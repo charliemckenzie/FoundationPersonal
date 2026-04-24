@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      font-size: 13px;
+      color: #1a1a1a;
+      background: #fff;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    h2 { font-size: 15px; font-weight: 600; }
+    p  { color: #666; line-height: 1.5; }
+
+    .drop-zone {
+      border: 2px dashed #d0d0d0;
+      border-radius: 8px;
+      padding: 28px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .drop-zone:hover, .drop-zone.over { border-color: #6366f1; background: #f5f3ff; }
+    .drop-zone input  { display: none; }
+    .drop-zone label  { cursor: pointer; color: #6366f1; font-weight: 500; }
+    .drop-zone p      { margin-top: 4px; font-size: 12px; }
+
+    .preview {
+      font-size: 12px;
+      color: #444;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .preview.visible { display: flex; }
+    .preview-row { display: flex; justify-content: space-between; }
+    .preview-row span:last-child { color: #6366f1; font-weight: 500; }
+
+    button {
+      padding: 10px;
+      background: #6366f1;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    button:hover:not(:disabled) { background: #4f46e5; }
+    button:disabled { opacity: 0.45; cursor: default; }
+
+    .status {
+      padding: 10px 12px;
+      border-radius: 6px;
+      display: none;
+      font-weight: 500;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: 1.5;
+    }
+    .status.success { background: #ecfdf5; color: #065f46; display: block; }
+    .status.error   { background: #fff1f2; color: #9f1239; display: block; }
+  </style>
+</head>
+<body>
+  <h2>Import Design Tokens</h2>
+  <p>Drop any <code>tokens.json</code> file. Each top-level key becomes a Figma variable collection. Keys sharing a prefix (e.g. <code>semantic/light</code>, <code>semantic/dark</code>) become modes of the same collection.</p>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".json" />
+    <label for="fileInput">Choose tokens.json</label>
+    <p>or drag and drop here</p>
+  </div>
+
+  <div class="preview" id="preview"></div>
+
+  <button id="importBtn" disabled>Import variables</button>
+  <div class="status" id="status"></div>
+
+  <script>
+    let parsed = null;
+
+    const dropZone  = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const importBtn = document.getElementById('importBtn');
+    const statusEl  = document.getElementById('status');
+    const previewEl = document.getElementById('preview');
+
+    fileInput.addEventListener('change', () => handleFile(fileInput.files[0]));
+    dropZone.addEventListener('dragover',  (e) => { e.preventDefault(); dropZone.classList.add('over'); });
+    dropZone.addEventListener('dragleave', ()  => dropZone.classList.remove('over'));
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('over');
+      handleFile(e.dataTransfer.files[0]);
+    });
+
+    function handleFile(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          parsed = parseTokens(JSON.parse(e.target.result));
+          showPreview(parsed);
+          importBtn.disabled = false;
+          showStatus('', '');
+        } catch (err) {
+          showStatus('error', `Parse error: ${err.message}`);
+          parsed = null;
+          importBtn.disabled = true;
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // ── Parsing ──────────────────────────────────────────────────────────────
+
+    function parseTokens(raw) {
+      // Step 1: group top-level keys into collections
+      // 'primitives'      → { collName: 'primitives', modeName: null }
+      // 'semantic/light'  → { collName: 'semantic',   modeName: 'light' }
+      const collMap = {}; // collName → [{ modeName, flat }]
+
+      for (const [key, set] of Object.entries(raw)) {
+        const slash = key.indexOf('/');
+        const collName = slash >= 0 ? key.slice(0, slash) : key;
+        const modeName = slash >= 0 ? key.slice(slash + 1) : null;
+        if (!collMap[collName]) collMap[collName] = [];
+        collMap[collName].push({ modeName, flat: flattenTokens(set) });
+      }
+
+      // Step 2: build a global lookup of all raw values for alias resolution
+      const globalRaw = {}; // tokenPath → token (first definition wins)
+      for (const modes of Object.values(collMap)) {
+        for (const { flat } of modes) {
+          for (const [path, token] of Object.entries(flat)) {
+            if (!globalRaw[path]) globalRaw[path] = token;
+          }
+        }
+      }
+
+      // Step 3: resolve aliases in every flat set
+      for (const modes of Object.values(collMap)) {
+        for (const { flat } of modes) {
+          for (const token of Object.values(flat)) {
+            if (isAliasStr(token.value)) {
+              const key = aliasToPath(token.value);
+              const ref = resolveChain(key, globalRaw);
+              if (ref) {
+                token.aliasKey = key;
+                token.value    = ref.value; // resolved fallback
+              }
+            }
+          }
+        }
+      }
+
+      return { groups: collMap };
+    }
+
+    function flattenTokens(obj, prefix) {
+      const out = {};
+      for (const [key, val] of Object.entries(obj)) {
+        const path = prefix ? `${prefix}/${key}` : key;
+        if (val && typeof val === 'object' && 'value' in val && 'type' in val) {
+          out[path] = { value: val.value, type: val.type, aliasKey: null, description: val.description || '', codeSyntax: val.codeSyntax || null, scopes: val.scopes || null };
+        } else if (val && typeof val === 'object') {
+          Object.assign(out, flattenTokens(val, path));
+        }
+      }
+      return out;
+    }
+
+    // Follow alias chains up to 5 deep
+    function resolveChain(key, globalRaw, depth = 0) {
+      if (depth > 5) return null;
+      const token = globalRaw[key];
+      if (!token) return null;
+      if (isAliasStr(token.value)) return resolveChain(aliasToPath(token.value), globalRaw, depth + 1);
+      return token;
+    }
+
+    function isAliasStr(val) {
+      return typeof val === 'string' && val.startsWith('{') && val.endsWith('}');
+    }
+
+    function aliasToPath(val) {
+      return val.slice(1, -1).replace(/\./g, '/');
+    }
+
+    // ── Preview ──────────────────────────────────────────────────────────────
+
+    function showPreview({ groups }) {
+      previewEl.innerHTML = '';
+      for (const [collName, modes] of Object.entries(groups)) {
+        const paths = new Set(modes.flatMap(m => Object.keys(m.flat)));
+        const modeLabel = modes.length > 1
+          ? `${modes.map(m => m.modeName).join(', ')}`
+          : 'single mode';
+        const row = document.createElement('div');
+        row.className = 'preview-row';
+        row.innerHTML = `<span>${collName} <em style="color:#999">(${modeLabel})</em></span><span>${paths.size} variables</span>`;
+        previewEl.appendChild(row);
+      }
+      previewEl.classList.add('visible');
+    }
+
+    // ── Import ───────────────────────────────────────────────────────────────
+
+    importBtn.addEventListener('click', () => {
+      if (!parsed) return;
+      importBtn.disabled = true;
+      showStatus('', '');
+      parent.postMessage({ pluginMessage: { type: 'IMPORT', ...parsed } }, '*');
+    });
+
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+      if (!msg) return;
+      if (msg.type === 'DONE') {
+        showStatus('success', `Done — ${msg.stats.variables} variables across ${msg.stats.collections} collections.`);
+        importBtn.disabled = false;
+      }
+      if (msg.type === 'ERROR') {
+        showStatus('error', msg.message);
+        importBtn.disabled = false;
+      }
+    };
+
+    function showStatus(type, text) {
+      statusEl.className = 'status' + (type ? ` ${type}` : '');
+      statusEl.textContent = text;
+      if (!type) statusEl.style.display = 'none';
+    }
+  </script>
+</body>
+</html>

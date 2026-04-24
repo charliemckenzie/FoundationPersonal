@@ -1,0 +1,11 @@
+
+- **Knowledge vault** — established `docs/` in the project repo as the team's knowledge vault (not iCloud); Paolo's notes live in `docs/Paolo/`
+- **Agent team configured** — Simpsons-themed agent team set up in `AGENTS.md`: Smithers (coordinator), Lenny (frontend), Carl (backend), Marge (visual QA), Flanders (accessibility), Lisa (docs), Chalmers (code quality), Frink (git/PRs), Moe (design system), Troy McClure (onboarding); each agent has defined responsibilities, a pipeline gate, and a distinct voice
+- **Skills imported** — Claude Code skills wired up for the team: `/frontend-design`, `/ui-ux-pro-max`, `/feature-dev`, `/simplify`, `/review`, `/security-review`, `/claude-api`, `/update-config`, `/less-permission-prompts`, `/init`
+- **Figma plugin** — tokens pipeline set up; `scripts/generate-tokens.ts` exports `tokens.json` from semantic colour tokens for Figma import via the Tokens Studio plugin
+- **Upgraded to WCAG 2.2 AA** — fixed 3 failing design tokens (info, success, divider/border contrast), updated all docs and Storybook a11y config to enforce the new standard
+- **UPDATED Reverted divider and border.default contrast** — `divider` and `border.default` were reverted to `neutral[300]`. WCAG 2.1 SC 1.4.11 (Non-text Contrast) only requires 3:1 contrast for visual information that identifies interactive UI components (e.g. form inputs). Decorative borders and dividers carry no functional identification role and are therefore exempt. Only `border.input` is required to meet the 3:1 contrast threshold.
+- **Fixed 8 accessibility issues across 9 components** — error live regions, table header scope, modal/badge aria labels, ToggleButton group label
+- **Theme B grid system** — defined 12-column layout spec (4→8→12 col, 8px-based gutters/margins, 1280px max-width) and documented it in Storybook with a visual column strip and usage guide
+- **Accordion expanded state** — expanded header now shows `action.selected` background to distinguish it from collapsed; hover locked to same so states don't collide
+- **Accordion close all** — "Close all" button appears when 2+ panels are stacked; disabled when nothing is open; accessible

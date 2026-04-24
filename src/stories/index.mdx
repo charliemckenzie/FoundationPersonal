@@ -1,0 +1,60 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / Component Status" />
+
+# Component Library
+
+This is the Foundation design system — a living component library built to support production-quality UX prototypes.
+
+## How This Works
+
+Every component goes through the full pipeline before it's marked **Stable**:
+
+1. **Lenny** builds it
+2. **Chalmers** reviews code quality
+3. **Flanders** reviews accessibility (WCAG 2.2 AA)
+4. **Marge** reviews visual consistency
+5. **Lisa** writes this story and usage docs
+6. **Frink** commits and opens a PR
+7. **You** (the designer) approves and merges
+
+---
+
+## Component Status
+
+| Component | Status | Story |
+|-----------|--------|-------|
+| Accordion | `draft` | [Accordion](/?path=/story/components-accordion--default) |
+| Alert | `review` | [Alert](/?path=/story/components-alert--default) |
+| Badge | `review` | [Badge](/?path=/story/components-badge--default) |
+| Button | `review` | [Button](/?path=/story/components-button--default) |
+| Checkbox | `review` | [Checkbox](/?path=/story/components-checkbox--default) |
+| Chip | `review` | [Chip](/?path=/story/components-chip--default) |
+| Icon | `draft` | [Icon](/?path=/story/components-icon--default) |
+| IconButton | `review` | [IconButton](/?path=/story/components-iconbutton--default) |
+| Modal | `draft` | [Modal](/?path=/story/components-modal--default) |
+| RadioGroup | `review` | [RadioGroup](/?path=/story/components-radiogroup--default) |
+| Select | `review` | [Select](/?path=/story/components-select--default) |
+| Spinner | `draft` | [Spinner](/?path=/story/components-spinner--default) |
+| Switch | `review` | [Switch](/?path=/story/components-switch--default) |
+| Table | `draft` | [Table](/?path=/story/components-table--default) |
+| TextField | `review` | [TextField](/?path=/story/components-textfield--default) |
+| Tooltip | `draft` | [Tooltip](/?path=/story/components-tooltip--default) |
+
+**Status legend:**
+- `draft` — in progress, not reviewed
+- `review` — with Chalmers / Flanders / Marge
+- `stable` — fully signed off, safe to use in prototypes
+
+---
+
+## Design Tokens
+
+| Token set | Story |
+|-----------|-------|
+| [Primitive Colors](/?path=/story/design-tokens-primitive-colors--default) | Raw hue scales (50–950), never use directly |
+| [Semantic Colors](/?path=/story/design-tokens-semantic-colors--default) | Semantic tokens — brand, feedback, surface, text |
+| [Typography](/?path=/story/design-tokens-typography--overview) | Type scale and font families |
+| [Spacing & Shape](/?path=/story/foundation-design-tokens-spacing-shape--docs) | Spacing scale and border radius |
+| [Shadows & Breakpoints](/?path=/story/foundation-design-tokens-shadows-breakpoints--docs) | Elevation and responsive breakpoints |
+| [Grid](/?path=/story/design-tokens-grid--default) | 12-column layout grid — columns, gutters, margins, max-width per breakpoint |
