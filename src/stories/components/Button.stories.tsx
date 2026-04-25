@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { IconPlus, IconTrash } from '@tabler/icons-react';
+import { faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
 import Box from '@mui/material/Box';
 import { Button } from '../../components/Button';
 
@@ -19,7 +19,7 @@ const meta: Meta<typeof Button> = {
     },
   ],
   argTypes: {
-    variant: { control: 'select', options: ['contained', 'outlined', 'text', 'soft'] },
+    variant: { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     color: { control: 'select', options: ['primary', 'error'] },
     reversed: { control: 'boolean' },
@@ -39,7 +39,7 @@ export const Variants: Story = {
       <Button label="Contained" variant="contained" />
       <Button label="Soft" variant="soft" />
       <Button label="Outlined" variant="outlined" />
-      <Button label="Text" variant="text" />
+      <Button label="Ghost" variant="ghost" />
     </Box>
   ),
 };
@@ -66,8 +66,8 @@ export const Colors: Story = {
 export const WithIcons: Story = {
   render: () => (
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-      <Button label="Add Item" startIcon={IconPlus} />
-      <Button label="Delete" endIcon={IconTrash} color="error" variant="outlined" />
+      <Button label="Add Item" startIcon={faPlus} />
+      <Button label="Delete" endIcon={faTrash} color="error" variant="outlined" />
     </Box>
   ),
 };
@@ -82,7 +82,7 @@ export const Disabled: Story = {
       <Button label="Contained" variant="contained" disabled />
       <Button label="Soft" variant="soft" disabled />
       <Button label="Outlined" variant="outlined" disabled />
-      <Button label="Text" variant="text" disabled />
+      <Button label="Ghost" variant="ghost" disabled />
     </Box>
   ),
 };
@@ -110,7 +110,7 @@ function ReversedShowcase() {
         <Button label="Contained" variant="contained" reversed />
         <Button label="Soft" variant="soft" reversed />
         <Button label="Outlined" variant="outlined" reversed />
-        <Button label="Text" variant="text" reversed />
+        <Button label="Ghost" variant="ghost" reversed />
       </Box>
       <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
         <Button label="Small" variant="contained" size="small" reversed />
@@ -121,7 +121,7 @@ function ReversedShowcase() {
         <Button label="Contained" variant="contained" reversed disabled />
         <Button label="Soft" variant="soft" reversed disabled />
         <Button label="Outlined" variant="outlined" reversed disabled />
-        <Button label="Text" variant="text" reversed disabled />
+        <Button label="Ghost" variant="ghost" reversed disabled />
       </Box>
     </Box>
   );

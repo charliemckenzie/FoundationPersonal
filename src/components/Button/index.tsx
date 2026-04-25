@@ -3,11 +3,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import { trueBlue } from '../../app/themes/primitives/colors';
-import type { IconProps as TablerIconProps } from '@tabler/icons-react';
+import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Icon } from '../Icon';
 import type React from 'react';
 
-export type ButtonVariant = 'contained' | 'outlined' | 'text' | 'soft';
+export type ButtonVariant = 'contained' | 'outlined' | 'ghost' | 'soft';
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 
@@ -20,8 +20,8 @@ export interface ButtonProps {
   loading?: boolean;
   fullWidth?: boolean;
   reversed?: boolean;
-  startIcon?: React.ComponentType<TablerIconProps>;
-  endIcon?: React.ComponentType<TablerIconProps>;
+  startIcon?: IconDefinition;
+  endIcon?: IconDefinition;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
 }
@@ -40,7 +40,7 @@ export function Button({
   onClick,
   type = 'button',
 }: ButtonProps) {
-  const muiVariant = variant === 'soft' ? 'text' : variant;
+  const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
   
   const containedStyles = variant === 'contained' ? {
     boxShadow: 'none',
@@ -73,6 +73,8 @@ export function Button({
     '&.Mui-disabled': {
       backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
       color: (theme: Theme) => theme.palette.action.disabled,
+      cursor: 'not-allowed !important',
+      pointerEvents: 'auto !important',
     },
   } : undefined;
   
@@ -86,25 +88,25 @@ export function Button({
       boxShadow: 'none',
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
       '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50) },
+      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
     }),
     ...(variant === 'outlined' && {
       borderColor: (theme: Theme) => theme.palette.common.white,
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12), borderColor: (theme: Theme) => theme.palette.common.white },
-      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
+      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
     }),
-    ...(variant === 'text' && {
+    ...(variant === 'ghost' && {
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12) },
-      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
+      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
     }),
     ...(variant === 'soft' && {
       backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.25) },
       '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
+      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
     }),
   } : undefined;
 
@@ -129,6 +131,10 @@ export function Button({
         ...sizeStyles[size],
         ...(containedStyles ?? softStyles),
         ...reversedStyles,
+        '&.Mui-disabled, &:disabled': {
+          cursor: 'not-allowed !important',
+          pointerEvents: 'auto !important',
+        },
         '&.Mui-focusVisible': {
           outline: `2px solid ${reversed ? theme.palette.common.white : ((theme.palette[color as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
           outlineOffset: '2px',

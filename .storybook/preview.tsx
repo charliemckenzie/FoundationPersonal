@@ -6,6 +6,7 @@ import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
 import '../src/app/globals.css';
+import '../src/lib/fontawesome'; // Initialize Font Awesome icon library
 
 const brands = {
   foundation,
@@ -50,6 +51,11 @@ const preview: Preview = {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
+      },
+    },
+    options: {
+      storySort: {
+        order: ['Foundation', 'Design Tokens', 'Components', '*'],
       },
     },
   },
