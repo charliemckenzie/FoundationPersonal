@@ -1,0 +1,194 @@
+import { alpha } from '@mui/material/styles';
+import type { PaletteOptions } from '@mui/material/styles';
+import { red, amber, cyan, green, skyBlue, clearBlue, salmon, white, black } from './primitives/colors';
+import type { BrandConfig } from './brands/index';
+
+export function buildLightPalette(brand: BrandConfig): PaletteOptions {
+  return {
+    primary: {
+      light:        brand.primary[400],
+      main:         brand.primary[600],
+      dark:         brand.primary[700],
+      contrastText: white,
+    },
+    secondary: {
+      light:        brand.secondary[600],
+      main:         brand.secondary[800],
+      dark:         brand.secondary[900],
+      contrastText: white,
+    },
+    error: {
+      light:        red[400],
+      main:         red[600],
+      dark:         red[700],
+      contrastText: white,
+    },
+    warning: {
+      light:        amber[300],
+      main:         amber[500],
+      dark:         amber[700],
+      contrastText: black,
+    },
+    info: {
+      light:        cyan[400],
+      main:         cyan[700],
+      dark:         cyan[800],
+      contrastText: white,
+    },
+    success: {
+      light:        green[400],
+      main:         green[700],
+      dark:         green[800],
+      contrastText: white,
+    },
+
+    // Tertiary brand color (optional — only present when the brand defines one)
+    ...(brand.tertiary && {
+      tertiary: {
+        light:        brand.tertiary[400],
+        main:         brand.tertiary[500],
+        dark:         brand.tertiary[700],
+        contrastText: brand.tertiary[950],
+      },
+    }),
+
+    // Background
+    background: {
+      default:        brand.neutral[50],    // Foundation: #f8fafc
+      paper:          white,               // #ffffff
+      elevated:       brand.neutral[100],  // Foundation: #f1f5f9
+      brandPrimary:   brand.surfaces?.brandPrimary ?? brand.primary[600],  // QSuper: #0084DD (large text only)  Foundation: #0051ff
+      brandSecondary: brand.secondary[800], // Foundation: deepBlue[800]  #1c355e
+      brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600], // Foundation: livingCoral[500] #f24e49
+      brandSky:       brand.surfaces?.sky   ?? skyBlue[200],    // QSuper: #30B3EE  Foundation: #B9DCFB
+      brandClear:     brand.surfaces?.clear ?? clearBlue[100],  // QSuper: #8CDDFF  Foundation: #DDF5FF
+      brandWarm:      brand.surfaces?.warm  ?? salmon[50],      // QSuper: soft navy tint  Foundation: #F8EBE5
+    },
+
+    // Text & Borders
+    text: {
+      primary:     brand.neutral[900],
+      muted:       brand.neutral[600],
+      disabled:    brand.neutral[500],
+      inverse:     white,
+      heading:     brand.secondary[800],
+      link:        brand.primary[600],
+      linkInverse: clearBlue[100],
+    },
+    divider: brand.neutral[300],
+    border: {
+      subtle:  brand.neutral[200],
+      default: brand.neutral[300],
+      input:   brand.neutral[500],
+      focus:   brand.neutral[700],
+    },
+    action: {
+      active:             brand.neutral[600],        // icon/control active colour (e.g. checked checkbox, active icon button)
+      hover:              alpha(brand.neutral[900], 0.04),  // hover overlay on any surface
+      hoverOpacity:       0.04,
+      selected:           alpha(brand.neutral[900], 0.08),  // selected/expanded state overlay (e.g. accordion, list item)
+      selectedOpacity:    0.08,
+      disabled:           brand.neutral[500],        // disabled text and icons — matches text.disabled
+      disabledBackground: brand.neutral[200],        // disabled control fill (e.g. disabled button, input)
+      disabledOpacity:    0.38,
+      focus:              alpha(brand.neutral[900], 0.12),  // focus overlay (used by MUI internally for ripple-free focus)
+      focusOpacity:       0.12,
+      activatedOpacity:   0.12,                      // activated state opacity scalar (e.g. pressed chip)
+    },
+  };
+}
+
+export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
+  return {
+    primary: {
+      light:        brand.primary[300],
+      main:         brand.primary[300],
+      dark:         brand.primary[400],
+      contrastText: brand.primary[950],
+    },
+    secondary: {
+      light:        brand.secondary[400],
+      main:         brand.secondary[600],
+      dark:         brand.secondary[800],
+      contrastText: white,
+    },
+    error: {
+      light:        red[300],
+      main:         red[400],
+      dark:         red[600],
+      contrastText: white,
+    },
+    warning: {
+      light:        amber[300],
+      main:         amber[400],
+      dark:         amber[500],
+      contrastText: black,
+    },
+    info: {
+      light:        cyan[300],
+      main:         cyan[400],
+      dark:         cyan[600],
+      contrastText: black,
+    },
+    success: {
+      light:        green[300],
+      main:         green[400],
+      dark:         green[600],
+      contrastText: black,
+    },
+
+    // Tertiary brand color (optional — only present when the brand defines one)
+    ...(brand.tertiary && {
+      tertiary: {
+        light:        brand.tertiary[300],
+        main:         brand.tertiary[400],
+        dark:         brand.tertiary[600],
+        contrastText: black,
+      },
+    }),
+
+    // Background
+    background: {
+      default:        brand.neutral[950],  // Foundation: #020617
+      paper:          brand.neutral[900],  // Foundation: #0f172a
+      elevated:       brand.neutral[800],  // Foundation: #1e293b
+      brandPrimary:   brand.neutral[800],  // Foundation: #1e293b (all brand surfaces unified at neutral[800] in dark mode)
+      brandSecondary: brand.neutral[800],  // Foundation: #1e293b
+      brandTertiary:  brand.neutral[800],  // Foundation: #1e293b
+      brandSky:       brand.neutral[800],  // Foundation: #1e293b
+      brandClear:     brand.neutral[800],  // Foundation: #1e293b
+      brandWarm:      brand.neutral[800],  // Foundation: #1e293b
+    },
+
+    // Text & Borders
+    text: {
+      primary:     brand.neutral[50],
+      muted:       brand.neutral[300],
+      disabled:    brand.neutral[500],
+      inverse:     brand.neutral[900],
+      heading:     white,
+      link:        brand.primary[300],
+      linkInverse: clearBlue[100],
+    },
+    divider: brand.neutral[700],  // Foundation: #334155
+    border: {
+      subtle:  brand.neutral[800],  // Foundation: #282c34
+      default: brand.neutral[700],  // Foundation: #334155
+      input:   brand.neutral[400],  // Foundation: #94a3b8
+      focus:   brand.neutral[300],  // Foundation: #cbd5e1
+    },
+    action: {
+      active:             brand.neutral[300],        // icon/control active colour
+      hover:              alpha(brand.neutral[50], 0.08),   // hover overlay — slightly stronger than light to read on dark surfaces
+      hoverOpacity:       0.08,
+      selected:           alpha(brand.neutral[50], 0.16),   // selected/expanded state overlay
+      selectedOpacity:    0.16,
+      disabled:           brand.neutral[500],        // disabled text and icons — matches text.disabled
+      disabledBackground: brand.neutral[800],        // disabled control fill
+      disabledOpacity:    0.38,
+      focus:              alpha(brand.neutral[50], 0.12),   // focus overlay
+      focusOpacity:       0.12,
+      activatedOpacity:   0.12,
+    },
+  };
+}

@@ -1,0 +1,112 @@
+import type { Meta, StoryObj } from '@storybook/nextjs-vite'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { primitiveScales, white, black } from '../../app/themes/primitives/colors'
+import type { ColorScale, PrimitiveScaleName } from '../../app/themes/primitives/colors'
+
+const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
+
+function Swatch({ step, value }: { step: number; value: string }) {
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+      <Box
+        sx={{
+          width: 56,
+          height: 56,
+          bgcolor: value,
+          borderRadius: 1,
+          border: '1px solid',
+          borderColor: 'divider',
+        }}
+      />
+      <Typography variant="caption" sx={{ lineHeight: 1.2 }}>
+        {step}
+      </Typography>
+      <Typography
+        variant="caption"
+        color="text.muted"
+        sx={{ fontFamily: 'monospace', fontSize: 10 }}
+      >
+        {value}
+      </Typography>
+    </Box>
+  )
+}
+
+function ScaleRow({ name, scale }: { name: string; scale: ColorScale }) {
+  return (
+    <Box sx={{ mb: 3 }}>
+      <Typography
+        variant="overline"
+        sx={{ mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        {name}
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {STEPS.map((step) => (
+          <Swatch key={step} step={step} value={scale[step]} />
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
+function PrimitivesDoc() {
+  return (
+    <Box sx={{ p: 4, maxWidth: 960 }}>
+      <Typography variant="h4" sx={{ mb: 0.5, fontWeight: 800 }}>
+        Primitive Scales
+      </Typography>
+      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+        Raw hue families — steps 50–950. Never reference these directly in components. Use semantic
+        tokens from the Colors story instead.
+      </Typography>
+      {(Object.entries(primitiveScales) as [PrimitiveScaleName, ColorScale][]).map(
+        ([name, scale]) => (
+          <ScaleRow key={name} name={name} scale={scale} />
+        ),
+      )}
+
+      <Typography
+        variant="overline"
+        sx={{ mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        Static Values
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5 }}>
+        {([['white', white], ['black', black]] as const).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box
+              sx={{
+                width: 56,
+                height: 56,
+                bgcolor: value,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            />
+            <Typography variant="caption" sx={{ lineHeight: 1.2 }}>{name}</Typography>
+            <Typography variant="caption" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
+              {value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
+const meta: Meta<typeof PrimitivesDoc> = {
+  title: 'Design Tokens/Colors/Primitives',
+  component: PrimitivesDoc,
+  parameters: {
+    layout: 'fullscreen',
+    docs: { canvas: { sourceState: 'hidden' } },
+  },
+}
+export default meta
+
+export const Default: StoryObj<typeof PrimitivesDoc> = {
+  render: () => <PrimitivesDoc />,
+}

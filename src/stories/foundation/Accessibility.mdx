@@ -1,0 +1,111 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / Accessibility" />
+
+# Accessibility
+
+This design system targets **WCAG 2.2 Level AA** compliance. Every component must meet these requirements before it is marked stable.
+
+---
+
+## Colour Contrast
+
+| Situation | Minimum ratio |
+|-----------|--------------|
+| Normal text (below 18pt / 14pt bold) | **4.5 : 1** |
+| Large text (18pt+ or 14pt+ bold) | **3 : 1** |
+| UI components and graphical objects | **3 : 1** |
+| Decorative content | No requirement |
+
+All semantic text tokens are verified against all semantic background tokens. See the [Typography — Accessibility](/?path=/story/design-tokens-typography--accessibility) story for the full contrast matrix in light and dark mode.
+
+---
+
+## Keyboard Navigation
+
+- All interactive elements must be reachable and operable by keyboard alone.
+- Tab order must follow a logical, predictable sequence that matches the visual layout.
+- No keyboard traps — focus must be able to leave every component.
+- Modal dialogs must trap focus while open and restore it on close.
+
+---
+
+## Focus Indicators
+
+- Every interactive element must display a visible focus ring.
+- The focus indicator must have a **3 : 1** contrast ratio against adjacent colours.
+- Do not suppress the outline with `outline: none` or `outline: 0` unless you replace it with an equivalent custom indicator.
+
+---
+
+## Text Alternatives
+
+- All meaningful images must have a descriptive `alt` attribute.
+- Decorative images must use `alt=""` so screen readers skip them.
+- Icons used as controls must have an accessible label — either visible text, `aria-label`, or a visually hidden `<span>`.
+
+---
+
+## Forms
+
+- Every form control must have a programmatically associated `<label>` (`for`/`id` pair or wrapping label).
+- Required fields must be marked — both visually and with `aria-required="true"` or the native `required` attribute.
+- Error messages must identify the field and describe what went wrong. Associate them with the field using `aria-describedby`.
+- Do not rely on colour alone to communicate a validation state — use an icon or text alongside it.
+
+---
+
+## Motion and Animation
+
+- Any animation that lasts more than 5 seconds, moves, blinks, or auto-updates must have a mechanism to pause, stop, or hide it.
+- Respect the user's `prefers-reduced-motion` media query.
+
+---
+
+## Resize and Reflow
+
+- Text must be readable and functional when resized up to **200%** in the browser without requiring horizontal scrolling at 320 px width.
+- No content or functionality may be clipped or lost at larger text sizes.
+
+---
+
+## Language
+
+- The page language must be set: `<html lang="en">`.
+- Sections in a different language must use the `lang` attribute on the containing element.
+
+---
+
+## Semantic Structure
+
+- Use the correct HTML element for the job. A button that triggers an action is `<button>`. A link that navigates is `<a>`.
+- Heading levels (`h1`–`h6`) must form a logical outline — do not skip levels.
+- Landmark regions (`<main>`, `<nav>`, `<header>`, `<footer>`) help screen reader users navigate quickly.
+- Lists of items should use `<ul>` or `<ol>`, not a series of `<div>` elements.
+
+---
+
+---
+
+## WCAG 2.2 — New criteria
+
+These criteria were added in 2.2 and are not covered by axe-core's default ruleset. Flanders checks each of these manually during every component review.
+
+| SC | Name | Level | What to check |
+|---|---|---|---|
+| 2.4.11 | Focus Not Obscured (Minimum) | AA | No sticky header or overlay completely hides a focused element |
+| 2.4.13 | Focus Appearance | AA | Focus indicator ≥ 2px thick, ≥ 3:1 contrast between focused and unfocused states |
+| 2.5.7 | Dragging Movements | AA | Any drag-and-drop action has a single-pointer alternative (e.g. click to pick up / click to drop) |
+| 2.5.8 | Target Size (Minimum) | AA | Interactive targets ≥ 24 × 24 CSS px, or offset from adjacent targets ≥ 24px |
+| 3.2.6 | Consistent Help | A | Help mechanisms (chat, contact) appear in the same location across pages |
+| 3.3.7 | Redundant Entry | A | Users are not asked to re-enter information already provided in the same session |
+| 3.3.8 | Accessible Authentication (Minimum) | AA | Login does not require solving a cognitive test (puzzle, image recognition) without an alternative |
+
+---
+
+## Further reading
+
+- [Typography — Accessibility](/?path=/story/design-tokens-typography--accessibility) — contrast matrix for all text and background token combinations
+- [WCAG 2.2 Quick Reference](https://www.w3.org/WAI/WCAG22/quickref/?versions=2.2&levels=aa) — official W3C checklist
+- [What's New in WCAG 2.2](https://www.w3.org/WAI/standards-guidelines/wcag/new-in-22/) — W3C summary of the 2.2 additions
+- [Accessible Rich Internet Applications (ARIA) Authoring Practices](https://www.w3.org/WAI/ARIA/apg/) — patterns for complex widgets
