@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import type { IconDefinition, IconPrefix, IconName } from '@fortawesome/fontawesome-svg-core';
 import Box from '@mui/material/Box';
 
-export type IconSize = 'small' | 'medium' | 'large';
+export type IconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export type IconColor =
   | 'inherit'
   | 'primary'
@@ -26,9 +26,12 @@ export interface IconProps {
 }
 
 const SIZE_MAP: Record<IconSize, string> = {
-  small: '0.875rem',
-  medium: '1.25rem',
-  large: '1.5rem',
+  sm: '0.875rem',
+  md: '1rem',
+  lg: '1.25rem',
+  xl: '1.5rem',
+  '2xl': '2rem',
+  '3xl': '2.5rem',
 };
 
 const COLOR_TO_SX: Record<IconColor, string> = {
@@ -53,7 +56,7 @@ const STYLE_TO_PREFIX: Record<IconStyle, IconPrefix> = {
   sharp: 'fass',
 };
 
-export function Icon({ icon, style = 'solid', size = 'medium', color = 'inherit', 'aria-label': ariaLabel }: IconProps) {
+export function Icon({ icon, style = 'solid', size = 'md', color = 'inherit', 'aria-label': ariaLabel }: IconProps) {
   // If icon is a string, convert it to the icon array format [prefix, iconName]
   // Remove "fa-" prefix if present (e.g., "fa-bed-front" -> "bed-front")
   // Default to "house" if empty string provided

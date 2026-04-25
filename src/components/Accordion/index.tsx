@@ -49,7 +49,7 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
       }}
     >
       <AccordionSummary
-        expandIcon={<Icon icon={faChevronDown} size="small" />}
+        expandIcon={<Icon icon={faChevronDown} size="sm" />}
         aria-controls={`${item.id}-content`}
         id={`${item.id}-header`}
         sx={(theme) => ({

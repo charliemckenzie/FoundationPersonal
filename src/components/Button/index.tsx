@@ -4,14 +4,14 @@ import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import { trueBlue } from '../../app/themes/primitives/colors';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { Icon } from '../Icon';
-import type React from 'react';
+import { Icon, type IconSize } from '../Icon';
+import React from 'react';
 
 export type ButtonVariant = 'contained' | 'outlined' | 'ghost' | 'soft';
 export type ButtonSize = 'small' | 'medium' | 'large';
 export type ButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 
-export interface ButtonProps {
+export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   label: string;
   variant?: ButtonVariant;
   size?: ButtonSize;
@@ -26,7 +26,7 @@ export interface ButtonProps {
   type?: 'button' | 'submit' | 'reset';
 }
 
-export function Button({
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   label,
   variant = 'contained',
   size = 'medium',
@@ -39,7 +39,15 @@ export function Button({
   endIcon,
   onClick,
   type = 'button',
-}: ButtonProps) {
+  ...rest
+}, ref) {
+  // Map Button size to Icon size
+  const iconSizeMap: Record<ButtonSize, IconSize> = {
+    small: 'sm',   // 14px icon in 36px button
+    medium: 'md',  // 16px icon in 48px button
+    large: 'lg',   // 20px icon in 56px button
+  };
+  const iconSize = iconSizeMap[size];
   const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
   
   const containedStyles = variant === 'contained' ? {
@@ -73,8 +81,6 @@ export function Button({
     '&.Mui-disabled': {
       backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
       color: (theme: Theme) => theme.palette.action.disabled,
-      cursor: 'not-allowed !important',
-      pointerEvents: 'auto !important',
     },
   } : undefined;
   
@@ -88,25 +94,25 @@ export function Button({
       boxShadow: 'none',
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
       '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
+      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50) },
     }),
     ...(variant === 'outlined' && {
       borderColor: (theme: Theme) => theme.palette.common.white,
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12), borderColor: (theme: Theme) => theme.palette.common.white },
-      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
+      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
     }),
     ...(variant === 'ghost' && {
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12) },
-      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
+      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
     }),
     ...(variant === 'soft' && {
       backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.25) },
       '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30), cursor: 'not-allowed !important', pointerEvents: 'auto !important' },
+      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
     }),
   } : undefined;
 
@@ -118,31 +124,39 @@ export function Button({
 
   return (
     <MuiButton
+      ref={ref}
       variant={muiVariant}
       size={size}
       color={color}
       disabled={disabled || loading}
       fullWidth={fullWidth}
-      startIcon={loading ? <CircularProgress size={16} color="inherit" /> : startIcon ? <Icon icon={startIcon} size={size} color="inherit" /> : undefined}
-      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={size} color="inherit" /> : undefined}
+      startIcon={loading ? <CircularProgress size={16} color="inherit" /> : startIcon ? <Icon icon={startIcon} size={iconSize} color="inherit" /> : undefined}
+      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSize} color="inherit" /> : undefined}
       onClick={onClick}
       type={type}
+      {...rest}
       sx={(theme) => ({
         ...sizeStyles[size],
         ...(containedStyles ?? softStyles),
         ...reversedStyles,
         '&.Mui-disabled, &:disabled': {
           cursor: 'not-allowed !important',
-          pointerEvents: 'auto !important',
+          pointerEvents: 'none !important',
         },
         '&.Mui-focusVisible': {
           outline: `2px solid ${reversed ? theme.palette.common.white : ((theme.palette[color as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
           outlineOffset: '2px',
           boxShadow: 'none',
         },
+        // Override MUI's default icon sizing to use our explicit icon sizes
+        '& .MuiButton-startIcon, & .MuiButton-endIcon': {
+          '& > span': {
+            fontSize: 'inherit !important',
+          },
+        },
       })}
     >
       {label}
     </MuiButton>
   );
-}
+});

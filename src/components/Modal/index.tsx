@@ -61,7 +61,7 @@ export function Modal({
               color: 'text.muted',
             }}
           >
-            <Icon icon={faXmark} size="small" />
+            <Icon icon={faXmark} size="sm" />
           </MuiIconButton>
         </DialogTitle>
       )}

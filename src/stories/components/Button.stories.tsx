@@ -23,6 +23,8 @@ const meta: Meta<typeof Button> = {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     color: { control: 'select', options: ['primary', 'error'] },
     reversed: { control: 'boolean' },
+    onClick: { table: { disable: true } },
+    type: { table: { disable: true } },
   },
 };
 

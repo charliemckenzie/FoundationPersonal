@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import type { Theme } from '@mui/material/styles';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowRight, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
-import { Icon } from '../Icon';
+import { Icon, type IconSize } from '../Icon';
 import type React from 'react';
 
 export type TextButtonSize = 'small' | 'medium' | 'large';
@@ -33,6 +33,14 @@ export function TextButton({
   onClick,
   type = 'button',
 }: TextButtonProps) {
+  // Map TextButton size to Icon size
+  const iconSizeMap: Record<TextButtonSize, IconSize> = {
+    small: 'sm',
+    medium: 'md',
+    large: 'lg',
+  };
+  const iconSize = iconSizeMap[size];
+  
   // Default arrow icon when none specified
   const defaultIcon = iconDirection === 'left' ? faArrowLeft : faArrowRight;
   const effectiveStartIcon = startIcon || (iconDirection === 'left' && !endIcon ? defaultIcon : undefined);
@@ -108,7 +116,7 @@ export function TextButton({
     >
       {effectiveStartIcon && (
         <Box className="text-button-icon" sx={(theme: Theme) => iconBoxStyles(theme, isUsingDefaultIcon)}>
-          <Icon icon={effectiveStartIcon} size={size} color="inherit" />
+          <Icon icon={effectiveStartIcon} size={iconSize} color="inherit" />
         </Box>
       )}
       <Typography
@@ -124,7 +132,7 @@ export function TextButton({
       </Typography>
       {effectiveEndIcon && (
         <Box className="text-button-icon" sx={(theme: Theme) => iconBoxStyles(theme, isUsingDefaultIcon)}>
-          <Icon icon={effectiveEndIcon} size={size} color="inherit" />
+          <Icon icon={effectiveEndIcon} size={iconSize} color="inherit" />
         </Box>
       )}
     </ButtonBase>
