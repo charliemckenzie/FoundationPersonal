@@ -2,11 +2,13 @@ import { qBlue, pink, neutral } from '../primitives/colors';
 import type { BrandConfig } from './index';
 
 export const themeB: BrandConfig = {
-  name: 'theme-b',
+  name: 'QSuper',
   primary: qBlue,
   secondary: pink,
   neutral,
   buttonBorderRadius: 8,
+  fontFamily: '"Open Sans", system-ui, sans-serif',
+  headingFontFamily: 'Merriweather, serif',
   grid: {
     //           xs    sm    md    lg    xl
     columns: { xs: 4,  sm: 8,  md: 12, lg: 12, xl: 12 },

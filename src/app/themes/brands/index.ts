@@ -14,5 +14,7 @@ export interface BrandConfig {
   tertiary?: ColorScale;
   neutral: ColorScale;
   buttonBorderRadius: string | number;
+  fontFamily: string;
+  headingFontFamily: string;
   grid?: GridConfig;
 }
