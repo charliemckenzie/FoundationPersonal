@@ -51,6 +51,19 @@ npm install
 npm run check-setup
 ```
 
+### 5. Configure VS Code (Recommended)
+
+If using GitHub Copilot or Claude Code, add this to your VS Code settings to auto-apply AI changes without manual approval prompts:
+
+1. Open VS Code Settings (`Ctrl+,` or `Cmd+,`)
+2. Search for "settings json" and click **"Open Settings (JSON)"**
+3. Add this line:
+   ```json
+   "github.copilot.editor.enableAutoApply": true
+   ```
+
+This prevents the "Keep/Undo" diff prompts from appearing for AI-suggested changes.
+
 ## Development
 
 ### Run the development server
