@@ -7,19 +7,6 @@ export interface GridConfig {
   maxWidth: number;
 }
 
-/** Brand-specific surface background overrides. Falls back to Foundation defaults in semantic.ts. */
-export interface BrandSurfaces {
-  brandPrimary?: string;
-  sky?:          string;
-  clear?:        string;
-  warm?:         string;
-}
-
-/** Named accent colours for icons and highlights (not for backgrounds). */
-export interface BrandHighlights {
-  [key: string]: string;
-}
-
 export interface BrandConfig {
   name: string;
   primary: ColorScale;
@@ -27,7 +14,7 @@ export interface BrandConfig {
   tertiary?: ColorScale;
   neutral: ColorScale;
   buttonBorderRadius: string | number;
+  fontFamily: string;
+  headingFontFamily: string;
   grid?: GridConfig;
-  surfaces?: BrandSurfaces;
-  highlights?: BrandHighlights;
 }

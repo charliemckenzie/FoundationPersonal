@@ -16,12 +16,12 @@ const SCALE: { token: string; value: number }[] = [
 
 function ShapeDoc() {
   const theme = useTheme()
-  const themeShape = theme.shape as Record<string, number>
+  const themeShape = theme.shape as unknown as Record<string, number>
 
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" sx={{ mb: 1 }}>Shape</Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         Border radius tokens. Use <code>theme.shape.&lt;token&gt;</code> in <code>sx</code> props or component styles.
       </Typography>
 
@@ -43,10 +43,10 @@ function ShapeDoc() {
                 py: 2,
               }}
             >
-              <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
+              <Typography variant="body" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
                 {token}
               </Typography>
-              <Typography variant="body2" color="text.muted" sx={{ fontFamily: 'monospace' }}>
+              <Typography variant="body" color="text.muted" sx={{ fontFamily: 'monospace' }}>
                 {value >= 9999 ? '∞' : `${value}px`}
               </Typography>
               <Box

@@ -19,11 +19,11 @@ function Swatch({ step, value }: { step: number; value: string }) {
           borderColor: 'divider',
         }}
       />
-      <Typography variant="caption" sx={{ lineHeight: 1.2 }}>
+      <Typography variant="small" sx={{ lineHeight: 1.2 }}>
         {step}
       </Typography>
       <Typography
-        variant="caption"
+        variant="small"
         color="text.muted"
         sx={{ fontFamily: 'monospace', fontSize: 10 }}
       >
@@ -37,7 +37,7 @@ function ScaleRow({ name, scale }: { name: string; scale: ColorScale }) {
   return (
     <Box sx={{ mb: 3 }}>
       <Typography
-        variant="overline"
+        variant="small"
         sx={{ mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
       >
         {name}
@@ -57,7 +57,7 @@ function PrimitivesDoc() {
       <Typography variant="h4" sx={{ mb: 0.5, fontWeight: 800 }}>
         Primitive Scales
       </Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         Raw hue families — steps 50–950. Never reference these directly in components. Use semantic
         tokens from the Colors story instead.
       </Typography>
@@ -68,7 +68,7 @@ function PrimitivesDoc() {
       )}
 
       <Typography
-        variant="overline"
+        variant="small"
         sx={{ mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
       >
         Static Values
@@ -86,8 +86,8 @@ function PrimitivesDoc() {
                 borderColor: 'divider',
               }}
             />
-            <Typography variant="caption" sx={{ lineHeight: 1.2 }}>{name}</Typography>
-            <Typography variant="caption" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
+            <Typography variant="small" sx={{ lineHeight: 1.2 }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
               {value}
             </Typography>
           </Box>

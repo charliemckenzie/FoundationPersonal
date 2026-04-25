@@ -36,7 +36,7 @@ export const Placements: Story = {
       <Tooltip title="Top" placement="top"><Button label="Top" size="small" /></Tooltip>
       <div />
       <Tooltip title="Left" placement="left"><Button label="Left" size="small" /></Tooltip>
-      <Typography variant="body2" color="text.muted" align="center">Placements</Typography>
+      <Typography variant="body" color="text.muted" align="center">Placements</Typography>
       <Tooltip title="Right" placement="right"><Button label="Right" size="small" /></Tooltip>
       <div />
       <Tooltip title="Bottom" placement="bottom"><Button label="Bottom" size="small" /></Tooltip>
@@ -59,8 +59,8 @@ export const RichContent: Story = {
     <Tooltip
       title={
         <Box>
-          <Typography variant="caption" sx={{ fontWeight: 600, display: 'block' }}>Keyboard shortcut</Typography>
-          <Typography variant="caption">⌘ + K</Typography>
+          <Typography variant="small" sx={{ fontWeight: 600, display: 'block' }}>Keyboard shortcut</Typography>
+          <Typography variant="small">⌘ + K</Typography>
         </Box>
       }
       placement="bottom"

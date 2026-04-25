@@ -41,6 +41,12 @@ interface BorderTokens {
 }
 
 declare module '@mui/material/styles' {
+  interface Theme {
+    brandConfig: BrandConfig;
+  }
+  interface ThemeOptions {
+    brandConfig?: BrandConfig;
+  }
   interface Shape {
     none: number
     xs: number
@@ -50,6 +56,16 @@ declare module '@mui/material/styles' {
     xl: number
     '2xl': number
     full: number
+  }
+  interface ShapeOptions {
+    none?: number
+    xs?: number
+    sm?: number
+    md?: number
+    lg?: number
+    xl?: number
+    '2xl'?: number
+    full?: number
   }
 }
 
@@ -163,7 +179,8 @@ export const DARK_MODE_SHADOWS: Shadows = [
 ]
 
 export function createBrandTheme(brand: BrandConfig) {
-  return createTheme({
+  const theme = createTheme({
+    brandConfig: brand,
     shadows: LIGHTER_SHADOWS,
     shape: {
       borderRadius: 4,
@@ -177,61 +194,61 @@ export function createBrandTheme(brand: BrandConfig) {
       full: 9999,
     },
     typography: {
-      fontFamily: 'var(--font-noto-sans), system-ui, sans-serif',
+      fontFamily: brand.fontFamily,
       htmlFontSize: 16,
       fontSize: 16,
       // Display headings - Bootstrap scale
       'display-1': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '5rem',      // 80px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-2': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '4.5rem',    // 72px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-3': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '4rem',      // 64px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-4': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '3.5rem',    // 56px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-5': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '3rem',      // 48px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-6': {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '2.5rem',    // 40px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       // Standard heading hierarchy - Bootstrap scale
       h1: {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '2.5rem',    // 40px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       h2: {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '2rem',      // 32px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       h3: {
-        fontFamily: 'var(--font-merriweather), serif',
+        fontFamily: brand.headingFontFamily,
         fontSize: '1.75rem',   // 28px
         fontWeight: 700,
         lineHeight: 1.2,
@@ -268,7 +285,6 @@ export function createBrandTheme(brand: BrandConfig) {
         lineHeight: 1.5,
       },
     },
-    colorSchemeSelector: 'data',
     colorSchemes: {
       light: { palette: buildLightPalette(brand) },
       dark:  { palette: buildDarkPalette(brand) },
@@ -303,13 +319,16 @@ export function createBrandTheme(brand: BrandConfig) {
             textTransform: 'none',
             fontSize: '1rem',
             fontWeight: 700,
+            lineHeight: 1,
             borderRadius: brand.buttonBorderRadius,
           },
           sizeSmall: {
             fontSize: '14px',
+            lineHeight: 1,
           },
           sizeLarge: {
             fontSize: '20px',
+            lineHeight: 1,
           },
         },
       },
@@ -394,4 +413,6 @@ export function createBrandTheme(brand: BrandConfig) {
       },
     },
   });
+  
+  return theme;
 }

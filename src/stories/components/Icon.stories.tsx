@@ -40,15 +40,15 @@ export const Sizes: Story = {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Icon icon={IconSearch} size="small" />
-        <Typography variant="caption">small</Typography>
+        <Typography variant="small">small</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Icon icon={IconSearch} size="medium" />
-        <Typography variant="caption">medium</Typography>
+        <Typography variant="small">medium</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Icon icon={IconSearch} size="large" />
-        <Typography variant="caption">large</Typography>
+        <Typography variant="small">large</Typography>
       </Box>
     </Box>
   ),
@@ -61,7 +61,7 @@ export const Colors: Story = {
         (color) => (
           <Box key={color} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
             <Icon icon={IconBell} color={color} />
-            <Typography variant="caption">{color}</Typography>
+            <Typography variant="small">{color}</Typography>
           </Box>
         )
       )}
@@ -85,7 +85,7 @@ export const CommonIcons: Story = {
       ].map(({ icon, name }) => (
         <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
           <Icon icon={icon} color="text.primary" />
-          <Typography variant="caption">{name}</Typography>
+          <Typography variant="small">{name}</Typography>
         </Box>
       ))}
     </Box>

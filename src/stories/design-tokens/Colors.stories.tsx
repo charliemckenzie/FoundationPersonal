@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
+import type { Palette } from '@mui/material/styles'
 import { buildLightPalette, buildDarkPalette } from '../../app/themes/semantic'
 import { primitiveScales, type ColorScale } from '../../app/themes/primitives/colors'
 
@@ -21,7 +22,7 @@ function DualModeTokenRow({ label, lightValue, darkValue, lightSource, darkSourc
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
       {/* Token Label */}
-      <Typography variant="caption" sx={{ fontWeight: 600, fontSize: 11 }}>
+      <Typography variant="small" sx={{ fontWeight: 600, fontSize: 11 }}>
         {label}
       </Typography>
       
@@ -49,7 +50,7 @@ function DualModeTokenRow({ label, lightValue, darkValue, lightSource, darkSourc
             }}
           />
           <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="caption" sx={{ fontFamily: 'monospace', fontSize: 11.5, fontWeight: 600, display: 'block', lineHeight: 1, mb: 0 }}>
+            <Typography variant="small" sx={{ fontFamily: 'monospace', fontSize: 11.5, fontWeight: 600, display: 'block', lineHeight: 1, mb: 0 }}>
               {lightValue}
             </Typography>
             {lightSource && lightSource.split(' — ').map((part, i) => (
@@ -82,7 +83,7 @@ function DualModeTokenRow({ label, lightValue, darkValue, lightSource, darkSourc
             }}
           />
           <Box sx={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '5px' }}>
-            <Typography variant="caption" sx={{ fontFamily: 'monospace', color: '#fff', fontSize: 11.5, fontWeight: 600, display: 'block', lineHeight: 1, mb: 0 }}>
+            <Typography variant="small" sx={{ fontFamily: 'monospace', color: '#fff', fontSize: 11.5, fontWeight: 600, display: 'block', lineHeight: 1, mb: 0 }}>
               {darkValue}
             </Typography>
             {darkSource && darkSource.split(' — ').map((part, i) => (
@@ -107,7 +108,7 @@ function SectionHeading({ children }: { children: string }) {
 
 function SectionSubtitle({ children }: { children: string }) {
   return (
-    <Typography variant="body2" color="text.muted" sx={{ mb: 3 }}>
+    <Typography variant="body" color="text.muted" sx={{ mb: 3 }}>
       {children}
     </Typography>
   )
@@ -116,8 +117,8 @@ function SectionSubtitle({ children }: { children: string }) {
 function ColorsDoc() {
   const theme = useTheme()
   const brand = theme.brandConfig
-  const lightPalette = buildLightPalette(brand)
-  const darkPalette = buildDarkPalette(brand)
+  const lightPalette = buildLightPalette(brand) as unknown as Palette
+  const darkPalette = buildDarkPalette(brand) as unknown as Palette
 
   const getPrimitiveName = (scale: ColorScale): string =>
     primitiveNameByStop500[scale[500]] ?? 'unknown'
@@ -538,7 +539,7 @@ function ColorsDoc() {
       <Typography variant="h4" sx={{ mb: 0.5, fontWeight: 800 }}>
         Semantic Colors
       </Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         All tokens shown with both light and dark mode values and their primitive sources.
       </Typography>
 

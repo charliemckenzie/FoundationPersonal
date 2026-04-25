@@ -9,11 +9,14 @@ const meta: Meta<typeof Button> = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   decorators: [
-    (Story) => (
-      <Box sx={{ bgcolor: 'background.default', p: 3, minWidth: 200 }}>
-        <Story />
-      </Box>
-    ),
+    (Story, context) => {
+      const bgType = context.globals.backgroundColor || 'default';
+      return (
+        <Box sx={{ bgcolor: `background.${bgType}`, p: 3, minWidth: 200 }}>
+          <Story />
+        </Box>
+      );
+    },
   ],
   argTypes: {
     variant: { control: 'select', options: ['contained', 'outlined', 'text', 'soft'] },

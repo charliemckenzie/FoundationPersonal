@@ -29,7 +29,7 @@ function ShadowsDoc() {
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" sx={{ mb: 1 }}>Shadows</Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         Elevation shadows are themed per colour scheme. Toggle Light / Dark in the toolbar to see each scale.
       </Typography>
 
@@ -55,12 +55,12 @@ function ShadowsDoc() {
           },
         ].map(({ label, description, rows }) => (
           <Box key={label} sx={{ p: 2, border: '1px solid', borderColor: 'divider', borderRadius: 1 }}>
-            <Typography variant="body2" sx={{ fontWeight: 700, mb: 0.5 }}>{label}</Typography>
-            <Typography variant="caption" color="text.muted" sx={{ display: 'block', mb: 1.5 }}>{description}</Typography>
+            <Typography variant="body" sx={{ fontWeight: 700, mb: 0.5 }}>{label}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 1.5 }}>{description}</Typography>
             {rows.map(({ name, value }) => (
               <Box key={name} sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
-                <Typography variant="caption" sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>{name}</Typography>
-                <Typography variant="caption" sx={{ fontFamily: 'monospace', color: 'text.muted' }}>{value}</Typography>
+                <Typography variant="small" sx={{ fontFamily: 'monospace', color: 'text.secondary' }}>{name}</Typography>
+                <Typography variant="small" sx={{ fontFamily: 'monospace', color: 'text.muted' }}>{value}</Typography>
               </Box>
             ))}
           </Box>
@@ -68,7 +68,7 @@ function ShadowsDoc() {
       </Box>
 
       <Typography variant="h6" sx={{ mb: 1 }}>Elevation Shadows</Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 3 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 3 }}>
         Each elevation is composed of 3 CSS shadow layers (umbra, penumbra, ambient) blended to create realistic depth.
       </Typography>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -98,11 +98,11 @@ function ShadowsDoc() {
                 }}
               />
               <Box sx={{ pt: 0.5 }}>
-                <Typography variant="body2" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
+                <Typography variant="body" sx={{ fontFamily: 'monospace', fontWeight: 600 }}>
                   elevation {elev}
                 </Typography>
                 {layers.length === 0 && (
-                  <Typography variant="caption" color="text.muted">none</Typography>
+                  <Typography variant="small" color="text.muted">none</Typography>
                 )}
               </Box>
               {layers.length > 0 && (
@@ -120,19 +120,19 @@ function ShadowsDoc() {
                           flexShrink: 0,
                         }}
                       />
-                      <Typography variant="caption" sx={{ fontFamily: 'monospace', color: 'text.secondary', minWidth: 64 }}>
+                      <Typography variant="small" sx={{ fontFamily: 'monospace', color: 'text.secondary', minWidth: 64 }}>
                         {(['Umbra', 'Penumbra', 'Ambient'] as const)[i]}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontFamily: 'monospace', color: 'text.muted', minWidth: 140 }}>
+                      <Typography variant="small" sx={{ fontFamily: 'monospace', color: 'text.muted', minWidth: 140 }}>
                         {layer.color}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
+                      <Typography variant="small" sx={{ fontFamily: 'monospace' }}>
                         x&nbsp;{layer.x}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
+                      <Typography variant="small" sx={{ fontFamily: 'monospace' }}>
                         y&nbsp;{layer.y}
                       </Typography>
-                      <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
+                      <Typography variant="small" sx={{ fontFamily: 'monospace' }}>
                         blur&nbsp;{layer.blur}
                       </Typography>
                     </Box>

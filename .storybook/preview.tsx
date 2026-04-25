@@ -1,65 +1,50 @@
-import React from 'react';
-import type { Preview, Decorator } from '@storybook/react';
-import { ThemeProvider } from '@mui/material/styles';
+import type { Preview } from '@storybook/react';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import { useMemo, useEffect } from 'react';
 import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
+import '../src/app/globals.css';
 
-const themes = {
-  'Theme A': createBrandTheme(foundation),
-  'Theme B': createBrandTheme(themeB),
-} as const;
-
-type BrandKey = keyof typeof themes;
-type ColorScheme = 'light' | 'dark';
-
-const withThemeAndColorScheme: Decorator = (Story, context) => {
-  const brand = (context.globals['brand'] as BrandKey | undefined) ?? 'Theme A';
-  const colorScheme = (context.globals['colorScheme'] as ColorScheme | undefined) ?? 'light';
-  const theme = themes[brand] ?? themes['Theme A'];
-
-  React.useEffect(() => {
-    document.body.setAttribute('data-mui-color-scheme', colorScheme);
-  }, [colorScheme]);
-
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Story />
-    </ThemeProvider>
-  );
+const brands = {
+  foundation,
+  'theme-b': themeB,
 };
 
+// Load Google Fonts
+if (typeof document !== 'undefined') {
+  const link = document.createElement('link');
+  link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Merriweather:wght@700;900&display=swap';
+  link.rel = 'stylesheet';
+  document.head.appendChild(link);
+}
+
 const preview: Preview = {
-  globalTypes: {
-    brand: {
-      name: 'Brand',
-      description: 'Brand theme',
-      defaultValue: 'Theme A',
-      toolbar: {
-        icon: 'paintbrush',
-        items: [
-          { value: 'Theme A', title: 'Theme A' },
-          { value: 'Theme B', title: 'Theme B' },
-        ],
-        dynamicTitle: true,
-      },
+  decorators: [
+    (Story, context) => {
+      const mode = context.globals.colorScheme || 'light';
+      const brandKey = context.globals.brand || 'foundation';
+      
+      // Create a theme instance with the selected brand and mode
+      const theme = useMemo(() => {
+        const brandConfig = brands[brandKey as keyof typeof brands];
+        const brandTheme = createBrandTheme(brandConfig);
+        const { colorSchemes, ...themeConfig } = brandTheme as any;
+        return createTheme({
+          ...themeConfig,
+          palette: colorSchemes[mode].palette,
+        });
+      }, [mode, brandKey]);
+      
+      return (
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Story />
+        </ThemeProvider>
+      );
     },
-    colorScheme: {
-      name: 'Color Scheme',
-      description: 'Light or dark mode',
-      defaultValue: 'light',
-      toolbar: {
-        icon: 'sun',
-        items: [
-          { value: 'light', title: 'Light', icon: 'sun' },
-          { value: 'dark',  title: 'Dark',  icon: 'moon' },
-        ],
-        dynamicTitle: true,
-      },
-    },
-  },
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -68,7 +53,48 @@ const preview: Preview = {
       },
     },
   },
-  decorators: [withThemeAndColorScheme],
+  globalTypes: {
+    brand: {
+      description: 'Brand theme',
+      defaultValue: 'foundation',
+      toolbar: {
+        title: 'Brand',
+        icon: 'paintbrush',
+        items: [
+          { value: 'foundation', title: 'ART' },
+          { value: 'theme-b', title: 'QSuper' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    colorScheme: {
+      description: 'Color scheme for MUI components',
+      defaultValue: 'light',
+      toolbar: {
+        title: 'Color Scheme',
+        icon: 'circlehollow',
+        items: [
+          { value: 'light', icon: 'sun', title: 'Light mode' },
+          { value: 'dark', icon: 'moon', title: 'Dark mode' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+    backgroundColor: {
+      description: 'Semantic background color',
+      defaultValue: 'default',
+      toolbar: {
+        title: 'Background',
+        icon: 'photo',
+        items: [
+          { value: 'default', title: 'Default' },
+          { value: 'paper', title: 'Paper' },
+          { value: 'elevated', title: 'Elevated' },
+        ],
+        dynamicTitle: true,
+      },
+    },
+  },
 };
 
 export default preview;

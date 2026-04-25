@@ -35,7 +35,7 @@ function ModalDemo({ size = 'medium', title = 'Modal title', disableCloseOnBackd
           </>
         }
       >
-        <Typography variant="body2" color="text.muted">
+        <Typography variant="body" color="text.muted">
           This is the modal body. Use this area for forms, confirmations, or detail views.
         </Typography>
       </Modal>
@@ -64,7 +64,7 @@ export const NoTitle: Story = {
       <>
         <Button label="Open (no title)" onClick={() => setOpen(true)} />
         <Modal open={open} onClose={() => setOpen(false)} actions={<Button label="Close" onClick={() => setOpen(false)} />}>
-          <Typography variant="body2">A modal without a title bar.</Typography>
+          <Typography variant="body">A modal without a title bar.</Typography>
         </Modal>
       </>
     );

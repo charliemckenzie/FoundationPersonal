@@ -27,7 +27,7 @@ export const Sizes: Story = {
       {(['small', 'medium', 'large'] as const).map((size) => (
         <Box key={size} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
           <Spinner size={size} />
-          <Typography variant="caption">{size}</Typography>
+          <Typography variant="small">{size}</Typography>
         </Box>
       ))}
     </Box>
@@ -40,7 +40,7 @@ export const Colors: Story = {
       {(['primary', 'secondary', 'error', 'warning', 'info', 'success'] as const).map((color) => (
         <Box key={color} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
           <Spinner color={color} />
-          <Typography variant="caption">{color}</Typography>
+          <Typography variant="small">{color}</Typography>
         </Box>
       ))}
     </Box>

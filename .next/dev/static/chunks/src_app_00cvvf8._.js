@@ -29,12 +29,6 @@ __turbopack_context__.s([
     ()=>purple,
     "qBlue",
     ()=>qBlue,
-    "qSuperBlue",
-    ()=>qSuperBlue,
-    "qSuperNavy",
-    ()=>qSuperNavy,
-    "qSuperNeutral",
-    ()=>qSuperNeutral,
     "red",
     ()=>red,
     "salmon",
@@ -195,45 +189,6 @@ const livingCoral = {
     900: '#681917',
     950: '#420f0e'
 };
-const qSuperBlue = {
-    50: '#e8f4fc',
-    100: '#c3e2f8',
-    200: '#90c8f3',
-    300: '#5caeea',
-    400: '#2b95e2',
-    500: '#0084DD',
-    600: '#006bb5',
-    700: '#005292',
-    800: '#003a69',
-    900: '#002244',
-    950: '#001122'
-};
-const qSuperNavy = {
-    50: '#eceef9',
-    100: '#d0d4f1',
-    200: '#a8b0e4',
-    300: '#7e8cd6',
-    400: '#5668c9',
-    500: '#3549bc',
-    600: '#2334a5',
-    700: '#1b288c',
-    800: '#151F6D',
-    900: '#0f1651',
-    950: '#080c30'
-};
-const qSuperNeutral = {
-    50: '#fafafa',
-    100: '#f4f4f4',
-    200: '#e9e9e9',
-    300: '#d1d1d1',
-    400: '#b4b4b4',
-    500: '#909090',
-    600: '#6c6c6c',
-    700: '#545454',
-    800: '#474747',
-    900: '#404040',
-    950: '#1a1a1a'
-};
 const purple = {
     50: '#faf5ff',
     100: '#f3e8ff',
@@ -317,9 +272,6 @@ const primitiveScales = {
     blue,
     trueBlue,
     qBlue,
-    qSuperBlue,
-    qSuperNavy,
-    qSuperNeutral,
     deepBlue,
     livingCoral,
     violet,
@@ -403,12 +355,12 @@ function buildLightPalette(brand) {
             default: brand.neutral[50],
             paper: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"],
             elevated: brand.neutral[100],
-            brandPrimary: brand.surfaces?.brandPrimary ?? brand.primary[600],
+            brandPrimary: brand.primary[600],
             brandSecondary: brand.secondary[800],
             brandTertiary: brand.tertiary?.[500] ?? brand.primary[600],
-            brandSky: brand.surfaces?.sky ?? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["skyBlue"][200],
-            brandClear: brand.surfaces?.clear ?? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100],
-            brandWarm: brand.surfaces?.warm ?? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["salmon"][50]
+            brandSky: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["skyBlue"][200],
+            brandClear: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100],
+            brandWarm: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["salmon"][50]
         },
         // Text & Borders
         text: {
@@ -607,7 +559,8 @@ const DARK_MODE_SHADOWS = [
     '0px 11px 15px -7px rgba(0,0,0,0.5),0px 24px 38px 3px rgba(0,0,0,0.35),0px 9px 46px 8px rgba(0,0,0,0.3)'
 ];
 function createBrandTheme(brand) {
-    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$styles$2f$createTheme$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__createTheme$3e$__["createTheme"])({
+    const theme = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$styles$2f$createTheme$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__createTheme$3e$__["createTheme"])({
+        brandConfig: brand,
         shadows: LIGHTER_SHADOWS,
         shape: {
             borderRadius: 4,
@@ -621,61 +574,61 @@ function createBrandTheme(brand) {
             full: 9999
         },
         typography: {
-            fontFamily: 'var(--font-noto-sans), system-ui, sans-serif',
+            fontFamily: brand.fontFamily,
             htmlFontSize: 16,
             fontSize: 16,
             // Display headings - Bootstrap scale
             'display-1': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '5rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             'display-2': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '4.5rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             'display-3': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '4rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             'display-4': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '3.5rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             'display-5': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '3rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             'display-6': {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '2.5rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             // Standard heading hierarchy - Bootstrap scale
             h1: {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '2.5rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             h2: {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '2rem',
                 fontWeight: 700,
                 lineHeight: 1.2
             },
             h3: {
-                fontFamily: 'var(--font-merriweather), serif',
+                fontFamily: brand.headingFontFamily,
                 fontSize: '1.75rem',
                 fontWeight: 700,
                 lineHeight: 1.2
@@ -712,7 +665,6 @@ function createBrandTheme(brand) {
                 lineHeight: 1.5
             }
         },
-        colorSchemeSelector: 'data',
         colorSchemes: {
             light: {
                 palette: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["buildLightPalette"])(brand)
@@ -751,13 +703,16 @@ function createBrandTheme(brand) {
                         textTransform: 'none',
                         fontSize: '1rem',
                         fontWeight: 700,
+                        lineHeight: 1,
                         borderRadius: brand.buttonBorderRadius
                     },
                     sizeSmall: {
-                        fontSize: '14px'
+                        fontSize: '14px',
+                        lineHeight: 1
                     },
                     sizeLarge: {
-                        fontSize: '20px'
+                        fontSize: '20px',
+                        lineHeight: 1
                     }
                 }
             },
@@ -842,6 +797,7 @@ function createBrandTheme(brand) {
             }
         }
     });
+    return theme;
 }
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
@@ -857,12 +813,14 @@ __turbopack_context__.s([
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/themes/primitives/colors.ts [app-client] (ecmascript)");
 ;
 const foundation = {
-    name: 'foundation',
+    name: 'ART',
     primary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["trueBlue"],
     secondary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["deepBlue"],
     tertiary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["livingCoral"],
     neutral: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["neutral"],
-    buttonBorderRadius: '9999px'
+    buttonBorderRadius: '9999px',
+    fontFamily: '"Noto Sans", system-ui, sans-serif',
+    headingFontFamily: 'Merriweather, serif'
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

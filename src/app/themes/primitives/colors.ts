@@ -180,56 +180,6 @@ export const livingCoral: ColorScale = {
   950: '#420f0e',
 };
 
-/**
- * QSuper Blue — QSuper primary brand color.
- * Brand anchor #0084DD sits at [500].
- * [600] (#006bb5) is the accessible interaction shade — 5.1:1 on white, passes WCAG AA.
- * Use [500] only for decorative/large-text contexts (3.9:1 — passes AA Large only).
- */
-export const qSuperBlue: ColorScale = {
-  50:  '#e8f4fc',
-  100: '#c3e2f8',
-  200: '#90c8f3',
-  300: '#5caeea',
-  400: '#2b95e2',
-  500: '#0084DD',
-  600: '#006bb5',
-  700: '#005292',
-  800: '#003a69',
-  900: '#002244',
-  950: '#001122',
-};
-
-/** QSuper Navy — QSuper secondary brand color, anchored on #151F6D */
-export const qSuperNavy: ColorScale = {
-  50:  '#eceef9',
-  100: '#d0d4f1',
-  200: '#a8b0e4',
-  300: '#7e8cd6',
-  400: '#5668c9',
-  500: '#3549bc',
-  600: '#2334a5',
-  700: '#1b288c',
-  800: '#151F6D',
-  900: '#0f1651',
-  950: '#080c30',
-};
-
-/** QSuper Neutral — charcoal-based neutral for QSuper, text.primary anchored on #404040 at 900 */
-export const qSuperNeutral: ColorScale = {
-  50:  '#fafafa',
-  100: '#f4f4f4',
-  200: '#e9e9e9',
-  300: '#d1d1d1',
-  400: '#b4b4b4',
-  500: '#909090',
-  600: '#6c6c6c',
-  700: '#545454',
-  800: '#474747',
-  900: '#404040',
-  950: '#1a1a1a',
-};
-
 /** Purple — Theme B primary brand color */
 export const purple: ColorScale = {
   50:  '#faf5ff',
@@ -325,9 +275,6 @@ export const primitiveScales = {
   blue,
   trueBlue,
   qBlue,
-  qSuperBlue,
-  qSuperNavy,
-  qSuperNeutral,
   deepBlue,
   livingCoral,
   violet,

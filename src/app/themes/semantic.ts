@@ -57,12 +57,12 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       default:        brand.neutral[50],    // Foundation: #f8fafc
       paper:          white,               // #ffffff
       elevated:       brand.neutral[100],  // Foundation: #f1f5f9
-      brandPrimary:   brand.surfaces?.brandPrimary ?? brand.primary[600],  // QSuper: #0084DD (large text only)  Foundation: #0051ff
+      brandPrimary:   brand.primary[600],  // Foundation: trueBlue[600]  #0051ff
       brandSecondary: brand.secondary[800], // Foundation: deepBlue[800]  #1c355e
       brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600], // Foundation: livingCoral[500] #f24e49
-      brandSky:       brand.surfaces?.sky   ?? skyBlue[200],    // QSuper: #30B3EE  Foundation: #B9DCFB
-      brandClear:     brand.surfaces?.clear ?? clearBlue[100],  // QSuper: #8CDDFF  Foundation: #DDF5FF
-      brandWarm:      brand.surfaces?.warm  ?? salmon[50],      // QSuper: soft navy tint  Foundation: #F8EBE5
+      brandSky:       skyBlue[200],        // #B9DCFB
+      brandClear:     clearBlue[100],      // #DDF5FF
+      brandWarm:      salmon[50],          // #F8EBE5
     },
 
     // Text & Borders

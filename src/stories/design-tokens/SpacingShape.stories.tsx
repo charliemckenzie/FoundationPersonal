@@ -12,7 +12,7 @@ function SpacingBreakpointsDoc() {
   return (
     <Box sx={{ p: 4 }}>
       <Typography variant="h4" sx={{ mb: 1 }}>Breakpoints & Spacing</Typography>
-      <Typography variant="body2" color="text.muted" sx={{ mb: 4 }}>
+      <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         Base unit: {theme.spacing(1)} — multiply by factor (e.g. <code>theme.spacing(2)</code> = {theme.spacing(2)})
       </Typography>
 
@@ -20,10 +20,10 @@ function SpacingBreakpointsDoc() {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mb: 6 }}>
         {SPACING_STEPS.map((step) => (
           <Box key={step} sx={{ display: 'grid', gridTemplateColumns: '48px 60px 1fr', alignItems: 'center', gap: 2 }}>
-            <Typography variant="caption" color="text.muted" sx={{ fontFamily: 'monospace' }}>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace' }}>
               ×{step}
             </Typography>
-            <Typography variant="caption" sx={{ fontFamily: 'monospace' }}>
+            <Typography variant="small" sx={{ fontFamily: 'monospace' }}>
               {theme.spacing(step)}
             </Typography>
             {step > 0 && (
@@ -57,10 +57,10 @@ function SpacingBreakpointsDoc() {
               py: 1.5,
             }}
           >
-            <Typography variant="body2" sx={{ fontFamily: 'monospace', color: 'primary.main' }}>
+            <Typography variant="body" sx={{ fontFamily: 'monospace', color: 'primary.main' }}>
               {bp}
             </Typography>
-            <Typography variant="body2" color="text.muted">
+            <Typography variant="body" color="text.muted">
               {value}px
             </Typography>
             <Box sx={{ position: 'relative', height: 8 }}>
