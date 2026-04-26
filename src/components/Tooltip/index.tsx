@@ -48,6 +48,8 @@ export function Tooltip({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            lineHeight: 1.2,
+            py: 0.5,
           },
         },
       }}

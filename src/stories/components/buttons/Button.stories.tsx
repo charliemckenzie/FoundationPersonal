@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
 import Box from '@mui/material/Box';
-import { Button } from '../../components/Button';
+import { Button } from '../../../components/Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'Components / Button',
+  title: 'Components / Buttons / Button',
   component: Button,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
@@ -78,47 +78,21 @@ export const Loading: Story = {
   render: () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Box>
-        <Box sx={{ mb: 1, fontWeight: 600 }}>Contained</Box>
+        <Box sx={{ mb: 1, fontWeight: 600 }}>Spinner Only (default)</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button label="Primary" variant="contained" color="primary" loading />
-          <Button label="Secondary" variant="contained" color="secondary" loading />
-          <Button label="Info" variant="contained" color="info" loading />
-          <Button label="Warning" variant="contained" color="warning" loading />
-          <Button label="Error" variant="contained" color="error" loading />
-          <Button label="Success" variant="contained" color="success" loading />
-        </Box>
-      </Box>
-      <Box>
-        <Box sx={{ mb: 1, fontWeight: 600 }}>Soft</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button label="Primary" variant="soft" color="primary" loading />
-          <Button label="Secondary" variant="soft" color="secondary" loading />
-          <Button label="Info" variant="soft" color="info" loading />
-          <Button label="Warning" variant="soft" color="warning" loading />
-          <Button label="Error" variant="soft" color="error" loading />
-          <Button label="Success" variant="soft" color="success" loading />
-        </Box>
-      </Box>
-      <Box>
-        <Box sx={{ mb: 1, fontWeight: 600 }}>Ghost</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button label="Primary" variant="ghost" color="primary" loading />
-          <Button label="Secondary" variant="ghost" color="secondary" loading />
-          <Button label="Info" variant="ghost" color="info" loading />
-          <Button label="Warning" variant="ghost" color="warning" loading />
-          <Button label="Error" variant="ghost" color="error" loading />
-          <Button label="Success" variant="ghost" color="success" loading />
+          <Button label="Primary" variant="outlined" color="primary" loading />
         </Box>
       </Box>
       <Box>
-        <Box sx={{ mb: 1, fontWeight: 600 }}>Outlined</Box>
+        <Box sx={{ mb: 1, fontWeight: 600 }}>With Label (hideLoadingText=false)</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button label="Primary" variant="outlined" color="primary" loading />
-          <Button label="Secondary" variant="outlined" color="secondary" loading />
-          <Button label="Info" variant="outlined" color="info" loading />
-          <Button label="Warning" variant="outlined" color="warning" loading />
-          <Button label="Error" variant="outlined" color="error" loading />
-          <Button label="Success" variant="outlined" color="success" loading />
+          <Button label="Saving..." variant="contained" color="primary" loading hideLoadingText={false} />
+          <Button label="Saving..." variant="soft" color="primary" loading hideLoadingText={false} />
+          <Button label="Saving..." variant="ghost" color="primary" loading hideLoadingText={false} />
+          <Button label="Saving..." variant="outlined" color="primary" loading hideLoadingText={false} />
         </Box>
       </Box>
     </Box>
@@ -155,22 +129,49 @@ function ReversedShowcase() {
         bgcolor: 'background.brandPrimary',
       }}
     >
-      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button label="Contained" variant="contained" reversed />
-        <Button label="Soft" variant="soft" reversed />
-        <Button label="Outlined" variant="outlined" reversed />
-        <Button label="Ghost" variant="ghost" reversed />
+      <Box>
+        <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Variants</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Contained" variant="contained" reversed />
+          <Button label="Soft" variant="soft" reversed />
+          <Button label="Outlined" variant="outlined" reversed />
+          <Button label="Ghost" variant="ghost" reversed />
+        </Box>
       </Box>
-      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button label="Small" variant="contained" size="small" reversed />
-        <Button label="Medium" variant="contained" size="medium" reversed />
-        <Button label="Large" variant="contained" size="large" reversed />
+      <Box>
+        <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Sizes</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Small" variant="contained" size="small" reversed />
+          <Button label="Medium" variant="contained" size="medium" reversed />
+          <Button label="Large" variant="contained" size="large" reversed />
+        </Box>
       </Box>
-      <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
-        <Button label="Contained" variant="contained" reversed disabled />
-        <Button label="Soft" variant="soft" reversed disabled />
-        <Button label="Outlined" variant="outlined" reversed disabled />
-        <Button label="Ghost" variant="ghost" reversed disabled />
+      <Box>
+        <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Disabled</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Contained" variant="contained" reversed disabled />
+          <Button label="Soft" variant="soft" reversed disabled />
+          <Button label="Outlined" variant="outlined" reversed disabled />
+          <Button label="Ghost" variant="ghost" reversed disabled />
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Loading — Spinner Only (default)</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Primary" variant="contained" reversed loading />
+          <Button label="Primary" variant="soft" reversed loading />
+          <Button label="Primary" variant="ghost" reversed loading />
+          <Button label="Primary" variant="outlined" reversed loading />
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Loading — With Label</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Saving..." variant="contained" reversed loading hideLoadingText={false} />
+          <Button label="Saving..." variant="soft" reversed loading hideLoadingText={false} />
+          <Button label="Saving..." variant="ghost" reversed loading hideLoadingText={false} />
+          <Button label="Saving..." variant="outlined" reversed loading hideLoadingText={false} />
+        </Box>
       </Box>
     </Box>
   );

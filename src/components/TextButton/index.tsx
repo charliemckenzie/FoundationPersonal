@@ -1,10 +1,12 @@
 import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { faArrowRight, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { Icon, type IconSize } from '../Icon';
+import { Spinner } from '../Spinner';
 import type React from 'react';
 
 export type TextButtonSize = 'small' | 'medium' | 'large';
@@ -15,6 +17,8 @@ export interface TextButtonProps {
   size?: TextButtonSize;
   color?: TextButtonColor;
   disabled?: boolean;
+  loading?: boolean;
+  reversed?: boolean;
   startIcon?: IconDefinition;
   endIcon?: IconDefinition;
   iconDirection?: 'left' | 'right';
@@ -27,6 +31,8 @@ export function TextButton({
   size = 'medium',
   color = 'primary',
   disabled = false,
+  loading = false,
+  reversed = false,
   startIcon,
   endIcon,
   iconDirection = 'right',
@@ -40,6 +46,21 @@ export function TextButton({
     large: 'lg',
   };
   const iconSize = iconSizeMap[size];
+  
+  // Map size to Spinner size
+  const spinnerSizeMap: Record<TextButtonSize, 'small' | 'medium' | 'large'> = {
+    small: 'small',
+    medium: 'small',
+    large: 'medium',
+  };
+  const spinnerSize = spinnerSizeMap[size];
+  
+  // Fixed width for icon/spinner containers to prevent shifting
+  const iconContainerWidth: Record<TextButtonSize, number> = {
+    small: 16,   // spinner is 16px (larger than icon's 14px)
+    medium: 16,  // both icon and spinner are 16px
+    large: 24,   // spinner is 24px (larger than icon's 20px)
+  };
   
   // Default arrow icon when none specified
   const defaultIcon = iconDirection === 'left' ? faArrowLeft : faArrowRight;
@@ -76,48 +97,61 @@ export function TextButton({
   return (
     <ButtonBase
       disabled={disabled}
-      onClick={onClick}
+      disableRipple
+      aria-busy={loading}
+      onClick={loading ? undefined : onClick}
       type={type}
       sx={(theme: Theme) => ({
         display: 'inline-flex',
         alignItems: 'center',
-        gap: theme.spacing(0.75),
+        gap: theme.spacing(1),
         padding: theme.spacing(0.5, 0),
-        color: disabled ? theme.palette.action.disabled : theme.palette[color].main,
+        color: reversed
+          ? (disabled ? alpha(theme.palette.common.white, 0.30) : theme.palette.common.white)
+          : (disabled ? theme.palette.action.disabled : theme.palette[color].main),
         fontSize: fontSizeMap[size],
         fontWeight: 700,
         lineHeight: lineHeightMap[size],
         fontFamily: theme.typography.fontFamily,
         textAlign: 'left',
-        cursor: disabled ? 'not-allowed' : 'pointer',
+        cursor: disabled || loading ? 'not-allowed' : 'pointer',
         borderRadius: theme.spacing(0.5),
         transition: theme.transitions.create(['color'], {
           duration: theme.transitions.duration.short,
         }),
+        ...(loading && {
+          pointerEvents: 'none',
+        }),
         '&:hover:not(:disabled)': {
-          color: theme.palette[color].dark,
-          ...(isUsingDefaultIcon && {
+          color: reversed ? alpha(theme.palette.common.white, 0.88) : theme.palette[color].dark,
+          ...(isUsingDefaultIcon && !loading && {
             '& .text-button-icon': {
               transform: iconDirection === 'left' ? `translateX(-${theme.spacing(0.5)})` : `translateX(${theme.spacing(0.5)})`,
             },
           }),
         },
         '&:focus-visible': {
-          outline: `2px solid ${theme.palette[color].main}`,
+          outline: `2px solid ${reversed ? theme.palette.common.white : theme.palette[color].main}`,
           outlineOffset: '2px',
         },
         '&:active:not(:disabled)': {
-          color: theme.palette[color].dark,
+          color: reversed ? alpha(theme.palette.common.white, 0.80) : theme.palette[color].dark,
         },
         '&:disabled': {
           pointerEvents: 'auto',
         },
       })}
     >
-      {effectiveStartIcon && (
-        <Box className="text-button-icon" sx={(theme: Theme) => iconBoxStyles(theme, isUsingDefaultIcon)}>
-          <Icon icon={effectiveStartIcon} size={iconSize} color="inherit" />
+      {loading && iconDirection === 'left' ? (
+        <Box sx={{ display: 'inline-flex', width: iconContainerWidth[size], justifyContent: 'center' }}>
+          <Spinner size={spinnerSize} color="inherit" />
         </Box>
+      ) : (
+        !loading && effectiveStartIcon && (
+          <Box className="text-button-icon" sx={(theme: Theme) => ({ ...iconBoxStyles(theme, isUsingDefaultIcon), width: iconContainerWidth[size], justifyContent: 'center' })}>
+            <Icon icon={effectiveStartIcon} size={iconSize} color="inherit" />
+          </Box>
+        )
       )}
       <Typography
         component="span"
@@ -130,10 +164,16 @@ export function TextButton({
       >
         {label}
       </Typography>
-      {effectiveEndIcon && (
-        <Box className="text-button-icon" sx={(theme: Theme) => iconBoxStyles(theme, isUsingDefaultIcon)}>
-          <Icon icon={effectiveEndIcon} size={iconSize} color="inherit" />
+      {loading && iconDirection === 'right' ? (
+        <Box sx={{ display: 'inline-flex', width: iconContainerWidth[size], justifyContent: 'center' }}>
+          <Spinner size={spinnerSize} color="inherit" />
         </Box>
+      ) : (
+        !loading && effectiveEndIcon && (
+          <Box className="text-button-icon" sx={(theme: Theme) => ({ ...iconBoxStyles(theme, isUsingDefaultIcon), width: iconContainerWidth[size], justifyContent: 'center' })}>
+            <Icon icon={effectiveEndIcon} size={iconSize} color="inherit" />
+          </Box>
+        )
       )}
     </ButtonBase>
   );

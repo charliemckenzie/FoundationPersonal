@@ -1,4 +1,5 @@
 import MuiButton from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
@@ -18,6 +19,7 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   color?: ButtonColor;
   disabled?: boolean;
   loading?: boolean;
+  hideLoadingText?: boolean;
   fullWidth?: boolean;
   reversed?: boolean;
   startIcon?: IconDefinition;
@@ -33,6 +35,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   color = 'primary',
   disabled = false,
   loading = false,
+  hideLoadingText = true,
   fullWidth = false,
   reversed = false,
   startIcon,
@@ -83,6 +86,43 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       color: (theme: Theme) => theme.palette.action.disabled,
     },
   } : undefined;
+
+  const ghostStyles = variant === 'ghost' ? {
+    backgroundColor: 'transparent',
+    color: (theme: Theme) => theme.palette[color].main,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.12),
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'transparent',
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  } : undefined;
+
+  const outlinedStyles = variant === 'outlined' ? {
+    backgroundColor: 'transparent',
+    borderColor: (theme: Theme) => theme.palette.mode === 'light' 
+      ? alpha(theme.palette[color].main, 0.5)
+      : theme.palette[color].main,
+    color: (theme: Theme) => theme.palette[color].main,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.04),
+      borderColor: (theme: Theme) => theme.palette[color].main,
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'transparent',
+      borderColor: (theme: Theme) => theme.palette.action.disabledBackground,
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  } : undefined;
   
   const reversedStyles = reversed ? {
     ...(variant === 'contained' && {
@@ -97,7 +137,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50) },
     }),
     ...(variant === 'outlined' && {
-      borderColor: (theme: Theme) => theme.palette.common.white,
+      borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.5),
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12), borderColor: (theme: Theme) => theme.palette.common.white },
       '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
@@ -121,6 +161,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
     medium: { height: 48, paddingLeft: '24px', paddingRight: '24px' },
     large:  { height: 56, paddingLeft: '28px', paddingRight: '28px' },
   };
+const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
+  const showSpinnerOnly = loading && hideLoadingText;
 
   return (
     <MuiButton
@@ -128,17 +170,25 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       variant={muiVariant}
       size={size}
       color={color}
-      disabled={disabled || loading}
+      disabled={disabled}
+      aria-busy={loading}
       fullWidth={fullWidth}
-      startIcon={loading ? <CircularProgress size={16} color="inherit" /> : startIcon ? <Icon icon={startIcon} size={iconSize} color="inherit" /> : undefined}
+      startIcon={loading && !hideLoadingText ? <CircularProgress size={spinnerSize} color="inherit" /> : !loading && startIcon ? <Icon icon={startIcon} size={iconSize} color="inherit" /> : undefined}
       endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSize} color="inherit" /> : undefined}
-      onClick={onClick}
+      onClick={loading ? undefined : onClick}
       type={type}
       {...rest}
       sx={(theme) => ({
         ...sizeStyles[size],
-        ...(containedStyles ?? softStyles),
+        ...(containedStyles ?? outlinedStyles ?? softStyles ?? ghostStyles),
         ...reversedStyles,
+        ...(showSpinnerOnly && {
+          position: 'relative',
+        }),
+        ...(loading && {
+          cursor: 'not-allowed !important',
+          pointerEvents: 'none !important',
+        }),
         '&.Mui-disabled, &:disabled': {
           cursor: 'not-allowed !important',
           pointerEvents: 'none !important',
@@ -156,7 +206,32 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         },
       })}
     >
-      {label}
+      <Box
+        component="span"
+        sx={{
+          ...(showSpinnerOnly && {
+            opacity: 0,
+          }),
+        }}
+      >
+        {label}
+      </Box>
+      {showSpinnerOnly && (
+        <Box
+          component="span"
+          sx={{
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
+            transform: 'translate(-50%, -50%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <CircularProgress size={spinnerSize} color="inherit" />
+        </Box>
+      )}
     </MuiButton>
   );
 });
