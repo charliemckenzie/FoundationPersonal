@@ -4,7 +4,6 @@ import type { Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { trueBlue } from '../../app/themes/primitives/colors';
 import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
 
@@ -101,20 +100,20 @@ export function IconButton({
   
   const softStyles = variant === 'soft' ? {
     backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-      ? alpha(trueBlue[500], 0.15)
+      ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.15)
       : alpha(theme.palette[color as keyof Theme['palette']].main, 0.08),
     color: (theme: Theme) => theme.palette.mode === 'dark'
-      ? trueBlue[300]
+      ? theme.palette[color as keyof Theme['palette']].main
       : theme.palette[color as keyof Theme['palette']].main,
     boxShadow: 'none',
     '&:hover': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(trueBlue[500], 0.25)
+        ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.25)
         : alpha(theme.palette[color as keyof Theme['palette']].main, 0.15),
     },
     '&:active': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(trueBlue[500], 0.30)
+        ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.30)
         : alpha(theme.palette[color as keyof Theme['palette']].main, 0.20),
     },
     '&.Mui-disabled': {

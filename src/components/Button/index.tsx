@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import { trueBlue } from '../../app/themes/primitives/colors';
 import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Icon, type IconSize } from '../Icon';
 import React from 'react';
@@ -65,20 +64,20 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   
   const softStyles = variant === 'soft' ? {
     backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-      ? alpha(trueBlue[500], 0.15)
+      ? alpha(theme.palette[color].main, 0.15)
       : alpha(theme.palette[color].main, 0.08),
     color: (theme: Theme) => theme.palette.mode === 'dark'
-      ? trueBlue[300]
+      ? theme.palette[color].main
       : theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(trueBlue[500], 0.25)
+        ? alpha(theme.palette[color].main, 0.25)
         : alpha(theme.palette[color].main, 0.15),
     },
     '&:active': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(trueBlue[500], 0.30)
+        ? alpha(theme.palette[color].main, 0.30)
         : alpha(theme.palette[color].main, 0.20),
     },
     '&.Mui-disabled': {

@@ -7,7 +7,48 @@ const meta: Meta<typeof Button> = {
   title: 'Components / Buttons / Button',
   component: Button,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: { 
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `Primary action component for user interactions.
+
+## Variants
+
+**Contained** — highest emphasis, primary actions  
+**Soft** — medium emphasis, secondary actions  
+**Outlined** — low-medium emphasis, less prominent actions  
+**Ghost** — lowest emphasis, tertiary actions or inline with text
+
+## When to Use Each Variant
+
+Use **contained** for the primary action in a view (submit, save, confirm).  
+Use **soft** for important but not primary actions (cancel, back, alternative paths).  
+Use **outlined** for secondary actions that need definition (filters, non-destructive edits).  
+Use **ghost** for tertiary actions or when sitting on coloured backgrounds.
+
+## Color Semantics
+
+**Primary** — default for most actions  
+**Secondary** — alternative actions, brand variety  
+**Error** — destructive actions (delete, remove, cancel subscription)  
+**Warning** — caution actions (proceed with risk, override)  
+**Info** — informational actions (learn more, view details)  
+**Success** — confirmations (approve, publish, complete)
+
+## Reversed Usage
+
+Use \`reversed\` when placing buttons on coloured backgrounds (\`background.brandPrimary\`, \`background.brandSecondary\`, or custom brand surfaces).
+
+Reversed buttons render in white/light tones optimised for dark backgrounds. All variants (contained, soft, outlined, ghost) support reversed mode.
+
+## Loading States
+
+**Spinner only** (\`loading\`, default): Label hidden, spinner centered. Use for single-action contexts where the button label is clear from context.  
+**Spinner with label** (\`loading hideLoadingText={false}\`): Spinner replaces start icon, label visible. Use for multi-step flows or when the action needs reinforcement.`,
+      },
+    },
+  },
   decorators: [
     (Story, context) => {
       const bgType = context.globals.backgroundColor || 'default';

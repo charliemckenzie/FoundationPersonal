@@ -19,8 +19,8 @@ export interface TextButtonProps {
   disabled?: boolean;
   loading?: boolean;
   reversed?: boolean;
-  startIcon?: IconDefinition;
-  endIcon?: IconDefinition;
+  startIcon?: IconDefinition | string;
+  endIcon?: IconDefinition | string;
   iconDirection?: 'left' | 'right';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
