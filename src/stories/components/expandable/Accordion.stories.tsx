@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Accordion } from '../../components/Accordion';
+import Box from '@mui/material/Box';
+import { Accordion } from '../../../components/Accordion';
 
 const SAMPLE_ITEMS = [
   { id: 'panel-1', title: 'What is Foundation?', content: 'Foundation is the design system powering all UX prototypes. It provides a consistent set of components built on MUI.' },
@@ -8,29 +9,44 @@ const SAMPLE_ITEMS = [
 ];
 
 const meta: Meta<typeof Accordion> = {
-  title: 'Components / Accordion',
+  title: 'Components / Expandable / Accordion',
   component: Accordion,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  decorators: [
+    (Story, context) => {
+      const bgType = context.globals.backgroundColor || 'default';
+      return (
+        <Box sx={{ bgcolor: `background.${bgType}`, p: 3, minWidth: 400 }}>
+          <Story />
+        </Box>
+      );
+    },
+  ],
+  argTypes: {
+    variant: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+    defaultExpanded: { table: { disable: true } },
+  },
 };
 
 export default meta;
 type Story = StoryObj<typeof Accordion>;
 
 export const Default: Story = {
-  args: { items: SAMPLE_ITEMS },
+  args: { items: SAMPLE_ITEMS, showCloseAll: false },
 };
 
 export const DefaultExpanded: Story = {
-  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1' },
+  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1', showCloseAll: false },
 };
 
-export const WithDisabledItem: Story = {
+export const Exclusive: Story = {
+  name: 'Exclusive — only one open',
   args: {
-    items: [
-      ...SAMPLE_ITEMS.slice(0, 2),
-      { id: 'panel-3', title: 'Locked section (disabled)', content: 'This panel is disabled.', disabled: true },
-    ],
+    items: SAMPLE_ITEMS,
+    variant: 'exclusive',
+    defaultExpanded: 'panel-1',
   },
 };
 
@@ -38,6 +54,7 @@ export const SingleItem: Story = {
   args: {
     items: [{ id: 'single', title: 'Single panel', content: 'Just one panel, expanded by default.', }],
     defaultExpanded: 'single',
+    showCloseAll: false,
   },
 };
 
@@ -47,6 +64,7 @@ export const MultipleExpanded: Story = {
     <Accordion
       items={SAMPLE_ITEMS}
       defaultExpanded="panel-1"
+      showCloseAll={true}
     />
   ),
 };

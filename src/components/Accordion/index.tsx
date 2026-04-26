@@ -2,11 +2,11 @@ import MuiAccordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { faChevronDown } from '@fortawesome/pro-solid-svg-icons';
 import { useCallback, useState } from 'react';
 import { Icon } from '../Icon';
+import { Button } from '../Button';
 import type React from 'react';
 
 export interface AccordionItem {
@@ -20,6 +20,8 @@ export interface AccordionProps {
   items: AccordionItem[];
   defaultExpanded?: string;
   onChange?: (id: string, expanded: boolean) => void;
+  variant?: 'default' | 'exclusive';
+  showCloseAll?: boolean;
 }
 
 interface AccordionPanelProps {
@@ -41,39 +43,50 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
       onChange={handleChange}
       disableGutters
       elevation={0}
-      sx={{
+      sx={(theme) => ({
         border: 1,
-        borderColor: 'divider',
-        '&:not(:last-child)': { borderBottom: 0 },
+        borderColor: theme.palette.border.default,
+        borderRadius: `${theme.spacing(1)} !important`,
+        backgroundColor: theme.palette.background.paper,
+        overflow: 'hidden',
         '&::before': { display: 'none' },
-      }}
+        '&:focus-within': {
+          outline: `2px solid ${theme.palette.border.focus}`,
+          outlineOffset: '2px',
+        },
+      })}
     >
       <AccordionSummary
         expandIcon={<Icon icon={faChevronDown} size="sm" />}
         aria-controls={`${item.id}-content`}
         id={`${item.id}-header`}
         sx={(theme) => ({
+          py: theme.spacing(2.5),
+          px: theme.spacing(3),
+          '& .MuiAccordionSummary-content': {
+            margin: 0,
+          },
           '&.Mui-expanded': {
-            backgroundColor: theme.palette.action.selected,
+            backgroundColor: theme.palette.background.elevated,
           },
           '&:hover:not(.Mui-disabled)': {
-            backgroundColor: theme.palette.action.hover,
+            backgroundColor: theme.palette.background.elevated,
           },
           '&.Mui-expanded:hover:not(.Mui-disabled)': {
-            backgroundColor: theme.palette.action.selected,
+            backgroundColor: theme.palette.background.elevated,
           },
           '&.Mui-focusVisible': {
-            outline: `2px solid ${theme.palette.border.focus}`,
-            outlineOffset: '-2px',
+            outline: 'none',
             boxShadow: 'none',
+            backgroundColor: theme.palette.background.elevated,
           },
         })}
       >
-        <Typography variant="body" sx={{ fontWeight: 500 }}>
+        <Typography variant="body" sx={(theme) => ({ fontWeight: 700, color: theme.palette.text.heading })}>
           {item.title}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails id={`${item.id}-content`}>
+      <AccordionDetails id={`${item.id}-content`} sx={(theme) => ({ px: theme.spacing(3), py: theme.spacing(4) })}>
         {typeof item.content === 'string' ? (
           <Typography variant="body" color="text.muted">
             {item.content}
@@ -86,7 +99,7 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
   );
 }
 
-export function Accordion({ items, defaultExpanded, onChange }: AccordionProps) {
+export function Accordion({ items, defaultExpanded, onChange, variant = 'default', showCloseAll = false }: AccordionProps) {
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set(defaultExpanded ? [defaultExpanded] : []),
   );
@@ -94,6 +107,11 @@ export function Accordion({ items, defaultExpanded, onChange }: AccordionProps) 
   const handleChange = useCallback(
     (id: string, isExpanded: boolean) => {
       setExpanded((prev) => {
+        if (variant === 'exclusive') {
+          // Only one panel can be open at a time
+          return isExpanded ? new Set([id]) : new Set();
+        }
+        // Default behavior: multiple panels can be open
         const next = new Set(prev);
         if (isExpanded) next.add(id);
         else next.delete(id);
@@ -101,7 +119,7 @@ export function Accordion({ items, defaultExpanded, onChange }: AccordionProps) 
       });
       onChange?.(id, isExpanded);
     },
-    [onChange],
+    [onChange, variant],
   );
 
   const handleCloseAll = useCallback(() => {
@@ -112,27 +130,27 @@ export function Accordion({ items, defaultExpanded, onChange }: AccordionProps) 
 
   return (
     <Box>
-      {items.length > 1 && (
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+      {items.length > 1 && variant === 'default' && showCloseAll && (
+        <Box sx={(theme) => ({ display: 'flex', justifyContent: 'flex-end', mb: theme.spacing(1) })}>
           <Button
-            variant="text"
+            label="Close all"
+            variant="ghost"
             size="small"
             onClick={handleCloseAll}
             disabled={expanded.size === 0}
-            disableRipple
-          >
-            Close all
-          </Button>
+          />
         </Box>
       )}
-      {items.map((item) => (
-        <AccordionPanel
-          key={item.id}
-          item={item}
-          expanded={expanded.has(item.id)}
-          onChange={handleChange}
-        />
-      ))}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: (theme) => theme.spacing(1) }}>
+        {items.map((item) => (
+          <AccordionPanel
+            key={item.id}
+            item={item}
+            expanded={expanded.has(item.id)}
+            onChange={handleChange}
+          />
+        ))}
+      </Box>
     </Box>
   );
 }
