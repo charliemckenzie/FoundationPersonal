@@ -9,7 +9,7 @@ const meta: Meta<typeof Alert> = {
   parameters: { layout: 'padded' },
   argTypes: {
     severity: { control: 'select', options: ['error', 'warning', 'info', 'success'] },
-    variant: { control: 'select', options: ['standard', 'filled', 'outlined'] },
+    variant: { control: 'select', options: ['standard', 'filled', 'outlined', 'no-icon'] },
   },
 };
 
@@ -58,6 +58,6 @@ export const WithAction: Story = {
   args: {
     severity: 'info',
     message: 'A new version of the app is available.',
-    action: <Button label="Refresh" size="small" variant="text" color="info" />,
+    action: <Button label="Refresh" size="small" variant="ghost" color="info" />,
   },
 };
