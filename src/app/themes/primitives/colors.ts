@@ -255,6 +255,36 @@ export const salmon: ColorScale = {
   950: '#200706',
 };
 
+/** Q Navy — QSuper secondary brand colour, anchored on #151F6D */
+export const qNavy: ColorScale = {
+  50:  '#eaecf5',
+  100: '#c6cbea',
+  200: '#9da6d8',
+  300: '#7381c6',
+  400: '#4f60b4',
+  500: '#3347a2',
+  600: '#243490',
+  700: '#1a267e',
+  800: '#151F6D',
+  900: '#0e1550',
+  950: '#070b33',
+};
+
+/** Q Sky Blue — QSuper tertiary brand colour, anchored on #30B3EE; Light Blue (#8CDDFF) sits at 300 */
+export const qSkyBlue: ColorScale = {
+  50:  '#edf8fd',
+  100: '#d0eefb',
+  200: '#a9def7',
+  300: '#8CDDFF',
+  400: '#59caef',
+  500: '#30B3EE',
+  600: '#1595cc',
+  700: '#1077a3',
+  800: '#0c587a',
+  900: '#073a51',
+  950: '#031d28',
+};
+
 /** Sand — warm light cream, anchored on #FDF4E8 */
 export const sand: ColorScale = {
   50:  '#FDF4E8',
@@ -275,6 +305,8 @@ export const primitiveScales = {
   blue,
   trueBlue,
   qBlue,
+  qNavy,
+  qSkyBlue,
   deepBlue,
   livingCoral,
   violet,

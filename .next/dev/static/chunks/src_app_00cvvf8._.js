@@ -29,6 +29,10 @@ __turbopack_context__.s([
     ()=>purple,
     "qBlue",
     ()=>qBlue,
+    "qNavy",
+    ()=>qNavy,
+    "qSkyBlue",
+    ()=>qSkyBlue,
     "red",
     ()=>red,
     "salmon",
@@ -254,6 +258,32 @@ const salmon = {
     900: '#3e120b',
     950: '#200706'
 };
+const qNavy = {
+    50: '#eaecf5',
+    100: '#c6cbea',
+    200: '#9da6d8',
+    300: '#7381c6',
+    400: '#4f60b4',
+    500: '#3347a2',
+    600: '#243490',
+    700: '#1a267e',
+    800: '#151F6D',
+    900: '#0e1550',
+    950: '#070b33'
+};
+const qSkyBlue = {
+    50: '#edf8fd',
+    100: '#d0eefb',
+    200: '#a9def7',
+    300: '#8CDDFF',
+    400: '#59caef',
+    500: '#30B3EE',
+    600: '#1595cc',
+    700: '#1077a3',
+    800: '#0c587a',
+    900: '#073a51',
+    950: '#031d28'
+};
 const sand = {
     50: '#FDF4E8',
     100: '#fae3c5',
@@ -272,6 +302,8 @@ const primitiveScales = {
     blue,
     trueBlue,
     qBlue,
+    qNavy,
+    qSkyBlue,
     deepBlue,
     livingCoral,
     violet,

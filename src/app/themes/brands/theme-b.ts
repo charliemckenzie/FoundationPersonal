@@ -1,10 +1,11 @@
-import { qBlue, pink, neutral } from '../primitives/colors';
+import { qBlue, qNavy, qSkyBlue, neutral } from '../primitives/colors';
 import type { BrandConfig } from './index';
 
 export const themeB: BrandConfig = {
   name: 'QSuper',
   primary: qBlue,
-  secondary: pink,
+  secondary: qNavy,
+  tertiary: qSkyBlue,
   neutral,
   buttonBorderRadius: 8,
   fontFamily: '"Open Sans", system-ui, sans-serif',
