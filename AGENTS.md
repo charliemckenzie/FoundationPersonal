@@ -42,6 +42,7 @@ Smithers is the single point of contact for the designer. All requests start her
 
 **Responsibilities:**
 - Translate designer intent into tasks with clear ownership
+- **BEFORE routing any component work:** Ask "What existing components does this relate to?" and spawn Explore subagent (medium) to check `src/stories/index.mdx` and survey `src/components/`
 - Route tasks to the right specialist (see routing logic below)
 - Enforce the quality charter at every handoff
 - Surface any decision that needs human approval before proceeding
@@ -81,6 +82,7 @@ Smithers is the single point of contact for the designer. All requests start her
 Lenny builds the UI. React, MUI, Next.js App Router — Lenny owns the frontend.
 
 **Responsibilities:**
+- **BLOCKING REQUIREMENT:** Before implementing ANY component, spawn Explore subagent (medium) to review existing patterns in `src/components/` and `src/stories/components/` — never guess at prop naming or styling patterns
 - Implement components and pages from designer descriptions or Figma context
 - Use MUI theme tokens exclusively — never hardcode colours, spacing, or shadows
 - Read `node_modules/next/dist/docs/` before using any Next.js API (this version has breaking changes)
@@ -281,6 +283,7 @@ Frink keeps the git history clean and the branches organised.
 Moe owns the design system as a whole. Where Marge checks that individual components look right, Moe makes sure the entire library hangs together — that it's coherent, consistent, and doesn't turn into a pile of one-offs.
 
 **Responsibilities:**
+- **FIRST ACTION on any component request:** Review `src/stories/index.mdx` component status table and spawn Explore (thorough) to audit what exists — never approve a new component without proving one doesn't already exist
 - Define and enforce component API conventions across the library (prop naming: `variant`, `size`, `color`; event naming: `onX`; slot naming — consistent everywhere)
 - Decide when a new component should be created vs. an existing one extended
 - Own the atomic structure: what's a primitive (Button, Input, Icon), what's a composite (Card, Modal, Form), what's a layout (Page, Section, Grid)
@@ -369,9 +372,9 @@ Every new component follows this exact sequence:
 
 ```
 Designer request
-  → Smithers (assigns + scopes)
-  → Moe (approves structure, API, and fit within the design system)
-  → Lenny (builds component)
+  → Smithers (spawns Explore to audit existing components & patterns)
+  → Moe (reviews findings, approves new component OR recommends extending existing)
+  → Lenny (spawns Explore to review existing patterns, then builds)
   → Chalmers (quality review)
   → Flanders (a11y review)
   → Marge (visual consistency review)
@@ -379,6 +382,8 @@ Designer request
   → Frink (commits + opens draft PR)
   → Designer (reviews PR → merges to main)
 ```
+
+**Discovery is mandatory** — both Smithers and Lenny must run Explore before any building starts. No guessing at what exists.
 
 No step may be skipped. If a review fails, the work returns to the previous agent with specific remediation notes.
 

@@ -1,8 +1,8 @@
-import type { IconProps as TablerIconProps } from '@tabler/icons-react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { IconDefinition, IconPrefix, IconName } from '@fortawesome/fontawesome-svg-core';
 import Box from '@mui/material/Box';
-import type React from 'react';
 
-export type IconSize = 'small' | 'medium' | 'large';
+export type IconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 export type IconColor =
   | 'inherit'
   | 'primary'
@@ -15,17 +15,23 @@ export type IconColor =
   | 'text.muted'
   | 'text.disabled';
 
+export type IconStyle = 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'sharp';
+
 export interface IconProps {
-  icon: React.ComponentType<TablerIconProps>;
+  icon: IconDefinition | string;
+  style?: IconStyle;
   size?: IconSize;
   color?: IconColor;
   'aria-label'?: string;
 }
 
-const SIZE_MAP: Record<IconSize, number> = {
-  small: 16,
-  medium: 20,
-  large: 24,
+const SIZE_MAP: Record<IconSize, string> = {
+  sm: '0.875rem',
+  md: '1rem',
+  lg: '1.25rem',
+  xl: '1.5rem',
+  '2xl': '2rem',
+  '3xl': '2.5rem',
 };
 
 const COLOR_TO_SX: Record<IconColor, string> = {
@@ -41,15 +47,38 @@ const COLOR_TO_SX: Record<IconColor, string> = {
   'text.disabled': 'text.disabled',
 };
 
-export function Icon({ icon: TablerIconComponent, size = 'medium', color = 'inherit', 'aria-label': ariaLabel }: IconProps) {
+const STYLE_TO_PREFIX: Record<IconStyle, IconPrefix> = {
+  solid: 'fas',
+  regular: 'far',
+  light: 'fal',
+  thin: 'fat',
+  duotone: 'fad',
+  sharp: 'fass',
+};
+
+export function Icon({ icon, style = 'solid', size = 'md', color = 'inherit', 'aria-label': ariaLabel }: IconProps) {
+  // If icon is a string, convert it to the icon array format [prefix, iconName]
+  // Remove "fa-" prefix if present (e.g., "fa-bed-front" -> "bed-front")
+  // Default to "house" if empty string provided
+  let iconProp: IconDefinition | [IconPrefix, IconName];
+  
+  if (typeof icon === 'string') {
+    const prefix = STYLE_TO_PREFIX[style];
+    const iconName = icon.trim() || 'house'; // Default to 'house' if empty
+    const name = iconName.replace(/^fa-/, '') as IconName;
+    iconProp = [prefix, name];
+  } else {
+    iconProp = icon;
+  }
+
   return (
     <Box
       component="span"
       aria-label={ariaLabel}
       aria-hidden={ariaLabel ? undefined : true}
-      sx={{ display: 'inline-flex', color: COLOR_TO_SX[color], lineHeight: 0 }}
+      sx={{ display: 'inline-flex', color: COLOR_TO_SX[color], lineHeight: 0, fontSize: SIZE_MAP[size] }}
     >
-      <TablerIconComponent size={SIZE_MAP[size]} stroke={1.5} />
+      <FontAwesomeIcon icon={iconProp} />
     </Box>
   );
 }

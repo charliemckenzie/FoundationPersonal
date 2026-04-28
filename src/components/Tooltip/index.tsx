@@ -42,6 +42,17 @@ export function Tooltip({
       disableHoverListener={disableHoverListener}
       disableFocusListener={disableFocusListener}
       disableTouchListener={disableTouchListener}
+      slotProps={{
+        tooltip: {
+          sx: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            lineHeight: 1.2,
+            py: 0.5,
+          },
+        },
+      }}
     >
       {children}
     </MuiTooltip>

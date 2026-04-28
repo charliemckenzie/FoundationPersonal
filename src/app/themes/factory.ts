@@ -310,6 +310,46 @@ export function createBrandTheme(brand: BrandConfig) {
           }),
         },
       },
+      MuiAlert: {
+        styleOverrides: {
+          root: {
+            padding: '12px 16px',
+            borderRadius: '8px',
+            alignItems: 'flex-start',
+            gap: '12px',
+          },
+          icon: {
+            padding: 0,
+            margin: 0,
+            alignSelf: 'flex-start',
+            height: '24px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          },
+          message: {
+            padding: 0,
+            margin: 0,
+            alignSelf: 'flex-start',
+            lineHeight: '24px',
+          },
+          action: {
+            padding: 0,
+            margin: 0,
+            alignSelf: 'flex-start',
+          },
+        },
+      },
+      MuiAlertTitle: {
+        styleOverrides: {
+          root: {
+            fontWeight: 700,
+            fontSize: '1rem',
+            lineHeight: 1.5,
+            margin: 0,
+          },
+        },
+      },
       MuiButton: {
         defaultProps: {
           disableRipple: true,
