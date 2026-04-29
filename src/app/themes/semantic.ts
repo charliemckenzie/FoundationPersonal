@@ -1,6 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import type { PaletteOptions } from '@mui/material/styles';
-import { red, amber, cyan, green, skyBlue, clearBlue, salmon, white, black } from './primitives/colors';
+import { red, amber, cyan, green, clearBlue, skyBlue, salmon, white, black } from './primitives/colors';
 import type { BrandConfig } from './brands/index';
 
 export function buildLightPalette(brand: BrandConfig): PaletteOptions {
@@ -52,6 +52,16 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       },
     }),
 
+    // Quaternary brand color — Light Blue (#8CDDFF); main anchored at [300]
+    ...(brand.quaternary && {
+      quaternary: {
+        light:        brand.quaternary[100],
+        main:         brand.quaternary[300],
+        dark:         brand.quaternary[500],
+        contrastText: brand.quaternary[950],
+      },
+    }),
+
     // Background
     background: {
       default:        brand.neutral[50],    // Foundation: #f8fafc
@@ -60,20 +70,31 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       brandPrimary:   brand.primary[600],  // Foundation: trueBlue[600]  #0051ff
       brandSecondary: brand.secondary[800], // Foundation: deepBlue[800]  #1c355e
       brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600], // Foundation: livingCoral[500] #f24e49
-      brandSky:       skyBlue[200],        // #B9DCFB
-      brandClear:     clearBlue[100],      // #DDF5FF
-      brandWarm:      salmon[50],          // #F8EBE5
+      ...(brand.quaternary === undefined
+        ? {
+            // ART-only brand backgrounds
+            brandSky:   skyBlue[200],    // #B9DCFB
+            brandClear: clearBlue[100],  // #DDF5FF
+            brandWarm:  salmon[50],      // #F8EBE5
+          }
+        : {
+            // QSuper-only brand backgrounds
+            brandGrey:      brand.neutral[100],      // neutral[100] — #f4f6fb
+            brandLightBlue: brand.quaternary[100],   // qSkyBlue[100] — stays tied to its own scale
+          }
+      ),
     },
 
     // Text & Borders
     text: {
-      primary:     brand.neutral[900],
+      primary:     brand.quaternary ? brand.neutral[700] : brand.neutral[900], // QSuper: neutral[700] #3b404a / ART: neutral[900]
       muted:       brand.neutral[600],
       disabled:    brand.neutral[500],
       inverse:     white,
       heading:     brand.secondary[800],
       link:        brand.primary[600],
-      linkInverse: clearBlue[100],
+      // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
+      linkInverse: brand.quaternary ? white : clearBlue[100], // QSuper: white (4.8:1 on brandPrimary) / ART: clearBlue[100]
     },
     divider: brand.neutral[300],
     border: {
@@ -95,7 +116,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       focusOpacity:       0.12,
       activatedOpacity:   0.12,                      // activated state opacity scalar (e.g. pressed chip)
     },
-  };
+  }
 }
 
 export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
@@ -147,6 +168,16 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       },
     }),
 
+    // Quaternary brand color — Light Blue; main anchored at [300]
+    ...(brand.quaternary && {
+      quaternary: {
+        light:        brand.quaternary[200],
+        main:         brand.quaternary[300],
+        dark:         brand.quaternary[500],
+        contrastText: black,
+      },
+    }),
+
     // Background
     background: {
       default:        brand.neutral[950],  // Foundation: #020617
@@ -155,9 +186,17 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       brandPrimary:   brand.neutral[800],  // Foundation: #1e293b (all brand surfaces unified at neutral[800] in dark mode)
       brandSecondary: brand.neutral[800],  // Foundation: #1e293b
       brandTertiary:  brand.neutral[800],  // Foundation: #1e293b
-      brandSky:       brand.neutral[800],  // Foundation: #1e293b
-      brandClear:     brand.neutral[800],  // Foundation: #1e293b
-      brandWarm:      brand.neutral[800],  // Foundation: #1e293b
+      ...(brand.quaternary === undefined
+        ? {
+            brandSky:   brand.neutral[800],
+            brandClear: brand.neutral[800],
+            brandWarm:  brand.neutral[800],
+          }
+        : {
+            brandGrey:      brand.neutral[800],
+            brandLightBlue: brand.neutral[800],
+          }
+      ),
     },
 
     // Text & Borders
@@ -168,7 +207,8 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       inverse:     brand.neutral[900],
       heading:     white,
       link:        brand.primary[300],
-      linkInverse: clearBlue[100],
+      // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
+      linkInverse: brand.quaternary ? white : clearBlue[100], // QSuper: white / ART: clearBlue[100]
     },
     divider: brand.neutral[700],  // Foundation: #334155
     border: {
@@ -190,5 +230,5 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       focusOpacity:       0.12,
       activatedOpacity:   0.12,
     },
-  };
+  }
 }

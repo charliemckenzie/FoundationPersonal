@@ -75,9 +75,13 @@ declare module '@mui/material/styles' {
     brandPrimary: string;
     brandSecondary: string;
     brandTertiary: string;
-    brandSky: string;
-    brandClear: string;
-    brandWarm: string;
+    // ART-only
+    brandSky?: string;
+    brandClear?: string;
+    brandWarm?: string;
+    // QSuper-only
+    brandGrey?: string;
+    brandLightBlue?: string;
   }
 
   interface TypeText {
@@ -91,11 +95,13 @@ declare module '@mui/material/styles' {
   interface Palette {
     border: BorderTokens;
     tertiary?: PaletteColor;
+    quaternary?: PaletteColor;
   }
 
   interface PaletteOptions {
     border?: Partial<BorderTokens>;
     tertiary?: SimplePaletteColorOptions;
+    quaternary?: SimplePaletteColorOptions;
   }
 
   interface TypographyVariants {
@@ -348,6 +354,48 @@ export function createBrandTheme(brand: BrandConfig) {
             lineHeight: 1.5,
             margin: 0,
           },
+        },
+      },
+      // Link interaction states — light mode and dark mode.
+      // Resting colour is set via text.link in the palette.
+      // visited uses CSS :visited which is browser-restricted to colour only (WCAG security constraint).
+      // Light — ART:    hover primary[700] 8.8:1, active primary[800] 11.6:1, visited secondary[800] 11.7:1
+      // Light — QSuper: hover primary[700] 6.4:1, active primary[800] 9.3:1,  visited secondary[800] 14.9:1
+      // Dark  — both:   hover primary[200],       active primary[100],         visited secondary[400]
+      MuiLink: {
+        styleOverrides: {
+          root: ({ theme: t }) => ({
+            color: 'inherit',
+            textDecorationColor: 'inherit',
+            '&:hover': {
+              color: brand.primary[700],
+              textDecorationColor: brand.primary[700],
+            },
+            '&:active': {
+              color: brand.primary[800],
+              textDecorationColor: brand.primary[800],
+            },
+            '&:visited': {
+              color: brand.secondary[800],
+              '&:hover': { color: brand.secondary[700] },
+              '&:active': { color: brand.secondary[900] },
+            },
+            ...t.applyStyles('dark', {
+              '&:hover': {
+                color: brand.primary[200],
+                textDecorationColor: brand.primary[200],
+              },
+              '&:active': {
+                color: brand.primary[100],
+                textDecorationColor: brand.primary[100],
+              },
+              '&:visited': {
+                color: brand.secondary[400],
+                '&:hover': { color: brand.secondary[300] },
+                '&:active': { color: brand.secondary[500] },
+              },
+            }),
+          }),
         },
       },
       MuiButton: {
