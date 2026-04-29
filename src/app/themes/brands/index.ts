@@ -12,6 +12,7 @@ export interface BrandConfig {
   primary: ColorScale;
   secondary: ColorScale;
   tertiary?: ColorScale;
+  quaternary?: ColorScale;
   neutral: ColorScale;
   buttonBorderRadius: string | number;
   fontFamily: string;

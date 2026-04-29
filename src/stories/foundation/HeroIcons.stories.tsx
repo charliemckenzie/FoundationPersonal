@@ -47,9 +47,8 @@ const BG_LABELS: Record<string, Record<HeroIconBackground, string>> = {
 };
 
 const meta: Meta<typeof HeroIcon> = {
-  title: 'Components / Hero Icon',
+  title: 'Foundation / Hero Icons',
   component: HeroIcon,
-  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
     name: {
@@ -155,6 +154,28 @@ export const Backgrounds: Story = {
   },
 };
 
+export const QSuperColors: Story = {
+  name: 'Colours — QSuper',
+  render: () => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+        <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="default" />
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          Default (QSuper blue)
+        </Typography>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ p: 2, bgcolor: 'background.brandPrimary', borderRadius: 2, display: 'inline-flex' }}>
+          <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="white" />
+        </Box>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+          White (on blue)
+        </Typography>
+      </Box>
+    </Box>
+  ),
+};
+
 function GalleryRender({ globalBrand }: { globalBrand: string }) {
   const [search, setSearch] = useState('');
   const { brand, icons } = getBrand(globalBrand);
@@ -202,26 +223,6 @@ function GalleryRender({ globalBrand }: { globalBrand: string }) {
     </Box>
   );
 }
-
-export const QuaternaryColor: Story = {
-  name: 'Colour — Quaternary (QSuper)',
-  render: () => (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
-        <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="default" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          Default (QSuper blue)
-        </Typography>
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
-        <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="quaternary" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          Quaternary (Light Blue)
-        </Typography>
-      </Box>
-    </Box>
-  ),
-};
 
 export const Gallery: Story = {
   render: (_args, context: StoryContext) => (

@@ -213,6 +213,36 @@ function ColorsDoc() {
         darkSource: 'black — on tertiary 400',
       },
     ] as TokenDualMode[] : []),
+    ...(lightPalette.quaternary ? [
+      {
+        label: 'quaternary.light',
+        lightValue: lightPalette.quaternary.light!,
+        darkValue: darkPalette.quaternary!.light!,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 100`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 200`,
+      },
+      {
+        label: 'quaternary.main',
+        lightValue: lightPalette.quaternary.main!,
+        darkValue: darkPalette.quaternary!.main!,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 300 — #8CDDFF`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 300 — #8CDDFF`,
+      },
+      {
+        label: 'quaternary.dark',
+        lightValue: lightPalette.quaternary.dark!,
+        darkValue: darkPalette.quaternary!.dark!,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 500`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 500`,
+      },
+      {
+        label: 'quaternary.contrastText',
+        lightValue: lightPalette.quaternary.contrastText!,
+        darkValue: darkPalette.quaternary!.contrastText!,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 950`,
+        darkSource: 'black',
+      },
+    ] as TokenDualMode[] : []),
   ]
 
   const feedbackTokens: TokenDualMode[] = [
@@ -376,27 +406,47 @@ function ColorsDoc() {
       lightSource: 'tertiary 500',
       darkSource: 'neutral 800',
     },
-    {
-      label: 'background.brandSky',
-      lightValue: lightPalette.background!.brandSky!,
-      darkValue: darkPalette.background!.brandSky!,
-      lightSource: 'skyBlue 200',
-      darkSource: 'neutral 800',
-    },
-    {
-      label: 'background.brandClear',
-      lightValue: lightPalette.background!.brandClear!,
-      darkValue: darkPalette.background!.brandClear!,
-      lightSource: 'clearBlue 100',
-      darkSource: 'neutral 800',
-    },
-    {
-      label: 'background.brandWarm',
-      lightValue: lightPalette.background!.brandWarm!,
-      darkValue: darkPalette.background!.brandWarm!,
-      lightSource: 'salmon 50',
-      darkSource: 'neutral 800',
-    },
+    // ART-only tokens
+    ...(lightPalette.background!.brandSky ? [
+      {
+        label: 'background.brandSky',
+        lightValue: lightPalette.background!.brandSky!,
+        darkValue: darkPalette.background!.brandSky!,
+        lightSource: 'skyBlue 200 — #B9DCFB',
+        darkSource: 'neutral 800',
+      },
+      {
+        label: 'background.brandClear',
+        lightValue: lightPalette.background!.brandClear!,
+        darkValue: darkPalette.background!.brandClear!,
+        lightSource: 'clearBlue 100 — #DDF5FF',
+        darkSource: 'neutral 800',
+      },
+      {
+        label: 'background.brandWarm',
+        lightValue: lightPalette.background!.brandWarm!,
+        darkValue: darkPalette.background!.brandWarm!,
+        lightSource: 'salmon 50 — #F8EBE5',
+        darkSource: 'neutral 800',
+      },
+    ] as TokenDualMode[] : []),
+    // QSuper-only tokens
+    ...(lightPalette.background!.brandGrey ? [
+      {
+        label: 'background.brandGrey',
+        lightValue: lightPalette.background!.brandGrey!,
+        darkValue: darkPalette.background!.brandGrey!,
+        lightSource: 'neutral 100 — #f4f6fb',
+        darkSource: 'neutral 800',
+      },
+      {
+        label: 'background.brandLightBlue',
+        lightValue: lightPalette.background!.brandLightBlue!,
+        darkValue: darkPalette.background!.brandLightBlue!,
+        lightSource: 'quaternary 100 — qSkyBlue[100] #d0eefb',
+        darkSource: 'neutral 800',
+      },
+    ] as TokenDualMode[] : []),
   ]
 
   const textTokens: TokenDualMode[] = [

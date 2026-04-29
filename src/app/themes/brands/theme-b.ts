@@ -6,6 +6,7 @@ export const themeB: BrandConfig = {
   primary: qBlue,
   secondary: qNavy,
   tertiary: qSkyBlue,
+  quaternary: qSkyBlue,   // Light Blue — #8CDDFF sits at [300]
   neutral,
   buttonBorderRadius: 8,
   fontFamily: '"Open Sans", system-ui, sans-serif',

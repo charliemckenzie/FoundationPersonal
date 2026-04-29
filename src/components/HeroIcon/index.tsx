@@ -11,10 +11,11 @@ export type HeroIconBackground = 'none' | 'brand' | 'white' | 'grey';
 /**
  * Icon fill colour — only meaningful for QSuper (monochrome SVGs).
  * ART icons are full-colour illustrations; `iconColor` has no effect on them.
- * - `default` → embedded colour (QSuper blue)
- * - `white`   → CSS filter to white
+ * - `default`    → embedded colour (QSuper blue)
+ * - `white`      → CSS filter to white
+ * - `quaternary` → quaternary.main (QSuper only; use with background="none")
  */
-export type HeroIconColor = 'default' | 'white';
+export type HeroIconColor = 'default' | 'white' | 'quaternary';
 export type HeroIconBrand = 'art' | 'qsuper';
 
 export interface HeroIconProps {
@@ -27,7 +28,8 @@ export interface HeroIconProps {
   background?: HeroIconBackground;
   /**
    * Icon fill colour. Only applies to QSuper (monochrome SVGs).
-   * `default` shows the embedded colour; `white` inverts to white.
+   * `default` shows the embedded colour; `white` inverts to white;
+   * `quaternary` tints to quaternary.main — use with background="none" only.
    */
   iconColor?: HeroIconColor;
   'aria-label'?: string;
@@ -70,15 +72,39 @@ export function HeroIcon({
   const px = SIZE_MAP[size];
   const bgColor = BG_COLOR[brand][background];
   const containerSize = Math.round(px * CONTAINER_RATIO);
-  const filter = iconColor === 'white' ? 'brightness(0) invert(1)' : undefined;
+  const iconSrc = `/icons/${brand}/${encodeURIComponent(name)}.svg`;
 
-  const img = (
+  // quaternary: CSS mask tints the monochrome SVG to quaternary.main;
+  // only valid with background="none" (no container is rendered in that case anyway)
+  const img = iconColor === 'quaternary' ? (
+    <Box
+      role={ariaLabel ? 'img' : undefined}
+      aria-label={ariaLabel}
+      aria-hidden={ariaLabel ? undefined : true}
+      sx={{
+        width: px,
+        height: px,
+        display: 'block',
+        flexShrink: 0,
+        bgcolor: 'quaternary.main',
+        maskImage: `url(${iconSrc})`,
+        WebkitMaskImage: `url(${iconSrc})`,
+        maskSize: 'contain',
+        WebkitMaskSize: 'contain',
+        maskRepeat: 'no-repeat',
+        WebkitMaskRepeat: 'no-repeat',
+        maskPosition: 'center',
+        WebkitMaskPosition: 'center',
+      }}
+    />
+  ) : (
     <Box
       component="img"
-      src={`/icons/${brand}/${encodeURIComponent(name)}.svg`}
+      src={iconSrc}
       alt={ariaLabel ?? ''}
       aria-hidden={ariaLabel ? undefined : true}
-      sx={{ width: px, height: px, objectFit: 'contain', display: 'block', filter }}
+      sx={{ width: px, height: px, objectFit: 'contain', display: 'block',
+        filter: iconColor === 'white' ? 'brightness(0) invert(1)' : undefined }}
     />
   );
 

@@ -283,6 +283,113 @@ function Legend() {
   )
 }
 
+// --- Link states panel ---
+
+interface LinkState {
+  label: string
+  hex: string
+  note: string
+}
+
+interface LinkStatesPanelProps {
+  surfaceBgs: { label: string; hex: string }[]
+  states: LinkState[]
+  mode: 'light' | 'dark'
+}
+
+function LinkStatesPanel({ surfaceBgs, states, mode }: LinkStatesPanelProps) {
+  const panelBg = mode === 'light' ? '#f8fafc' : '#0f172a'
+  const headingColor = mode === 'light' ? '#1e293b' : '#f1f5f9'
+  const mutedColor = mode === 'light' ? '#64748b' : '#94a3b8'
+  const borderColor = mode === 'light' ? '#e2e8f0' : '#1e293b'
+
+  return (
+    <Box
+      sx={{
+        bgcolor: panelBg,
+        border: '1px solid',
+        borderColor,
+        borderRadius: 2,
+        p: 3,
+        overflow: 'auto',
+      }}
+    >
+      <Typography variant="h6" sx={{ color: headingColor, mb: 0.5, fontWeight: 700 }}>
+        {mode === 'light' ? 'Light mode' : 'Dark mode'}
+      </Typography>
+      <Typography variant="small" sx={{ color: mutedColor, display: 'block', mb: 3 }}>
+        Contrast of each link state against body copy surfaces. Underline is on at rest — satisfies WCAG 1.4.1 without additional contrast checks against surrounding text.
+      </Typography>
+
+      {/* Column headers */}
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: `160px repeat(${states.length}, 1fr)`,
+          gap: 1,
+          mb: 1,
+          minWidth: 160 + states.length * 140,
+        }}
+      >
+        <Box />
+        {states.map((s) => (
+          <Box key={s.label} sx={{ px: 0.5 }}>
+            <Typography
+              variant="small"
+              sx={{ fontFamily: 'monospace', fontSize: 13, fontWeight: 700, color: headingColor, display: 'block', lineHeight: 1.3 }}
+            >
+              {s.label}
+            </Typography>
+            <Typography
+              variant="small"
+              sx={{ fontFamily: 'monospace', fontSize: 11, color: mutedColor, display: 'block', lineHeight: 1.3 }}
+            >
+              {s.note}
+            </Typography>
+            <Box
+              sx={{
+                width: 16, height: 16, mt: 0.5, borderRadius: 0.5,
+                bgcolor: s.hex,
+                border: `1px solid ${borderColor}`,
+              }}
+            />
+          </Box>
+        ))}
+      </Box>
+
+      {/* Rows */}
+      {surfaceBgs.map((bg) => (
+        <Box
+          key={bg.label}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: `160px repeat(${states.length}, 1fr)`,
+            gap: 1,
+            mb: 1,
+            minWidth: 160 + states.length * 140,
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, pr: 1 }}>
+            <Box
+              sx={{
+                width: 16, height: 16, flexShrink: 0, borderRadius: 0.5,
+                bgcolor: bg.hex,
+                border: `1px solid ${borderColor}`,
+              }}
+            />
+            <Typography variant="small" sx={{ fontFamily: 'monospace', fontSize: 13, color: mutedColor, lineHeight: 1.3 }}>
+              {bg.label}
+            </Typography>
+          </Box>
+          {states.map((s) => (
+            <MatrixCell key={s.label} textHex={s.hex} bgHex={bg.hex} exempt={false} />
+          ))}
+        </Box>
+      ))}
+    </Box>
+  )
+}
+
 // --- Main doc component ---
 
 function TypographyAccessibilityDoc() {
@@ -308,9 +415,18 @@ function TypographyAccessibilityDoc() {
     { label: 'bg.brandPrimary', tokenPath: 'brandPrimary' },
     { label: 'bg.brandSecondary', tokenPath: 'brandSecondary' },
     { label: 'bg.brandTertiary', tokenPath: 'brandTertiary' },
-    { label: 'bg.brandSky', tokenPath: 'brandSky' },
-    { label: 'bg.brandClear', tokenPath: 'brandClear' },
-    { label: 'bg.brandWarm', tokenPath: 'brandWarm' },
+    // Brand-specific backgrounds
+    ...(brand.quaternary
+      ? [
+          { label: 'bg.brandGrey', tokenPath: 'brandGrey' },
+          { label: 'bg.brandLightBlue', tokenPath: 'brandLightBlue' },
+        ]
+      : [
+          { label: 'bg.brandSky', tokenPath: 'brandSky' },
+          { label: 'bg.brandClear', tokenPath: 'brandClear' },
+          { label: 'bg.brandWarm', tokenPath: 'brandWarm' },
+        ]
+    ),
   ]
 
   const getLightText = (t: TextToken): string =>
@@ -318,6 +434,34 @@ function TypographyAccessibilityDoc() {
 
   const getLightBg = (b: BgToken): string =>
     (light.background as Record<string, string>)[b.tokenPath] ?? '#ffffff'
+
+  // Link states — sourced from brand primitive scales, mirroring MuiLink override in factory.ts
+  const lightBg = light.background as Record<string, string>
+  const linkSurfaceBgs = [
+    { label: 'bg.default', hex: lightBg['default'] ?? '#ffffff' },
+    { label: 'bg.paper',   hex: lightBg['paper']   ?? '#ffffff' },
+    { label: 'bg.elevated', hex: lightBg['elevated'] ?? '#f5f5f5' },
+  ]
+  const linkStates: LinkState[] = [
+    { label: 'Resting',  hex: brand.primary[600],   note: 'text.link' },
+    { label: 'Hover',    hex: brand.primary[700],   note: 'primary[700]' },
+    { label: 'Active',   hex: brand.primary[800],   note: 'primary[800]' },
+    { label: 'Visited',  hex: brand.secondary[800], note: 'secondary[800]' },
+  ]
+
+  // Link states — dark mode
+  const darkBg = dark.background as Record<string, string>
+  const linkDarkSurfaceBgs = [
+    { label: 'bg.default', hex: darkBg['default'] ?? '#020617' },
+    { label: 'bg.paper',   hex: darkBg['paper']   ?? '#0f172a' },
+    { label: 'bg.elevated', hex: darkBg['elevated'] ?? '#1e293b' },
+  ]
+  const linkDarkStates: LinkState[] = [
+    { label: 'Resting',  hex: brand.primary[300],   note: 'text.link (dark)' },
+    { label: 'Hover',    hex: brand.primary[200],   note: 'primary[200]' },
+    { label: 'Active',   hex: brand.primary[100],   note: 'primary[100]' },
+    { label: 'Visited',  hex: brand.secondary[400], note: 'secondary[400]' },
+  ]
 
   const getDarkText = (t: TextToken): string =>
     (dark.text as Record<string, string>)[t.tokenPath] ?? '#ffffff'
@@ -352,12 +496,23 @@ function TypographyAccessibilityDoc() {
           getBgHex={getDarkBg}
         />
       </Box>
+
+      <Typography variant="h5" sx={{ mt: 6, mb: 0.5, fontWeight: 700 }}>
+        Link States
+      </Typography>
+      <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 3 }}>
+        Contrast of each link interaction state against body copy surfaces. Values mirror the MuiLink theme override.
+      </Typography>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <LinkStatesPanel surfaceBgs={linkSurfaceBgs} states={linkStates} mode="light" />
+        <LinkStatesPanel surfaceBgs={linkDarkSurfaceBgs} states={linkDarkStates} mode="dark" />
+      </Box>
     </Box>
   )
 }
 
 const meta: Meta<typeof TypographyAccessibilityDoc> = {
-  title: 'Design Tokens/Typography',
+  title: 'Design Tokens/Typography/Accessibility',
   component: TypographyAccessibilityDoc,
   parameters: {
     layout: 'fullscreen',
