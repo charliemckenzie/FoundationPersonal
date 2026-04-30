@@ -300,6 +300,110 @@ export const sand: ColorScale = {
   950: '#1e0f01',
 };
 
+/**
+ * QSuper Investment Allocation colours — fixed single values, not scales.
+ * Use only for data visualisation representing QSuper investment options.
+ * Effective from 1 July 2024.
+ */
+/**
+ * QSuper Asset Class Allocation colours — fixed single values, not scales.
+ * Use only for data visualisation representing QSuper asset class allocations.
+ * Effective from 1 July 2024.
+ */
+export const qsuperAssetAllocations = {
+  australianSharesIndex:            '#650D0C',
+  internationalSharesHedgedIndex:   '#FFCC65',
+  internationalSharesUnhedgedIndex: '#FF5527',
+  listedPropertyIndex:              '#947ACB',
+  unlistedAssets:                   '#66D6C5',
+  bondsIndex:                       '#CAD83D',
+  cash:                             '#199393',
+} as const;
+
+export type QSuperAssetAllocationKey = keyof typeof qsuperAssetAllocations;
+
+/**
+ * Shared Asset Class Option colours — fixed single values, available to both ART and QSuper.
+ * Same values as qsuperAssetAllocations. Use for data visualisation of asset class allocations.
+ * Effective from 1 July 2024.
+ */
+export const sharedAssetClassOptions = qsuperAssetAllocations;
+export type SharedAssetClassOptionKey = keyof typeof sharedAssetClassOptions;
+
+/**
+ * ART Investment Option colours — fixed single values, not scales.
+ * Use only for data visualisation representing ART investment options.
+ * Effective from 1 July 2024.
+ */
+export const artInvestmentOptions = {
+  lifecycleHighGrowthPool:      '#A1D0F9',
+  lifecycleBalancedPool:        '#0051FF',
+  lifecycleCashPool:            '#1C355E',
+  highGrowth:                   '#B42026',
+  balanced:                     '#E69927',
+  sociallyConsciousBalanced:    '#1AB257',
+  highGrowthIndex:              '#EE147D',
+  balancedIndex:                '#964298',
+  conservativeBalanced:         '#28AAEE',
+  balancedRiskAdjusted:         '#224F24',
+  conservative:                 '#3B4CA4',
+} as const;
+
+export type ARTInvestmentOptionKey = keyof typeof artInvestmentOptions;
+
+/**
+ * ART Asset Mix colours — fixed single values, not scales.
+ * Use only for data visualisation representing ART asset mix allocations.
+ * Effective from 1 July 2024.
+ */
+export const artAssetMix = {
+  australianShares:                '#69259B',
+  internationalShares:             '#FFBF2F',
+  unlistedAssetsAndAlternatives:   '#CF4A9B',
+  fixedIncome:                     '#89C86B',
+  cash:                            '#1C355E',
+} as const;
+
+export type ARTAssetMixKey = keyof typeof artAssetMix;
+
+/**
+ * Shared Diversified Option colours — fixed single values, available to both ART and QSuper.
+ * Use for data visualisation of diversified investment options.
+ * Effective from 1 July 2024.
+ */
+export const sharedDiversifiedOptions = {
+  highGrowthIndex:           '#EE147D',
+  highGrowth:                '#B42026',
+  balancedIndex:             '#964298',
+  balanced:                  '#E69927',
+  sociallyConsciousBalanced: '#1AB257',
+  balancedRiskAdjusted:      '#224F24',
+  conservativeBalanced:      '#28AAEE',
+  conservative:              '#3B4CA4',
+} as const;
+
+export type SharedDiversifiedOptionKey = keyof typeof sharedDiversifiedOptions;
+
+/**
+ * QSuper Investment Allocation colours — fixed single values, not scales.
+ * Use only for data visualisation representing QSuper investment options.
+ * Effective from 1 July 2024.
+ */
+export const qsuperInvestmentAllocations = {
+  lifetime: '#0079D0',
+  outlook:  '#009247',
+  aspire1:  '#F48220',
+  aspire2:  '#86441E',
+  focus1:   '#CF2128',
+  focus2:   '#BB2980',
+  focus3:   '#831A54',
+  sustain1: '#7BDEEE',
+  sustain2: '#22B1C7',
+  sustain3: '#15657C',
+} as const;
+
+export type QSuperInvestmentAllocationKey = keyof typeof qsuperInvestmentAllocations;
+
 export const primitiveScales = {
   neutral,
   blue,

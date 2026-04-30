@@ -82,6 +82,8 @@ declare module '@mui/material/styles' {
     // QSuper-only
     brandGrey?: string;
     brandLightBlue?: string;
+    // Table
+    tableStripe: string;
   }
 
   interface TypeText {

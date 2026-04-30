@@ -1,4 +1,4 @@
-import { qBlue, qNavy, qSkyBlue, neutral } from '../primitives/colors';
+import { qBlue, qNavy, qSkyBlue, neutral, qsuperInvestmentAllocations, qsuperAssetAllocations, sharedDiversifiedOptions, sharedAssetClassOptions } from '../primitives/colors';
 import type { BrandConfig } from './index';
 
 export const themeB: BrandConfig = {
@@ -18,4 +18,8 @@ export const themeB: BrandConfig = {
     margin:  { xs: 16, sm: 24, md: 32, lg: 'auto', xl: 'auto' },
     maxWidth: 1280,
   },
+  investmentAllocations: qsuperInvestmentAllocations,
+  assetAllocations: qsuperAssetAllocations,
+  diversifiedOptions: sharedDiversifiedOptions,
+  assetClassOptions: sharedAssetClassOptions,
 };

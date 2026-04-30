@@ -83,6 +83,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
             brandLightBlue: brand.quaternary[100],   // qSkyBlue[100] — stays tied to its own scale
           }
       ),
+      tableStripe: brand.neutral[100],  // ART: #f4f6fb / QSuper: #f4f6fb — closest match to #F2F2F2
     },
 
     // Text & Borders
@@ -197,6 +198,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
             brandLightBlue: brand.neutral[800],
           }
       ),
+      tableStripe: brand.neutral[800],  // dark mode stripe
     },
 
     // Text & Borders
