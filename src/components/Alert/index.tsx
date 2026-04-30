@@ -35,7 +35,7 @@ export function Alert({
 }: AlertProps) {
   const resolvedIcon = icon !== undefined
     ? icon
-    : <Icon icon={SEVERITY_ICONS[severity]} color={severity} size="lg" />;
+    : <Icon icon={SEVERITY_ICONS[severity]} color={variant === 'filled' ? 'inherit' : severity} size="lg" />;
 
   return (
     <MuiAlert
