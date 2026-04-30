@@ -40,6 +40,24 @@ const meta: Meta<typeof Table> = {
   component: Table,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  argTypes: {
+    density: {
+      control: 'select',
+      options: ['condensed', 'default', 'spaced'],
+      description: 'Vertical cell padding size.',
+    },
+    striped: {
+      control: 'boolean',
+      description: 'Alternates row background colour.',
+    },
+    horizontalPadding: {
+      control: 'boolean',
+      description: 'Include horizontal cell padding.',
+    },
+    stickyHeader: {
+      control: 'boolean',
+    },
+  },
 };
 
 export default meta;
@@ -47,6 +65,38 @@ type Story = StoryObj<typeof Table<User>>;
 
 export const Default: Story = {
   render: () => <Table columns={COLUMNS} rows={ROWS} />,
+};
+
+export const Striped: Story = {
+  render: () => <Table columns={COLUMNS} rows={ROWS} striped />,
+};
+
+export const Density: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Condensed</p>
+        <Table columns={COLUMNS} rows={ROWS} density="condensed" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Default</p>
+        <Table columns={COLUMNS} rows={ROWS} density="default" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Spaced</p>
+        <Table columns={COLUMNS} rows={ROWS} density="spaced" />
+      </div>
+    </div>
+  ),
+};
+
+export const NoHorizontalPadding: Story = {
+  render: () => <Table columns={COLUMNS} rows={ROWS} horizontalPadding={false} />,
+};
+
+export const KitchenSink: Story = {
+  name: 'Kitchen Sink',
+  render: () => <Table columns={COLUMNS} rows={ROWS} striped density="condensed" horizontalPadding={false} />,
 };
 
 export const Loading: Story = {
