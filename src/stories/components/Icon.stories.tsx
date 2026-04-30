@@ -19,7 +19,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const meta: Meta<typeof Icon> = {
-  title: 'Components / Icon',
+  title: 'Components / Icons / Icon',
   component: Icon,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

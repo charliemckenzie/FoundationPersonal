@@ -210,7 +210,7 @@ function GridDoc() {
       <Box sx={{ p: 6 }}>
         <Typography variant="h4" sx={{ mb: 1 }}>Grid System</Typography>
         <Typography variant="body" color="text.muted">
-          No grid configuration defined for this theme. Switch to <strong>Theme B</strong> in the toolbar to view the grid specification.
+          No grid configuration defined for this theme.
         </Typography>
       </Box>
     )

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { primitiveScales, white, black } from '../../app/themes/primitives/colors'
+import { primitiveScales, white, black, qsuperInvestmentAllocations, qsuperAssetAllocations, artInvestmentOptions, artAssetMix, sharedDiversifiedOptions } from '../../app/themes/primitives/colors'
 import type { ColorScale, PrimitiveScaleName } from '../../app/themes/primitives/colors'
 
 const STEPS = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950] as const
@@ -90,6 +90,123 @@ function PrimitivesDoc() {
             <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
               {value}
             </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Typography
+        variant="small"
+        sx={{ mt: 5, mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        Shared Diversified Options
+      </Typography>
+      <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+        Fixed single values — not scales. Shared across ART and QSuper for diversified investment option data visualisation.
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {(Object.entries(sharedDiversifiedOptions) as [string, string][]).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box sx={{ width: 56, height: 56, bgcolor: value, borderRadius: 1, border: '1px solid', borderColor: 'divider' }} />
+            <Typography variant="small" sx={{ lineHeight: 1.2, textAlign: 'center', maxWidth: 64, wordBreak: 'break-word' }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>{value}</Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Typography
+        variant="small"
+        sx={{ mt: 5, mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        QSuper Investment Allocations
+      </Typography>
+      <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+        Fixed single values — not scales. Use only for data visualisation of QSuper investment options.
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {(Object.entries(qsuperInvestmentAllocations) as [string, string][]).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box
+              sx={{
+                width: 56,
+                height: 56,
+                bgcolor: value,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            />
+            <Typography variant="small" sx={{ lineHeight: 1.2 }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
+              {value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Typography
+        variant="small"
+        sx={{ mt: 5, mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        QSuper Asset Class Allocations
+      </Typography>
+      <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+        Fixed single values — not scales. Use only for data visualisation of QSuper asset class allocations.
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {(Object.entries(qsuperAssetAllocations) as [string, string][]).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box
+              sx={{
+                width: 56,
+                height: 56,
+                bgcolor: value,
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+              }}
+            />
+            <Typography variant="small" sx={{ lineHeight: 1.2 }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>
+              {value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Typography
+        variant="small"
+        sx={{ mt: 5, mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        ART Investment Options
+      </Typography>
+      <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+        Fixed single values — not scales. Use only for data visualisation of ART investment options.
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {(Object.entries(artInvestmentOptions) as [string, string][]).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box sx={{ width: 56, height: 56, bgcolor: value, borderRadius: 1, border: '1px solid', borderColor: 'divider' }} />
+            <Typography variant="small" sx={{ lineHeight: 1.2, textAlign: 'center', maxWidth: 64, wordBreak: 'break-word' }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>{value}</Typography>
+          </Box>
+        ))}
+      </Box>
+
+      <Typography
+        variant="small"
+        sx={{ mt: 5, mb: 1.5, display: 'block', color: 'text.muted', letterSpacing: 2 }}
+      >
+        ART Asset Mix
+      </Typography>
+      <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+        Fixed single values — not scales. Use only for data visualisation of ART asset mix allocations.
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1.5, flexWrap: 'wrap' }}>
+        {(Object.entries(artAssetMix) as [string, string][]).map(([name, value]) => (
+          <Box key={name} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
+            <Box sx={{ width: 56, height: 56, bgcolor: value, borderRadius: 1, border: '1px solid', borderColor: 'divider' }} />
+            <Typography variant="small" sx={{ lineHeight: 1.2, textAlign: 'center', maxWidth: 64, wordBreak: 'break-word' }}>{name}</Typography>
+            <Typography variant="small" color="text.muted" sx={{ fontFamily: 'monospace', fontSize: 10 }}>{value}</Typography>
           </Box>
         ))}
       </Box>

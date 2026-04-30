@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import MuiTextField from '@mui/material/TextField';
 import { useState } from 'react';
 import { HeroIcon } from '../../components/HeroIcon';
-import type { HeroIconBackground, HeroIconBrand, HeroIconColor } from '../../components/HeroIcon';
+import type { HeroIconBackground, HeroIconBrand } from '../../components/HeroIcon';
 import artIconList from '../../assets/icon-list-art.json';
 import qsuperIconList from '../../assets/icon-list-qsuper.json';
 
@@ -47,7 +47,7 @@ const BG_LABELS: Record<string, Record<HeroIconBackground, string>> = {
 };
 
 const meta: Meta<typeof HeroIcon> = {
-  title: 'Components / Hero Icon',
+  title: 'Components / Icons / Hero Icon',
   component: HeroIcon,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
@@ -70,11 +70,6 @@ const meta: Meta<typeof HeroIcon> = {
       control: 'select',
       options: ['none', 'brand', 'white', 'grey'] satisfies HeroIconBackground[],
       description: 'Circular background. Colour resolves per brand via semantic tokens.',
-    },
-    iconColor: {
-      control: 'select',
-      options: ['default', 'white'] satisfies HeroIconColor[],
-      description: 'Fill colour. Only applies to QSuper (monochrome SVGs). ART icons are full-colour.',
     },
     'aria-label': {
       control: 'text',
@@ -203,21 +198,23 @@ function GalleryRender({ globalBrand }: { globalBrand: string }) {
   );
 }
 
-export const QuaternaryColor: Story = {
-  name: 'Colour — Quaternary (QSuper)',
+export const QSuperColours: Story = {
+  name: 'Colours — QSuper only',
   render: () => (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
         <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="default" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          Default (QSuper blue)
-        </Typography>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>Default (QSuper blue)</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
+        <Box sx={{ p: 2, bgcolor: 'background.brandPrimary', borderRadius: 2, display: 'inline-flex' }}>
+          <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="white" />
+        </Box>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>White (on blue)</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
         <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="quaternary" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>
-          Quaternary (Light Blue)
-        </Typography>
+        <Typography variant="caption" sx={{ color: 'text.secondary' }}>Quaternary (Light Blue)</Typography>
       </Box>
     </Box>
   ),
