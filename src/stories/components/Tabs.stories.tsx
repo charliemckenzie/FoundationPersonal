@@ -1,9 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Tabs } from '../../components/Tabs';
 import type { TabSize, TabVariant } from '../../components/Tabs';
-import { useTheme } from '@mui/material/styles';
+import { ThemeProvider, useTheme, createTheme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import { useMemo } from 'react';
+import { createBrandTheme } from '../../app/themes/factory';
+import { foundation } from '../../app/themes/brands/foundation';
+import { themeB } from '../../app/themes/brands/theme-b';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Components / Tabs',
@@ -146,8 +150,24 @@ function BgRow({ variant, bgcolor, tabStyle = 'default', bgLabel }: BgRowProps) 
 
 function BackgroundsDoc() {
   const theme = useTheme();
-  const hasSky   = !!theme.palette.background.brandSky;
-  const hasClear = !!theme.palette.background.brandClear;
+  const hasSky       = !!theme.palette.background.brandSky;
+  const hasClear     = !!theme.palette.background.brandClear;
+  const hasGrey      = !!theme.palette.background.brandGrey;
+  const hasLightBlue = !!theme.palette.background.brandLightBlue;
+
+  const darkThemeART = useMemo(() => {
+    if (!hasSky) return null;
+    const brandTheme = createBrandTheme(foundation);
+    const { colorSchemes, ...rest } = brandTheme as any;
+    return createTheme({ ...rest, palette: colorSchemes.dark.palette });
+  }, [hasSky]);
+
+  const darkTheme = useMemo(() => {
+    if (!hasGrey) return null;
+    const brandTheme = createBrandTheme(themeB);
+    const { colorSchemes, ...rest } = brandTheme as any;
+    return createTheme({ ...rest, palette: colorSchemes.dark.palette });
+  }, [hasGrey]);
 
   return (
     <Box sx={{ maxWidth: 700 }}>
@@ -161,6 +181,12 @@ function BackgroundsDoc() {
       {hasClear && (
         <BgRow variant="pill" bgcolor="background.brandClear" bgLabel="background.brandClear" />
       )}
+      {hasGrey && (
+        <BgRow variant="pill" bgcolor="background.brandGrey" bgLabel="background.brandGrey" />
+      )}
+      {hasLightBlue && (
+        <BgRow variant="pill" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue" />
+      )}
 
       <Typography variant="h4" sx={{ mb: 0.5, mt: 4 }}>Nav tabs — Background contexts</Typography>
       <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
@@ -171,6 +197,50 @@ function BackgroundsDoc() {
       )}
       {hasClear && (
         <BgRow variant="nav" bgcolor="background.brandClear" bgLabel="background.brandClear" />
+      )}
+      {hasGrey && (
+        <BgRow variant="nav" bgcolor="background.brandGrey" bgLabel="background.brandGrey" />
+      )}
+      {hasLightBlue && (
+        <BgRow variant="nav" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue" />
+      )}
+
+      {hasSky && darkThemeART && (
+        <ThemeProvider theme={darkThemeART}>
+          <Typography variant="h4" sx={{ mb: 0.5, mt: 6 }}>Pill tabs — Dark mode</Typography>
+          <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
+            ART brand surfaces in dark mode.
+          </Typography>
+          <BgRow variant="pill" bgcolor="background.brandSky" bgLabel="background.brandSky (dark)" />
+          <BgRow variant="pill" bgcolor="background.brandClear" bgLabel="background.brandClear (dark)" />
+          <BgRow variant="pill" bgcolor="background.brandWarm" bgLabel="background.brandWarm (dark)" />
+
+          <Typography variant="h4" sx={{ mb: 0.5, mt: 4 }}>Nav tabs — Dark mode</Typography>
+          <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
+            Nav tabs in dark mode.
+          </Typography>
+          <BgRow variant="nav" bgcolor="background.brandSky" bgLabel="background.brandSky (dark)" />
+          <BgRow variant="nav" bgcolor="background.brandClear" bgLabel="background.brandClear (dark)" />
+          <BgRow variant="nav" bgcolor="background.brandWarm" bgLabel="background.brandWarm (dark)" />
+        </ThemeProvider>
+      )}
+
+      {hasGrey && darkTheme && (
+        <ThemeProvider theme={darkTheme}>
+          <Typography variant="h4" sx={{ mb: 0.5, mt: 6 }}>Pill tabs — Dark mode</Typography>
+          <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
+            QSuper brand surfaces in dark mode.
+          </Typography>
+          <BgRow variant="pill" bgcolor="background.brandGrey" bgLabel="background.brandGrey (dark)" />
+          <BgRow variant="pill" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue (dark)" />
+
+          <Typography variant="h4" sx={{ mb: 0.5, mt: 4 }}>Nav tabs — Dark mode</Typography>
+          <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
+            Nav tabs in dark mode.
+          </Typography>
+          <BgRow variant="nav" bgcolor="background.brandGrey" bgLabel="background.brandGrey (dark)" />
+          <BgRow variant="nav" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue (dark)" />
+        </ThemeProvider>
       )}
     </Box>
   );

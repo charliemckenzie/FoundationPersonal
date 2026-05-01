@@ -45,7 +45,7 @@ export function Tabs({
   const uid = React.useId();
   const theme = useTheme();
   const { fontSize, py, px, minHeight } = SIZE_CONFIG[size];
-  const radius = `${theme.shape.full}px`;
+  const radius = `${theme.shape.button}px`;
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setActive(newValue);

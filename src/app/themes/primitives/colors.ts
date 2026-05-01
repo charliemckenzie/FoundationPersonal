@@ -30,6 +30,36 @@ export const neutral: ColorScale = {
   950: '#121315',
 };
 
+/** Neutral test — blue-gray family, blue channel reduced at 100–500 to eliminate lavender cast */
+export const neutralTest: ColorScale = {
+  50:  '#fafbfd',
+  100: '#f4f6f8',
+  200: '#edf0f3',
+  300: '#d7dde3',
+  400: '#b5bdc7',
+  500: '#878f9d',
+  600: '#60697b',
+  700: '#3b404a',
+  800: '#282c34',
+  900: '#191b1f',
+  950: '#121315',
+};
+
+/** Neutral current — pure gray scale anchored at 100 #f2f2f2, 700 #4a4a4a, 800 #333333 */
+export const neutralCurrent: ColorScale = {
+  50:  '#fcfcfc',
+  100: '#f2f2f2',
+  200: '#d6d6d6',
+  300: '#bababa',
+  400: '#9e9e9e',
+  500: '#828282',
+  600: '#666666',
+  700: '#4a4a4a',
+  800: '#333333',
+  900: '#1c1c1c',
+  950: '#0f0f0f',
+};
+
 /** Blue — default primary brand color */
 export const blue: ColorScale = {
   50:  '#eff6ff',
@@ -406,6 +436,8 @@ export type QSuperInvestmentAllocationKey = keyof typeof qsuperInvestmentAllocat
 
 export const primitiveScales = {
   neutral,
+  neutralTest,
+  neutralCurrent,
   blue,
   trueBlue,
   qBlue,

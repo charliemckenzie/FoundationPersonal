@@ -56,6 +56,7 @@ declare module '@mui/material/styles' {
     xl: number
     '2xl': number
     full: number
+    button: number
   }
   interface ShapeOptions {
     none?: number
@@ -66,6 +67,7 @@ declare module '@mui/material/styles' {
     xl?: number
     '2xl'?: number
     full?: number
+    button?: number
   }
 }
 
@@ -200,6 +202,7 @@ export function createBrandTheme(brand: BrandConfig) {
       xl: 24,
       '2xl': 32,
       full: 9999,
+      button: typeof brand.buttonBorderRadius === 'number' ? brand.buttonBorderRadius : 9999,
     },
     typography: {
       fontFamily: brand.fontFamily,
