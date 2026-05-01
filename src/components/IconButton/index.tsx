@@ -3,7 +3,6 @@ import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
 
@@ -12,7 +11,7 @@ export type IconButtonSize = 'small' | 'medium' | 'large';
 export type IconButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
 
 export interface IconButtonProps {
-  icon: IconDefinition | string;
+  icon: string;
   iconStyle?: IconStyle;
   label: string;
   variant?: IconButtonVariant;
@@ -58,16 +57,18 @@ export function IconButton({
   onClick,
   type = 'button',
 }: IconButtonProps) {
+  const resolvedColor: Exclude<IconButtonColor, 'default'> = color === 'default' ? 'primary' : color;
+
   const containedStyles = variant === 'contained' ? {
-    backgroundColor: (theme: Theme) => theme.palette[color as keyof Theme['palette']].main,
-    color: (theme: Theme) => theme.palette[color as keyof Theme['palette']].contrastText,
+    backgroundColor: (theme: Theme) => theme.palette[resolvedColor].main,
+    color: (theme: Theme) => theme.palette[resolvedColor].contrastText,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: (theme: Theme) => theme.palette[color as keyof Theme['palette']].dark,
+      backgroundColor: (theme: Theme) => theme.palette[resolvedColor].dark,
       boxShadow: 'none',
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette[color as keyof Theme['palette']].dark,
+      backgroundColor: (theme: Theme) => theme.palette[resolvedColor].dark,
       boxShadow: 'none',
     },
     '&.Mui-disabled': {
@@ -80,16 +81,16 @@ export function IconButton({
     backgroundColor: 'transparent',
     border: '1px solid',
     borderColor: (theme: Theme) => theme.palette.mode === 'light' 
-      ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.5)
-      : theme.palette[color as keyof Theme['palette']].main,
-    color: (theme: Theme) => theme.palette[color as keyof Theme['palette']].main,
+      ? alpha(theme.palette[resolvedColor].main, 0.5)
+      : theme.palette[resolvedColor].main,
+    color: (theme: Theme) => theme.palette[resolvedColor].main,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color as keyof Theme['palette']].main, 0.04),
-      borderColor: (theme: Theme) => theme.palette[color as keyof Theme['palette']].main,
+      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.04),
+      borderColor: (theme: Theme) => theme.palette[resolvedColor].main,
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color as keyof Theme['palette']].main, 0.08),
+      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.08),
     },
     '&.Mui-disabled': {
       backgroundColor: 'transparent',
@@ -100,21 +101,21 @@ export function IconButton({
   
   const softStyles = variant === 'soft' ? {
     backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-      ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.15)
-      : alpha(theme.palette[color as keyof Theme['palette']].main, 0.08),
+      ? alpha(theme.palette[resolvedColor].main, 0.15)
+      : alpha(theme.palette[resolvedColor].main, 0.08),
     color: (theme: Theme) => theme.palette.mode === 'dark'
-      ? theme.palette[color as keyof Theme['palette']].main
-      : theme.palette[color as keyof Theme['palette']].main,
+      ? theme.palette[resolvedColor].main
+      : theme.palette[resolvedColor].main,
     boxShadow: 'none',
     '&:hover': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.25)
-        : alpha(theme.palette[color as keyof Theme['palette']].main, 0.15),
+        ? alpha(theme.palette[resolvedColor].main, 0.25)
+        : alpha(theme.palette[resolvedColor].main, 0.15),
     },
     '&:active': {
       backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[color as keyof Theme['palette']].main, 0.30)
-        : alpha(theme.palette[color as keyof Theme['palette']].main, 0.20),
+        ? alpha(theme.palette[resolvedColor].main, 0.30)
+        : alpha(theme.palette[resolvedColor].main, 0.20),
     },
     '&.Mui-disabled': {
       backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
@@ -124,13 +125,13 @@ export function IconButton({
 
   const ghostStyles = variant === 'ghost' ? {
     backgroundColor: 'transparent',
-    color: (theme: Theme) => theme.palette[color as keyof Theme['palette']].main,
+    color: (theme: Theme) => theme.palette[resolvedColor].main,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color as keyof Theme['palette']].main, 0.08),
+      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.08),
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color as keyof Theme['palette']].main, 0.12),
+      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.12),
     },
     '&.Mui-disabled': {
       backgroundColor: 'transparent',
@@ -142,8 +143,8 @@ export function IconButton({
     ...(variant === 'contained' && {
       backgroundColor: (theme: Theme) => theme.palette.common.white,
       color: (theme: Theme) => theme.palette.mode === 'dark'
-        ? theme.palette[color as keyof Theme['palette']].dark
-        : theme.palette[color as keyof Theme['palette']].main,
+        ? theme.palette[resolvedColor].dark
+        : theme.palette[resolvedColor].main,
       boxShadow: 'none',
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
       '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },

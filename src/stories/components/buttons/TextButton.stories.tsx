@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
 import Box from '@mui/material/Box';
 import { TextButton } from '../../../components/TextButton';
 import { Icon } from '../../../components/Icon';
@@ -92,8 +91,8 @@ export const CommonIcons: Story = {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
       <TextButton label="Open external link" endIcon="arrow-up-right" />
       <TextButton label="Download file" startIcon="arrow-down-to-line" />
-      <TextButton label="Add item" startIcon={faPlus} />
-      <TextButton label="Delete" startIcon={faTrash} color="error" />
+      <TextButton label="Add item" startIcon="plus" />
+      <TextButton label="Delete" startIcon="delete" color="error" />
       <TextButton label="View details" startIcon="clone" />
     </Box>
   ),
@@ -103,7 +102,7 @@ export const Disabled: Story = {
   render: () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
       <TextButton label="Disabled primary" disabled />
-      <TextButton label="Disabled with icon" disabled startIcon={faPlus} />
+      <TextButton label="Disabled with icon" disabled startIcon="plus" />
       <TextButton label="Disabled error" disabled color="error" />
     </Box>
   ),
@@ -183,7 +182,7 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Disabled</Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
           <TextButton label="Disabled primary" disabled reversed />
-          <TextButton label="Disabled with icon" disabled startIcon={faPlus} reversed />
+          <TextButton label="Disabled with icon" disabled startIcon="plus" reversed />
         </Box>
       </Box>
       <Box>

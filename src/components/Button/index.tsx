@@ -3,7 +3,6 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
 import { Icon, type IconSize } from '../Icon';
 import React from 'react';
 
@@ -21,8 +20,8 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   hideLoadingText?: boolean;
   fullWidth?: boolean;
   reversed?: boolean;
-  startIcon?: IconDefinition;
-  endIcon?: IconDefinition;
+  startIcon?: string;
+  endIcon?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
 }

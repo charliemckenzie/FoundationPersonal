@@ -2,12 +2,10 @@ import type { Preview } from '@storybook/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import { useMemo, useEffect } from 'react';
 import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
 import '../src/app/globals.css';
-import '../src/lib/fontawesome'; // Initialize Font Awesome icon library
 
 const brands = {
   foundation,
@@ -31,15 +29,13 @@ const preview: Preview = {
       const isDesignTokenStory = context.title?.startsWith('Design Tokens/');
       
       // Create a theme instance with the selected brand and mode
-      const theme = useMemo(() => {
-        const brandConfig = brands[brandKey as keyof typeof brands];
-        const brandTheme = createBrandTheme(brandConfig);
-        const { colorSchemes, ...themeConfig } = brandTheme as any;
-        return createTheme({
-          ...themeConfig,
-          palette: colorSchemes[mode].palette,
-        });
-      }, [mode, brandKey]);
+      const brandConfig = brands[brandKey as keyof typeof brands];
+      const brandTheme = createBrandTheme(brandConfig);
+      const { colorSchemes, ...themeConfig } = brandTheme as any;
+      const theme = createTheme({
+        ...themeConfig,
+        palette: colorSchemes[mode].palette,
+      });
       
       return (
         <ThemeProvider theme={theme}>

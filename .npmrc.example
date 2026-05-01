@@ -1,5 +1,0 @@
-# Font Awesome Pro Configuration Template
-# Copy this file to .npmrc and replace YOUR_FONTAWESOME_PRO_TOKEN_HERE with your actual token
-
-@fortawesome:registry=https://npm.fontawesome.com/
-//npm.fontawesome.com/:_authToken=YOUR_FONTAWESOME_PRO_TOKEN_HERE

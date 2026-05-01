@@ -1,5 +1,4 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import type { IconDefinition, IconPrefix, IconName } from '@fortawesome/fontawesome-svg-core';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 
 export type IconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
@@ -18,7 +17,7 @@ export type IconColor =
 export type IconStyle = 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'sharp';
 
 export interface IconProps {
-  icon: IconDefinition | string;
+  icon: string;
   style?: IconStyle;
   size?: IconSize;
   color?: IconColor;
@@ -47,29 +46,74 @@ const COLOR_TO_SX: Record<IconColor, string> = {
   'text.disabled': 'text.disabled',
 };
 
-const STYLE_TO_PREFIX: Record<IconStyle, IconPrefix> = {
-  solid: 'fas',
-  regular: 'far',
-  light: 'fal',
-  thin: 'fat',
-  duotone: 'fad',
-  sharp: 'fass',
+const FONT_AWESOME_ICON_ALIASES: Record<string, string> = {
+  // Legacy qsuper/icon names mapped to local Font Awesome base names.
+  chevron_down: 'chevron-down',
+  chevron_left: 'chevron-left',
+  chevron_right: 'chevron-right',
+  chevron_up: 'chevron-up',
+  home: 'house',
+  info_1: 'circle-info',
+  info: 'circle-info',
+  'circle-info': 'circle-info',
+  plus: 'plus',
 };
 
-export function Icon({ icon, style = 'solid', size = 'md', color = 'inherit', 'aria-label': ariaLabel }: IconProps) {
-  // If icon is a string, convert it to the icon array format [prefix, iconName]
-  // Remove "fa-" prefix if present (e.g., "fa-bed-front" -> "bed-front")
-  // Default to "house" if empty string provided
-  let iconProp: IconDefinition | [IconPrefix, IconName];
-  
-  if (typeof icon === 'string') {
-    const prefix = STYLE_TO_PREFIX[style];
-    const iconName = icon.trim() || 'house'; // Default to 'house' if empty
-    const name = iconName.replace(/^fa-/, '') as IconName;
-    iconProp = [prefix, name];
-  } else {
-    iconProp = icon;
-  }
+function normalizeIconName(icon: string): string {
+  const normalized = icon.trim().replace(/^fa-/, '').toLowerCase().replace(/\s+/g, '-');
+  if (!normalized) return 'house';
+  const aliasOrName = FONT_AWESOME_ICON_ALIASES[normalized] ?? normalized;
+  return aliasOrName.replace(/_/g, '-');
+}
+
+function getStyleVariant(style: IconStyle): 'solid' | 'light' {
+  return style === 'light' ? 'light' : 'solid';
+}
+
+function resolveIconPaths(icon: string, style: IconStyle): { primary: string; fallback: string } {
+  const variant = getStyleVariant(style);
+  const fallbackVariant = variant === 'light' ? 'solid' : 'solid';
+  const normalized = normalizeIconName(icon).replace(/\.svg$/i, '');
+  const withVariantSuffix = normalized.match(/-(solid|light)-full$/)
+    ? normalized.replace(/-(solid|light)-full$/, `-${variant}-full`)
+    : `${normalized}-${variant}-full`;
+
+  const primary = `/icons/font-awesome/${variant}/${encodeURIComponent(withVariantSuffix)}.svg`;
+  const fallbackSuffix = withVariantSuffix.replace(/-(solid|light)-full$/, `-${fallbackVariant}-full`);
+  const fallback = `/icons/font-awesome/${fallbackVariant}/${encodeURIComponent(fallbackSuffix)}.svg`;
+
+  return { primary, fallback };
+}
+
+const FINAL_FALLBACK_SRC = '/icons/font-awesome/solid/house-solid-full.svg';
+
+export function Icon({
+  icon,
+  style = 'solid',
+  size = 'md',
+  color = 'inherit',
+  'aria-label': ariaLabel,
+}: IconProps) {
+  const paths = useMemo(() => resolveIconPaths(icon, style), [icon, style]);
+  const [iconSrc, setIconSrc] = useState(paths.primary);
+  const [didTryStyleFallback, setDidTryStyleFallback] = useState(false);
+
+  useEffect(() => {
+    setIconSrc(paths.primary);
+    setDidTryStyleFallback(false);
+  }, [paths.primary]);
+
+  const handleLoadError = () => {
+    if (!didTryStyleFallback && iconSrc !== paths.fallback) {
+      setDidTryStyleFallback(true);
+      setIconSrc(paths.fallback);
+      return;
+    }
+
+    if (iconSrc !== FINAL_FALLBACK_SRC) {
+      setIconSrc(FINAL_FALLBACK_SRC);
+    }
+  };
 
   return (
     <Box
@@ -78,7 +122,34 @@ export function Icon({ icon, style = 'solid', size = 'md', color = 'inherit', 'a
       aria-hidden={ariaLabel ? undefined : true}
       sx={{ display: 'inline-flex', color: COLOR_TO_SX[color], lineHeight: 0, fontSize: SIZE_MAP[size] }}
     >
-      <FontAwesomeIcon icon={iconProp} />
+      <Box
+        component="span"
+        role={ariaLabel ? 'img' : undefined}
+        aria-label={ariaLabel}
+        sx={{
+          width: '1em',
+          height: '1em',
+          display: 'block',
+          bgcolor: 'currentColor',
+          maskImage: `url(${iconSrc})`,
+          WebkitMaskImage: `url(${iconSrc})`,
+          maskSize: 'contain',
+          WebkitMaskSize: 'contain',
+          maskRepeat: 'no-repeat',
+          WebkitMaskRepeat: 'no-repeat',
+          maskPosition: 'center',
+          WebkitMaskPosition: 'center',
+        }}
+      >
+        <Box
+          component="img"
+          src={iconSrc}
+          alt=""
+          aria-hidden
+          onError={handleLoadError}
+          sx={{ width: 0, height: 0, opacity: 0, position: 'absolute', pointerEvents: 'none' }}
+        />
+      </Box>
     </Box>
   );
 }

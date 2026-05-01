@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Noto_Sans, Open_Sans, Merriweather } from "next/font/google";
 import ThemeRegistry from "./ThemeRegistry";
 import "./globals.css";
-import '../lib/fontawesome'; // Initialize Font Awesome icon library
 
 const notoSans = Noto_Sans({
   variable: "--font-noto-sans",

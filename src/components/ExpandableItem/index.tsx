@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useId } from 'react';
 import { Box, Collapse, Typography } from '@mui/material';
-import { faChevronDown } from '@fortawesome/pro-solid-svg-icons';
 import { Icon } from '../Icon';
 
 export interface ExpandableItemProps {
@@ -129,7 +128,7 @@ export const ExpandableItem: React.FC<ExpandableItemProps> = ({
             transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
           }}
         >
-          <Icon icon={faChevronDown} size="sm" color="inherit" />
+          <Icon icon="chevron_down" size="sm" color="inherit" />
         </Box>
         
         {/* Label */}

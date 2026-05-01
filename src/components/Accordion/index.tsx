@@ -3,7 +3,6 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { faChevronDown } from '@fortawesome/pro-solid-svg-icons';
 import { useCallback, useState } from 'react';
 import { Icon } from '../Icon';
 import { Button } from '../Button';
@@ -57,7 +56,7 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
       })}
     >
       <AccordionSummary
-        expandIcon={<Icon icon={faChevronDown} size="sm" />}
+        expandIcon={<Icon icon="chevron_down" size="sm" />}
         aria-controls={`${item.id}-content`}
         id={`${item.id}-header`}
         sx={(theme) => ({

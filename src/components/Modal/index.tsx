@@ -3,7 +3,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import MuiIconButton from '@mui/material/IconButton';
-import { faXmark } from '@fortawesome/pro-solid-svg-icons';
 import { Icon } from '../Icon';
 import type React from 'react';
 
@@ -61,7 +60,7 @@ export function Modal({
               color: 'text.muted',
             }}
           >
-            <Icon icon={faXmark} size="sm" />
+            <Icon icon="cross" size="sm" />
           </MuiIconButton>
         </DialogTitle>
       )}

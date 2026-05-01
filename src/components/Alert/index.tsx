@@ -1,6 +1,5 @@
 import MuiAlert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import { faCircleExclamation, faTriangleExclamation, faCircleInfo, faCircleCheck } from '@fortawesome/pro-solid-svg-icons';
 import type React from 'react';
 import { Icon } from '../Icon';
 
@@ -18,10 +17,10 @@ export interface AlertProps {
 }
 
 const SEVERITY_ICONS = {
-  error: faCircleExclamation,
-  warning: faTriangleExclamation,
-  info: faCircleInfo,
-  success: faCircleCheck,
+  error: 'alert_2',
+  warning: 'alert_1',
+  info: 'info_1',
+  success: 'tick',
 } as const;
 
 export function Alert({

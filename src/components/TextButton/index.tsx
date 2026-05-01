@@ -3,8 +3,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-import { faArrowRight, faArrowLeft } from '@fortawesome/pro-solid-svg-icons';
 import { Icon, type IconSize } from '../Icon';
 import { Spinner } from '../Spinner';
 import type React from 'react';
@@ -19,8 +17,8 @@ export interface TextButtonProps {
   disabled?: boolean;
   loading?: boolean;
   reversed?: boolean;
-  startIcon?: IconDefinition | string;
-  endIcon?: IconDefinition | string;
+  startIcon?: string;
+  endIcon?: string;
   iconDirection?: 'left' | 'right';
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
@@ -63,7 +61,7 @@ export function TextButton({
   };
   
   // Default arrow icon when none specified
-  const defaultIcon = iconDirection === 'left' ? faArrowLeft : faArrowRight;
+  const defaultIcon = iconDirection === 'left' ? 'chevron_left' : 'chevron_right';
   const effectiveStartIcon = startIcon || (iconDirection === 'left' && !endIcon ? defaultIcon : undefined);
   const effectiveEndIcon = endIcon || (iconDirection === 'right' && !startIcon ? defaultIcon : undefined);
   

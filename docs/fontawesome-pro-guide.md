@@ -1,174 +1,92 @@
-# Font Awesome Pro Guide
+# Local SVG Icon Guide
 
-Your Foundation design system is now using **Font Awesome Pro** with access to 16,000+ icons and multiple icon styles.
+This project uses local SVG assets from `public/icons`.
 
-## Two Ways to Use Icons
+## How Icons Work
 
-### Method 1: Icon Names (Recommended - Simple & Dynamic)
+- The `Icon` component takes a string icon name.
+- Icons are loaded from `public/icons/qsuper/<name>.svg`.
+- Font Awesome local icons are loaded from `public/icons/font-awesome/<style>/<name>.svg`.
+- Unknown names fall back to `public/icons/qsuper/general.svg`.
 
-Use icon names as strings - no imports needed!
+## Font Awesome Local Folder Structure
+
+Use style folders under `font-awesome`:
+
+```
+public/icons/font-awesome/
+  solid/
+    house.svg
+  light/
+    house.svg
+```
+
+You can keep your source files in:
+
+```
+src/assets/icons/font-awesome/
+  solid/
+  light/
+```
+
+Then sync them to `public`:
+
+```bash
+npm run sync-font-awesome-icons
+```
+
+## Basic Usage
 
 ```tsx
 import { Icon } from '@/components/Icon';
 
-// Basic usage - defaults to solid style
-<Icon icon="bed-front" />
-<Icon icon="coffee" color="primary" />
+<Icon icon="search" />
+<Icon icon="chevron_right" color="primary" />
+<Icon icon="alert_2" size="lg" color="error" />
 
-// Specify different styles
-<Icon icon="heart" style="regular" />
-<Icon icon="star" style="light" size="large" />
-<Icon icon="house" style="thin" color="warning" />
-
-// With or without "fa-" prefix (both work)
-<Icon icon="bed-front" />
-<Icon icon="fa-bed-front" />  // Same result
-
-// In buttons
-<Button label="Add" startIcon="plus" />
-<TextButton label="Delete" endIcon="trash" color="error" />
+// Font Awesome local: solid/light from public/icons/font-awesome
+<Icon icon="house" source="font-awesome" style="solid" />
+<Icon icon="house" source="font-awesome" style="light" />
 ```
 
-**Benefits:**
-- No imports needed
-- Easy to make icons dynamic/configurable
-- Perfect for CMS-driven content
-- Switch styles on the fly
-
-### Method 2: Import Icon Definitions (Type-Safe)
-
-Import icon objects for TypeScript type safety:
-
-```tsx
-import { faHome, faUser, faBell } from '@fortawesome/pro-solid-svg-icons';
-import { faHome as faHomeRegular } from '@fortawesome/pro-regular-svg-icons';
-import { Icon } from '@/components/Icon';
-
-<Icon icon={faHome} />
-<Icon icon={faHomeRegular} />
-```
-
-**Benefits:**
-- TypeScript autocomplete
-- Build-time verification
-- Tree-shaking (only imports used icons)
-
-## Icon Packages Available
-
-| Package | Style | Use Case |
-|---------|-------|----------|
-| `@fortawesome/pro-solid-svg-icons` | **Solid** (filled) | Primary UI elements, emphasis |
-| `@fortawesome/pro-regular-svg-icons` | **Regular** (outlined) | Secondary actions, subtle UI |
-| `@fortawesome/pro-light-svg-icons` | **Light** (thin outline) | Delicate interfaces, large icons |
-| `@fortawesome/pro-thin-svg-icons` | **Thin** (hairline) | Minimal designs, headings |
-| `@fortawesome/pro-duotone-svg-icons` | **Duotone** (two-tone) | Visual interest, accents |
-| `@fortawesome/sharp-solid-svg-icons` | **Sharp Solid** | Modern, geometric look |
-
-## Icon Component Props
+## Icon Props
 
 ```tsx
 interface IconProps {
-  icon: IconDefinition | string;  // Icon object OR icon name string
+  icon: string;
+  source?: 'qsuper' | 'art' | 'font-awesome';
   style?: 'solid' | 'regular' | 'light' | 'thin' | 'duotone' | 'sharp';
-  size?: 'small' | 'medium' | 'large';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
   color?: 'inherit' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'text.primary' | 'text.muted' | 'text.disabled';
   'aria-label'?: string;
 }
 ```
 
-## How to Use
+Note: `style` remains for API compatibility and is not used to switch files.
+For `source="font-awesome"`, use `style="solid"` or `style="light"`.
 
-### Using Icon Names (Simple)
-
-```tsx
-import { Icon } from '@/components/Icon';
-
-// All styles available via the style prop
-<Icon icon="home" />                           // solid (default)
-<Icon icon="home" style="regular" />          // outlined style
-<Icon icon="home" style="light" />            // light weight
-<Icon icon="home" style="thin" />             // thinnest weight
-
-// Combine with other props
-<Icon icon="star" style="thin" size="large" color="warning" />
-<Icon icon="heart" style="regular" color="error" aria-label="Favorite" />
-
-// Empty string defaults to "house" icon
-<Icon icon="" />  // Shows house icon
-```
-
-**Note:** If an empty string is provided for the `icon` prop, the component defaults to the "house" icon.
-
-### Using Icon Imports (Type-Safe)
+## Using Icons In Buttons
 
 ```tsx
-// Import specific icons from specific style packages
-import { faHome, faUser, faBell } from '@fortawesome/pro-solid-svg-icons';
-import { faHome as faHomeRegular } from '@fortawesome/pro-regular-svg-icons';
-import { Icon } from '@/components/Icon';
-
-<Icon icon={faHome} />          // Solid
-<Icon icon={faHomeRegular} />   // Regular/outlined
-```
-
-### In Other Components
-
-```tsx
-// Using icon names (string)
 <Button label="Add Item" startIcon="plus" />
-<TextButton label="Delete" endIcon="trash" color="error" />
+<Button label="Delete" endIcon="delete" color="error" />
 
-// OR using imported icons
-import { faPlus, faTrash } from '@fortawesome/pro-solid-svg-icons';
-<Button label="Add Item" startIcon={faPlus} />
-<TextButton label="Delete" endIcon={faTrash} color="error" />
+<TextButton label="Open external link" endIcon="arrow-up-right" />
+<TextButton label="Download" startIcon="arrow-down-to-line" />
 ```
 
-## Finding Icons
+## Naming Rules
 
-Browse all 16,000+ Pro icons at: **https://fontawesome.com/icons**
+- Use the file name without `.svg`.
+- Underscore names work directly (`chevron_right`).
+- Legacy kebab-case aliases are supported for common values (`chevron-right`, `arrow-up-right`, `circle-info`).
 
-Filter by:
-- **Style** (Solid, Regular, Light, Thin, Duotone, Sharp)
-- **Category** (Arrows, Business, Chat, etc.)
-- **Pro** toggle (see Pro-only icons)
+## Adding New Icons
 
-## Icon Naming
+1. Add the SVG into `public/icons/qsuper`.
+2. Use that filename in `icon` props.
+3. If you need backward compatibility aliases, add mapping entries in `src/components/Icon/index.tsx`.
 
-When using icon names as strings, use the kebab-case name from Font Awesome:
+## Storybook
 
-| Font Awesome Name | String Usage | Import Usage |
-|------------------|--------------|--------------|
-| "home" | `icon="home"` | `faHome` |
-| "arrow-right" | `icon="arrow-right"` | `faArrowRight` |
-| "circle-check" | `icon="circle-check"` | `faCircleCheck` |
-| "bed-front" | `icon="bed-front"` | `faBedFront` |
-
-**Note:** You can optionally use the `fa-` prefix: `icon="fa-home"` works the same as `icon="home"`
-
-## Style Recommendations
-
-| Context | Recommended Style | Why |
-|---------|------------------|-----|
-| Buttons, primary actions | **Solid** | Strong, clear, recognizable |
-| Secondary UI, navigation | **Regular** | Clean, unobtrusive |
-| Large display icons | **Light** or **Thin** | Elegant at scale |
-| Data tables, compact UI | **Solid** or **Regular** | Clarity at small sizes |
-| Hero sections, marketing | **Light** or **Duotone** | Visual impact |
-
-## Storybook Examples
-
-Check out **Components / Icon** in Storybook to see:
-- **Using Icon Names** - Examples of using string icon names (bed-front, coffee, plane, etc.)
-- **Icon Name With Styles** - Same icon (star) shown in all 4 styles using icon names
-- **Icon Name Example** - Interactive playground to test any icon name
-- **Pro Styles** - Heart icon in Solid, Regular, Light, and Thin using imported definitions
-- All standard examples (sizes, colors, etc.)
-
-## Security Note
-
-Your Font Awesome Pro token is stored in `.npmrc` and excluded from git via `.gitignore`. Never commit this file to version control.
-
-## Need More Icons?
-
-With Pro, you have access to **16,000+ icons** vs. the 2,000 in the free version. Browse the full catalog at fontawesome.com/icons with the "Pro" filter enabled.
+See `Components / Icons / Icon` for current examples and supported naming patterns.

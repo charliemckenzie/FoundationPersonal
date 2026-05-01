@@ -1,12 +1,11 @@
 # Foundation Design System
 
-A Next.js-based design system built with MUI, Font Awesome Pro, and Storybook.
+A Next.js-based design system built with MUI, local SVG icons, and Storybook.
 
 ## Prerequisites
 
 - Node.js 20+ 
 - npm or yarn
-- Font Awesome Pro license (required for icon packages)
 
 ## First-Time Setup
 
@@ -17,41 +16,19 @@ git clone <repository-url>
 cd Foundation
 ```
 
-### 2. Configure Font Awesome Pro Access
-
-This project uses Font Awesome Pro, which requires authentication:
-
-1. Get your Font Awesome Pro token:
-   - Go to https://fontawesome.com/account
-   - Navigate to "Kits & API Tokens"
-   - Copy your **Package Token** (not API Token)
-
-2. Create your local `.npmrc` file:
-   ```bash
-   # Copy the example file
-   cp .npmrc.example .npmrc
-   
-   # On Windows:
-   copy .npmrc.example .npmrc
-   ```
-
-3. Edit `.npmrc` and replace `YOUR_FONTAWESOME_PRO_TOKEN_HERE` with your actual token
-
-**Note:** The `.npmrc` file is git-ignored for security. Never commit your token to the repository.
-
-### 3. Install dependencies
+### 2. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 4. Verify setup
+### 3. Verify setup
 
 ```bash
 npm run check-setup
 ```
 
-### 5. Configure VS Code (Recommended)
+### 4. Configure VS Code (Recommended)
 
 If using GitHub Copilot or Claude Code, add this to your VS Code settings to auto-apply AI changes without manual approval prompts:
 
@@ -92,9 +69,9 @@ Foundation/
 │   │   └── layout.tsx    # Root layout
 │   ├── components/       # Reusable components
 │   ├── stories/          # Storybook stories
-│   └── lib/              # Utilities (Font Awesome setup)
+│   └── assets/           # Asset metadata
 ├── docs/                 # Documentation
-├── public/               # Static assets
+├── public/icons/         # Local icon assets served by Next.js
 └── scripts/              # Build scripts
 ```
 
@@ -107,34 +84,39 @@ Foundation/
 - `npm run build-storybook` - Build Storybook for deployment
 - `npm run check-setup` - Verify environment setup
 - `npm run lint` - Run ESLint
+- `npm run sync-font-awesome-icons` - Copy local Font Awesome SVGs from `src/assets/icons/font-awesome` to `public/icons/font-awesome`
 
 ## Documentation
 
-- [Font Awesome Pro Guide](docs/fontawesome-pro-guide.md) - How to use Font Awesome Pro icons
+- [Local Icons Guide](docs/fontawesome-pro-guide.md) - How to use local SVG icons
 - [Agents Guide](AGENTS.md) - Team structure and workflows
 
 ## Troubleshooting
 
-### Font Awesome Pro Installation Fails
-
-**Error:** `npm ERR! 401 Unauthorized`
-
-**Solution:** 
-1. Verify your `.npmrc` file exists with a valid token
-2. Check your Font Awesome Pro subscription is active
-3. Ensure you copied the **Package Token** (not API Token)
-
 ### Icons Not Showing
 
 **Solution:**
-1. Verify Font Awesome Pro packages are installed: `npm list @fortawesome`
-2. Check Storybook is loading the icon library (see Components / Icon examples)
-3. Restart your dev server after installing packages
+1. Confirm the icon exists under `public/icons/qsuper`.
+2. Pass the icon file name (without `.svg`) to the `Icon` component.
+3. Restart your dev server if you have just added new static files.
+
+### Font Awesome Local Icons
+
+Use this folder structure:
+1. `src/assets/icons/font-awesome/solid`
+2. `src/assets/icons/font-awesome/light`
+
+Then run:
+1. `npm run sync-font-awesome-icons`
+
+Runtime paths are served from:
+1. `public/icons/font-awesome/solid`
+2. `public/icons/font-awesome/light`
 
 ## Team Onboarding
 
 New team members should:
-1. Follow the **First-Time Setup** steps above (especially step 2 for Font Awesome)
+1. Follow the **First-Time Setup** steps above
 2. Run `npm run check-setup` to verify everything works
 3. Run `npm run storybook` to explore the component library
 4. Read [AGENTS.md](AGENTS.md) to understand team workflows

@@ -97,51 +97,6 @@ check('No known vulnerabilities (high+)', () => {
   }
 });
 
-// ── Font Awesome Pro ─────────────────────────────────────────────────────────
-console.log('\nFont Awesome Pro');
-
-check('.npmrc exists', () => {
-  if (!existsSync(join(root, '.npmrc'))) {
-    throw new Error('.npmrc missing.\n     Fix: cp .npmrc.example .npmrc (then add your Font Awesome Pro token)');
-  }
-});
-
-check('.npmrc has valid token', () => {
-  const npmrc = readFileSync(join(root, '.npmrc'), 'utf8');
-  
-  // Check if the actual token line (not comments) has a placeholder
-  const tokenLine = npmrc
-    .split('\n')
-    .find(line => line.trim().startsWith('//npm.fontawesome.com/:_authToken='));
-  
-  if (!tokenLine) {
-    throw new Error('.npmrc missing Font Awesome token line');
-  }
-  
-  if (tokenLine.includes('YOUR_FONTAWESOME_PRO_TOKEN_HERE')) {
-    throw new Error('.npmrc still has placeholder token.\n     Fix: Edit .npmrc and add your real Font Awesome Pro token from https://fontawesome.com/account');
-  }
-  
-  if (!npmrc.includes('@fortawesome:registry=https://npm.fontawesome.com/')) {
-    throw new Error('.npmrc missing Font Awesome registry configuration');
-  }
-});
-
-check('Font Awesome Pro packages installed', () => {
-  const faPackages = [
-    '@fortawesome/pro-solid-svg-icons',
-    '@fortawesome/pro-regular-svg-icons',
-    '@fortawesome/pro-light-svg-icons',
-    '@fortawesome/pro-thin-svg-icons',
-  ];
-  
-  const missing = faPackages.filter(pkg => !existsSync(join(root, 'node_modules', pkg)));
-  
-  if (missing.length > 0) {
-    throw new Error(`Missing Font Awesome Pro packages: ${missing.join(', ')}.\n     Fix: npm install`);
-  }
-});
-
 // ── TypeScript ────────────────────────────────────────────────────────────────
 console.log('\nTypeScript');
 
