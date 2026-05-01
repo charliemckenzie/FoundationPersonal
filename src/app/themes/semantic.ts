@@ -88,8 +88,8 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
 
     // Text & Borders
     text: {
-      primary:     brand.quaternary ? brand.neutral[700] : brand.neutral[900], // QSuper: neutral[700] #3b404a / ART: neutral[900]
-      muted:       brand.neutral[600],
+      primary:     brand.quaternary ? brand.neutral[700] : brand.neutral[700], // QSuper: neutral[700] / ART: neutral[700]
+      muted:       brand.quaternary ? brand.neutral[600] : brand.neutral[600], // QSuper: neutral[600] / ART: neutral[600]
       disabled:    brand.neutral[500],
       inverse:     white,
       heading:     brand.secondary[800],
@@ -102,7 +102,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       subtle:  brand.neutral[200],
       default: brand.neutral[300],
       input:   brand.neutral[500],
-      focus:   brand.neutral[700],
+      focus:   brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
     },
     action: {
       active:             brand.neutral[600],        // icon/control active colour (e.g. checked checkbox, active icon button)
@@ -203,8 +203,8 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
 
     // Text & Borders
     text: {
-      primary:     brand.neutral[50],
-      muted:       brand.neutral[300],
+      primary:     brand.quaternary ? brand.neutral[50] : brand.neutral[300], // QSuper: neutral[50] / ART: neutral[300]
+      muted:       brand.quaternary ? brand.neutral[300] : brand.neutral[500], // QSuper: neutral[300] / ART: neutral[500]
       disabled:    brand.neutral[500],
       inverse:     brand.neutral[900],
       heading:     white,
@@ -212,12 +212,12 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
       linkInverse: brand.quaternary ? white : clearBlue[100], // QSuper: white / ART: clearBlue[100]
     },
-    divider: brand.neutral[700],  // Foundation: #334155
+    divider: brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
     border: {
       subtle:  brand.neutral[800],  // Foundation: #282c34
-      default: brand.neutral[700],  // Foundation: #334155
-      input:   brand.neutral[400],  // Foundation: #94a3b8
-      focus:   brand.neutral[300],  // Foundation: #cbd5e1
+      default: brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
+      input:   brand.quaternary ? brand.neutral[400] : brand.neutral[500], // QSuper: neutral[400] / ART: neutral[500]
+      focus:   brand.quaternary ? brand.neutral[300] : brand.neutral[400], // QSuper: neutral[300] / ART: neutral[400]
     },
     action: {
       active:             brand.neutral[300],        // icon/control active colour

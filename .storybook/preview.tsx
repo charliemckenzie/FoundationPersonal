@@ -1,6 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 import { useMemo, useEffect } from 'react';
 import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
@@ -26,6 +27,8 @@ const preview: Preview = {
     (Story, context) => {
       const mode = context.globals.colorScheme || 'light';
       const brandKey = context.globals.brand || 'foundation';
+      const bgType = context.globals.backgroundColor || 'default';
+      const isDesignTokenStory = context.title?.startsWith('Design Tokens/');
       
       // Create a theme instance with the selected brand and mode
       const theme = useMemo(() => {
@@ -41,7 +44,13 @@ const preview: Preview = {
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <Story />
+          {isDesignTokenStory ? (
+            <Box sx={{ bgcolor: `background.${bgType}`, minHeight: '100vh' }}>
+              <Story />
+            </Box>
+          ) : (
+            <Story />
+          )}
         </ThemeProvider>
       );
     },

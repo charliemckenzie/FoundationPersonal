@@ -59,7 +59,7 @@ function PrimitivesDoc() {
       </Typography>
       <Typography variant="body" color="text.muted" sx={{ mb: 4 }}>
         Raw hue families — steps 50–950. Never reference these directly in components. Use semantic
-        tokens from the Colors story instead.
+        tokens from the Colors story instead. Includes neutralART for ART-specific neutral usage.
       </Typography>
       {(Object.entries(primitiveScales) as [PrimitiveScaleName, ColorScale][]).map(
         ([name, scale]) => (

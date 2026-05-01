@@ -1,4 +1,4 @@
-import { trueBlue, deepBlue, livingCoral, neutral, artInvestmentOptions, artAssetMix, sharedDiversifiedOptions, sharedAssetClassOptions } from '../primitives/colors';
+import { trueBlue, deepBlue, livingCoral, neutralART, artInvestmentOptions, artAssetMix, sharedDiversifiedOptions, sharedAssetClassOptions } from '../primitives/colors';
 import type { BrandConfig } from './index';
 
 export const foundation: BrandConfig = {
@@ -6,7 +6,7 @@ export const foundation: BrandConfig = {
   primary: trueBlue,
   secondary: deepBlue,
   tertiary: livingCoral,
-  neutral,
+  neutral: neutralART,
   buttonBorderRadius: '9999px',
   fontFamily: '"Noto Sans", system-ui, sans-serif',
   headingFontFamily: 'Merriweather, serif',
