@@ -51,6 +51,13 @@ const meta: Meta<typeof HeroIcon> = {
   component: HeroIcon,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
+  args: {
+    name: 'Goals',
+    brand: 'art',
+    size: 'md',
+    background: 'none',
+    iconColor: 'default',
+  },
   argTypes: {
     name: {
       control: 'text',
@@ -71,6 +78,11 @@ const meta: Meta<typeof HeroIcon> = {
       options: ['none', 'brand', 'white', 'grey'] satisfies HeroIconBackground[],
       description: 'Circular background. Colour resolves per brand via semantic tokens.',
     },
+    iconColor: {
+      control: 'radio',
+      options: ['default', 'white', 'quaternary'],
+      description: 'Icon fill colour. Only applies to QSuper (monochrome SVGs). `default` shows the embedded colour; `white` inverts to white; `quaternary` tints to quaternary.main — use with background="none" only.',
+    },
     'aria-label': {
       control: 'text',
       description: 'Accessible label. Omit for decorative icons.',
@@ -82,9 +94,18 @@ export default meta;
 type Story = StoryObj<typeof HeroIcon>;
 
 export const Default: Story = {
-  render: (_args, context: StoryContext) => {
-    const { brand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
-    return <HeroIcon name={sampleIcon} brand={brand} size="md" background="none" />;
+  render: (args, context: StoryContext) => {
+    const { brand: globalBrand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
+    return (
+      <HeroIcon
+        name={args.name || sampleIcon}
+        brand={args.brand ?? globalBrand}
+        size={args.size ?? 'md'}
+        background={args.background ?? 'none'}
+        iconColor={args.iconColor}
+        aria-label={args['aria-label']}
+      />
+    );
   },
 };
 
