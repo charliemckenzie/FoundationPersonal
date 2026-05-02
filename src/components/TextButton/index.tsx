@@ -61,7 +61,7 @@ export function TextButton({
   };
   
   // Default arrow icon when none specified
-  const defaultIcon = iconDirection === 'left' ? 'chevron_left' : 'chevron_right';
+  const defaultIcon = iconDirection === 'left' ? 'arrow-left' : 'arrow-right';
   const effectiveStartIcon = startIcon || (iconDirection === 'left' && !endIcon ? defaultIcon : undefined);
   const effectiveEndIcon = endIcon || (iconDirection === 'right' && !startIcon ? defaultIcon : undefined);
   

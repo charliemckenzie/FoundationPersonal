@@ -8,6 +8,10 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import { useState } from 'react';
 
 const FONT_AWESOME_ICONS = [
+  'arrow-down-to-line',
+  'arrow-left',
+  'arrow-left-arrow-right',
+  'arrow-right',
   'arrow-up-right',
   'chevron-down',
   'chevron-left',
