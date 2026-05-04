@@ -18,6 +18,10 @@ const config: StorybookConfig = {
   docs: {
     autodocs: 'tag',
   },
+  features: {
+    onboarding: false,
+    sidebarOnboardingChecklist: false,
+  },
 };
 
 export default config;

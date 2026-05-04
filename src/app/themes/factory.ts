@@ -1,6 +1,20 @@
-import { createTheme, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
+import { createTheme, lighten, darken, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
+import { red, amber, cyan, green } from './primitives/colors';
+
+const ALERT_BORDER_LIGHT: Record<string, string> = {
+  error:   lighten(red[400],   0.7),
+  warning: lighten(amber[300], 0.7),
+  info:    lighten(cyan[400],  0.7),
+  success: lighten(green[400], 0.7),
+};
+const ALERT_BORDER_DARK: Record<string, string> = {
+  error:   darken(red[400],   0.7),
+  warning: darken(amber[300], 0.7),
+  info:    darken(cyan[400],  0.7),
+  success: darken(green[400], 0.7),
+};
 import type React from 'react';
 
 declare module '@mui/material/Button' {
@@ -323,12 +337,18 @@ export function createBrandTheme(brand: BrandConfig) {
       },
       MuiAlert: {
         styleOverrides: {
-          root: {
+          root: ({ theme, ownerState }) => ({
             padding: '12px 16px',
             borderRadius: '8px',
             alignItems: 'flex-start',
             gap: '12px',
-          },
+            ...(ownerState.variant === 'standard' && ownerState.severity && {
+              border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
+              ...theme.applyStyles('dark', {
+                border: `1px solid ${ALERT_BORDER_DARK[ownerState.severity]}`,
+              }),
+            }),
+          }),
           icon: {
             padding: 0,
             margin: 0,
