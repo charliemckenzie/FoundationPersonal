@@ -30,7 +30,7 @@ function ModalDemo({ size = 'medium', title = 'Modal title', disableCloseOnBackd
         disableCloseOnBackdrop={disableCloseOnBackdrop}
         actions={
           <>
-            <Button label="Cancel" variant="text" onClick={() => setOpen(false)} />
+            <Button label="Cancel" variant="ghost" onClick={() => setOpen(false)} />
             <Button label="Confirm" onClick={() => setOpen(false)} />
           </>
         }
@@ -63,7 +63,7 @@ export const NoTitle: Story = {
     return (
       <>
         <Button label="Open (no title)" onClick={() => setOpen(true)} />
-        <Modal open={open} onClose={() => setOpen(false)} actions={<Button label="Close" onClick={() => setOpen(false)} />}>
+        <Modal open={open} onClose={() => setOpen(false)} actions={<Button label="Close" variant="ghost" onClick={() => setOpen(false)} />}>
           <Typography variant="body">A modal without a title bar.</Typography>
         </Modal>
       </>
@@ -73,4 +73,32 @@ export const NoTitle: Story = {
 
 export const DisableBackdropClose: Story = {
   render: () => <ModalDemo title="Can't close by clicking backdrop" disableCloseOnBackdrop />,
+};
+
+export const ScrollableContent: Story = {
+  render: () => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <Button label="Open scrollable modal" onClick={() => setOpen(true)} />
+        <Modal
+          open={open}
+          onClose={() => setOpen(false)}
+          title="Long content"
+          actions={
+            <>
+              <Button label="Cancel" variant="ghost" onClick={() => setOpen(false)} />
+              <Button label="Confirm" onClick={() => setOpen(false)} />
+            </>
+          }
+        >
+          {Array.from({ length: 20 }, (_, i) => (
+            <Typography key={i} variant="body" color="text.muted" sx={{ mb: 2, display: 'block' }}>
+              Paragraph {i + 1}: The modal body scrolls independently when content overflows. The title and actions stay fixed.
+            </Typography>
+          ))}
+        </Modal>
+      </>
+    );
+  },
 };

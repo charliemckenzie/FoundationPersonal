@@ -1,14 +1,20 @@
 import MuiButton from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
-import { alpha } from '@mui/material/styles';
-import type { Theme } from '@mui/material/styles';
 import { Icon, type IconSize } from '../Icon';
 import React from 'react';
+import {
+  buildSoftStyles,
+  buildGhostStyles,
+  buildOutlinedStyles,
+  buildReversedStyles,
+  type ButtonColorKey,
+  type ButtonVariantKey,
+} from '../buttons/variantStyles';
 
-export type ButtonVariant = 'contained' | 'outlined' | 'ghost' | 'soft';
+export type ButtonVariant = ButtonVariantKey;
 export type ButtonSize = 'small' | 'medium' | 'large';
-export type ButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+export type ButtonColor = ButtonColorKey;
 
 export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'type'> {
   label: string;
@@ -26,6 +32,24 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   type?: 'button' | 'submit' | 'reset';
 }
 
+const iconSizeMap: Record<ButtonSize, IconSize> = {
+  small: 'sm',
+  medium: 'md',
+  large: 'lg',
+};
+
+const sizeStyles: Record<ButtonSize, { height: number; paddingLeft: string; paddingRight: string }> = {
+  small:  { height: 36, paddingLeft: '16px', paddingRight: '16px' },
+  medium: { height: 48, paddingLeft: '24px', paddingRight: '24px' },
+  large:  { height: 56, paddingLeft: '28px', paddingRight: '28px' },
+};
+
+const containedStyles = {
+  boxShadow: 'none',
+  '&:hover': { boxShadow: 'none' },
+  '&:active': { boxShadow: 'none' },
+};
+
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   label,
   variant = 'contained',
@@ -42,125 +66,17 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   type = 'button',
   ...rest
 }, ref) {
-  // Map Button size to Icon size
-  const iconSizeMap: Record<ButtonSize, IconSize> = {
-    small: 'sm',   // 14px icon in 36px button
-    medium: 'md',  // 16px icon in 48px button
-    large: 'lg',   // 20px icon in 56px button
-  };
-  const iconSize = iconSizeMap[size];
   const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
-  
-  const containedStyles = variant === 'contained' ? {
-    boxShadow: 'none',
-    '&:hover': {
-      boxShadow: 'none',
-    },
-    '&:active': {
-      boxShadow: 'none',
-    },
-  } : undefined;
-  
-  const softStyles = variant === 'soft' ? {
-    backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-      ? alpha(theme.palette[color].main, 0.15)
-      : alpha(theme.palette[color].main, 0.08),
-    color: (theme: Theme) => theme.palette.mode === 'dark'
-      ? theme.palette[color].main
-      : theme.palette[color].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[color].main, 0.25)
-        : alpha(theme.palette[color].main, 0.15),
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[color].main, 0.30)
-        : alpha(theme.palette[color].main, 0.20),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-
-  const ghostStyles = variant === 'ghost' ? {
-    backgroundColor: 'transparent',
-    color: (theme: Theme) => theme.palette[color].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.12),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: 'transparent',
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-
-  const outlinedStyles = variant === 'outlined' ? {
-    backgroundColor: 'transparent',
-    borderColor: (theme: Theme) => theme.palette.mode === 'light' 
-      ? alpha(theme.palette[color].main, 0.5)
-      : theme.palette[color].main,
-    color: (theme: Theme) => theme.palette[color].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.04),
-      borderColor: (theme: Theme) => theme.palette[color].main,
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: 'transparent',
-      borderColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-  
-  const reversedStyles = reversed ? {
-    ...(variant === 'contained' && {
-      backgroundColor: (theme: Theme) => theme.palette.common.white,
-      // primary.main in dark mode (#3385ff) is 3.54:1 vs white — fails AA. primary.dark (#0051ff) = 5.80:1 ✅
-      color: (theme: Theme) => theme.palette.mode === 'dark'
-        ? theme.palette[color].dark
-        : theme.palette[color].main,
-      boxShadow: 'none',
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50) },
-    }),
-    ...(variant === 'outlined' && {
-      borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.5),
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12), borderColor: (theme: Theme) => theme.palette.common.white },
-      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-    ...(variant === 'ghost' && {
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12) },
-      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-    ...(variant === 'soft' && {
-      backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.25) },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-  } : undefined;
-
-  const sizeStyles: Record<ButtonSize, { height: number; paddingLeft: string; paddingRight: string }> = {
-    small:  { height: 36, paddingLeft: '16px', paddingRight: '16px' },
-    medium: { height: 48, paddingLeft: '24px', paddingRight: '24px' },
-    large:  { height: 56, paddingLeft: '28px', paddingRight: '28px' },
-  };
-const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
+  const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   const showSpinnerOnly = loading && hideLoadingText;
+
+  const variantStyles =
+    variant === 'contained' ? containedStyles
+    : variant === 'soft'     ? buildSoftStyles(color)
+    : variant === 'ghost'    ? buildGhostStyles(color)
+    : buildOutlinedStyles(color);
+
+  const reversedStyles = reversed ? buildReversedStyles(variant, color) : undefined;
 
   return (
     <MuiButton
@@ -171,18 +87,16 @@ const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
       disabled={disabled}
       aria-busy={loading}
       fullWidth={fullWidth}
-      startIcon={loading && !hideLoadingText ? <CircularProgress size={spinnerSize} color="inherit" /> : !loading && startIcon ? <Icon icon={startIcon} size={iconSize} color="inherit" /> : undefined}
-      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSize} color="inherit" /> : undefined}
+      startIcon={loading && !hideLoadingText ? <CircularProgress size={spinnerSize} color="inherit" /> : !loading && startIcon ? <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
+      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
       onClick={loading ? undefined : onClick}
       type={type}
       {...rest}
       sx={(theme) => ({
         ...sizeStyles[size],
-        ...(containedStyles ?? outlinedStyles ?? softStyles ?? ghostStyles),
+        ...variantStyles,
         ...reversedStyles,
-        ...(showSpinnerOnly && {
-          position: 'relative',
-        }),
+        ...(showSpinnerOnly && { position: 'relative' }),
         ...(loading && {
           cursor: 'not-allowed !important',
           pointerEvents: 'none !important',
@@ -196,22 +110,12 @@ const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
           outlineOffset: '2px',
           boxShadow: 'none',
         },
-        // Override MUI's default icon sizing to use our explicit icon sizes
         '& .MuiButton-startIcon, & .MuiButton-endIcon': {
-          '& > span': {
-            fontSize: 'inherit !important',
-          },
+          '& > span': { fontSize: 'inherit !important' },
         },
       })}
     >
-      <Box
-        component="span"
-        sx={{
-          ...(showSpinnerOnly && {
-            opacity: 0,
-          }),
-        }}
-      >
+      <Box component="span" sx={{ ...(showSpinnerOnly && { opacity: 0 }) }}>
         {label}
       </Box>
       {showSpinnerOnly && (

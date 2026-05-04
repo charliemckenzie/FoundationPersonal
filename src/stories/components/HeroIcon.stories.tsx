@@ -1,4 +1,4 @@
-import type { Meta, StoryObj, StoryContext } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import MuiTextField from '@mui/material/TextField';
@@ -94,7 +94,7 @@ export default meta;
 type Story = StoryObj<typeof HeroIcon>;
 
 export const Default: Story = {
-  render: (args, context: StoryContext) => {
+  render: (args, context) => {
     const { brand: globalBrand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
     return (
       <HeroIcon
@@ -110,14 +110,14 @@ export const Default: Story = {
 };
 
 export const Sizes: Story = {
-  render: (_args, context: StoryContext) => {
+  render: (_args, context) => {
     const { brand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
     return (
       <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 4, flexWrap: 'wrap' }}>
         {SIZES.map(size => (
           <Box key={size} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
             <HeroIcon name={sampleIcon} brand={brand} size={size} />
-            <Typography variant="caption" sx={{ color: 'text.secondary' }}>
+            <Typography variant="small" sx={{ color: 'text.secondary' }}>
               {SIZE_LABELS[size]}
             </Typography>
           </Box>
@@ -128,14 +128,14 @@ export const Sizes: Story = {
 };
 
 export const WithAriaLabel: Story = {
-  render: (_args, context: StoryContext) => {
+  render: (_args, context) => {
     const { brand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
     return <HeroIcon name={sampleIcon} brand={brand} size="lg" aria-label={`${sampleIcon} icon`} />;
   },
 };
 
 export const Backgrounds: Story = {
-  render: (_args, context: StoryContext) => {
+  render: (_args, context) => {
     const { brand, sampleIcon } = getBrand((context.globals['brand'] as string) || 'foundation');
     const bgList = brand === 'art' ? ART_BACKGROUNDS : QSUPER_BACKGROUNDS;
     const labels = BG_LABELS[brand];
@@ -161,7 +161,7 @@ export const Backgrounds: Story = {
                 iconColor={brand === 'qsuper' && bg === 'brand' ? 'white' : 'default'}
               />
             </Box>
-            <Typography variant="caption" sx={{ color: 'text.secondary', textAlign: 'center' }}>
+            <Typography variant="small" sx={{ color: 'text.secondary', textAlign: 'center' }}>
               {labels[bg]}
             </Typography>
           </Box>
@@ -187,9 +187,9 @@ function GalleryRender({ globalBrand }: { globalBrand: string }) {
         value={search}
         onChange={e => setSearch(e.target.value)}
         sx={{ mb: 2, width: 280 }}
-        inputProps={{ 'aria-label': 'Search icons' }}
+        slotProps={{ input: { 'aria-label': 'Search icons' } }}
       />
-      <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
+      <Typography variant="body" sx={{ mb: 3, color: 'text.secondary' }}>
         {filtered.length} of {icons.length} icons
       </Typography>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 2 }}>
@@ -209,7 +209,7 @@ function GalleryRender({ globalBrand }: { globalBrand: string }) {
             }}
           >
             <HeroIcon name={name} brand={brand} size="lg" />
-            <Typography variant="caption" sx={{ wordBreak: 'break-word', lineHeight: 1.3, color: 'text.secondary' }}>
+            <Typography variant="small" sx={{ wordBreak: 'break-word', lineHeight: 1.3, color: 'text.secondary' }}>
               {name}
             </Typography>
           </Box>
@@ -225,24 +225,24 @@ export const QSuperColours: Story = {
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 4 }}>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
         <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="default" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>Default (QSuper blue)</Typography>
+        <Typography variant="small" sx={{ color: 'text.secondary' }}>Default (QSuper blue)</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
         <Box sx={{ p: 2, bgcolor: 'background.brandPrimary', borderRadius: 2, display: 'inline-flex' }}>
           <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="white" />
         </Box>
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>White (on blue)</Typography>
+        <Typography variant="small" sx={{ color: 'text.secondary' }}>White (on blue)</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1.5 }}>
         <HeroIcon name="alert" brand="qsuper" size="xl" iconColor="quaternary" />
-        <Typography variant="caption" sx={{ color: 'text.secondary' }}>Quaternary (Light Blue)</Typography>
+        <Typography variant="small" sx={{ color: 'text.secondary' }}>Quaternary (Light Blue)</Typography>
       </Box>
     </Box>
   ),
 };
 
 export const Gallery: Story = {
-  render: (_args, context: StoryContext) => (
+  render: (_args, context) => (
     <GalleryRender globalBrand={(context.globals['brand'] as string) || 'foundation'} />
   ),
   parameters: { controls: { disable: true } },

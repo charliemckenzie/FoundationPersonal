@@ -166,7 +166,6 @@ export function Tabs({
                 }
               : { minHeight }
           }
-          TabIndicatorProps={variant === 'pill' ? { style: { display: 'none', height: 0 } } : undefined}
         >
           {tabs.map((tab, i) => (
             <MuiTab

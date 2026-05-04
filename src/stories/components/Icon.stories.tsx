@@ -97,7 +97,7 @@ function GalleryRender({ style }: { style: 'solid' | 'light' }) {
           value={search}
           onChange={(event) => setSearch(event.target.value)}
           sx={{ width: 280, maxWidth: '100%' }}
-          inputProps={{ 'aria-label': 'Search icons' }}
+          slotProps={{ input: { 'aria-label': 'Search icons' } }}
         />
         <ToggleButtonGroup
           exclusive
@@ -112,7 +112,7 @@ function GalleryRender({ style }: { style: 'solid' | 'light' }) {
           <ToggleButton value="light" aria-label="Light icons">Light</ToggleButton>
         </ToggleButtonGroup>
       </Box>
-      <Typography variant="body2" sx={{ mb: 3, color: 'text.secondary' }}>
+      <Typography variant="body" sx={{ mb: 3, color: 'text.secondary' }}>
         {filtered.length} of {FONT_AWESOME_ICONS.length} icons
       </Typography>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 2 }}>
@@ -132,7 +132,7 @@ function GalleryRender({ style }: { style: 'solid' | 'light' }) {
             }}
           >
             <Icon icon={name} style={iconStyle} size="lg" />
-            <Typography variant="caption" sx={{ wordBreak: 'break-word', lineHeight: 1.3, color: 'text.secondary' }}>
+            <Typography variant="small" sx={{ wordBreak: 'break-word', lineHeight: 1.3, color: 'text.secondary' }}>
               {name}
             </Typography>
           </Box>

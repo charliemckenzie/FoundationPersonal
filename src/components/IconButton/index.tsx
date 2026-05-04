@@ -1,14 +1,21 @@
 import MuiIconButton from '@mui/material/IconButton';
-import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
 import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
+import {
+  buildSoftStyles,
+  buildGhostStyles,
+  buildOutlinedStyles,
+  buildReversedStyles,
+  type ButtonColorKey,
+  type ButtonVariantKey,
+} from '../buttons/variantStyles';
 
-export type IconButtonVariant = 'contained' | 'outlined' | 'ghost' | 'soft';
+export type IconButtonVariant = ButtonVariantKey;
 export type IconButtonSize = 'small' | 'medium' | 'large';
-export type IconButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
+export type IconButtonColor = ButtonColorKey | 'default';
 
 export interface IconButtonProps {
   icon: string;
@@ -43,6 +50,26 @@ const SPINNER_SIZE_MAP: Record<IconButtonSize, 'small' | 'medium' | 'large'> = {
   large: 'medium',
 };
 
+function buildContainedStyles(color: ButtonColorKey) {
+  return {
+    backgroundColor: (theme: Theme) => theme.palette[color].main,
+    color: (theme: Theme) => theme.palette[color].contrastText,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => theme.palette[color].dark,
+      boxShadow: 'none',
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => theme.palette[color].dark,
+      boxShadow: 'none',
+    },
+    '&.Mui-disabled': {
+      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  };
+}
+
 export function IconButton({
   icon,
   iconStyle = 'solid',
@@ -57,120 +84,15 @@ export function IconButton({
   onClick,
   type = 'button',
 }: IconButtonProps) {
-  const resolvedColor: Exclude<IconButtonColor, 'default'> = color === 'default' ? 'primary' : color;
+  const resolvedColor: ButtonColorKey = color === 'default' ? 'primary' : color;
 
-  const containedStyles = variant === 'contained' ? {
-    backgroundColor: (theme: Theme) => theme.palette[resolvedColor].main,
-    color: (theme: Theme) => theme.palette[resolvedColor].contrastText,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => theme.palette[resolvedColor].dark,
-      boxShadow: 'none',
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette[resolvedColor].dark,
-      boxShadow: 'none',
-    },
-    '&.Mui-disabled': {
-      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
+  const variantStyles =
+    variant === 'contained' ? buildContainedStyles(resolvedColor)
+    : variant === 'soft'    ? buildSoftStyles(resolvedColor)
+    : variant === 'ghost'   ? buildGhostStyles(resolvedColor)
+    : buildOutlinedStyles(resolvedColor);
 
-  const outlinedStyles = variant === 'outlined' ? {
-    backgroundColor: 'transparent',
-    border: '1px solid',
-    borderColor: (theme: Theme) => theme.palette.mode === 'light' 
-      ? alpha(theme.palette[resolvedColor].main, 0.5)
-      : theme.palette[resolvedColor].main,
-    color: (theme: Theme) => theme.palette[resolvedColor].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.04),
-      borderColor: (theme: Theme) => theme.palette[resolvedColor].main,
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.08),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: 'transparent',
-      borderColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-  
-  const softStyles = variant === 'soft' ? {
-    backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-      ? alpha(theme.palette[resolvedColor].main, 0.15)
-      : alpha(theme.palette[resolvedColor].main, 0.08),
-    color: (theme: Theme) => theme.palette.mode === 'dark'
-      ? theme.palette[resolvedColor].main
-      : theme.palette[resolvedColor].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[resolvedColor].main, 0.25)
-        : alpha(theme.palette[resolvedColor].main, 0.15),
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette.mode === 'dark'
-        ? alpha(theme.palette[resolvedColor].main, 0.30)
-        : alpha(theme.palette[resolvedColor].main, 0.20),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-
-  const ghostStyles = variant === 'ghost' ? {
-    backgroundColor: 'transparent',
-    color: (theme: Theme) => theme.palette[resolvedColor].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.08),
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[resolvedColor].main, 0.12),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: 'transparent',
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  } : undefined;
-
-  const reversedStyles = reversed ? {
-    ...(variant === 'contained' && {
-      backgroundColor: (theme: Theme) => theme.palette.common.white,
-      color: (theme: Theme) => theme.palette.mode === 'dark'
-        ? theme.palette[resolvedColor].dark
-        : theme.palette[resolvedColor].main,
-      boxShadow: 'none',
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.50) },
-    }),
-    ...(variant === 'outlined' && {
-      backgroundColor: 'transparent',
-      borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.5),
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12), borderColor: (theme: Theme) => theme.palette.common.white },
-      '&.Mui-disabled': { borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-    ...(variant === 'ghost' && {
-      backgroundColor: 'transparent',
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12) },
-      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-    ...(variant === 'soft' && {
-      backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.25) },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-      '&.Mui-disabled': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10), color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
-    }),
-  } : undefined;
+  const reversedStyles = reversed ? buildReversedStyles(variant, resolvedColor) : undefined;
 
   const button = (
     <MuiIconButton
@@ -184,7 +106,7 @@ export function IconButton({
       type={type}
       sx={(theme) => ({
         ...SIZE_STYLES[size],
-        ...(containedStyles ?? outlinedStyles ?? softStyles ?? ghostStyles),
+        ...variantStyles,
         ...reversedStyles,
         ...(loading && {
           cursor: 'not-allowed !important',
@@ -202,17 +124,9 @@ export function IconButton({
       })}
     >
       {loading ? (
-        <Spinner 
-          size={SPINNER_SIZE_MAP[size]} 
-          color="inherit"
-        />
+        <Spinner size={SPINNER_SIZE_MAP[size]} color="inherit" />
       ) : (
-        <Icon 
-          icon={icon} 
-          style={iconStyle}
-          size={BUTTON_SIZE_TO_ICON_SIZE[size]}
-          color="inherit"
-        />
+        <Icon icon={icon} style={iconStyle} size={BUTTON_SIZE_TO_ICON_SIZE[size]} color="inherit" />
       )}
     </MuiIconButton>
   );

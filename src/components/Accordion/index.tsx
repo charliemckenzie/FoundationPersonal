@@ -42,15 +42,15 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
       onChange={handleChange}
       disableGutters
       elevation={0}
-      sx={(theme) => ({
+      sx={(t) => ({
         border: 1,
-        borderColor: theme.palette.border.default,
-        borderRadius: `${theme.spacing(1)} !important`,
-        backgroundColor: theme.palette.background.paper,
+        borderColor: 'border.default',
+        borderRadius: `${t.spacing(1)} !important`,
+        backgroundColor: 'background.paper',
         overflow: 'hidden',
         '&::before': { display: 'none' },
         '&:focus-within': {
-          outline: `2px solid ${theme.palette.border.focus}`,
+          outline: `2px solid ${t.palette.border.focus}`,
           outlineOffset: '2px',
         },
       })}
@@ -59,33 +59,21 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
         expandIcon={<Icon icon="chevron_down" size="sm" />}
         aria-controls={`${item.id}-content`}
         id={`${item.id}-header`}
-        sx={(theme) => ({
-          py: theme.spacing(2.5),
-          px: theme.spacing(3),
-          '& .MuiAccordionSummary-content': {
-            margin: 0,
-          },
-          '&.Mui-expanded': {
-            backgroundColor: theme.palette.background.elevated,
-          },
-          '&:hover:not(.Mui-disabled)': {
-            backgroundColor: theme.palette.background.elevated,
-          },
-          '&.Mui-expanded:hover:not(.Mui-disabled)': {
-            backgroundColor: theme.palette.background.elevated,
-          },
-          '&.Mui-focusVisible': {
-            outline: 'none',
-            boxShadow: 'none',
-            backgroundColor: theme.palette.background.elevated,
-          },
-        })}
+        sx={{
+          py: 2.5,
+          px: 3,
+          '& .MuiAccordionSummary-content': { margin: 0 },
+          '&.Mui-expanded': { backgroundColor: 'background.elevated' },
+          '&:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
+          '&.Mui-expanded:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
+          '&.Mui-focusVisible': { outline: 'none', boxShadow: 'none', backgroundColor: 'background.elevated' },
+        }}
       >
-        <Typography variant="body" sx={(theme) => ({ fontWeight: 700, color: theme.palette.text.heading })}>
+        <Typography variant="body" sx={{ fontWeight: 700, color: 'text.heading' }}>
           {item.title}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails id={`${item.id}-content`} sx={(theme) => ({ px: theme.spacing(3), py: theme.spacing(4) })}>
+      <AccordionDetails id={`${item.id}-content`} sx={{ px: 3, py: 4 }}>
         {typeof item.content === 'string' ? (
           <Typography variant="body" color="text.muted">
             {item.content}
@@ -107,10 +95,8 @@ export function Accordion({ items, defaultExpanded, onChange, variant = 'default
     (id: string, isExpanded: boolean) => {
       setExpanded((prev) => {
         if (variant === 'exclusive') {
-          // Only one panel can be open at a time
           return isExpanded ? new Set([id]) : new Set();
         }
-        // Default behavior: multiple panels can be open
         const next = new Set(prev);
         if (isExpanded) next.add(id);
         else next.delete(id);
@@ -130,7 +116,7 @@ export function Accordion({ items, defaultExpanded, onChange, variant = 'default
   return (
     <Box>
       {items.length > 1 && variant === 'default' && showCloseAll && (
-        <Box sx={(theme) => ({ display: 'flex', justifyContent: 'flex-end', mb: theme.spacing(1) })}>
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
           <Button
             label="Close all"
             variant="ghost"
@@ -140,7 +126,7 @@ export function Accordion({ items, defaultExpanded, onChange, variant = 'default
           />
         </Box>
       )}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: (theme) => theme.spacing(1) }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
         {items.map((item) => (
           <AccordionPanel
             key={item.id}

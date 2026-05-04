@@ -88,8 +88,8 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
 
     // Text & Borders
     text: {
-      primary:     brand.quaternary ? brand.neutral[700] : brand.neutral[700], // QSuper: neutral[700] / ART: neutral[700]
-      muted:       brand.quaternary ? brand.neutral[600] : brand.neutral[600], // QSuper: neutral[600] / ART: neutral[600]
+      primary:     brand.neutral[700],
+      muted:       brand.neutral[600],
       disabled:    brand.neutral[500],
       inverse:     white,
       heading:     brand.secondary[800],

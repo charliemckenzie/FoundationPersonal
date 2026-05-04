@@ -54,6 +54,21 @@ export const NoArrow: Story = {
   ),
 };
 
+export const DisabledTrigger: Story = {
+  render: () => (
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <Tooltip title="Tooltip on a disabled button" placement="top">
+        <span>
+          <Button label="Disabled button" disabled />
+        </span>
+      </Tooltip>
+      <Tooltip title="This tooltip never shows" disableHoverListener disableFocusListener disableTouchListener>
+        <Button label="All listeners off" variant="outlined" />
+      </Tooltip>
+    </Box>
+  ),
+};
+
 export const RichContent: Story = {
   render: () => (
     <Tooltip

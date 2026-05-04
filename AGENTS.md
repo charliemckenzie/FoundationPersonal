@@ -101,6 +101,10 @@ Lenny builds the UI. React, MUI, Next.js App Router — Lenny owns the frontend.
 - Ship a component without Chalmers, Flanders, and Marge sign-off
 - Use inline `style={{}}` props — use `sx` with theme tokens or Tailwind classes
 - Introduce new dependencies without checking with Smithers first
+- Define sizing constants (`SIZE_MAP`, `sizeStyles`, etc.) with hardcoded pixel or rem values — derive from `theme.spacing()` or match existing `theme.typography` variant sizes instead
+- Mix `sx` access patterns in the same component — use string shorthand (`'primary.main'`) for static colour tokens; use `(t) =>` callbacks only for conditional logic; never use `theme.palette.primary.main` object notation in `sx`
+- Duplicate variant style logic — before implementing contained/outlined/soft/ghost styles, check `src/components/buttons/` for shared helpers first
+- Ship a component over 200 lines — extract variant style objects and size maps into module-level constants or a hook before the component file gets there
 
 ---
 

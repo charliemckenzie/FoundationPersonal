@@ -26,7 +26,7 @@ type TokenGroup = Record<string, Token | Record<string, Token>>;
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function resolveHex(scale: string, step: number | string): string {
-  return (primitiveScales as Record<string, Record<string, string>>)[scale]?.[String(step)] ?? '';
+  return (primitiveScales as unknown as Record<string, Record<string, string>>)[scale]?.[String(step)] ?? '';
 }
 
 function colorAlias(scale: string, step: number | string, palettePath: string, scopes?: string[]): Token {

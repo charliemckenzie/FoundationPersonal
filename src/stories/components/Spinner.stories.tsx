@@ -50,3 +50,25 @@ export const Colors: Story = {
 export const WithLabel: Story = {
   args: { size: 'medium', label: 'Loading data…' },
 };
+
+export const Overlay: Story = {
+  render: () => (
+    <Box sx={{ position: 'relative', width: 320, height: 160, border: 1, borderColor: 'border.default', borderRadius: 1, overflow: 'hidden' }}>
+      <Box sx={{ p: 2 }}>
+        <Typography variant="body">Content underneath the overlay.</Typography>
+      </Box>
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: 'rgba(255,255,255,0.75)',
+        }}
+      >
+        <Spinner size="large" label="Loading…" />
+      </Box>
+    </Box>
+  ),
+};

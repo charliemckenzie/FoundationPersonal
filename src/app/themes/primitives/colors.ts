@@ -30,36 +30,6 @@ export const neutral: ColorScale = {
   950: '#121315',
 };
 
-/** Neutral test — blue-gray family, blue channel reduced at 100–500 to eliminate lavender cast */
-export const neutralTest: ColorScale = {
-  50:  '#fafbfd',
-  100: '#f4f6f8',
-  200: '#edf0f3',
-  300: '#d7dde3',
-  400: '#b5bdc7',
-  500: '#878f9d',
-  600: '#60697b',
-  700: '#3b404a',
-  800: '#282c34',
-  900: '#191b1f',
-  950: '#121315',
-};
-
-/** Neutral test 2 — cool gray scale variant */
-export const neutralTest2: ColorScale = {
-  50:  '#f4f5f6',
-  100: '#efeff0',
-  200: '#e7e8e9',
-  300: '#d9d9db',
-  400: '#b5b7bb',
-  500: '#8f9197',
-  600: '#6a6c72',
-  700: '#313235',
-  800: '#27282a',
-  900: '#1d1e20',
-  950: '#111213',
-};
-
 /** Neutral ART — pure gray neutral scale for ART */
 export const neutralART: ColorScale = {
   50:  '#f5f5f5',
@@ -451,8 +421,6 @@ export type QSuperInvestmentAllocationKey = keyof typeof qsuperInvestmentAllocat
 
 export const primitiveScales = {
   neutral,
-  neutralTest,
-  neutralTest2,
   neutralART,
   blue,
   trueBlue,
