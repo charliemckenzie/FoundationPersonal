@@ -1,4 +1,8 @@
-import type { Theme } from '@mui/material/styles';
+import React from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Slide from '@mui/material/Slide';
+import type { TransitionProps } from '@mui/material/transitions';
 import MuiDialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -9,11 +13,11 @@ import IconButton from '@mui/material/IconButton';
 import { Button } from '../Button';
 import { Icon, type IconColor } from '../Icon';
 import { buildSoftStyles } from '../buttons/variantStyles';
-import type React from 'react';
 
 export type DialogVariant = 'neutral' | 'info' | 'warning' | 'danger' | 'alert';
 export type DialogSize = 'small' | 'medium' | 'large';
 export type AlertButtonLayout = 'row' | 'stack';
+export type DialogMobileDisplay = 'drawer' | 'dialog';
 export interface AlertAction { label: string; onClick: () => void }
 
 export interface DialogProps {
@@ -31,6 +35,7 @@ export interface DialogProps {
   disableCloseOnBackdrop?: boolean;
   alertButtonLayout?: AlertButtonLayout;
   extraActions?: ReadonlyArray<AlertAction>;
+  mobileDisplay?: DialogMobileDisplay;
 }
 
 const SIZE_MAP: Record<DialogSize, 'xs' | 'sm' | 'md'> = {
@@ -58,6 +63,12 @@ const VARIANT_BUTTON_COLOR: Record<Exclude<DialogVariant, 'alert'>, 'primary' | 
   danger: 'error',
 };
 
+const SlideUp = React.forwardRef<unknown, TransitionProps & { children: React.ReactElement }>(
+  function SlideUp(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  }
+);
+
 export function Dialog({
   open,
   onClose,
@@ -73,8 +84,43 @@ export function Dialog({
   disableCloseOnBackdrop = false,
   alertButtonLayout = 'row',
   extraActions,
+  mobileDisplay = 'drawer',
 }: DialogProps) {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const showAsDrawer = isMobile && mobileDisplay !== 'dialog';
   const hasBody = Boolean(description ?? children);
+
+  const [dragY, setDragY] = React.useState(0);
+  const [isDragging, setIsDragging] = React.useState(false);
+  const dragStartRef = React.useRef<number>(0);
+
+  React.useEffect(() => {
+    if (!open) {
+      setDragY(0);
+      setIsDragging(false);
+    }
+  }, [open]);
+
+  const handleDragStart = (e: React.TouchEvent) => {
+    dragStartRef.current = e.touches[0].clientY;
+    setIsDragging(true);
+  };
+
+  const handleDragMove = (e: React.TouchEvent) => {
+    const delta = e.touches[0].clientY - dragStartRef.current;
+    if (delta > 0) setDragY(delta);
+  };
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    if (dragY > 120) {
+      setDragY(0);
+      onClose();
+    } else {
+      setDragY(0);
+    }
+  };
 
   if (variant === 'alert') {
     return (
@@ -148,19 +194,63 @@ export function Dialog({
     <MuiDialog
       open={open}
       onClose={disableCloseOnBackdrop ? undefined : onClose}
-      maxWidth={SIZE_MAP[size]}
-      fullWidth
+      maxWidth={showAsDrawer ? false : SIZE_MAP[size]}
+      fullWidth={!showAsDrawer}
+      slots={showAsDrawer ? { transition: SlideUp } : undefined}
       aria-labelledby="dialog-title"
       aria-describedby={description ? 'dialog-description' : undefined}
       slotProps={{
         paper: {
-          sx: { borderRadius: (t: Theme) => `${t.shape['xl']}px` },
+          sx: showAsDrawer
+            ? {
+                position: 'fixed',
+                bottom: 0,
+                left: 0,
+                right: 0,
+                m: 0,
+                maxWidth: '100% !important',
+                width: '100%',
+                borderRadius: '24px 24px 0 0',
+                transform: `translateY(${dragY}px)`,
+                transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                willChange: 'transform',
+              }
+            : { borderRadius: (t) => `${t.shape['xl']}px` },
         },
       }}
     >
+      {showAsDrawer && (
+        <Box
+          aria-hidden="true"
+          onTouchStart={handleDragStart}
+          onTouchMove={handleDragMove}
+          onTouchEnd={handleDragEnd}
+          sx={{
+            width: 40,
+            height: 4,
+            borderRadius: '2px',
+            backgroundColor: 'divider',
+            mx: 'auto',
+            mt: 1.5,
+            mb: 0,
+            touchAction: 'none',
+            cursor: 'grab',
+            // Expand touch target without affecting visual size
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: -12,
+              bottom: -12,
+              left: -40,
+              right: -40,
+            },
+            position: 'relative',
+          }}
+        />
+      )}
       <DialogTitle
-        id="dialog-title"
-        sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pr: 6 }}
+        disableTypography
+        sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pt: 4, pl: 4, pr: 4, pb: 1 }}
       >
         {variant !== 'neutral' && (
           <Icon
@@ -169,15 +259,17 @@ export function Dialog({
             size="lg"
           />
         )}
-        {title}
+        <Typography id="dialog-title" variant="h5" component="h2" sx={{ color: 'text.heading' }}>
+          {title}
+        </Typography>
         <IconButton
           size="small"
           onClick={onClose}
           aria-label="Close"
           sx={{
             position: 'absolute',
-            top: 12,
-            right: 12,
+            top: 16,
+            right: 16,
             width: 32,
             height: 32,
             borderRadius: '50%',
@@ -190,7 +282,7 @@ export function Dialog({
         </IconButton>
       </DialogTitle>
       {hasBody && (
-        <DialogContent>
+        <DialogContent sx={{ px: 4 }}>
           {description && (
             <Typography id="dialog-description" variant="body" color="text.muted">
               {description}
@@ -199,7 +291,7 @@ export function Dialog({
           {children}
         </DialogContent>
       )}
-      <DialogActions sx={{ px: 3, py: 2 }}>
+      <DialogActions sx={{ pl: 4, pr: 4, pb: 4, pt: 2 }}>
         <Button
           label={cancelLabel}
           variant="ghost"

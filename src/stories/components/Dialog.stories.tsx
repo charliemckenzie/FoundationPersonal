@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import { Dialog, type DialogVariant, type AlertAction } from '../../components/Dialog';
+import { Dialog, type DialogVariant, type AlertAction, type DialogMobileDisplay } from '../../components/Dialog';
 import { Button } from '../../components/Button';
 
 const meta: Meta<typeof Dialog> = {
@@ -27,6 +27,7 @@ const meta: Meta<typeof Dialog> = {
     onClose: { table: { disable: true } },
     children: { table: { disable: true } },
     extraActions: { table: { disable: true } },
+    mobileDisplay: { control: 'radio', options: ['drawer', 'dialog'] },
   },
 };
 
@@ -41,6 +42,7 @@ function DialogDemo({
   triggerLabel = 'Open dialog',
   confirmLabel,
   cancelLabel,
+  mobileDisplay,
 }: {
   variant?: DialogVariant;
   size?: 'small' | 'medium' | 'large';
@@ -49,6 +51,7 @@ function DialogDemo({
   triggerLabel?: string;
   confirmLabel?: string;
   cancelLabel?: string;
+  mobileDisplay?: DialogMobileDisplay;
 }) {
   const [open, setOpen] = useState(false);
   return (
@@ -64,6 +67,7 @@ function DialogDemo({
         size={size}
         confirmLabel={confirmLabel}
         cancelLabel={cancelLabel}
+        mobileDisplay={mobileDisplay}
       />
     </>
   );
@@ -71,6 +75,24 @@ function DialogDemo({
 
 export const Default: Story = {
   render: () => <DialogDemo />,
+};
+
+export const NoMobileDrawer: Story = {
+  name: 'No mobile drawer',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use `mobileDisplay="dialog"` to keep the classic centred modal on all breakpoints. The default (`"drawer"`) slides up from the bottom on small screens.',
+      },
+    },
+  },
+  render: () => (
+    <Box sx={{ display: 'flex', gap: 2 }}>
+      <DialogDemo triggerLabel="Drawer (default)" />
+      <DialogDemo triggerLabel="Always modal" mobileDisplay="dialog" />
+    </Box>
+  ),
 };
 
 export const Sizes: Story = {
