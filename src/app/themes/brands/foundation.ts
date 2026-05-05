@@ -17,8 +17,14 @@ export const foundation: BrandConfig = {
     margin:  { xs: 16, sm: 24, md: 32, lg: 'auto', xl: 'auto' },
     maxWidth: 1280,
   },
-  artInvestmentOptions,
+    artInvestmentOptions,
   artAssetMix,
   diversifiedOptions: sharedDiversifiedOptions,
   assetClassOptions: sharedAssetClassOptions,
+  logos: {
+    primary: '/logos/art/ART_Logo_Horizontal_Preferred_RGB.svg',
+    secondary: '/logos/art/ART_Logo_2lines.svg',
+    mark: '/logos/art/logo-mark.svg',
+    alt: 'Australian Retirement Trust',
+  },
 };

@@ -11,6 +11,11 @@ export const themeB: BrandConfig = {
   buttonBorderRadius: 8,
   fontFamily: '"Open Sans", system-ui, sans-serif',
   headingFontFamily: 'Merriweather, serif',
+  logos: {
+    primary: '/logos/qsuper/qsuper.svg',
+    secondary: '/logos/qsuper/qsuper-only.svg',
+    alt: 'QSuper',
+  },
   grid: {
     //           xs    sm    md    lg    xl
     columns: { xs: 4,  sm: 8,  md: 12, lg: 12, xl: 12 },

@@ -8,6 +8,19 @@ import type {
   SharedAssetClassOptionKey,
 } from '../primitives/colors';
 
+export type LogoVariant = 'primary' | 'secondary' | 'mark';
+
+export interface LogoConfig {
+  /** The brand's preferred/full logo. */
+  primary: string;
+  /** Alternative layout (e.g. stacked or wordmark-only). Falls back to primary if absent. */
+  secondary?: string;
+  /** Icon/mark only. Falls back to primary if absent. */
+  mark?: string;
+  /** Default accessible alt text for the brand logo. */
+  alt: string;
+}
+
 export interface GridConfig {
   columns: Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', number>;
   gutter:  Record<'xs' | 'sm' | 'md' | 'lg' | 'xl', number>;
@@ -38,4 +51,6 @@ export interface BrandConfig {
   diversifiedOptions?: Record<SharedDiversifiedOptionKey, string>;
   /** Shared asset class option colours. Available to both ART and QSuper. */
   assetClassOptions?: Record<SharedAssetClassOptionKey, string>;
+  /** Brand logo paths and alt text. */
+  logos: LogoConfig;
 }
