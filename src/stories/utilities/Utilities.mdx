@@ -1,0 +1,59 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Utilities / Overview" />
+
+# Utilities
+
+Utilities are foundational building blocks — low-level components that handle a specific browser or interaction concern without imposing structure on the content inside them.
+
+They sit one level below opinionated UI components. A Utility solves the hard part (focus trapping, overlay management, scroll locking, portal rendering) so that higher-level components can focus on layout and content.
+
+---
+
+## When to use a Utility
+
+Use a Utility directly when you need full control over the content and visual structure of an overlay or panel. Use an opinionated component when you want a consistent, pre-structured pattern.
+
+| You want… | Use |
+|---|---|
+| A flexible overlay with any content | [Modal](/?path=/story/utilities-modal--default) |
+| A confirmation or destructive-action dialog | [Dialog](/?path=/story/components-dialog--default) |
+| A slide-in panel for nav, filters, or forms | [Drawer](/?path=/story/components-drawer--default) |
+
+---
+
+## How Utilities relate to Components
+
+Utilities are not wrappers around design decisions — they are infrastructure. They do not make choices about colour, spacing, or typography. Those choices belong to the components built on top of them.
+
+```
+Utility (Modal)
+  └── Opinionated component (Dialog, Drawer)
+        └── Usage in product UI
+```
+
+Any component that introduces an overlay, a focus trap, or a portal should be built on a Utility — not on raw MUI primitives — so the team maintains one consistent layer of control.
+
+---
+
+## Current Utilities
+
+| Utility | Purpose | Story |
+|---|---|---|
+| Modal | General-purpose overlay with focus trap, backdrop, and scroll lock | [Modal](/?path=/story/utilities-modal--default) |
+
+---
+
+## Adding a new Utility
+
+Before proposing a new Utility, confirm that no existing Utility covers the use case. Overlay behaviour should always be consolidated — two components solving the same browser concern is a maintenance liability.
+
+New Utilities follow the same component pipeline as all other components: Lenny builds, Chalmers reviews, Flanders checks accessibility, Marge checks visual consistency, Lisa documents.
+
+---
+
+## Further reading
+
+- [Foundation / Accessibility](/?path=/docs/foundation-accessibility--docs) — WCAG 2.2 AA requirements that every overlay Utility must satisfy
+- [Components / Dialog](/?path=/story/components-dialog--default) — built on Modal; structured confirmation flows
+- [Components / Drawer](/?path=/story/components-drawer--default) — slide-in panels for secondary content

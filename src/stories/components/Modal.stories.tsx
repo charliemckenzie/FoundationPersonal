@@ -1,14 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Modal } from '../../components/Modal';
 import { Button } from '../../components/Button';
-import Typography from '@mui/material/Typography';
 
 const meta: Meta<typeof Modal> = {
-  title: 'Components / Modal',
+  title: 'Utilities / Modal',
   component: Modal,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Modal is the foundational overlay utility. It wraps MUI Dialog to provide focus trapping, backdrop, scroll lock, and portal rendering — with no imposed structure on the content.\n\nFor structured interactions, use the opinionated components built on this pattern:\n- **[Dialog](/?path=/story/components-dialog--default)** — confirmations, alerts, and destructive-action flows with a required title, optional description, and built-in confirm/cancel actions.\n- **[Drawer](/?path=/story/components-drawer--default)** — slide-in panels for navigation, filters, and forms that need persistent screen real estate.',
+      },
+    },
+  },
   argTypes: {
     size: { control: 'select', options: ['small', 'medium', 'large', 'fullscreen'] },
   },
@@ -49,11 +58,11 @@ export const Default: Story = {
 
 export const Sizes: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 12 }}>
+    <Box sx={{ display: 'flex', gap: 1.5 }}>
       <ModalDemo size="small" title="Small modal" />
       <ModalDemo size="medium" title="Medium modal" />
       <ModalDemo size="large" title="Large modal" />
-    </div>
+    </Box>
   ),
 };
 
