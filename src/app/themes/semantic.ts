@@ -1,6 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import type { PaletteOptions } from '@mui/material/styles';
-import { red, amber, cyan, green, clearBlue, skyBlue, salmon, white, black } from './primitives/colors';
+import { red, amber, blue, green, clearBlue, skyBlue, salmon, white, black } from './primitives/colors';
 import type { BrandConfig } from './brands/index';
 
 export function buildLightPalette(brand: BrandConfig): PaletteOptions {
@@ -21,24 +21,28 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       light:        red[400],
       main:         red[600],
       dark:         red[700],
+      text:         red[800],
       contrastText: white,
     },
     warning: {
       light:        amber[300],
-      main:         amber[500],
+      main:         amber[600],
       dark:         amber[700],
+      text:         amber[800],
       contrastText: black,
     },
     info: {
-      light:        cyan[400],
-      main:         cyan[700],
-      dark:         cyan[800],
+      light:        blue[400],
+      main:         blue[600],
+      dark:         blue[700],
+      text:         blue[800],
       contrastText: white,
     },
     success: {
       light:        green[400],
-      main:         green[700],
-      dark:         green[800],
+      main:         green[600],
+      dark:         green[700],
+      text:         green[800],
       contrastText: white,
     },
 
@@ -138,24 +142,28 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       light:        red[300],
       main:         red[400],
       dark:         red[600],
+      text:         red[300],
       contrastText: white,
     },
     warning: {
       light:        amber[300],
       main:         amber[400],
       dark:         amber[500],
+      text:         amber[300],
       contrastText: black,
     },
     info: {
-      light:        cyan[300],
-      main:         cyan[400],
-      dark:         cyan[600],
-      contrastText: black,
+      light:        blue[300],
+      main:         blue[400],
+      dark:         blue[600],
+      text:         blue[300],
+      contrastText: white,
     },
     success: {
       light:        green[300],
       main:         green[400],
       dark:         green[600],
+      text:         green[300],
       contrastText: black,
     },
 

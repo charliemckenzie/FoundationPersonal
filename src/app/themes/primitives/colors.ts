@@ -15,19 +15,34 @@ export interface ColorScale {
   950: string;
 }
 
+/** Red — error/danger feedback (fixed across brands) */
+export const red: ColorScale = {
+  50:  '#FCEBED',
+  100: '#F9DEE1',
+  200: '#F9B3BA',
+  300: '#F98994',
+  400: '#F53B4D',
+  500: '#E83849',
+  600: '#DC3545',
+  700: '#9A2531',
+  800: '#58151C',
+  900: '#3E1419',
+  950: '#2A1013',
+};
+
 /** Blue-gray neutral — backgrounds, text, borders, surfaces */
 export const neutral: ColorScale = {
-  50:  '#fafbfd',
-  100: '#f4f6fb',
-  200: '#edf0f8',
-  300: '#d7ddea',
-  400: '#b5bdce',
-  500: '#878fa1',
-  600: '#60697b',
-  700: '#3b404a',
-  800: '#282c34',
-  900: '#191b1f',
-  950: '#121315',
+  50:  '#F3F5F6',
+  100: '#F0F2F4',
+  200: '#E1E5EA',
+  300: '#C5CDD8',
+  400: '#A0A7B2',
+  500: '#7B818C',
+  600: '#565B66',
+  700: '#303741',
+  800: '#20262E',
+  900: '#14191E',
+  950: '#0C1013',
 };
 
 /** Neutral ART — pure gray neutral scale for ART */
@@ -107,47 +122,32 @@ export const violet: ColorScale = {
 
 /** Green — success feedback (fixed across brands) */
 export const green: ColorScale = {
-  50:  '#ecfdf5',
-  100: '#d1fae5',
-  200: '#a7f3d0',
-  300: '#6ee7b7',
-  400: '#34d399',
-  500: '#10b981',
-  600: '#059669',
-  700: '#047857',
-  800: '#065f46',
-  900: '#064e3b',
-  950: '#022c22',
-};
-
-/** Red — error/danger feedback (fixed across brands) */
-export const red: ColorScale = {
-  50:  '#fff1f2',
-  100: '#ffe4e6',
-  200: '#fecdd3',
-  300: '#fda4af',
-  400: '#fb7185',
-  500: '#f43f5e',
-  600: '#e11d48',
-  700: '#be123c',
-  800: '#9f1239',
-  900: '#881337',
-  950: '#4c0519',
+  50:  '#EDF6F2',
+  100: '#DAECE3',
+  200: '#AFDBC2',
+  300: '#5EBD90',
+  400: '#19A061',
+  500: '#199357',
+  600: '#198754',
+  700: '#177A4B',
+  800: '#146C43',
+  900: '#0F3524',
+  950: '#0C241A',
 };
 
 /** Amber — warning feedback (fixed across brands) */
 export const amber: ColorScale = {
-  50:  '#fffbeb',
-  100: '#fef3c7',
-  200: '#fde68a',
-  300: '#fcd34d',
-  400: '#fbbf24',
-  500: '#f59e0b',
-  600: '#d97706',
-  700: '#b45309',
-  800: '#92400e',
-  900: '#78350f',
-  950: '#451a03',
+  50:  '#FFF9E7',
+  100: '#FFEFC1',
+  200: '#FFEAA0',
+  300: '#FFE186',
+  400: '#FFD968',
+  500: '#FFCA40',
+  600: '#FFC107',
+  700: '#997003',
+  800: '#664D03',
+  900: '#40361A',
+  950: '#262110',
 };
 
 /** Cyan — info feedback (fixed across brands) */

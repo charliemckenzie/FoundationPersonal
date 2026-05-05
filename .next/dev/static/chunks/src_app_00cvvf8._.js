@@ -5,6 +5,10 @@
 __turbopack_context__.s([
     "amber",
     ()=>amber,
+    "artAssetMix",
+    ()=>artAssetMix,
+    "artInvestmentOptions",
+    ()=>artInvestmentOptions,
     "black",
     ()=>black,
     "blue",
@@ -21,6 +25,8 @@ __turbopack_context__.s([
     ()=>livingCoral,
     "neutral",
     ()=>neutral,
+    "neutralART",
+    ()=>neutralART,
     "pink",
     ()=>pink,
     "primitiveScales",
@@ -33,12 +39,20 @@ __turbopack_context__.s([
     ()=>qNavy,
     "qSkyBlue",
     ()=>qSkyBlue,
+    "qsuperAssetAllocations",
+    ()=>qsuperAssetAllocations,
+    "qsuperInvestmentAllocations",
+    ()=>qsuperInvestmentAllocations,
     "red",
     ()=>red,
     "salmon",
     ()=>salmon,
     "sand",
     ()=>sand,
+    "sharedAssetClassOptions",
+    ()=>sharedAssetClassOptions,
+    "sharedDiversifiedOptions",
+    ()=>sharedDiversifiedOptions,
     "skyBlue",
     ()=>skyBlue,
     "trueBlue",
@@ -50,18 +64,44 @@ __turbopack_context__.s([
 ]);
 const white = '#ffffff';
 const black = '#000000';
+const red = {
+    50: '#FCEBED',
+    100: '#F9DEE1',
+    200: '#F9B3BA',
+    300: '#F98994',
+    400: '#F53B4D',
+    500: '#E83849',
+    600: '#DC3545',
+    700: '#9A2531',
+    800: '#58151C',
+    900: '#3E1419',
+    950: '#2A1013'
+};
 const neutral = {
-    50: '#fafbfd',
-    100: '#f4f6fb',
-    200: '#edf0f8',
-    300: '#d7ddea',
-    400: '#b5bdce',
-    500: '#878fa1',
-    600: '#60697b',
-    700: '#3b404a',
-    800: '#282c34',
-    900: '#191b1f',
-    950: '#121315'
+    50: '#F3F5F6',
+    100: '#F0F2F4',
+    200: '#E1E5EA',
+    300: '#C5CDD8',
+    400: '#A0A7B2',
+    500: '#7B818C',
+    600: '#565B66',
+    700: '#303741',
+    800: '#20262E',
+    900: '#14191E',
+    950: '#0C1013'
+};
+const neutralART = {
+    50: '#f5f5f5',
+    100: '#f2f2f2',
+    200: '#e8e8e8',
+    300: '#dadada',
+    400: '#b8b8b8',
+    500: '#939393',
+    600: '#6e6e6e',
+    700: '#333333',
+    800: '#292929',
+    900: '#1f1f1f',
+    950: '#121212'
 };
 const blue = {
     50: '#eff6ff',
@@ -116,43 +156,30 @@ const violet = {
     950: '#2e1065'
 };
 const green = {
-    50: '#ecfdf5',
-    100: '#d1fae5',
-    200: '#a7f3d0',
-    300: '#6ee7b7',
-    400: '#34d399',
-    500: '#10b981',
-    600: '#059669',
-    700: '#047857',
-    800: '#065f46',
-    900: '#064e3b',
-    950: '#022c22'
-};
-const red = {
-    50: '#fff1f2',
-    100: '#ffe4e6',
-    200: '#fecdd3',
-    300: '#fda4af',
-    400: '#fb7185',
-    500: '#f43f5e',
-    600: '#e11d48',
-    700: '#be123c',
-    800: '#9f1239',
-    900: '#881337',
-    950: '#4c0519'
+    50: '#EDF6F2',
+    100: '#DAECE3',
+    200: '#AFDBC2',
+    300: '#5EBD90',
+    400: '#19A061',
+    500: '#199357',
+    600: '#198754',
+    700: '#177A4B',
+    800: '#146C43',
+    900: '#0F3524',
+    950: '#0C241A'
 };
 const amber = {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
-    950: '#451a03'
+    50: '#FFF9E7',
+    100: '#FFEFC1',
+    200: '#FFEAA0',
+    300: '#FFE186',
+    400: '#FFD968',
+    500: '#FFCA40',
+    600: '#FFC107',
+    700: '#997003',
+    800: '#664D03',
+    900: '#40361A',
+    950: '#262110'
 };
 const cyan = {
     50: '#ecfeff',
@@ -297,8 +324,61 @@ const sand = {
     900: '#3e1e03',
     950: '#1e0f01'
 };
+const qsuperAssetAllocations = {
+    australianSharesIndex: '#650D0C',
+    internationalSharesHedgedIndex: '#FFCC65',
+    internationalSharesUnhedgedIndex: '#FF5527',
+    listedPropertyIndex: '#947ACB',
+    unlistedAssets: '#66D6C5',
+    bondsIndex: '#CAD83D',
+    cash: '#199393'
+};
+const sharedAssetClassOptions = qsuperAssetAllocations;
+const artInvestmentOptions = {
+    lifecycleHighGrowthPool: '#A1D0F9',
+    lifecycleBalancedPool: '#0051FF',
+    lifecycleCashPool: '#1C355E',
+    highGrowth: '#B42026',
+    balanced: '#E69927',
+    sociallyConsciousBalanced: '#1AB257',
+    highGrowthIndex: '#EE147D',
+    balancedIndex: '#964298',
+    conservativeBalanced: '#28AAEE',
+    balancedRiskAdjusted: '#224F24',
+    conservative: '#3B4CA4'
+};
+const artAssetMix = {
+    australianShares: '#69259B',
+    internationalShares: '#FFBF2F',
+    unlistedAssetsAndAlternatives: '#CF4A9B',
+    fixedIncome: '#89C86B',
+    cash: '#1C355E'
+};
+const sharedDiversifiedOptions = {
+    highGrowthIndex: '#EE147D',
+    highGrowth: '#B42026',
+    balancedIndex: '#964298',
+    balanced: '#E69927',
+    sociallyConsciousBalanced: '#1AB257',
+    balancedRiskAdjusted: '#224F24',
+    conservativeBalanced: '#28AAEE',
+    conservative: '#3B4CA4'
+};
+const qsuperInvestmentAllocations = {
+    lifetime: '#0079D0',
+    outlook: '#009247',
+    aspire1: '#F48220',
+    aspire2: '#86441E',
+    focus1: '#CF2128',
+    focus2: '#BB2980',
+    focus3: '#831A54',
+    sustain1: '#7BDEEE',
+    sustain2: '#22B1C7',
+    sustain3: '#15657C'
+};
 const primitiveScales = {
     neutral,
+    neutralART,
     blue,
     trueBlue,
     qBlue,
@@ -353,24 +433,28 @@ function buildLightPalette(brand) {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][400],
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][700],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][800],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         warning: {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][300],
-            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][500],
+            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][700],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][800],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         info: {
-            light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][400],
-            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][700],
-            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][800],
+            light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][400],
+            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][600],
+            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][700],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][800],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         success: {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][400],
-            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][700],
-            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][800],
+            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][600],
+            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][700],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][800],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         // Tertiary brand color (optional — only present when the brand defines one)
@@ -382,6 +466,15 @@ function buildLightPalette(brand) {
                 contrastText: brand.tertiary[950]
             }
         },
+        // Quaternary brand color — Light Blue (#8CDDFF); main anchored at [300]
+        ...brand.quaternary && {
+            quaternary: {
+                light: brand.quaternary[100],
+                main: brand.quaternary[300],
+                dark: brand.quaternary[500],
+                contrastText: brand.quaternary[950]
+            }
+        },
         // Background
         background: {
             default: brand.neutral[50],
@@ -390,26 +483,35 @@ function buildLightPalette(brand) {
             brandPrimary: brand.primary[600],
             brandSecondary: brand.secondary[800],
             brandTertiary: brand.tertiary?.[500] ?? brand.primary[600],
-            brandSky: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["skyBlue"][200],
-            brandClear: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100],
-            brandWarm: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["salmon"][50]
+            ...brand.quaternary === undefined ? {
+                // ART-only brand backgrounds
+                brandSky: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["skyBlue"][200],
+                brandClear: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100],
+                brandWarm: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["salmon"][50]
+            } : {
+                // QSuper-only brand backgrounds
+                brandGrey: brand.neutral[100],
+                brandLightBlue: brand.quaternary[100]
+            },
+            tableStripe: brand.neutral[100]
         },
         // Text & Borders
         text: {
-            primary: brand.neutral[900],
+            primary: brand.neutral[700],
             muted: brand.neutral[600],
             disabled: brand.neutral[500],
             inverse: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"],
             heading: brand.secondary[800],
             link: brand.primary[600],
-            linkInverse: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100]
+            // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
+            linkInverse: brand.quaternary ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"] : __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100]
         },
         divider: brand.neutral[300],
         border: {
             subtle: brand.neutral[200],
             default: brand.neutral[300],
             input: brand.neutral[500],
-            focus: brand.neutral[700]
+            focus: brand.quaternary ? brand.neutral[700] : brand.neutral[600]
         },
         action: {
             active: brand.neutral[600],
@@ -444,24 +546,28 @@ function buildDarkPalette(brand) {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][300],
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][600],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][300],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         warning: {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][300],
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][500],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][300],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         info: {
-            light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][300],
-            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][400],
-            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["cyan"][600],
-            contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
+            light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][300],
+            main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][400],
+            dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][600],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][300],
+            contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         success: {
             light: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][300],
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][600],
+            text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][300],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         // Tertiary brand color (optional — only present when the brand defines one)
@@ -473,6 +579,15 @@ function buildDarkPalette(brand) {
                 contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
             }
         },
+        // Quaternary brand color — Light Blue; main anchored at [300]
+        ...brand.quaternary && {
+            quaternary: {
+                light: brand.quaternary[200],
+                main: brand.quaternary[300],
+                dark: brand.quaternary[500],
+                contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
+            }
+        },
         // Background
         background: {
             default: brand.neutral[950],
@@ -481,26 +596,33 @@ function buildDarkPalette(brand) {
             brandPrimary: brand.neutral[800],
             brandSecondary: brand.neutral[800],
             brandTertiary: brand.neutral[800],
-            brandSky: brand.neutral[800],
-            brandClear: brand.neutral[800],
-            brandWarm: brand.neutral[800]
+            ...brand.quaternary === undefined ? {
+                brandSky: brand.neutral[800],
+                brandClear: brand.neutral[800],
+                brandWarm: brand.neutral[800]
+            } : {
+                brandGrey: brand.neutral[800],
+                brandLightBlue: brand.neutral[800]
+            },
+            tableStripe: brand.neutral[800]
         },
         // Text & Borders
         text: {
-            primary: brand.neutral[50],
-            muted: brand.neutral[300],
+            primary: brand.quaternary ? brand.neutral[50] : brand.neutral[300],
+            muted: brand.quaternary ? brand.neutral[300] : brand.neutral[500],
             disabled: brand.neutral[500],
             inverse: brand.neutral[900],
             heading: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"],
             link: brand.primary[300],
-            linkInverse: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100]
+            // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
+            linkInverse: brand.quaternary ? __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"] : __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["clearBlue"][100]
         },
-        divider: brand.neutral[700],
+        divider: brand.quaternary ? brand.neutral[700] : brand.neutral[600],
         border: {
             subtle: brand.neutral[800],
-            default: brand.neutral[700],
-            input: brand.neutral[400],
-            focus: brand.neutral[300]
+            default: brand.quaternary ? brand.neutral[700] : brand.neutral[600],
+            input: brand.quaternary ? brand.neutral[400] : brand.neutral[500],
+            focus: brand.quaternary ? brand.neutral[300] : brand.neutral[400]
         },
         action: {
             active: brand.neutral[300],
@@ -534,8 +656,22 @@ __turbopack_context__.s([
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$styles$2f$createTheme$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__createTheme$3e$__ = __turbopack_context__.i("[project]/node_modules/@mui/material/styles/createTheme.mjs [app-client] (ecmascript) <export default as createTheme>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/themes/semantic.ts [app-client] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/themes/primitives/colors.ts [app-client] (ecmascript)");
 ;
 ;
+;
+const ALERT_BORDER_LIGHT = {
+    error: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][100],
+    warning: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][100],
+    info: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][100],
+    success: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][100]
+};
+const ALERT_BORDER_DARK = {
+    error: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][900],
+    warning: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][900],
+    info: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][900],
+    success: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][900]
+};
 const LIGHTER_SHADOWS = [
     'none',
     '0px 2px 1px -1px rgba(0,0,0,0.12),0px 1px 1px 0px rgba(0,0,0,0.08),0px 1px 3px 0px rgba(0,0,0,0.06)',
@@ -603,7 +739,8 @@ function createBrandTheme(brand) {
             lg: 16,
             xl: 24,
             '2xl': 32,
-            full: 9999
+            full: 9999,
+            button: typeof brand.buttonBorderRadius === 'number' ? brand.buttonBorderRadius : 9999
         },
         typography: {
             fontFamily: brand.fontFamily,
@@ -723,6 +860,126 @@ function createBrandTheme(brand) {
                                 outlineOffset: '-2px',
                                 boxShadow: 'none'
                             }
+                        })
+                }
+            },
+            MuiAlert: {
+                styleOverrides: {
+                    root: ({ theme, ownerState })=>({
+                            padding: '12px 16px',
+                            borderRadius: '8px',
+                            alignItems: 'flex-start',
+                            gap: '12px',
+                            ...ownerState.variant === 'standard' && ownerState.severity && {
+                                border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
+                                ...theme.applyStyles('dark', {
+                                    border: `1px solid ${ALERT_BORDER_DARK[ownerState.severity]}`
+                                })
+                            },
+                            ...ownerState.variant === 'standard' && ownerState.severity === 'error' && {
+                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][50],
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][950]
+                                })
+                            },
+                            ...ownerState.variant === 'standard' && ownerState.severity === 'warning' && {
+                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][50],
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][950]
+                                })
+                            },
+                            ...ownerState.variant === 'standard' && ownerState.severity === 'info' && {
+                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][50],
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][950]
+                                })
+                            },
+                            ...ownerState.variant === 'standard' && ownerState.severity === 'success' && {
+                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][50],
+                                ...theme.applyStyles('dark', {
+                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][950]
+                                })
+                            }
+                        }),
+                    icon: {
+                        padding: 0,
+                        margin: 0,
+                        alignSelf: 'flex-start',
+                        height: '24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    },
+                    message: {
+                        padding: 0,
+                        margin: 0,
+                        alignSelf: 'flex-start',
+                        lineHeight: '24px'
+                    },
+                    action: {
+                        padding: 0,
+                        margin: 0,
+                        alignSelf: 'flex-start'
+                    }
+                }
+            },
+            MuiAlertTitle: {
+                styleOverrides: {
+                    root: {
+                        fontWeight: 700,
+                        fontSize: '1rem',
+                        lineHeight: 1.5,
+                        margin: 0
+                    }
+                }
+            },
+            // Link interaction states — light mode and dark mode.
+            // Resting colour is set via text.link in the palette.
+            // visited uses CSS :visited which is browser-restricted to colour only (WCAG security constraint).
+            // Light — ART:    hover primary[700] 8.8:1, active primary[800] 11.6:1, visited secondary[800] 11.7:1
+            // Light — QSuper: hover primary[700] 6.4:1, active primary[800] 9.3:1,  visited secondary[800] 14.9:1
+            // Dark  — both:   hover primary[200],       active primary[100],         visited secondary[400]
+            MuiLink: {
+                styleOverrides: {
+                    root: ({ theme: t })=>({
+                            color: 'inherit',
+                            textDecorationColor: 'inherit',
+                            '&:hover': {
+                                color: brand.primary[700],
+                                textDecorationColor: brand.primary[700]
+                            },
+                            '&:active': {
+                                color: brand.primary[800],
+                                textDecorationColor: brand.primary[800]
+                            },
+                            '&:visited': {
+                                color: brand.secondary[800],
+                                '&:hover': {
+                                    color: brand.secondary[700]
+                                },
+                                '&:active': {
+                                    color: brand.secondary[900]
+                                }
+                            },
+                            ...t.applyStyles('dark', {
+                                '&:hover': {
+                                    color: brand.primary[200],
+                                    textDecorationColor: brand.primary[200]
+                                },
+                                '&:active': {
+                                    color: brand.primary[100],
+                                    textDecorationColor: brand.primary[100]
+                                },
+                                '&:visited': {
+                                    color: brand.secondary[400],
+                                    '&:hover': {
+                                        color: brand.secondary[300]
+                                    },
+                                    '&:active': {
+                                        color: brand.secondary[500]
+                                    }
+                                }
+                            })
                         })
                 }
             },
@@ -849,10 +1106,39 @@ const foundation = {
     primary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["trueBlue"],
     secondary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["deepBlue"],
     tertiary: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["livingCoral"],
-    neutral: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["neutral"],
+    neutral: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["neutralART"],
     buttonBorderRadius: '9999px',
     fontFamily: '"Noto Sans", system-ui, sans-serif',
-    headingFontFamily: 'Merriweather, serif'
+    headingFontFamily: 'Merriweather, serif',
+    grid: {
+        //           xs    sm    md    lg    xl
+        columns: {
+            xs: 4,
+            sm: 8,
+            md: 12,
+            lg: 12,
+            xl: 12
+        },
+        gutter: {
+            xs: 16,
+            sm: 16,
+            md: 24,
+            lg: 24,
+            xl: 32
+        },
+        margin: {
+            xs: 16,
+            sm: 24,
+            md: 32,
+            lg: 'auto',
+            xl: 'auto'
+        },
+        maxWidth: 1280
+    },
+    artInvestmentOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["artInvestmentOptions"],
+    artAssetMix: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["artAssetMix"],
+    diversifiedOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sharedDiversifiedOptions"],
+    assetClassOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sharedAssetClassOptions"]
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

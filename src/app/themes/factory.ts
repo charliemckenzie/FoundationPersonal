@@ -1,19 +1,19 @@
 import { createTheme, lighten, darken, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
-import { red, amber, cyan, green } from './primitives/colors';
+import { red, amber, blue, green } from './primitives/colors';
 
 const ALERT_BORDER_LIGHT: Record<string, string> = {
-  error:   lighten(red[400],   0.7),
-  warning: lighten(amber[300], 0.7),
-  info:    lighten(cyan[400],  0.7),
-  success: lighten(green[400], 0.7),
+  error:   red[100],
+  warning: amber[100],
+  info:    blue[100],
+  success: green[100],
 };
 const ALERT_BORDER_DARK: Record<string, string> = {
-  error:   darken(red[400],   0.7),
-  warning: darken(amber[300], 0.7),
-  info:    darken(cyan[400],  0.7),
-  success: darken(green[400], 0.7),
+  error:   red[900],
+  warning: amber[900],
+  info:    blue[900],
+  success: green[900],
 };
 import type React from 'react';
 
@@ -114,6 +114,13 @@ declare module '@mui/material/styles' {
     border: BorderTokens;
     tertiary?: PaletteColor;
     quaternary?: PaletteColor;
+  }
+
+  interface PaletteColor {
+    text: string;
+  }
+  interface SimplePaletteColorOptions {
+    text?: string;
   }
 
   interface PaletteOptions {
@@ -346,6 +353,30 @@ export function createBrandTheme(brand: BrandConfig) {
               border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
               ...theme.applyStyles('dark', {
                 border: `1px solid ${ALERT_BORDER_DARK[ownerState.severity]}`,
+              }),
+            }),
+            ...(ownerState.variant === 'standard' && ownerState.severity === 'error' && {
+              backgroundColor: red[50],
+              ...theme.applyStyles('dark', {
+                backgroundColor: red[950],
+              }),
+            }),
+            ...(ownerState.variant === 'standard' && ownerState.severity === 'warning' && {
+              backgroundColor: amber[50],
+              ...theme.applyStyles('dark', {
+                backgroundColor: amber[950],
+              }),
+            }),
+            ...(ownerState.variant === 'standard' && ownerState.severity === 'info' && {
+              backgroundColor: blue[50],
+              ...theme.applyStyles('dark', {
+                backgroundColor: blue[950],
+              }),
+            }),
+            ...(ownerState.variant === 'standard' && ownerState.severity === 'success' && {
+              backgroundColor: green[50],
+              ...theme.applyStyles('dark', {
+                backgroundColor: green[950],
               }),
             }),
           }),
