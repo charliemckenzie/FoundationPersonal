@@ -7,19 +7,19 @@ import { Icon } from '../Icon';
 import { buildSoftStyles } from '../buttons/variantStyles';
 
 export type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
-export type AlertVariant = 'standard' | 'filled' | 'outlined' | 'no-icon';
+export type AlertVariant = 'standard' | 'filled' | 'outlined';
 
 export interface AlertProps {
   severity: AlertSeverity;
   message: string;
   title?: string;
   variant?: AlertVariant;
-  icon?: React.ReactNode | false;
+  icon?: React.ReactNode;
   action?: React.ReactNode;
   onClose?: () => void;
 }
 
-const SEVERITY_ICONS = {
+export const SEVERITY_ICONS = {
   error: 'xmark',
   warning: 'triangle-exclamation',
   info: 'circle-info',
@@ -35,8 +35,9 @@ const SEVERITY_LABELS: Record<AlertSeverity, string> = {
 
 const visiblyHiddenSx = {
   position: 'absolute',
-  width: 1,
-  height: 1,
+  width: '1px',
+  height: '1px',
+  margin: '-1px',
   overflow: 'hidden',
   clip: 'rect(0,0,0,0)',
   whiteSpace: 'nowrap',
@@ -52,19 +53,13 @@ export function Alert({
   action,
   onClose,
 }: AlertProps) {
-  const muiVariant = variant === 'no-icon' ? 'standard' : variant;
-  const showIcon = variant !== 'no-icon' && icon !== false;
-  const resolvedIcon = showIcon
-    ? (icon !== undefined ? icon : <Icon icon={SEVERITY_ICONS[severity]} color={muiVariant === 'filled' ? 'inherit' : severity} size="lg" />)
-    : null;
-
   const hasAction = Boolean(action || onClose);
   const role = severity === 'error' || severity === 'warning' ? 'alert' : 'status';
 
   return (
     <MuiAlert
       severity={severity}
-      variant={muiVariant}
+      variant={variant}
       icon={false}
       role={role}
       sx={{ '& .MuiAlert-message': { width: '100%', py: 0 } }}
@@ -77,7 +72,7 @@ export function Alert({
         gap: action ? { xs: 1.5, sm: 2 } : 2,
       }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-          {resolvedIcon && <Box sx={{ display: 'flex', mt: '2px' }}>{resolvedIcon}</Box>}
+          {icon && <Box sx={{ display: 'flex', mt: '2px' }}>{icon}</Box>}
           <Box>
             {title && <AlertTitle component="h4" sx={{ fontWeight: 'fontWeightBold', fontSize: 'inherit', m: 0 }}>{title}</AlertTitle>}
             <Box component="span" sx={visiblyHiddenSx}>{SEVERITY_LABELS[severity]}: </Box>

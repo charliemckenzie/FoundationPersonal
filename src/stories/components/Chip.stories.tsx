@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Avatar from '@mui/material/Avatar';
 import FaceIcon from '@mui/icons-material/Face';
 import { Chip } from '../../components/Chip';
 
@@ -9,7 +8,7 @@ const meta: Meta<typeof Chip> = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    variant: { control: 'select', options: ['filled', 'outlined'] },
+    variant: { control: 'select', options: ['filled', 'outlined', 'alert'] },
     color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     size: { control: 'select', options: ['small', 'medium'] },
   },
@@ -27,6 +26,50 @@ export const Variants: Story = {
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       <Chip label="Filled" variant="filled" color="primary" />
       <Chip label="Outlined" variant="outlined" color="primary" />
+      <Chip label="Alert" variant="alert" color="primary" />
+    </div>
+  ),
+};
+
+export const Alert: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Chip label="Error" variant="alert" color="error" size="small" />
+      <Chip label="Warning" variant="alert" color="warning" size="small" />
+      <Chip label="Info" variant="alert" color="info" size="small" />
+      <Chip label="Success" variant="alert" color="success" size="small" />
+    </div>
+  ),
+};
+
+export const AlertWithIcon: Story = {
+  name: 'Alert with severity icon',
+  render: () => (
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Chip label="Error" variant="alert" color="error" size="small" showSeverityIcon />
+      <Chip label="Warning" variant="alert" color="warning" size="small" showSeverityIcon />
+      <Chip label="Info" variant="alert" color="info" size="small" showSeverityIcon />
+      <Chip label="Success" variant="alert" color="success" size="small" showSeverityIcon />
+    </div>
+  ),
+};
+
+export const InlineWithText: Story = {
+  name: 'Inline with text',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span>Invoice #1042</span>
+        <Chip label="Overdue" variant="alert" color="error" size="small" showSeverityIcon />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span>Deployment v2.4.1</span>
+        <Chip label="In review" variant="alert" color="warning" size="small" showSeverityIcon />
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <span>Pull request #88</span>
+        <Chip label="Merged" variant="alert" color="success" size="small" showSeverityIcon />
+      </div>
     </div>
   ),
 };
@@ -56,18 +99,10 @@ export const Sizes: Story = {
 
 export const WithIcon: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 8 }}>
-      <Chip label="With icon" icon={<FaceIcon />} color="primary" />
+    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+      <Chip label="Filled" icon={<FaceIcon />} color="primary" />
       <Chip label="Outlined" icon={<FaceIcon />} color="primary" variant="outlined" />
-    </div>
-  ),
-};
-
-export const WithAvatar: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 8 }}>
-      <Chip label="Adam" avatar={<Avatar>A</Avatar>} />
-      <Chip label="Bart" avatar={<Avatar src="https://i.pravatar.cc/40?u=bart" />} />
+      <Chip label="Alert" icon={<FaceIcon />} color="primary" variant="alert" />
     </div>
   ),
 };
@@ -77,19 +112,6 @@ export const Deletable: Story = {
     <div style={{ display: 'flex', gap: 8 }}>
       <Chip label="React" color="primary" onDelete={() => {}} />
       <Chip label="TypeScript" color="secondary" variant="outlined" onDelete={() => {}} />
-    </div>
-  ),
-};
-
-export const Clickable: Story = {
-  args: { label: 'Clickable', color: 'primary', clickable: true },
-};
-
-export const Disabled: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 8 }}>
-      <Chip label="Filled disabled" color="primary" disabled />
-      <Chip label="Outlined disabled" color="primary" variant="outlined" disabled />
     </div>
   ),
 };

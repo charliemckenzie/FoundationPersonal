@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import type React from 'react';
-import { Alert } from '../../components/Alert';
+import { Alert, SEVERITY_ICONS } from '../../components/Alert';
+import type { AlertSeverity } from '../../components/Alert';
 import { Button } from '../../components/Button';
 import { Icon } from '../../components/Icon';
 
@@ -42,10 +43,10 @@ const meta: Meta<AlertStoryArgs> = {
     severity: { control: 'select', options: ['error', 'warning', 'info', 'success'] },
     message: { control: 'text' },
     title: { control: 'text' },
-    variant: { control: 'select', options: ['standard', 'filled', 'outlined', 'no-icon'] },
+    variant: { control: 'select', options: ['standard', 'filled', 'outlined'] },
     showIcon: {
       control: 'boolean',
-      description: 'Show the icon.',
+      description: 'Show an icon.',
     },
     icon: {
       control: 'select',
@@ -74,7 +75,9 @@ type Story = StoryObj<AlertStoryArgs>;
 
 export const Default: Story = {
   render: ({ showIcon, actionType, actionLabel, icon, severity, message, title, variant }) => {
-    const resolvedIcon = showIcon ? ICON_MAPPING[String(icon)] : false;
+    const resolvedIcon = showIcon
+      ? (icon && icon !== '(default)' ? ICON_MAPPING[String(icon)] : <Icon icon={SEVERITY_ICONS[severity as AlertSeverity]} color="inherit" size="lg" />)
+      : undefined;
     const resolvedAction = actionType === 'custom'
       ? <Button label={actionLabel || 'Refresh'} size="small" variant="soft" color={severity} />
       : undefined;
@@ -94,7 +97,7 @@ export const Default: Story = {
   args: {
     severity: 'info',
     message: 'This is an informational message.',
-    showIcon: true,
+    showIcon: false,
     icon: '(default)' as React.ReactNode,
     actionType: 'none',
     actionLabel: 'Refresh',
@@ -108,6 +111,18 @@ export const Severities: Story = {
       <Alert severity="warning" message="Your session will expire in 5 minutes." />
       <Alert severity="info" message="A new version is available." />
       <Alert severity="success" message="Your changes have been saved." />
+    </div>
+  ),
+};
+
+export const WithIcon: Story = {
+  name: 'With Icon',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      <Alert severity="error" message="Something went wrong. Please try again." icon={<Icon icon={SEVERITY_ICONS.error} color="inherit" size="lg" />} />
+      <Alert severity="warning" message="Your session will expire in 5 minutes." icon={<Icon icon={SEVERITY_ICONS.warning} color="inherit" size="lg" />} />
+      <Alert severity="info" message="A new version is available." icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />} />
+      <Alert severity="success" message="Your changes have been saved." icon={<Icon icon={SEVERITY_ICONS.success} color="inherit" size="lg" />} />
     </div>
   ),
 };
@@ -126,7 +141,7 @@ export const WithTitle: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <Alert severity="error" title="Error" message="The form could not be submitted. Check the fields below." />
-      <Alert severity="success" title="Saved" message="Your profile has been updated successfully." />
+      <Alert severity="success" title="Saved" message="Your profile has been updated successfully." icon={<Icon icon={SEVERITY_ICONS.success} color="inherit" size="lg" />} />
     </div>
   ),
 };
@@ -139,30 +154,20 @@ export const Closable: Story = {
         severity="warning"
         title="Session expiring soon"
         message="Your session will expire in 5 minutes due to inactivity. Save any unsaved work before it times out."
+        icon={<Icon icon={SEVERITY_ICONS.warning} color="inherit" size="lg" />}
         onClose={() => {}}
       />
     </div>
   ),
 };
 
-export const NoIcon: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <Alert severity="error" variant="no-icon" message="Something went wrong. Please try again." />
-      <Alert severity="warning" variant="no-icon" message="Your session will expire in 5 minutes." />
-      <Alert severity="info" variant="no-icon" message="A new version is available." />
-      <Alert severity="success" variant="no-icon" message="Your changes have been saved." />
-    </div>
-  ),
-};
-
 const SEVERITIES = ['error', 'warning', 'info', 'success'] as const;
-const VARIANTS = ['standard', 'filled', 'outlined', 'no-icon'] as const;
+const VARIANTS = ['standard', 'filled', 'outlined'] as const;
 
 export const AllCombinations: Story = {
   name: 'All Severity × Variant combinations',
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
       {SEVERITIES.map(severity =>
         VARIANTS.map(variant => (
           <Alert
@@ -189,6 +194,7 @@ export const WithAction: Story = {
         severity="info"
         title="Update available"
         message="A new version of the app is available with performance improvements and bug fixes. Refresh to apply the update."
+        icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />}
         action={<Button label="Refresh" size="small" variant="soft" color="info" />}
       />
     </div>

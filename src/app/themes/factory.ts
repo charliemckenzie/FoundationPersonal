@@ -345,9 +345,10 @@ export function createBrandTheme(brand: BrandConfig) {
       MuiAlert: {
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
-            padding: '12px 16px',
+            padding: '8px 16px',
+            minHeight: '44px',
             borderRadius: '8px',
-            alignItems: 'flex-start',
+            alignItems: 'center',
             gap: '12px',
             ...(ownerState.variant === 'standard' && ownerState.severity && {
               border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
@@ -392,7 +393,6 @@ export function createBrandTheme(brand: BrandConfig) {
           message: {
             padding: 0,
             margin: 0,
-            alignSelf: 'flex-start',
             lineHeight: '24px',
           },
           action: {
