@@ -8,6 +8,7 @@ import { ARTHorizontal } from './logos/ARTHorizontal';
 import { ART2Lines } from './logos/ART2Lines';
 import { ARTMark } from './logos/ARTMark';
 import { QSuperFull } from './logos/QSuperFull';
+import { QSuperMark } from './logos/QSuperMark';
 import { QSuperOnly } from './logos/QSuperOnly';
 
 type LogoMap = Partial<Record<LogoVariant, React.ComponentType<SVGProps<SVGSVGElement>>>>;
@@ -21,6 +22,7 @@ const BRAND_LOGOS: Record<string, LogoMap> = {
   QSuper: {
     primary: QSuperFull,
     secondary: QSuperOnly,
+    mark: QSuperMark,
   },
 };
 

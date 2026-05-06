@@ -160,8 +160,10 @@ export function Tabs({
           sx={
             variant === 'pill'
               ? {
-                  '& .MuiTabs-flexContainer': { gap: 1 },
+                  '& .MuiTabs-flexContainer': { gap: 0 },
                   '& .MuiTabs-indicator': { display: 'none' },
+                  '& .MuiTab-root': { marginRight: 0.5 },
+                  '& .MuiTab-root:last-of-type': { marginRight: 0 },
                   minHeight,
                 }
               : { minHeight }

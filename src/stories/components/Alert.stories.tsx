@@ -156,6 +156,27 @@ export const NoIcon: Story = {
   ),
 };
 
+const SEVERITIES = ['error', 'warning', 'info', 'success'] as const;
+const VARIANTS = ['standard', 'filled', 'outlined', 'no-icon'] as const;
+
+export const AllCombinations: Story = {
+  name: 'All Severity × Variant combinations',
+  render: () => (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
+      {SEVERITIES.map(severity =>
+        VARIANTS.map(variant => (
+          <Alert
+            key={`${severity}-${variant}`}
+            severity={severity}
+            variant={variant}
+            message={`${severity} / ${variant}`}
+          />
+        ))
+      )}
+    </div>
+  ),
+};
+
 export const WithAction: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

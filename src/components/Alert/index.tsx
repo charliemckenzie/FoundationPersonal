@@ -20,10 +20,27 @@ export interface AlertProps {
 }
 
 const SEVERITY_ICONS = {
-  error: 'alert_2',
-  warning: 'alert_1',
-  info: 'info_1',
-  success: 'tick',
+  error: 'xmark',
+  warning: 'triangle-exclamation',
+  info: 'circle-info',
+  success: 'circle-check',
+} as const;
+
+const SEVERITY_LABELS: Record<AlertSeverity, string> = {
+  error: 'Error',
+  warning: 'Warning',
+  info: 'Information',
+  success: 'Success',
+};
+
+const visiblyHiddenSx = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  overflow: 'hidden',
+  clip: 'rect(0,0,0,0)',
+  whiteSpace: 'nowrap',
+  border: 0,
 } as const;
 
 export function Alert({
@@ -42,25 +59,28 @@ export function Alert({
     : null;
 
   const hasAction = Boolean(action || onClose);
+  const role = severity === 'error' || severity === 'warning' ? 'alert' : 'status';
 
   return (
     <MuiAlert
       severity={severity}
       variant={muiVariant}
       icon={false}
+      role={role}
       sx={{ '& .MuiAlert-message': { width: '100%', py: 0 } }}
     >
       <Box sx={{
         display: 'flex',
         flexDirection: action ? { xs: 'column', sm: 'row' } : 'row',
-        alignItems: onClose ? 'flex-start' : { xs: 'flex-start', sm: 'center' },
+        alignItems: { xs: 'flex-start', sm: 'center' },
         justifyContent: 'space-between',
         gap: action ? { xs: 1.5, sm: 2 } : 2,
       }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
           {resolvedIcon && <Box sx={{ display: 'flex', mt: '2px' }}>{resolvedIcon}</Box>}
           <Box>
-            {title && <AlertTitle>{title}</AlertTitle>}
+            {title && <AlertTitle component="h4" sx={{ fontWeight: 'fontWeightBold', fontSize: 'inherit', m: 0 }}>{title}</AlertTitle>}
+            <Box component="span" sx={visiblyHiddenSx}>{SEVERITY_LABELS[severity]}: </Box>
             {message}
           </Box>
         </Box>
@@ -71,8 +91,8 @@ export function Alert({
               <IconButton
                 size="small"
                 onClick={onClose}
-                aria-label="Dismiss"
-                sx={{ mt: '2px', width: 32, height: 32, borderRadius: '50%', '& .MuiTouchRipple-root': { display: 'none' }, ...buildSoftStyles(severity), color: 'inherit' }}
+                aria-label={`Dismiss ${SEVERITY_LABELS[severity]} alert`}
+                sx={{ width: 32, height: 32, borderRadius: '50%', '& .MuiTouchRipple-root': { display: 'none' }, ...buildSoftStyles(severity), color: 'inherit' }}
               >
                 <Icon icon="xmark" size="md" />
               </IconButton>

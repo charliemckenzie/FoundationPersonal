@@ -9,16 +9,6 @@ import { createBrandTheme } from '../../app/themes/factory';
 import { foundation } from '../../app/themes/brands/foundation';
 import { themeB } from '../../app/themes/brands/theme-b';
 
-const meta: Meta<typeof Tabs> = {
-  title: 'Components / Tabs',
-  component: Tabs,
-  tags: ['autodocs'],
-  parameters: { layout: 'padded' },
-};
-
-export default meta;
-type Story = StoryObj<typeof Tabs>;
-
 const placeholder = (name: string) => (
   <Box sx={{ p: 2, bgcolor: 'background.default', borderRadius: 1, border: '1px dashed', borderColor: 'divider' }}>
     <Typography variant="body" color="text.muted">{name} — placeholder content</Typography>
@@ -36,6 +26,54 @@ const SIZE_TABS = [
   { label: 'Tab label' },
   { label: 'Tab label' },
 ];
+
+const meta: Meta<typeof Tabs> = {
+  title: 'Components / Tabs',
+  component: Tabs,
+  tags: ['autodocs'],
+  parameters: { layout: 'padded' },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['pill', 'nav'],
+      description: 'Visual style of the tabs.',
+    },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+      description: 'Tab size — controls font size and padding.',
+    },
+    tabStyle: {
+      control: 'select',
+      options: ['default', 'white'],
+      description: 'Use `white` on brand-coloured backgrounds.',
+    },
+    defaultTab: {
+      control: 'number',
+      description: 'Index of the initially selected tab.',
+    },
+    label: {
+      control: 'text',
+      description: 'Accessible label for the tablist (screen readers only).',
+    },
+    tabs: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Tabs>;
+
+export const Default: Story = {
+  args: {
+    label: 'Example tabs',
+    variant: 'pill',
+    size: 'medium',
+    tabStyle: 'default',
+    defaultTab: 0,
+    tabs: SAMPLE_TABS,
+  },
+};
 
 // ─── Default stories ──────────────────────────────────────────────────────────
 

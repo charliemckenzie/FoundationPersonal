@@ -56,7 +56,18 @@ const meta: Meta<typeof Table> = {
     },
     stickyHeader: {
       control: 'boolean',
+      description: 'Pins the header row when the table scrolls.',
     },
+    loading: {
+      control: 'boolean',
+      description: 'Shows a loading spinner and marks the table as busy.',
+    },
+    emptyMessage: {
+      control: 'text',
+      description: 'Message shown when rows is empty.',
+    },
+    columns: { table: { disable: true } },
+    rows: { table: { disable: true } },
   },
 };
 
@@ -64,7 +75,15 @@ export default meta;
 type Story = StoryObj<typeof Table<User>>;
 
 export const Default: Story = {
-  render: () => <Table columns={COLUMNS} rows={ROWS} />,
+  args: {
+    density: 'default',
+    striped: false,
+    horizontalPadding: true,
+    stickyHeader: false,
+    loading: false,
+    emptyMessage: 'No data to display.',
+  },
+  render: (args) => <Table {...args} columns={COLUMNS} rows={ROWS} />,
 };
 
 export const Striped: Story = {
