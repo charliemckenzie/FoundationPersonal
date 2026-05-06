@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import FaceIcon from '@mui/icons-material/Face';
 import { Chip } from '../../components/Chip';
+import { Icon } from '../../components/Icon';
 
 const meta: Meta<typeof Chip> = {
   title: 'Components / Chip',
@@ -8,9 +8,10 @@ const meta: Meta<typeof Chip> = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    variant: { control: 'select', options: ['filled', 'outlined', 'alert'] },
+    variant: { control: 'select', options: ['filled', 'outlined'] },
     color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     size: { control: 'select', options: ['small', 'medium'] },
+    severity: { control: 'select', options: ['error', 'warning', 'info', 'success'] },
   },
 };
 
@@ -26,30 +27,25 @@ export const Variants: Story = {
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
       <Chip label="Filled" variant="filled" color="primary" />
       <Chip label="Outlined" variant="outlined" color="primary" />
-      <Chip label="Alert" variant="alert" color="primary" />
     </div>
   ),
 };
 
 export const Alert: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-      <Chip label="Error" variant="alert" color="error" size="small" />
-      <Chip label="Warning" variant="alert" color="warning" size="small" />
-      <Chip label="Info" variant="alert" color="info" size="small" />
-      <Chip label="Success" variant="alert" color="success" size="small" />
-    </div>
-  ),
-};
-
-export const AlertWithIcon: Story = {
-  name: 'Alert with severity icon',
-  render: () => (
-    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-      <Chip label="Error" variant="alert" color="error" size="small" showSeverityIcon />
-      <Chip label="Warning" variant="alert" color="warning" size="small" showSeverityIcon />
-      <Chip label="Info" variant="alert" color="info" size="small" showSeverityIcon />
-      <Chip label="Success" variant="alert" color="success" size="small" showSeverityIcon />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Chip label="Error" severity="error" />
+        <Chip label="Warning" severity="warning" />
+        <Chip label="Info" severity="info" />
+        <Chip label="Success" severity="success" />
+      </div>
+      <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <Chip label="Error" severity="error" icon={<Icon icon="xmark" size="sm" color="inherit" />} />
+        <Chip label="Warning" severity="warning" icon={<Icon icon="triangle-exclamation" size="sm" color="inherit" />} />
+        <Chip label="Info" severity="info" icon={<Icon icon="circle-info" size="sm" color="inherit" />} />
+        <Chip label="Success" severity="success" icon={<Icon icon="circle-check" size="sm" color="inherit" />} />
+      </div>
     </div>
   ),
 };
@@ -60,15 +56,15 @@ export const InlineWithText: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span>Invoice #1042</span>
-        <Chip label="Overdue" variant="alert" color="error" size="small" showSeverityIcon />
+        <Chip label="Overdue" severity="error" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span>Deployment v2.4.1</span>
-        <Chip label="In review" variant="alert" color="warning" size="small" showSeverityIcon />
+        <Chip label="In review" severity="warning" />
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <span>Pull request #88</span>
-        <Chip label="Merged" variant="alert" color="success" size="small" showSeverityIcon />
+        <Chip label="Merged" severity="success" />
       </div>
     </div>
   ),
@@ -99,10 +95,9 @@ export const Sizes: Story = {
 
 export const WithIcon: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-      <Chip label="Filled" icon={<FaceIcon />} color="primary" />
-      <Chip label="Outlined" icon={<FaceIcon />} color="primary" variant="outlined" />
-      <Chip label="Alert" icon={<FaceIcon />} color="primary" variant="alert" />
+    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <Chip label="Filled" icon={<Icon icon="user" size="sm" color="inherit" />} color="primary" />
+      <Chip label="Outlined" icon={<Icon icon="user" size="sm" color="inherit" />} color="primary" variant="outlined" />
     </div>
   ),
 };
