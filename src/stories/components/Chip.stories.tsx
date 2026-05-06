@@ -41,10 +41,10 @@ export const Alert: Story = {
         <Chip label="Success" severity="success" />
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <Chip label="Error" severity="error" icon={<Icon icon="xmark" size="sm" color="inherit" />} />
-        <Chip label="Warning" severity="warning" icon={<Icon icon="triangle-exclamation" size="sm" color="inherit" />} />
-        <Chip label="Info" severity="info" icon={<Icon icon="circle-info" size="sm" color="inherit" />} />
-        <Chip label="Success" severity="success" icon={<Icon icon="circle-check" size="sm" color="inherit" />} />
+        <Chip label="Error" severity="error" icon={<Icon icon="xmark" size="md" color="inherit" />} />
+        <Chip label="Warning" severity="warning" icon={<Icon icon="triangle-exclamation" size="md" color="inherit" />} />
+        <Chip label="Info" severity="info" icon={<Icon icon="circle-info" size="md" color="inherit" />} />
+        <Chip label="Success" severity="success" icon={<Icon icon="circle-check" size="md" color="inherit" />} />
       </div>
     </div>
   ),
@@ -96,8 +96,8 @@ export const Sizes: Story = {
 export const WithIcon: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-      <Chip label="Filled" icon={<Icon icon="user" size="sm" color="inherit" />} color="primary" />
-      <Chip label="Outlined" icon={<Icon icon="user" size="sm" color="inherit" />} color="primary" variant="outlined" />
+      <Chip label="Filled" icon={<Icon icon="user" size="lg" color="inherit" />} color="primary" />
+      <Chip label="Outlined" icon={<Icon icon="user" size="lg" color="inherit" />} color="primary" variant="outlined" />
     </div>
   ),
 };
