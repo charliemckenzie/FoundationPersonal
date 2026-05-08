@@ -52,7 +52,7 @@ export function buildGhostStyles(color: ButtonColorKey) {
 export function buildOutlinedStyles(color: ButtonColorKey) {
   return {
     backgroundColor: 'transparent',
-    border: '1px solid',
+    border: '2px solid',
     borderColor: (theme: Theme) =>
       theme.palette.mode === 'light'
         ? alpha(theme.palette[color].main, 0.5)

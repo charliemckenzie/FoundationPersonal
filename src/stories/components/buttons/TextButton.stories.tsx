@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import { TextButton } from '../../../components/TextButton';
 import { Icon } from '../../../components/Icon';
 import { useState } from 'react';
+import { BUTTON_ICON_OPTIONS } from '../../constants/buttonIcons';
 
 const meta: Meta<typeof TextButton> = {
   title: 'Components / Buttons / TextButton',
@@ -21,25 +22,18 @@ const meta: Meta<typeof TextButton> = {
       },
     },
   },
-  decorators: [
-    (Story, context) => {
-      const bgType = context.globals.backgroundColor || 'default';
-      return (
-        <Box sx={{ bgcolor: `background.${bgType}`, p: 3, minWidth: 200 }}>
-          <Story />
-        </Box>
-      );
-    },
-  ],
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
-    color: { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
+    label:         { control: 'text' },
+    size:          { control: 'select', options: ['small', 'medium', 'large'] },
+    color:         { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     iconDirection: { control: 'select', options: ['left', 'right'] },
-    disabled: { control: 'boolean' },
-    loading: { control: 'boolean' },
-    reversed: { control: 'boolean' },
-    type: { table: { disable: true } },
-    onClick: { table: { disable: true } },
+    startIcon:     { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Overrides the default arrow — set either start or end, not both' },
+    endIcon:       { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Overrides the default arrow — set either start or end, not both' },
+    disabled:      { control: 'boolean' },
+    loading:       { control: 'boolean' },
+    reversed:      { control: 'boolean' },
+    type:          { table: { disable: true } },
+    onClick:       { table: { disable: true } },
   },
 };
 
@@ -47,7 +41,15 @@ export default meta;
 type Story = StoryObj<typeof TextButton>;
 
 export const Default: Story = {
-  args: { label: 'Learn more' },
+  args: {
+    label: 'Learn more',
+    size: 'medium',
+    color: 'primary',
+    iconDirection: 'right',
+    disabled: false,
+    loading: false,
+    reversed: false,
+  },
 };
 
 export const Sizes: Story = {
@@ -213,3 +215,5 @@ export const OnPrimaryBackground: Story = {
   parameters: { layout: 'fullscreen' },
   render: () => <ReversedShowcase />,
 };
+
+

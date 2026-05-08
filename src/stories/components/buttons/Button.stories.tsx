@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Box from '@mui/material/Box';
 import { Button } from '../../../components/Button';
+import { BUTTON_ICON_OPTIONS } from '../../constants/buttonIcons';
 
 const meta = {
   title: 'Components / Buttons / Button',
@@ -14,23 +15,20 @@ const meta = {
       },
     },
   },
-  decorators: [
-    (Story, context) => {
-      const bgType = context.globals.backgroundColor || 'default';
-      return (
-        <Box sx={{ bgcolor: `background.${bgType}`, p: 3, minWidth: 200 }}>
-          <Story />
-        </Box>
-      );
-    },
-  ],
   argTypes: {
-    variant: { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
-    size: { control: 'select', options: ['small', 'medium', 'large'] },
-    color: { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
-    reversed: { control: 'boolean' },
-    onClick: { table: { disable: true } },
-    type: { table: { disable: true } },
+    label:           { control: 'text' },
+    variant:         { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
+    size:            { control: 'select', options: ['small', 'medium', 'large'] },
+    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
+    disabled:        { control: 'boolean' },
+    loading:         { control: 'boolean' },
+    hideLoadingText: { control: 'boolean' },
+    fullWidth:       { control: 'boolean' },
+    reversed:        { control: 'boolean' },
+    startIcon:       { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Leading icon' },
+    endIcon:         { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Trailing icon' },
+    onClick:         { table: { disable: true } },
+    type:            { table: { disable: true } },
   },
 } satisfies Meta<typeof Button>;
 
@@ -38,7 +36,19 @@ export default meta;
 type Story = StoryObj<typeof Button>;
 
 export const Default: Story = {
-  args: { label: 'Button' },
+  args: {
+    label: 'Button',
+    variant: 'contained',
+    size: 'medium',
+    color: 'primary',
+    disabled: false,
+    loading: false,
+    hideLoadingText: true,
+    fullWidth: false,
+    reversed: false,
+    startIcon: '',
+    endIcon: '',
+  },
 };
 
 export const Variants: Story = {
