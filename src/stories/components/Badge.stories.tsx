@@ -15,6 +15,12 @@ const meta: Meta<typeof Badge> = {
     color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     count: { control: 'number' },
     max: { control: 'number' },
+    showZero: { control: 'boolean' },
+    invisible: { control: 'boolean' },
+    anchorVertical: { control: 'select', options: ['top', 'bottom'] },
+    anchorHorizontal: { control: 'select', options: ['left', 'right'] },
+    ariaLabel: { control: 'text' },
+    children: { table: { disable: true } },
   },
   // Children is always a React node — can't be serialised as a Storybook arg.
   // Render wraps the badge around a static icon so controls work for all other props.

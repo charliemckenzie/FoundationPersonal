@@ -7,13 +7,11 @@ import { Icon } from '../Icon';
 import { buildSoftStyles } from '../buttons/variantStyles';
 
 export type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
-export type AlertVariant = 'standard' | 'filled' | 'outlined';
 
 export interface AlertProps {
   severity: AlertSeverity;
   message: string;
   title?: string;
-  variant?: AlertVariant;
   icon?: React.ReactNode;
   action?: React.ReactNode;
   onClose?: () => void;
@@ -48,7 +46,6 @@ export function Alert({
   severity,
   message,
   title,
-  variant = 'standard',
   icon,
   action,
   onClose,
@@ -59,7 +56,6 @@ export function Alert({
   return (
     <MuiAlert
       severity={severity}
-      variant={variant}
       icon={false}
       role={role}
       sx={{ '& .MuiAlert-message': { width: '100%', py: 0 } }}

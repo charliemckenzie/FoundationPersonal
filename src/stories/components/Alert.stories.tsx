@@ -22,14 +22,11 @@ const FA_ICONS = [
 ] as const;
 
 const ICON_OPTIONS = ['(default)', ...FA_ICONS] as const;
+type IconOption = typeof ICON_OPTIONS[number];
 
-const ICON_MAPPING: Record<string, React.ReactNode | undefined> = {
-  '(default)': undefined,
-  ...Object.fromEntries(FA_ICONS.map(name => [name, <Icon key={name} icon={name} size="lg" />])),
-};
-
-type AlertStoryArgs = React.ComponentProps<typeof Alert> & {
+type AlertStoryArgs = Omit<React.ComponentProps<typeof Alert>, 'icon'> & {
   showIcon: boolean;
+  iconName: IconOption;
   actionType: 'none' | 'close' | 'custom';
   actionLabel: string;
 };
@@ -43,18 +40,17 @@ const meta: Meta<AlertStoryArgs> = {
     severity: { control: 'select', options: ['error', 'warning', 'info', 'success'] },
     message: { control: 'text' },
     title: { control: 'text' },
-    variant: { control: 'select', options: ['standard', 'filled', 'outlined'] },
     showIcon: {
       control: 'boolean',
       description: 'Show an icon.',
     },
-    icon: {
+    iconName: {
       control: 'select',
       options: ICON_OPTIONS,
-      mapping: ICON_MAPPING,
       description: 'Override the severity icon. "(default)" uses the severity icon.',
       if: { arg: 'showIcon', truthy: true },
     },
+    icon: { table: { disable: true } },
     action: { table: { disable: true } },
     onClose: { table: { disable: true } },
     actionType: {
@@ -74,9 +70,9 @@ export default meta;
 type Story = StoryObj<AlertStoryArgs>;
 
 export const Default: Story = {
-  render: ({ showIcon, actionType, actionLabel, icon, severity, message, title, variant }) => {
+  render: ({ showIcon, iconName, actionType, actionLabel, severity, message, title }) => {
     const resolvedIcon = showIcon
-      ? (icon && icon !== '(default)' ? ICON_MAPPING[String(icon)] : <Icon icon={SEVERITY_ICONS[severity as AlertSeverity]} color="inherit" size="lg" />)
+      ? <Icon icon={iconName !== '(default)' ? iconName : SEVERITY_ICONS[severity as AlertSeverity]} color="inherit" size="lg" />
       : undefined;
     const resolvedAction = actionType === 'custom'
       ? <Button label={actionLabel || 'Refresh'} size="small" variant="soft" color={severity} />
@@ -87,7 +83,6 @@ export const Default: Story = {
         severity={severity}
         message={message}
         title={title}
-        variant={variant}
         icon={resolvedIcon}
         action={resolvedAction}
         onClose={resolvedOnClose}
@@ -98,7 +93,7 @@ export const Default: Story = {
     severity: 'info',
     message: 'This is an informational message.',
     showIcon: false,
-    icon: '(default)' as React.ReactNode,
+    iconName: '(default)',
     actionType: 'none',
     actionLabel: 'Refresh',
   },
@@ -127,16 +122,6 @@ export const WithIcon: Story = {
   ),
 };
 
-export const Variants: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <Alert severity="info" variant="standard" message="Standard variant." />
-      <Alert severity="info" variant="filled" message="Filled variant." />
-      <Alert severity="info" variant="outlined" message="Outlined variant." />
-    </div>
-  ),
-};
-
 export const WithTitle: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -157,27 +142,6 @@ export const Closable: Story = {
         icon={<Icon icon={SEVERITY_ICONS.warning} color="inherit" size="lg" />}
         onClose={() => {}}
       />
-    </div>
-  ),
-};
-
-const SEVERITIES = ['error', 'warning', 'info', 'success'] as const;
-const VARIANTS = ['standard', 'filled', 'outlined'] as const;
-
-export const AllCombinations: Story = {
-  name: 'All Severity × Variant combinations',
-  render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-      {SEVERITIES.map(severity =>
-        VARIANTS.map(variant => (
-          <Alert
-            key={`${severity}-${variant}`}
-            severity={severity}
-            variant={variant}
-            message={`${severity} / ${variant}`}
-          />
-        ))
-      )}
     </div>
   ),
 };

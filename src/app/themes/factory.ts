@@ -325,6 +325,7 @@ export function createBrandTheme(brand: BrandConfig) {
       MuiAccordionSummary: {
         styleOverrides: {
           root: ({ theme }) => ({
+            color: brand.quaternary ? theme.palette.text.link : theme.palette.text.heading,
             '&.Mui-expanded': {
               backgroundColor: theme.palette.action.selected,
             },

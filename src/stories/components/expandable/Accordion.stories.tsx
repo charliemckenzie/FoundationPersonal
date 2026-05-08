@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Box from '@mui/material/Box';
 import { Accordion } from '../../../components/Accordion';
+import type { AccordionProps } from '../../../components/Accordion';
 
 const SAMPLE_ITEMS = [
   { id: 'panel-1', title: 'What is Foundation?', content: 'Foundation is the design system powering all UX prototypes. It provides a consistent set of components built on MUI.' },
@@ -8,37 +8,60 @@ const SAMPLE_ITEMS = [
   { id: 'panel-3', title: 'How do I request a new component?', content: 'Talk to Smithers. All new component requests start with Smithers, who routes to Moe for design system approval before Lenny builds it.' },
 ];
 
-const meta: Meta<typeof Accordion> = {
+type DefaultExpandedOption = 'none' | 'panel-1' | 'panel-2' | 'panel-3';
+
+type AccordionStoryArgs = Omit<AccordionProps, 'defaultExpanded'> & {
+  defaultExpanded: DefaultExpandedOption;
+};
+
+const meta: Meta<AccordionStoryArgs> = {
   title: 'Components / Expandable / Accordion',
   component: Accordion,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
-  decorators: [
-    (Story, context) => {
-      const bgType = context.globals.backgroundColor || 'default';
-      return (
-        <Box sx={{ bgcolor: `background.${bgType}`, p: 3, minWidth: 400 }}>
-          <Story />
-        </Box>
-      );
-    },
-  ],
   argTypes: {
+    items: { table: { disable: true } },
     variant: { table: { disable: true } },
     onChange: { table: { disable: true } },
-    defaultExpanded: { table: { disable: true } },
+    size: {
+      control: 'select',
+      options: ['small', 'medium', 'large'],
+      description: 'Controls the padding and typography scale of each panel.',
+    },
+    defaultExpanded: {
+      control: 'select',
+      options: ['none', 'panel-1', 'panel-2', 'panel-3'],
+      description: 'Which panel is open on first render.',
+    },
+    showCloseAll: {
+      control: 'boolean',
+      description: 'Show a "Close all" button above the panels.',
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Accordion>;
+type Story = StoryObj<AccordionStoryArgs>;
 
 export const Default: Story = {
-  args: { items: SAMPLE_ITEMS, showCloseAll: false },
+  render: ({ defaultExpanded, size, showCloseAll }) => (
+    <Accordion
+      key={defaultExpanded}
+      items={SAMPLE_ITEMS}
+      defaultExpanded={defaultExpanded === 'none' ? undefined : defaultExpanded}
+      size={size}
+      showCloseAll={showCloseAll}
+    />
+  ),
+  args: {
+    size: 'medium',
+    defaultExpanded: 'none',
+    showCloseAll: false,
+  },
 };
 
 export const DefaultExpanded: Story = {
-  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1', showCloseAll: false },
+  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1', showCloseAll: false, size: 'medium' },
 };
 
 export const Exclusive: Story = {
@@ -47,14 +70,16 @@ export const Exclusive: Story = {
     items: SAMPLE_ITEMS,
     variant: 'exclusive',
     defaultExpanded: 'panel-1',
+    size: 'medium',
   },
 };
 
 export const SingleItem: Story = {
   args: {
-    items: [{ id: 'single', title: 'Single panel', content: 'Just one panel, expanded by default.', }],
+    items: [{ id: 'single', title: 'Single panel', content: 'Just one panel, expanded by default.' }],
     defaultExpanded: 'single',
     showCloseAll: false,
+    size: 'medium',
   },
 };
 
@@ -65,6 +90,7 @@ export const MultipleExpanded: Story = {
       items={SAMPLE_ITEMS}
       defaultExpanded="panel-1"
       showCloseAll={true}
+      size="medium"
     />
   ),
 };
