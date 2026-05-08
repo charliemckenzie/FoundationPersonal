@@ -10,12 +10,32 @@ This design system targets **WCAG 2.2 Level AA** compliance. Every component mus
 
 ## Colour Contrast
 
-| Situation | Minimum ratio |
-|-----------|--------------|
-| Normal text (below 18pt / 14pt bold) | **4.5 : 1** |
-| Large text (18pt+ or 14pt+ bold) | **3 : 1** |
-| UI components and graphical objects | **3 : 1** |
-| Decorative content | No requirement |
+<table>
+  <thead>
+    <tr>
+      <th>Situation</th>
+      <th>Minimum ratio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Normal text (below 18pt / 14pt bold)</td>
+      <td><strong>4.5 : 1</strong></td>
+    </tr>
+    <tr>
+      <td>Large text (18pt+ or 14pt+ bold)</td>
+      <td><strong>3 : 1</strong></td>
+    </tr>
+    <tr>
+      <td>UI components and graphical objects</td>
+      <td><strong>3 : 1</strong></td>
+    </tr>
+    <tr>
+      <td>Decorative content</td>
+      <td>No requirement</td>
+    </tr>
+  </tbody>
+</table>
 
 All semantic text tokens are verified against all semantic background tokens. See the [Typography — Accessibility](/?path=/story/design-tokens-typography--accessibility) story for the full contrast matrix in light and dark mode.
 
@@ -91,15 +111,60 @@ All semantic text tokens are verified against all semantic background tokens. Se
 
 These criteria were added in 2.2 and are not covered by axe-core's default ruleset. Flanders checks each of these manually during every component review.
 
-| SC | Name | Level | What to check |
-|---|---|---|---|
-| 2.4.11 | Focus Not Obscured (Minimum) | AA | No sticky header or overlay completely hides a focused element |
-| 2.4.13 | Focus Appearance | AA | Focus indicator ≥ 2px thick, ≥ 3:1 contrast between focused and unfocused states |
-| 2.5.7 | Dragging Movements | AA | Any drag-and-drop action has a single-pointer alternative (e.g. click to pick up / click to drop) |
-| 2.5.8 | Target Size (Minimum) | AA | Interactive targets ≥ 24 × 24 CSS px, or offset from adjacent targets ≥ 24px |
-| 3.2.6 | Consistent Help | A | Help mechanisms (chat, contact) appear in the same location across pages |
-| 3.3.7 | Redundant Entry | A | Users are not asked to re-enter information already provided in the same session |
-| 3.3.8 | Accessible Authentication (Minimum) | AA | Login does not require solving a cognitive test (puzzle, image recognition) without an alternative |
+<table>
+  <thead>
+    <tr>
+      <th>SC</th>
+      <th>Name</th>
+      <th>Level</th>
+      <th>What to check</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>2.4.11</td>
+      <td>Focus Not Obscured (Minimum)</td>
+      <td>AA</td>
+      <td>No sticky header or overlay completely hides a focused element</td>
+    </tr>
+    <tr>
+      <td>2.4.13</td>
+      <td>Focus Appearance</td>
+      <td>AA</td>
+      <td>Focus indicator ≥ 2px thick, ≥ 3:1 contrast between focused and unfocused states</td>
+    </tr>
+    <tr>
+      <td>2.5.7</td>
+      <td>Dragging Movements</td>
+      <td>AA</td>
+      <td>Any drag-and-drop action has a single-pointer alternative (e.g. click to pick up / click to drop)</td>
+    </tr>
+    <tr>
+      <td>2.5.8</td>
+      <td>Target Size (Minimum)</td>
+      <td>AA</td>
+      <td>Interactive targets ≥ 24 × 24 CSS px, or offset from adjacent targets ≥ 24px</td>
+    </tr>
+    <tr>
+      <td>3.2.6</td>
+      <td>Consistent Help</td>
+      <td>A</td>
+      <td>Help mechanisms (chat, contact) appear in the same location across pages</td>
+    </tr>
+    <tr>
+      <td>3.3.7</td>
+      <td>Redundant Entry</td>
+      <td>A</td>
+      <td>Users are not asked to re-enter information already provided in the same session</td>
+    </tr>
+    <tr>
+      <td>3.3.8</td>
+      <td>Accessible Authentication (Minimum)</td>
+      <td>AA</td>
+      <td>Login does not require solving a cognitive test (puzzle, image recognition) without an alternative</td>
+    </tr>
+  </tbody>
+</table>
 
 ---
 

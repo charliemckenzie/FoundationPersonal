@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
@@ -26,8 +26,7 @@ const preview: Preview = {
       const mode = context.globals.colorScheme || 'light';
       const brandKey = context.globals.brand || 'foundation';
       const bgType = context.globals.backgroundColor || 'default';
-      const isDesignTokenStory = context.title?.startsWith('Design Tokens/');
-      
+
       // Create a theme instance with the selected brand and mode
       const brandConfig = brands[brandKey as keyof typeof brands];
       const brandTheme = createBrandTheme(brandConfig);
@@ -36,17 +35,21 @@ const preview: Preview = {
         ...themeConfig,
         palette: colorSchemes[mode].palette,
       });
-      
+
       return (
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {isDesignTokenStory ? (
-            <Box sx={{ bgcolor: `background.${bgType}`, minHeight: '100vh' }}>
-              <Story />
-            </Box>
-          ) : (
-            <Story />
-          )}
+          <GlobalStyles
+            styles={(t) => {
+              const bg = (t.palette.background as Record<string, string>)[bgType] ?? t.palette.background.default;
+              return {
+                'html, body, #storybook-root, .docs-story': {
+                  backgroundColor: `${bg} !important`,
+                },
+              };
+            }}
+          />
+          <Story />
         </ThemeProvider>
       );
     },

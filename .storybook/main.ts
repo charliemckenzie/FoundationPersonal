@@ -1,4 +1,5 @@
 import type { StorybookConfig } from '@storybook/nextjs-vite';
+import remarkGfm from 'remark-gfm';
 
 const config: StorybookConfig = {
   stories: [
@@ -17,6 +18,11 @@ const config: StorybookConfig = {
   },
   docs: {
     autodocs: 'tag',
+    mdxPluginOptions: {
+      mdxCompileOptions: {
+        remarkPlugins: [remarkGfm],
+      },
+    },
   },
   features: {
     onboarding: false,
