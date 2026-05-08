@@ -1,20 +1,6 @@
 import { createTheme, lighten, darken, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
-import { red, amber, blue, green } from './primitives/colors';
-
-const ALERT_BORDER_LIGHT: Record<string, string> = {
-  error:   red[100],
-  warning: amber[100],
-  info:    blue[100],
-  success: green[100],
-};
-const ALERT_BORDER_DARK: Record<string, string> = {
-  error:   red[900],
-  warning: amber[900],
-  info:    blue[900],
-  success: green[900],
-};
 import type React from 'react';
 
 declare module '@mui/material/Button' {
@@ -118,9 +104,15 @@ declare module '@mui/material/styles' {
 
   interface PaletteColor {
     text: string;
+    icon: string;
+    background: string;
+    border: string;
   }
   interface SimplePaletteColorOptions {
     text?: string;
+    icon?: string;
+    background?: string;
+    border?: string;
   }
 
   interface PaletteOptions {
@@ -351,35 +343,25 @@ export function createBrandTheme(brand: BrandConfig) {
             borderRadius: '8px',
             alignItems: 'center',
             gap: '12px',
-            ...(ownerState.variant === 'standard' && ownerState.severity && {
-              border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
-              ...theme.applyStyles('dark', {
-                border: `1px solid ${ALERT_BORDER_DARK[ownerState.severity]}`,
-              }),
-            }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'error' && {
-              backgroundColor: red[50],
-              ...theme.applyStyles('dark', {
-                backgroundColor: red[950],
-              }),
+              backgroundColor: theme.palette.error.background,
+              color:           theme.palette.error.text,
+              border:          `1px solid ${theme.palette.error.border}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'warning' && {
-              backgroundColor: amber[50],
-              ...theme.applyStyles('dark', {
-                backgroundColor: amber[950],
-              }),
+              backgroundColor: theme.palette.warning.background,
+              color:           theme.palette.warning.text,
+              border:          `1px solid ${theme.palette.warning.border}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'info' && {
-              backgroundColor: blue[50],
-              ...theme.applyStyles('dark', {
-                backgroundColor: blue[950],
-              }),
+              backgroundColor: theme.palette.info.background,
+              color:           theme.palette.info.text,
+              border:          `1px solid ${theme.palette.info.border}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'success' && {
-              backgroundColor: green[50],
-              ...theme.applyStyles('dark', {
-                backgroundColor: green[950],
-              }),
+              backgroundColor: theme.palette.success.background,
+              color:           theme.palette.success.text,
+              border:          `1px solid ${theme.palette.success.border}`,
             }),
           }),
           icon: {

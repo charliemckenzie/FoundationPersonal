@@ -18,8 +18,8 @@ export interface AlertProps {
 }
 
 export const SEVERITY_ICONS = {
-  error: 'xmark',
-  warning: 'triangle-exclamation',
+  error: 'circle-exclamation',
+  warning: 'circle-exclamation',
   info: 'circle-info',
   success: 'circle-check',
 } as const;
@@ -68,7 +68,7 @@ export function Alert({
         gap: action ? { xs: 1.5, sm: 2 } : 2,
       }}>
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-          {icon && <Box sx={{ display: 'flex', mt: '2px' }}>{icon}</Box>}
+          {icon && <Box sx={{ display: 'flex', mt: '2px', color: `${severity}.icon` }}>{icon}</Box>}
           <Box>
             {title && <AlertTitle component="h4" sx={{ fontWeight: 'fontWeightBold', fontSize: 'inherit', m: 0 }}>{title}</AlertTitle>}
             <Box component="span" sx={visiblyHiddenSx}>{SEVERITY_LABELS[severity]}: </Box>

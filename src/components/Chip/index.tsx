@@ -1,40 +1,27 @@
 import MuiChip from '@mui/material/Chip';
 import type { Theme } from '@mui/material/styles';
+import { cloneElement, isValidElement, type ReactElement } from 'react';
 import type React from 'react';
-import { red, amber, blue, green } from '../../app/themes/primitives/colors';
 
 export type ChipVariant = 'filled' | 'outlined';
 export type ChipColor = 'default' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 export type ChipSize = 'small' | 'medium';
 export type ChipSeverity = 'error' | 'warning' | 'info' | 'success';
 
-// Mirrors factory.ts MuiAlert standard-variant colour overrides exactly.
-const ALERT_BG_LIGHT: Record<ChipSeverity, string> = {
-  error:   red[50],
-  warning: amber[50],
-  info:    blue[50],
-  success: green[50],
-};
-const ALERT_BG_DARK: Record<ChipSeverity, string> = {
-  error:   red[950],
-  warning: amber[950],
-  info:    blue[950],
-  success: green[950],
-};
-
-function alertSx(severity: ChipSeverity) {
+function alertSx(severity: ChipSeverity, hasIcon: boolean) {
   return {
     '& .MuiChip-label': {
-      paddingLeft: '10px',
+      paddingLeft: hasIcon ? '4px' : '10px',
       paddingRight: '10px',
     },
     '& .MuiChip-icon': {
-      color: 'inherit',
+      marginLeft: '0px',
+      marginRight: '-2px',
     },
     '& .MuiChip-deleteIcon': { color: 'inherit' },
-    backgroundColor: (theme: Theme) =>
-      theme.palette.mode === 'dark' ? ALERT_BG_DARK[severity] : ALERT_BG_LIGHT[severity],
+    backgroundColor: (theme: Theme) => theme.palette[severity].background,
     color: (theme: Theme) => theme.palette[severity].text,
+    border: (theme: Theme) => `1px solid ${theme.palette[severity].border}`,
   };
 }
 
@@ -67,6 +54,9 @@ export function Chip({
   severity,
 }: ChipProps) {
   const isSeverity = Boolean(severity);
+  const resolvedIcon = isSeverity && icon && isValidElement(icon)
+    ? <span style={{ marginLeft: '2px', display: 'inline-flex' }}>{cloneElement(icon as ReactElement<{ size?: string; color?: string }>, { size: 'lg', color: severity })}</span>
+    : icon;
 
   return (
     <MuiChip
@@ -74,13 +64,13 @@ export function Chip({
       variant={isSeverity ? 'filled' : variant}
       color={isSeverity ? severity : color}
       size={isSeverity ? 'small' : size}
-      icon={icon}
+      icon={resolvedIcon}
       avatar={avatar}
       disabled={disabled}
       clickable={clickable}
       onDelete={onDelete}
       onClick={onClick}
-      sx={isSeverity ? alertSx(severity as ChipSeverity) : undefined}
+      sx={isSeverity ? alertSx(severity as ChipSeverity, Boolean(icon)) : undefined}
     />
   );
 }

@@ -41,8 +41,8 @@ export const Alert: Story = {
         <Chip label="Success" severity="success" />
       </div>
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-        <Chip label="Error" severity="error" icon={<Icon icon="xmark" size="md" color="inherit" />} />
-        <Chip label="Warning" severity="warning" icon={<Icon icon="triangle-exclamation" size="md" color="inherit" />} />
+        <Chip label="Error" severity="error" icon={<Icon icon="circle-exclamation" size="md" color="inherit" />} />
+        <Chip label="Warning" severity="warning" icon={<Icon icon="circle-exclamation" size="md" color="inherit" />} />
         <Chip label="Info" severity="info" icon={<Icon icon="circle-info" size="md" color="inherit" />} />
         <Chip label="Success" severity="success" icon={<Icon icon="circle-check" size="md" color="inherit" />} />
       </div>

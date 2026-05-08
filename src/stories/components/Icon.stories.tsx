@@ -25,6 +25,7 @@ const FONT_AWESOME_ICONS = [
   'chevron-up',
   'circle-check',
   'circle-dollar',
+  'circle-exclamation',
   'circle-info',
   'circle-minus',
   'circle-plus',

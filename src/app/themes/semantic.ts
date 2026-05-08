@@ -22,6 +22,9 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       main:         red[600],
       dark:         red[700],
       text:         red[800],
+      icon:         red[600],
+      background:   red[50],
+      border:       red[100],
       contrastText: white,
     },
     warning: {
@@ -29,6 +32,9 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       main:         amber[600],
       dark:         amber[700],
       text:         amber[800],
+      icon:         amber[600],
+      background:   amber[50],
+      border:       amber[100],
       contrastText: black,
     },
     info: {
@@ -36,6 +42,9 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       main:         blue[600],
       dark:         blue[700],
       text:         blue[800],
+      icon:         blue[600],
+      background:   blue[50],
+      border:       blue[100],
       contrastText: white,
     },
     success: {
@@ -43,6 +52,9 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       main:         green[600],
       dark:         green[700],
       text:         green[800],
+      icon:         green[600],
+      background:   green[50],
+      border:       green[100],
       contrastText: white,
     },
 
@@ -143,6 +155,9 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       main:         red[400],
       dark:         red[600],
       text:         red[300],
+      icon:         red[400],
+      background:   red[950],
+      border:       red[900],
       contrastText: white,
     },
     warning: {
@@ -150,6 +165,9 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       main:         amber[400],
       dark:         amber[500],
       text:         amber[300],
+      icon:         amber[400],
+      background:   amber[950],
+      border:       amber[900],
       contrastText: black,
     },
     info: {
@@ -157,6 +175,9 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       main:         blue[400],
       dark:         blue[600],
       text:         blue[300],
+      icon:         blue[400],
+      background:   blue[950],
+      border:       blue[900],
       contrastText: white,
     },
     success: {
@@ -164,6 +185,9 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       main:         green[400],
       dark:         green[600],
       text:         green[300],
+      icon:         green[400],
+      background:   green[950],
+      border:       green[900],
       contrastText: black,
     },
 
