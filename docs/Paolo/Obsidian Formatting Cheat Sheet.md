@@ -120,6 +120,14 @@ const name = "Foundation";
 
 ---
 
+## Related
+
+- [[Tech Glossary]] — definitions for Foundation design system terms
+- [[accessibility-audit-todo]] — WCAG 2.2 audit log
+- [[Issues & Open Questions]] — active bugs and open questions
+
+---
+
 ## Horizontal Rule
 
 ```

@@ -1,6 +1,9 @@
-# Foundation — Accessibility Audit Todo
+# Foundation — Accessibility Audit
 
 Full WCAG 2.2 AA audit of Foundation design system (Theme A). Audit date: 2026-04-21. Report only — no changes made yet.
+
+> [!tip] Terminology
+> Unfamiliar with WCAG or SC references? See [[Tech Glossary]] for plain-English definitions.
 
 ---
 
@@ -77,6 +80,12 @@ For reference — these were audited and confirmed compliant:
 - All interactive button target sizes ≥ 36px height (SC 2.5.8 pass)
 
 ---
+
+## Related
+
+- [[Issues & Open Questions]] — ongoing bugs and design decisions not yet in the formal audit
+- [[Tech Glossary]] — plain-English definitions for WCAG, accessibility terms, and design system concepts
+- [[Obsidian Formatting Cheat Sheet]] — formatting reference
 
 ## Context
 

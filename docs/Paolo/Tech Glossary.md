@@ -31,6 +31,15 @@ Our component library. MUI provides the base components — buttons, text fields
 ### Theme tokens
 Named design values instead of raw numbers. Rather than writing `color: #005BBB`, we write `color: primary.main`. The token resolves to the right colour for whichever brand (ART or QSuper) is active. Change the token once → everything updates.
 
+### Surface tokens
+Define the background colours that UI sits on top of. There are three levels:
+
+- **Default** — the page background. The outermost layer everything sits on.
+- **Paper** — a raised surface. Cards, panels, drawers — anything that sits above the page.
+- **Elevated** — a further-raised surface. Dropdowns, tooltips, hover states — things that float above paper.
+
+Think of it as a physical stack: Default → Paper → Elevated, each one slightly lighter (light mode) or darker (dark mode) to create visual depth. They're sourced from the brand's neutral scale (greys), so swapping the brand token updates all surfaces automatically.
+
 ### Emotion
 The styling engine that MUI uses behind the scenes. It converts our `sx={{ ... }}` prop shorthand into real CSS. You'll rarely see it mentioned directly.
 
@@ -104,3 +113,11 @@ Testing tools. Vitest handles unit tests (does this function return the right va
 
 ### Chromatic
 A cloud service connected to Storybook. It takes visual snapshots of every story and flags when something changes visually — useful for catching accidental regressions.
+
+---
+
+## Related
+
+- [[accessibility-audit-todo]] — WCAG 2.2 AA audit of Foundation. See this for real-world examples of the a11y concepts above.
+- [[Issues & Open Questions]] — active bugs and open design decisions
+- [[Obsidian Formatting Cheat Sheet]] — formatting reference
