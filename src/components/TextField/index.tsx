@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { alpha } from '@mui/material/styles';
 import MuiTextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormLabel from '@mui/material/FormLabel';
@@ -86,11 +87,18 @@ export function TextField({
         name={name}
         autoComplete={autoComplete}
         slotProps={{
-          formHelperText: error ? { role: 'alert' } : undefined,
+          formHelperText: { ...(error ? { role: 'alert' } : {}), sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
               fontSize: '1rem',
               borderRadius: `${theme.shape.sm}px`,
+              backgroundColor: theme.palette.background.paper,
+              '&.Mui-disabled': {
+                backgroundColor: alpha(theme.palette.background.default, 0.6),
+              },
+              '&&.Mui-disabled fieldset': {
+                borderColor: alpha(theme.palette.border.input, 0.6),
+              },
               '& .MuiOutlinedInput-input': {
                 paddingTop: '12px',
                 paddingBottom: '12px',

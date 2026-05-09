@@ -13,8 +13,25 @@ const meta: Meta<typeof Select> = {
   component: Select,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
+  args: {
+    error: false,
+    required: false,
+    disabled: false,
+    fullWidth: false,
+    native: false,
+  },
   argTypes: {
-    size: { control: 'select', options: ['small', 'medium'] },
+    size: { table: { disable: true } },
+    error: { control: 'boolean' },
+    required: { control: 'boolean' },
+    disabled: { control: 'boolean' },
+    fullWidth: { control: 'boolean' },
+    native: { control: 'boolean' },
+    onChange: { table: { disable: true } },
+    id: { table: { disable: true } },
+    name: { table: { disable: true } },
+    value: { table: { disable: true } },
+    defaultValue: { table: { disable: true } },
   },
 };
 
@@ -43,14 +60,6 @@ export const WithLabels: Story = {
   ),
 };
 
-export const Sizes: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 240 }}>
-      <Select label="Small" options={FRUIT_OPTIONS} size="small" placeholder="Select a fruit" />
-      <Select label="Medium" options={FRUIT_OPTIONS} size="medium" placeholder="Select a fruit" />
-    </div>
-  ),
-};
 
 export const WithHelperText: Story = {
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', helperText: 'Pick your favourite.' },
@@ -70,4 +79,36 @@ export const Required: Story = {
 export const Disabled: Story = {
   args: { label: 'Fruit', options: FRUIT_OPTIONS, disabled: true, defaultValue: 'apple' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
+};
+
+export const Native: Story = {
+  args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', native: true },
+  decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
+  parameters: {
+    docs: {
+      description: {
+        story: [
+          'Renders a native `<select>` element instead of the custom MUI dropdown. Use it when:',
+          '',
+          '- **Autocomplete matters** — browsers surface native selects in OS-level autofill, which the custom dropdown cannot participate in.',
+          '- **Mobile form UX** — native selects trigger the platform\'s built-in picker (iOS scroll wheel, Android bottom sheet), which users expect in form contexts.',
+          '- **Accessibility in constrained environments** — assistive technologies and older browsers have deeper, more reliable support for native form controls.',
+          '- **Long option lists** — the OS picker handles scroll and search natively without custom implementation.',
+          '',
+          'Use the default (custom) variant when you need placeholder text, custom option rendering, or the mobile bottom-drawer behaviour.',
+        ].join('\n'),
+      },
+    },
+  },
+};
+
+export const NativeStates: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 240 }}>
+      <Select label="Default" options={FRUIT_OPTIONS} placeholder="Select a fruit" native />
+      <Select label="With value" options={FRUIT_OPTIONS} defaultValue="apple" native />
+      <Select label="Error" options={FRUIT_OPTIONS} placeholder="Select a fruit" native error helperText="Please select an option." />
+      <Select label="Disabled" options={FRUIT_OPTIONS} native disabled defaultValue="banana" />
+    </div>
+  ),
 };
