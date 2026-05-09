@@ -475,6 +475,22 @@ export function createBrandTheme(brand: BrandConfig) {
           },
         },
       },
+      MuiFormLabel: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '&.Mui-focused': {
+              color: theme.palette.text.primary,
+            },
+          }),
+        },
+      },
+      MuiFormControlLabel: {
+        styleOverrides: {
+          label: {
+            fontSize: '1rem',
+          },
+        },
+      },
       MuiCheckbox: {
         styleOverrides: {
           root: ({ ownerState, theme }) => {
@@ -493,18 +509,18 @@ export function createBrandTheme(brand: BrandConfig) {
       },
       MuiRadio: {
         styleOverrides: {
-          root: ({ ownerState, theme }) => {
-            const colorKey = (ownerState.color === 'default' ? null : ownerState.color) as keyof typeof theme.palette | null;
-            const palette = colorKey ? theme.palette[colorKey] as { main?: string } | undefined : undefined;
-            const ringColor = palette?.main ?? theme.palette.action.active;
-            return {
-              '&.Mui-focusVisible': {
-                outline: `2px solid ${ringColor}`,
-                outlineOffset: '2px',
-                boxShadow: 'none',
-              },
-            };
-          },
+          root: ({ theme }) => ({
+            '&.Mui-focusVisible, &.Mui-checked.Mui-focusVisible': {
+              outline: `2px solid ${theme.palette.border.focus}`,
+              outlineOffset: '2px',
+              boxShadow: 'none',
+              backgroundColor: 'transparent',
+            },
+            '& input[type="radio"]': {
+              appearance: 'none',
+              WebkitAppearance: 'none',
+            },
+          }),
         },
       },
       MuiToggleButton: {

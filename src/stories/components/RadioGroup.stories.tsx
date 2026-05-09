@@ -12,11 +12,18 @@ const meta: Meta<typeof RadioGroup> = {
   title: 'Form Components / RadioGroup',
   component: RadioGroup,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    controls: { exclude: ['defaultValue', 'value', 'onChange', 'name'] },
+  },
+  args: {
+    legendBold: true,
+  },
   argTypes: {
     direction: { control: 'select', options: ['column', 'row'] },
-    color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
-    size: { control: 'select', options: ['small', 'medium'] },
+    legendBold: { control: 'boolean' },
+    color: { table: { disable: true } },
+    size: { table: { disable: true } },
   },
 };
 
@@ -29,16 +36,6 @@ export const Default: Story = {
 
 export const Row: Story = {
   args: { legend: 'Size', options: SIZE_OPTIONS, direction: 'row', defaultValue: 'sm' },
-};
-
-export const Colors: Story = {
-  render: () => (
-    <div style={{ display: 'flex', gap: 40 }}>
-      <RadioGroup legend="Primary" options={SIZE_OPTIONS.slice(0, 2)} color="primary" defaultValue="xs" />
-      <RadioGroup legend="Secondary" options={SIZE_OPTIONS.slice(0, 2)} color="secondary" defaultValue="xs" />
-      <RadioGroup legend="Error" options={SIZE_OPTIONS.slice(0, 2)} color="error" defaultValue="xs" />
-    </div>
-  ),
 };
 
 export const WithHelperText: Story = {

@@ -170,6 +170,7 @@ export function Dialog({
           size="small"
           onClick={onClose}
           aria-label="Close"
+          disableRipple
           sx={(t) => ({
             position: 'absolute',
             top: t.spacing(2),
@@ -177,7 +178,6 @@ export function Dialog({
             width: t.spacing(4),
             height: t.spacing(4),
             borderRadius: '50%',
-            '& .MuiTouchRipple-root': { display: 'none' },
             ...buildSoftStyles('secondary'),
             color: 'inherit',
           })}

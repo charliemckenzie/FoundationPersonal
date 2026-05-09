@@ -1,5 +1,8 @@
+import { useId } from 'react';
 import MuiTextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
+import FormLabel from '@mui/material/FormLabel';
+import Box from '@mui/material/Box';
 import type React from 'react';
 
 export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
@@ -50,37 +53,76 @@ export function TextField({
   name,
   autoComplete,
 }: TextFieldProps) {
+  const generatedId = useId();
+  const fieldId = id ?? generatedId;
+
   return (
-    <MuiTextField
-      label={label}
-      value={value}
-      defaultValue={defaultValue}
-      placeholder={placeholder}
-      type={type}
-      size={size}
-      helperText={helperText}
-      error={error}
-      required={required}
-      disabled={disabled}
-      fullWidth={fullWidth}
-      multiline={multiline}
-      rows={rows}
-      onChange={onChange}
-      onBlur={onBlur}
-      id={id}
-      name={name}
-      autoComplete={autoComplete}
-      slotProps={{
-        formHelperText: error ? { role: 'alert' } : undefined,
-        input: {
-          startAdornment: startAdornment ? (
-            <InputAdornment position="start">{startAdornment}</InputAdornment>
-          ) : undefined,
-          endAdornment: endAdornment ? (
-            <InputAdornment position="end">{endAdornment}</InputAdornment>
-          ) : undefined,
-        },
-      }}
-    />
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>
+      <FormLabel
+        htmlFor={fieldId}
+        required={required}
+        error={error}
+        disabled={disabled}
+        sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+      >
+        {label}
+      </FormLabel>
+      <MuiTextField
+        value={value}
+        defaultValue={defaultValue}
+        placeholder={placeholder}
+        type={type}
+        size={size}
+        helperText={helperText}
+        error={error}
+        required={required}
+        disabled={disabled}
+        fullWidth={fullWidth}
+        multiline={multiline}
+        rows={rows}
+        onChange={onChange}
+        onBlur={onBlur}
+        id={fieldId}
+        name={name}
+        autoComplete={autoComplete}
+        slotProps={{
+          formHelperText: error ? { role: 'alert' } : undefined,
+          input: {
+            sx: (theme) => ({
+              fontSize: '1rem',
+              borderRadius: `${theme.shape.sm}px`,
+              '& .MuiOutlinedInput-input': {
+                paddingTop: '12px',
+                paddingBottom: '12px',
+              },
+              '& fieldset': {
+                borderColor: theme.palette.border.input,
+                borderRadius: `${theme.shape.sm}px`,
+              },
+              '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': {
+                borderColor: theme.palette.border.input,
+              },
+              '&.Mui-focused': {
+                outline: `2px solid ${theme.palette.border.focus}`,
+                outlineOffset: '2px',
+              },
+              '&&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                borderWidth: '1px',
+                borderColor: theme.palette.border.input,
+              },
+              '&&.Mui-focused.Mui-error .MuiOutlinedInput-notchedOutline': {
+                borderColor: theme.palette.error.main,
+              },
+            }),
+            startAdornment: startAdornment ? (
+              <InputAdornment position="start">{startAdornment}</InputAdornment>
+            ) : undefined,
+            endAdornment: endAdornment ? (
+              <InputAdornment position="end">{endAdornment}</InputAdornment>
+            ) : undefined,
+          },
+        }}
+      />
+    </Box>
   );
 }

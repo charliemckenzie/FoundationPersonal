@@ -1,0 +1,16 @@
+- generic [ref=e3]:
+  - generic [ref=e4]: Size
+  - radiogroup [ref=e5]:
+    - generic [ref=e6] [cursor=pointer]:
+      - radio "Extra small" [ref=e8]
+      - generic [ref=e10]: Extra small
+    - generic [ref=e11] [cursor=pointer]:
+      - radio "Small" [checked] [active] [ref=e13]
+      - generic [ref=e16]: Small
+    - generic [ref=e17] [cursor=pointer]:
+      - radio "Medium" [ref=e19]
+      - generic [ref=e21]: Medium
+    - generic [ref=e22]:
+      - generic:
+        - radio "Large" [disabled]
+      - generic [ref=e23]: Large

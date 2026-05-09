@@ -1,0 +1,75 @@
+- generic [ref=e3]:
+  - navigation "Global" [ref=e6]:
+    - generic [ref=e10]:
+      - generic [ref=e12]:
+        - link "Skip to canvas" [ref=e13] [cursor=pointer]:
+          - /url: "#storybook-preview-wrapper"
+        - link "Storybook" [ref=e15] [cursor=pointer]:
+          - /url: ./
+          - img "Storybook" [ref=e16]
+        - switch "Settings" [ref=e21] [cursor=pointer]:
+          - img [ref=e22]
+      - generic [ref=e25]: Search for components
+      - combobox "Search for components" [ref=e27]:
+        - generic:
+          - img
+        - searchbox "Search for components" [ref=e28]
+        - code: ⌃ K
+  - main [ref=e52]:
+    - region "Toolbar" [ref=e53]:
+      - heading "Toolbar" [level=2] [ref=e54]
+      - toolbar [ref=e55]:
+        - generic [ref=e56]:
+          - button "Reload story" [ref=e57] [cursor=pointer]:
+            - img [ref=e58]
+          - button "Zoom in" [ref=e60] [cursor=pointer]:
+            - img [ref=e61]
+          - button "Zoom out" [ref=e64] [cursor=pointer]:
+            - img [ref=e65]
+          - button "Reset zoom" [ref=e68] [cursor=pointer]:
+            - img [ref=e69]
+          - switch "Measure tool" [ref=e72] [cursor=pointer]:
+            - img [ref=e73]
+          - switch "Outline tool" [ref=e76] [cursor=pointer]:
+            - img [ref=e77]
+          - button "Viewport size" [ref=e79] [cursor=pointer]:
+            - img [ref=e80]
+          - button "Vision simulator" [ref=e84] [cursor=pointer]:
+            - img [ref=e85]
+          - generic:
+            - img
+        - generic [ref=e89]:
+          - button "Enter full screen" [ref=e90] [cursor=pointer]:
+            - img [ref=e91]
+          - button "Share" [ref=e93] [cursor=pointer]:
+            - img [ref=e94]
+    - region "Main preview area" [ref=e97]:
+      - heading "Main preview area" [level=2] [ref=e98]
+      - generic [ref=e99]:
+        - progressbar "Content is loading..." [ref=e101]
+        - generic [ref=e102]:
+          - link "Skip to sidebar" [ref=e103] [cursor=pointer]:
+            - /url: "#form-elements-select--default"
+          - iframe [ref=e104]:
+            
+  - region "Addon panel" [ref=e107]:
+    - heading "Addon panel" [level=2] [ref=e108]
+    - generic [ref=e109]:
+      - generic [ref=e110]:
+        - generic [ref=e111]:
+          - button "Move addon panel to right" [ref=e112] [cursor=pointer]:
+            - img [ref=e113]
+          - button "Hide addon panel" [ref=e116] [cursor=pointer]:
+            - img [ref=e117]
+        - tablist "Available addons" [ref=e122]:
+          - tab "Controls" [selected] [ref=e123] [cursor=pointer]:
+            - generic [ref=e125]: Controls
+          - tab "Actions" [ref=e126] [cursor=pointer]:
+            - generic [ref=e128]: Actions
+          - tab "Interactions" [ref=e129] [cursor=pointer]:
+            - generic [ref=e131]: Interactions
+          - tab "Visual tests" [ref=e132] [cursor=pointer]
+          - tab "Accessibility" [ref=e133] [cursor=pointer]:
+            - generic [ref=e135]: Accessibility
+          - tab "Code" [ref=e136] [cursor=pointer]
+      - tabpanel "Controls" [ref=e137]

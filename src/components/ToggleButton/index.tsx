@@ -64,7 +64,7 @@ export function ToggleButtonGroup({
       aria-label={ariaLabel}
     >
       {options.map((opt) => (
-        <MuiToggleButton key={opt.value} value={opt.value} disabled={opt.disabled} aria-label={opt.label}>
+        <MuiToggleButton key={opt.value} value={opt.value} disabled={opt.disabled} aria-label={opt.label} disableRipple>
           {opt.label}
         </MuiToggleButton>
       ))}

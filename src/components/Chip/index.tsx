@@ -117,6 +117,7 @@ export function Chip({
       clickable={clickable}
       onDelete={onDelete}
       onClick={onClick}
+      disableRipple
       sx={chipSx}
     />
   );

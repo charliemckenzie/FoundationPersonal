@@ -51,6 +51,7 @@ export function Switch({
             size={size}
             id={id}
             name={name}
+            disableRipple
             onChange={(e) => onChange?.(e.target.checked)}
           />
         }

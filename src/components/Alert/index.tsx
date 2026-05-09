@@ -83,7 +83,8 @@ export function Alert({
                 size="small"
                 onClick={onClose}
                 aria-label={`Dismiss ${SEVERITY_LABELS[severity]} alert`}
-                sx={{ width: 32, height: 32, borderRadius: '50%', '& .MuiTouchRipple-root': { display: 'none' }, ...buildSoftStyles(severity), color: 'inherit' }}
+                disableRipple
+                sx={{ width: 32, height: 32, borderRadius: '50%', ...buildSoftStyles(severity), color: 'inherit' }}
               >
                 <Icon icon="xmark" size="md" />
               </IconButton>
