@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import Box from '@mui/material/Box';
 import { TextButton } from '../../../components/TextButton';
-import { Icon } from '../../../components/Icon';
 import { useState } from 'react';
 import { BUTTON_ICON_OPTIONS } from '../../constants/buttonIcons';
 

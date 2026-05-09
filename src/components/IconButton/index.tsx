@@ -1,10 +1,10 @@
 import MuiIconButton from '@mui/material/IconButton';
-import type { Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
 import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
 import {
+  buildContainedStyles,
   buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
@@ -50,25 +50,6 @@ const SPINNER_SIZE_MAP: Record<IconButtonSize, 'small' | 'medium' | 'large'> = {
   large: 'medium',
 };
 
-function buildContainedStyles(color: ButtonColorKey) {
-  return {
-    backgroundColor: (theme: Theme) => theme.palette[color].main,
-    color: (theme: Theme) => theme.palette[color].contrastText,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) => theme.palette[color].dark,
-      boxShadow: 'none',
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette[color].dark,
-      boxShadow: 'none',
-    },
-    '&.Mui-disabled': {
-      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  };
-}
 
 export function IconButton({
   icon,

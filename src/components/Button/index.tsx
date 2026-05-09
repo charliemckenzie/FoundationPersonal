@@ -38,10 +38,10 @@ const iconSizeMap: Record<ButtonSize, IconSize> = {
   large: 'lg',
 };
 
-const sizeStyles: Record<ButtonSize, { height: number; paddingLeft: string; paddingRight: string }> = {
-  small:  { height: 36, paddingLeft: '16px', paddingRight: '16px' },
-  medium: { height: 48, paddingLeft: '24px', paddingRight: '24px' },
-  large:  { height: 56, paddingLeft: '28px', paddingRight: '28px' },
+const sizeStyles: Record<ButtonSize, { height: number; px: number }> = {
+  small:  { height: 36, px: 2 },
+  medium: { height: 48, px: 3 },
+  large:  { height: 56, px: 3.5 },
 };
 
 const containedStyles = {

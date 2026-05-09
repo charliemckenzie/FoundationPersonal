@@ -68,13 +68,6 @@ export function TextButton({
   // Track whether we're using default icons (for hover animation)
   const isUsingDefaultIcon = !startIcon && !endIcon;
 
-  // Font size mapping based on size
-  const fontSizeMap: Record<TextButtonSize, string> = {
-    small: '0.875rem',   // 14px
-    medium: '1rem',      // 16px
-    large: '1.125rem',   // 18px
-  };
-
   // Line height mapping
   const lineHeightMap: Record<TextButtonSize, number> = {
     small: 1.43,
@@ -107,7 +100,11 @@ export function TextButton({
         color: reversed
           ? (disabled ? alpha(theme.palette.common.white, 0.30) : theme.palette.common.white)
           : (disabled ? theme.palette.action.disabled : theme.palette[color].main),
-        fontSize: fontSizeMap[size],
+        fontSize: size === 'small'
+          ? (theme.typography.small as { fontSize?: string }).fontSize ?? '0.875rem'
+          : size === 'medium'
+            ? (theme.typography.body as { fontSize?: string }).fontSize ?? '1rem'
+            : '1.125rem', // No matching theme typography variant for 18px — intentional
         fontWeight: 700,
         lineHeight: lineHeightMap[size],
         fontFamily: theme.typography.fontFamily,

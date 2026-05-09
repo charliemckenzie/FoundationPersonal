@@ -48,7 +48,7 @@ export function QuickLinks({
           right: 0,
           bottom: 0,
           width: 48,
-          background: 'linear-gradient(to right, transparent, var(--QuickLinks-fadeBg, #fff))',
+          background: (t) => `linear-gradient(to right, transparent, var(--QuickLinks-fadeBg, ${t.palette.background.paper}))`,
           pointerEvents: 'none',
         },
       }}

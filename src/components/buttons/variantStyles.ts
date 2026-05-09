@@ -4,6 +4,26 @@ import type { Theme } from '@mui/material/styles';
 export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost' | 'soft';
 
+export function buildContainedStyles(color: ButtonColorKey) {
+  return {
+    backgroundColor: (theme: Theme) => theme.palette[color].main,
+    color: (theme: Theme) => theme.palette[color].contrastText,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => theme.palette[color].dark,
+      boxShadow: 'none',
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => theme.palette[color].dark,
+      boxShadow: 'none',
+    },
+    '&.Mui-disabled': {
+      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  };
+}
+
 export function buildSoftStyles(color: ButtonColorKey) {
   return {
     backgroundColor: (theme: Theme) =>

@@ -27,10 +27,10 @@ export interface TabsProps {
 }
 
 const SIZE_CONFIG = {
-  small:  { fontSize: '0.75rem',  py: 0.5,  px: 1.5, minHeight: 32 },
-  medium: { fontSize: '0.875rem', py: 1,    px: 2,   minHeight: 40 },
-  large:  { fontSize: '1rem',     py: 1,    px: 3,   minHeight: 48 },
-} satisfies Record<TabSize, { fontSize: string; py: number; px: number; minHeight: number }>;
+  small:  { py: 0.5, px: 1.5 },
+  medium: { py: 1,   px: 2 },
+  large:  { py: 1,   px: 3 },
+} satisfies Record<TabSize, { py: number; px: number }>;
 
 export function Tabs({
   label,
@@ -44,7 +44,14 @@ export function Tabs({
   const [active, setActive] = React.useState(defaultTab);
   const uid = React.useId();
   const theme = useTheme();
-  const { fontSize, py, px, minHeight } = SIZE_CONFIG[size];
+  const { py, px } = SIZE_CONFIG[size];
+  // '0.75rem' is intentionally below the 'small' typography variant for compact tab labels
+  const fontSize = size === 'small'
+    ? '0.75rem'
+    : size === 'medium'
+      ? (theme.typography.small as { fontSize?: string }).fontSize ?? '0.875rem'
+      : (theme.typography.body as { fontSize?: string }).fontSize ?? '1rem';
+  const minHeight = theme.spacing(size === 'small' ? 4 : size === 'medium' ? 5 : 6);
   const radius = `${theme.shape.button}px`;
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
