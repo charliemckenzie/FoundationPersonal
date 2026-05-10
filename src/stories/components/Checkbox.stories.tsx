@@ -47,6 +47,15 @@ export const ErrorState: Story = {
   args: { label: 'Accept terms', error: true, helperText: 'You must accept the terms to continue.' },
 };
 
+export const ErrorWithHelperText: Story = {
+  args: {
+    label: 'Accept terms',
+    error: true,
+    helperText: 'You must accept the terms before proceeding.',
+    errorMessage: 'This field is required.',
+  },
+};
+
 export const Disabled: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

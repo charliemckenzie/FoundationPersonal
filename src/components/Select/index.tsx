@@ -30,6 +30,7 @@ export interface SelectProps {
   placeholder?: string;
   size?: SelectSize;
   helperText?: string;
+  errorMessage?: string;
   error?: boolean;
   required?: boolean;
   disabled?: boolean;
@@ -48,6 +49,7 @@ export function Select({
   placeholder,
   size = 'medium',
   helperText,
+  errorMessage,
   error = false,
   required = false,
   disabled = false,
@@ -185,8 +187,17 @@ export function Select({
             ))
           )}
         </MuiSelect>
-        {helperText && <FormHelperText role={error ? 'alert' : undefined} sx={{ mx: 0 }}>{helperText}</FormHelperText>}
+        {helperText && (
+          <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ mx: 0 }}>
+            {helperText}
+          </FormHelperText>
+        )}
       </MuiFormControl>
+      {error && errorMessage && (
+        <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+          {errorMessage}
+        </FormHelperText>
+      )}
 
       {!native && (
         <Drawer

@@ -87,7 +87,7 @@ export function Chip({
   const smallLabelSx = {
     '& .MuiChip-label': {
       fontSize: (theme.typography.small as { fontSize?: string }).fontSize,
-      lineHeight: '24px',
+      lineHeight: 1.5,
     },
   };
   const iconLabelSx = {

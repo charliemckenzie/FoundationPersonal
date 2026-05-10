@@ -11,10 +11,10 @@ export interface SpinnerProps {
   label?: string;
 }
 
-const SIZE_MAP: Record<SpinnerSize, number> = {
-  small: 16,
-  medium: 24,
-  large: 40,
+const SIZE_MAP: Record<SpinnerSize, string> = {
+  small: '1rem',
+  medium: '1.5rem',
+  large: '2.5rem',
 };
 
 export function Spinner({ size = 'medium', color = 'primary', label }: SpinnerProps) {

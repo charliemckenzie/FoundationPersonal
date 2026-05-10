@@ -1,4 +1,4 @@
-import { createTheme, lighten, darken, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
+import { createTheme, lighten, darken, alpha, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
 import type React from 'react';
@@ -493,18 +493,15 @@ export function createBrandTheme(brand: BrandConfig) {
       },
       MuiCheckbox: {
         styleOverrides: {
-          root: ({ ownerState, theme }) => {
-            const colorKey = (ownerState.color === 'default' ? null : ownerState.color) as keyof typeof theme.palette | null;
-            const palette = colorKey ? theme.palette[colorKey] as { main?: string } | undefined : undefined;
-            const ringColor = palette?.main ?? theme.palette.action.active;
-            return {
-              '&.Mui-focusVisible': {
-                outline: `2px solid ${ringColor}`,
-                outlineOffset: '2px',
-                boxShadow: 'none',
-              },
-            };
-          },
+          root: ({ theme }) => ({
+            borderRadius: '0.25rem',
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${theme.palette.border.focus}`,
+              outlineOffset: '2px',
+              boxShadow: 'none',
+              backgroundColor: 'transparent',
+            },
+          }),
         },
       },
       MuiRadio: {
@@ -525,18 +522,57 @@ export function createBrandTheme(brand: BrandConfig) {
       },
       MuiToggleButton: {
         styleOverrides: {
-          root: ({ ownerState, theme }) => {
-            const colorKey = (ownerState.color === 'standard' ? null : ownerState.color) as keyof typeof theme.palette | null;
-            const palette = colorKey ? theme.palette[colorKey] as { main?: string } | undefined : undefined;
-            const ringColor = palette?.main ?? theme.palette.action.active;
-            return {
-              '&.Mui-focusVisible': {
-                outline: `2px solid ${ringColor}`,
-                outlineOffset: '2px',
-                boxShadow: 'none',
-              },
-            };
-          },
+          root: ({ ownerState, theme }) => ({
+            textTransform: 'none',
+            color: theme.palette.text.primary,
+            backgroundColor: theme.palette.background.paper,
+            borderColor: theme.palette.border.input,
+            borderRadius: '8px',
+            position: 'relative',
+            zIndex: 0,
+            height: ownerState.size === 'small' ? '2.25rem' : ownerState.size === 'large' ? '3.5rem' : '3rem',
+            '&.Mui-disabled': {
+              backgroundColor: alpha(theme.palette.background.default, 0.6),
+              borderColor: alpha(theme.palette.border.input, 0.6),
+              color: theme.palette.action.disabled,
+            },
+            '&.Mui-selected': {
+              borderColor: theme.palette.primary.main,
+              backgroundColor: theme.palette.primary.background,
+              color: theme.palette.primary.dark,
+              zIndex: 1,
+            },
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${theme.palette.border.focus}`,
+              outlineOffset: '2px',
+              boxShadow: 'none',
+              zIndex: 2,
+            },
+          }),
+        },
+      },
+      MuiToggleButtonGroup: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '& .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+              borderLeft: `1px solid ${theme.palette.border.input}`,
+            },
+            '& .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+              borderLeft: `1px solid ${theme.palette.primary.main}`,
+            },
+            '& .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+              borderLeft: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+              borderTop: `1px solid ${theme.palette.border.input}`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+              borderTop: `1px solid ${theme.palette.primary.main}`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+              borderTop: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
+            },
+          }),
         },
       },
       MuiTypography: {

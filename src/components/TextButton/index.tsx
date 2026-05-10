@@ -54,10 +54,10 @@ export function TextButton({
   const spinnerSize = spinnerSizeMap[size];
   
   // Fixed width for icon/spinner containers to prevent shifting
-  const iconContainerWidth: Record<TextButtonSize, number> = {
-    small: 16,   // spinner is 16px (larger than icon's 14px)
-    medium: 16,  // both icon and spinner are 16px
-    large: 24,   // spinner is 24px (larger than icon's 20px)
+  const iconContainerWidth: Record<TextButtonSize, string> = {
+    small: '1rem',
+    medium: '1rem',
+    large: '1.5rem',
   };
   
   // Default arrow icon when none specified

@@ -2,6 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import EmailIcon from '@mui/icons-material/Email';
 import SearchIcon from '@mui/icons-material/Search';
 import { TextField } from '../../components/TextField';
+import { MoneyField } from '../../components/MoneyField';
+import { PercentageField } from '../../components/PercentageField';
+import { DateOfBirthField } from '../../components/DateOfBirthField';
 
 const meta: Meta<typeof TextField> = {
   title: 'Form Components / TextField',
@@ -21,12 +24,12 @@ export const Default: Story = {
   args: { label: 'Username', placeholder: 'Enter username' },
 };
 
-export const WithLabels: Story = {
+export const NoLabels: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 320 }}>
-      <TextField label="Username" placeholder="Enter username" />
-      <TextField label="Email" type="email" placeholder="Enter email" />
-      <TextField label="Password" type="password" placeholder="Enter password" />
+      <TextField placeholder="Enter username" />
+      <TextField type="email" placeholder="Enter email" />
+      <TextField type="password" placeholder="Enter password" />
     </div>
   ),
 };
@@ -68,12 +71,32 @@ export const ErrorState: Story = {
   args: { label: 'Email', value: 'not-an-email', error: true, helperText: 'Enter a valid email address.' },
 };
 
+export const ErrorWithHelperText: Story = {
+  args: {
+    label: 'Username',
+    value: 'ab',
+    error: true,
+    helperText: 'Must be 3–20 characters.',
+    errorMessage: 'Username is too short.',
+  },
+};
+
 export const Required: Story = {
   args: { label: 'Full name', required: true, placeholder: 'Your full name' },
 };
 
 export const Disabled: Story = {
   args: { label: 'Disabled field', value: 'Cannot edit this', disabled: true },
+};
+
+export const Specialized: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 280 }}>
+      <DateOfBirthField />
+      <MoneyField label="Amount" placeholder="0" />
+      <PercentageField label="Rate" placeholder="0.00" />
+    </div>
+  ),
 };
 
 export const Multiline: Story = {

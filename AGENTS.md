@@ -23,6 +23,7 @@ Every agent on the team upholds these standards. No exceptions.
 - TypeScript strict mode — no `any`, no implicit types
 - Component props always explicitly typed with interfaces
 - MUI theme tokens only — zero hardcoded colours, spacing, or shadows anywhere in the codebase
+- **Rem-first sizing** — font sizes, icon sizes, and component sizes that contain text must use `rem` so they scale with browser zoom and user font preferences; line heights must be unitless (e.g. `1.5`, never `'24px'`); px is only acceptable for non-text structural values (borders, outlines, box-shadows)
 - No commented-out code committed; no `TODO` without a linked ticket
 - Functions ≤ 40 lines; components ≤ 200 lines — split if larger
 - Accessibility from the start: semantic HTML first, ARIA only when native elements can't serve
@@ -113,7 +114,7 @@ Lenny builds the UI. React, MUI, Next.js App Router — Lenny owns the frontend.
 - Ship a component without Chalmers, Flanders, and Marge sign-off
 - Use inline `style={{}}` props — use `sx` with theme tokens or Tailwind classes
 - Introduce new dependencies without checking with Smithers first
-- Define sizing constants (`SIZE_MAP`, `sizeStyles`, etc.) with hardcoded pixel or rem values — derive from `theme.spacing()` or match existing `theme.typography` variant sizes instead
+- Use `px` for sizes that affect text or scale with zoom — icon sizes, component sizes containing text, and font sizes must use `rem`; line heights must be unitless; derive from `theme.spacing()` or `theme.typography` where possible, otherwise use `rem` strings explicitly
 - Mix `sx` access patterns in the same component — use string shorthand (`'primary.main'`) for static colour tokens; use `(t) =>` callbacks only for conditional logic; never use `theme.palette.primary.main` object notation in `sx`
 - Duplicate variant style logic — before implementing contained/outlined/soft/ghost styles, check `src/components/buttons/` for shared helpers first
 - Ship a component over 200 lines — extract variant style objects and size maps into module-level constants or a hook before the component file gets there

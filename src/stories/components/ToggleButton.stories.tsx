@@ -20,7 +20,11 @@ const meta: Meta<typeof ToggleButtonGroup> = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    color: { control: 'select', options: ['standard', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
+    color: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+    exclusive: { table: { disable: true } },
+    defaultValue: { table: { disable: true } },
+    value: { table: { disable: true } },
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     orientation: { control: 'select', options: ['horizontal', 'vertical'] },
   },
@@ -47,14 +51,28 @@ export const Sizes: Story = {
   ),
 };
 
-export const Colors: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment" color="primary" defaultValue="left" />
-      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment" color="secondary" defaultValue="left" />
-      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment" color="success" defaultValue="left" />
-    </div>
-  ),
+const COUNTRY_OPTIONS = [
+  { value: 'au', label: 'Australia' },
+  { value: 'other', label: 'Outside Australia' },
+];
+
+export const WithLabel: Story = {
+  args: {
+    options: COUNTRY_OPTIONS,
+    ariaLabel: 'Select country',
+    defaultValue: 'au',
+    label: 'Select country',
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    options: COUNTRY_OPTIONS,
+    ariaLabel: 'Select country',
+    label: 'Select country',
+    error: true,
+    errorMessage: 'Please select a country to continue.',
+  },
 };
 
 export const Vertical: Story = {

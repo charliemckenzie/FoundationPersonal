@@ -35,13 +35,14 @@ export interface HeroIconProps {
   'aria-label'?: string;
 }
 
+// rem units — scales with browser font size / zoom
 const SIZE_MAP: Record<HeroIconSize, number> = {
-  sm: 24,
-  md: 32,
-  lg: 48,
-  xl: 64,
-  '2xl': 80,
-  '3xl': 96,
+  sm: 1.5,
+  md: 2,
+  lg: 3,
+  xl: 4,
+  '2xl': 5,
+  '3xl': 6,
 };
 
 const CONTAINER_RATIO = 1.75;
@@ -69,9 +70,10 @@ export function HeroIcon({
   iconColor = 'default',
   'aria-label': ariaLabel,
 }: HeroIconProps) {
-  const px = SIZE_MAP[size];
+  const sizeRem = SIZE_MAP[size];
+  const iconSize = `${sizeRem}rem`;
+  const containerSize = `${sizeRem * CONTAINER_RATIO}rem`;
   const bgColor = BG_COLOR[brand][background];
-  const containerSize = Math.round(px * CONTAINER_RATIO);
   const iconSrc = `/icons/${brand}/${encodeURIComponent(name)}.svg`;
 
   // quaternary: CSS mask tints the monochrome SVG to quaternary.main;
@@ -82,8 +84,8 @@ export function HeroIcon({
       aria-label={ariaLabel}
       aria-hidden={ariaLabel ? undefined : true}
       sx={{
-        width: px,
-        height: px,
+        width: iconSize,
+        height: iconSize,
         display: 'block',
         flexShrink: 0,
         bgcolor: 'quaternary.main',
@@ -103,7 +105,7 @@ export function HeroIcon({
       src={iconSrc}
       alt={ariaLabel ?? ''}
       aria-hidden={ariaLabel ? undefined : true}
-      sx={{ width: px, height: px, objectFit: 'contain', display: 'block',
+      sx={{ width: iconSize, height: iconSize, objectFit: 'contain', display: 'block',
         filter: iconColor === 'white' ? 'brightness(0) invert(1)' : undefined }}
     />
   );

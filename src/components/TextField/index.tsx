@@ -3,20 +3,22 @@ import { alpha } from '@mui/material/styles';
 import MuiTextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormLabel from '@mui/material/FormLabel';
+import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type React from 'react';
 
-export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search';
+export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date';
 export type TextFieldSize = 'small' | 'medium';
 
 export interface TextFieldProps {
-  label: string;
+  label?: string;
   value?: string;
   defaultValue?: string;
   placeholder?: string;
   type?: TextFieldType;
   size?: TextFieldSize;
   helperText?: string;
+  errorMessage?: string;
   error?: boolean;
   required?: boolean;
   disabled?: boolean;
@@ -27,6 +29,8 @@ export interface TextFieldProps {
   endAdornment?: React.ReactNode;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
+  onFocus?: React.FocusEventHandler<HTMLInputElement>;
+  htmlInputProps?: React.InputHTMLAttributes<HTMLInputElement>;
   id?: string;
   name?: string;
   autoComplete?: string;
@@ -40,6 +44,7 @@ export function TextField({
   type = 'text',
   size = 'medium',
   helperText,
+  errorMessage,
   error = false,
   required = false,
   disabled = false,
@@ -50,6 +55,8 @@ export function TextField({
   endAdornment,
   onChange,
   onBlur,
+  onFocus,
+  htmlInputProps,
   id,
   name,
   autoComplete,
@@ -59,15 +66,17 @@ export function TextField({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>
-      <FormLabel
-        htmlFor={fieldId}
-        required={required}
-        error={error}
-        disabled={disabled}
-        sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
-      >
-        {label}
-      </FormLabel>
+      {label && (
+        <FormLabel
+          htmlFor={fieldId}
+          required={required}
+          error={error}
+          disabled={disabled}
+          sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+        >
+          {label}
+        </FormLabel>
+      )}
       <MuiTextField
         value={value}
         defaultValue={defaultValue}
@@ -83,15 +92,22 @@ export function TextField({
         rows={rows}
         onChange={onChange}
         onBlur={onBlur}
+        onFocus={onFocus}
         id={fieldId}
         name={name}
         autoComplete={autoComplete}
         slotProps={{
-          formHelperText: { ...(error ? { role: 'alert' } : {}), sx: { mx: 0 } },
+          ...(htmlInputProps && { htmlInput: htmlInputProps }),
+          formHelperText: { role: error && !errorMessage ? 'alert' : undefined, error: errorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
               fontSize: '1rem',
               borderRadius: `${theme.shape.sm}px`,
+              '& .MuiInputAdornment-root': {
+                alignSelf: 'stretch',
+                alignItems: 'center',
+                maxHeight: 'none',
+              },
               backgroundColor: theme.palette.background.paper,
               '&.Mui-disabled': {
                 backgroundColor: alpha(theme.palette.background.default, 0.6),
@@ -99,10 +115,12 @@ export function TextField({
               '&&.Mui-disabled fieldset': {
                 borderColor: alpha(theme.palette.border.input, 0.6),
               },
-              '& .MuiOutlinedInput-input': {
-                paddingTop: '12px',
-                paddingBottom: '12px',
-              },
+              ...(!multiline && {
+                '& .MuiOutlinedInput-input': {
+                  paddingTop: '12px',
+                  paddingBottom: '12px',
+                },
+              }),
               '& fieldset': {
                 borderColor: theme.palette.border.input,
                 borderRadius: `${theme.shape.sm}px`,
@@ -131,6 +149,11 @@ export function TextField({
           },
         }}
       />
+      {error && errorMessage && (
+        <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+          {errorMessage}
+        </FormHelperText>
+      )}
     </Box>
   );
 }

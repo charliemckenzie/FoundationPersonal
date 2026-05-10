@@ -71,6 +71,18 @@ export const ErrorState: Story = {
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
+export const ErrorWithHelperText: Story = {
+  args: {
+    label: 'Fruit',
+    options: FRUIT_OPTIONS,
+    placeholder: 'Select a fruit',
+    error: true,
+    helperText: 'Pick your favourite.',
+    errorMessage: 'Please select an option.',
+  },
+  decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
+};
+
 export const Required: Story = {
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', required: true },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],

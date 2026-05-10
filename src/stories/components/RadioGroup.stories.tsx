@@ -46,6 +46,16 @@ export const ErrorState: Story = {
   args: { legend: 'Size', options: SIZE_OPTIONS, error: true, helperText: 'Please select a size.' },
 };
 
+export const ErrorWithHelperText: Story = {
+  args: {
+    legend: 'T-shirt size',
+    options: SIZE_OPTIONS,
+    error: true,
+    helperText: 'This cannot be changed after ordering.',
+    errorMessage: 'Please select a size.',
+  },
+};
+
 export const Disabled: Story = {
   args: { legend: 'Size', options: SIZE_OPTIONS, disabled: true, defaultValue: 'sm' },
 };

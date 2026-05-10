@@ -5,19 +5,23 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles';
 
-const RadioUncheckedIcon = () => (
+const RadioUncheckedIcon = ({ disabled }: { disabled?: boolean }) => (
   <Box
     component="span"
-    sx={{
+    sx={(theme) => ({
       width: '1.5rem',
       height: '1.5rem',
       border: '1px solid',
-      borderColor: 'border.input',
+      borderColor: disabled ? alpha(theme.palette.border.input, 0.6) : 'border.input',
       borderRadius: '50%',
       display: 'inline-block',
       boxSizing: 'border-box',
-    }}
+      backgroundColor: disabled
+        ? alpha(theme.palette.background.default, 0.6)
+        : theme.palette.background.paper,
+    })}
   />
 );
 
@@ -59,7 +63,7 @@ export type RadioColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' 
 export type RadioSize = 'small' | 'medium';
 
 export interface RadioGroupProps {
-  legend: string;
+  legend?: string;
   options: RadioOption[];
   value?: string;
   defaultValue?: string;
@@ -67,6 +71,7 @@ export interface RadioGroupProps {
   color?: RadioColor;
   size?: RadioSize;
   helperText?: string;
+  errorMessage?: string;
   error?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -84,6 +89,7 @@ export function RadioGroup({
   color = 'primary',
   size = 'medium',
   helperText,
+  errorMessage,
   error = false,
   disabled = false,
   required = false,
@@ -93,19 +99,21 @@ export function RadioGroup({
 }: RadioGroupProps) {
   return (
     <FormControl error={error} disabled={disabled} required={required}>
-      <FormLabel
-        sx={{
-          color: 'text.primary',
-          fontSize: '1rem',
-          fontWeight: legendBold ? 600 : 400,
-          mb: 1,
-          '&.Mui-focused': { color: 'text.primary' },
-          '&.Mui-error': { color: 'error.main' },
-          '&.Mui-disabled': { color: 'text.disabled' },
-        }}
-      >
-        {legend}
-      </FormLabel>
+      {legend && (
+        <FormLabel
+          sx={{
+            color: 'text.primary',
+            fontSize: '1rem',
+            fontWeight: legendBold ? 600 : 400,
+            mb: 1,
+            '&.Mui-focused': { color: 'text.primary' },
+            '&.Mui-error': { color: 'error.main' },
+            '&.Mui-disabled': { color: 'text.disabled' },
+          }}
+        >
+          {legend}
+        </FormLabel>
+      )}
       <MuiRadioGroup
         value={value}
         defaultValue={defaultValue}
@@ -121,11 +129,20 @@ export function RadioGroup({
             label={option.label}
             disabled={option.disabled}
             sx={{ ml: 0, gap: 1 }}
-            control={<Radio color={color} size={size} disableRipple icon={<RadioUncheckedIcon />} checkedIcon={<RadioCheckedIcon />} sx={{ p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }} />}
+            control={<Radio color={color} size={size} disableRipple disableTouchRipple icon={<RadioUncheckedIcon disabled={disabled || option.disabled} />} checkedIcon={<RadioCheckedIcon />} sx={{ p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }} />}
           />
         ))}
       </MuiRadioGroup>
-      {helperText && <FormHelperText role={error ? 'alert' : undefined} sx={{ ml: 0 }}>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+          {helperText}
+        </FormHelperText>
+      )}
+      {error && errorMessage && (
+        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+          {errorMessage}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }

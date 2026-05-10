@@ -3,20 +3,28 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles';
 import { Icon } from '../Icon';
 
-const CheckboxUncheckedIcon = ({ error }: { error?: boolean }) => (
+const CheckboxUncheckedIcon = ({ error, disabled }: { error?: boolean; disabled?: boolean }) => (
   <Box
     component="span"
-    sx={{
+    sx={(theme) => ({
       width: '1.5rem',
       height: '1.5rem',
       border: '1px solid',
-      borderColor: error ? 'error.main' : 'border.input',
+      borderColor: disabled
+        ? alpha(theme.palette.border.input, 0.6)
+        : error
+        ? 'error.main'
+        : 'border.input',
       borderRadius: '0.25rem',
       display: 'inline-block',
       boxSizing: 'border-box',
-    }}
+      backgroundColor: disabled
+        ? alpha(theme.palette.background.default, 0.6)
+        : theme.palette.background.paper,
+    })}
   />
 );
 
@@ -75,6 +83,7 @@ export interface CheckboxProps {
   size?: CheckboxSize;
   labelPlacement?: LabelPlacement;
   helperText?: string;
+  errorMessage?: string;
   error?: boolean;
   disabled?: boolean;
   required?: boolean;
@@ -92,6 +101,7 @@ export function Checkbox({
   size = 'medium',
   labelPlacement = 'end',
   helperText,
+  errorMessage,
   error = false,
   disabled = false,
   required = false,
@@ -104,6 +114,7 @@ export function Checkbox({
       <FormControlLabel
         labelPlacement={labelPlacement}
         label={label}
+        sx={{ ml: 0, gap: 1 }}
         control={
           <MuiCheckbox
             checked={checked}
@@ -114,14 +125,24 @@ export function Checkbox({
             id={id}
             name={name}
             disableRipple
-            icon={<CheckboxUncheckedIcon error={error} />}
+            icon={<CheckboxUncheckedIcon error={error} disabled={disabled} />}
             checkedIcon={<CheckboxCheckedIcon />}
             indeterminateIcon={<CheckboxIndeterminateIcon />}
             onChange={(e) => onChange?.(e.target.checked)}
+            sx={{ p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }}
           />
         }
       />
-      {helperText && <FormHelperText role={error ? 'alert' : undefined} sx={{ ml: '2rem' }}>{helperText}</FormHelperText>}
+      {helperText && (
+        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+          {helperText}
+        </FormHelperText>
+      )}
+      {error && errorMessage && (
+        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+          {errorMessage}
+        </FormHelperText>
+      )}
     </FormControl>
   );
 }
