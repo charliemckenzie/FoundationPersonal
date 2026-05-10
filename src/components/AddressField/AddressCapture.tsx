@@ -24,9 +24,10 @@ export interface AddressCaptureProps {
   section?: string;
   disabled?: boolean;
   lookup?: AddressLookupConfig;
+  onAutocompleteSearching?: (searching: boolean) => void;
 }
 
-export function AddressCapture({ value, onChange, section, disabled, lookup }: AddressCaptureProps) {
+export function AddressCapture({ value, onChange, section, disabled, lookup, onAutocompleteSearching }: AddressCaptureProps) {
   function handleTypeChange(type: string) {
     if (type === 'australian') {
       onChange({ type: 'australian', ...AU_RESET });
@@ -52,6 +53,7 @@ export function AddressCapture({ value, onChange, section, disabled, lookup }: A
             lookup={lookup}
             section={section}
             disabled={disabled}
+            onModeChange={onAutocompleteSearching}
           />
         ) : (
           <AustralianFields value={value} onChange={onChange} section={section} disabled={disabled} />

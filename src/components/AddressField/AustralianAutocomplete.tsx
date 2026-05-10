@@ -19,6 +19,7 @@ interface AustralianAutocompleteProps {
   lookup: AddressLookupConfig;
   section?: string;
   disabled?: boolean;
+  onModeChange?: (isSearching: boolean) => void;
 }
 
 function isPopulated(v: AustralianAddress): boolean {
@@ -57,6 +58,7 @@ export function AustralianAutocomplete({
   lookup,
   section,
   disabled,
+  onModeChange,
 }: AustralianAutocompleteProps) {
   const [mode, setMode] = useState<Mode>(() => (isPopulated(value) ? 'confirmed' : 'search'));
   const [inputValue, setInputValue] = useState('');
@@ -88,12 +90,20 @@ export function AustralianAutocomplete({
     if (!suggestion) return;
     onChange(suggestion.value);
     setMode('confirmed');
+    onModeChange?.(false);
   }
 
   function handleChangeAddress() {
+    onChange({ type: 'australian', line1: '', line2: '', suburb: '', state: '', postcode: '' });
     setInputValue('');
     setOptions([]);
     setMode('search');
+    onModeChange?.(true);
+  }
+
+  function handleUseManual() {
+    setMode('manual');
+    onModeChange?.(false);
   }
 
   const linkSx = (t: Theme) => ({
@@ -118,6 +128,7 @@ export function AustralianAutocomplete({
         <Box sx={(t) => ({
           border: `1px solid ${t.palette.border.input}`,
           borderRadius: `${t.shape.sm}px`,
+          backgroundColor: t.palette.background.paper,
           px: '14px',
           py: '12px',
         })}>
@@ -125,7 +136,7 @@ export function AustralianAutocomplete({
           <Typography sx={{ fontSize: '1rem', lineHeight: 1.5 }}>{addrLine2}</Typography>
         </Box>
         <ButtonBase disableRipple onClick={handleChangeAddress} disabled={disabled} sx={linkSx}>
-          Change
+          Change address
         </ButtonBase>
       </Stack>
     );
@@ -205,7 +216,7 @@ export function AustralianAutocomplete({
       </Box>
       <ButtonBase
         disableRipple
-        onClick={() => setMode('manual')}
+        onClick={handleUseManual}
         disabled={disabled}
         sx={(t) => ({
           fontSize: '0.875rem',

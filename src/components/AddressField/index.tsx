@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -22,6 +22,11 @@ export function AddressField({ onChange, defaultHasPostalAddress = false, disabl
   const [address, setAddress] = useState<Address>(DEFAULT_ADDRESS);
   const [hasPostal, setHasPostal] = useState(defaultHasPostalAddress);
   const [postalAddress, setPostalAddress] = useState<Address>({ ...DEFAULT_ADDRESS });
+  const [isAutocompleteSearching, setIsAutocompleteSearching] = useState(!!addressLookup);
+
+  const handleAutocompleteSearching = useCallback((searching: boolean) => {
+    setIsAutocompleteSearching(searching);
+  }, []);
 
   function handleAddressChange(next: Address) {
     setAddress(next);
@@ -52,13 +57,16 @@ export function AddressField({ onChange, defaultHasPostalAddress = false, disabl
         section="residential"
         disabled={disabled}
         lookup={addressLookup}
+        onAutocompleteSearching={handleAutocompleteSearching}
       />
-      <Checkbox
-        label="I have a different postal address"
-        checked={hasPostal}
-        onChange={handlePostalToggle}
-        disabled={disabled}
-      />
+      {!isAutocompleteSearching && (
+        <Checkbox
+          label="I have a different postal address"
+          checked={hasPostal}
+          onChange={handlePostalToggle}
+          disabled={disabled}
+        />
+      )}
       {hasPostal && (
         <Stack spacing={3}>
           <Divider />
