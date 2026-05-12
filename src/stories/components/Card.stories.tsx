@@ -1,3 +1,4 @@
+import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Typography from '@mui/material/Typography';
 import { Card } from '../../components/Card';
@@ -65,18 +66,33 @@ export const ContainedInteractive: Story = {
 
 // --- Open ---
 
-export const OpenWithActions: Story = {
+type OpenWithActionsArgs = ComponentProps<typeof Card> & { showSubtitle: boolean };
+
+export const OpenWithActions: StoryObj<OpenWithActionsArgs> = {
   name: 'Open — image + actions',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'The standard open card with image, copy, and action buttons. Use the **Show subtitle** toggle to show or hide the supporting detail line — useful for testing layouts where a subtitle is not always available. Action buttons carry contextual `aria-label` attributes (e.g. "Get started: Card heading") so screen reader users can distinguish buttons across multiple cards on the same page.',
+      },
+    },
+  },
+  argTypes: {
+    showSubtitle: { control: 'boolean', description: 'Show or hide the supporting detail line.' },
+    subtitle: { table: { disable: true } },
+  },
   args: {
     variant: 'open',
     imageSrc: PLACEHOLDER_IMAGE,
     imageAlt: '',
     title: 'Card heading',
-    subtitle: 'Supporting detail line',
+    showSubtitle: true,
   },
-  render: (args) => (
+  render: ({ showSubtitle, ...args }) => (
     <Card
       {...args}
+      subtitle={showSubtitle ? 'Supporting detail line' : undefined}
       primaryAction={{ label: 'Get started', onClick: () => {} }}
       secondaryAction={{ label: 'Learn more', onClick: () => {} }}
       sx={{ maxWidth: 368 }}

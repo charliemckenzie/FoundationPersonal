@@ -488,6 +488,17 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           },
         },
       },
+      MuiCardActionArea: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${theme.palette.border.focus}`,
+              outlineOffset: '2px',
+              boxShadow: 'none',
+            },
+          }),
+        },
+      },
       MuiIconButton: {
         styleOverrides: {
           root: ({ ownerState, theme }) => {

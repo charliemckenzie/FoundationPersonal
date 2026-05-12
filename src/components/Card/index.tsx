@@ -121,6 +121,7 @@ export function Card({
           {primaryAction && (
             <Button
               label={primaryAction.label}
+              aria-label={title ? `${primaryAction.label}: ${title}` : undefined}
               onClick={primaryAction.onClick}
               variant="contained"
               size="medium"
@@ -129,6 +130,7 @@ export function Card({
           {secondaryAction && (
             <Button
               label={secondaryAction.label}
+              aria-label={title ? `${secondaryAction.label}: ${title}` : undefined}
               onClick={secondaryAction.onClick}
               variant="outlined"
               size="medium"
