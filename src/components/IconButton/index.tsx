@@ -33,9 +33,9 @@ export interface IconButtonProps {
 }
 
 const BUTTON_SIZE_TO_ICON_SIZE = {
-  small: 'sm',
-  medium: 'md',
-  large: 'lg',
+  small: 'md',
+  medium: 'lg',
+  large: 'xl',
 } as const;
 
 const SIZE_STYLES: Record<IconButtonSize, { width: number; height: number }> = {
