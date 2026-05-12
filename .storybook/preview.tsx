@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import { createBrandTheme } from '../src/app/themes/factory';
@@ -29,12 +29,7 @@ const preview: Preview = {
 
       // Create a theme instance with the selected brand and mode
       const brandConfig = brands[brandKey as keyof typeof brands];
-      const brandTheme = createBrandTheme(brandConfig);
-      const { colorSchemes, ...themeConfig } = brandTheme as any;
-      const theme = createTheme({
-        ...themeConfig,
-        palette: colorSchemes[mode].palette,
-      });
+      const theme = createBrandTheme(brandConfig, mode as 'light' | 'dark');
 
       return (
         <ThemeProvider theme={theme}>

@@ -434,6 +434,9 @@ function buildLightPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][700],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][800],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][600],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][50],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][100],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         warning: {
@@ -441,6 +444,9 @@ function buildLightPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][700],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][800],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][600],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][50],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][100],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         info: {
@@ -448,6 +454,9 @@ function buildLightPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][700],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][800],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][600],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][50],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][100],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         success: {
@@ -455,6 +464,9 @@ function buildLightPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][600],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][700],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][800],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][600],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][50],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][100],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         // Tertiary brand color (optional — only present when the brand defines one)
@@ -547,6 +559,9 @@ function buildDarkPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][600],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][300],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][400],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][950],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][900],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         warning: {
@@ -554,6 +569,9 @@ function buildDarkPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][500],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][300],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][400],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][950],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][900],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         info: {
@@ -561,6 +579,9 @@ function buildDarkPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][600],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][300],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][400],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][950],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][900],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["white"]
         },
         success: {
@@ -568,6 +589,9 @@ function buildDarkPalette(brand) {
             main: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][400],
             dark: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][600],
             text: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][300],
+            icon: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][400],
+            background: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][950],
+            border: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][900],
             contrastText: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["black"]
         },
         // Tertiary brand color (optional — only present when the brand defines one)
@@ -655,23 +679,10 @@ __turbopack_context__.s([
     ()=>createBrandTheme
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$styles$2f$createTheme$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__createTheme$3e$__ = __turbopack_context__.i("[project]/node_modules/@mui/material/styles/createTheme.mjs [app-client] (ecmascript) <export default as createTheme>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/node_modules/@mui/system/colorManipulator/colorManipulator.mjs [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/themes/semantic.ts [app-client] (ecmascript)");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/themes/primitives/colors.ts [app-client] (ecmascript)");
 ;
 ;
-;
-const ALERT_BORDER_LIGHT = {
-    error: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][100],
-    warning: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][100],
-    info: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][100],
-    success: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][100]
-};
-const ALERT_BORDER_DARK = {
-    error: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][900],
-    warning: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][900],
-    info: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][900],
-    success: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][900]
-};
 const LIGHTER_SHADOWS = [
     'none',
     '0px 2px 1px -1px rgba(0,0,0,0.12),0px 1px 1px 0px rgba(0,0,0,0.08),0px 1px 3px 0px rgba(0,0,0,0.06)',
@@ -726,10 +737,16 @@ const DARK_MODE_SHADOWS = [
     '0px 11px 14px -7px rgba(0,0,0,0.5),0px 23px 36px 3px rgba(0,0,0,0.35),0px 9px 44px 8px rgba(0,0,0,0.3)',
     '0px 11px 15px -7px rgba(0,0,0,0.5),0px 24px 38px 3px rgba(0,0,0,0.35),0px 9px 46px 8px rgba(0,0,0,0.3)'
 ];
-function createBrandTheme(brand) {
+function createBrandTheme(brand, mode = 'light') {
+    const palette = mode === 'dark' ? (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["buildDarkPalette"])(brand) : (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["buildLightPalette"])(brand);
+    const shadows = mode === 'dark' ? DARK_MODE_SHADOWS : LIGHTER_SHADOWS;
     const theme = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$material$2f$styles$2f$createTheme$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__createTheme$3e$__["createTheme"])({
         brandConfig: brand,
-        shadows: LIGHTER_SHADOWS,
+        shadows,
+        palette: {
+            ...palette,
+            mode
+        },
         shape: {
             borderRadius: 4,
             none: 0,
@@ -834,18 +851,36 @@ function createBrandTheme(brand) {
                 lineHeight: 1.5
             }
         },
-        colorSchemes: {
-            light: {
-                palette: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["buildLightPalette"])(brand)
-            },
-            dark: {
-                palette: (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$semantic$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["buildDarkPalette"])(brand)
-            }
-        },
         components: {
+            MuiCssBaseline: {
+                styleOverrides: (theme)=>({
+                        a: {
+                            color: theme.palette.text.link,
+                            textDecoration: 'underline',
+                            textUnderlineOffset: '0.2em',
+                            textDecorationColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(theme.palette.text.link, 0.5),
+                            '&:hover': {
+                                color: brand.primary[700],
+                                textDecorationColor: brand.primary[700]
+                            },
+                            '&:active': {
+                                color: brand.primary[800],
+                                textDecorationColor: brand.primary[800]
+                            }
+                        }
+                    })
+            },
+            MuiContainer: {
+                styleOverrides: {
+                    maxWidthLg: {
+                        maxWidth: '1248px !important'
+                    }
+                }
+            },
             MuiAccordionSummary: {
                 styleOverrides: {
                     root: ({ theme })=>({
+                            color: brand.quaternary ? theme.palette.text.link : theme.palette.text.heading,
                             '&.Mui-expanded': {
                                 backgroundColor: theme.palette.action.selected
                             },
@@ -866,39 +901,30 @@ function createBrandTheme(brand) {
             MuiAlert: {
                 styleOverrides: {
                     root: ({ theme, ownerState })=>({
-                            padding: '12px 16px',
+                            padding: '8px 16px',
+                            minHeight: '44px',
                             borderRadius: '8px',
-                            alignItems: 'flex-start',
+                            alignItems: 'center',
                             gap: '12px',
-                            ...ownerState.variant === 'standard' && ownerState.severity && {
-                                border: `1px solid ${ALERT_BORDER_LIGHT[ownerState.severity]}`,
-                                ...theme.applyStyles('dark', {
-                                    border: `1px solid ${ALERT_BORDER_DARK[ownerState.severity]}`
-                                })
-                            },
                             ...ownerState.variant === 'standard' && ownerState.severity === 'error' && {
-                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][50],
-                                ...theme.applyStyles('dark', {
-                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["red"][950]
-                                })
+                                backgroundColor: theme.palette.error.background,
+                                color: theme.palette.error.text,
+                                border: `1px solid ${theme.palette.error.border}`
                             },
                             ...ownerState.variant === 'standard' && ownerState.severity === 'warning' && {
-                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][50],
-                                ...theme.applyStyles('dark', {
-                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["amber"][950]
-                                })
+                                backgroundColor: theme.palette.warning.background,
+                                color: theme.palette.warning.text,
+                                border: `1px solid ${theme.palette.warning.border}`
                             },
                             ...ownerState.variant === 'standard' && ownerState.severity === 'info' && {
-                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][50],
-                                ...theme.applyStyles('dark', {
-                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["blue"][950]
-                                })
+                                backgroundColor: theme.palette.info.background,
+                                color: theme.palette.info.text,
+                                border: `1px solid ${theme.palette.info.border}`
                             },
                             ...ownerState.variant === 'standard' && ownerState.severity === 'success' && {
-                                backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][50],
-                                ...theme.applyStyles('dark', {
-                                    backgroundColor: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["green"][950]
-                                })
+                                backgroundColor: theme.palette.success.background,
+                                color: theme.palette.success.text,
+                                border: `1px solid ${theme.palette.success.border}`
                             }
                         }),
                     icon: {
@@ -913,7 +939,6 @@ function createBrandTheme(brand) {
                     message: {
                         padding: 0,
                         margin: 0,
-                        alignSelf: 'flex-start',
                         lineHeight: '24px'
                     },
                     action: {
@@ -943,7 +968,9 @@ function createBrandTheme(brand) {
                 styleOverrides: {
                     root: ({ theme: t })=>({
                             color: 'inherit',
-                            textDecorationColor: 'inherit',
+                            textDecoration: 'underline',
+                            textUnderlineOffset: '0.2em',
+                            textDecorationColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(brand.primary[600], 0.5),
                             '&:hover': {
                                 color: brand.primary[700],
                                 textDecorationColor: brand.primary[700]
@@ -954,14 +981,18 @@ function createBrandTheme(brand) {
                             },
                             '&:visited': {
                                 color: brand.secondary[800],
+                                textDecorationColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(brand.secondary[800], 0.5),
                                 '&:hover': {
-                                    color: brand.secondary[700]
+                                    color: brand.secondary[700],
+                                    textDecorationColor: brand.secondary[700]
                                 },
                                 '&:active': {
-                                    color: brand.secondary[900]
+                                    color: brand.secondary[900],
+                                    textDecorationColor: brand.secondary[900]
                                 }
                             },
                             ...t.applyStyles('dark', {
+                                textDecorationColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(brand.primary[300], 0.5),
                                 '&:hover': {
                                     color: brand.primary[200],
                                     textDecorationColor: brand.primary[200]
@@ -972,11 +1003,14 @@ function createBrandTheme(brand) {
                                 },
                                 '&:visited': {
                                     color: brand.secondary[400],
+                                    textDecorationColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(brand.secondary[400], 0.5),
                                     '&:hover': {
-                                        color: brand.secondary[300]
+                                        color: brand.secondary[300],
+                                        textDecorationColor: brand.secondary[300]
                                     },
                                     '&:active': {
-                                        color: brand.secondary[500]
+                                        color: brand.secondary[500],
+                                        textDecorationColor: brand.secondary[500]
                                     }
                                 }
                             })
@@ -1021,52 +1055,104 @@ function createBrandTheme(brand) {
                     }
                 }
             },
+            MuiFormLabel: {
+                styleOverrides: {
+                    root: ({ theme })=>({
+                            '&.Mui-focused': {
+                                color: theme.palette.text.primary
+                            }
+                        })
+                }
+            },
+            MuiFormControlLabel: {
+                styleOverrides: {
+                    label: {
+                        fontSize: '1rem'
+                    }
+                }
+            },
             MuiCheckbox: {
                 styleOverrides: {
-                    root: ({ ownerState, theme })=>{
-                        const colorKey = ownerState.color === 'default' ? null : ownerState.color;
-                        const palette = colorKey ? theme.palette[colorKey] : undefined;
-                        const ringColor = palette?.main ?? theme.palette.action.active;
-                        return {
+                    root: ({ theme })=>({
+                            borderRadius: '0.25rem',
                             '&.Mui-focusVisible': {
-                                outline: `2px solid ${ringColor}`,
+                                outline: `2px solid ${theme.palette.border.focus}`,
                                 outlineOffset: '2px',
-                                boxShadow: 'none'
+                                boxShadow: 'none',
+                                backgroundColor: 'transparent'
                             }
-                        };
-                    }
+                        })
                 }
             },
             MuiRadio: {
                 styleOverrides: {
-                    root: ({ ownerState, theme })=>{
-                        const colorKey = ownerState.color === 'default' ? null : ownerState.color;
-                        const palette = colorKey ? theme.palette[colorKey] : undefined;
-                        const ringColor = palette?.main ?? theme.palette.action.active;
-                        return {
-                            '&.Mui-focusVisible': {
-                                outline: `2px solid ${ringColor}`,
+                    root: ({ theme })=>({
+                            '&.Mui-focusVisible, &.Mui-checked.Mui-focusVisible': {
+                                outline: `2px solid ${theme.palette.border.focus}`,
                                 outlineOffset: '2px',
-                                boxShadow: 'none'
+                                boxShadow: 'none',
+                                backgroundColor: 'transparent'
+                            },
+                            '& input[type="radio"]': {
+                                appearance: 'none',
+                                WebkitAppearance: 'none'
                             }
-                        };
-                    }
+                        })
                 }
             },
             MuiToggleButton: {
                 styleOverrides: {
-                    root: ({ ownerState, theme })=>{
-                        const colorKey = ownerState.color === 'standard' ? null : ownerState.color;
-                        const palette = colorKey ? theme.palette[colorKey] : undefined;
-                        const ringColor = palette?.main ?? theme.palette.action.active;
-                        return {
+                    root: ({ ownerState, theme })=>({
+                            textTransform: 'none',
+                            color: theme.palette.text.primary,
+                            backgroundColor: theme.palette.background.paper,
+                            borderColor: theme.palette.border.input,
+                            borderRadius: '8px',
+                            position: 'relative',
+                            zIndex: 0,
+                            height: ownerState.size === 'small' ? '2.25rem' : ownerState.size === 'large' ? '3.5rem' : '3rem',
+                            '&.Mui-disabled': {
+                                backgroundColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(theme.palette.background.default, 0.6),
+                                borderColor: (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(theme.palette.border.input, 0.6),
+                                color: theme.palette.action.disabled
+                            },
+                            '&.Mui-selected': {
+                                borderColor: theme.palette.primary.main,
+                                backgroundColor: theme.palette.primary.background,
+                                color: theme.palette.primary.dark,
+                                zIndex: 1
+                            },
                             '&.Mui-focusVisible': {
-                                outline: `2px solid ${ringColor}`,
+                                outline: `2px solid ${theme.palette.border.focus}`,
                                 outlineOffset: '2px',
-                                boxShadow: 'none'
+                                boxShadow: 'none',
+                                zIndex: 2
                             }
-                        };
-                    }
+                        })
+                }
+            },
+            MuiToggleButtonGroup: {
+                styleOverrides: {
+                    root: ({ theme })=>({
+                            '& .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+                                borderLeft: `1px solid ${theme.palette.border.input}`
+                            },
+                            '& .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+                                borderLeft: `1px solid ${theme.palette.primary.main}`
+                            },
+                            '& .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+                                borderLeft: `1px solid ${(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(theme.palette.border.input, 0.6)}`
+                            },
+                            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+                                borderTop: `1px solid ${theme.palette.border.input}`
+                            },
+                            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+                                borderTop: `1px solid ${theme.palette.primary.main}`
+                            },
+                            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+                                borderTop: `1px solid ${(0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f40$mui$2f$system$2f$colorManipulator$2f$colorManipulator$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__["alpha"])(theme.palette.border.input, 0.6)}`
+                            }
+                        })
                 }
             },
             MuiTypography: {
@@ -1138,7 +1224,13 @@ const foundation = {
     artInvestmentOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["artInvestmentOptions"],
     artAssetMix: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["artAssetMix"],
     diversifiedOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sharedDiversifiedOptions"],
-    assetClassOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sharedAssetClassOptions"]
+    assetClassOptions: __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$themes$2f$primitives$2f$colors$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["sharedAssetClassOptions"],
+    logos: {
+        primary: '/logos/art/ART_Logo_Horizontal_Preferred_RGB.svg',
+        secondary: '/logos/art/ART_Logo_2lines.svg',
+        mark: '/logos/art/logo-mark.svg',
+        alt: 'Australian Retirement Trust'
+    }
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);

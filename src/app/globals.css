@@ -3,3 +3,34 @@
 html {
   font-size: 16px;
 }
+
+/* Override Tailwind preflight + MUI CssBaseline which both reset text-decoration to none/inherit.
+   !important is required here — two competing reset systems (Tailwind + Emotion) both suppress underlines. */
+a {
+  text-decoration-line: underline !important;
+  text-underline-offset: 0.3em !important;
+  text-decoration-color: color-mix(in srgb, currentColor 30%, transparent) !important;
+  transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              text-decoration-color 250ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+a:hover, a:focus-visible {
+  text-decoration-color: currentColor !important;
+}
+
+/* Apply to a link or any container — child links show underline on hover only */
+.link-hover-only a,
+a.link-hover-only {
+  text-decoration-line: none !important;
+}
+.link-hover-only a:hover,
+.link-hover-only a:focus-visible,
+a.link-hover-only:hover,
+a.link-hover-only:focus-visible {
+  text-decoration-line: underline !important;
+}
+
+/* Opt specific links back in to always-underline, even inside link-hover-only */
+a.link-underline,
+.link-hover-only a.link-underline {
+  text-decoration-line: underline !important;
+}

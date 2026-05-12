@@ -201,10 +201,13 @@ export const DARK_MODE_SHADOWS: Shadows = [
   '0px 11px 15px -7px rgba(0,0,0,0.5),0px 24px 38px 3px rgba(0,0,0,0.35),0px 9px 46px 8px rgba(0,0,0,0.3)',
 ]
 
-export function createBrandTheme(brand: BrandConfig) {
+export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'light') {
+  const palette = mode === 'dark' ? buildDarkPalette(brand) : buildLightPalette(brand);
+  const shadows = mode === 'dark' ? DARK_MODE_SHADOWS : LIGHTER_SHADOWS;
   const theme = createTheme({
     brandConfig: brand,
-    shadows: LIGHTER_SHADOWS,
+    shadows,
+    palette: { ...palette, mode },
     shape: {
       borderRadius: 4,
       none: 0,
@@ -309,11 +312,32 @@ export function createBrandTheme(brand: BrandConfig) {
         lineHeight: 1.5,
       },
     },
-    colorSchemes: {
-      light: { palette: buildLightPalette(brand) },
-      dark:  { palette: buildDarkPalette(brand) },
-    },
     components: {
+      MuiCssBaseline: {
+        styleOverrides: (theme) => ({
+          a: {
+            color: theme.palette.text.link,
+            textDecoration: 'underline',
+            textUnderlineOffset: '0.2em',
+            textDecorationColor: alpha(theme.palette.text.link, 0.5),
+            '&:hover': {
+              color: brand.primary[700],
+              textDecorationColor: brand.primary[700],
+            },
+            '&:active': {
+              color: brand.primary[800],
+              textDecorationColor: brand.primary[800],
+            },
+          },
+        }),
+      },
+      MuiContainer: {
+        styleOverrides: {
+          maxWidthLg: {
+            maxWidth: '1248px !important',
+          },
+        },
+      },
       MuiAccordionSummary: {
         styleOverrides: {
           root: ({ theme }) => ({
@@ -405,7 +429,9 @@ export function createBrandTheme(brand: BrandConfig) {
         styleOverrides: {
           root: ({ theme: t }) => ({
             color: 'inherit',
-            textDecorationColor: 'inherit',
+            textDecoration: 'underline',
+            textUnderlineOffset: '0.2em',
+            textDecorationColor: alpha(brand.primary[600], 0.5),
             '&:hover': {
               color: brand.primary[700],
               textDecorationColor: brand.primary[700],
@@ -416,10 +442,12 @@ export function createBrandTheme(brand: BrandConfig) {
             },
             '&:visited': {
               color: brand.secondary[800],
-              '&:hover': { color: brand.secondary[700] },
-              '&:active': { color: brand.secondary[900] },
+              textDecorationColor: alpha(brand.secondary[800], 0.5),
+              '&:hover': { color: brand.secondary[700], textDecorationColor: brand.secondary[700] },
+              '&:active': { color: brand.secondary[900], textDecorationColor: brand.secondary[900] },
             },
             ...t.applyStyles('dark', {
+              textDecorationColor: alpha(brand.primary[300], 0.5),
               '&:hover': {
                 color: brand.primary[200],
                 textDecorationColor: brand.primary[200],
@@ -430,8 +458,9 @@ export function createBrandTheme(brand: BrandConfig) {
               },
               '&:visited': {
                 color: brand.secondary[400],
-                '&:hover': { color: brand.secondary[300] },
-                '&:active': { color: brand.secondary[500] },
+                textDecorationColor: alpha(brand.secondary[400], 0.5),
+                '&:hover': { color: brand.secondary[300], textDecorationColor: brand.secondary[300] },
+                '&:active': { color: brand.secondary[500], textDecorationColor: brand.secondary[500] },
               },
             }),
           }),

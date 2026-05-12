@@ -28,6 +28,7 @@ const config: StorybookConfig = {
     onboarding: false,
     sidebarOnboardingChecklist: false,
   },
+  staticDirs: ['../public'],
 };
 
 export default config;
