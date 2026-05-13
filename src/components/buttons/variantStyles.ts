@@ -1,7 +1,7 @@
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 
-export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'white';
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost' | 'soft';
 
 export function buildContainedStyles(color: ButtonColorKey) {
@@ -72,11 +72,8 @@ export function buildGhostStyles(color: ButtonColorKey) {
 export function buildOutlinedStyles(color: ButtonColorKey) {
   return {
     backgroundColor: 'transparent',
-    border: '2px solid',
-    borderColor: (theme: Theme) =>
-      theme.palette.mode === 'light'
-        ? alpha(theme.palette[color].main, 0.5)
-        : theme.palette[color].main,
+    border: '1px solid',
+    borderColor: (theme: Theme) => theme.palette[color].main,
     color: (theme: Theme) => theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {
@@ -94,14 +91,29 @@ export function buildOutlinedStyles(color: ButtonColorKey) {
   };
 }
 
+export function buildWhiteStyles() {
+  return {
+    backgroundColor: (theme: Theme) => theme.palette.background.paper,
+    color: (theme: Theme) => theme.palette.primary.main,
+    boxShadow: 'none',
+    '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.08), boxShadow: 'none' },
+    '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.12), boxShadow: 'none' },
+    '&.Mui-disabled': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.3),
+      color: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),
+    },
+  };
+}
+
 export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColorKey) {
   return {
     ...(variant === 'contained' && {
       backgroundColor: (theme: Theme) => theme.palette.common.white,
-      // primary.main in dark mode (#3385ff) is 3.54:1 vs white — fails AA. primary.dark (#0051ff) = 5.80:1 ✅
+      // In dark mode, primary.main/dark are light blues (~3:1 vs white — fails AA).
+      // primary.contrastText = brand.primary[950] (#030917) = ~19:1 vs white ✅
       color: (theme: Theme) =>
         theme.palette.mode === 'dark'
-          ? theme.palette[color].dark
+          ? theme.palette[color].contrastText
           : theme.palette[color].main,
       boxShadow: 'none',
       '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },

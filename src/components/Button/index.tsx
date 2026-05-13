@@ -8,6 +8,7 @@ import {
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
+  buildWhiteStyles,
   type ButtonColorKey,
   type ButtonVariantKey,
 } from '../buttons/variantStyles';
@@ -26,6 +27,7 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   hideLoadingText?: boolean;
   fullWidth?: boolean;
   reversed?: boolean;
+  condensed?: boolean;
   startIcon?: string;
   endIcon?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -33,16 +35,18 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
 }
 
 const iconSizeMap: Record<ButtonSize, IconSize> = {
-  small: 'sm',
-  medium: 'md',
-  large: 'lg',
+  small: 'md',
+  medium: 'lg',
+  large: 'xl',
 };
 
 const sizeStyles: Record<ButtonSize, { height: number; px: number }> = {
-  small:  { height: 36, px: 2 },
+  small:  { height: 40, px: 2 },
   medium: { height: 48, px: 3 },
   large:  { height: 56, px: 3.5 },
 };
+
+const CONDENSED_REDUCTION = 4;
 
 const containedStyles = {
   boxShadow: 'none',
@@ -60,6 +64,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   hideLoadingText = true,
   fullWidth = false,
   reversed = false,
+  condensed = false,
   startIcon,
   endIcon,
   onClick,
@@ -67,23 +72,27 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   ...rest
 }, ref) {
   const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
+  const muiColor = color === 'white' ? 'primary' : color;
   const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   const showSpinnerOnly = loading && hideLoadingText;
+  const hasStartIcon = (!loading && !!startIcon) || (loading && !hideLoadingText);
+  const hasEndIcon = !loading && !!endIcon;
 
   const variantStyles =
-    variant === 'contained' ? containedStyles
-    : variant === 'soft'     ? buildSoftStyles(color)
-    : variant === 'ghost'    ? buildGhostStyles(color)
-    : buildOutlinedStyles(color);
+    color === 'white' && variant === 'contained' ? buildWhiteStyles()
+    : variant === 'contained' ? containedStyles
+    : variant === 'soft'      ? buildSoftStyles(color === 'white' ? 'primary' : color)
+    : variant === 'ghost'     ? buildGhostStyles(color === 'white' ? 'primary' : color)
+    : buildOutlinedStyles(color === 'white' ? 'primary' : color);
 
-  const reversedStyles = reversed ? buildReversedStyles(variant, color) : undefined;
+  const reversedStyles = reversed ? buildReversedStyles(variant, color === 'white' ? 'primary' : color) : undefined;
 
   return (
     <MuiButton
       ref={ref}
       variant={muiVariant}
       size={size}
-      color={color}
+      color={muiColor}
       disabled={disabled}
       aria-busy={loading}
       fullWidth={fullWidth}
@@ -94,6 +103,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       {...rest}
       sx={(theme) => ({
         ...sizeStyles[size],
+        ...(condensed && { height: sizeStyles[size].height - CONDENSED_REDUCTION }),
+        ...(hasStartIcon && { paddingRight: `calc(${theme.spacing(sizeStyles[size].px)} + 4px)` }),
+        ...(hasEndIcon   && { paddingLeft:  `calc(${theme.spacing(sizeStyles[size].px)} + 4px)` }),
         ...variantStyles,
         ...reversedStyles,
         ...(showSpinnerOnly && { position: 'relative' }),
@@ -106,12 +118,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
           pointerEvents: 'none !important',
         },
         '&.Mui-focusVisible': {
-          outline: `2px solid ${reversed ? theme.palette.common.white : ((theme.palette[color as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
+          outline: `2px solid ${reversed || color === 'white' ? (theme.palette.common.white) : ((theme.palette[muiColor as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
           outlineOffset: '2px',
           boxShadow: 'none',
-        },
-        '& .MuiButton-startIcon, & .MuiButton-endIcon': {
-          '& > span': { fontSize: 'inherit !important' },
         },
       })}
     >

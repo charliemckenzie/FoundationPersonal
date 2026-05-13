@@ -12,6 +12,8 @@ export const BUTTON_ICON_OPTIONS = [
   // Navigation / direction
   'arrow-right',
   'arrow-left',
+  'arrow-right-to-bracket',
+  'arrow-up-from-line',
   'arrow-up-right',
   'arrow-down-to-line',
   'chevron-right',
@@ -21,6 +23,7 @@ export const BUTTON_ICON_OPTIONS = [
   // Actions
   'plus',
   'minus',
+  'copy',
   'xmark',
   'check',
   'magnifying-glass',
