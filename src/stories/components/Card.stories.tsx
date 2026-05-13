@@ -2,6 +2,10 @@ import type { ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Typography from '@mui/material/Typography';
 import { Card } from '../../components/Card';
+import { HeroIcon } from '../../components/HeroIcon';
+import type { HeroIconBackground } from '../../components/HeroIcon';
+import { TextButton } from '../../components/TextButton';
+import artIcons from '../../assets/icon-list-art.json';
 
 // A self-contained placeholder image — no external dependency required.
 const PLACEHOLDER_IMAGE =
@@ -64,6 +68,60 @@ export const ContainedInteractive: Story = {
   ),
 };
 
+// --- Contained — icon feature ---
+
+type OpenIconArgs = ComponentProps<typeof Card> & {
+  iconName: string;
+  iconBackground: HeroIconBackground;
+};
+
+export const OpenIcon: StoryObj<OpenIconArgs> = {
+  name: 'Contained — icon feature',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '`variant="contained"` card with a **HeroIcon** (5.5rem container, 2.75rem icon) in place of an image. The icon is **decorative** — do not pass `aria-label`; the heading communicates the topic. The 50% icon-to-container ratio is intentionally more open than the standard HeroIcon ratio (57%) — the larger circle benefits from extra breathing room. Use the **Icon** and **Icon background** controls to preview combinations; set the `component` prop on the heading to match the surrounding page hierarchy.',
+      },
+    },
+  },
+  argTypes: {
+    iconName: {
+      control: 'select',
+      options: artIcons,
+      description: 'Icon from the ART icon set.',
+    },
+    iconBackground: {
+      control: 'select',
+      options: ['none', 'brand', 'white', 'grey'] satisfies HeroIconBackground[],
+      description: 'Circular background colour behind the icon.',
+    },
+  },
+  args: {
+    variant: 'contained',
+    iconName: 'Calculator',
+    iconBackground: 'brand',
+  },
+  render: ({ iconName, iconBackground, ...args }) => (
+    <Card {...args} sx={{ maxWidth: 368 }}>
+      <HeroIcon
+        name={iconName}
+        brand="art"
+        iconSizeOverride="2.75rem"
+        containerSizeOverride="5.5rem"
+        background={iconBackground}
+      />
+      <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mt: 3, mb: 1 }}>
+        Card heading
+      </Typography>
+      <Typography variant="body" component="p" sx={{ color: 'text.primary', mb: { xs: 3, sm: 4 } }}>
+        Supporting body copy sits here. Use it to describe the feature or topic this card represents.
+      </Typography>
+      <TextButton label="Learn more about this feature" endIcon="arrow-right" />
+    </Card>
+  ),
+};
+
 // --- Open ---
 
 type OpenWithActionsArgs = ComponentProps<typeof Card> & { showSubtitle: boolean };
@@ -104,16 +162,31 @@ export const OpenWithActions: StoryObj<OpenWithActionsArgs> = {
   ),
 };
 
-export const OpenNoImage: Story = {
+type OpenNoImageArgs = ComponentProps<typeof Card> & { showSubtitle: boolean };
+
+export const OpenNoImage: StoryObj<OpenNoImageArgs> = {
   name: 'Open — no image',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Open card variant without an image. Use when imagery is unavailable or unnecessary — layout adapts to fill the space. Use the **Show subtitle** toggle to test single-line versus two-line copy configurations.',
+      },
+    },
+  },
+  argTypes: {
+    showSubtitle: { control: 'boolean', description: 'Show or hide the supporting detail line.' },
+    subtitle: { table: { disable: true } },
+  },
   args: {
     variant: 'open',
     title: 'No image variant',
-    subtitle: 'Use when imagery is unavailable or unnecessary.',
+    showSubtitle: true,
   },
-  render: (args) => (
+  render: ({ showSubtitle, ...args }) => (
     <Card
       {...args}
+      subtitle={showSubtitle ? 'Use when imagery is unavailable or unnecessary.' : undefined}
       primaryAction={{ label: 'Get started', onClick: () => {} }}
       sx={{ maxWidth: 368 }}
     >
@@ -124,17 +197,36 @@ export const OpenNoImage: Story = {
   ),
 };
 
-export const OpenInteractive: Story = {
+type OpenInteractiveArgs = ComponentProps<typeof Card> & { showSubtitle: boolean };
+
+export const OpenInteractive: StoryObj<OpenInteractiveArgs> = {
   name: 'Open — interactive (whole card)',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Open card where the entire surface is a clickable button. Action buttons are suppressed automatically — they cannot coexist with a card-level interaction. The `CardActionArea` carries `aria-label={title}` so screen readers announce the card by its heading regardless of **Show subtitle** state.',
+      },
+    },
+  },
+  argTypes: {
+    showSubtitle: { control: 'boolean', description: 'Show or hide the supporting detail line.' },
+    subtitle: { table: { disable: true } },
+  },
   args: {
     variant: 'open',
     imageSrc: PLACEHOLDER_IMAGE,
     imageAlt: '',
     title: 'Clickable card',
-    subtitle: 'The entire card is the call-to-action. No action buttons shown.',
+    showSubtitle: true,
   },
-  render: (args) => (
-    <Card {...args} onClick={() => alert('Card clicked')} sx={{ maxWidth: 368 }}>
+  render: ({ showSubtitle, ...args }) => (
+    <Card
+      {...args}
+      subtitle={showSubtitle ? 'The entire card is the call-to-action. No action buttons shown.' : undefined}
+      onClick={() => alert('Card clicked')}
+      sx={{ maxWidth: 368 }}
+    >
       <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
         When the card has an onClick or href, action buttons are suppressed automatically.
       </Typography>
@@ -142,18 +234,36 @@ export const OpenInteractive: Story = {
   ),
 };
 
-export const OpenAsLink: Story = {
+type OpenAsLinkArgs = ComponentProps<typeof Card> & { showSubtitle: boolean };
+
+export const OpenAsLink: StoryObj<OpenAsLinkArgs> = {
   name: 'Open — href link card',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Open card rendered as an anchor element via `href`. No action buttons — the whole card is the link target. Use the **Show subtitle** toggle to verify the accessible name stays stable; `aria-label={title}` is applied to the `CardActionArea` so the linked label never includes subtitle text.',
+      },
+    },
+  },
+  argTypes: {
+    showSubtitle: { control: 'boolean', description: 'Show or hide the supporting detail line.' },
+    subtitle: { table: { disable: true } },
+  },
   args: {
     variant: 'open',
     imageSrc: PLACEHOLDER_IMAGE,
     imageAlt: '',
     title: 'Link card',
-    subtitle: 'Renders the whole card as an anchor element.',
+    showSubtitle: true,
     href: '#',
   },
-  render: (args) => (
-    <Card {...args} sx={{ maxWidth: 368 }}>
+  render: ({ showSubtitle, ...args }) => (
+    <Card
+      {...args}
+      subtitle={showSubtitle ? 'Renders the whole card as an anchor element.' : undefined}
+      sx={{ maxWidth: 368 }}
+    >
       <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
         Pass an href to turn the entire card into a semantic link.
       </Typography>

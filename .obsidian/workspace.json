@@ -1,70 +1,37 @@
 {
   "main": {
-    "id": "c78d8c985f81d6e4",
+    "id": "5368146c0ae3df17",
     "type": "split",
     "children": [
       {
-        "id": "8db689ed2c8a6042",
+        "id": "1a15ad013d3a59a4",
         "type": "tabs",
         "children": [
           {
-            "id": "549587e6964ec609",
+            "id": "970e8c0b32b1c725",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Getting started/fontawesome-pro-guide.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "fontawesome-pro-guide"
-            }
-          },
-          {
-            "id": "2758b21f7b49a7fc",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Getting started/fontawesome-team-setup.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "fontawesome-team-setup"
-            }
-          },
-          {
-            "id": "fdeb155e111dfa0c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Jade/change-log.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "change-log"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "vertical"
   },
   "left": {
-    "id": "84f2aa183a2ce63c",
+    "id": "14431be3e66469f9",
     "type": "split",
     "children": [
       {
-        "id": "fdc020b0f2f348e3",
+        "id": "100d980891d59ec4",
         "type": "tabs",
         "children": [
           {
-            "id": "9750fcf5c88110e5",
+            "id": "5685a4e12861ad6a",
             "type": "leaf",
             "state": {
               "type": "file-explorer",
@@ -77,7 +44,7 @@
             }
           },
           {
-            "id": "264682674feb80bf",
+            "id": "94036a3088cd98fb",
             "type": "leaf",
             "state": {
               "type": "search",
@@ -94,7 +61,7 @@
             }
           },
           {
-            "id": "e7b1989120680e49",
+            "id": "20deced717de0052",
             "type": "leaf",
             "state": {
               "type": "bookmarks",
@@ -107,23 +74,22 @@
       }
     ],
     "direction": "horizontal",
-    "width": 248.5
+    "width": 300
   },
   "right": {
-    "id": "de2dfa7212100ba7",
+    "id": "1afcb1b378920494",
     "type": "split",
     "children": [
       {
-        "id": "5d2cf80fdc6ef6eb",
+        "id": "edf7fd8c36dbcb35",
         "type": "tabs",
         "children": [
           {
-            "id": "40d5b153384925db",
+            "id": "6e4d8d4953e135e1",
             "type": "leaf",
             "state": {
               "type": "backlink",
               "state": {
-                "file": "accessibility-audit-todo.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -133,25 +99,24 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for accessibility-audit-todo"
+              "title": "Backlinks"
             }
           },
           {
-            "id": "85d98a936b97086c",
+            "id": "af670a7f98aae3a4",
             "type": "leaf",
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "accessibility-audit-todo.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Outgoing links from accessibility-audit-todo"
+              "title": "Outgoing links"
             }
           },
           {
-            "id": "0b74423709637c5b",
+            "id": "cd585b8d785c5ecb",
             "type": "leaf",
             "state": {
               "type": "tag",
@@ -166,7 +131,7 @@
             }
           },
           {
-            "id": "04c2a1bbe3a10bd2",
+            "id": "cb5c6169f1dae39b",
             "type": "leaf",
             "state": {
               "type": "all-properties",
@@ -180,18 +145,17 @@
             }
           },
           {
-            "id": "d16edb1962c86b41",
+            "id": "af4ff21f770bb8d9",
             "type": "leaf",
             "state": {
               "type": "outline",
               "state": {
-                "file": "accessibility-audit-todo.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Outline of accessibility-audit-todo"
+              "title": "Outline"
             }
           }
         ]
@@ -212,33 +176,6 @@
       "bases:Create new base": false
     }
   },
-  "active": "fdeb155e111dfa0c",
-  "lastOpenFiles": [
-    "Paolo/accessibility-audit-todo.md",
-    "Jade/change-log.md",
-    "agents/README.md",
-    "Start here.md",
-    "Getting started/fontawesome-pro-guide.md",
-    "Getting started/Getting start with Foundation.md",
-    "Getting started/fontawesome-team-setup.md",
-    "workflows/figma-design-tokens.md",
-    "Setting up",
-    "Paolo/Obsidian Formatting Cheat Sheet.md",
-    "Paolo/Tech Glossary.md",
-    "Paolo/Need to come back to..md",
-    "Paolo/Session Notes — 21 April 202.md",
-    "agents/flanders.md",
-    "Paolo",
-    "agents/lisa.md",
-    "agents/frink.md",
-    "agents/troy-mcclure.md",
-    "workflows/README.md",
-    "obsidian/README.md",
-    "workflows",
-    "agents/chalmers.md",
-    "agents/carl.md",
-    "obsidian/figma-design-tokens.md",
-    "agents/smithers.md",
-    "agents/marge.md"
-  ]
+  "active": "970e8c0b32b1c725",
+  "lastOpenFiles": []
 }

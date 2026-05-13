@@ -32,6 +32,20 @@ export interface HeroIconProps {
    * `quaternary` tints to quaternary.main — use with background="none" only.
    */
   iconColor?: HeroIconColor;
+  /**
+   * Override the icon image size. Must be a valid CSS length in `rem` units (e.g. `'2.75rem'`).
+   * `px` values break browser zoom scaling and violate the rem-first sizing principle.
+   * Always pass alongside `containerSizeOverride` — mixing one override with `size` will produce a mismatched icon-to-container ratio.
+   * Takes precedence over `size`.
+   */
+  iconSizeOverride?: string;
+  /**
+   * Override the circular container size. Must be a valid CSS length in `rem` units (e.g. `'5.5rem'`).
+   * `px` values break browser zoom scaling and violate the rem-first sizing principle.
+   * Always pass alongside `iconSizeOverride` — mixing one override with `size` will produce a mismatched icon-to-container ratio.
+   * Takes precedence over `size`.
+   */
+  containerSizeOverride?: string;
   'aria-label'?: string;
 }
 
@@ -68,11 +82,13 @@ export function HeroIcon({
   size = 'md',
   background = 'none',
   iconColor = 'default',
+  iconSizeOverride,
+  containerSizeOverride,
   'aria-label': ariaLabel,
 }: HeroIconProps) {
   const sizeRem = SIZE_MAP[size];
-  const iconSize = `${sizeRem}rem`;
-  const containerSize = `${sizeRem * CONTAINER_RATIO}rem`;
+  const iconSize = iconSizeOverride || `${sizeRem}rem`;
+  const containerSize = containerSizeOverride || `${sizeRem * CONTAINER_RATIO}rem`;
   const bgColor = BG_COLOR[brand][background];
   const iconSrc = `/icons/${brand}/${encodeURIComponent(name)}.svg`;
 

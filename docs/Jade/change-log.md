@@ -4,6 +4,69 @@ A personal record of changes I've made or commissioned. Most recent first.
 
 ---
 
+## Card — Contained icon feature variant + HeroIcon size overrides
+**Date:** May 13, 2026
+**Files:** `src/stories/components/Card.stories.tsx`, `src/components/HeroIcon/index.tsx`
+
+### What changed
+
+Added a new **Contained — icon feature** story to the Card component in Storybook (positioned after "Contained — interactive (whole card)"). It's a `contained` card (free-form children) composed of:
+- `HeroIcon` — 88px container / 44px icon (5.5rem / 2.75rem). ART icon set with selectable background.
+- `Typography` heading + body copy
+- `TextButton` CTA — lighter visual weight than the action button variants
+
+To support the specific 88×44 sizes (not covered by HeroIcon's existing size scale), two optional props were added to `HeroIcon`:
+- `iconSizeOverride` — CSS length string, must be rem
+- `containerSizeOverride` — CSS length string, must be rem
+
+**Story controls:**
+- **Icon** — select dropdown of the full ART icon set (~150 icons)
+- **Icon background** — `none | brand | white | grey`
+
+### Team reviews
+
+**Flanders (a11y) — PASS WITH NOTES → fixed:**
+- Removed `aria-label` from decorative HeroIcon (heading communicates topic)
+- Updated TextButton label from generic "Call to action" to descriptive "Learn more about this feature"
+
+**Chalmers (code quality) — PASS WITH NOTES → fixed:**
+- `??` → `||` operator on override fallbacks (empty string would have silently bypassed the fallback)
+- Strengthened JSDoc on both override props — rem-only, must pass both together
+
+**Marge (visual consistency) — PASS WITH NOTES → fixed:**
+- Body text spacing updated to `mb: { xs: 3, sm: 4 }` to match other card variant spacing
+
+**Lisa (documentation) — done:**
+- Story description updated to cover decorative icon rule, button label guidance, ratio rationale, and heading level note
+
+### Structural note (resolved)
+Marge flagged that the story was originally named "Open — icon" but used `variant="contained"` while all other "Open —" stories use `variant="open"`. Renamed to **Contained — icon feature** to correctly reflect the variant, and repositioned to sit directly after "Contained — interactive (whole card)" in the Storybook sidebar.
+
+---
+
+## Card — showSubtitle control extended to remaining open variants
+**Date:** May 13, 2026
+**Files:** `src/stories/components/Card.stories.tsx`
+
+### What changed
+
+The `showSubtitle` boolean Storybook control (added earlier to "Open — image + actions") was extended to the three remaining open card variants:
+- **Open — no image**
+- **Open — interactive (whole card)**
+- **Open — href link card**
+
+Each story now has the toggle on by default. Toggling off passes `subtitle={undefined}` to the Card, removing the element from the DOM (not CSS-hiding it).
+
+### Accessibility (Flanders — PASS)
+
+All three variants passed. In the interactive and link card contexts, `aria-label={title}` on `CardActionArea` means the accessible name is completely decoupled from subtitle state — toggling it has no effect on what assistive technology announces.
+
+### Documentation (Lisa)
+
+Each story now has a `parameters.docs.description.story` string in the autodocs panel explaining the variant purpose, the `showSubtitle` toggle, and the relevant a11y behaviour.
+
+---
+
 ## Card — Accessibility fixes + subtitle toggle
 **Date:** May 13, 2026
 **Files:** `src/components/Card/index.tsx`, `src/app/themes/factory.ts`, `src/stories/components/Card.stories.tsx`
