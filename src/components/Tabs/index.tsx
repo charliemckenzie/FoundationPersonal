@@ -5,7 +5,6 @@ import { alpha } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import React from 'react';
 
-export type TabVariant = 'pill' | 'nav';
 export type TabSize = 'small' | 'medium' | 'large';
 export type TabStyle = 'default' | 'white';
 
@@ -19,7 +18,6 @@ export interface TabsProps {
   /** Accessible label for the tablist — shown to screen readers. Make it descriptive, e.g. "Account settings". */
   label: string;
   tabs: TabItem[];
-  variant?: TabVariant;
   size?: TabSize;
   tabStyle?: TabStyle;
   defaultTab?: number;
@@ -35,7 +33,6 @@ const SIZE_CONFIG = {
 export function Tabs({
   label,
   tabs,
-  variant = 'pill',
   size = 'medium',
   tabStyle = 'default',
   defaultTab = 0,
@@ -132,49 +129,25 @@ export function Tabs({
           },
         };
 
-  const navTabSx = {
-    textTransform: 'none' as const,
-    fontWeight: 500,
-    fontSize,
-    py,
-    px,
-    minHeight,
-    color: 'text.primary',
-    '&:hover': {
-      color: 'primary.main',
-      bgcolor: 'action.hover',
-    },
-    '&.Mui-selected': {
-      color: 'primary.main',
-      fontWeight: 700,
-    },
-    '&.Mui-focusVisible': {
-      outline: '2px solid',
-      outlineColor: 'primary.main',
-      outlineOffset: 2,
-    },
-  };
-
-  const tabSx = variant === 'pill' ? pillTabSx : navTabSx;
+  const tabSx = pillTabSx;
 
   return (
     <Box>
-      <Box sx={variant === 'nav' ? { borderBottom: 1, borderColor: 'divider' } : undefined}>
+      <Box>
         <MuiTabs
           value={active}
           onChange={handleChange}
           aria-label={label}
-          sx={
-            variant === 'pill'
-              ? {
-                  '& .MuiTabs-flexContainer': { gap: 0 },
-                  '& .MuiTabs-indicator': { display: 'none' },
-                  '& .MuiTab-root': { marginRight: 0.5 },
-                  '& .MuiTab-root:last-of-type': { marginRight: 0 },
-                  minHeight,
-                }
-              : { minHeight }
-          }
+          selectionFollowsFocus
+          sx={{
+            overflow: 'visible',
+            '& .MuiTabs-scroller': { overflow: 'visible !important' },
+            '& .MuiTabs-flexContainer': { gap: 0 },
+            '& .MuiTabs-indicator': { display: 'none' },
+            '& .MuiTab-root': { marginRight: 0.5 },
+            '& .MuiTab-root:last-of-type': { marginRight: 0 },
+            minHeight,
+          }}
         >
           {tabs.map((tab, i) => (
             <MuiTab
