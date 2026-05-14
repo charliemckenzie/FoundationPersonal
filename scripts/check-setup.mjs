@@ -219,6 +219,21 @@ check('No uncommitted changes from others', () => {
   }
 });
 
+check('gc.auto disabled (OneDrive compat)', () => {
+  let gcAuto;
+  try {
+    gcAuto = cmd('git config --global gc.auto');
+  } catch {
+    gcAuto = '';
+  }
+  if (gcAuto !== '0') {
+    throw new Error(
+      'Git auto-gc is enabled. On OneDrive this causes hundreds of y/n prompts after commits.\n' +
+      '     Fix: git config --global gc.auto 0'
+    );
+  }
+});
+
 // ── Summary ───────────────────────────────────────────────────────────────────
 console.log('\n' + '─'.repeat(50));
 console.log(`\n  ${passed} passed  |  ${warnings} warnings  |  ${failed} failed\n`);
