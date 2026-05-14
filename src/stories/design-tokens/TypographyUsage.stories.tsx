@@ -2,6 +2,72 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import Box from '@mui/material/Box'
 import MuiTypography from '@mui/material/Typography'
 
+// Recommended margin-bottom values per variant.
+// These are not enforced by the theme — they are the documented convention.
+// Apply via sx={{ mb: X }} at the call site.
+const SPACING_SCALE = [
+  { variant: 'display-1', mb: 2,   mbPx: '16px' },
+  { variant: 'display-2', mb: 2,   mbPx: '16px' },
+  { variant: 'display-3', mb: 2,   mbPx: '16px' },
+  { variant: 'display-4', mb: 2,   mbPx: '16px' },
+  { variant: 'display-5', mb: 2,   mbPx: '16px' },
+  { variant: 'display-6', mb: 2,   mbPx: '16px' },
+  { variant: 'h1',        mb: 1.5, mbPx: '12px' },
+  { variant: 'h2',        mb: 1.5, mbPx: '12px' },
+  { variant: 'h3',        mb: 1,   mbPx: '8px'  },
+  { variant: 'h4',        mb: 1,   mbPx: '8px'  },
+  { variant: 'h5',        mb: 1,   mbPx: '8px'  },
+  { variant: 'h6',        mb: 0.5, mbPx: '4px'  },
+  { variant: 'lead',      mb: 2.5, mbPx: '20px' },
+  { variant: 'body',      mb: 2,   mbPx: '16px' },
+  { variant: 'small',     mb: 1.5, mbPx: '12px' },
+] as const
+
+function SpacingTable() {
+  return (
+    <Box sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 1, overflow: 'hidden', mb: 4 }}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: '120px 140px',
+          gap: 2,
+          px: 2,
+          py: 1.5,
+          backgroundColor: 'action.hover',
+          borderBottom: '1px solid',
+          borderColor: 'divider',
+        }}
+      >
+        <MuiTypography variant="small" sx={{ fontWeight: 600, mb: 0 }}>Variant</MuiTypography>
+        <MuiTypography variant="small" sx={{ fontWeight: 600, mb: 0 }}>Recommended mb</MuiTypography>
+      </Box>
+      {SPACING_SCALE.map(({ variant, mb, mbPx }, i) => (
+        <Box
+          key={variant}
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: '120px 140px',
+            gap: 2,
+            px: 2,
+            py: 1.5,
+            borderBottom: i < SPACING_SCALE.length - 1 ? '1px solid' : 'none',
+            borderColor: 'divider',
+          }}
+        >
+          <Box component="span" sx={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'primary.main', lineHeight: 1.5 }}>
+            {variant}
+          </Box>
+          <MuiTypography variant="small" sx={{ mb: 0 }}>
+            <Box component="span" sx={{ fontFamily: 'monospace', fontSize: '0.8rem' }}>mb={mb}</Box>
+            {' '}
+            <Box component="span" sx={{ color: 'text.muted' }}>({mbPx})</Box>
+          </MuiTypography>
+        </Box>
+      ))}
+    </Box>
+  )
+}
+
 function Section({ label, token, children }: { label: string; token: string; children: React.ReactNode }) {
   return (
     <Box
@@ -50,7 +116,7 @@ function TypographyUsageDoc() {
       </MuiTypography>
 
       {/* Headings */}
-      <MuiTypography variant="h6" sx={{ mb: 1, color: 'primary.main' }}>Headings</MuiTypography>
+      <MuiTypography variant="h6" color="text.heading" sx={{ mb: 1 }}>Headings</MuiTypography>
       <MuiTypography variant="small" color="text.muted" sx={{ mb: 2, display: 'block' }}>
         Use semantic heading elements to establish document hierarchy. Render with the matching variant.
       </MuiTypography>
@@ -69,9 +135,12 @@ function TypographyUsageDoc() {
       ))}
 
       {/* Body text */}
-      <MuiTypography variant="h6" sx={{ mt: 5, mb: 1, color: 'primary.main' }}>Paragraphs</MuiTypography>
+      <MuiTypography variant="h6" color="text.heading" sx={{ mt: 5, mb: 1 }}>Paragraphs</MuiTypography>
       <MuiTypography variant="small" color="text.muted" sx={{ mb: 2, display: 'block' }}>
         Three paragraph roles. Use lead for introductory copy, body for general prose, small for supporting or meta text.
+        Body defaults to a 24px (1.5) line height — compact and suitable for UI copy. For longer reading passages, apply{' '}
+        <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.8em' }}>{'sx={{ lineHeight: 1.75 }}'}</Box>{' '}
+        to increase line height to 28px.
       </MuiTypography>
 
       <Section label="Introductory paragraph" token="lead">
@@ -81,7 +150,7 @@ function TypographyUsageDoc() {
         </MuiTypography>
       </Section>
 
-      <Section label="General prose" token="body">
+      <Section label="General prose" token="body · lineHeight 1.5 (default)">
         <MuiTypography variant="body">
           Use the body variant for the majority of readable content — article text, descriptions, form instructions,
           and interface copy. It is optimised for line length and reading comfort at normal screen distances.
@@ -89,14 +158,30 @@ function TypographyUsageDoc() {
         </MuiTypography>
       </Section>
 
-      <Section label="Supporting / meta text" token="small">
+      <Section label="Long-form / content blocks" token="body · lineHeight 1.75">
+        <MuiTypography variant="body" sx={{ lineHeight: 1.75 }}>
+          For longer reading passages — editorial articles, help content, onboarding explanations — increase line height
+          to 1.75 (28px). This improves readability for multi-paragraph text by giving each line more breathing room.
+          Apply it with <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.8em' }}>{'sx={{ lineHeight: 1.75 }}'}</Box>{' '}
+          directly on the Typography component. The base font size remains 16px; only the line height changes.
+        </MuiTypography>
+      </Section>
+
+      <Section label="Supporting / meta text" token="small · text.secondary">
         <MuiTypography variant="small" color="text.secondary">
           Last updated 12 April 2026 · 4 min read · Tagged under Design Systems, Typography
         </MuiTypography>
       </Section>
 
+      <Section label="Footnote" token="small · text.muted">
+        <MuiTypography variant="small" color="text.muted">
+          Past performance is not a reliable indicator of future performance. This information is general in nature
+          and does not take into account your personal financial situation or needs.
+        </MuiTypography>
+      </Section>
+
       {/* Inline links */}
-      <MuiTypography variant="h6" sx={{ mt: 5, mb: 1, color: 'primary.main' }}>Inline Links</MuiTypography>
+      <MuiTypography variant="h6" color="text.heading" sx={{ mt: 5, mb: 1 }}>Inline Links</MuiTypography>
       <MuiTypography variant="small" color="text.muted" sx={{ mb: 2, display: 'block' }}>
         Links sit inline within body copy. Use color="text.link" with underline decoration on the anchor element.
       </MuiTypography>
@@ -138,7 +223,7 @@ function TypographyUsageDoc() {
       </Section>
 
       {/* Lists */}
-      <MuiTypography variant="h6" sx={{ mt: 5, mb: 1, color: 'primary.main' }}>Lists</MuiTypography>
+      <MuiTypography variant="h6" color="text.heading" sx={{ mt: 5, mb: 1 }}>Lists</MuiTypography>
       <MuiTypography variant="small" color="text.muted" sx={{ mb: 2, display: 'block' }}>
         Use ul for unordered items, ol for sequential steps. List items inherit body typography.
       </MuiTypography>
@@ -179,214 +264,14 @@ function TypographyUsageDoc() {
         </Box>
       </Section>
 
-      {/* Composition example */}
-      <MuiTypography variant="h6" sx={{ mt: 5, mb: 1, color: 'primary.main' }}>Composition</MuiTypography>
+      {/* Spacing */}
+      <MuiTypography variant="h6" color="text.heading" sx={{ mt: 5, mb: 1 }}>Spacing</MuiTypography>
       <MuiTypography variant="small" color="text.muted" sx={{ mb: 2, display: 'block' }}>
-        How these elements combine in a real document structure.
+        Recommended <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.8em' }}>mb</Box> values
+        per variant. Override with <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.8em' }}>{'sx={{ mb: 0 }}'}</Box> inside
+        components that manage their own spacing — cards, list items, form labels, table cells.
       </MuiTypography>
-
-      <Box
-        sx={{
-          borderBottom: '1px solid',
-          borderColor: 'divider',
-          py: 3,
-        }}
-      >
-        <MuiTypography variant="h2" color="text.heading" sx={{ mb: 2 }}>
-          Getting started with the design system
-        </MuiTypography>
-        <MuiTypography variant="lead" sx={{ mb: 2 }}>
-          The foundation design system provides a shared set of components, tokens, and patterns
-          for building consistent product interfaces.
-        </MuiTypography>
-        <MuiTypography variant="body" sx={{ mb: 2 }}>
-          Before writing any component code, read the{' '}
-          <Box
-            component="a"
-            href="#"
-            sx={linkSx}
-          >
-            contributing guide
-          </Box>
-          {' '}and familiarise yourself with the token system. All spacing, colour, and typography values
-          come from the theme — never from hardcoded values.
-        </MuiTypography>
-        <MuiTypography variant="h4" color="text.heading" sx={{ mb: 1.5 }}>
-          Prerequisites
-        </MuiTypography>
-        <Box
-          component="ul"
-          sx={{ m: 0, pl: 3, mb: 2, display: 'flex', flexDirection: 'column', gap: 0.75 }}
-        >
-          {[
-            'Node 20 or later',
-            'npm 10 or later',
-            'VS Code with the Claude Code extension',
-          ].map((item) => (
-            <Box component="li" key={item}>
-              <MuiTypography variant="body">{item}</MuiTypography>
-            </Box>
-          ))}
-        </Box>
-        <MuiTypography variant="small" color="text.muted">
-          Run npm run check-setup to verify your environment before starting.
-        </MuiTypography>
-      </Box>
-
-      {/* Composition 2 — Release notes / changelog */}
-      <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', py: 3 }}>
-        <MuiTypography variant="small" color="text.muted" sx={{ display: 'block', mb: 1 }}>
-          20 April 2026
-        </MuiTypography>
-        <MuiTypography variant="h3" color="text.heading" sx={{ mb: 1.5 }}>
-          v2.4.0 — Semantic colour tokens
-        </MuiTypography>
-        <MuiTypography variant="body" sx={{ mb: 2 }}>
-          This release replaces all primitive colour references in component code with semantic tokens.
-          Hardcoded hex values and direct palette references are no longer permitted — see the{' '}
-          <Box component="a" href="#" sx={linkSx}>
-            migration guide
-          </Box>
-          {' '}for a full list of renamed tokens.
-        </MuiTypography>
-        <MuiTypography variant="h5" color="text.heading" sx={{ mb: 1 }}>
-          Breaking changes
-        </MuiTypography>
-        <Box component="ul" sx={{ m: 0, pl: 3, mb: 2, display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-          {[
-            'palette.primary.600 → text.link',
-            'palette.neutral.100 → surface.subtle',
-            'palette.neutral.900 → text.default',
-          ].map((item) => (
-            <Box component="li" key={item}>
-              <MuiTypography variant="body" sx={{ fontFamily: 'monospace' }}>{item}</MuiTypography>
-            </Box>
-          ))}
-        </Box>
-        <MuiTypography variant="h5" color="text.heading" sx={{ mb: 1 }}>
-          What to do
-        </MuiTypography>
-        <Box component="ol" sx={{ m: 0, pl: 3, mb: 2, display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-          {[
-            'Run the codemod: npx @foundation/codemod semantic-tokens',
-            'Review any sx props flagged by the ESLint rule.',
-            'Re-run Storybook and check visual diffs.',
-          ].map((item) => (
-            <Box component="li" key={item}>
-              <MuiTypography variant="body">{item}</MuiTypography>
-            </Box>
-          ))}
-        </Box>
-        <MuiTypography variant="small" color="text.muted">
-          Full diff on{' '}
-          <Box component="a" href="#" sx={{ ...linkSx, fontSize: 'inherit' }}>
-            GitHub
-          </Box>
-          . Questions? Post in #design-system.
-        </MuiTypography>
-      </Box>
-
-      {/* Composition 3 — Empty / error state UI copy */}
-      <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', py: 3 }}>
-        <MuiTypography variant="h4" color="text.heading" sx={{ mb: 1 }}>
-          No results found
-        </MuiTypography>
-        <MuiTypography variant="body" color="text.secondary" sx={{ mb: 2 }}>
-          We couldn't find anything matching <Box component="strong" sx={{ color: 'text.default' }}>"semantic button"</Box>.
-          Try adjusting your search or browse the full component list.
-        </MuiTypography>
-        <MuiTypography variant="small" color="text.muted">
-          Showing results from{' '}
-          <Box component="a" href="#" sx={{ ...linkSx, fontSize: 'inherit' }}>
-            all categories
-          </Box>
-          .
-        </MuiTypography>
-      </Box>
-
-      {/* Composition 4 — Settings / form description pattern */}
-      <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', py: 3 }}>
-        <MuiTypography variant="h5" color="text.heading" sx={{ mb: 0.5 }}>
-          Email notifications
-        </MuiTypography>
-        <MuiTypography variant="body" color="text.secondary" sx={{ mb: 2 }}>
-          Choose which updates you receive by email. You can change these at any time from your{' '}
-          <Box component="a" href="#" sx={linkSx}>
-            account settings
-          </Box>
-          .
-        </MuiTypography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-          {[
-            { label: 'Component status changes', desc: 'When a component moves from draft to review or stable.' },
-            { label: 'New design token releases', desc: 'When the token set is updated or extended.' },
-            { label: 'Breaking changes', desc: 'Always sent — cannot be disabled.' },
-          ].map(({ label, desc }) => (
-            <Box key={label}>
-              <MuiTypography variant="body" sx={{ fontWeight: 500 }}>{label}</MuiTypography>
-              <MuiTypography variant="small" color="text.muted">{desc}</MuiTypography>
-            </Box>
-          ))}
-        </Box>
-      </Box>
-
-      {/* Composition 5 — Long-form article section */}
-      <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', py: 3 }}>
-        <MuiTypography variant="h2" color="text.heading" sx={{ mb: 2 }}>
-          Why design tokens matter
-        </MuiTypography>
-        <MuiTypography variant="lead" sx={{ mb: 3 }}>
-          Tokens are the single source of truth for every visual decision in a product. When a colour
-          changes in the theme, every component that uses that token updates automatically.
-        </MuiTypography>
-        <MuiTypography variant="h4" color="text.heading" sx={{ mb: 1.5 }}>
-          The problem without tokens
-        </MuiTypography>
-        <MuiTypography variant="body" sx={{ mb: 2 }}>
-          Without tokens, colours and spacing values are scattered across hundreds of files. A single
-          brand refresh means hunting through every component, every stylesheet, and every inline style —
-          with no guarantee you found them all.
-        </MuiTypography>
-        <MuiTypography variant="body" sx={{ mb: 2 }}>
-          Tokens solve this by giving every value a name. The name is stable even when the value changes.
-          Components reference the name, not the value, so a theme update propagates everywhere at once.
-          Read more in the{' '}
-          <Box component="a" href="#" sx={linkSx}>
-            token architecture guide
-          </Box>
-          .
-        </MuiTypography>
-        <MuiTypography variant="h4" color="text.heading" sx={{ mb: 1.5 }}>
-          Semantic vs primitive tokens
-        </MuiTypography>
-        <MuiTypography variant="body" sx={{ mb: 2 }}>
-          Primitive tokens name raw values: <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.875em' }}>blue-600 = #2563eb</Box>.
-          Semantic tokens assign meaning: <Box component="code" sx={{ fontFamily: 'monospace', fontSize: '0.875em' }}>text.link = blue-600</Box>.
-          Components should always use semantic tokens — never primitives directly.
-        </MuiTypography>
-        <Box component="ul" sx={{ m: 0, pl: 3, mb: 2, display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-          {[
-            'Semantic tokens can be reassigned per theme without touching component code.',
-            'Primitive tokens can be updated in one place and all semantic tokens inherit the change.',
-            'The two-layer model scales from single-brand to multi-brand with minimal effort.',
-          ].map((item) => (
-            <Box component="li" key={item}>
-              <MuiTypography variant="body">{item}</MuiTypography>
-            </Box>
-          ))}
-        </Box>
-        <MuiTypography variant="small" color="text.muted">
-          See{' '}
-          <Box component="a" href="#" sx={{ ...linkSx, fontSize: 'inherit' }}>
-            Colors
-          </Box>
-          {' '}and{' '}
-          <Box component="a" href="#" sx={{ ...linkSx, fontSize: 'inherit' }}>
-            Primitives
-          </Box>
-          {' '}in Design Tokens for the full token reference.
-        </MuiTypography>
-      </Box>
+      <SpacingTable />
     </Box>
   )
 }

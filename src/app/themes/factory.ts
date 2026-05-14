@@ -629,6 +629,15 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             small: 'p',
           },
         },
+        styleOverrides: {
+          root: ({ theme, ownerState }) => ({
+            ...(['h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+                 'display-1', 'display-2', 'display-3', 'display-4', 'display-5', 'display-6',
+                ].includes(ownerState.variant as string) && {
+              color: theme.palette.text.heading,
+            }),
+          }),
+        },
       },
     },
   });
