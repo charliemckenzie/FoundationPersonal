@@ -1,4 +1,5 @@
 import { Meta } from '@storybook/addon-docs/blocks';
+import { useState } from 'react';
 
 <Meta title="Foundation / Component Status" />
 
@@ -10,66 +11,109 @@ This is the Foundation design system — a living component library built to sup
 
 Every component goes through the full pipeline before it's marked **Stable**:
 
-1. **Lenny** builds it
-2. **Chalmers** reviews code quality
-3. **Flanders** reviews accessibility (WCAG 2.2 AA)
-4. **Marge** reviews visual consistency
-5. **Lisa** writes this story and usage docs
-6. **Frink** commits and opens a PR
-7. **You** (the designer) approves and merges
+1. **Moe** approves the component structure and API before anything is built
+2. **Lenny** builds it
+3. **Chalmers** reviews code quality
+4. **Flanders** reviews accessibility (WCAG 2.2 AA)
+5. **Marge** reviews visual consistency
+6. **Lisa** writes this story and usage docs
+7. **Willie** runs the full sign-off checklist and marks the component stable
+8. **Frink** commits and opens a PR
+9. **You** (the designer) approves and merges
 
 ---
 
 ## Component Status
 
-<table>
-  <thead>
-    <tr>
-      <th>Component</th>
-      <th>Status</th>
-      <th>Story</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td>Accordion</td><td><code>draft</code></td><td><a href="/?path=/story/components-accordion--default">Accordion</a></td></tr>
-    <tr><td>AddressField</td><td><code>draft</code></td><td><a href="/?path=/story/form-components-addressfield--default">AddressField</a></td></tr>
-    <tr><td>Autocomplete</td><td><code>draft</code></td><td><a href="/?path=/story/form-components-autocomplete--default">Autocomplete</a></td></tr>
-    <tr><td>Alert</td><td><code>review</code></td><td><a href="/?path=/story/components-alert--default">Alert</a></td></tr>
-    <tr><td>Badge</td><td><code>review</code></td><td><a href="/?path=/story/components-badge--default">Badge</a></td></tr>
-    <tr><td>Breadcrumb</td><td><code>draft</code></td><td><a href="/?path=/story/components-breadcrumb--default">Breadcrumb</a></td></tr>
-    <tr><td>Button</td><td><code>stable</code></td><td><a href="/?path=/story/components-buttons-button--default">Button</a></td></tr>
-    <tr><td>Card</td><td><code>draft</code></td><td><a href="/?path=/story/components-card--contained">Card</a></td></tr>
-    <tr><td>Checkbox</td><td><code>review</code></td><td><a href="/?path=/story/components-checkbox--default">Checkbox</a></td></tr>
-    <tr><td>Chip</td><td><code>review</code></td><td><a href="/?path=/story/components-chip--default">Chip</a></td></tr>
-    <tr><td>Dialog</td><td><code>draft</code></td><td><a href="/?path=/story/components-dialog--default">Dialog</a></td></tr>
-    <tr><td>Drawer</td><td><code>draft</code></td><td><a href="/?path=/story/components-drawer--default">Drawer</a></td></tr>
-    <tr><td>ExpandableItem</td><td><code>review</code></td><td><a href="/?path=/story/components-expandableitem--default">ExpandableItem</a></td></tr>
-    <tr><td>Footer</td><td><code>draft</code></td><td><a href="/?path=/story/public-web-footer--default">Footer</a></td></tr>
-    <tr><td>HeroIcon</td><td><code>draft</code></td><td><a href="/?path=/story/components-icons-hero-icon--default">HeroIcon</a></td></tr>
-    <tr><td>Icon</td><td><code>draft</code></td><td><a href="/?path=/story/components-icons-icon--default">Icon</a></td></tr>
-    <tr><td>IconButton</td><td><code>stable</code></td><td><a href="/?path=/story/components-buttons-iconbutton--default">IconButton</a></td></tr>
-    <tr><td>IconList</td><td><code>draft</code></td><td><a href="/?path=/story/components-iconlist--default">IconList</a></td></tr>
-    <tr><td>Logo</td><td><code>draft</code></td><td><a href="/?path=/story/components-logo--default">Logo</a></td></tr>
-    <tr><td>Menu</td><td><code>draft</code></td><td><a href="/?path=/story/components-menu--default">Menu</a></td></tr>
-    <tr><td>Modal</td><td><code>draft</code></td><td><a href="/?path=/story/utilities-modal--default">Modal</a></td></tr>
-    <tr><td>RadioGroup</td><td><code>review</code></td><td><a href="/?path=/story/components-radiogroup--default">RadioGroup</a></td></tr>
-    <tr><td>QuickLinks</td><td><code>draft</code></td><td><a href="/?path=/story/components-quicklinks--default">QuickLinks</a></td></tr>
-    <tr><td>Select</td><td><code>review</code></td><td><a href="/?path=/story/components-select--default">Select</a></td></tr>
-    <tr><td>Spinner</td><td><code>draft</code></td><td><a href="/?path=/story/components-spinner--default">Spinner</a></td></tr>
-    <tr><td>Switch</td><td><code>review</code></td><td><a href="/?path=/story/components-switch--default">Switch</a></td></tr>
-    <tr><td>Table</td><td><code>draft</code></td><td><a href="/?path=/story/components-table--default">Table</a></td></tr>
-    <tr><td>Tabs</td><td><code>draft</code></td><td><a href="/?path=/story/components-tabs--default">Tabs</a></td></tr>
-    <tr><td>TextButton</td><td><code>stable</code></td><td><a href="/?path=/story/components-buttons-textbutton--default">TextButton</a></td></tr>
-    <tr><td>TextField</td><td><code>review</code></td><td><a href="/?path=/story/components-textfield--default">TextField</a></td></tr>
-    <tr><td>ToggleButton</td><td><code>draft</code></td><td><a href="/?path=/story/components-togglebutton--default">ToggleButton</a></td></tr>
-    <tr><td>Tooltip</td><td><code>draft</code></td><td><a href="/?path=/story/components-tooltip--default">Tooltip</a></td></tr>
-  </tbody>
-</table>
+export const COMPONENTS = [
+  { name: 'Accordion',      status: 'draft',  story: '/?path=/story/components-accordion--default' },
+  { name: 'AddressField',   status: 'draft',  story: '/?path=/story/form-components-addressfield--default' },
+  { name: 'Alert',          status: 'review', story: '/?path=/story/components-alert--default' },
+  { name: 'Autocomplete',   status: 'draft',  story: '/?path=/story/form-components-autocomplete--default' },
+  { name: 'Badge',          status: 'review', story: '/?path=/story/components-badge--default' },
+  { name: 'Breadcrumb',     status: 'draft',  story: '/?path=/story/components-breadcrumb--default' },
+  { name: 'Button',         status: 'stable', story: '/?path=/story/components-buttons-button--default' },
+  { name: 'Card',           status: 'draft',  story: '/?path=/story/components-card--contained' },
+  { name: 'Checkbox',       status: 'review', story: '/?path=/story/components-checkbox--default' },
+  { name: 'Chip',           status: 'review', story: '/?path=/story/components-chip--default' },
+  { name: 'Dialog',         status: 'draft',  story: '/?path=/story/components-dialog--default' },
+  { name: 'Drawer',         status: 'draft',  story: '/?path=/story/components-drawer--default' },
+  { name: 'ExpandableItem', status: 'review', story: '/?path=/story/components-expandableitem--default' },
+  { name: 'Footer',         status: 'draft',  story: '/?path=/story/public-web-footer--default' },
+  { name: 'HeroIcon',       status: 'draft',  story: '/?path=/story/components-icons-hero-icon--default' },
+  { name: 'Icon',           status: 'draft',  story: '/?path=/story/components-icons-icon--default' },
+  { name: 'IconButton',     status: 'stable', story: '/?path=/story/components-buttons-iconbutton--default' },
+  { name: 'IconList',       status: 'draft',  story: '/?path=/story/components-iconlist--default' },
+  { name: 'Logo',           status: 'draft',  story: '/?path=/story/components-logo--default' },
+  { name: 'Menu',           status: 'draft',  story: '/?path=/story/components-menu--default' },
+  { name: 'Modal',          status: 'draft',  story: '/?path=/story/utilities-modal--default' },
+  { name: 'QuickLinks',     status: 'draft',  story: '/?path=/story/components-quicklinks--default' },
+  { name: 'RadioGroup',     status: 'review', story: '/?path=/story/components-radiogroup--default' },
+  { name: 'Select',         status: 'review', story: '/?path=/story/components-select--default' },
+  { name: 'Spinner',        status: 'draft',  story: '/?path=/story/components-spinner--default' },
+  { name: 'Switch',         status: 'review', story: '/?path=/story/components-switch--default' },
+  { name: 'Table',          status: 'draft',  story: '/?path=/story/components-table--default' },
+  { name: 'Tabs',           status: 'draft',  story: '/?path=/story/components-tabs--default' },
+  { name: 'TextButton',     status: 'stable', story: '/?path=/story/components-buttons-textbutton--default' },
+  { name: 'TextField',      status: 'review', story: '/?path=/story/components-textfield--default' },
+  { name: 'ToggleButton',   status: 'draft',  story: '/?path=/story/components-togglebutton--default' },
+  { name: 'Tooltip',        status: 'draft',  story: '/?path=/story/components-tooltip--default' },
+];
+
+export const STATUS_ORDER = { stable: 0, review: 1, draft: 2 };
+export const STATUS_COLOR = { stable: '#2e7d32', review: '#f9a825', draft: '#c62828' };
+
+export const ComponentTable = () => {
+  const [sortCol, setSortCol] = useState('name');
+  const [sortDir, setSortDir] = useState('asc');
+
+  const toggle = (col) => {
+    if (sortCol === col) setSortDir(d => d === 'asc' ? 'desc' : 'asc');
+    else { setSortCol(col); setSortDir('asc'); }
+  };
+
+  const sorted = [...COMPONENTS].sort((a, b) => {
+    const cmp = sortCol === 'name'
+      ? a.name.localeCompare(b.name)
+      : STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+    return sortDir === 'asc' ? cmp : -cmp;
+  });
+
+  const indicator = (col) => sortCol === col ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ' ⇅';
+
+  const thStyle = { cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap' };
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th style={thStyle} onClick={() => toggle('name')}>Component{indicator('name')}</th>
+          <th style={thStyle} onClick={() => toggle('status')}>Status{indicator('status')}</th>
+          <th>Story</th>
+        </tr>
+      </thead>
+      <tbody>
+        {sorted.map(({ name, status, story }) => (
+          <tr key={name}>
+            <td>{name}</td>
+            <td>
+              <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:STATUS_COLOR[status],marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true" />
+              <code>{status}</code>
+            </td>
+            <td><a href={story}>{name}</a></td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
+
+<ComponentTable />
 
 **Status legend:**
-- `draft` — in progress, not reviewed
-- `review` — with Chalmers / Flanders / Marge
-- `stable` — fully signed off, safe to use in prototypes
+- <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#2e7d32',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`stable` — fully signed off, safe to use in prototypes
+- <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#f9a825',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`review` — with Chalmers / Flanders / Marge
+- <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#c62828',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`draft` — in progress, not reviewed
 
 ---
 

@@ -66,4 +66,4 @@ chore(deps): update MUI to 9.1.0
 
 ## Position in pipeline
 
-Receives from [Lisa](./lisa.md) (all reviews complete). Creates branch (with designer approval), commits, and opens draft PR. Designer reviews and merges.
+Receives from [Willie](./willie.md) (status confirmed, all sign-offs complete). Creates branch (with designer approval), commits, and opens draft PR. Designer reviews and merges.

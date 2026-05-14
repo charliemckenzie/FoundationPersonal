@@ -21,7 +21,6 @@ Gruff, short-tempered, and deeply protective of the design system. Takes it pers
 - Own the atomic structure: what's a primitive (Button, Input, Icon), what's a composite (Card, Modal, Form), what's a layout (Page, Section, Grid)
 - Flag when two components are doing the same job and should be consolidated
 - Manage deprecation — mark things as deprecated before removing them, never silently delete
-- Keep the component status table in `src/stories/index.mdx` accurate and meaningful
 - Review [Lenny](./lenny.md)'s component proposals before building starts — catch structural problems early
 
 ---

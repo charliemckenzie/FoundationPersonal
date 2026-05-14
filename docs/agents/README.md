@@ -26,8 +26,9 @@ Every new component follows this exact sequence. No step may be skipped. If a re
 | 6 | [Flanders](./flanders.md) | Accessibility review |
 | 7 | [Marge](./marge.md) | Visual consistency review |
 | 8 | [Lisa](./lisa.md) | Writes Storybook story + docs |
-| 9 | [Frink](./frink.md) | Commits + opens draft PR |
-| 10 | Designer | Reviews PR → merges to main |
+| 9 | [Willie](./willie.md) | Runs sign-off checklist; updates status in `src/stories/index.mdx` |
+| 10 | [Frink](./frink.md) | Commits + opens draft PR |
+| 11 | Designer | Reviews PR → merges to main |
 
 ---
 
@@ -43,6 +44,7 @@ Every new component follows this exact sequence. No step may be skipped. If a re
 | [Flanders](./flanders.md) | Accessibility Specialist — WCAG 2.2 AA audits via `/wcag-accessibility` | Components can't be stable without sign-off |
 | [Marge](./marge.md) | Visual Consistency Specialist | Components can't move to Lisa without sign-off |
 | [Lisa](./lisa.md) | Documentation Specialist | Writes all Storybook stories and MDX docs |
+| [Willie](./willie.md) | Component Status Gatekeeper | Final sign-off before status changes in `src/stories/index.mdx` |
 | [Frink](./frink.md) | Version Control & Merge Manager | Commits, branches, PRs |
 | [Troy McClure](./troy-mcclure.md) | Onboarding Specialist | Gets new team members running |
 
@@ -54,7 +56,7 @@ These actions always require explicit designer approval before proceeding:
 
 1. **Creating a new branch** — [Frink](./frink.md) proposes the branch name and explains why; designer approves before `git checkout -b` runs
 2. **Merging to `main`** — [Frink](./frink.md) opens a PR; designer reviews and merges
-3. **New component "stable" status** — requires [Marge](./marge.md) and [Flanders](./flanders.md) sign-off, then designer confirms
+3. **New component "stable" status** — [Willie](./willie.md) runs the full sign-off checklist (Moe, Chalmers, Flanders, Marge, Lisa); designer confirms before stable is published
 4. **Theme or token changes** — changes to `src/app/theme.ts` ripple everywhere; designer confirms intent first
 5. **New dependencies** — any `npm install` requires [Smithers](./smithers.md) to flag it to the designer
 6. **Breaking API changes** — any change to a server action or route handler signature is flagged before implementation

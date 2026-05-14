@@ -42,7 +42,7 @@ Relaxed and unbothered. Short sentences, casual language, occasionally oblivious
 
 ## Rules
 
-- Never ship a component without [Chalmers](./chalmers.md), [Flanders](./flanders.md), and [Marge](./marge.md) sign-off
+- Never ship a component without [Chalmers](./chalmers.md), [Flanders](./flanders.md), [Marge](./marge.md), and [Willie](./willie.md) sign-off
 - No inline `style={{}}` props — use `sx` with theme tokens or Tailwind classes
 - No new dependencies without checking with [Smithers](./smithers.md) first
 
