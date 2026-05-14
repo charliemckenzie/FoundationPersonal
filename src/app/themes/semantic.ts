@@ -118,7 +118,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       subtle:  brand.neutral[200],
       default: brand.neutral[300],
       input:   brand.neutral[500],
-      focus:   brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
+      focus:   brand.primary[600], // brand primary blue — ART: trueBlue[600] #0051ff / QSuper: qBlue[600] #0079d0
     },
     action: {
       active:             brand.neutral[600],        // icon/control active colour (e.g. checked checkbox, active icon button)
@@ -249,7 +249,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       subtle:  brand.neutral[800],  // Foundation: #282c34
       default: brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
       input:   brand.quaternary ? brand.neutral[400] : brand.neutral[500], // QSuper: neutral[400] / ART: neutral[500]
-      focus:   brand.quaternary ? brand.neutral[300] : brand.neutral[400], // QSuper: neutral[300] / ART: neutral[400]
+      focus:   brand.primary[300], // brand primary blue (light tint for dark mode) — ART: trueBlue[300] / QSuper: qBlue[300]
     },
     action: {
       active:             brand.neutral[300],        // icon/control active colour

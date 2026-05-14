@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { Accordion } from '../../../components/Accordion';
 import type { AccordionProps } from '../../../components/Accordion';
+import { Button } from '../../../components/Button';
 
 const SAMPLE_ITEMS = [
   { id: 'panel-1', title: 'What is Foundation?', content: 'Foundation is the design system powering all UX prototypes. It provides a consistent set of components built on MUI.' },
@@ -10,8 +11,9 @@ const SAMPLE_ITEMS = [
 
 type DefaultExpandedOption = 'none' | 'panel-1' | 'panel-2' | 'panel-3';
 
-type AccordionStoryArgs = Omit<AccordionProps, 'defaultExpanded'> & {
+type AccordionStoryArgs = Omit<AccordionProps, 'defaultExpanded' | 'items'> & {
   defaultExpanded: DefaultExpandedOption;
+  showActions: boolean;
 };
 
 const meta: Meta<AccordionStoryArgs> = {
@@ -21,12 +23,11 @@ const meta: Meta<AccordionStoryArgs> = {
   parameters: { layout: 'padded' },
   argTypes: {
     items: { table: { disable: true } },
-    variant: { table: { disable: true } },
     onChange: { table: { disable: true } },
-    size: {
-      control: 'select',
-      options: ['small', 'medium', 'large'],
-      description: 'Controls the padding and typography scale of each panel.',
+    variant: {
+      control: 'radio',
+      options: ['default', 'exclusive'],
+      description: 'exclusive — only one panel can be open at a time.',
     },
     defaultExpanded: {
       control: 'select',
@@ -37,31 +38,43 @@ const meta: Meta<AccordionStoryArgs> = {
       control: 'boolean',
       description: 'Show a "Close all" button above the panels.',
     },
+    showActions: {
+      control: 'boolean',
+      description: 'Add action buttons (e.g. Cancel / Confirm) to the bottom of each panel.',
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<AccordionStoryArgs>;
 
+const ACTIONS = (
+  <>
+    <Button label="Cancel" variant="outlined" size="small" />
+    <Button label="Confirm" variant="contained" size="small" />
+  </>
+);
+
 export const Default: Story = {
-  render: ({ defaultExpanded, size, showCloseAll }) => (
+  render: ({ defaultExpanded, showCloseAll, variant, showActions }) => (
     <Accordion
-      key={defaultExpanded}
-      items={SAMPLE_ITEMS}
+      key={`${defaultExpanded}-${variant}-${showActions}`}
+      items={SAMPLE_ITEMS.map((item) => ({ ...item, actions: showActions ? ACTIONS : undefined }))}
       defaultExpanded={defaultExpanded === 'none' ? undefined : defaultExpanded}
-      size={size}
       showCloseAll={showCloseAll}
+      variant={variant}
     />
   ),
   args: {
-    size: 'medium',
+    variant: 'default',
     defaultExpanded: 'none',
     showCloseAll: false,
+    showActions: false,
   },
 };
 
 export const DefaultExpanded: Story = {
-  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1', showCloseAll: false, size: 'medium' },
+  args: { items: SAMPLE_ITEMS, defaultExpanded: 'panel-1', showCloseAll: false },
 };
 
 export const Exclusive: Story = {
@@ -70,7 +83,6 @@ export const Exclusive: Story = {
     items: SAMPLE_ITEMS,
     variant: 'exclusive',
     defaultExpanded: 'panel-1',
-    size: 'medium',
   },
 };
 
@@ -79,7 +91,6 @@ export const SingleItem: Story = {
     items: [{ id: 'single', title: 'Single panel', content: 'Just one panel, expanded by default.' }],
     defaultExpanded: 'single',
     showCloseAll: false,
-    size: 'medium',
   },
 };
 
@@ -90,7 +101,58 @@ export const MultipleExpanded: Story = {
       items={SAMPLE_ITEMS}
       defaultExpanded="panel-1"
       showCloseAll={true}
-      size="medium"
+    />
+  ),
+};
+
+export const Disabled: Story = {
+  name: 'Disabled panels',
+  render: () => (
+    <Accordion
+      defaultExpanded="panel-1"
+      items={[
+        { id: 'panel-1', title: 'Active panel', content: 'This panel is active and can be expanded or collapsed.' },
+        { id: 'panel-2', title: 'Disabled panel', content: 'This content is not reachable.', disabled: true },
+        { id: 'panel-3', title: 'Another active panel', content: 'This panel is also active.' },
+      ]}
+    />
+  ),
+};
+
+export const WithActions: Story = {
+  name: 'With action buttons',
+  render: () => (
+    <Accordion
+      defaultExpanded="panel-1"
+      items={[
+        {
+          id: 'panel-1',
+          title: 'Terms and conditions',
+          content: 'By proceeding you agree to the terms and conditions of this service. Please read carefully before accepting.',
+          actions: (
+            <>
+              <Button label="Cancel" variant="outlined" size="small" />
+              <Button label="I agree" variant="contained" size="small" />
+            </>
+          ),
+        },
+        {
+          id: 'panel-2',
+          title: 'Privacy policy',
+          content: 'We collect only the information necessary to deliver our services. Your data is never sold to third parties.',
+          actions: (
+            <>
+              <Button label="Decline" variant="outlined" size="small" />
+              <Button label="Accept" variant="contained" size="small" />
+            </>
+          ),
+        },
+        {
+          id: 'panel-3',
+          title: 'No action buttons',
+          content: 'This panel has no actions — the footer does not render when actions is omitted.',
+        },
+      ]}
     />
   ),
 };

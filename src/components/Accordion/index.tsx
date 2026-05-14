@@ -13,15 +13,11 @@ export interface AccordionItem {
   title: string;
   content: React.ReactNode;
   disabled?: boolean;
+  /** Optional action buttons rendered at the bottom of the expanded panel (e.g. Cancel / Agree). */
+  actions?: React.ReactNode;
 }
 
-export type AccordionSize = 'small' | 'medium' | 'large';
-
-const SIZE_MAP = {
-  small:  { summaryPy: 1,   summaryPx: 2,   detailsPy: 1,   detailsPx: 2,   titleVariant: 'small' as const, iconSize: 'sm' as const },
-  medium: { summaryPy: 1.5, summaryPx: 2,   detailsPy: 2,   detailsPx: 2,   titleVariant: 'body'  as const, iconSize: 'sm' as const },
-  large:  { summaryPy: 2,   summaryPx: 2.5, detailsPy: 2.5, detailsPx: 2.5, titleVariant: 'body'  as const, iconSize: 'md' as const },
-} as const;
+const SIZE = { summaryPy: 2.5, summaryPx: 3, detailsPt: 3, detailsPb: 3, detailsPx: 3, titleVariant: 'body' as const, iconSize: 'sm' as const };
 
 export interface AccordionProps {
   items: AccordionItem[];
@@ -29,18 +25,15 @@ export interface AccordionProps {
   onChange?: (id: string, expanded: boolean) => void;
   variant?: 'default' | 'exclusive';
   showCloseAll?: boolean;
-  size?: AccordionSize;
 }
 
 interface AccordionPanelProps {
   item: AccordionItem;
   expanded: boolean;
   onChange?: (id: string, expanded: boolean) => void;
-  size: AccordionSize;
 }
 
-function AccordionPanel({ item, expanded, onChange, size }: AccordionPanelProps) {
-  const sz = SIZE_MAP[size];
+function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
   const handleChange = useCallback(
     (_e: React.SyntheticEvent, isExpanded: boolean) => onChange?.(item.id, isExpanded),
     [item.id, onChange],
@@ -55,24 +48,24 @@ function AccordionPanel({ item, expanded, onChange, size }: AccordionPanelProps)
       elevation={0}
       sx={(t) => ({
         border: 1,
-        borderColor: 'border.default',
+        borderColor: item.disabled ? 'border.subtle' : 'border.default',
         borderRadius: `${t.spacing(1)} !important`,
         backgroundColor: 'background.paper',
         overflow: 'hidden',
         '&::before': { display: 'none' },
         '&:focus-within': {
-          outline: `2px solid ${t.palette.border.focus}`,
+          outline: `2px solid ${t.palette.primary.main}`,
           outlineOffset: '2px',
         },
       })}
     >
       <AccordionSummary
-        expandIcon={<Icon icon="chevron_down" size={sz.iconSize} />}
+        expandIcon={<Icon icon="chevron_down" size={SIZE.iconSize} />}
         aria-controls={`${item.id}-content`}
         id={`${item.id}-header`}
         sx={{
-          py: sz.summaryPy,
-          px: sz.summaryPx,
+          py: SIZE.summaryPy,
+          px: SIZE.summaryPx,
           '& .MuiAccordionSummary-content': { margin: 0 },
           '&.Mui-expanded': { backgroundColor: 'background.elevated' },
           '&:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
@@ -80,11 +73,11 @@ function AccordionPanel({ item, expanded, onChange, size }: AccordionPanelProps)
           '&.Mui-focusVisible': { outline: 'none', boxShadow: 'none', backgroundColor: 'background.elevated' },
         }}
       >
-        <Typography variant={sz.titleVariant} sx={{ fontWeight: 700, color: 'inherit' }}>
+        <Typography variant={SIZE.titleVariant} sx={{ fontWeight: 700, color: 'inherit' }}>
           {item.title}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails id={`${item.id}-content`} sx={{ px: sz.detailsPx, py: sz.detailsPy }}>
+      <AccordionDetails id={`${item.id}-content`} sx={{ px: SIZE.detailsPx, pt: SIZE.detailsPt, pb: SIZE.detailsPb }}>
         {typeof item.content === 'string' ? (
           <Typography variant="body" color="text.muted">
             {item.content}
@@ -92,12 +85,17 @@ function AccordionPanel({ item, expanded, onChange, size }: AccordionPanelProps)
         ) : (
           item.content
         )}
+        {item.actions && (
+          <Box sx={{ mt: 2, pt: 2, borderTop: 1, borderColor: 'border.subtle', display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+            {item.actions}
+          </Box>
+        )}
       </AccordionDetails>
     </MuiAccordion>
   );
 }
 
-export function Accordion({ items, defaultExpanded, onChange, variant = 'default', showCloseAll = false, size = 'medium' }: AccordionProps) {
+export function Accordion({ items, defaultExpanded, onChange, variant = 'default', showCloseAll = false }: AccordionProps) {
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set(defaultExpanded ? [defaultExpanded] : []),
   );
@@ -144,7 +142,6 @@ export function Accordion({ items, defaultExpanded, onChange, variant = 'default
             item={item}
             expanded={expanded.has(item.id)}
             onChange={handleChange}
-            size={size}
           />
         ))}
       </Box>
