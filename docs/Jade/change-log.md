@@ -4,6 +4,95 @@ A personal record of changes I've made or commissioned. Most recent first.
 
 ---
 
+## Card — documentation rewrite, new promo variant, and Storybook improvements
+**Date:** May 15, 2026
+**Files:** `src/components/Card/index.tsx`, `src/stories/components/Card.stories.tsx`, `src/stories/components/Card.mdx`
+
+### What changed
+
+#### 1. Documentation rewritten for a designer audience
+All story descriptions were rewritten to remove developer-facing language (rem sizes, prop names, ARIA implementation detail). Tone and structure now matches Material Design 3 — purpose first, brief guidance on when to use, key decisions highlighted in bold. No implementation detail.
+
+#### 2. `showSubtitle` toggle added to all remaining stories; defaults set to `false` on contained variants
+The three contained variants (**Contained**, **Contained — interactive**, **Contained — icon feature**) did not have a subtitle toggle. All three now have one, defaulting to `false`. The open variants retain their `true` default.
+
+#### 3. New `promo` variant — Open — horizontal image + actions
+A new `variant="promo"` was added to the Card component. Layout: image fills the left side (~35% width), content sits to the right. Stacks vertically on small screens.
+
+**Component changes (`src/components/Card/index.tsx`):**
+- `Box` import added
+- `variant` union extended: `'contained' | 'open' | 'promo'`
+- Promo renders with `h5` heading (same as all other variants), responsive flex layout, and the same action button pattern as the open variant
+
+**Accessibility (Flanders — PASS):**
+- Heading swaps to `<p>` when card is interactive (prevents heading inside button)
+- `aria-label={title}` on `CardActionArea`
+- Action buttons carry contextual `aria-label="Action: Card title"`
+- Stacks to column at `xs/sm` — safe for keyboard and zoom users
+
+**Story controls for the new variant:**
+| Control | Options | Default |
+|---|---|---|
+| Show subtitle | boolean | off |
+| Show primary action | boolean | on |
+| Show secondary action | boolean | off |
+| Show text button | boolean | off |
+| Background colour | white / grey / light blue | white |
+
+Background colour maps to `background.paper`, `background.default`, and `background.brandClear` (light blue brand token).
+
+`actionStyle` select control replaced with an independent `showTextButton` boolean toggle — consistent with how primary and secondary actions are controlled.
+
+#### 4. Image badge/pill feature added
+A `badge?: string` prop was added to the Card component. When set, renders a white pill label absolutely positioned in the top-left of the image. Applies to both the `open` and `promo` variants.
+
+- Position: `1rem` from top and left edges (previously `2px` — too tight)
+- Internal padding: `px: 2, py: 0.75` — breathing room around the label
+- Text centred with `display: flex`, `alignItems: center`, `justifyContent: center`
+- `pointerEvents: none` — does not interfere with interactive cards
+
+Four stories now have `showBadge` (boolean, default off) and `badgeLabel` (text, default "New members") controls:
+- Open — image + actions
+- Open — interactive (whole card)
+- Open — href link card
+- Open — horizontal image + actions
+
+#### 5. New story: Contained — horizontal + icon
+A new layout composition using `variant="contained"`: icon on the left (64px container / 32px icon), heading and supporting copy in the centre, action on the right. Responsive — stacks to column on small screens.
+
+**Accessibility (Flanders — PASS):**
+- Icon is decorative — no `aria-label`, heading communicates the topic
+- `minWidth: 0` on content box prevents long headings blowing out the flex layout
+- Stacks to column on `xs` screens
+
+**Story controls:**
+| Control | Options | Default |
+|---|---|---|
+| Icon | ART icon set | Calculator |
+| Icon background | none / brand / white / grey | brand |
+| Show subtitle | boolean | off |
+| Show primary action | boolean | on |
+| Show secondary action | boolean | off |
+| Show text button | boolean | off |
+
+Typography matches all other card variants: `h5` heading, `mb: 1` (8px) below heading, `variant="small"` for subtitle, `variant="body"` for supporting copy.
+
+#### 6. Storybook docs page restructured with accordions
+`autodocs` was replaced with a custom MDX docs page (`Card.mdx`). Each story is now inside a collapsible MUI Accordion. Structure:
+- **Contained** — 4 stories
+- **Open — vertical** — 4 stories
+- **Open — horizontal** — 1 story
+
+Each accordion shows the story description (`Description`), live canvas (`Canvas`), and controls (`Controls`).
+
+#### 7. Story renamed
+"Promo — image + content" renamed to **"Open — horizontal image + actions"** to sit consistently within the Open family naming convention.
+
+#### 8. npm audit — safe fixes applied
+Ran `npm audit fix`. Resolved 7 high-severity vulnerabilities (`ws <8.20.1`, `zod <4.0`, associated licence flags). 8 critical issues remain — all trace back to `next` itself and require a major version upgrade to `next@16.2.6`. Parked for a separate scoped upgrade project.
+
+---
+
 ## Card — Contained icon feature variant + HeroIcon size overrides
 **Date:** May 13, 2026
 **Files:** `src/stories/components/Card.stories.tsx`, `src/components/HeroIcon/index.tsx`
