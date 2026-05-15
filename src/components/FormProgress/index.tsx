@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { alpha } from '@mui/material/styles';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 
@@ -68,10 +69,10 @@ const MARKER_BASE_SX: SxProps<Theme> = {
 };
 
 const MARKER_STATE_SX: Record<StepState, SxProps<Theme>> = {
-  upcoming:  { border: '1.5px dashed', borderColor: 'border.default' },
-  active:    { border: '2px solid',    borderColor: 'primary.main'   },
-  completed: { bgcolor: 'primary.main' },
-  visited:   { bgcolor: 'text.muted'   },
+  upcoming:  { bgcolor: 'transparent', border: 0, color: 'text.muted' },
+  active:    { width: THUMB_SIZE, height: THUMB_SIZE, border: '3px solid', borderColor: 'primary.main', boxShadow: (t) => `0 0 0 2px ${t.palette.background.paper}, 0 0 0 6px ${alpha(t.palette.primary.main, 0.18)}` },
+  completed: { bgcolor: 'transparent', border: 0, color: 'primary.main' },
+  visited:   { bgcolor: 'transparent', border: 0, color: 'primary.main' },
 };
 
 const INTERACTIVE_SX: SxProps<Theme> = {
@@ -88,47 +89,64 @@ interface StepMarkerProps {
 }
 
 function StepMarker({ state, label, onClick, ariaLabel }: StepMarkerProps) {
-  const hasCheck = state === 'completed' || state === 'visited';
   const sharedSx = [MARKER_BASE_SX, MARKER_STATE_SX[state]];
 
-  const icon = hasCheck ? (
-    <Box component="span" sx={{ color: 'common.white', display: 'flex', lineHeight: 0 }}>
-      <Icon icon="check" size="sm" color="inherit" />
-    </Box>
-  ) : null;
+  const icon =
+    state === 'completed' ? <Box component="span" sx={{ fontSize: '1.5rem', display: 'flex', lineHeight: 0, bgcolor: 'background.paper', borderRadius: '50%', p: '1px', cursor: 'inherit' }}><Icon icon="circle-check" style="solid" size="inherit" color="inherit" /></Box> :
+    state === 'visited'   ? <Box component="span" sx={{ fontSize: '1.5rem', display: 'flex', lineHeight: 0, bgcolor: 'background.paper', borderRadius: '50%', p: '1px', cursor: 'inherit' }}><Icon icon="circle-check" style="light" size="inherit" color="inherit" /></Box> :
+    state === 'upcoming'  ? <Box component="span" sx={{ fontSize: '1.5rem', display: 'flex', lineHeight: 0, bgcolor: 'background.paper', borderRadius: '50%', p: '1px', cursor: 'inherit' }}><Icon icon="circle-dashed" style="light" size="inherit" color="inherit" /></Box> :
+    null;
 
   const labelEl = label != null ? (
-    <Typography variant="caption" color="text.muted" sx={{ lineHeight: 1.4, textAlign: 'center' }}>
+    <Typography variant="caption" className="fm-label" sx={{ lineHeight: 1.4, textAlign: 'center', color: state === 'active' ? 'primary.main' : 'text.muted', transition: 'color 0.15s ease' }}>
       {label}
     </Typography>
   ) : null;
 
-  const markerEl = onClick ? (
+  const inner = (
+    <>
+      <Box sx={{ width: MARKER_SIZE, height: MARKER_SIZE, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box
+          component="span"
+          className="fm-marker-icon"
+          aria-current={state === 'active' ? 'step' : undefined}
+          sx={[...sharedSx, { transition: 'transform 0.15s ease' }]}
+        >
+          {icon}
+        </Box>
+      </Box>
+      {labelEl}
+    </>
+  );
+
+  return onClick ? (
     <Box
       component="button"
       type="button"
       onClick={onClick}
       aria-label={ariaLabel}
-      aria-current={state === 'active' ? 'step' : undefined}
-      sx={[...sharedSx, INTERACTIVE_SX]}
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 0.5,
+        width: '100%',
+        background: 'none',
+        border: 0,
+        p: 0,
+        cursor: 'pointer',
+        fontFamily: 'inherit',
+        '& .fm-marker-icon': { cursor: 'pointer' },
+        '&:hover .fm-marker-icon': { transform: 'scale(1.15)', transition: 'transform 0.15s ease', color: 'primary.dark' },
+        '&:hover .fm-label': { color: 'primary.dark' },
+        '&:focus-visible': { outline: '2px solid', outlineColor: 'primary.main', outlineOffset: '2px', borderRadius: '4px' },
+      }}
     >
-      {icon}
+      {inner}
     </Box>
   ) : (
-    <Box
-      component="span"
-      aria-label={ariaLabel}
-      aria-current={state === 'active' ? 'step' : undefined}
-      sx={sharedSx}
-    >
-      {icon}
-    </Box>
-  );
-
-  return (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5 }}>
-      {markerEl}
-      {labelEl}
+      {inner}
     </Box>
   );
 }
@@ -139,10 +157,10 @@ export function FormProgress(props: FormProgressProps) {
     const { value, sx, 'aria-label': ariaLabel } = props;
     const pct = Math.min(100, Math.max(0, value));
 
-    // Strategy: an inner "travel zone" container is inset by MARKER_HALF on each
-    // side. The thumb uses simple `left: pct%` inside that container — no calc
-    // multiplication needed. Fill is also in the travel zone but extends left
-    // by MARKER_HALF to reach the outer left edge.
+    // Thumb travels between 10% and 90% of the track so there is always
+    // visible track on both sides regardless of the current value.
+    const visualPct = 10 + pct * 0.8;
+
     return (
       <Box
         role="progressbar"
@@ -166,48 +184,37 @@ export function FormProgress(props: FormProgressProps) {
             borderRadius: '99px',
           }}
         />
-        {/* Travel zone — inset MARKER_HALF each side so thumb centre aligns
-            with the stepped markers at 0 % and 100 % */}
+        {/* Fill — from left edge to thumb position */}
         <Box
           aria-hidden="true"
           sx={{
             position: 'absolute',
-            top: 0,
-            bottom: 0,
-            left: MARKER_HALF,
-            right: MARKER_HALF,
+            top: '50%',
+            left: 0,
+            width: `${visualPct}%`,
+            transform: 'translateY(-50%)',
+            height: SIMPLE_TRACK_H,
+            bgcolor: 'primary.main',
+            borderRadius: '99px',
           }}
-        >
-          {/* Fill — sticks left back to the outer edge, width grows with pct */}
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: `-${MARKER_HALF}`,
-              width: `calc(${MARKER_HALF} + ${pct}%)`,
-              transform: 'translateY(-50%)',
-              height: SIMPLE_TRACK_H,
-              bgcolor: 'primary.main',
-              borderRadius: '99px',
-            }}
-          />
-          {/* Thumb — simple percentage of the travel zone */}
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: `${pct}%`,
-              transform: 'translate(-50%, -50%)',
-              width: THUMB_SIZE,
-              height: THUMB_SIZE,
-              borderRadius: '50%',
-              bgcolor: 'background.paper',
-              border: '2px solid',
-              borderColor: 'primary.main',
-              zIndex: 1,
-            }}
-          />
-        </Box>
+        />
+        {/* Thumb */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: `${visualPct}%`,
+            transform: 'translate(-50%, -50%)',
+            width: THUMB_SIZE,
+            height: THUMB_SIZE,
+            borderRadius: '50%',
+            bgcolor: 'background.paper',
+            border: '3px solid',
+            borderColor: 'primary.main',
+            boxShadow: (t) => `0 0 0 2px ${t.palette.background.paper}, 0 0 0 6px ${alpha(t.palette.primary.main, 0.18)}`,
+            zIndex: 1,
+          }}
+        />
       </Box>
     );
   }
@@ -246,15 +253,16 @@ export function FormProgress(props: FormProgressProps) {
           height: STEPPED_TRACK_H,
           borderRadius: '99px',
           bgcolor: 'primary.main',
+          transition: 'width 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       />
-      <Box sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', position: 'relative', zIndex: 1 }}>
         {steps.map((step, i) => (
           <Box key={step.id} role="listitem" sx={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <StepMarker
               state={resolveState(i, activeStep, maxStep)}
               label={step.label}
-              onClick={onStepClick ? () => onStepClick(i) : undefined}
+              onClick={onStepClick && i !== activeStep && resolveState(i, activeStep, maxStep) !== 'upcoming' ? () => onStepClick(i) : undefined}
               ariaLabel={step.label ?? `Step ${i + 1}`}
             />
           </Box>

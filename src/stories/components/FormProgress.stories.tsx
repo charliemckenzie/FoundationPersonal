@@ -1,5 +1,7 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FormProgress } from '../../components/FormProgress';
+import type { SteppedFormProgressProps } from '../../components/FormProgress';
 
 const meta: Meta<typeof FormProgress> = {
   title: 'Form Components / FormProgress',
@@ -87,11 +89,21 @@ export const SteppedWithLabels: Story = {
 
 export const SteppedClickable: Story = {
   name: 'Stepped — Clickable markers',
+  render: (args) => {
+    const [activeStep, setActiveStep] = React.useState(2);
+    return (
+      <FormProgress
+        {...args}
+        activeStep={activeStep}
+        maxStep={Math.max(activeStep, (args as SteppedFormProgressProps).maxStep ?? 2)}
+        onStepClick={setActiveStep}
+      />
+    );
+  },
   args: {
     variant: 'stepped',
     steps: FIVE_STEPS_LABELLED,
     activeStep: 2,
     maxStep: 3,
-    onStepClick: (index: number) => console.log('Step clicked:', index),
   },
 };
