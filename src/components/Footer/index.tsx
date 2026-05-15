@@ -3,14 +3,19 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
+import { useTheme } from '@mui/material/styles';
 import { Logo } from '../Logo';
 import { FooterNavSection } from './FooterNavSection';
 import { FooterContact } from './FooterContact';
 import { FooterBottom } from './FooterBottom';
 import { AwardPlaceholder } from './AwardPlaceholder';
-import { NAV_SECTIONS } from './footerData';
+import { ART_NAV_SECTIONS, QSUPER_NAV_SECTIONS } from './footerData';
 
 export function Footer() {
+  const theme = useTheme();
+  const isQSuper = theme.brandConfig.name === 'QSuper';
+  const navSections = isQSuper ? QSUPER_NAV_SECTIONS : ART_NAV_SECTIONS;
+
   return (
     <Box
       component="footer"
@@ -23,53 +28,67 @@ export function Footer() {
       }}
     >
       <Container maxWidth="lg">
-        {/* Logo — sits above the nav/contact grid on all breakpoints */}
-        <Box sx={{ mb: 4, lineHeight: 0, '& svg': { width: '2.75rem', height: 'auto' }, '& > div': { height: '3.4375rem' } }}>
-          <Logo variant="mark" size="sm" />
-        </Box>
-
-        {/* Main two-column body */}
-        <Box
-          sx={{
-            display: { xs: 'block', sm: 'grid' },
-            gridTemplateColumns: { sm: '1fr 17.5rem' },
-            gap: { sm: 4, md: 6 },
-            mb: { xs: 4, md: 5 },
-          }}
-        >
-          {/* Left: nav columns/accordions + desktop awards */}
-          <Box sx={{ mb: { xs: 4, sm: 0 } }}>
-            {/* Nav — desktop: 4-col grid; mobile/tablet: stacked accordions */}
+        {isQSuper ? (
+          <>
+            {/* QSuper: 5-col flat grid, no logo, no contact sidebar */}
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(5, 1fr)' },
                 gap: { xs: 0, md: 3 },
+                mb: { xs: 0, md: 5 },
               }}
             >
-              {NAV_SECTIONS.map((section) => (
-                <FooterNavSection key={section.title} title={section.title} links={section.links} />
+              {navSections.map((section) => (
+                <FooterNavSection key={section.title} title={section.title} links={section.links} uppercaseTitle />
               ))}
             </Box>
-
-            {/* Closing divider for mobile accordions */}
-            <Box sx={{ display: { md: 'none' } }}>
+            <Box sx={{ display: { md: 'none' }, mb: 4 }}>
               <Divider />
             </Box>
-
-            {/* Awards — desktop only; mobile awards are in FooterContact */}
-            <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, mt: 4 }}>
-              <AwardPlaceholder />
-              <AwardPlaceholder />
+          </>
+        ) : (
+          <>
+            {/* ART: logo + 4-col nav + right contact sidebar */}
+            <Box sx={{ mb: 4, lineHeight: 0, '& svg': { width: '2.75rem', height: 'auto' }, '& > div': { height: '3.4375rem' } }}>
+              <Logo variant="mark" size="sm" />
             </Box>
-          </Box>
-
-          {/* Right: Contact info */}
-          <FooterContact />
-        </Box>
+            <Box
+              sx={{
+                display: { xs: 'block', sm: 'grid' },
+                gridTemplateColumns: { sm: '1fr 17.5rem' },
+                gap: { sm: 4, md: 6 },
+                mb: { xs: 4, md: 5 },
+              }}
+            >
+              <Box sx={{ mb: { xs: 4, sm: 0 } }}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: { xs: '1fr', md: 'repeat(4, 1fr)' },
+                    gap: { xs: 0, md: 3 },
+                  }}
+                >
+                  {navSections.map((section) => (
+                    <FooterNavSection key={section.title} title={section.title} links={section.links} />
+                  ))}
+                </Box>
+                <Box sx={{ display: { md: 'none' } }}>
+                  <Divider />
+                </Box>
+                <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 2, mt: 4 }}>
+                  <AwardPlaceholder />
+                  <AwardPlaceholder />
+                </Box>
+              </Box>
+              <FooterContact />
+            </Box>
+          </>
+        )}
 
         <FooterBottom />
       </Container>
     </Box>
   );
 }
+

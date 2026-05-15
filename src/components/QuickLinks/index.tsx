@@ -64,7 +64,11 @@ export function QuickLinks({
           // Hide scrollbar visually but keep it functional
           scrollbarWidth: 'none',
           '&::-webkit-scrollbar': { display: 'none' },
-          m: 0,
+          // Cap item growth at the container width on wide viewports
+          maxWidth: '1248px',
+          width: '100%',
+          mx: 'auto',
+          my: 0,
           p: 0,
           listStyle: 'none',
         }}
@@ -96,6 +100,7 @@ export function QuickLinks({
                   pb: 2,
                   width: '100%',
                   textDecoration: 'none',
+                  textDecorationLine: 'none !important',
                   color: isActive ? 'primary.main' : 'text.muted',
                   position: 'relative',
                   transition: t.transitions.create(['color'], {

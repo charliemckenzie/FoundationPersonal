@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Icon } from '../Icon';
 import { AwardPlaceholder } from './AwardPlaceholder';
-import { FUND_DETAILS, SOCIAL_LINKS } from './footerData';
+import { ART_FUND_DETAILS, ART_SOCIAL_LINKS } from './footerData';
 
 const linkSx = {
   color: 'text.link',
@@ -52,7 +52,7 @@ export function FooterContact() {
 
       {/* Fund details */}
       <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-        {FUND_DETAILS.map(({ label, value }) => (
+        {ART_FUND_DETAILS.map(({ label, value }) => (
           <Typography key={label} component="p" sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5 }}>
             <Box component="span" sx={{ fontWeight: 700 }}>{label}: </Box>{value}
           </Typography>
@@ -70,7 +70,7 @@ export function FooterContact() {
 
       {/* Social icons */}
       <Box sx={{ display: 'flex', gap: 1.5, mt: 3 }}>
-        {SOCIAL_LINKS.map(({ icon, label, href }) => (
+        {ART_SOCIAL_LINKS.map(({ icon, label, href }) => (
           <Box
             key={label}
             component="a"

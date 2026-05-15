@@ -14,5 +14,11 @@ const meta: Meta<typeof Footer> = {
 export default meta;
 type Story = StoryObj<typeof Footer>;
 
-/** Default footer at desktop width. Resize the viewport to see the accordion treatment on mobile and tablet (below 960px). */
+/** Footer — brand follows the toolbar switcher. Resize the viewport to see the accordion treatment on mobile and tablet (below 960px). */
 export const Default: Story = {};
+
+/** QSuper brand footer — always renders with QSuper theme regardless of toolbar. */
+export const QSuper: Story = {
+  name: 'QSuper',
+  globals: { brand: 'theme-b' },
+};

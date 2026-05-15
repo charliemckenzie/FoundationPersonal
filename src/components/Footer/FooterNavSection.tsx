@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import { useMediaQuery } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Icon } from '../Icon';
@@ -26,16 +27,22 @@ function LinkList({ links }: { links: FooterNavSectionData['links'] }) {
     >
       {links.map((link) => (
         <Box component="li" key={link.label}>
-          <Box component="a" href={link.href} sx={linkSx}>
-            {link.label}
-          </Box>
+          {link.href ? (
+            <Box component="a" href={link.href} sx={linkSx}>
+              {link.label}
+            </Box>
+          ) : (
+            <Typography component="span" sx={{ color: 'text.muted', fontSize: '0.875rem', lineHeight: 1.5 }}>
+              {link.label}
+            </Typography>
+          )}
         </Box>
       ))}
     </Box>
   );
 }
 
-export function FooterNavSection({ title, links }: FooterNavSectionData) {
+export function FooterNavSection({ title, links, uppercaseTitle = false }: FooterNavSectionData & { uppercaseTitle?: boolean }) {
   const theme = useTheme();
   const isCollapsed = useMediaQuery(theme.breakpoints.down('md'));
   const [open, setOpen] = useState(false);
@@ -48,8 +55,10 @@ export function FooterNavSection({ title, links }: FooterNavSectionData) {
           sx={{
             fontWeight: 700,
             color: 'text.heading',
-            fontSize: '1rem',
+            fontSize: uppercaseTitle ? '0.75rem' : '1rem',
             lineHeight: 1.5,
+            letterSpacing: uppercaseTitle ? '0.08em' : undefined,
+            textTransform: uppercaseTitle ? 'uppercase' : 'none',
             m: 0,
             mb: 1.5,
           }}
@@ -84,7 +93,7 @@ export function FooterNavSection({ title, links }: FooterNavSectionData) {
       >
         <Box
           component="span"
-          sx={{ fontWeight: 700, color: 'text.heading', fontSize: '1rem', lineHeight: 1.5 }}
+          sx={{ fontWeight: 700, color: 'text.heading', fontSize: uppercaseTitle ? '0.75rem' : '1rem', lineHeight: 1.5, letterSpacing: uppercaseTitle ? '0.08em' : undefined, textTransform: uppercaseTitle ? 'uppercase' : 'none' }}
         >
           {title}
         </Box>
