@@ -1,0 +1,126 @@
+import { Meta, Canvas, Controls, Description } from '@storybook/addon-docs/blocks';
+import MuiAccordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import * as CardStories from './Card.stories';
+
+<Meta of={CardStories} />
+
+# Card
+
+Cards group related content on a shared surface. Use them to present information, actions, or navigation in a scannable, contained layout.
+
+Three variants are available: **contained** for flexible free-form content (four layout options), **open** for structured image + text + action layouts, and **open — horizontal** for wide promotional content.
+
+---
+
+## Contained
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Contained</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.Contained} />
+    <Canvas of={CardStories.Contained} />
+    <Controls of={CardStories.Contained} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Contained — interactive (whole card)</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.ContainedInteractive} />
+    <Canvas of={CardStories.ContainedInteractive} />
+    <Controls of={CardStories.ContainedInteractive} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Contained — icon feature</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.OpenIcon} />
+    <Canvas of={CardStories.OpenIcon} />
+    <Controls of={CardStories.OpenIcon} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Contained — horizontal + icon</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.ContainedHorizontalIcon} />
+    <Canvas of={CardStories.ContainedHorizontalIcon} />
+    <Controls of={CardStories.ContainedHorizontalIcon} />
+  </AccordionDetails>
+</MuiAccordion>
+
+---
+
+## Open — vertical
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Open — image + actions</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.OpenWithActions} />
+    <Canvas of={CardStories.OpenWithActions} />
+    <Controls of={CardStories.OpenWithActions} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Open — no image</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.OpenNoImage} />
+    <Canvas of={CardStories.OpenNoImage} />
+    <Controls of={CardStories.OpenNoImage} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Open — interactive (whole card)</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.OpenInteractive} />
+    <Canvas of={CardStories.OpenInteractive} />
+    <Controls of={CardStories.OpenInteractive} />
+  </AccordionDetails>
+</MuiAccordion>
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Open — href link card</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.OpenAsLink} />
+    <Canvas of={CardStories.OpenAsLink} />
+    <Controls of={CardStories.OpenAsLink} />
+  </AccordionDetails>
+</MuiAccordion>
+
+---
+
+## Open — horizontal
+
+<MuiAccordion disableGutters>
+  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+    <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>Open — horizontal image + actions</Typography>
+  </AccordionSummary>
+  <AccordionDetails>
+    <Description of={CardStories.PromoWithActions} />
+    <Canvas of={CardStories.PromoWithActions} />
+    <Controls of={CardStories.PromoWithActions} />
+  </AccordionDetails>
+</MuiAccordion>
