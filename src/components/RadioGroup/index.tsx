@@ -1,3 +1,4 @@
+import React from 'react';
 import MuiRadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -6,6 +7,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
+import { Icon } from '../Icon';
 
 const RadioUncheckedIcon = ({ disabled }: { disabled?: boolean }) => (
   <Box
@@ -37,6 +39,7 @@ const RadioCheckedIcon = () => (
       alignItems: 'center',
       justifyContent: 'center',
       boxSizing: 'border-box',
+      bgcolor: 'background.paper',
     }}
   >
     <Box
@@ -55,9 +58,12 @@ const RadioCheckedIcon = () => (
 export interface RadioOption {
   value: string;
   label: string;
+  description?: string;
+  icon?: string;
   disabled?: boolean;
 }
 
+export type RadioGroupVariant = 'default' | 'boxed' | 'card';
 export type RadioGroupDirection = 'column' | 'row';
 export type RadioColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
 export type RadioSize = 'small' | 'medium';
@@ -65,6 +71,7 @@ export type RadioSize = 'small' | 'medium';
 export interface RadioGroupProps {
   legend?: string;
   options: RadioOption[];
+  variant?: RadioGroupVariant;
   value?: string;
   defaultValue?: string;
   direction?: RadioGroupDirection;
@@ -76,6 +83,7 @@ export interface RadioGroupProps {
   disabled?: boolean;
   required?: boolean;
   legendBold?: boolean;
+  cardDirection?: 'top' | 'left';
   onChange?: (value: string) => void;
   name?: string;
 }
@@ -83,6 +91,7 @@ export interface RadioGroupProps {
 export function RadioGroup({
   legend,
   options,
+  variant = 'default',
   value,
   defaultValue,
   direction = 'column',
@@ -94,9 +103,14 @@ export function RadioGroup({
   disabled = false,
   required = false,
   legendBold = true,
+  cardDirection = 'top',
   onChange,
   name,
 }: RadioGroupProps) {
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
+  const resolvedValue = value !== undefined ? value : internalValue;
+  const isBoxedOrCard = variant === 'boxed' || variant === 'card';
+
   return (
     <FormControl error={error} disabled={disabled} required={required}>
       {legend && (
@@ -119,19 +133,152 @@ export function RadioGroup({
         defaultValue={defaultValue}
         name={name}
         row={direction === 'row'}
-        onChange={(e) => onChange?.(e.target.value)}
-        sx={{ gap: 1.5 }}
+        onChange={(e) => {
+          if (value === undefined) setInternalValue(e.target.value);
+          onChange?.(e.target.value);
+        }}
+        sx={{ gap: isBoxedOrCard ? 1 : 1.5 }}
       >
-        {options.map((option) => (
-          <FormControlLabel
-            key={option.value}
-            value={option.value}
-            label={option.label}
-            disabled={option.disabled}
-            sx={{ ml: 0, gap: 1 }}
-            control={<Radio color={color} size={size} disableRipple disableTouchRipple icon={<RadioUncheckedIcon disabled={disabled || option.disabled} />} checkedIcon={<RadioCheckedIcon />} sx={{ p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }} />}
-          />
-        ))}
+        {options.map((option) => {
+          const isItemDisabled = disabled || option.disabled;
+          const isSelected = isBoxedOrCard && option.value === resolvedValue;
+
+          if (!isBoxedOrCard) {
+            const labelNode: React.ReactNode = option.description ? (
+              <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
+                {option.label}
+                <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: isItemDisabled ? 'text.disabled' : 'text.secondary', lineHeight: 1.4 }}>
+                  {option.description}
+                </Box>
+              </Box>
+            ) : option.label;
+            return (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                label={labelNode}
+                disabled={isItemDisabled}
+                sx={{ ml: 0, gap: 1, alignItems: option.description ? 'flex-start' : 'center' }}
+                control={
+                  <Radio color={color} size={size} disableRipple disableTouchRipple
+                    icon={<RadioUncheckedIcon disabled={isItemDisabled} />}
+                    checkedIcon={<RadioCheckedIcon />}
+                    sx={{ p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }}
+                  />
+                }
+              />
+            );
+          }
+
+          const circleSize = cardDirection === 'top' ? '3rem' : '2.5rem';
+          const iconSize = cardDirection === 'top' ? 'xl' : 'lg';
+          const iconCircle = option.icon ? (
+            <Box
+              component="span"
+              sx={(theme) => ({
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: circleSize,
+                height: circleSize,
+                borderRadius: '50%',
+                flexShrink: 0,
+                color: isItemDisabled
+                  ? theme.palette.action.disabled
+                  : isSelected
+                  ? theme.palette.common.white
+                  : theme.palette.primary.main,
+                backgroundColor: isItemDisabled
+                  ? theme.palette.action.disabledBackground
+                  : isSelected
+                  ? theme.palette.primary.main
+                  : alpha(theme.palette.primary.main, 0.08),
+              })}
+            >
+              <Icon icon={option.icon} size={iconSize} style={isSelected ? 'solid' : 'light'} color="inherit" />
+            </Box>
+          ) : null;
+
+          const labelNode: React.ReactNode = variant === 'card' ? (
+            cardDirection === 'left' ? (
+              <Box component="span" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
+                {iconCircle}
+                <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Box component="span" sx={{ fontWeight: 500 }}>{option.label}</Box>
+                  {option.description && (
+                    <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4 }}>
+                      {option.description}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            ) : (
+              <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
+                {iconCircle}
+                <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                  <Box component="span" sx={{ fontWeight: 500 }}>{option.label}</Box>
+                  {option.description && (
+                    <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4, textAlign: 'center' }}>
+                      {option.description}
+                    </Box>
+                  )}
+                </Box>
+              </Box>
+            )
+          ) : (
+            <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
+              {option.label}
+              {option.description && (
+                <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4 }}>
+                  {option.description}
+                </Box>
+              )}
+            </Box>
+          );
+
+          return (
+            <FormControlLabel
+              key={option.value}
+              value={option.value}
+              label={labelNode}
+              disabled={isItemDisabled}
+              sx={{
+                ml: 0,
+                gap: variant === 'card' ? 0 : 1,
+                position: 'relative',
+                alignItems: variant === 'card' ? 'center' : option.description ? 'flex-start' : 'center',
+                border: '1px solid',
+                borderColor: isSelected ? 'primary.main' : 'border.default',
+                borderRadius: '0.5rem',
+                minHeight: '3rem',
+                minWidth: variant === 'card' && cardDirection === 'top' ? '9rem' : undefined,
+                px: variant === 'card' ? 2 : 2,
+                py: variant === 'card' ? 2 : option.description ? 1.5 : 0,
+                cursor: isItemDisabled ? 'default' : 'pointer',
+                transition: 'border-color 150ms ease, background-color 150ms ease',
+                ...(isSelected && { backgroundColor: (theme: import('@mui/material/styles').Theme) => alpha(theme.palette.primary.main, 0.08) }),
+                ...(!isItemDisabled && { '&:hover': { backgroundColor: 'action.hover' } }),
+                '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
+              }}
+              control={
+                <Radio
+                  color={color}
+                  size={size}
+                  disableRipple
+                  disableTouchRipple
+                  icon={variant === 'card' ? undefined : <RadioUncheckedIcon disabled={isItemDisabled} />}
+                  checkedIcon={variant === 'card' ? undefined : <RadioCheckedIcon />}
+                  sx={
+                    variant === 'card'
+                      ? { position: 'absolute', width: '1px', height: '1px', opacity: 0, p: 0, m: 0, overflow: 'hidden', '&.Mui-focusVisible': { outline: 'none' } }
+                      : { p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } }
+                  }
+                />
+              }
+            />
+          );
+        })}
       </MuiRadioGroup>
       {helperText && (
         <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
