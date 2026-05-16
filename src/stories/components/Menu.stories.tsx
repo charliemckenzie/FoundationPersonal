@@ -159,6 +159,32 @@ export const WithIconButtonTrigger: Story = {
   ),
 };
 
+const LONG_LIST_ITEMS: MenuItemConfig[] = [
+  { label: 'Dashboard', icon: <Icon icon="house" size="md" />, onClick: () => {} },
+  { label: 'My profile', icon: <Icon icon="user" size="md" />, onClick: () => {} },
+  { label: 'Account settings', icon: <Icon icon="gear" size="md" />, onClick: () => {} },
+  { label: 'Notifications', icon: <Icon icon="bell" size="md" />, onClick: () => {} },
+  { label: 'Privacy', icon: <Icon icon="shield" size="md" />, onClick: () => {} },
+  { label: 'Security', icon: <Icon icon="lock" size="md" />, onClick: () => {}, dividerAfter: true },
+  { label: 'Help centre', icon: <Icon icon="circle-question" size="md" />, onClick: () => {} },
+  { label: 'Contact support', icon: <Icon icon="headset" size="md" />, onClick: () => {} },
+  { label: 'Send feedback', icon: <Icon icon="message" size="md" />, onClick: () => {}, dividerAfter: true },
+  { label: 'Sign out', icon: <Icon icon="arrow-right-from-bracket" size="md" />, onClick: () => {}, color: 'error' },
+];
+
+/**
+ * Long lists demonstrate the scrollable drawer on mobile and how the min-width keeps the dropdown readable at any content length.
+ * Use dividers to create clear groups when a menu has more than five items.
+ */
+export const LongList: Story = {
+  render: () => (
+    <Menu
+      trigger={<Button label="Account" variant="soft" />}
+      items={LONG_LIST_ITEMS}
+    />
+  ),
+};
+
 /**
  * A chevron on the trigger signals to users that a dropdown will appear. The chevron rotates when the menu is open.
  */

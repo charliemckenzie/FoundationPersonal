@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Icon, type IconSize } from '../Icon';
 import React from 'react';
+import type { SxProps, Theme } from '@mui/material/styles';
 import {
   buildSoftStyles,
   buildGhostStyles,
@@ -32,6 +33,7 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   endIcon?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  sx?: SxProps<Theme>;
 }
 
 const iconSizeMap: Record<ButtonSize, IconSize> = {
@@ -69,6 +71,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   endIcon,
   onClick,
   type = 'button',
+  sx: sxProp,
   ...rest
 }, ref) {
   const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
@@ -101,7 +104,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       onClick={loading ? undefined : onClick}
       type={type}
       {...rest}
-      sx={(theme) => ({
+      sx={[
+        (theme) => ({
         ...sizeStyles[size],
         ...(condensed && { height: sizeStyles[size].height - CONDENSED_REDUCTION }),
         ...(hasStartIcon && { paddingRight: `calc(${theme.spacing(sizeStyles[size].px)} + 4px)` }),
@@ -122,7 +126,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
           outlineOffset: '2px',
           boxShadow: 'none',
         },
-      })}
+      }),
+      ...(Array.isArray(sxProp) ? sxProp : sxProp ? [sxProp] : []),
+      ]}
     >
       <Box component="span" sx={{ ...(showSpinnerOnly && { opacity: 0 }) }}>
         {label}
