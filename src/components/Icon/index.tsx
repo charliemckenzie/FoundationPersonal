@@ -72,7 +72,7 @@ function getStyleVariant(style: IconStyle): 'solid' | 'light' {
 
 function resolveIconPaths(icon: string, style: IconStyle): { primary: string; fallback: string } {
   const variant = getStyleVariant(style);
-  const fallbackVariant = variant === 'light' ? 'solid' : 'solid';
+  const fallbackVariant = 'solid';
   const normalized = normalizeIconName(icon).replace(/\.svg$/i, '');
   const withVariantSuffix = normalized.match(/-(solid|light)-full$/)
     ? normalized.replace(/-(solid|light)-full$/, `-${variant}-full`)

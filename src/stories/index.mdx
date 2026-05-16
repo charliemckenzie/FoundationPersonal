@@ -3,27 +3,9 @@ import { useState } from 'react';
 
 <Meta title="Foundation / Component Status" />
 
-# Component Library
+# Component Status
 
-This is the Foundation design system — a living component library built to support production-quality UX prototypes.
-
-## How This Works
-
-Every component goes through the full pipeline before it's marked **Stable**:
-
-1. **Moe** approves the component structure and API before anything is built
-2. **Lenny** builds it
-3. **Chalmers** reviews code quality
-4. **Flanders** reviews accessibility (WCAG 2.2 AA)
-5. **Marge** reviews visual consistency
-6. **Lisa** writes this story and usage docs
-7. **Willie** runs the full sign-off checklist and marks the component stable
-8. **Frink** commits and opens a PR
-9. **You** (the designer) approves and merges
-
----
-
-## Component Status
+Full inventory of every component in Foundation — 8 stable, 7 in review, 22 draft. Sort by name or status.
 
 export const COMPONENTS = [
   { name: 'Accordion',         status: 'stable', story: '/?path=/story/components-expandable-accordion--default' },
@@ -34,14 +16,14 @@ export const COMPONENTS = [
   { name: 'Breadcrumb',        status: 'draft',  story: '/?path=/story/public-web-breadcrumb--default' },
   { name: 'Button',            status: 'stable', story: '/?path=/story/components-buttons-button--default' },
   { name: 'Card',              status: 'draft',  story: '/?path=/story/components-card--contained' },
-  { name: 'Checkbox',          status: 'review', story: '/?path=/story/form-components-checkbox--default' },
+  { name: 'Checkbox',          status: 'stable', story: '/?path=/story/form-components-checkbox--default' },
   { name: 'Chip',              status: 'review', story: '/?path=/story/components-chip--default' },
   { name: 'DateOfBirthField',  status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
   { name: 'Dialog',            status: 'draft',  story: '/?path=/story/components-dialog--default' },
   { name: 'Drawer',            status: 'draft',  story: '/?path=/story/components-drawer--default' },
   { name: 'ExpandableItem',    status: 'review', story: '/?path=/story/components-expandable-expandableitem--default' },
   { name: 'Footer',            status: 'draft',  story: '/?path=/story/public-web-footer--default' },
-  { name: 'FormProgress',      status: 'stable',  story: '/?path=/story/form-components-formprogress--simple' },
+  { name: 'FormProgress',      status: 'stable', story: '/?path=/story/form-components-formprogress--simple' },
   { name: 'HeroIcon',          status: 'draft',  story: '/?path=/story/components-icons-hero-icon--default' },
   { name: 'Icon',              status: 'draft',  story: '/?path=/story/components-icons-icon--default' },
   { name: 'IconButton',        status: 'stable', story: '/?path=/story/components-buttons-iconbutton--default' },
@@ -52,7 +34,7 @@ export const COMPONENTS = [
   { name: 'MoneyField',        status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
   { name: 'PercentageField',   status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
   { name: 'QuickLinks',        status: 'draft',  story: '/?path=/story/public-web-section-navigation-tab--default' },
-  { name: 'RadioGroup',        status: 'review', story: '/?path=/story/form-components-radiogroup--default' },
+  { name: 'RadioGroup',        status: 'stable', story: '/?path=/story/form-components-radiogroup--default' },
   { name: 'Select',            status: 'review', story: '/?path=/story/form-components-select--default' },
   { name: 'Spinner',           status: 'draft',  story: '/?path=/story/components-spinner--default' },
   { name: 'Switch',            status: 'review', story: '/?path=/story/form-components-switch--default' },
@@ -84,7 +66,6 @@ export const ComponentTable = () => {
   });
 
   const indicator = (col) => sortCol === col ? (sortDir === 'asc' ? ' ▲' : ' ▼') : ' ⇅';
-
   const thStyle = { cursor: 'pointer', userSelect: 'none', whiteSpace: 'nowrap' };
 
   return (
@@ -118,24 +99,3 @@ export const ComponentTable = () => {
 - <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#2e7d32',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`stable` — fully signed off, safe to use in prototypes
 - <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#f9a825',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`review` — with Chalmers / Flanders / Marge
 - <span style={{display:'inline-block',width:'10px',height:'10px',borderRadius:'50%',backgroundColor:'#c62828',marginRight:'6px',verticalAlign:'middle'}} aria-hidden="true"></span>`draft` — in progress, not reviewed
-
----
-
-## Design Tokens
-
-<table>
-  <thead>
-    <tr>
-      <th>Token set</th>
-      <th>Story</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr><td><a href="/?path=/story/design-tokens-primitive-colors--default">Primitive Colors</a></td><td>Raw hue scales (50–950), never use directly</td></tr>
-    <tr><td><a href="/?path=/story/design-tokens-semantic-colors--default">Semantic Colors</a></td><td>Semantic tokens — brand, feedback, surface, text</td></tr>
-    <tr><td><a href="/?path=/story/design-tokens-typography--overview">Typography</a></td><td>Type scale and font families</td></tr>
-    <tr><td><a href="/?path=/story/foundation-design-tokens-spacing-shape--docs">Spacing & Shape</a></td><td>Spacing scale and border radius</td></tr>
-    <tr><td><a href="/?path=/story/foundation-design-tokens-shadows-breakpoints--docs">Shadows & Breakpoints</a></td><td>Elevation and responsive breakpoints</td></tr>
-    <tr><td><a href="/?path=/story/design-tokens-grid--default">Grid</a></td><td>12-column layout grid — columns, gutters, margins, max-width per breakpoint</td></tr>
-  </tbody>
-</table>

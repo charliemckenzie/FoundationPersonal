@@ -106,7 +106,7 @@ export function Dialog({
       slotProps={{
         paper: {
           sx: showAsDrawer
-            ? {
+            ? (t) => ({
                 position: 'fixed',
                 bottom: 0,
                 left: 0,
@@ -114,11 +114,11 @@ export function Dialog({
                 m: 0,
                 maxWidth: '100% !important',
                 width: '100%',
-                borderRadius: '24px 24px 0 0',
+                borderRadius: `${t.shape.xl}px ${t.shape.xl}px 0 0`,
                 transform: `translateY(${dragY}px)`,
                 transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 willChange: 'transform',
-              }
+              })
             : { borderRadius: (t) => `${t.shape['xl']}px` },
         },
       }}

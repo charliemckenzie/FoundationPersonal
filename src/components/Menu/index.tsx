@@ -150,15 +150,15 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
         onClose={handleDrawerClose}
         slotProps={{
           paper: {
-            sx: {
-              borderRadius: '24px 24px 0 0',
+            sx: (t) => ({
+              borderRadius: `${t.shape.xl}px ${t.shape.xl}px 0 0`,
               maxHeight: '80vh',
               ...(dragY > 0 && {
                 transform: `translateY(${dragY}px)`,
                 transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 willChange: 'transform',
               }),
-            },
+            }),
           },
         }}
       >

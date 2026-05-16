@@ -363,8 +363,8 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
             padding: '8px 16px',
-            minHeight: '44px',
-            borderRadius: '8px',
+            minHeight: '2.75rem',
+            borderRadius: `${theme.shape.sm}px`,
             alignItems: 'center',
             gap: '12px',
             ...(ownerState.variant === 'standard' && ownerState.severity === 'error' && {
@@ -392,7 +392,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             padding: 0,
             margin: 0,
             alignSelf: 'flex-start',
-            height: '24px',
+            height: '1.5rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -400,7 +400,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           message: {
             padding: 0,
             margin: 0,
-            lineHeight: '24px',
+            lineHeight: 1.5,
           },
           action: {
             padding: 0,
@@ -479,11 +479,11 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             borderRadius: brand.buttonBorderRadius,
           },
           sizeSmall: {
-            fontSize: '14px',
+            fontSize: '0.875rem',
             lineHeight: 1,
           },
           sizeLarge: {
-            fontSize: '20px',
+            fontSize: '1.25rem',
             lineHeight: 1,
           },
         },
@@ -567,7 +567,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.background.paper,
             borderColor: theme.palette.border.input,
-            borderRadius: '8px',
+            borderRadius: `${theme.shape.sm}px`,
             position: 'relative',
             zIndex: 0,
             height: ownerState.size === 'small' ? '2.25rem' : ownerState.size === 'large' ? '3.5rem' : '3rem',

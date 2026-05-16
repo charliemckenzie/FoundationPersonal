@@ -214,7 +214,18 @@ const meta: Meta<typeof Autocomplete> = {
   title: 'Form Components / Autocomplete',
   component: Autocomplete,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Autocomplete is a searchable dropdown. Users type to filter a list of options — best when typing is faster than scrolling.
+
+For short, fixed lists (under ~10 options), use \`Select\` instead. For complex grouped lists or custom option rendering, use the \`groupBy\` and \`renderOption\` props.
+        `.trim(),
+      },
+    },
+  },
   args: {
     error: false,
     required: false,
@@ -241,12 +252,48 @@ const meta: Meta<typeof Autocomplete> = {
 export default meta;
 type Story = StoryObj<typeof Autocomplete>;
 
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    docs: {
+      description: {
+        story: '',
+      },
+    },
+  },
+  args: {
+    label: 'Label',
+    options: FRUIT_OPTIONS,
+    placeholder: 'Search…',
+    error: false,
+    required: false,
+    disabled: false,
+    fullWidth: false,
+    loading: false,
+  },
+  decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
+};
+
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use when the option list is too long to browse by scrolling — typically more than 10–15 options. For short, fixed lists use `Select` instead.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Search…' },
   decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
 };
 
 export const WithHelperText: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `helperText` for persistent guidance displayed beneath the field.',
+      },
+    },
+  },
   args: {
     label: 'Fruit',
     options: FRUIT_OPTIONS,
@@ -257,6 +304,13 @@ export const WithHelperText: Story = {
 };
 
 export const ErrorState: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Set `error` when validation fails. Pair with `helperText` to explain what went wrong.',
+      },
+    },
+  },
   args: {
     label: 'Fruit',
     options: FRUIT_OPTIONS,
@@ -268,6 +322,13 @@ export const ErrorState: Story = {
 };
 
 export const ErrorWithHelperText: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `errorMessage` alongside `helperText` when you need both persistent context and a specific validation message on the same field.',
+      },
+    },
+  },
   args: {
     label: 'Fruit',
     options: FRUIT_OPTIONS,
@@ -280,11 +341,25 @@ export const ErrorWithHelperText: Story = {
 };
 
 export const Required: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `required` to mark mandatory fields.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Search…', required: true },
   decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
 };
 
 export const Disabled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `disabled` when the field is not editable in the current state.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, defaultValue: FRUIT_OPTIONS[0], disabled: true },
   decorators: [(Story) => <div style={{ width: 360 }}><Story /></div>],
 };

@@ -143,12 +143,12 @@ export function Select({
               borderColor: alpha(t.palette.border.input, 0.6),
             },
             '& div.MuiSelect-select': {
-              paddingTop: '12px',
-              paddingBottom: '12px',
+              paddingTop: '0.75rem',
+              paddingBottom: '0.75rem',
             },
             '&& select.MuiInputBase-input': {
-              paddingTop: '12px',
-              paddingBottom: '12px',
+              paddingTop: '0.75rem',
+              paddingBottom: '0.75rem',
             },
             '& fieldset': {
               borderColor: t.palette.border.input,
@@ -206,15 +206,15 @@ export function Select({
           onClose={() => setDrawerOpen(false)}
           slotProps={{
             paper: {
-              sx: {
-                borderRadius: '24px 24px 0 0',
+              sx: (t) => ({
+                borderRadius: `${t.shape.xl}px ${t.shape.xl}px 0 0`,
                 maxHeight: '80vh',
                 ...(dragY > 0 && {
                   transform: `translateY(${dragY}px)`,
                   transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                   willChange: 'transform',
                 }),
-              },
+              }),
             },
           }}
         >

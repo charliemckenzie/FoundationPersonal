@@ -4,7 +4,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
-import { alpha } from '@mui/material/styles';
+import { alpha, type Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 
 const CheckboxUncheckedIcon = ({ error, disabled }: { error?: boolean; disabled?: boolean }) => (
@@ -81,7 +81,7 @@ export interface CheckboxProps {
   description?: string;
   variant?: CheckboxVariant;
   icon?: string;
-  cardDirection?: 'top' | 'left';
+  cardDirection?: 'column' | 'row';
   checked?: boolean;
   defaultChecked?: boolean;
   indeterminate?: boolean;
@@ -103,7 +103,7 @@ export function Checkbox({
   description,
   variant = 'default',
   icon,
-  cardDirection = 'top',
+  cardDirection = 'column',
   checked,
   defaultChecked,
   indeterminate = false,
@@ -131,8 +131,8 @@ export function Checkbox({
 
   const labelContent: React.ReactNode = (() => {
     if (variant === 'card') {
-      const circleSize = cardDirection === 'top' ? '3rem' : '2.5rem';
-      const iconSize = cardDirection === 'top' ? 'xl' : 'lg';
+      const circleSize = cardDirection === 'column' ? '3rem' : '2.5rem';
+      const iconSize = cardDirection === 'column' ? 'xl' : 'lg';
       const iconCircle = icon ? (
         <Box
           component="span"
@@ -196,14 +196,14 @@ export function Checkbox({
         </Box>
       );
 
-      if (cardDirection === 'left') {
+      if (cardDirection === 'row') {
         return (
           <Box component="span" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
             {iconCircle}
             <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
               <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
               {description && (
-                <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4 }}>
+                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
                   {description}
                 </Box>
               )}
@@ -219,7 +219,7 @@ export function Checkbox({
           <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
             {description && (
-              <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4, textAlign: 'center' }}>
+              <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
                 {description}
               </Box>
             )}
@@ -232,7 +232,7 @@ export function Checkbox({
       return (
         <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
           {label}
-          <Box component="span" sx={{ display: 'block', fontSize: '0.875rem', color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.secondary', lineHeight: 1.4 }}>
+          <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
             {description}
           </Box>
         </Box>
@@ -242,27 +242,30 @@ export function Checkbox({
   })();
 
   const containerSx = isBoxedOrCard
-    ? {
+    ? (theme: Theme) => ({
         ml: 0,
         gap: variant === 'card' ? 0 : 1,
         position: 'relative' as const,
         alignItems: variant === 'card' ? 'center' : description ? 'flex-start' : 'center',
-        justifyContent: variant === 'card' && cardDirection === 'top' ? 'center' : undefined,
+        justifyContent: variant === 'card' && cardDirection === 'column' ? 'center' : undefined,
         '& .MuiFormControlLabel-label': variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
         border: '1px solid',
         borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.default',
         borderRadius: '0.5rem',
         minHeight: '3rem',
-        minWidth: variant === 'card' && cardDirection === 'top' ? '9rem' : undefined,
-        px: variant === 'card' ? 2 : 2,
+        minWidth: variant === 'card' && cardDirection === 'column' ? '9rem' : undefined,
+        px: 2,
+        ...(variant === 'boxed' && { pr: '1.25rem' }),
+        ...(variant === 'card' && cardDirection === 'row' && { pr: '2.5rem' }),
         py: variant === 'card' ? 2 : description ? 1.5 : 0,
         cursor: disabled ? 'default' : 'pointer',
         transition: 'border-color 150ms ease, background-color 150ms ease',
-        ...(isSelected && { backgroundColor: (theme: import('@mui/material/styles').Theme) => alpha(theme.palette.primary.main, 0.08) }),
+        backgroundColor: 'background.paper',
+        ...(isSelected && { backgroundColor: alpha(theme.palette.primary.main, 0.08) }),
         ...(!disabled && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
-      }
+      })
     : { ml: 0, gap: 1, alignItems: description ? 'flex-start' : 'center' };
 
   const checkboxSx =

@@ -5,7 +5,18 @@ const meta: Meta<typeof AddressField> = {
   title: 'Form Components / AddressField',
   component: AddressField,
   tags: ['autodocs'],
-  parameters: { layout: 'padded' },
+  parameters: {
+    layout: 'padded',
+    docs: {
+      description: {
+        component: `
+AddressField is a composite form control for capturing physical addresses. It supports Australian and international addresses in the same field, with an optional postal address section.
+
+Pass \`addressLookup\` with an address provider to enable autocomplete search for Australian addresses. When a match is selected the full form is pre-filled and remains editable. International addresses are unaffected by autocomplete.
+        `.trim(),
+      },
+    },
+  },
   argTypes: {
     disabled: { control: 'boolean' },
     defaultHasPostalAddress: { control: 'boolean' },
@@ -39,6 +50,13 @@ export const WithPostalAddress: Story = {
 };
 
 export const Disabled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `disabled` when the address has been confirmed and should not be edited — for example, during submission or in a read-only review step.',
+      },
+    },
+  },
   args: { disabled: true },
 };
 

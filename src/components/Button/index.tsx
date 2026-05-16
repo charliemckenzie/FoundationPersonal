@@ -5,6 +5,7 @@ import { Icon, type IconSize } from '../Icon';
 import React from 'react';
 import type { SxProps, Theme } from '@mui/material/styles';
 import {
+  buildContainedStyles,
   buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
@@ -50,12 +51,6 @@ const sizeStyles: Record<ButtonSize, { height: number; px: number }> = {
 
 const CONDENSED_REDUCTION = 4;
 
-const containedStyles = {
-  boxShadow: 'none',
-  '&:hover': { boxShadow: 'none' },
-  '&:active': { boxShadow: 'none' },
-};
-
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   label,
   variant = 'contained',
@@ -75,31 +70,37 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   ...rest
 }, ref) {
   const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
-  const muiColor = color === 'white' ? 'primary' : color;
   const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   const showSpinnerOnly = loading && hideLoadingText;
   const hasStartIcon = (!loading && !!startIcon) || (loading && !hideLoadingText);
   const hasEndIcon = !loading && !!endIcon;
 
+  const resolvedColor = color === 'white' ? 'primary' : color;
   const variantStyles =
     color === 'white' && variant === 'contained' ? buildWhiteStyles()
-    : variant === 'contained' ? containedStyles
-    : variant === 'soft'      ? buildSoftStyles(color === 'white' ? 'primary' : color)
-    : variant === 'ghost'     ? buildGhostStyles(color === 'white' ? 'primary' : color)
-    : buildOutlinedStyles(color === 'white' ? 'primary' : color);
+    : variant === 'contained' ? buildContainedStyles(resolvedColor)
+    : variant === 'soft'      ? buildSoftStyles(resolvedColor)
+    : variant === 'ghost'     ? buildGhostStyles(resolvedColor)
+    : buildOutlinedStyles(resolvedColor);
 
-  const reversedStyles = reversed ? buildReversedStyles(variant, color === 'white' ? 'primary' : color) : undefined;
+  const reversedStyles = reversed ? buildReversedStyles(variant, resolvedColor) : undefined;
+
+  const startIconNode = (() => {
+    if (loading && !hideLoadingText) return <CircularProgress size={spinnerSize} color="inherit" />;
+    if (!loading && startIcon) return <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" />;
+    return undefined;
+  })();
 
   return (
     <MuiButton
       ref={ref}
       variant={muiVariant}
       size={size}
-      color={muiColor}
+      color={resolvedColor}
       disabled={disabled}
       aria-busy={loading}
       fullWidth={fullWidth}
-      startIcon={loading && !hideLoadingText ? <CircularProgress size={spinnerSize} color="inherit" /> : !loading && startIcon ? <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
+      startIcon={startIconNode}
       endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
       onClick={loading ? undefined : onClick}
       type={type}
@@ -122,7 +123,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
           pointerEvents: 'none !important',
         },
         '&.Mui-focusVisible': {
-          outline: `2px solid ${reversed || color === 'white' ? (theme.palette.common.white) : ((theme.palette[muiColor as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
+          outline: `2px solid ${reversed || color === 'white' ? theme.palette.common.white : ((theme.palette[resolvedColor as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
           outlineOffset: '2px',
           boxShadow: 'none',
         },

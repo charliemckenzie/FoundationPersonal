@@ -45,7 +45,7 @@ export function AlertDialog({
       slotProps={{
         paper: {
           sx: {
-            width: 300,
+            width: '18.75rem',
             borderRadius: (t: Theme) => `${t.shape['xl']}px`,
             backgroundColor: 'background.paper',
             overflow: 'hidden',

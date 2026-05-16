@@ -1,10 +1,8 @@
 import MuiAlert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import type React from 'react';
-import { Icon } from '../Icon';
-import { buildSoftStyles } from '../buttons/variantStyles';
+import { IconButton } from '../IconButton';
 
 export type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
 
@@ -80,14 +78,14 @@ export function Alert({
             {action}
             {onClose && (
               <IconButton
+                icon="xmark"
+                label={`Dismiss ${SEVERITY_LABELS[severity]} alert`}
+                variant="soft"
+                color={severity}
                 size="small"
+                showTooltip={false}
                 onClick={onClose}
-                aria-label={`Dismiss ${SEVERITY_LABELS[severity]} alert`}
-                disableRipple
-                sx={{ width: 32, height: 32, borderRadius: '50%', ...buildSoftStyles(severity), color: 'inherit' }}
-              >
-                <Icon icon="xmark" size="md" />
-              </IconButton>
+              />
             )}
           </Box>
         )}

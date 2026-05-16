@@ -117,8 +117,8 @@ export function TextField({
               },
               ...(!multiline && {
                 '& .MuiOutlinedInput-input': {
-                  paddingTop: '12px',
-                  paddingBottom: '12px',
+                  paddingTop: '0.75rem',
+                  paddingBottom: '0.75rem',
                 },
               }),
               '& fieldset': {

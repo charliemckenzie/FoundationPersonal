@@ -55,8 +55,8 @@ const inputSx = (t: Theme) => ({
     borderColor: alpha(t.palette.border.input, 0.6),
   },
   '&.MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
-    paddingTop: '12px',
-    paddingBottom: '12px',
+    paddingTop: '0.75rem',
+    paddingBottom: '0.75rem',
     lineHeight: 1.5,
   },
   '& fieldset': {
@@ -91,12 +91,12 @@ const listboxSx = (t: Theme) => ({
     fontSize: '0.75rem',
     fontWeight: 700,
     lineHeight: 2,
-    color: t.palette.text.secondary,
+    color: t.palette.text.muted,
     textTransform: 'uppercase',
     letterSpacing: '0.08em',
   },
   '& li:not(:first-child) .MuiAutocomplete-groupLabel': {
-    paddingTop: '12px',
+    paddingTop: '0.75rem',
   },
   '& .MuiAutocomplete-groupUl': {
     padding: 0,

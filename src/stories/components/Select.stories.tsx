@@ -12,7 +12,20 @@ const meta: Meta<typeof Select> = {
   title: 'Form Components / Select',
   component: Select,
   tags: ['autodocs'],
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Select renders a dropdown for choosing from a fixed list of options.
+
+On mobile (below \`sm\`) the custom variant opens a bottom drawer automatically — no additional configuration needed. Use \`native\` to render the browser's native \`<select>\` element when OS-level autofill, accessibility in constrained environments, or very long option lists are the priority.
+
+For searchable option lists, use \`Autocomplete\` instead.
+        `.trim(),
+      },
+    },
+  },
   args: {
     error: false,
     required: false,
@@ -38,12 +51,43 @@ const meta: Meta<typeof Select> = {
 export default meta;
 type Story = StoryObj<typeof Select>;
 
+export const Playground: Story = {
+  name: 'Playground',
+  parameters: {
+    docs: {
+      description: {
+        story: '',
+      },
+    },
+  },
+  args: {
+    label: 'Label',
+    options: FRUIT_OPTIONS,
+    placeholder: 'Select an option',
+  },
+  decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
+};
+
 export const Default: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Standard dropdown with label and placeholder.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const WithLabels: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Two selects with different option sets, demonstrating label alignment across a form column.',
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 320 }}>
       <Select label="Fruit" options={FRUIT_OPTIONS} placeholder="Select a fruit" />
@@ -60,18 +104,38 @@ export const WithLabels: Story = {
   ),
 };
 
-
 export const WithHelperText: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `helperText` for persistent guidance displayed beneath the field.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', helperText: 'Pick your favourite.' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const ErrorState: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Set `error` when validation fails. Pair with `helperText` to explain what went wrong.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', error: true, helperText: 'Please select an option.' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const ErrorWithHelperText: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `errorMessage` alongside `helperText` when you need both persistent context and a specific validation message on the same field.',
+      },
+    },
+  },
   args: {
     label: 'Fruit',
     options: FRUIT_OPTIONS,
@@ -84,18 +148,30 @@ export const ErrorWithHelperText: Story = {
 };
 
 export const Required: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `required` to mark mandatory fields.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', required: true },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const Disabled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: '**Usage guidance:** Use `disabled` when the field is not editable in the current state.',
+      },
+    },
+  },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, disabled: true, defaultValue: 'apple' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const Native: Story = {
-  args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', native: true },
-  decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
   parameters: {
     docs: {
       description: {
@@ -112,9 +188,18 @@ export const Native: Story = {
       },
     },
   },
+  args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit', native: true },
+  decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
 
 export const NativeStates: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'All interaction states for the native variant — default, with a value selected, error, and disabled.',
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16, width: 240 }}>
       <Select label="Default" options={FRUIT_OPTIONS} placeholder="Select a fruit" native />

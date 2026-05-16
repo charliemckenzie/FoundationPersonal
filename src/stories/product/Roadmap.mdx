@@ -1,0 +1,77 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / Roadmap" />
+
+# Roadmap
+
+What's in the pipeline, what's planned, and what's further out.
+
+Items move through **Draft → Review → Stable** via the full agent sign-off cycle. This page reflects intent — priorities shift as needs change.
+
+---
+
+## Now — In the Pipeline
+
+These components are in the review cycle right now. Each is working toward stable status.
+
+- Alert — Flanders · Marge · Lisa
+- Badge — Flanders · Marge · Lisa
+- Checkbox — Marge · Lisa
+- Chip — Flanders · Marge · Lisa
+- ExpandableItem — Marge · Lisa
+- RadioGroup — Marge · Lisa
+- Select — Flanders · Marge · Lisa
+- Switch — Flanders · Marge · Lisa
+- TextField — Flanders · Marge · Lisa
+
+---
+
+## Next — Planned
+
+Draft components queued for the next review cycle once the current batch clears.
+
+- Autocomplete — prop API needs final Moe sign-off before review starts
+- Dialog — AlertDialog variant included; keyboard trap to be verified by Flanders
+- Menu — keyboard navigation pattern needs clarification
+- Tooltip — positioning behaviour (edge cases, portal) to be resolved
+
+---
+
+## Later — Backlog
+
+No committed order. Priority will be set based on what prototypes actually need.
+
+**Form fields**
+- AddressField — composite; depends on stable TextField and Autocomplete
+- DateOfBirthField — composite; depends on stable TextField
+- MoneyField — composite; depends on stable TextField
+- PercentageField — composite; depends on stable TextField
+
+**Navigation & layout**
+- Breadcrumb — routing integration to be resolved
+- Footer — depends on final brand tokens
+- QuickLinks — tab-style section navigation; API TBC
+
+**Display & feedback**
+- Card — multiple layout variants built; needs review cycle
+- Drawer — structure complete; focus trap needs Flanders review
+- HeroIcon — dependent on Icon reaching stable
+- Icon — wrapper complete; usage patterns to be documented
+- IconList — depends on stable Icon
+- Logo — awaiting final brand lockup
+- Modal — focus management depends on Drawer patterns
+- Spinner — simple; can enter review any time
+- Table — complex; sortable and paginated variants needed
+- ToggleButton — API alignment with Checkbox/RadioGroup needed
+
+---
+
+## Initiatives
+
+Larger efforts beyond individual components.
+
+- Dark mode *(Backlog)* — requires full semantic token audit; significant effort
+- Figma Code Connect *(Backlog)* — map all stable components to Figma counterparts
+- Composition patterns *(Backlog)* — form layouts, page shells, data display patterns
+- Motion & animation guidelines *(Backlog)* — reduced motion support required throughout
+- RTL support *(Not planned)* — no current requirement

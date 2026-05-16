@@ -1,49 +1,22 @@
 'use client';
 
-import React, { useState, useCallback, useId } from 'react';
+import { useState, useCallback, useId } from 'react';
 import { Box, Collapse, Typography } from '@mui/material';
 import { Icon } from '../Icon';
 
 export interface ExpandableItemProps {
-  /**
-   * The label text displayed next to the chevron
-   */
   label: string;
-  
-  /**
-   * The content to show/hide
-   */
   children: React.ReactNode;
-  
-  /**
-   * Initial expanded state (uncontrolled mode)
-   * @default false
-   */
+  /** @default false */
   defaultExpanded?: boolean;
-  
-  /**
-   * Controlled expanded state
-   */
   expanded?: boolean;
-  
-  /**
-   * Callback fired when the expanded state changes
-   */
   onChange?: (expanded: boolean) => void;
-  
-  /**
-   * If true, the item cannot be expanded/collapsed
-   * @default false
-   */
+  /** @default false */
   disabled?: boolean;
-  
-  /**
-   * Optional id for ARIA relationships. If not provided, one will be generated.
-   */
   id?: string;
 }
 
-export const ExpandableItem: React.FC<ExpandableItemProps> = ({
+export function ExpandableItem({
   label,
   children,
   defaultExpanded = false,
@@ -51,41 +24,29 @@ export const ExpandableItem: React.FC<ExpandableItemProps> = ({
   onChange,
   disabled = false,
   id: providedId,
-}) => {
+}: ExpandableItemProps) {
   const generatedId = useId();
   const id = providedId || generatedId;
-  
-  // Internal state for uncontrolled mode
+
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-  
-  // Use controlled state if provided, otherwise use internal state
   const isExpanded = controlledExpanded !== undefined ? controlledExpanded : internalExpanded;
-  
+
   const handleToggle = useCallback(() => {
     if (disabled) return;
-    
     const newExpanded = !isExpanded;
-    
-    // Update internal state if uncontrolled
-    if (controlledExpanded === undefined) {
-      setInternalExpanded(newExpanded);
-    }
-    
-    // Call onChange callback
+    if (controlledExpanded === undefined) setInternalExpanded(newExpanded);
     onChange?.(newExpanded);
   }, [disabled, isExpanded, controlledExpanded, onChange]);
-  
+
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
-    // Handle Enter and Space to toggle
     if (event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       handleToggle();
     }
   }, [handleToggle]);
-  
+
   return (
     <Box>
-      {/* Trigger button */}
       <Box
         component="button"
         onClick={handleToggle}
@@ -94,7 +55,7 @@ export const ExpandableItem: React.FC<ExpandableItemProps> = ({
         aria-expanded={isExpanded}
         aria-controls={`${id}-content`}
         id={`${id}-header`}
-        sx={{
+        sx={(t) => ({
           display: 'flex',
           alignItems: 'center',
           gap: 1,
@@ -102,60 +63,41 @@ export const ExpandableItem: React.FC<ExpandableItemProps> = ({
           border: 'none',
           padding: 0,
           cursor: disabled ? 'default' : 'pointer',
-          opacity: disabled ? (theme) => theme.palette.action.disabledOpacity : 1,
-          color: (theme) => disabled ? theme.palette.action.disabled : theme.palette.primary.main,
-          transition: (theme) => theme.transitions.create('color', {
-            duration: theme.transitions.duration.short,
-          }),
+          opacity: disabled ? t.palette.action.disabledOpacity : 1,
+          color: disabled ? t.palette.action.disabled : t.palette.primary.main,
+          transition: t.transitions.create('color', { duration: t.transitions.duration.short }),
           '&:hover:not(:disabled)': {
-            color: (theme) => theme.palette.primary.dark,
+            color: t.palette.primary.dark,
           },
           '&.Mui-focusVisible': {
-            outline: (theme) => `2px solid ${theme.palette.border.focus}`,
+            outline: `2px solid ${t.palette.border.focus}`,
             outlineOffset: '2px',
-            borderRadius: (theme) => theme.spacing(0.5),
+            borderRadius: `${t.shape.xs}px`,
           },
-        }}
+        })}
       >
-        {/* Chevron icon */}
         <Box
-          sx={{
+          sx={(t) => ({
             display: 'flex',
-            transition: (theme) => theme.transitions.create('transform', {
-              duration: theme.transitions.duration.short,
-              easing: theme.transitions.easing.easeInOut,
+            transition: t.transitions.create('transform', {
+              duration: t.transitions.duration.short,
+              easing: t.transitions.easing.easeInOut,
             }),
             transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          }}
+          })}
         >
           <Icon icon="chevron_down" size="sm" color="inherit" />
         </Box>
-        
-        {/* Label */}
-        <Typography
-          variant="body"
-          component="span"
-          sx={{
-            fontWeight: 700,
-          }}
-        >
+        <Typography variant="body" component="span" sx={{ fontWeight: 700 }}>
           {label}
         </Typography>
       </Box>
-      
-      {/* Collapsible content */}
+
       <Collapse in={isExpanded}>
-        <Box
-          id={`${id}-content`}
-          role="region"
-          aria-labelledby={`${id}-header`}
-          sx={{
-            mt: 1,
-          }}
-        >
+        <Box id={`${id}-content`} role="region" aria-labelledby={`${id}-header`} sx={{ mt: 1 }}>
           {children}
         </Box>
       </Collapse>
     </Box>
   );
-};
+}

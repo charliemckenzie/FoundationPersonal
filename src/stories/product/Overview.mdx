@@ -1,0 +1,87 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / Overview" />
+
+export const VersionBadge = () => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: '0 0 28px' }}>
+    <span style={{
+      padding: '3px 10px', borderRadius: '4px', backgroundColor: '#1565c0',
+      color: '#fff', fontSize: '0.7rem', fontWeight: 700, letterSpacing: '0.08em',
+      textTransform: 'uppercase',
+    }}>Alpha</span>
+    <code style={{ fontSize: '0.85rem', color: '#555' }}>v0.1.0</code>
+    <span style={{ color: '#ccc' }}>|</span>
+    <span style={{ fontSize: '0.8rem', color: '#555' }}>6 stable · 9 in review · 22 draft</span>
+  </div>
+);
+
+# Foundation
+
+<VersionBadge />
+
+A living component library built to support production-quality UX prototypes. Every component is reviewed for code quality, accessibility, and visual consistency before it's marked stable.
+
+---
+
+## [Component Status](/?path=/docs/foundation-component-status--docs)
+
+37 components across draft, review, and stable stages. Use this page to find any component, check its current status, and jump to its story.
+
+Stable components are fully signed off and safe to use in prototypes. Review components are with the specialist agents. Draft components are in progress and not yet reviewed.
+
+---
+
+## [Changelog](/?path=/docs/foundation-changelog--docs)
+
+Version history from v0.1 (September 2024) to the current release. Each entry lists what was promoted to stable, what was added as draft, and any infrastructure or documentation changes that shipped with that version.
+
+Versioning is feature-driven — the minor version increments whenever a component reaches stable.
+
+---
+
+## [Roadmap](/?path=/docs/foundation-roadmap--docs)
+
+9 components are currently in the review cycle. 4 are planned for the next cycle once the current batch clears. 22 are in the backlog with no committed order.
+
+The roadmap also tracks larger initiatives: dark mode, Figma Code Connect, composition patterns, and motion guidelines.
+
+---
+
+## [Accessibility](/?path=/docs/foundation-accessibility--docs)
+
+WCAG 2.2 AA is the baseline for every component in Foundation, not a goal. This page documents the specific standards applied — colour contrast ratios, keyboard navigation requirements, focus management, ARIA usage, and the seven new criteria introduced in WCAG 2.2.
+
+Flanders reviews every component against these standards before it can reach stable.
+
+---
+
+## Design tokens
+
+- [Primitive Colours](/?path=/story/design-tokens-primitive-colors--default) — raw hue scales (50–950); never use directly in components
+- [Semantic Colours](/?path=/story/design-tokens-semantic-colors--default) — brand, feedback, surface, and text tokens; these are what components use
+- [Typography](/?path=/story/design-tokens-typography--overview) — type scale and font families
+- [Spacing & Shape](/?path=/story/foundation-design-tokens-spacing-shape--docs) — spacing scale and border radius
+- [Shadows & Breakpoints](/?path=/story/foundation-design-tokens-shadows-breakpoints--docs) — elevation and responsive breakpoints
+- [Grid](/?path=/story/design-tokens-grid--default) — 12-column layout; columns, gutters, margins, max-width per breakpoint
+
+---
+
+## Utilities
+
+- [Utilities](/?path=/docs/utilities-overview--docs) — low-level building blocks underpinning Modal, Drawer, and focus management; not for direct use in most cases
+
+---
+
+## The pipeline
+
+Every component follows this sequence before it's marked stable.
+
+1. **Moe** — Approves component structure and API. Nothing is built without this.
+2. **Lenny** — Builds the component.
+3. **Chalmers** — Code quality review: TypeScript, token usage, charter compliance.
+4. **Flanders** — Accessibility review: WCAG 2.2 AA, keyboard nav, focus management.
+5. **Marge** — Visual consistency: tokens, spacing, cohesion with the rest of the library.
+6. **Lisa** — Writes the Storybook story and usage docs.
+7. **Willie** — Runs the full sign-off checklist; updates component status.
+8. **Frink** — Commits and opens a PR.
+9. **You** — Reviews and merges.
