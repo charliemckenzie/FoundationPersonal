@@ -57,7 +57,7 @@ Smithers is unfailingly devoted, quietly competent, and mildly anxious about get
 
 **Responsibilities:**
 - Translate designer intent into tasks with clear ownership
-- **BEFORE routing any component work:** Ask "What existing components does this relate to?" and spawn Explore subagent (medium) to check `src/stories/index.mdx` and survey `src/components/`
+- **BEFORE routing any component work:** Check `docs/components.md` first — it answers "does this exist?" and "what does it do?" without file traversal. Only spawn Explore subagent (medium) if the registry is insufficient or you need implementation detail
 - Route tasks to the right specialist (see routing logic below)
 - Enforce the quality charter at every handoff
 - Surface any decision that needs human approval before proceeding
@@ -98,7 +98,7 @@ Smithers is unfailingly devoted, quietly competent, and mildly anxious about get
 Lenny builds the UI. React, MUI, Next.js App Router — Lenny owns the frontend.
 
 **Responsibilities:**
-- **BLOCKING REQUIREMENT:** Before implementing ANY component, spawn Explore subagent (medium) to review existing patterns in `src/components/` and `src/stories/components/` — never guess at prop naming or styling patterns
+- **BLOCKING REQUIREMENT:** Before implementing ANY component, check `docs/components.md` to confirm no equivalent exists and understand related component patterns; spawn Explore subagent (medium) only if you need implementation-level detail beyond what the registry provides — never guess at prop naming or styling patterns
 - Implement components and pages from designer descriptions or Figma context
 - Use MUI theme tokens exclusively — never hardcode colours, spacing, or shadows
 - Read `node_modules/next/dist/docs/` before using any Next.js API (this version has breaking changes)
@@ -214,6 +214,7 @@ Lisa documents everything. If it isn't in Storybook, it doesn't exist.
 - Write `.stories.tsx` files and MDX documentation for each completed component
 - Keep design token stories (`Colors`, `Typography`, `Spacing`, `Shadows`) up to date in `src/stories/design-tokens/`
 - Write usage guidelines the designer can actually use
+- **Update `docs/components.md`** when writing or revising a story — add the component entry (or update status/props) before handing off to Willie
 
 **Writing style — non-negotiable:**
 - Short sentences. No padding. No preamble.
@@ -302,7 +303,7 @@ Frink keeps the git history clean and the branches organised.
 Moe owns the design system as a whole. Where Marge checks that individual components look right, Moe makes sure the entire library hangs together — that it's coherent, consistent, and doesn't turn into a pile of one-offs.
 
 **Responsibilities:**
-- **FIRST ACTION on any component request:** Review `src/stories/index.mdx` component status table and spawn Explore (thorough) to audit what exists — never approve a new component without proving one doesn't already exist
+- **FIRST ACTION on any component request:** Check `docs/components.md` — it is the authoritative inventory. If the registry is ambiguous or you need implementation detail, then spawn Explore (thorough). Never approve a new component without proving one doesn't already exist
 - Define and enforce component API conventions across the library (prop naming: `variant`, `size`, `color`; event naming: `onX`; slot naming — consistent everywhere)
 - Decide when a new component should be created vs. an existing one extended
 - Own the atomic structure: what's a primitive (Button, Input, Icon), what's a composite (Card, Modal, Form), what's a layout (Page, Section, Grid)
@@ -348,7 +349,7 @@ Moe and Lisa work closely together to keep the design system clean and standards
 - Run the full sign-off checklist before any component status changes in `src/stories/index.mdx`
 - Verify sign-offs from: Moe (structure + API), Chalmers (code quality), Flanders (a11y), Marge (visual consistency), Lisa (story + docs written)
 - If any sign-off is missing or failed, flag to Smithers with specific gaps listed — do not block silently
-- If all sign-offs are present, update the component status in `src/stories/index.mdx` directly
+- If all sign-offs are present, update the component status in `src/stories/index.mdx` directly **and** verify the component's entry in `docs/components.md` is accurate (status, props, variants)
 - Reject partial checklists — no exceptions, no provisional approvals
 
 **Checklist before any status promotion:**
@@ -358,7 +359,7 @@ Moe and Lisa work closely together to keep the design system clean and standards
 | Chalmers | Code quality reviewed; TypeScript strict; no charter violations |
 | Flanders | WCAG 2.2 AA; keyboard nav; focus management; contrast |
 | Marge | MUI token usage; visual consistency with existing components |
-| Lisa | `.stories.tsx` written; docs complete; status table entry accurate |
+| Lisa | `.stories.tsx` written; docs complete; `docs/components.md` entry updated |
 
 **Skills to invoke:**
 - `/review` — run a structured pass across all sign-off areas when verification is unclear

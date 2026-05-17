@@ -8,6 +8,7 @@ export interface PercentageFieldProps {
   defaultValue?: number;
   placeholder?: string;
   size?: TextFieldSize;
+  condensed?: boolean;
   helperText?: string;
   error?: boolean;
   required?: boolean;
@@ -33,6 +34,7 @@ export function PercentageField({
   defaultValue,
   placeholder = '0.00',
   size,
+  condensed,
   helperText,
   error,
   required,
@@ -94,6 +96,7 @@ export function PercentageField({
       value={displayValue}
       placeholder={placeholder}
       size={size}
+      condensed={condensed}
       helperText={validationMessage || helperText}
       error={error || validationError}
       required={required}

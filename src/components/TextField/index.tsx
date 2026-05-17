@@ -10,6 +10,8 @@ import type React from 'react';
 export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date';
 export type TextFieldSize = 'small' | 'medium';
 
+const CONDENSED_REDUCTION = 0.25; // rem = 4px
+
 export interface TextFieldProps {
   label?: string;
   value?: string;
@@ -23,6 +25,7 @@ export interface TextFieldProps {
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  condensed?: boolean;
   multiline?: boolean;
   rows?: number;
   startAdornment?: React.ReactNode;
@@ -49,6 +52,7 @@ export function TextField({
   required = false,
   disabled = false,
   fullWidth = false,
+  condensed = false,
   multiline = false,
   rows,
   startAdornment,
@@ -72,7 +76,7 @@ export function TextField({
           required={required}
           error={error}
           disabled={disabled}
-          sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+          sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
         >
           {label}
         </FormLabel>
@@ -101,6 +105,17 @@ export function TextField({
           formHelperText: { role: error && !errorMessage ? 'alert' : undefined, error: errorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
+              '& .MuiInputBase-input': { lineHeight: 1.5, ...(!multiline && { height: '1.5em' }) },
+              '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' },
+              ...(!label && {
+                '& .MuiInputBase-input::placeholder': {
+                  color: theme.palette.text.secondary,
+                  opacity: 1,
+                },
+              }),
+              minHeight: size === 'small'
+                ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
+                : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
               fontSize: '1rem',
               borderRadius: `${theme.shape.sm}px`,
               '& .MuiInputAdornment-root': {
@@ -117,8 +132,12 @@ export function TextField({
               },
               ...(!multiline && {
                 '& .MuiOutlinedInput-input': {
-                  paddingTop: '0.75rem',
-                  paddingBottom: '0.75rem',
+                  paddingTop: size === 'small'
+                    ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                    : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
+                  paddingBottom: size === 'small'
+                    ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                    : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
                 },
               }),
               '& fieldset': {

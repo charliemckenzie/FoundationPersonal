@@ -8,6 +8,7 @@ export interface MoneyFieldProps {
   defaultValue?: number;
   placeholder?: string;
   size?: TextFieldSize;
+  condensed?: boolean;
   helperText?: string;
   error?: boolean;
   required?: boolean;
@@ -58,6 +59,7 @@ export function MoneyField({
   defaultValue,
   placeholder = '0',
   size,
+  condensed,
   helperText,
   error,
   required,
@@ -105,6 +107,7 @@ export function MoneyField({
       value={displayValue}
       placeholder={placeholder}
       size={size}
+      condensed={condensed}
       helperText={helperText}
       error={error}
       required={required}

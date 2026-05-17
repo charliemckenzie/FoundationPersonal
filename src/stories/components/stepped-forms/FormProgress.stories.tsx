@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { FormProgress, STEPPED_MIN_STEPS, STEPPED_MAX_STEPS, STEPPED_MAX_STEPS_LABELLED } from '../../components/FormProgress';
+import { FormProgress, STEPPED_MIN_STEPS, STEPPED_MAX_STEPS, STEPPED_MAX_STEPS_LABELLED } from '../../../components/FormProgress';
 
 const Label = ({ first, children }: { first?: boolean; children: React.ReactNode }) => (
   <p style={{ margin: first ? '0 0 0.5rem' : '1.5rem 0 0.5rem', fontSize: '0.75rem', color: '#666', fontWeight: 600 }}>{children}</p>
@@ -108,7 +108,7 @@ function PlaygroundDemo({ storyVariant, value, showStepIndicator, stepIndicatorT
 }
 
 const meta: Meta<typeof FormProgress> = {
-  title: 'Form Components / FormProgress',
+  title: 'Form Components / Stepped Forms / FormProgress',
   component: FormProgress,
   tags: ['autodocs'],
   parameters: {

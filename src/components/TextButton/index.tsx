@@ -20,6 +20,7 @@ export interface TextButtonProps {
   startIcon?: string;
   endIcon?: string;
   iconDirection?: 'left' | 'right';
+  hideIcon?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
 }
@@ -34,6 +35,7 @@ export function TextButton({
   startIcon,
   endIcon,
   iconDirection = 'right',
+  hideIcon = false,
   onClick,
   type = 'button',
 }: TextButtonProps) {
@@ -62,8 +64,8 @@ export function TextButton({
   
   // Default arrow icon when none specified
   const defaultIcon = iconDirection === 'left' ? 'arrow-left' : 'arrow-right';
-  const effectiveStartIcon = startIcon || (iconDirection === 'left' && !endIcon ? defaultIcon : undefined);
-  const effectiveEndIcon = endIcon || (iconDirection === 'right' && !startIcon ? defaultIcon : undefined);
+  const effectiveStartIcon = hideIcon ? undefined : (startIcon || (iconDirection === 'left' && !endIcon ? defaultIcon : undefined));
+  const effectiveEndIcon = hideIcon ? undefined : (endIcon || (iconDirection === 'right' && !startIcon ? defaultIcon : undefined));
   
   // Track whether we're using default icons (for hover animation)
   const isUsingDefaultIcon = !startIcon && !endIcon;

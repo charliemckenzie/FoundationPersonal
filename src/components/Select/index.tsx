@@ -114,7 +114,7 @@ export function Select({
         required={required}
         error={error}
         disabled={disabled}
-        sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+        sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
       >
         {label}
       </FormLabel>
@@ -133,6 +133,7 @@ export function Select({
           inputProps={{ id: fieldId, name }}
           MenuProps={{ slotProps: { list: { sx: { py: '4px' } }, paper: { sx: (t) => ({ borderRadius: `${t.shape.sm}px` }) } } }}
           sx={(t) => ({
+            minHeight: size === 'small' ? '2.5rem' : '3rem',
             fontSize: '1rem',
             borderRadius: `${t.shape.sm}px`,
             backgroundColor: t.palette.background.paper,
@@ -143,12 +144,13 @@ export function Select({
               borderColor: alpha(t.palette.border.input, 0.6),
             },
             '& div.MuiSelect-select': {
-              paddingTop: '0.75rem',
-              paddingBottom: '0.75rem',
+              lineHeight: 1.5,
+              paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
+              paddingBottom: size === 'small' ? '0.5rem' : '0.75rem',
             },
             '&& select.MuiInputBase-input': {
-              paddingTop: '0.75rem',
-              paddingBottom: '0.75rem',
+              paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
+              paddingBottom: size === 'small' ? '0.5rem' : '0.75rem',
             },
             '& fieldset': {
               borderColor: t.palette.border.input,
