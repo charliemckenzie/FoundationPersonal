@@ -4,11 +4,11 @@ import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
-import LinearProgress from '@mui/material/LinearProgress';
 import { Button } from '../Button';
-import { IconButton } from '../IconButton';
 import { Icon } from '../Icon';
 import type React from 'react';
+import { dashedBorderSvg, isFileAccepted } from './helpers';
+import { FileListItem } from './FileListItem';
 
 export interface FileUploadProps {
   label?: string;
@@ -22,29 +22,6 @@ export interface FileUploadProps {
   error?: string;
   helperText?: string;
   disabled?: boolean;
-}
-
-function dashedBorderSvg(color: string, radius: number): string {
-  const c = encodeURIComponent(color);
-  return `url("data:image/svg+xml,%3csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3e%3crect width='100%25' height='100%25' fill='none' rx='${radius}' ry='${radius}' stroke='${c}' stroke-width='1' stroke-dasharray='6%2c4' stroke-dashoffset='0' stroke-linecap='square'/%3e%3c/svg%3e")`;
-}
-
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}
-
-function isFileAccepted(file: File, accept?: string): boolean {
-  if (!accept) return true;
-  return accept
-    .split(',')
-    .map((t) => t.trim())
-    .some((token) => {
-      if (token.startsWith('.')) return file.name.toLowerCase().endsWith(token.toLowerCase());
-      if (token.endsWith('/*')) return file.type.startsWith(token.slice(0, -1));
-      return file.type === token;
-    });
 }
 
 export function FileUpload({
@@ -214,12 +191,7 @@ export function FileUpload({
             </Typography>
           )}
         </Box>
-        <Button
-          label="Browse files"
-          variant="soft"
-          size="small"
-          disabled={disabled}
-        />
+        <Button label="Browse files" variant="soft" size="small" disabled={disabled} />
         <input
           ref={inputRef}
           id={inputId}
@@ -245,80 +217,15 @@ export function FileUpload({
 
       {files.length > 0 && (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mt: 0.5 }}>
-          {files.map((file, i) => {
-            const progress = uploadProgress?.[file.name];
-            const isUploading = progress != null && progress < 100;
-            return (
-              <Box
-                key={`${file.name}-${i}`}
-                sx={(theme) => ({
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 1.5,
-                  px: 1.5,
-                  py: 1.5,
-                  borderRadius: `${theme.shape.sm}px`,
-                  border: '1px solid',
-                  borderColor: 'border.subtle',
-                  backgroundColor: 'background.paper',
-                })}
-              >
-                <Box
-                  component="span"
-                  sx={(theme) => ({
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '2.5rem',
-                    height: '2.5rem',
-                    borderRadius: '50%',
-                    flexShrink: 0,
-                    color: theme.palette.primary.main,
-                    backgroundColor: alpha(theme.palette.primary.main, 0.08),
-                  })}
-                >
-                  <Icon icon={isUploading ? 'arrow-up-from-line' : 'file'} size="lg" color="inherit" />
-                </Box>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography variant="body" noWrap title={file.name}>
-                    {file.name}
-                  </Typography>
-                  {isUploading ? (
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <LinearProgress
-                        variant="determinate"
-                        value={progress}
-                        sx={(theme) => ({
-                          flex: 1,
-                          height: 4,
-                          borderRadius: `${theme.shape.full}px`,
-                          backgroundColor: 'action.hover',
-                          '& .MuiLinearProgress-bar': { borderRadius: `${theme.shape.full}px` },
-                        })}
-                      />
-                      <Typography variant="small" sx={{ color: 'text.muted', flexShrink: 0 }}>
-                        {progress}%
-                      </Typography>
-                    </Box>
-                  ) : (
-                    <Typography variant="small" sx={{ display: 'block', color: 'text.muted' }}>
-                      {formatBytes(file.size)}
-                    </Typography>
-                  )}
-                </Box>
-                {!isUploading && (
-                  <IconButton
-                    label="Delete"
-                    icon="trash"
-                    variant="ghost"
-                    size="small"
-                    disabled={disabled}
-                    onClick={() => removeFile(i)}
-                  />
-                )}
-              </Box>
-            );
-          })}
+          {files.map((file, i) => (
+            <FileListItem
+              key={`${file.name}-${i}`}
+              file={file}
+              progress={uploadProgress?.[file.name]}
+              disabled={disabled}
+              onRemove={() => removeFile(i)}
+            />
+          ))}
         </Box>
       )}
     </Box>

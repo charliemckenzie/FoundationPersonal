@@ -4,73 +4,10 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
-import { alpha, type Theme } from '@mui/material/styles';
-import { Icon } from '../Icon';
+import { type Theme } from '@mui/material/styles';
 import { selectedSoftBg } from '../inputs/variantStyles';
-
-const CheckboxUncheckedIcon = ({ error, disabled }: { error?: boolean; disabled?: boolean }) => (
-  <Box
-    component="span"
-    sx={(theme) => ({
-      width: '1.5rem',
-      height: '1.5rem',
-      border: '1px solid',
-      borderColor: disabled
-        ? alpha(theme.palette.border.input, 0.6)
-        : error
-        ? 'error.main'
-        : 'border.input',
-      borderRadius: '0.25rem',
-      display: 'inline-block',
-      boxSizing: 'border-box',
-      backgroundColor: disabled
-        ? alpha(theme.palette.background.default, 0.6)
-        : theme.palette.background.paper,
-    })}
-  />
-);
-
-const CheckboxIndeterminateIcon = () => (
-  <Box
-    component="span"
-    sx={{
-      width: '1.5rem',
-      height: '1.5rem',
-      bgcolor: 'currentColor',
-      border: '1px solid currentColor',
-      borderRadius: '0.25rem',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-    }}
-  >
-    <Box component="span" sx={{ color: 'common.white', display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
-      <Icon icon="minus" size="lg" color="inherit" />
-    </Box>
-  </Box>
-);
-
-const CheckboxCheckedIcon = () => (
-  <Box
-    component="span"
-    sx={{
-      width: '1.5rem',
-      height: '1.5rem',
-      bgcolor: 'currentColor',
-      border: '1px solid currentColor',
-      borderRadius: '0.25rem',
-      display: 'inline-flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      boxSizing: 'border-box',
-    }}
-  >
-    <Box component="span" sx={{ color: 'common.white', display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
-      <Icon icon="check" size="lg" color="inherit" />
-    </Box>
-  </Box>
-);
+import { CheckboxUncheckedIcon, CheckboxIndeterminateIcon, CheckboxCheckedIcon } from './icons';
+import { CheckboxCardLabel } from './CheckboxCardLabel';
 
 export type CheckboxVariant = 'default' | 'boxed' | 'card';
 export type CheckboxColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
@@ -97,6 +34,41 @@ export interface CheckboxProps {
   onChange?: (checked: boolean) => void;
   id?: string;
   name?: string;
+}
+
+function renderLabelContent(args: {
+  label: string;
+  description?: string;
+  variant: CheckboxVariant;
+  icon?: string;
+  cardDirection: 'column' | 'row';
+  isSelected: boolean;
+  disabled: boolean;
+}): React.ReactNode {
+  const { label, description, variant, icon, cardDirection, isSelected, disabled } = args;
+  if (variant === 'card') {
+    return (
+      <CheckboxCardLabel
+        label={label}
+        description={description}
+        icon={icon}
+        cardDirection={cardDirection}
+        isSelected={isSelected}
+        disabled={disabled}
+      />
+    );
+  }
+  if (description) {
+    return (
+      <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
+        {label}
+        <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
+          {description}
+        </Box>
+      </Box>
+    );
+  }
+  return label;
 }
 
 export function Checkbox({
@@ -129,118 +101,6 @@ export function Checkbox({
     if (checked === undefined) setInternalChecked(isChecked);
     onChange?.(isChecked);
   };
-
-  const labelContent: React.ReactNode = (() => {
-    if (variant === 'card') {
-      const circleSize = cardDirection === 'column' ? '3rem' : '2.5rem';
-      const iconSize = cardDirection === 'column' ? 'xl' : 'lg';
-      const iconCircle = icon ? (
-        <Box
-          component="span"
-          sx={(theme) => ({
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: circleSize,
-            height: circleSize,
-            borderRadius: '50%',
-            flexShrink: 0,
-            color: disabled
-              ? theme.palette.action.disabled
-              : isSelected
-              ? theme.palette.common.white
-              : theme.palette.primary.main,
-            backgroundColor: disabled
-              ? theme.palette.action.disabledBackground
-              : isSelected
-              ? theme.palette.primary.main
-              : selectedSoftBg(theme),
-          })}
-        >
-          <Icon icon={icon} size={iconSize} style={isSelected ? 'solid' : 'light'} color="inherit" />
-        </Box>
-      ) : null;
-
-      const cornerIndicator = (
-        <Box
-          component="span"
-          aria-hidden
-          sx={(theme) => ({
-            position: 'absolute',
-            top: '0.5rem',
-            right: '0.5rem',
-            width: '1.125rem',
-            height: '1.125rem',
-            borderRadius: '0.1875rem',
-            display: 'inline-flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxSizing: 'border-box',
-            flexShrink: 0,
-            transition: 'background-color 150ms ease, border-color 150ms ease',
-            ...(isSelected
-              ? {
-                  backgroundColor: disabled ? theme.palette.action.disabledBackground : theme.palette.primary.main,
-                  border: 'none',
-                }
-              : {
-                  backgroundColor: 'transparent',
-                  border: `1px solid ${disabled ? alpha(theme.palette.border.input, 0.6) : theme.palette.border.input}`,
-                }),
-          })}
-        >
-          {isSelected && (
-            <Box component="span" sx={{ color: 'common.white', display: 'inline-flex', lineHeight: 0 }}>
-              <Icon icon="check" size="sm" color="inherit" style="solid" />
-            </Box>
-          )}
-        </Box>
-      );
-
-      if (cardDirection === 'row') {
-        return (
-          <Box component="span" sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 1.5, width: '100%' }}>
-            {iconCircle}
-            <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
-              <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
-              {description && (
-                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
-                  {description}
-                </Box>
-              )}
-            </Box>
-            {cornerIndicator}
-          </Box>
-        );
-      }
-
-      return (
-        <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
-          {iconCircle}
-          <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
-            {description && (
-              <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
-                {description}
-              </Box>
-            )}
-          </Box>
-          {cornerIndicator}
-        </Box>
-      );
-    }
-    if (description) {
-      return (
-        <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
-          {label}
-          <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
-            {description}
-          </Box>
-        </Box>
-      );
-    }
-    return label;
-  })();
 
   const containerSx = isBoxedOrCard
     ? (theme: Theme) => ({
@@ -288,7 +148,7 @@ export function Checkbox({
     <FormControl error={error} disabled={disabled} required={required}>
       <FormControlLabel
         labelPlacement={labelPlacement}
-        label={labelContent}
+        label={renderLabelContent({ label, description, variant, icon, cardDirection, isSelected, disabled })}
         sx={containerSx}
         control={
           <MuiCheckbox
