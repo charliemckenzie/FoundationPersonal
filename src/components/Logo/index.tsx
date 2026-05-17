@@ -47,11 +47,11 @@ export function Logo({ variant = 'primary', size = 'md', alt }: LogoProps) {
 
   return (
     <Box
-      sx={{
+      sx={(t) => ({
         color: 'primary.main',
-        height: (t) => ({ sm: t.spacing(3), md: t.spacing(5), lg: t.spacing(8) }[size]),
+        height: { sm: t.spacing(3), md: t.spacing(5), lg: t.spacing(8) }[size],
         '& svg': { height: '100%', width: 'auto', display: 'block' },
-      }}
+      })}
     >
       <SvgComponent aria-label={altText} role="img" />
     </Box>

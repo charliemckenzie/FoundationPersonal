@@ -50,7 +50,6 @@ const meta: Meta<AlertStoryArgs> = {
       description: 'Override the severity icon. "(default)" uses the severity icon.',
       if: { arg: 'showIcon', truthy: true },
     },
-    icon: { table: { disable: true } },
     action: { table: { disable: true } },
     onClose: { table: { disable: true } },
     actionType: {

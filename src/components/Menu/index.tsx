@@ -29,13 +29,21 @@ export interface MenuItemConfig {
   color?: 'default' | 'error';
 }
 
+/** Props injected by Menu into the trigger element via cloneElement. */
+interface TriggerInjectedProps {
+  onClick?: React.MouseEventHandler<HTMLElement>;
+  'aria-haspopup'?: boolean | 'true' | 'menu';
+  'aria-expanded'?: boolean | undefined;
+  'aria-controls'?: string;
+}
+
 export interface MenuProps {
   /**
    * The element that opens the menu on click.
    * Its `onClick`, `aria-haspopup`, `aria-expanded`, and `aria-controls` props
    * are injected automatically — do not set them on the trigger.
    */
-  trigger: React.ReactElement;
+  trigger: React.ReactElement<TriggerInjectedProps>;
   /** Ordered list of menu items. */
   items: MenuItemConfig[];
   /** Optional id for the `<ul role="menu">` element. Defaults to a generated id. */

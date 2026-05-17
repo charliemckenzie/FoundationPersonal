@@ -4,7 +4,17 @@ import { Icon } from '../../components/Icon';
 
 const ADORNMENT_ICONS = ['magnifying-glass', 'lock', 'key', 'circle-info', 'circle-question', 'circle-check', 'xmark', 'circle-dollar'] as const;
 
-const meta: Meta<typeof TextField> = {
+type TextFieldStoryArgs = TextFieldProps & {
+  showHelperText?: boolean;
+  showStartAdornment?: boolean;
+  startAdornmentIcon?: string;
+  startAdornmentText?: string;
+  showEndAdornment?: boolean;
+  endAdornmentIcon?: string;
+  endAdornmentText?: string;
+};
+
+const meta: Meta<TextFieldStoryArgs> = {
   title: 'Form Components / TextInput / TextField',
   component: TextField,
   tags: ['autodocs'],
@@ -41,7 +51,7 @@ For passwords, multi-line text, currency, percentages, or date of birth, use the
 };
 
 export default meta;
-type Story = StoryObj<typeof TextField>;
+type Story = StoryObj<TextFieldStoryArgs>;
 
 export const Playground: Story = {
   name: 'Playground',

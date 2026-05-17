@@ -11,7 +11,9 @@ import {
   buildOutlinedStyles,
   buildReversedStyles,
   buildWhiteStyles,
+  buildFocusStyles,
   type ButtonColorKey,
+  type ButtonColorKeyResolved,
   type ButtonVariantKey,
 } from '../buttons/variantStyles';
 
@@ -75,7 +77,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   const hasStartIcon = (!loading && !!startIcon) || (loading && !hideLoadingText);
   const hasEndIcon = !loading && !!endIcon;
 
-  const resolvedColor = color === 'white' ? 'primary' : color;
+  const resolvedColor: ButtonColorKeyResolved = color === 'white' ? 'primary' : color;
   const variantStyles =
     color === 'white' && variant === 'contained' ? buildWhiteStyles()
     : variant === 'contained' ? buildContainedStyles(resolvedColor)
@@ -122,11 +124,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
           cursor: 'not-allowed !important',
           pointerEvents: 'none !important',
         },
-        '&.Mui-focusVisible': {
-          outline: `2px solid ${reversed || color === 'white' ? theme.palette.common.white : ((theme.palette[resolvedColor as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
-          outlineOffset: '2px',
-          boxShadow: 'none',
-        },
+        ...buildFocusStyles(reversed || color === 'white', resolvedColor),
       }),
       ...(Array.isArray(sxProp) ? sxProp : sxProp ? [sxProp] : []),
       ]}

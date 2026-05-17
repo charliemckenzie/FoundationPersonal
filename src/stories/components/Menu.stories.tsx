@@ -12,7 +12,9 @@ interface MenuStoryArgs {
 
 const meta: Meta<MenuStoryArgs> = {
   title: 'Components / Menu',
-  component: Menu,
+  // MenuStoryArgs (showIcons/showDividers) differs from MenuProps so Storybook's
+  // strict ComponentType<CustomArgs> check rejects the real component.
+  component: Menu as never,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
@@ -45,9 +47,6 @@ const meta: Meta<MenuStoryArgs> = {
   argTypes: {
     showIcons: { control: 'boolean', name: 'Icons' },
     showDividers: { control: 'boolean', name: 'Dividers' },
-    trigger: { table: { disable: true } },
-    id: { table: { disable: true } },
-    onOpenChange: { table: { disable: true } },
   },
 };
 

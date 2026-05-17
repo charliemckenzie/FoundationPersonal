@@ -9,16 +9,19 @@ const SAMPLE_ITEMS = [
   { id: 'panel-3', title: 'How do I request a new component?', content: 'Talk to Smithers. All new component requests start with Smithers, who routes to Moe for design system approval before Lenny builds it.' },
 ];
 
-type DefaultExpandedOption = 'none' | 'panel-1' | 'panel-2' | 'panel-3';
+type DefaultExpandedOption = 'none' | 'panel-1' | 'panel-2' | 'panel-3' | 'single';
 
-type AccordionStoryArgs = Omit<AccordionProps, 'defaultExpanded' | 'items'> & {
+type AccordionStoryArgs = Omit<AccordionProps, 'defaultExpanded'> & {
+  items?: AccordionProps['items'];
   defaultExpanded: DefaultExpandedOption;
   showActions: boolean;
 };
 
 const meta: Meta<AccordionStoryArgs> = {
   title: 'Components / Expandable / Accordion',
-  component: Accordion,
+  // Custom story args differ from AccordionProps (defaultExpanded uses a story-local
+  // enum, plus a showActions toggle). Cast bypasses the strict ComponentType check.
+  component: Accordion as never,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {

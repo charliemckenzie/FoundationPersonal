@@ -103,9 +103,9 @@ export function TextButton({
           ? (disabled ? alpha(theme.palette.common.white, 0.30) : theme.palette.common.white)
           : (disabled ? theme.palette.action.disabled : theme.palette[color].main),
         fontSize: size === 'small'
-          ? (theme.typography.small as { fontSize?: string }).fontSize ?? '0.875rem'
+          ? theme.typography.small.fontSize
           : size === 'medium'
-            ? (theme.typography.body as { fontSize?: string }).fontSize ?? '1rem'
+            ? theme.typography.body.fontSize
             : '1.125rem', // No matching theme typography variant for 18px — intentional
         fontWeight: 700,
         lineHeight: lineHeightMap[size],
@@ -127,7 +127,7 @@ export function TextButton({
             },
           }),
         },
-        '&:focus-visible': {
+        '&.Mui-focusVisible': {
           outline: `2px solid ${reversed ? theme.palette.common.white : theme.palette[color].main}`,
           outlineOffset: '2px',
         },

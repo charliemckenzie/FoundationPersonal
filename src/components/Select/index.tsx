@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { alpha, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import MuiFormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
@@ -13,6 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import type React from 'react';
 import { useDrawerDrag } from '../Dialog/useDrawerDrag';
+import { buildInputStyles } from '../inputs/variantStyles';
 
 export interface SelectOption {
   value: string;
@@ -98,7 +99,7 @@ export function Select({
 
   function renderValue(selected: unknown): React.ReactNode {
     if (!selected && placeholder) {
-      return <Box component="span" sx={{ color: 'text.secondary' }}>{placeholder}</Box>;
+      return <Box component="span" sx={{ color: 'text.muted' }}>{placeholder}</Box>;
     }
     return options.find(o => o.value === (selected as string))?.label ?? '';
   }
@@ -133,16 +134,9 @@ export function Select({
           inputProps={{ id: fieldId, name }}
           MenuProps={{ slotProps: { list: { sx: { py: '4px' } }, paper: { sx: (t) => ({ borderRadius: `${t.shape.sm}px` }) } } }}
           sx={(t) => ({
+            ...buildInputStyles(t),
             minHeight: size === 'small' ? '2.5rem' : '3rem',
             fontSize: '1rem',
-            borderRadius: `${t.shape.sm}px`,
-            backgroundColor: t.palette.background.paper,
-            '&.Mui-disabled': {
-              backgroundColor: alpha(t.palette.background.default, 0.6),
-            },
-            '&&.Mui-disabled fieldset': {
-              borderColor: alpha(t.palette.border.input, 0.6),
-            },
             '& div.MuiSelect-select': {
               lineHeight: 1.5,
               paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
@@ -151,24 +145,6 @@ export function Select({
             '&& select.MuiInputBase-input': {
               paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
               paddingBottom: size === 'small' ? '0.5rem' : '0.75rem',
-            },
-            '& fieldset': {
-              borderColor: t.palette.border.input,
-              borderRadius: `${t.shape.sm}px`,
-            },
-            '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': {
-              borderColor: t.palette.border.input,
-            },
-            '&.Mui-focused': {
-              outline: `2px solid ${t.palette.border.focus}`,
-              outlineOffset: '2px',
-            },
-            '&&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-              borderWidth: '1px',
-              borderColor: t.palette.border.input,
-            },
-            '&&.Mui-focused.Mui-error .MuiOutlinedInput-notchedOutline': {
-              borderColor: t.palette.error.main,
             },
           })}
         >

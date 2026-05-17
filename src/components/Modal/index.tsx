@@ -53,12 +53,12 @@ export function Modal({
             aria-label="Close modal"
             onClick={onClose}
             size="small"
-            sx={{
+            sx={(t) => ({
               position: 'absolute',
-              top: (t) => t.spacing(1),
-              right: (t) => t.spacing(1),
+              top: t.spacing(1),
+              right: t.spacing(1),
               color: 'text.muted',
-            }}
+            })}
           >
             <Icon icon="cross" size="sm" />
           </MuiIconButton>

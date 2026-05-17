@@ -2,7 +2,9 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PasswordField, type PasswordFieldProps } from '../../components/PasswordField';
 import { Icon } from '../../components/Icon';
 
-const meta: Meta<typeof PasswordField> = {
+type PasswordFieldStoryArgs = PasswordFieldProps & { showHelperText?: boolean };
+
+const meta: Meta<PasswordFieldStoryArgs> = {
   title: 'Form Components / TextInput / PasswordField',
   component: PasswordField,
   tags: ['autodocs'],
@@ -26,8 +28,6 @@ Do not use \`TextField type="password"\` directly — use this component instead
     errorMessage: { if: { arg: 'error', truthy: true } },
     value: { table: { disable: true } },
     defaultValue: { table: { disable: true } },
-    multiline: { table: { disable: true } },
-    rows: { table: { disable: true } },
     onChange: { table: { disable: true } },
     onBlur: { table: { disable: true } },
     onFocus: { table: { disable: true } },
@@ -40,7 +40,7 @@ Do not use \`TextField type="password"\` directly — use this component instead
 };
 
 export default meta;
-type Story = StoryObj<typeof PasswordField>;
+type Story = StoryObj<PasswordFieldStoryArgs>;
 
 export const Playground: Story = {
   name: 'Playground',

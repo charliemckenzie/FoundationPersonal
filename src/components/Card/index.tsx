@@ -38,14 +38,38 @@ export interface CardProps {
   sx?: SxProps<Theme>;
 }
 
-const cardBaseSx = {
+const cardBaseSx = (theme: Theme) => ({
   boxShadow: 'none',
   border: '1px solid',
-  borderColor: 'border.subtle',
-  borderRadius: (theme: { shape: { lg: number } }) => `${theme.shape.lg}px`,
-  backgroundColor: 'background.paper',
+  borderColor: theme.palette.border.subtle,
+  borderRadius: `${theme.shape.lg}px`,
+  backgroundColor: theme.palette.background.paper,
   overflow: 'hidden',
-} as const;
+});
+
+function BadgeOverlay({ text }: { text: string }) {
+  return (
+    <Box
+      sx={(t) => ({
+        position: 'absolute',
+        top: '1rem',
+        left: '1rem',
+        backgroundColor: 'background.paper',
+        borderRadius: `${t.shape.full}px`,
+        px: 2,
+        py: 0.75,
+        pointerEvents: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      })}
+    >
+      <Typography variant="small" component="span" sx={{ fontWeight: 600, color: 'text.heading', lineHeight: 1.5 }}>
+        {text}
+      </Typography>
+    </Box>
+  );
+}
 
 export function Card({
   variant,
@@ -100,27 +124,7 @@ export function Card({
               alt={imageAlt}
               sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
             />
-            {badge && (
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '1rem',
-                  left: '1rem',
-                  backgroundColor: 'background.paper',
-                  borderRadius: (t) => `${t.shape.full}px`,
-                  px: 2,
-                  py: 0.75,
-                  pointerEvents: 'none',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-              >
-                <Typography variant="small" component="span" sx={{ fontWeight: 600, color: 'text.heading', lineHeight: 1.5 }}>
-                  {badge}
-                </Typography>
-              </Box>
-            )}
+            {badge && <BadgeOverlay text={badge} />}
           </Box>
         )}
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', p: { xs: 3, sm: 4 }, gap: 2 }}>
@@ -192,27 +196,7 @@ export function Card({
             alt={imageAlt}
             sx={{ aspectRatio: '16 / 7', objectFit: 'cover', display: 'block', width: '100%' }}
           />
-          {badge && (
-            <Box
-              sx={{
-                position: 'absolute',
-                top: '1rem',
-                left: '1rem',
-                backgroundColor: 'background.paper',
-                borderRadius: (t) => `${t.shape.full}px`,
-                px: 2,
-                py: 0.75,
-                pointerEvents: 'none',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography variant="small" component="span" sx={{ fontWeight: 600, color: 'text.heading', lineHeight: 1.5 }}>
-                {badge}
-              </Typography>
-            </Box>
-          )}
+          {badge && <BadgeOverlay text={badge} />}
         </Box>
       )}
       <CardContent sx={{ p: { xs: 3, sm: 4 }, '&:last-child': { pb: { xs: 3, sm: 4 } } }}>

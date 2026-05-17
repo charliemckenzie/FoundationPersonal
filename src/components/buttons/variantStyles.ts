@@ -4,7 +4,10 @@ import type { Theme } from '@mui/material/styles';
 export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'white';
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost' | 'soft';
 
-export function buildContainedStyles(color: ButtonColorKey) {
+/** Resolved color key — 'white' is always pre-mapped to 'primary' before calling the variant helpers. */
+export type ButtonColorKeyResolved = Exclude<ButtonColorKey, 'white'>;
+
+export function buildContainedStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: (theme: Theme) => theme.palette[color].main,
     color: (theme: Theme) => theme.palette[color].contrastText,
@@ -24,7 +27,7 @@ export function buildContainedStyles(color: ButtonColorKey) {
   };
 }
 
-export function buildSoftStyles(color: ButtonColorKey) {
+export function buildSoftStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: (theme: Theme) =>
       theme.palette.mode === 'dark'
@@ -51,7 +54,7 @@ export function buildSoftStyles(color: ButtonColorKey) {
   };
 }
 
-export function buildGhostStyles(color: ButtonColorKey) {
+export function buildGhostStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: 'transparent',
     color: (theme: Theme) => theme.palette[color].main,
@@ -69,7 +72,7 @@ export function buildGhostStyles(color: ButtonColorKey) {
   };
 }
 
-export function buildOutlinedStyles(color: ButtonColorKey) {
+export function buildOutlinedStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: 'transparent',
     border: '1px solid',
@@ -105,7 +108,22 @@ export function buildWhiteStyles() {
   };
 }
 
-export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColorKey) {
+/**
+ * Focus ring styles shared by Button and IconButton.
+ * Pass reversed=true (or color==='white') to get a white ring for dark-background contexts.
+ */
+export function buildFocusStyles(isReversed: boolean, resolvedColor: ButtonColorKeyResolved) {
+  return {
+    '&.Mui-focusVisible': {
+      outline: (theme: Theme) =>
+        `2px solid ${isReversed ? theme.palette.common.white : theme.palette[resolvedColor].main}`,
+      outlineOffset: '2px',
+      boxShadow: 'none',
+    },
+  };
+}
+
+export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColorKeyResolved) {
   return {
     ...(variant === 'contained' && {
       backgroundColor: (theme: Theme) => theme.palette.common.white,

@@ -9,7 +9,9 @@ import {
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
+  buildFocusStyles,
   type ButtonColorKey,
+  type ButtonColorKeyResolved,
   type ButtonVariantKey,
 } from '../buttons/variantStyles';
 
@@ -65,7 +67,8 @@ export function IconButton({
   onClick,
   type = 'button',
 }: IconButtonProps) {
-  const resolvedColor: ButtonColorKey = color === 'default' ? 'primary' : color;
+  const resolvedColor: ButtonColorKeyResolved =
+    color === 'default' || color === 'white' ? 'primary' : color;
 
   const variantStyles =
     variant === 'contained' ? buildContainedStyles(resolvedColor)
@@ -85,7 +88,7 @@ export function IconButton({
       disableRipple
       onClick={loading ? undefined : onClick}
       type={type}
-      sx={(theme) => ({
+      sx={{
         ...SIZE_STYLES[size],
         ...variantStyles,
         ...reversedStyles,
@@ -97,12 +100,8 @@ export function IconButton({
           cursor: 'not-allowed !important',
           pointerEvents: 'none !important',
         },
-        '&.Mui-focusVisible': {
-          outline: `2px solid ${reversed ? theme.palette.common.white : ((theme.palette[color as keyof typeof theme.palette] as { main?: string })?.main ?? theme.palette.primary.main)}`,
-          outlineOffset: '2px',
-          boxShadow: 'none',
-        },
-      })}
+        ...buildFocusStyles(reversed || color === 'white', resolvedColor),
+      }}
     >
       {loading ? (
         <Spinner size={SPINNER_SIZE_MAP[size]} color="inherit" />

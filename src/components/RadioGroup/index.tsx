@@ -8,6 +8,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import { alpha, type Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
+import { selectedSoftBg } from '../inputs/variantStyles';
 
 const RadioUncheckedIcon = ({ disabled }: { disabled?: boolean }) => (
   <Box
@@ -147,7 +148,7 @@ export function RadioGroup({
             const labelNode: React.ReactNode = option.description ? (
               <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
                 {option.label}
-                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: isItemDisabled ? 'text.disabled' : 'text.muted', lineHeight: 1.4 }}>
+                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: isItemDisabled ? 'text.disabled' : 'text.muted', lineHeight: 1.4 }}>
                   {option.description}
                 </Box>
               </Box>
@@ -192,7 +193,7 @@ export function RadioGroup({
                   ? theme.palette.action.disabledBackground
                   : isSelected
                   ? theme.palette.primary.main
-                  : alpha(theme.palette.primary.main, 0.08),
+                  : selectedSoftBg(theme),
               })}
             >
               <Icon icon={option.icon} size={iconSize} style={isSelected ? 'solid' : 'light'} color="inherit" />
@@ -206,7 +207,7 @@ export function RadioGroup({
                 <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
                   <Box component="span" sx={{ fontWeight: 500 }}>{option.label}</Box>
                   {option.description && (
-                    <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
+                    <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
                       {option.description}
                     </Box>
                   )}
@@ -218,7 +219,7 @@ export function RadioGroup({
                 <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                   <Box component="span" sx={{ fontWeight: 500 }}>{option.label}</Box>
                   {option.description && (
-                    <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
+                    <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
                       {option.description}
                     </Box>
                   )}
@@ -229,7 +230,7 @@ export function RadioGroup({
             <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
               {option.label}
               {option.description && (
-                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
+                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: isItemDisabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
                   {option.description}
                 </Box>
               )}
@@ -260,7 +261,7 @@ export function RadioGroup({
                 cursor: isItemDisabled ? 'default' : 'pointer',
                 transition: 'border-color 150ms ease, background-color 150ms ease',
                 backgroundColor: 'background.paper',
-                ...(isSelected && { backgroundColor: alpha(theme.palette.primary.main, 0.08) }),
+                ...(isSelected && { backgroundColor: selectedSoftBg(theme) }),
                 ...(!isItemDisabled && { '&:hover': { backgroundColor: 'action.hover' } }),
                 '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
                 '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },

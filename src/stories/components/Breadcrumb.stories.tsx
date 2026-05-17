@@ -21,7 +21,9 @@ type BreadcrumbStoryArgs = Omit<BreadcrumbProps, 'items' | 'separator'> & {
 
 const meta: Meta<BreadcrumbStoryArgs> = {
   title: 'Public web / Breadcrumb',
-  component: Breadcrumb,
+  // Custom story args differ from BreadcrumbProps (we build items from crumb1..crumb4)
+  // so Storybook's strict ComponentType<CustomArgs> check rejects the real component.
+  component: Breadcrumb as never,
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',

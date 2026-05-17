@@ -116,7 +116,7 @@ export function AustralianAutocomplete({
     alignSelf: 'flex-start',
     borderRadius: '2px',
     '&:hover': { color: 'primary.dark', textDecoration: 'underline' },
-    '&:focus-visible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
+    '&.Mui-focusVisible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
     '&:disabled': { color: 'action.disabled' },
   });
 
@@ -228,11 +228,11 @@ export function AustralianAutocomplete({
           alignSelf: 'flex-start',
           borderRadius: '2px',
           '&:hover': { color: 'primary.dark', textDecoration: 'underline' },
-          '&:focus-visible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
+          '&.Mui-focusVisible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
           '&:disabled': { color: 'action.disabled' },
         })}
       >
-        Can't find your address? Enter manually
+        Can&apos;t find your address? Enter manually
       </ButtonBase>
     </Stack>
   );

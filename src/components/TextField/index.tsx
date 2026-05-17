@@ -1,11 +1,11 @@
 import { useId } from 'react';
-import { alpha } from '@mui/material/styles';
 import MuiTextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type React from 'react';
+import { buildInputStyles } from '../inputs/variantStyles';
 
 export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date';
 export type TextFieldSize = 'small' | 'medium';
@@ -105,11 +105,12 @@ export function TextField({
           formHelperText: { role: error && !errorMessage ? 'alert' : undefined, error: errorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
+              ...buildInputStyles(theme),
               '& .MuiInputBase-input': { lineHeight: 1.5, ...(!multiline && { height: '1.5em' }) },
               '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' },
               ...(!label && {
                 '& .MuiInputBase-input::placeholder': {
-                  color: theme.palette.text.secondary,
+                  color: theme.palette.text.muted,
                   opacity: 1,
                 },
               }),
@@ -117,18 +118,10 @@ export function TextField({
                 ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
                 : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
               fontSize: '1rem',
-              borderRadius: `${theme.shape.sm}px`,
               '& .MuiInputAdornment-root': {
                 alignSelf: 'stretch',
                 alignItems: 'center',
                 maxHeight: 'none',
-              },
-              backgroundColor: theme.palette.background.paper,
-              '&.Mui-disabled': {
-                backgroundColor: alpha(theme.palette.background.default, 0.6),
-              },
-              '&&.Mui-disabled fieldset': {
-                borderColor: alpha(theme.palette.border.input, 0.6),
               },
               ...(!multiline && {
                 '& .MuiOutlinedInput-input': {
@@ -140,24 +133,6 @@ export function TextField({
                     : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
                 },
               }),
-              '& fieldset': {
-                borderColor: theme.palette.border.input,
-                borderRadius: `${theme.shape.sm}px`,
-              },
-              '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': {
-                borderColor: theme.palette.border.input,
-              },
-              '&.Mui-focused': {
-                outline: `2px solid ${theme.palette.border.focus}`,
-                outlineOffset: '2px',
-              },
-              '&&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-                borderWidth: '1px',
-                borderColor: theme.palette.border.input,
-              },
-              '&&.Mui-focused.Mui-error .MuiOutlinedInput-notchedOutline': {
-                borderColor: theme.palette.error.main,
-              },
             }),
             startAdornment: startAdornment ? (
               <InputAdornment position="start">{startAdornment}</InputAdornment>

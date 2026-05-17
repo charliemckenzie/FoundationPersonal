@@ -161,13 +161,13 @@ function BackgroundsDoc() {
         Pill tabs using the white tab style on brand-coloured surfaces.
       </Typography>
       {hasClear && (
-        <BgRow variant="pill" bgcolor="background.brandClear" bgLabel="background.brandClear" />
+        <BgRow bgcolor="background.brandClear" bgLabel="background.brandClear" />
       )}
       {hasGrey && (
-        <BgRow variant="pill" bgcolor="background.brandGrey" bgLabel="background.brandGrey" />
+        <BgRow bgcolor="background.brandGrey" bgLabel="background.brandGrey" />
       )}
       {hasLightBlue && (
-        <BgRow variant="pill" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue" />
+        <BgRow bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue" />
       )}
 
       {hasGrey && darkTheme && (
@@ -176,8 +176,8 @@ function BackgroundsDoc() {
           <Typography variant="body" color="text.muted" sx={{ display: 'block', mb: 4 }}>
             QSuper brand surfaces in dark mode.
           </Typography>
-          <BgRow variant="pill" bgcolor="background.brandGrey" bgLabel="background.brandGrey (dark)" />
-          <BgRow variant="pill" bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue (dark)" />
+          <BgRow bgcolor="background.brandGrey" bgLabel="background.brandGrey (dark)" />
+          <BgRow bgcolor="background.brandLightBlue" bgLabel="background.brandLightBlue (dark)" />
 
         </ThemeProvider>
       )}

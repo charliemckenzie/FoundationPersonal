@@ -28,7 +28,7 @@ const COLUMNS: TableColumn<User>[] = [
     render: (row) => (
       <Chip
         label={row.status}
-        color={row.status === 'active' ? 'success' : 'default'}
+        {...(row.status === 'active' ? { severity: 'success' as const } : { color: 'default' as const })}
         size="small"
       />
     ),

@@ -33,7 +33,9 @@ type SectionNavStoryArgs = Omit<QuickLinksProps, 'items' | 'brand'> & {
 
 const meta: Meta<SectionNavStoryArgs> = {
   title: 'Public web / Section navigation tab',
-  component: QuickLinks,
+  // Custom story args differ from QuickLinksProps (we generate items via itemCount/activeIndex)
+  // so Storybook's strict ComponentType<CustomArgs> check rejects the real component.
+  component: QuickLinks as never,
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',

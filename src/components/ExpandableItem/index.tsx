@@ -64,13 +64,14 @@ export function ExpandableItem({
           padding: 0,
           cursor: disabled ? 'default' : 'pointer',
           opacity: disabled ? t.palette.action.disabledOpacity : 1,
-          color: disabled ? t.palette.action.disabled : t.palette.primary.main,
+          color: disabled ? 'action.disabled' : 'primary.main',
           transition: t.transitions.create('color', { duration: t.transitions.duration.short }),
           '&:hover:not(:disabled)': {
-            color: t.palette.primary.dark,
+            color: 'primary.dark',
           },
           '&.Mui-focusVisible': {
-            outline: `2px solid ${t.palette.border.focus}`,
+            outline: '2px solid',
+            outlineColor: 'border.focus',
             outlineOffset: '2px',
             borderRadius: `${t.shape.xs}px`,
           },

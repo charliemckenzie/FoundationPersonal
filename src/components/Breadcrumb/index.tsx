@@ -63,7 +63,7 @@ export function Breadcrumb({
               color: 'text.link',
               fontWeight: 400,
               '&:hover': { color: 'text.link' },
-              '&:focus-visible': {
+              '&.Mui-focusVisible': {
                 outline: '2px solid',
                 outlineColor: 'border.focus',
                 outlineOffset: '2px',

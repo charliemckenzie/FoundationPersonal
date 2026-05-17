@@ -1,11 +1,12 @@
 import { useId } from 'react';
-import { alpha, type Theme } from '@mui/material/styles';
+import { type Theme } from '@mui/material/styles';
 import MuiAutocomplete from '@mui/material/Autocomplete';
 import MuiTextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type React from 'react';
+import { buildInputStyles } from '../inputs/variantStyles';
 
 export interface AutocompleteOption {
   value: string;
@@ -39,43 +40,18 @@ export interface AutocompleteProps {
 }
 
 const inputSx = (t: Theme) => ({
+  ...buildInputStyles(t),
   fontSize: '1rem',
-  borderRadius: `${t.shape.sm}px`,
-  backgroundColor: t.palette.background.paper,
   // MUI Autocomplete adds `padding: 9px` via `.MuiAutocomplete-inputRoot.MuiOutlinedInput-root`.
   // Matching that class directly beats it on injection order (sx injects later).
   '&.MuiAutocomplete-inputRoot': {
     paddingTop: 0,
     paddingBottom: 0,
   },
-  '&.Mui-disabled': {
-    backgroundColor: alpha(t.palette.background.default, 0.6),
-  },
-  '&&.Mui-disabled fieldset': {
-    borderColor: alpha(t.palette.border.input, 0.6),
-  },
   '&.MuiAutocomplete-inputRoot .MuiAutocomplete-input': {
     paddingTop: '0.75rem',
     paddingBottom: '0.75rem',
     lineHeight: 1.5,
-  },
-  '& fieldset': {
-    borderColor: t.palette.border.input,
-    borderRadius: `${t.shape.sm}px`,
-  },
-  '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': {
-    borderColor: t.palette.border.input,
-  },
-  '&.Mui-focused': {
-    outline: `2px solid ${t.palette.border.focus}`,
-    outlineOffset: '2px',
-  },
-  '&&.Mui-focused .MuiOutlinedInput-notchedOutline': {
-    borderWidth: '1px',
-    borderColor: t.palette.border.input,
-  },
-  '&&.Mui-focused.Mui-error .MuiOutlinedInput-notchedOutline': {
-    borderColor: t.palette.error.main,
   },
 });
 

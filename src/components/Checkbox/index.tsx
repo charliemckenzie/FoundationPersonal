@@ -6,6 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import { alpha, type Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
+import { selectedSoftBg } from '../inputs/variantStyles';
 
 const CheckboxUncheckedIcon = ({ error, disabled }: { error?: boolean; disabled?: boolean }) => (
   <Box
@@ -153,7 +154,7 @@ export function Checkbox({
               ? theme.palette.action.disabledBackground
               : isSelected
               ? theme.palette.primary.main
-              : alpha(theme.palette.primary.main, 0.08),
+              : selectedSoftBg(theme),
           })}
         >
           <Icon icon={icon} size={iconSize} style={isSelected ? 'solid' : 'light'} color="inherit" />
@@ -203,7 +204,7 @@ export function Checkbox({
             <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
               <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
               {description && (
-                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
+                <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
                   {description}
                 </Box>
               )}
@@ -219,7 +220,7 @@ export function Checkbox({
           <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
             {description && (
-              <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
+              <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4, textAlign: 'center' }}>
                 {description}
               </Box>
             )}
@@ -232,7 +233,7 @@ export function Checkbox({
       return (
         <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
           {label}
-          <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => (t.typography as { small?: { fontSize?: string } }).small?.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
+          <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
             {description}
           </Box>
         </Box>
@@ -261,7 +262,7 @@ export function Checkbox({
         cursor: disabled ? 'default' : 'pointer',
         transition: 'border-color 150ms ease, background-color 150ms ease',
         backgroundColor: 'background.paper',
-        ...(isSelected && { backgroundColor: alpha(theme.palette.primary.main, 0.08) }),
+        ...(isSelected && { backgroundColor: selectedSoftBg(theme) }),
         ...(!disabled && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },

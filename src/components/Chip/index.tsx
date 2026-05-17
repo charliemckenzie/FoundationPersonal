@@ -86,7 +86,7 @@ export function Chip({
   };
   const smallLabelSx = {
     '& .MuiChip-label': {
-      fontSize: (theme.typography.small as { fontSize?: string }).fontSize,
+      fontSize: theme.typography.small.fontSize,
       lineHeight: 1.5,
     },
   };
@@ -117,7 +117,6 @@ export function Chip({
       clickable={clickable}
       onDelete={onDelete}
       onClick={onClick}
-      disableRipple
       sx={chipSx}
     />
   );

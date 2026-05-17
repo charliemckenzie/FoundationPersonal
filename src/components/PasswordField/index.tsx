@@ -4,7 +4,7 @@ import { TextField, type TextFieldProps } from '../TextField';
 
 export type PasswordFieldSize = 'small' | 'medium';
 
-export interface PasswordFieldProps extends Omit<TextFieldProps, 'type' | 'multiline' | 'rows' | 'endAdornment'> {}
+export type PasswordFieldProps = Omit<TextFieldProps, 'type' | 'multiline' | 'rows' | 'endAdornment'>;
 
 export function PasswordField(props: PasswordFieldProps) {
   const [showPassword, setShowPassword] = useState(false);

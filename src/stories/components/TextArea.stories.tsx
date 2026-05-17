@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { TextArea, type TextAreaProps } from '../../components/TextArea';
 
-const meta: Meta<typeof TextArea> = {
+type TextAreaStoryArgs = TextAreaProps & { showHelperText?: boolean };
+
+const meta: Meta<TextAreaStoryArgs> = {
   title: 'Form Components / TextInput / TextArea',
   component: TextArea,
   tags: ['autodocs'],
@@ -37,7 +39,7 @@ Do not use \`TextField multiline\` directly — use this component instead.
 };
 
 export default meta;
-type Story = StoryObj<typeof TextArea>;
+type Story = StoryObj<TextAreaStoryArgs>;
 
 export const Playground: Story = {
   name: 'Playground',

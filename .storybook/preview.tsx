@@ -12,12 +12,23 @@ const brands = {
   'theme-b': themeB,
 };
 
-// Load Google Fonts
+// Load Google Fonts and define the font CSS variables that brand configs reference.
+// In production, next/font sets these variables via a className on <html>; here in
+// Storybook we wire them to the Google-Fonts-loaded family names so brand configs
+// resolve correctly in both contexts without per-environment forks.
 if (typeof document !== 'undefined') {
   const link = document.createElement('link');
   link.href = 'https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&family=Merriweather:wght@700;900&display=swap';
   link.rel = 'stylesheet';
   document.head.appendChild(link);
+
+  const style = document.createElement('style');
+  style.textContent = `:root {
+    --font-noto-sans: 'Noto Sans';
+    --font-open-sans: 'Open Sans';
+    --font-merriweather: 'Merriweather';
+  }`;
+  document.head.appendChild(style);
 }
 
 const preview: Preview = {

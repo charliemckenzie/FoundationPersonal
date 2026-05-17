@@ -8,8 +8,8 @@ export const foundation: BrandConfig = {
   tertiary: livingCoral,
   neutral: neutralART,
   buttonBorderRadius: '9999px',
-  fontFamily: '"Noto Sans", system-ui, sans-serif',
-  headingFontFamily: 'Merriweather, serif',
+  fontFamily: 'var(--font-noto-sans), "Noto Sans", system-ui, sans-serif',
+  headingFontFamily: 'var(--font-merriweather), Merriweather, serif',
   grid: {
     //           xs    sm    md    lg    xl
     columns: { xs: 4,  sm: 8,  md: 12, lg: 12, xl: 12 },

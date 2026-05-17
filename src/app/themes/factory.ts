@@ -1,149 +1,9 @@
-import { createTheme, lighten, darken, alpha, type PaletteColor, type SimplePaletteColorOptions, type Shadows } from '@mui/material/styles';
+import { createTheme, alpha, type Shadows } from '@mui/material/styles';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
-import type React from 'react';
 
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    soft: true;
-  }
-}
-
-declare module '@mui/material/Typography' {
-  interface TypographyPropsVariantOverrides {
-    // Bootstrap display headings
-    'display-1': true;
-    'display-2': true;
-    'display-3': true;
-    'display-4': true;
-    'display-5': true;
-    'display-6': true;
-    // Bootstrap body variants
-    lead: true;
-    body: true;
-    small: true;
-    // Disable MUI defaults
-    body1: false;
-    body2: false;
-    subtitle1: false;
-    subtitle2: false;
-    button: false;
-    caption: false;
-    overline: false;
-  }
-}
-
-interface BorderTokens {
-  subtle: string;
-  default: string;
-  input: string;
-  focus: string;
-}
-
-declare module '@mui/material/styles' {
-  interface Theme {
-    brandConfig: BrandConfig;
-  }
-  interface ThemeOptions {
-    brandConfig?: BrandConfig;
-  }
-  interface Shape {
-    none: number
-    xs: number
-    sm: number
-    md: number
-    lg: number
-    xl: number
-    '2xl': number
-    full: number
-    button: number
-  }
-  interface ShapeOptions {
-    none?: number
-    xs?: number
-    sm?: number
-    md?: number
-    lg?: number
-    xl?: number
-    '2xl'?: number
-    full?: number
-    button?: number
-  }
-}
-
-declare module '@mui/material/styles' {
-  interface TypeBackground {
-    elevated: string;
-    brandPrimary: string;
-    brandSecondary: string;
-    brandTertiary: string;
-    // ART-only
-    brandSky?: string;
-    brandClear?: string;
-    brandWarm?: string;
-    // QSuper-only
-    brandGrey?: string;
-    brandLightBlue?: string;
-    // Table
-    tableStripe: string;
-  }
-
-  interface TypeText {
-    muted: string;
-    inverse: string;
-    heading: string;
-    link: string;
-    linkInverse: string;
-  }
-
-  interface Palette {
-    border: BorderTokens;
-    tertiary?: PaletteColor;
-    quaternary?: PaletteColor;
-  }
-
-  interface PaletteColor {
-    text: string;
-    icon: string;
-    background: string;
-    border: string;
-  }
-  interface SimplePaletteColorOptions {
-    text?: string;
-    icon?: string;
-    background?: string;
-    border?: string;
-  }
-
-  interface PaletteOptions {
-    border?: Partial<BorderTokens>;
-    tertiary?: SimplePaletteColorOptions;
-    quaternary?: SimplePaletteColorOptions;
-  }
-
-  interface TypographyVariants {
-    'display-1': React.CSSProperties;
-    'display-2': React.CSSProperties;
-    'display-3': React.CSSProperties;
-    'display-4': React.CSSProperties;
-    'display-5': React.CSSProperties;
-    'display-6': React.CSSProperties;
-    lead: React.CSSProperties;
-    body: React.CSSProperties;
-    small: React.CSSProperties;
-  }
-  interface TypographyVariantsOptions {
-    'display-1'?: React.CSSProperties;
-    'display-2'?: React.CSSProperties;
-    'display-3'?: React.CSSProperties;
-    'display-4'?: React.CSSProperties;
-    'display-5'?: React.CSSProperties;
-    'display-6'?: React.CSSProperties;
-    lead?: React.CSSProperties;
-    body?: React.CSSProperties;
-    small?: React.CSSProperties;
-  }
-}
+// MUI module augmentations live in src/types/mui.d.ts so they apply globally
+// without requiring this file to be imported.
 
 export const LIGHTER_SHADOWS: Shadows = [
   'none',
@@ -502,9 +362,13 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       MuiIconButton: {
         styleOverrides: {
           root: ({ ownerState, theme }) => {
-            const colorKey = (ownerState.color === 'default' ? null : ownerState.color) as keyof typeof theme.palette | null;
-            const palette = colorKey ? theme.palette[colorKey] as { main?: string } | undefined : undefined;
-            const ringColor = palette?.main ?? theme.palette.action.active;
+            const paletteColors = ['primary', 'secondary', 'error', 'warning', 'info', 'success'] as const;
+            type PaletteColor = (typeof paletteColors)[number];
+            const isPaletteColor = (c: unknown): c is PaletteColor =>
+              paletteColors.includes(c as PaletteColor);
+            const ringColor = isPaletteColor(ownerState.color)
+              ? theme.palette[ownerState.color].main
+              : theme.palette.action.active;
             return {
               '&.Mui-focusVisible': {
                 outline: `2px solid ${ringColor}`,

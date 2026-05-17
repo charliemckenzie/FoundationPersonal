@@ -94,7 +94,7 @@ export const ContainedInteractive: StoryObj<ContainedInteractiveArgs> = {
   },
   args: { variant: 'contained', showSubtitle: false },
   render: ({ showSubtitle, ...args }) => (
-    <Card {...args} onClick={() => alert('Card clicked')} style={{ maxWidth: 400 }}>
+    <Card {...args} onClick={() => alert('Card clicked')} sx={{ maxWidth: 400 }}>
       <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mb: showSubtitle ? 0.5 : 1 }}>
         Clickable card
       </Typography>

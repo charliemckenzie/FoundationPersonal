@@ -54,7 +54,7 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
         overflow: 'hidden',
         '&::before': { display: 'none' },
         '&:focus-within': {
-          outline: `2px solid ${t.palette.primary.main}`,
+          outline: `2px solid ${t.palette.border.focus}`,
           outlineOffset: '2px',
         },
       })}
