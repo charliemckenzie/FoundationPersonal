@@ -20,6 +20,7 @@ const PROMO_PLACEHOLDER_IMAGE =
 const meta: Meta<typeof Card> = {
   title: 'Components / Card',
   component: Card,
+  tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
     variant: {
@@ -27,11 +28,13 @@ const meta: Meta<typeof Card> = {
       options: ['contained', 'open', 'promo'],
       description: '`contained` — paper background with free-form children. `open` — image + content + actions. `promo` — horizontal layout with image on the left.',
     },
-    title: { control: 'text', description: 'Open and promo variants. Card heading.' },
-    subtitle: { control: 'text', description: 'Open and promo variants. Line below the title.' },
-    imageSrc: { control: 'text', description: 'Open and promo variants. Path to image in /public.' },
-    imageAlt: { control: 'text', description: 'Alt text for the image. Leave empty for decorative images.' },
-    href: { control: 'text', description: 'Makes the whole card a link. Ignores action buttons.' },
+    title: { table: { disable: true } },
+    subtitle: { table: { disable: true } },
+    imageSrc: { table: { disable: true } },
+    imageAlt: { table: { disable: true } },
+    href: { table: { disable: true } },
+    badge: { table: { disable: true } },
+    sx: { table: { disable: true } },
     onClick: { table: { disable: true } },
     primaryAction: { table: { disable: true } },
     secondaryAction: { table: { disable: true } },
@@ -41,6 +44,238 @@ const meta: Meta<typeof Card> = {
 
 export default meta;
 type Story = StoryObj<typeof Card>;
+
+// --- Playground ---
+
+type PlaygroundVariant =
+  | 'Contained'
+  | 'Contained — interactive (whole card)'
+  | 'Contained — icon feature'
+  | 'Contained — horizontal + icon'
+  | 'Open — image + actions'
+  | 'Open — no image'
+  | 'Open — interactive (whole card)'
+  | 'Open — href link card'
+  | 'Open — horizontal image + actions';
+
+interface PlaygroundArgs {
+  storyVariant: PlaygroundVariant;
+  showSubtitle: boolean;
+}
+
+const PLAYGROUND_VARIANTS: PlaygroundVariant[] = [
+  'Contained',
+  'Contained — interactive (whole card)',
+  'Contained — icon feature',
+  'Contained — horizontal + icon',
+  'Open — image + actions',
+  'Open — no image',
+  'Open — interactive (whole card)',
+  'Open — href link card',
+  'Open — horizontal image + actions',
+];
+
+function PlaygroundCard({ storyVariant, showSubtitle }: PlaygroundArgs) {
+  if (storyVariant === 'Contained') {
+    return (
+      <Card variant="contained" sx={{ maxWidth: 368 }}>
+        <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mb: showSubtitle ? 0.5 : 1 }}>
+          Card title
+        </Typography>
+        {showSubtitle && (
+          <Typography variant="body" component="p" sx={{ color: 'text.secondary', mb: 1 }}>
+            Supporting detail line
+          </Typography>
+        )}
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          Free-form content lives here. Drop in any combination of text, lists, or other components.
+        </Typography>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Contained — interactive (whole card)') {
+    return (
+      <Card variant="contained" onClick={() => {}} sx={{ maxWidth: 368 }}>
+        <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mb: showSubtitle ? 0.5 : 1 }}>
+          Clickable card
+        </Typography>
+        {showSubtitle && (
+          <Typography variant="body" component="p" sx={{ color: 'text.secondary', mb: 1 }}>
+            Supporting detail line
+          </Typography>
+        )}
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          The entire card surface is interactive. Hover to see the ripple effect.
+        </Typography>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Contained — icon feature') {
+    return (
+      <Card variant="contained" sx={{ maxWidth: 368 }}>
+        <HeroIcon name="Calculator" brand="art" iconSizeOverride="2.75rem" containerSizeOverride="5.5rem" background="brand" />
+        <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mt: 3, mb: showSubtitle ? 0.5 : 1 }}>
+          Card heading
+        </Typography>
+        {showSubtitle && (
+          <Typography variant="body" component="p" sx={{ color: 'text.secondary', mb: 1 }}>
+            Supporting detail line
+          </Typography>
+        )}
+        <Typography variant="body" component="p" sx={{ color: 'text.primary', mb: { xs: 3, sm: 4 } }}>
+          Supporting body copy sits here. Use it to describe the feature or topic this card represents.
+        </Typography>
+        <TextButton label="Learn more about this feature" endIcon="arrow-right" />
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Contained — horizontal + icon') {
+    return (
+      <Card variant="contained">
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, alignItems: { xs: 'flex-start', sm: 'center' }, gap: { xs: 2, sm: 3 } }}>
+          <Box sx={{ flexShrink: 0 }}>
+            <HeroIcon name="Calculator" brand="art" iconSizeOverride="2rem" containerSizeOverride="4rem" background="brand" />
+          </Box>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Typography variant="h5" component="h3" sx={{ color: 'text.heading', mb: 1 }}>
+              Card heading
+            </Typography>
+            {showSubtitle && (
+              <Typography variant="small" component="p" sx={{ color: 'text.primary', mb: 1 }}>
+                Supporting detail line
+              </Typography>
+            )}
+            <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+              Supporting copy sits here. Keep it short — one or two sentences.
+            </Typography>
+          </Box>
+          <Box sx={{ flexShrink: 0 }}>
+            <Button label="Learn more" variant="contained" size="medium" onClick={() => {}} />
+          </Box>
+        </Box>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Open — image + actions') {
+    return (
+      <Card
+        variant="open"
+        imageSrc={PLACEHOLDER_IMAGE}
+        imageAlt=""
+        title="Card heading"
+        subtitle={showSubtitle ? 'Supporting detail line' : undefined}
+        primaryAction={{ label: 'Get started', onClick: () => {} }}
+        secondaryAction={{ label: 'Learn more', onClick: () => {} }}
+        sx={{ maxWidth: 368 }}
+      >
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          Body content sits between the subtitle and the action buttons.
+        </Typography>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Open — no image') {
+    return (
+      <Card
+        variant="open"
+        title="No image variant"
+        subtitle={showSubtitle ? 'Use when imagery is unavailable or unnecessary.' : undefined}
+        primaryAction={{ label: 'Get started', onClick: () => {} }}
+        sx={{ maxWidth: 368 }}
+      >
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          The image slot is optional — the card still works without it.
+        </Typography>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Open — interactive (whole card)') {
+    return (
+      <Card
+        variant="open"
+        imageSrc={PLACEHOLDER_IMAGE}
+        imageAlt=""
+        title="Clickable card"
+        subtitle={showSubtitle ? 'The entire card is the call-to-action. No action buttons shown.' : undefined}
+        onClick={() => {}}
+        sx={{ maxWidth: 368 }}
+      >
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          When the card has an onClick or href, action buttons are suppressed automatically.
+        </Typography>
+      </Card>
+    );
+  }
+
+  if (storyVariant === 'Open — href link card') {
+    return (
+      <Card
+        variant="open"
+        imageSrc={PLACEHOLDER_IMAGE}
+        imageAlt=""
+        title="Link card"
+        subtitle={showSubtitle ? 'Renders the whole card as an anchor element.' : undefined}
+        href="#"
+        sx={{ maxWidth: 368 }}
+      >
+        <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+          Pass an href to turn the entire card into a semantic link.
+        </Typography>
+      </Card>
+    );
+  }
+
+  // Open — horizontal image + actions
+  return (
+    <Card
+      variant="promo"
+      imageSrc={PROMO_PLACEHOLDER_IMAGE}
+      imageAlt=""
+      title="Card heading"
+      subtitle={showSubtitle ? 'Supporting detail line' : undefined}
+      primaryAction={{ label: 'Primary action', onClick: () => {} }}
+    >
+      <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
+        Supporting copy sits here. Keep it short — one or two sentences that build on the heading.
+      </Typography>
+    </Card>
+  );
+}
+
+export const Playground: StoryObj<PlaygroundArgs> = {
+  name: 'Playground',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Explore all Card layouts in one place. Use the **Variant** dropdown to switch between them.',
+      },
+    },
+  },
+  argTypes: {
+    storyVariant: {
+      name: 'Variant',
+      control: 'select',
+      options: PLAYGROUND_VARIANTS,
+      description: 'Switch between all available Card layouts.',
+    },
+    showSubtitle: {
+      name: 'Show subtitle',
+      control: 'boolean',
+      description: 'Show or hide the supporting detail line.',
+    },
+  },
+  args: {
+    storyVariant: 'Contained',
+    showSubtitle: false,
+  },
+  render: (args) => <PlaygroundCard {...args} />,
+};
 
 // --- Contained ---
 

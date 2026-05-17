@@ -4,6 +4,43 @@ A personal record of changes I've made or commissioned. Most recent first.
 
 ---
 
+## Card — Playground story, autodocs, and controls clean-up
+**Date:** May 18, 2026
+**Files:** `src/stories/components/Card.stories.tsx`
+
+### What changed
+
+#### 1. Docs page switched from custom MDX to autodocs
+The custom `Card.mdx` accordion page was removed. The stories file now uses `tags: ['autodocs']` — the same pattern as FormProgress under Stepped Forms. Each story appears as its own named section in the docs page with a description, live canvas, and controls panel. No more click-to-expand.
+
+#### 2. Playground story added
+A new **Playground** story sits at the top of the docs page. It has a single **Variant** dropdown listing all 9 Card layouts:
+
+- Contained
+- Contained — interactive (whole card)
+- Contained — icon feature
+- Contained — horizontal + icon
+- Open — image + actions
+- Open — no image
+- Open — interactive (whole card)
+- Open — href link card
+- Open — horizontal image + actions
+
+Selecting a variant in the dropdown swaps the canvas to that layout in real time. A **Show subtitle** toggle works across all variants. This replaces the need to jump between separate stories to compare layouts.
+
+#### 3. Dev-only controls hidden from the controls panel
+The following props were hidden from the Storybook controls table across all stories. They are still used internally by the stories but are not relevant to a designer reviewing the component:
+
+- `title`
+- `subtitle`
+- `imageSrc`
+- `imageAlt`
+- `href`
+- `badge`
+- `sx`
+
+---
+
 ## Card — documentation rewrite, new promo variant, and Storybook improvements
 **Date:** May 15, 2026
 **Files:** `src/components/Card/index.tsx`, `src/stories/components/Card.stories.tsx`, `src/stories/components/Card.mdx`
