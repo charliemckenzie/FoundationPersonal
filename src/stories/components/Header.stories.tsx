@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { Header } from '../../components/Header'
+import { Button } from '../../components/Button'
 import type {
   NavItemMegamenu,
   CtaAction,
@@ -52,9 +53,22 @@ const whyChooseUs: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Why choose us?',
   promoCard: {
-    title: 'Focused on long-term returns',
-    description: 'We take care of your super. Join 2.4 million Australians who trust us to take care of theirs.',
-    cta: { label: 'Join us today', href: '/join' },
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading' }}>
+          Focused on long-term returns
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          We take care of your super. Join 2.4 million Australians who trust us.
+        </Typography>
+        <Button
+          label="Join us today"
+          variant="contained"
+          size="small"
+          onClick={() => { window.location.href = '/join' }}
+        />
+      </Box>
+    ),
   },
   columns: [
     {
@@ -262,16 +276,50 @@ const meta = {
     docs: {
       description: {
         component:
-          'Site header with responsive megamenu navigation. Supports megamenu panels (full-width with optional promo card), dropdown panels, and plain links. Collapses to a drawer on mobile.',
+          'Site header with two-row layout — utility bar (logo, search, utility links, CTAs) and a desktop megamenu nav strip. Collapses to a hamburger + drawer on tablet and mobile. Megamenu panels are full-width with optional promo card. All nav data is passed as props — the header has no internal routing logic.',
       },
     },
   },
   argTypes: {
+    // ─── Storybook-only controls ───────────────────────────────────────────
     showHero: {
-      control: 'boolean',
       name: 'Show hero content',
-      description: 'Toggle placeholder hero content below the header (Storybook only)',
-      table: { defaultValue: { summary: 'false' } },
+      description: 'Toggle a placeholder hero section below the header. Storybook demo only — not a component prop.',
+      control: 'boolean',
+      table: { category: 'Demo', defaultValue: { summary: 'false' } },
+    },
+    // ─── Navigation ────────────────────────────────────────────────────────
+    navItems: {
+      description: 'Primary navigation items. Each item is either a `megamenu` (with columns and optional promo card) or a plain `link`.',
+      control: false,
+      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
+    },
+    secondaryNavItems: {
+      description: 'Secondary nav items rendered right-aligned in the desktop nav strip (e.g. For employers, For advisers). Collapsible in the drawer.',
+      control: false,
+      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
+    },
+    // ─── Actions ───────────────────────────────────────────────────────────
+    primaryCta: {
+      description: 'Left CTA button — rendered with `outlined` style. Supports an optional dropdown `menu` array.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'CtaAction' } },
+    },
+    secondaryCta: {
+      description: 'Right CTA button — rendered with `contained` style. Supports an optional dropdown `menu` array.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'CtaAction' } },
+    },
+    utilityLinks: {
+      description: 'Icon + label utility links shown in the desktop utility bar (e.g. Rewards, Learn, Contact). Hidden on phone.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'UtilityLink[]' } },
+    },
+    // ─── Search ────────────────────────────────────────────────────────────
+    onSearch: {
+      description: 'Callback fired when the search form is submitted. When provided, the search bar is rendered. Omit to hide search entirely.',
+      control: false,
+      table: { category: 'Search', type: { summary: '(query: string) => void' } },
     },
   },
 } satisfies Meta<HeaderStoryArgs>

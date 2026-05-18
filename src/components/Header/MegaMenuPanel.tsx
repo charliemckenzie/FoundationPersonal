@@ -4,6 +4,7 @@ import Fade from '@mui/material/Fade'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
+import IconButton from '@mui/material/IconButton'
 import { useEffect, useRef } from 'react'
 import { NavPanelLink } from './NavPanelLink'
 import { PromoCard } from './PromoCard'
@@ -27,7 +28,7 @@ function NavColumn({ group, onClose }: NavColumnProps) {
       {group.heading && (
         <Typography
           variant="small"
-          sx={{ fontWeight: 700, color: 'text.muted', mb: 1, display: 'block' }}
+          sx={{ fontWeight: 700, color: 'text.heading', mb: 1.5, display: 'block', textTransform: 'uppercase', letterSpacing: '0.06em' }}
         >
           {group.heading}
         </Typography>
@@ -78,12 +79,25 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPan
           }}
         >
           <Container maxWidth="lg">
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
+              <IconButton
+                aria-label="Close menu"
+                onClick={onClose}
+                size="small"
+                sx={{
+                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                  '&:focus': { outline: 'none' },
+                }}
+              >
+                <Box component="span" aria-hidden="true" sx={{ fontSize: '1.25rem', lineHeight: 1 }}>✕</Box>
+              </IconButton>
+            </Box>
             <Box sx={{ display: 'flex', gap: 4 }}>
               <Box
                 sx={{
                   flex: 1,
                   display: 'grid',
-                  gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`,
+                  gridTemplateColumns: 'repeat(4, 1fr)',
                   gap: 3,
                 }}
               >
@@ -91,7 +105,7 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPan
                   <NavColumn key={i} group={col} onClose={onClose} />
                 ))}
               </Box>
-              {item.promoCard && <PromoCard {...item.promoCard} />}
+              {item.promoCard && <PromoCard>{item.promoCard.children}</PromoCard>}
             </Box>
           </Container>
         </Box>

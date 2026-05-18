@@ -3,11 +3,14 @@ import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
+import MuiAccordion from '@mui/material/Accordion'
+import AccordionSummary from '@mui/material/AccordionSummary'
+import AccordionDetails from '@mui/material/AccordionDetails'
 import { Drawer } from '../Drawer'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
 import { NavPanelLink } from './NavPanelLink'
-import type { NavItem, CtaAction } from './types'
+import type { NavItem, NavItemMegamenu, CtaAction } from './types'
 
 interface NavDrawerProps {
   open: boolean
@@ -19,19 +22,66 @@ interface NavDrawerProps {
   onSearch?: (query: string) => void
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function slugify(str: string): string {
+  return str.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+}
+
+function NavAccordion({ item, expanded, onToggle, onClose }: { item: NavItemMegamenu; expanded: boolean; onToggle: () => void; onClose: () => void }) {
+  const links = item.columns.flatMap((col) => col.links)
+
   return (
-    <Typography
-      variant="small"
-      sx={{ fontWeight: 700, color: 'text.muted', px: 1, py: 0.5, display: 'block' }}
+    <MuiAccordion
+      expanded={expanded}
+      onChange={onToggle}
+      disableGutters
+      elevation={0}
+      sx={{
+        bgcolor: 'transparent',
+        '&::before': { display: 'none' },
+        '&.Mui-expanded': { margin: 0 },
+      }}
     >
-      {children}
-    </Typography>
+      <AccordionSummary
+        expandIcon={<Icon icon="chevron-down" size="sm" />}
+        aria-controls={`drawer-${slugify(item.label)}-content`}
+        id={`drawer-${slugify(item.label)}-header`}
+        sx={{
+          px: 1,
+          py: 1.5,
+          minHeight: 'unset',
+          '& .MuiAccordionSummary-content': { margin: 0 },
+          '&:hover': { bgcolor: 'action.hover', borderRadius: 1 },
+          '&.Mui-focusVisible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px', boxShadow: 'none', bgcolor: 'transparent' },
+          borderRadius: 1,
+        }}
+      >
+        <Typography variant="body" sx={{ fontWeight: 700 }}>
+          {item.label}
+        </Typography>
+      </AccordionSummary>
+      <AccordionDetails sx={{ px: 0, pt: 0.5, pb: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+          {links.map((link) => (
+            <NavPanelLink key={link.href} {...link} onClick={onClose} />
+          ))}
+        </Box>
+      </AccordionDetails>
+    </MuiAccordion>
   )
 }
 
 export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryCta, secondaryCta, onSearch }: NavDrawerProps) {
   const [query, setQuery] = useState('')
+  const [expandedPanel, setExpandedPanel] = useState<string | null>(null)
+
+  const handleToggle = (label: string) => {
+    setExpandedPanel((prev) => (prev === label ? null : label))
+  }
+
+  const handleClose = () => {
+    setExpandedPanel(null)
+    onClose()
+  }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -46,7 +96,7 @@ export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryC
             label={primaryCta.label}
             variant="contained"
             fullWidth
-            onClick={primaryCta.onClick}
+            onClick={primaryCta.onClick ?? (() => { if (primaryCta.menu?.[0]) window.location.href = primaryCta.menu[0].href })}
           />
         )}
         {secondaryCta && (
@@ -54,14 +104,14 @@ export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryC
             label={secondaryCta.label}
             variant="outlined"
             fullWidth
-            onClick={secondaryCta.onClick}
+            onClick={secondaryCta.onClick ?? (() => { if (secondaryCta.menu?.[0]) window.location.href = secondaryCta.menu[0].href })}
           />
         )}
       </Box>
     ) : undefined
 
   return (
-    <Drawer open={open} onClose={onClose} anchor="left" title="Menu" width={320} actions={actions}>
+    <Drawer open={open} onClose={handleClose} anchor="left" title="Menu" width={320} actions={actions}>
       {onSearch && (
         <Box
           component="form"
@@ -97,51 +147,37 @@ export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryC
               alignItems: 'center',
               p: 0,
               color: 'text.secondary',
+              borderRadius: 1,
+              '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+              '&:focus': { outline: 'none' },
             }}
           >
             <Icon icon="magnifying-glass" size="md" />
           </Box>
         </Box>
       )}
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        {navItems.map((item, index) => (
+      <Box component="nav" aria-label="Mobile navigation" sx={{ display: 'flex', flexDirection: 'column' }}>
+        {navItems.map((item) => (
           <Box key={item.label}>
-            {index > 0 && <Divider sx={{ my: 1 }} />}
-
             {item.type === 'link' && (
-              <NavPanelLink href={item.href} label={item.label} onClick={onClose} />
+              <NavPanelLink href={item.href} label={item.label} onClick={handleClose} />
             )}
-
             {item.type === 'megamenu' && (
-              <Box>
-                <SectionLabel>{item.label}</SectionLabel>
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                  {item.columns.flatMap((col) => col.links).map((link) => (
-                    <NavPanelLink key={link.href} {...link} onClick={onClose} />
-                  ))}
-                </Box>
-              </Box>
+              <NavAccordion item={item} expanded={expandedPanel === item.label} onToggle={() => handleToggle(item.label)} onClose={handleClose} />
             )}
           </Box>
         ))}
       </Box>
       {secondaryNavItems && secondaryNavItems.length > 0 && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: 1 }}>
-          <Divider />
+        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
+          <Divider sx={{ mb: 1 }} />
           {secondaryNavItems.map((item) => (
             <Box key={item.label}>
               {item.type === 'link' && (
-                <NavPanelLink href={item.href} label={item.label} onClick={onClose} />
+                <NavPanelLink href={item.href} label={item.label} onClick={handleClose} />
               )}
               {item.type === 'megamenu' && (
-                <Box>
-                  <SectionLabel>{item.label}</SectionLabel>
-                  <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-                    {item.columns.flatMap((col) => col.links).map((link) => (
-                      <NavPanelLink key={link.href} {...link} onClick={onClose} />
-                    ))}
-                  </Box>
-                </Box>
+                <NavAccordion item={item} expanded={expandedPanel === item.label} onToggle={() => handleToggle(item.label)} onClose={handleClose} />
               )}
             </Box>
           ))}

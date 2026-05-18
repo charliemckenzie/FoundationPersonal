@@ -20,12 +20,13 @@ interface CtaButtonProps {
   variant: 'contained' | 'outlined'
   size?: 'small' | 'medium' | 'large'
   condensed?: boolean
+  noMenu?: boolean
 }
 
-function CtaButton({ cta, variant, size, condensed }: CtaButtonProps) {
+function CtaButton({ cta, variant, size, condensed, noMenu }: CtaButtonProps) {
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
-  const hasMenu = (cta.menu?.length ?? 0) > 0
+  const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
 
   return (
     <>
@@ -100,7 +101,7 @@ export function UtilityBar({
           <Box sx={{ ml: '-12px' }}>
             <IconButton icon="bars" label="Open navigation menu" variant="ghost" onClick={onMenuOpen} />
           </Box>
-          {isPhone ? <Logo size="md" variant="secondary" /> : <Logo size="md" />}
+          {isPhone ? <Logo size="md" variant="mark" /> : <Logo size="md" />}
           {!isPhone && onSearch && (
             <Box
               component="form"
@@ -136,6 +137,9 @@ export function UtilityBar({
                   alignItems: 'center',
                   p: 0,
                   color: 'text.secondary',
+                  borderRadius: 1,
+                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                  '&:focus': { outline: 'none' },
                 }}
               >
                 <Icon icon="magnifying-glass" size="md" />
@@ -145,8 +149,8 @@ export function UtilityBar({
           {isPhone && <Box sx={{ flex: 1 }} />}
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed />}
-              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed />}
+              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} />}
+              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} />}
             </Box>
           )}
         </Toolbar>
@@ -190,6 +194,9 @@ export function UtilityBar({
                   alignItems: 'center',
                   p: 0,
                   color: 'text.secondary',
+                  borderRadius: 1,
+                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                  '&:focus': { outline: 'none' },
                 }}
               >
                 <Icon icon="magnifying-glass" size="md" />
@@ -198,7 +205,7 @@ export function UtilityBar({
           )}
 
           {utilityLinks && (
-            <Box sx={{ display: 'flex', gap: '16px' }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
               {utilityLinks.map((link) => (
                 <ButtonBase
                   key={link.href}

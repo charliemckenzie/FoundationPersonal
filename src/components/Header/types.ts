@@ -1,3 +1,5 @@
+import type React from 'react'
+
 export interface NavLink {
   label: string
   href: string
@@ -21,11 +23,7 @@ export interface NavGroup {
 }
 
 export interface NavPromoCard {
-  image?: string
-  imageAlt?: string
-  title: string
-  description?: string
-  cta: { label: string; href: string }
+  children: React.ReactNode
 }
 
 export interface NavItemMegamenu {

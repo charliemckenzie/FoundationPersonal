@@ -18,11 +18,12 @@ export function NavPanelLink({ href, label, description, onClick }: NavPanelLink
         display: 'block',
         px: 1.5,
         py: 1,
-        textDecoration: 'none',
+        textDecoration: 'none !important',
         color: 'inherit',
         borderRadius: (t) => `${t.shape.sm}px`,
         '&:hover': {
           bgcolor: 'action.hover',
+          textDecoration: 'none !important',
         },
         '&:focus-visible': {
           outline: '2px solid',

@@ -17,7 +17,7 @@ export function NavItemButton({ item, active, secondary = false, onClick }: NavI
       component="button"
       type="button"
       aria-expanded={hasPanel ? active : undefined}
-      aria-haspopup={hasPanel ? 'true' : undefined}
+      aria-haspopup={hasPanel ? 'menu' : undefined}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClick(item, e.currentTarget)}
       sx={{
         px: 1.5,
