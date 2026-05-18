@@ -27,30 +27,16 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Getting started/fontawesome-team-setup.md",
+                "file": "agents/sideshow-bob.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "fontawesome-team-setup"
-            }
-          },
-          {
-            "id": "fdeb155e111dfa0c",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Jade/change-log.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "change-log"
+              "title": "sideshow-bob"
             }
           }
         ],
-        "currentTab": 2
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -123,7 +109,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "accessibility-audit-todo.md",
+                "file": "agents/frink.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -133,7 +119,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Backlinks for accessibility-audit-todo"
+              "title": "Backlinks for frink"
             }
           },
           {
@@ -212,33 +198,37 @@
       "bases:Create new base": false
     }
   },
-  "active": "fdeb155e111dfa0c",
+  "active": "9750fcf5c88110e5",
   "lastOpenFiles": [
+    "Paolo/megamenu-header-implementation-brief.md",
+    "agents/sideshow-bob.md",
+    "Getting started/fontawesome-team-setup.md",
+    "Getting started/Using Sideshow Bob.md",
+    "Paolo/Tech Glossary.md",
+    "Adam",
+    "Paolo/sideshow-bob-agent-setup.md",
+    "Paolo/Obsidian Formatting Cheat Sheet.md",
+    "Paolo/Need to come back to..md",
     "Paolo/accessibility-audit-todo.md",
-    "Jade/change-log.md",
+    "agents/frink.md",
+    "agents/lisa.md",
+    "agents/smithers.md",
+    "agents/troy-mcclure.md",
+    "agents/willie.md",
     "agents/README.md",
+    "Jade/change-log.md",
     "Start here.md",
     "Getting started/fontawesome-pro-guide.md",
     "Getting started/Getting start with Foundation.md",
-    "Getting started/fontawesome-team-setup.md",
     "workflows/figma-design-tokens.md",
     "Setting up",
-    "Paolo/Obsidian Formatting Cheat Sheet.md",
-    "Paolo/Tech Glossary.md",
-    "Paolo/Need to come back to..md",
     "Paolo/Session Notes — 21 April 202.md",
     "agents/flanders.md",
     "Paolo",
-    "agents/lisa.md",
-    "agents/frink.md",
-    "agents/troy-mcclure.md",
     "workflows/README.md",
     "obsidian/README.md",
     "workflows",
     "agents/chalmers.md",
-    "agents/carl.md",
-    "obsidian/figma-design-tokens.md",
-    "agents/smithers.md",
-    "agents/marge.md"
+    "agents/carl.md"
   ]
 }
