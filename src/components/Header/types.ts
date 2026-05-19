@@ -55,4 +55,7 @@ export interface HeaderProps {
   secondaryCta?: CtaAction
   utilityLinks?: UtilityLink[]
   onSearch?: (query: string) => void
+  searchPlaceholder?: string
+  /** Override scroll-driven condensed state — useful for Storybook and testing. */
+  condensed?: boolean
 }

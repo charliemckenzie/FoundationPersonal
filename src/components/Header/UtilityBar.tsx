@@ -75,6 +75,7 @@ export interface UtilityBarProps {
   onMenuOpen: () => void
   isMobile: boolean
   isPhone?: boolean
+  searchPlaceholder?: string
 }
 
 export function UtilityBar({
@@ -85,6 +86,7 @@ export function UtilityBar({
   onMenuOpen,
   isMobile,
   isPhone = false,
+  searchPlaceholder,
 }: UtilityBarProps) {
   const [query, setQuery] = useState('')
 
@@ -116,12 +118,14 @@ export function UtilityBar({
                 px: 2,
                 py: 0.5,
                 gap: 1,
+                outline: '2px solid transparent',
+                '&:focus-within': { outlineColor: 'border.focus' },
               }}
             >
               <InputBase
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search"
+                placeholder={searchPlaceholder ?? 'Search'}
                 inputProps={{ 'aria-label': 'Search' }}
                 sx={{ flex: 1, fontSize: '0.9375rem' }}
               />
@@ -156,8 +160,10 @@ export function UtilityBar({
         </Toolbar>
       ) : (
         /* Desktop: logo — search — utility links — CTAs */
-        <Toolbar disableGutters sx={{ gap: 3, py: 1.5 }}>
-          <Logo size="lg" />
+        <Toolbar disableGutters sx={{ gap: 2, pt: 2, pb: 2, alignItems: 'center' }}>
+          <Box sx={{ flexShrink: 0, '& > div': { height: '3.75rem' } }}>
+            <Logo size="lg" />
+          </Box>
 
           {onSearch && (
             <Box
@@ -171,14 +177,16 @@ export function UtilityBar({
                 bgcolor: 'action.hover',
                 borderRadius: 6,
                 px: 2,
-                py: 0.5,
+                py: 0.75,
                 gap: 1,
+                outline: '2px solid transparent',
+                '&:focus-within': { outlineColor: 'border.focus' },
               }}
             >
               <InputBase
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Search"
+                placeholder={searchPlaceholder ?? 'Search'}
                 inputProps={{ 'aria-label': 'Search' }}
                 sx={{ flex: 1, fontSize: '0.9375rem' }}
               />
@@ -205,7 +213,7 @@ export function UtilityBar({
           )}
 
           {utilityLinks && (
-            <Box sx={{ display: 'flex', gap: 2 }}>
+            <Box sx={{ display: 'flex', gap: 1.5 }}>
               {utilityLinks.map((link) => (
                 <ButtonBase
                   key={link.href}
@@ -231,7 +239,7 @@ export function UtilityBar({
                     '&:focus': { outline: 'none' },
                   }}
                 >
-                  <Icon icon={link.icon} size="xl" />
+                  <Icon icon={link.icon} size="lg" />
                   <Typography variant="small" sx={{ color: 'inherit', lineHeight: 1.2 }}>
                     {link.label}
                   </Typography>

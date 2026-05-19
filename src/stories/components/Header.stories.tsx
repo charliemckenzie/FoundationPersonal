@@ -320,6 +320,15 @@ const meta = {
       description: 'Callback fired when the search form is submitted. When provided, the search bar is rendered. Omit to hide search entirely.',
       control: false,
       table: { category: 'Search', type: { summary: '(query: string) => void' } },
+    },    searchPlaceholder: {
+      description: 'Placeholder text for the search input. Defaults to `“Search”` if omitted.',
+      control: 'text',
+      table: { category: 'Search', type: { summary: 'string' } },
+    },    // ─── State ─────────────────────────────────────────────────────────────
+    condensed: {
+      description: 'Force the condensed (scrolled) state. Normally driven by scroll position — use this in Storybook or tests to preview the compact header without scrolling.',
+      control: 'boolean',
+      table: { category: 'State', defaultValue: { summary: 'false' } },
     },
   },
 } satisfies Meta<HeaderStoryArgs>
@@ -335,6 +344,7 @@ export const Default: Story = {
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
     onSearch: (q: string) => console.log('search:', q),
+    searchPlaceholder: 'Search Australian Retirement Trust',
   },
   render: (args) => {
     const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
@@ -356,6 +366,7 @@ export const MegaMenuVariant: Story = {
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
     onSearch: (q: string) => console.log('search:', q),
+    searchPlaceholder: 'Search Australian Retirement Trust',
   },
   render: (args) => {
     const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
@@ -380,5 +391,30 @@ export const MobileView: Story = {
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
     onSearch: (q: string) => console.log('search:', q),
+    searchPlaceholder: 'Search Australian Retirement Trust',
+  },
+}
+
+export const Condensed: Story = {
+  name: 'Condensed (scrolled)',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Single-row compact layout shown on desktop after scrolling past 50px. Logo collapses to the brand mark, nav moves inline, search becomes a pill icon, utility link icons are hidden. Pass `condensed={true}` to force this state without scrolling — useful for testing and visual regression.',
+      },
+    },
+  },
+  args: {
+    navItems: allNavItems,
+    primaryCta: sampleCtaPrimary,
+    secondaryCta: sampleCtaSecondary,
+    utilityLinks: sampleUtilityLinks,
+    onSearch: (q: string) => console.log('search:', q),
+    searchPlaceholder: 'Search Australian Retirement Trust',
+    condensed: true,
+  },
+  render: (args) => {
+    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
+    return <Header {...headerArgs} />
   },
 }

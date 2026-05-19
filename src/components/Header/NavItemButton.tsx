@@ -1,15 +1,17 @@
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
+import type { SxProps, Theme } from '@mui/material/styles'
 import type { NavItem } from './types'
 
 interface NavItemButtonProps {
   item: NavItem
   active: boolean
   secondary?: boolean
+  sx?: SxProps<Theme>
   onClick: (item: NavItem, el: HTMLButtonElement) => void
 }
 
-export function NavItemButton({ item, active, secondary = false, onClick }: NavItemButtonProps) {
+export function NavItemButton({ item, active, secondary = false, sx, onClick }: NavItemButtonProps) {
   const hasPanel = item.type !== 'link'
 
   return (
@@ -19,10 +21,11 @@ export function NavItemButton({ item, active, secondary = false, onClick }: NavI
       aria-expanded={hasPanel ? active : undefined}
       aria-haspopup={hasPanel ? 'menu' : undefined}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClick(item, e.currentTarget)}
-      sx={{
+      sx={[
+        {
         px: 1.5,
         pt: 1,
-        pb: '12px',
+        pb: 1,
         alignSelf: 'stretch',
         display: 'flex',
         alignItems: 'center',
@@ -44,7 +47,9 @@ export function NavItemButton({ item, active, secondary = false, onClick }: NavI
         '&:focus': {
           outline: 'none',
         },
-      }}
+        },
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+      ]}
     >
       <Typography variant="body" component="span" sx={{ fontWeight: secondary ? 400 : 700 }}>
         {item.label}

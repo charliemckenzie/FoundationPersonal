@@ -9,12 +9,14 @@ import { MegaMenuPanel } from './MegaMenuPanel'
 import { NavDrawer } from './NavDrawer'
 import { NavItemButton } from './NavItemButton'
 import { UtilityBar } from './UtilityBar'
+import { CondensedBar } from './CondensedBar'
 import type { HeaderProps, NavItem } from './types'
 
-export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, utilityLinks, onSearch }: HeaderProps) {
+export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, utilityLinks, onSearch, searchPlaceholder, condensed }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<string | null>(null)
   const [headerBottom, setHeaderBottom] = useState(0)
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const headerRef = useRef<HTMLElement | null>(null)
   const triggerRef = useRef<HTMLButtonElement | null>(null)
   const theme = useTheme()
@@ -37,7 +39,10 @@ export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, 
   }, [activePanel])
 
   useEffect(() => {
-    const handleScroll = () => closePanel()
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50)
+      closePanel()
+    }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
@@ -68,8 +73,10 @@ export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, 
     secondaryNavItems?.find((item) => item.label === activePanel) ??
     null
 
+  const isCondensed = condensed ?? (scrolled && !isMobile)
+
   return (
-    <Box component="div">
+    <>
       <AppBar
         component="header"
         ref={headerRef}
@@ -81,53 +88,84 @@ export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, 
           borderBottom: 1,
           borderColor: 'border.subtle',
           zIndex: (t) => t.zIndex.appBar + 2,
+          boxShadow: isCondensed ? 2 : 0,
+          transition: 'box-shadow 0.2s ease',
         }}
       >
-        {/* Row 1 — utility bar: Logo, Search, UtilityLinks, CTAs */}
-        <UtilityBar
-          utilityLinks={utilityLinks}
-          primaryCta={primaryCta}
-          secondaryCta={secondaryCta}
-          onSearch={onSearch}
-          onMenuOpen={() => setDrawerOpen(true)}
-          isMobile={isMobile}
-          isPhone={isPhone}
-        />
+        {/* Condensed single-row layout (desktop, scrolled) */}
+        {isCondensed && !isMobile && (
+          <CondensedBar
+            navItems={navItems}
+            utilityLinks={utilityLinks}
+            primaryCta={primaryCta}
+            secondaryCta={secondaryCta}
+            onSearch={onSearch}
+            searchPlaceholder={searchPlaceholder}
+            activePanel={activePanel}
+            onNavClick={handleNavClick}
+          />
+        )}
 
-        {/* Row 2 — primary nav (desktop only) */}
-        {!isMobile && (
-          <Box>
-            <Container maxWidth="lg">
-              <Box
-                component="nav"
-                aria-label="Main navigation"
-                sx={{ display: 'flex', alignItems: 'stretch', gap: 0.5 }}
-              >
-                {navItems.map((item) => (
-                  <NavItemButton
-                    key={item.label}
-                    item={item}
-                    active={activePanel === item.label}
-                    onClick={handleNavClick}
-                  />
-                ))}
-                {secondaryNavItems && secondaryNavItems.length > 0 && (
-                  <>
-                    <Box sx={{ flex: 1 }} />
-                    {secondaryNavItems.map((item) => (
-                      <NavItemButton
-                        key={item.label}
-                        item={item}
-                        active={activePanel === item.label}
-                        secondary
-                        onClick={handleNavClick}
-                      />
-                    ))}
-                  </>
-                )}
-              </Box>
-            </Container>
-          </Box>
+        {/* Full two-row layout (desktop, not scrolled) */}
+        {!isCondensed && !isMobile && (
+          <>
+            <UtilityBar
+              utilityLinks={utilityLinks}
+              primaryCta={primaryCta}
+              secondaryCta={secondaryCta}
+              onSearch={onSearch}
+              onMenuOpen={() => setDrawerOpen(true)}
+              isMobile={false}
+              isPhone={false}
+              searchPlaceholder={searchPlaceholder}
+            />
+            <Box>
+              <Container maxWidth="lg">
+                <Box
+                  component="nav"
+                  aria-label="Main navigation"
+                  sx={{ display: 'flex', alignItems: 'stretch', gap: 0.5 }}
+                >
+                  {navItems.map((item) => (
+                    <NavItemButton
+                      key={item.label}
+                      item={item}
+                      active={activePanel === item.label}
+                      onClick={handleNavClick}
+                    />
+                  ))}
+                  {secondaryNavItems && secondaryNavItems.length > 0 && (
+                    <>
+                      <Box sx={{ flex: 1 }} />
+                      {secondaryNavItems.map((item) => (
+                        <NavItemButton
+                          key={item.label}
+                          item={item}
+                          active={activePanel === item.label}
+                          secondary
+                          onClick={handleNavClick}
+                        />
+                      ))}
+                    </>
+                  )}
+                </Box>
+              </Container>
+            </Box>
+          </>
+        )}
+
+        {/* Mobile layout */}
+        {isMobile && (
+          <UtilityBar
+            utilityLinks={utilityLinks}
+            primaryCta={primaryCta}
+            secondaryCta={secondaryCta}
+            onSearch={onSearch}
+            onMenuOpen={() => setDrawerOpen(true)}
+            isMobile={true}
+            isPhone={isPhone}
+            searchPlaceholder={searchPlaceholder}
+          />
         )}
       </AppBar>
 
@@ -149,7 +187,7 @@ export function Header({ navItems, secondaryNavItems, primaryCta, secondaryCta, 
         secondaryCta={secondaryCta}
         onSearch={onSearch}
       />
-    </Box>
+    </>
   )
 }
 
