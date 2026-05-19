@@ -15,7 +15,9 @@ Quick reference for all Foundation components. Check here before exploring `src/
 | Checkbox | `src/components/Checkbox/` | Input checkbox with optional description | `default`, `boxed`, `card` | — | `label`, `checked`, `color`, `variant`, `description`, `icon`, `indeterminate` |
 | FormProgress | `src/components/FormProgress/` | Multi-variant form progress indicator | `simple` (linear %), `stepped` (discrete), `responsive` (adaptive) | — | `variant`, `value`, `steps`, `activeStep`, `maxStep`, `tooltipLabels`, `showStepIndicator`, `stepMenu` |
 | IconButton | `src/components/IconButton/` | Icon-only button with optional tooltip | `contained`, `soft`, `ghost`, `outlined` | `small` `medium` `large` | `icon`, `label`, `variant`, `size`, `color`, `loading`, `showTooltip` |
+| Header | `src/components/Header/` | Site header; two-row desktop layout (logo, search, utility links, CTAs + megamenu nav) + condensed scroll state + mobile drawer | Condensed (scroll-driven) | — | `navItems`, `secondaryNavItems`, `primaryCta`, `secondaryCta`, `utilityLinks`, `onSearch`, `searchPlaceholder`, `condensed` |
 | RadioGroup | `src/components/RadioGroup/` | Set of radio buttons | `default`, `boxed`, `card` | — | `legend`, `options`, `variant`, `value`, `direction`, `color`, `cardDirection` |
+| SkipLinks | `src/components/SkipLinks/` | Keyboard-only accessibility skip links; first focusable element on every page | — | — | `links?: SkipLink[]` (`label`, `targetId`, `icon?`) |
 | Tabs | `src/components/Tabs/` | Tab navigation with content panels | `default` (pill), `white` | `small` `medium` `large` | `label`, `tabs`, `size`, `tabStyle`, `defaultTab`, `onChange` |
 | TextButton | `src/components/TextButton/` | Text-based action button with optional icons | — | `small` `medium` `large` | `label`, `size`, `color`, `startIcon`, `endIcon`, `iconDirection`, `loading`, `hideIcon` |
 
