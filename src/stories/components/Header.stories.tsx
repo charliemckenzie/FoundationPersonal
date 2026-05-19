@@ -3,13 +3,21 @@ import type { ComponentProps } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
+import { ThemeProvider } from '@mui/material/styles'
+import CssBaseline from '@mui/material/CssBaseline'
+import { createBrandTheme } from '../../app/themes/factory'
+import { themeB } from '../../app/themes/brands/theme-b'
 import { Header } from '../../components/Header'
 import { Button } from '../../components/Button'
 import type {
   NavItemMegamenu,
   CtaAction,
   UtilityLink,
+  AudienceLink,
+  ResourceLink,
 } from '../../components/Header/types'
+
+const qsuperTheme = createBrandTheme(themeB)
 
 type HeaderStoryArgs = ComponentProps<typeof Header> & { showHero?: boolean }
 
@@ -418,3 +426,181 @@ export const Condensed: Story = {
     return <Header {...headerArgs} />
   },
 }
+
+// ─── QSuper brand nav data ────────────────────────────────────────────────────
+
+const qsuperAudienceLinks: AudienceLink[] = [
+  { label: 'Personal', href: '/personal' },
+  { label: 'Employers', href: '/employers' },
+  { label: 'Advisers', href: '/advisers' },
+]
+
+const qsuperResourceLinks: ResourceLink[] = [
+  { label: 'Calculators & forms', href: '/calculators' },
+  { label: 'News Hub', href: '/news' },
+  { label: 'Contact us', href: '/contact' },
+]
+
+const qsuperProductsItem: NavItemMegamenu = {
+  type: 'megamenu',
+  label: 'Products',
+  columns: [
+    {
+      // No heading — links render bold/prominent as primary nav items
+      links: [
+        { label: 'Why QSuper', href: '/why-qsuper', description: 'Awaken your super with Australian Retirement Trust' },
+        { label: 'Can I join QSuper', href: '/join' },
+        { label: 'Investment options', href: '/products/investments' },
+        { label: 'Fees', href: '/products/fees' },
+        { label: 'Financial advice', href: '/advice' },
+        { label: 'Compare us', href: '/compare' },
+      ],
+    },
+    {
+      heading: 'Insurance',
+      links: [
+        { label: 'Income protection', href: '/insurance/income' },
+        { label: 'Death cover', href: '/insurance/death' },
+        { label: 'TPD cover', href: '/insurance/tpd' },
+      ],
+    },
+    {
+      heading: 'Account types',
+      links: [
+        { label: 'Accumulation account', href: '/products/accumulation' },
+        { label: 'Transition to Retirement Income account', href: '/products/ttr' },
+        { label: 'Retirement Income account', href: '/products/income' },
+        { label: 'Lifetime Pension', href: '/products/lifetime' },
+      ],
+    },
+  ],
+}
+
+const qsuperNavItems: NavItemMegamenu[] = [
+  qsuperProductsItem,
+  {
+    type: 'megamenu',
+    label: 'Super',
+    columns: [
+      {
+        heading: 'Your super',
+        links: [
+          { label: 'How super works', href: '/super/how' },
+          { label: 'Consolidate super', href: '/super/consolidate' },
+          { label: 'Super contributions', href: '/super/contributions' },
+        ],
+      },
+      {
+        heading: 'Defined Benefit',
+        links: [
+          { label: 'Defined Benefit account', href: '/super/defined-benefit' },
+          { label: 'CSS, PSS & SASS', href: '/super/css-pss' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'megamenu',
+    label: 'Retirement',
+    columns: [
+      {
+        heading: 'Planning',
+        links: [
+          { label: 'Retirement guide', href: '/retirement/guide' },
+          { label: 'When to retire', href: '/retirement/when' },
+          { label: 'Age pension', href: '/retirement/pension' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'megamenu',
+    label: 'Investments',
+    columns: [
+      {
+        heading: 'Investment options',
+        links: [
+          { label: 'Lifetime', href: '/investments/lifetime' },
+          { label: 'Diversified options', href: '/investments/diversified' },
+          { label: 'Single sector options', href: '/investments/single' },
+        ],
+      },
+      {
+        heading: 'Performance',
+        links: [
+          { label: 'Investment performance', href: '/investments/performance' },
+          { label: 'Investment updates', href: '/investments/updates' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'megamenu',
+    label: 'Insurance',
+    columns: [
+      {
+        heading: 'Cover',
+        links: [
+          { label: 'Income protection', href: '/insurance/income' },
+          { label: 'Death cover', href: '/insurance/death' },
+          { label: 'TPD cover', href: '/insurance/tpd' },
+        ],
+      },
+    ],
+  },
+  {
+    type: 'megamenu',
+    label: 'Advice',
+    columns: [
+      {
+        heading: 'Financial advice',
+        links: [
+          { label: 'Get advice', href: '/advice' },
+          { label: 'Find an adviser', href: '/advice/find' },
+          { label: 'Advice fees', href: '/advice/fees' },
+        ],
+      },
+    ],
+  },
+]
+
+export const QSuperBrand: Story = {
+  name: 'QSuper brand',
+  globals: { brand: 'theme-b' },
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={qsuperTheme}>
+        <CssBaseline />
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'QSuper brand layout: audience bar (Personal / Employers / Advisers + resource links) above the main bar (full logo + inline megamenu nav + search + CTAs). Brand auto-detected from theme.',
+      },
+    },
+  },
+  args: {
+    navItems: qsuperNavItems,
+    audienceLinks: qsuperAudienceLinks,
+    resourceLinks: qsuperResourceLinks,
+    activeAudienceHref: '/personal',
+    primaryCta: { label: 'Join', menu: [{ label: 'Join as a member', href: '/join/member' }, { label: 'Join as an employer', href: '/join/employer' }] },
+    secondaryCta: { label: 'Log In', menu: [{ label: 'Member login', href: '/login/member' }, { label: 'Employer login', href: '/login/employer' }] },
+    onSearch: (q: string) => console.log('search:', q),
+    searchPlaceholder: 'Search QSuper',
+  },
+  render: (args) => {
+    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
+    return (
+      <>
+        <Header {...headerArgs} />
+        {showHero && <HeroPlaceholder />}
+      </>
+    )
+  },
+}
+

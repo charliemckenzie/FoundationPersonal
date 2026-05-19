@@ -1,71 +1,17 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import InputBase from '@mui/material/InputBase'
-import MuiMenu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
-import { Button } from '../Button'
 import { Icon } from '../Icon'
 import { IconButton } from '../IconButton'
-import type { CtaAction, CtaMenuItem, UtilityLink } from './types'
-
-interface CtaButtonProps {
-  cta: CtaAction
-  variant: 'contained' | 'outlined'
-  size?: 'small' | 'medium' | 'large'
-  condensed?: boolean
-  noMenu?: boolean
-}
-
-function CtaButton({ cta, variant, size, condensed, noMenu }: CtaButtonProps) {
-  const [open, setOpen] = useState(false)
-  const anchorRef = useRef<HTMLButtonElement>(null)
-  const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
-
-  return (
-    <>
-      <Button
-        ref={anchorRef}
-        label={cta.label}
-        variant={variant}
-        size={size}
-        condensed={condensed}
-        endIcon={hasMenu ? 'chevron-down' : undefined}
-        aria-expanded={hasMenu ? open : undefined}
-        aria-haspopup={hasMenu ? 'menu' : undefined}
-        onClick={hasMenu ? () => setOpen((o) => !o) : cta.onClick}
-      />
-      {hasMenu && (
-        <MuiMenu
-          open={open}
-          anchorEl={anchorRef.current}
-          onClose={() => setOpen(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          disableScrollLock
-        >
-          {cta.menu!.map((item: CtaMenuItem) => (
-            <MenuItem
-              key={item.href}
-              onClick={() => {
-                window.location.href = item.href
-                setOpen(false)
-              }}
-            >
-              {item.label}
-            </MenuItem>
-          ))}
-        </MuiMenu>
-      )}
-    </>
-  )
-}
+import { HeaderCtaButton } from './CtaButton'
+import type { CtaAction, UtilityLink } from './types'
 
 export interface UtilityBarProps {
   utilityLinks?: UtilityLink[]
@@ -89,11 +35,7 @@ export function UtilityBar({
   searchPlaceholder,
 }: UtilityBarProps) {
   const [query, setQuery] = useState('')
-
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (query.trim()) onSearch?.(query.trim())
-  }
+  const handleSearchSubmit = (e: React.FormEvent) => { e.preventDefault(); if (query.trim()) onSearch?.(query.trim()) }
 
   return (
     <Container maxWidth="lg">
@@ -153,8 +95,8 @@ export function UtilityBar({
           {isPhone && <Box sx={{ flex: 1 }} />}
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} />}
-              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} />}
+              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} />}
+              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} />}
             </Box>
           )}
         </Toolbar>
@@ -231,11 +173,7 @@ export function UtilityBar({
                     textDecoration: 'none',
                     '&, & *': { textDecoration: 'none !important' },
                     '&:hover': { color: 'primary.main' },
-                    '&:focus-visible': {
-                      outline: '2px solid',
-                      outlineColor: 'border.focus',
-                      outlineOffset: '2px',
-                    },
+                    '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
                     '&:focus': { outline: 'none' },
                   }}
                 >
@@ -250,8 +188,8 @@ export function UtilityBar({
 
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed />}
-              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed />}
+              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed />}
+              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed />}
             </Box>
           )}
         </Toolbar>

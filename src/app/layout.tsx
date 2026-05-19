@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans, Open_Sans, Merriweather } from "next/font/google";
 import ThemeRegistry from "./ThemeRegistry";
+import { SkipLinks } from "../components/SkipLinks";
 import "./globals.css";
 
 const notoSans = Noto_Sans({
@@ -37,7 +38,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${notoSans.variable} ${openSans.variable} ${merriweather.variable}`}>
       <body>
-        <ThemeRegistry>{children}</ThemeRegistry>
+        <ThemeRegistry>
+          <SkipLinks />
+          {children}
+        </ThemeRegistry>
       </body>
     </html>
   );

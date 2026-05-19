@@ -17,6 +17,16 @@ export interface UtilityLink {
   icon: string
 }
 
+export interface AudienceLink {
+  label: string
+  href: string
+}
+
+export interface ResourceLink {
+  label: string
+  href: string
+}
+
 export interface NavGroup {
   heading?: string
   links: NavLink[]
@@ -58,4 +68,10 @@ export interface HeaderProps {
   searchPlaceholder?: string
   /** Override scroll-driven condensed state — useful for Storybook and testing. */
   condensed?: boolean
+  /** QSuper: audience section links shown in the top utility bar (Personal, Employers, Advisers). */
+  audienceLinks?: AudienceLink[]
+  /** QSuper: resource links shown in the top utility bar (Calculators & forms, News Hub, Contact us). */
+  resourceLinks?: ResourceLink[]
+  /** QSuper: href of the currently active audience link — renders with an underline indicator. */
+  activeAudienceHref?: string
 }
