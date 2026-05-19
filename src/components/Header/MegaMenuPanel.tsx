@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import Portal from '@mui/material/Portal'
-import Backdrop from '@mui/material/Backdrop'
 import Fade from '@mui/material/Fade'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
@@ -17,6 +16,8 @@ interface MegaMenuPanelProps {
   open: boolean
   headerBottom: number
   onClose: () => void
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }
 
 interface NavColumnProps {
@@ -25,6 +26,25 @@ interface NavColumnProps {
 }
 
 function NavColumn({ group, onClose }: NavColumnProps) {
+  if (group.groups && group.groups.length > 0) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        {group.heading && (
+          <Typography
+            variant="body"
+            component="p"
+            sx={{ fontWeight: 700, color: 'text.heading', display: 'block' }}
+          >
+            {group.heading}
+          </Typography>
+        )}
+        {group.groups.map((subGroup, i) => (
+          <NavColumn key={i} group={subGroup} onClose={onClose} />
+        ))}
+      </Box>
+    )
+  }
+
   const prominent = !group.heading
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
@@ -38,7 +58,7 @@ function NavColumn({ group, onClose }: NavColumnProps) {
         </Typography>
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-        {group.links.map((link) => (
+        {(group.links ?? []).map((link) => (
           <NavPanelLink key={link.href} {...link} prominent={prominent} onClick={onClose} />
         ))}
       </Box>
@@ -112,7 +132,7 @@ function QSuperPromoPanel({ children }: { children?: ReactNode }) {
   )
 }
 
-export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPanelProps) {
+export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter, onMouseLeave }: MegaMenuPanelProps) {
   const panelRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
   const isQSuper = theme.brandConfig?.name === 'QSuper'
@@ -128,16 +148,13 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPan
 
   return (
     <Portal>
-      <Backdrop
-        open={open}
-        onClick={onClose}
-        sx={{ zIndex: (t) => t.zIndex.appBar, bgcolor: 'rgba(0,0,0,0.4)' }}
-      />
       <Fade in={open} unmountOnExit>
         <Box
           ref={panelRef}
           role="region"
           aria-label={item.label}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
           sx={{
             position: 'fixed',
             top: headerBottom,
@@ -146,6 +163,7 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPan
             bgcolor: 'background.paper',
             borderBottom: 1,
             borderColor: 'border.subtle',
+            boxShadow: 4,
             zIndex: (t) => t.zIndex.appBar + 1,
           }}
         >
@@ -169,11 +187,8 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose }: MegaMenuPan
             </Container>
           ) : (
             <Container maxWidth="lg" sx={{ py: 4 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 1 }}>
-                <IconButton icon="xmark" label="Close menu" variant="ghost" size="small" onClick={onClose} />
-              </Box>
               <Box sx={{ display: 'flex', gap: 4 }}>
-                <Box sx={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 3 }}>
+                <Box sx={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`, gap: 3 }}>
                   {item.columns.map((col, i) => (
                     <NavColumn key={i} group={col} onClose={onClose} />
                   ))}

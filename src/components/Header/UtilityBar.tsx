@@ -45,7 +45,11 @@ export function UtilityBar({
           <Box sx={{ ml: '-12px' }}>
             <IconButton icon="bars" label="Open navigation menu" variant="ghost" onClick={onMenuOpen} />
           </Box>
-          {isPhone ? <Logo size="md" variant="mark" /> : <Logo size="md" />}
+          {isPhone ? (
+            <Box component="a" href="/" aria-label="Go to home" sx={{ display: 'inline-flex', textDecoration: 'none', lineHeight: 0 }}><Logo size="md" variant="mark" /></Box>
+          ) : (
+            <Box component="a" href="/" aria-label="Go to home" sx={{ display: 'inline-flex', textDecoration: 'none', lineHeight: 0 }}><Logo size="md" /></Box>
+          )}
           {!isPhone && onSearch && (
             <Box
               component="form"
@@ -95,15 +99,15 @@ export function UtilityBar({
           {isPhone && <Box sx={{ flex: 1 }} />}
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} />}
-              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} />}
+              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} sx={{ px: 2 }} />}
+              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} sx={{ px: 2 }} />}
             </Box>
           )}
         </Toolbar>
       ) : (
         /* Desktop: logo — search — utility links — CTAs */
-        <Toolbar disableGutters sx={{ gap: 2, pt: 2, pb: 2, alignItems: 'center' }}>
-          <Box sx={{ flexShrink: 0, '& > div': { height: '3.75rem' } }}>
+        <Toolbar disableGutters sx={{ gap: 3.5, pt: 2, pb: 2, alignItems: 'center' }}>
+          <Box component="a" href="/" aria-label="Go to home" sx={{ flexShrink: 0, display: 'inline-flex', textDecoration: 'none', '& > div': { height: '3.75rem' } }}>
             <Logo size="lg" />
           </Box>
 
@@ -119,7 +123,7 @@ export function UtilityBar({
                 bgcolor: 'action.hover',
                 borderRadius: 6,
                 px: 2,
-                py: 0.75,
+                height: '44px',
                 gap: 1,
                 outline: '2px solid transparent',
                 '&:focus-within': { outlineColor: 'border.focus' },
@@ -130,7 +134,7 @@ export function UtilityBar({
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder ?? 'Search'}
                 inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, fontSize: '0.9375rem' }}
+                sx={{ flex: 1, fontSize: '0.9375rem', '& input::placeholder': { color: 'text.primary', opacity: 0.6 } }}
               />
               <Box
                 component="button"
@@ -149,7 +153,7 @@ export function UtilityBar({
                   '&:focus': { outline: 'none' },
                 }}
               >
-                <Icon icon="magnifying-glass" size="md" />
+                <Icon icon="magnifying-glass" size="lg" />
               </Box>
             </Box>
           )}
@@ -161,6 +165,7 @@ export function UtilityBar({
                   key={link.href}
                   component="a"
                   href={link.href}
+                  disableRipple
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -188,8 +193,8 @@ export function UtilityBar({
 
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed />}
-              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed />}
+              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed sx={{ px: 2 }} />}
+              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed sx={{ px: 2 }} />}
             </Box>
           )}
         </Toolbar>

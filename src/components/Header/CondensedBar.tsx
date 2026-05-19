@@ -22,6 +22,8 @@ export interface CondensedBarProps {
   onSearch?: (query: string) => void
   activePanel: string | null
   onNavClick: (item: NavItem, el: HTMLButtonElement) => void
+  onNavHover?: (item: NavItem, el: HTMLButtonElement) => void
+  onNavHoverEnd?: () => void
 }
 
 export function CondensedBar({
@@ -33,6 +35,8 @@ export function CondensedBar({
   onSearch,
   activePanel,
   onNavClick,
+  onNavHover,
+  onNavHoverEnd,
 }: CondensedBarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -58,20 +62,23 @@ export function CondensedBar({
     <Container maxWidth="lg">
       <Toolbar disableGutters sx={{ gap: 1, py: 1, alignItems: 'center' }}>
         {/* Mark logo */}
-        <Box sx={{ flexShrink: 0, mr: 1, '& > div': { height: '2.5rem' } }}>
+        <Box component="a" href="/" aria-label="Go to home" sx={{ flexShrink: 0, mr: 1, display: 'inline-flex', textDecoration: 'none', '& > div': { height: '2.5rem' } }}>
           <Logo variant="mark" size="lg" />
         </Box>
 
         {/* Primary nav — hidden when search is expanded */}
         {!searchOpen && (
-          <Box sx={{ display: 'flex' }}>
+          <Box sx={{ display: 'flex', alignSelf: 'stretch', my: '-8px', gap: 2 }}>
             {navItems.map((item) => (
               <NavItemButton
                 key={item.label}
                 item={item}
                 active={activePanel === item.label}
-                sx={{ px: 1 }}
+                sx={{ px: 0, pt: 0, pb: 0 }}
+                fontSize="1rem"
                 onClick={onNavClick}
+                onHover={onNavHover}
+                onHoverEnd={onNavHoverEnd}
               />
             ))}
           </Box>
@@ -186,8 +193,8 @@ export function CondensedBar({
         {/* CTAs — small */}
         {(primaryCta || secondaryCta) && (
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed />}
-            {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed />}
+            {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed sx={{ px: 2 }} />}
+            {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed sx={{ px: 2 }} />}
           </Box>
         )}
       </Toolbar>

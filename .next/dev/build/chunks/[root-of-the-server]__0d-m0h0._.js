@@ -25,9 +25,7 @@ __turbopack_context__.s([
     ()=>__TURBOPACK__default__export__
 ]);
 const config = {
-    plugins: {
-        "@tailwindcss/postcss": {}
-    }
+    plugins: {}
 };
 const __TURBOPACK__default__export__ = config;
 }),

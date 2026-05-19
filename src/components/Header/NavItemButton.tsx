@@ -7,25 +7,30 @@ interface NavItemButtonProps {
   item: NavItem
   active: boolean
   secondary?: boolean
+  fontSize?: string
   sx?: SxProps<Theme>
   onClick: (item: NavItem, el: HTMLButtonElement) => void
+  onHover?: (item: NavItem, el: HTMLButtonElement) => void
+  onHoverEnd?: () => void
 }
 
-export function NavItemButton({ item, active, secondary = false, sx, onClick }: NavItemButtonProps) {
+export function NavItemButton({ item, active, secondary = false, fontSize, sx, onClick, onHover, onHoverEnd }: NavItemButtonProps) {
   const hasPanel = item.type !== 'link'
 
   return (
     <ButtonBase
       component="button"
       type="button"
+      disableRipple
       aria-expanded={hasPanel ? active : undefined}
       aria-haspopup={hasPanel ? 'menu' : undefined}
       onClick={(e: React.MouseEvent<HTMLButtonElement>) => onClick(item, e.currentTarget)}
+      onMouseEnter={onHover ? (e: React.MouseEvent<HTMLButtonElement>) => onHover(item, e.currentTarget) : undefined}
+      onMouseLeave={onHoverEnd}
       sx={[
         {
-        px: 1.5,
         pt: 1,
-        pb: 1,
+        pb: 1.5,
         alignSelf: 'stretch',
         display: 'flex',
         alignItems: 'center',
@@ -51,7 +56,7 @@ export function NavItemButton({ item, active, secondary = false, sx, onClick }: 
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
     >
-      <Typography variant="body" component="span" sx={{ fontWeight: secondary ? 400 : 700 }}>
+      <Typography variant="body" component="span" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: '24px', fontWeight: secondary ? 400 : 600 }}>
         {item.label}
       </Typography>
     </ButtonBase>

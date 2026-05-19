@@ -3,6 +3,7 @@
 import { useState, useRef } from 'react'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import type { SxProps, Theme } from '@mui/material/styles'
 import { Button } from '../Button'
 import type { CtaAction, CtaMenuItem } from './types'
 
@@ -12,9 +13,10 @@ export interface HeaderCtaButtonProps {
   size?: 'small' | 'medium' | 'large'
   condensed?: boolean
   noMenu?: boolean
+  sx?: SxProps<Theme>
 }
 
-export function HeaderCtaButton({ cta, variant, size, condensed, noMenu }: HeaderCtaButtonProps) {
+export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: HeaderCtaButtonProps) {
   const [open, setOpen] = useState(false)
   const anchorRef = useRef<HTMLButtonElement>(null)
   const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
@@ -31,6 +33,7 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu }: Heade
         aria-expanded={hasMenu ? open : undefined}
         aria-haspopup={hasMenu ? 'menu' : undefined}
         onClick={hasMenu ? () => setOpen((o) => !o) : cta.onClick}
+        sx={sx}
       />
       {hasMenu && (
         <MuiMenu

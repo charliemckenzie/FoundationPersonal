@@ -29,7 +29,9 @@ export interface ResourceLink {
 
 export interface NavGroup {
   heading?: string
-  links: NavLink[]
+  links?: NavLink[]
+  /** Stack multiple sub-groups vertically within a single visual column. */
+  groups?: NavGroup[]
 }
 
 export interface NavPromoCard {
