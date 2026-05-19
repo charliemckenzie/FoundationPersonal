@@ -5,65 +5,13 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import InputBase from '@mui/material/InputBase'
-import MuiMenu from '@mui/material/Menu'
-import MenuItem from '@mui/material/MenuItem'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
-import { Button } from '../Button'
 import { Icon } from '../Icon'
-import { IconButton } from '../IconButton'
 import { NavItemButton } from './NavItemButton'
-import type { NavItem, CtaAction, CtaMenuItem, UtilityLink } from './types'
-
-interface CondensedCtaProps {
-  cta: CtaAction
-  variant: 'contained' | 'outlined'
-}
-
-function CondensedCta({ cta, variant }: CondensedCtaProps) {
-  const [open, setOpen] = useState(false)
-  const anchorRef = useRef<HTMLButtonElement>(null)
-  const hasMenu = (cta.menu?.length ?? 0) > 0
-
-  return (
-    <>
-      <Button
-        ref={anchorRef}
-        label={cta.label}
-        variant={variant}
-        size="small"
-        condensed
-        endIcon={hasMenu ? 'chevron-down' : undefined}
-        aria-expanded={hasMenu ? open : undefined}
-        aria-haspopup={hasMenu ? 'menu' : undefined}
-        onClick={hasMenu ? () => setOpen((o) => !o) : cta.onClick}
-      />
-      {hasMenu && (
-        <MuiMenu
-          open={open}
-          anchorEl={anchorRef.current}
-          onClose={() => setOpen(false)}
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-          disableScrollLock
-        >
-          {cta.menu!.map((item: CtaMenuItem) => (
-            <MenuItem
-              key={item.href}
-              onClick={() => {
-                window.location.href = item.href
-                setOpen(false)
-              }}
-            >
-              {item.label}
-            </MenuItem>
-          ))}
-        </MuiMenu>
-      )}
-    </>
-  )
-}
+import { HeaderCtaButton } from './CtaButton'
+import type { NavItem, CtaAction, UtilityLink } from './types'
 
 export interface CondensedBarProps {
   navItems: NavItem[]
@@ -238,8 +186,8 @@ export function CondensedBar({
         {/* CTAs — small */}
         {(primaryCta || secondaryCta) && (
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {primaryCta && <CondensedCta cta={primaryCta} variant="outlined" />}
-            {secondaryCta && <CondensedCta cta={secondaryCta} variant="contained" />}
+            {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed />}
+            {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed />}
           </Box>
         )}
       </Toolbar>

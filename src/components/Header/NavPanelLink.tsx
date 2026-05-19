@@ -5,10 +5,12 @@ interface NavPanelLinkProps {
   href: string
   label: string
   description?: string
+  /** Renders the label bold — used when the link itself is the primary item (no group heading above). */
+  prominent?: boolean
   onClick?: () => void
 }
 
-export function NavPanelLink({ href, label, description, onClick }: NavPanelLinkProps) {
+export function NavPanelLink({ href, label, description, prominent, onClick }: NavPanelLinkProps) {
   return (
     <Box
       component="a"
@@ -16,26 +18,25 @@ export function NavPanelLink({ href, label, description, onClick }: NavPanelLink
       onClick={onClick}
       sx={{
         display: 'block',
-        px: 1.5,
-        py: 1,
+        py: 0.75,
         textDecoration: 'none !important',
         color: 'inherit',
-        borderRadius: (t) => `${t.shape.sm}px`,
         '&:hover': {
-          bgcolor: 'action.hover',
+          color: 'primary.main',
           textDecoration: 'none !important',
         },
         '&:focus-visible': {
           outline: '2px solid',
           outlineColor: 'border.focus',
           outlineOffset: '2px',
+          borderRadius: (t) => `${t.shape.sm}px`,
         },
         '&:focus': {
           outline: 'none',
         },
       }}
     >
-      <Typography variant="body" sx={{ display: 'block' }}>
+      <Typography variant="body" sx={{ display: 'block', fontWeight: prominent ? 700 : 400 }}>
         {label}
       </Typography>
       {description && (
