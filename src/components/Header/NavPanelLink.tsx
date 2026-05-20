@@ -19,11 +19,12 @@ export function NavPanelLink({ href, label, description, prominent, onClick }: N
       sx={{
         display: 'block',
         py: 0.75,
-        textDecoration: 'none !important',
-        color: 'inherit',
+        textDecorationLine: 'none !important',
+        color: 'text.primary',
+        '&:visited': { color: 'text.primary' },
         '&:hover': {
           color: 'primary.main',
-          textDecoration: 'none !important',
+          textDecorationLine: 'none !important',
         },
         '&:focus-visible': {
           outline: '2px solid',

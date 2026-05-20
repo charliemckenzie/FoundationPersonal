@@ -6,9 +6,15 @@ export interface NavLink {
   description?: string
 }
 
-export interface CtaMenuItem {
+export interface CtaSubItem {
   label: string
   href: string
+}
+
+export interface CtaMenuItem {
+  label: string
+  href?: string
+  items?: CtaSubItem[]
 }
 
 export interface UtilityLink {
@@ -29,6 +35,8 @@ export interface ResourceLink {
 
 export interface NavGroup {
   heading?: string
+  /** When set, the heading renders as a link. */
+  headingHref?: string
   links?: NavLink[]
   /** Stack multiple sub-groups vertically within a single visual column. */
   groups?: NavGroup[]

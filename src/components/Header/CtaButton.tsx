@@ -46,9 +46,9 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
         >
           {cta.menu!.map((item: CtaMenuItem) => (
             <MenuItem
-              key={item.href}
+              key={item.label}
               onClick={() => {
-                window.location.href = item.href
+                if (item.href) window.location.href = item.href
                 setOpen(false)
               }}
             >

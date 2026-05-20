@@ -1,16 +1,76 @@
 import { useState } from 'react'
+import MuiDrawer from '@mui/material/Drawer'
 import Box from '@mui/material/Box'
+import ButtonBase from '@mui/material/ButtonBase'
 import Divider from '@mui/material/Divider'
-import Typography from '@mui/material/Typography'
 import InputBase from '@mui/material/InputBase'
-import MuiAccordion from '@mui/material/Accordion'
-import AccordionSummary from '@mui/material/AccordionSummary'
-import AccordionDetails from '@mui/material/AccordionDetails'
-import { Drawer } from '../Drawer'
+import Typography from '@mui/material/Typography'
 import { Button } from '../Button'
 import { Icon } from '../Icon'
+import { Logo } from '../Logo'
 import { NavPanelLink } from './NavPanelLink'
-import type { NavItem, NavItemMegamenu, CtaAction } from './types'
+import type { NavItem, NavItemMegamenu, CtaAction, UtilityLink } from './types'
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+
+/** Full-width nav row with chevron. bold=false for secondary nav items. */
+function NavSlideRow({ item, bold = true, onClick }: { item: NavItem; bold?: boolean; onClick: () => void }) {
+  return (
+    <Box>
+      <ButtonBase
+        onClick={onClick}
+        sx={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          py: 1.75,
+          px: 2,
+          fontFamily: (t) => t.typography.fontFamily,
+          '&:hover': { bgcolor: 'action.hover' },
+          '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px' },
+          '&:focus': { outline: 'none' },
+        }}
+      >
+        <Typography variant="body" sx={{ fontWeight: bold ? 700 : 400, fontSize: '1.125rem' }}>
+          {item.label}
+        </Typography>
+        <Box sx={{ color: 'text.primary', display: 'flex' }}>
+          <Icon icon="chevron-right" size="md" />
+        </Box>
+      </ButtonBase>
+      <Divider sx={{ borderColor: 'border.subtle' }} />
+    </Box>
+  )
+}
+
+/** Plain utility link row — no chevron, normal weight. */
+function UtilityRow({ label, href, onClick }: { label: string; href: string; onClick: () => void }) {
+  return (
+    <Box
+      component="a"
+      href={href}
+      onClick={onClick}
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        px: 2,
+        py: 1.875,
+        color: 'text.primary',
+        textDecorationLine: 'none !important',
+        fontSize: '1.125rem',
+        lineHeight: 1.5,
+        fontWeight: 700,
+        '&:hover': { bgcolor: 'action.hover', textDecorationLine: 'none !important' },
+        '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px' },
+      }}
+    >
+      {label}
+    </Box>
+  )
+}
+
+// ── Props ─────────────────────────────────────────────────────────────────────
 
 interface NavDrawerProps {
   open: boolean
@@ -19,68 +79,40 @@ interface NavDrawerProps {
   secondaryNavItems?: NavItem[]
   primaryCta?: CtaAction
   secondaryCta?: CtaAction
+  utilityLinks?: UtilityLink[]
   onSearch?: (query: string) => void
 }
 
-function slugify(str: string): string {
-  return str.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-}
+// ── Component ─────────────────────────────────────────────────────────────────
 
-function NavAccordion({ item, expanded, onToggle, onClose }: { item: NavItemMegamenu; expanded: boolean; onToggle: () => void; onClose: () => void }) {
-  const links = item.columns.flatMap((col) => col.links)
-
-  return (
-    <MuiAccordion
-      expanded={expanded}
-      onChange={onToggle}
-      disableGutters
-      elevation={0}
-      sx={{
-        bgcolor: 'transparent',
-        '&::before': { display: 'none' },
-        '&.Mui-expanded': { margin: 0 },
-      }}
-    >
-      <AccordionSummary
-        expandIcon={<Icon icon="chevron-down" size="sm" />}
-        aria-controls={`drawer-${slugify(item.label)}-content`}
-        id={`drawer-${slugify(item.label)}-header`}
-        sx={{
-          px: 1,
-          py: 1.5,
-          minHeight: 'unset',
-          '& .MuiAccordionSummary-content': { margin: 0 },
-          '&:hover': { bgcolor: 'action.hover', borderRadius: 1 },
-          '&.Mui-focusVisible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px', boxShadow: 'none', bgcolor: 'transparent' },
-          borderRadius: 1,
-        }}
-      >
-        <Typography variant="body" sx={{ fontWeight: 700 }}>
-          {item.label}
-        </Typography>
-      </AccordionSummary>
-      <AccordionDetails sx={{ px: 0, pt: 0.5, pb: 1 }}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
-          {links.map((link) => (
-            <NavPanelLink key={link.href} {...link} onClick={onClose} />
-          ))}
-        </Box>
-      </AccordionDetails>
-    </MuiAccordion>
-  )
-}
-
-export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryCta, secondaryCta, onSearch }: NavDrawerProps) {
+export function NavDrawer({
+  open,
+  onClose,
+  navItems,
+  secondaryNavItems,
+  primaryCta,
+  secondaryCta,
+  utilityLinks,
+  onSearch,
+}: NavDrawerProps) {
+  const [activePanel, setActivePanel] = useState<NavItem | null>(null)
+  const [activeCta, setActiveCta] = useState<'primary' | 'secondary' | null>(null)
+  const [expandedMenuItem, setExpandedMenuItem] = useState<string | null>(null)
   const [query, setQuery] = useState('')
-  const [expandedPanel, setExpandedPanel] = useState<string | null>(null)
 
-  const handleToggle = (label: string) => {
-    setExpandedPanel((prev) => (prev === label ? null : label))
-  }
+  const contactLink = utilityLinks?.find((l) => l.label.toLowerCase().includes('contact'))
 
   const handleClose = () => {
-    setExpandedPanel(null)
+    setActivePanel(null)
+    setActiveCta(null)
+    setExpandedMenuItem(null)
     onClose()
+  }
+
+  const toggleCta = (which: 'primary' | 'secondary') => {
+    setActiveCta((p) => (p === which ? null : which))
+    setExpandedMenuItem(null)
+    setActivePanel(null)
   }
 
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -88,101 +120,285 @@ export function NavDrawer({ open, onClose, navItems, secondaryNavItems, primaryC
     if (query.trim()) onSearch?.(query.trim())
   }
 
-  const actions =
-    primaryCta || secondaryCta ? (
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-        {primaryCta && (
-          <Button
-            label={primaryCta.label}
-            variant="contained"
-            fullWidth
-            onClick={primaryCta.onClick ?? (() => { if (primaryCta.menu?.[0]) window.location.href = primaryCta.menu[0].href })}
-          />
-        )}
-        {secondaryCta && (
-          <Button
-            label={secondaryCta.label}
-            variant="outlined"
-            fullWidth
-            onClick={secondaryCta.onClick ?? (() => { if (secondaryCta.menu?.[0]) window.location.href = secondaryCta.menu[0].href })}
-          />
-        )}
-      </Box>
-    ) : undefined
+  const activeCfg = activeCta === 'primary' ? primaryCta : activeCta === 'secondary' ? secondaryCta : undefined
 
   return (
-    <Drawer open={open} onClose={handleClose} anchor="left" title="Menu" width={320} actions={actions}>
-      {onSearch && (
-        <Box
-          component="form"
-          role="search"
-          onSubmit={handleSearchSubmit}
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            bgcolor: 'action.hover',
-            borderRadius: 6,
-            px: 2,
-            py: 0.5,
-            gap: 1,
-            mb: 1,
-          }}
+    <MuiDrawer
+      open={open}
+      onClose={handleClose}
+      anchor="left"
+      slotProps={{ paper: { sx: { width: 'min(430px, 100vw)', display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden', fontFamily: (t) => t.typography.fontFamily } } }}
+    >
+      {/* ── Top chrome ──────────────────────────────────────────────────── */}
+      <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', px: 2, pt: 2, pb: 2, flexShrink: 0 }}>
+        {/* Close — blue, 16px icon */}
+        <ButtonBase
+          onClick={handleClose}
+          aria-label="Close menu"
+          sx={{ borderRadius: 1, py: 0.75, px: 0.5, color: 'primary.main', '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' }, '&:focus': { outline: 'none' } }}
         >
-          <InputBase
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search"
-            inputProps={{ 'aria-label': 'Search' }}
-            sx={{ flex: 1, fontSize: '0.9375rem' }}
-          />
+          <Icon icon="xmark" size="xl" />
+        </ButtonBase>
+
+        {/* ART mark — absolutely centred to the full drawer width */}
+        <Box sx={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', pointerEvents: 'none' }}>
+          <Logo variant="mark" size="md" />
+        </Box>
+
+        {/* Contact pill — grey filled, 16px h-padding, no underline */}
+        {contactLink ? (
           <Box
-            component="button"
-            type="submit"
-            aria-label="Submit search"
+            component="a"
+            href={contactLink.href}
             sx={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              p: 0,
-              color: 'text.secondary',
-              borderRadius: 1,
-              '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
-              '&:focus': { outline: 'none' },
+              fontSize: '0.875rem',
+              fontWeight: 600,
+              px: 2,
+              py: 0.75,
+              bgcolor: 'action.hover',
+              borderRadius: 6,
+              color: 'text.primary',
+              textDecorationLine: 'none !important',
+              whiteSpace: 'nowrap',
+              display: 'inline-block',
+              '&:hover': { textDecorationLine: 'none !important' },
+              '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' },
             }}
           >
-            <Icon icon="magnifying-glass" size="md" />
+            {contactLink.label}
           </Box>
+        ) : (
+          <Box sx={{ width: '2.5rem' }} />
+        )}
+      </Box>
+
+      {/* ── CTA bar ─────────────────────────────────────────────────────── */}
+      {(primaryCta || secondaryCta) && (
+        <Box sx={{ display: 'flex', gap: 1.5, px: 2, pb: 2, flexShrink: 0 }}>
+          {primaryCta && (
+            <Box sx={{ flex: 1 }}>
+              <Button
+                label={primaryCta.label}
+                variant="outlined"
+                fullWidth
+                endIcon={activeCta === 'primary' ? 'chevron-up' : 'chevron-down'}
+                onClick={() => toggleCta('primary')}
+              />
+            </Box>
+          )}
+          {secondaryCta && (
+            <Box sx={{ flex: 1 }}>
+              <Button
+                label={secondaryCta.label}
+                variant="contained"
+                fullWidth
+                endIcon={activeCta === 'secondary' ? 'chevron-up' : 'chevron-down'}
+                onClick={() => toggleCta('secondary')}
+              />
+            </Box>
+          )}
         </Box>
       )}
-      <Box component="nav" aria-label="Mobile navigation" sx={{ display: 'flex', flexDirection: 'column' }}>
-        {navItems.map((item) => (
-          <Box key={item.label}>
-            {item.type === 'link' && (
-              <NavPanelLink href={item.href} label={item.label} onClick={handleClose} />
-            )}
-            {item.type === 'megamenu' && (
-              <NavAccordion item={item} expanded={expandedPanel === item.label} onToggle={() => handleToggle(item.label)} onClose={handleClose} />
+      {/* Divider under CTAs */}
+      <Divider sx={{ flexShrink: 0, borderColor: 'border.subtle' }} />
+
+
+      {/* ── Scrollable area ──────────────────────────────────────────────── */}
+      <Box sx={{ flex: 1, overflow: 'hidden', position: 'relative' }}>
+
+        {/* CTA inline dropdown */}
+        {activeCta && activeCfg?.menu && (
+          <Box sx={{ position: 'absolute', inset: 0, overflow: 'auto', bgcolor: 'action.hover' }}>
+            {activeCfg.menu.map((item) =>
+              item.items?.length ? (
+                <Box key={item.label}>
+                  <ButtonBase
+                    onClick={() => setExpandedMenuItem((p) => (p === item.label ? null : item.label))}
+                    sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 3, py: 2, fontFamily: (t) => t.typography.fontFamily, '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' }, '&:focus': { outline: 'none' } }}
+                  >
+                    <Typography variant="body">{item.label}</Typography>
+                    <Icon icon={expandedMenuItem === item.label ? 'chevron-up' : 'chevron-down'} size="sm" />
+                  </ButtonBase>
+                  {expandedMenuItem === item.label && (
+                    <Box sx={{ px: 5, pb: 1 }}>
+                      {item.items.map((sub) => (
+                        <Box key={sub.href} component="a" href={sub.href}
+                          sx={{ display: 'block', py: 1.5, color: 'inherit', textDecorationLine: 'none !important', fontSize: '0.9375rem', '&:hover': { textDecorationLine: 'none !important' } }}
+                        >
+                          {sub.label}
+                        </Box>
+                      ))}
+                    </Box>
+                  )}
+                  <Divider sx={{ borderColor: 'border.subtle' }} />
+                </Box>
+              ) : (
+                <Box key={item.label}>
+                  <Box component="a" href={item.href}
+                    sx={{ display: 'block', px: 3, py: 2, color: 'inherit', textDecorationLine: 'none !important', fontSize: '0.9375rem', '&:hover': { textDecorationLine: 'none !important' } }}
+                  >
+                    {item.label}
+                  </Box>
+                  <Divider sx={{ borderColor: 'border.subtle' }} />
+                </Box>
+              )
             )}
           </Box>
-        ))}
-      </Box>
-      {secondaryNavItems && secondaryNavItems.length > 0 && (
-        <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
-          <Divider sx={{ mb: 1 }} />
-          {secondaryNavItems.map((item) => (
-            <Box key={item.label}>
-              {item.type === 'link' && (
-                <NavPanelLink href={item.href} label={item.label} onClick={handleClose} />
+        )}
+
+        {/* Nav slide container */}
+        {!activeCta && (
+          <>
+            {/* Level 1 — nav list */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                overflow: 'auto',
+                transform: activePanel ? 'translateX(-100%)' : 'translateX(0)',
+                transition: 'transform 280ms ease',
+              }}
+            >
+              {/* ── Search ──────────────────────────────────────────────── */}
+              {onSearch && (
+                <Box
+                  component="form"
+                  role="search"
+                  onSubmit={handleSearchSubmit}
+                  sx={{ display: 'flex', alignItems: 'center', mx: 2, mt: 2.25, mb: 4, bgcolor: 'action.hover', borderRadius: 6, px: 2, py: 0.75, gap: 1 }}
+                >
+                  <InputBase
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Search Australian Retirement Trust"
+                    inputProps={{ 'aria-label': 'Search' }}
+                    sx={{ flex: 1, fontSize: '0.9375rem' }}
+                  />
+                  <Box
+                    component="button"
+                    type="submit"
+                    aria-label="Submit search"
+                    sx={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', p: 0, color: 'text.secondary', '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' }, '&:focus': { outline: 'none' } }}
+                  >
+                    <Icon icon="magnifying-glass" size="md" />
+                  </Box>
+                </Box>
               )}
-              {item.type === 'megamenu' && (
-                <NavAccordion item={item} expanded={expandedPanel === item.label} onToggle={() => handleToggle(item.label)} onClose={handleClose} />
+
+              {/* Primary nav — bold, chevron */}
+              <Box component="nav" aria-label="Mobile navigation">
+                {navItems.map((item) => (
+                  <NavSlideRow key={item.label} item={item} bold onClick={() => setActivePanel(item)} />
+                ))}
+              </Box>
+
+              {/* Utility links — no chevron, bold, dividers between */}
+              {utilityLinks && utilityLinks.length > 0 && (
+                <Box>
+                  {utilityLinks.map((link, i) => (
+                    <Box key={link.href}>
+                      <UtilityRow label={link.label} href={link.href} onClick={handleClose} />
+                      {i < utilityLinks.length - 1 && <Divider sx={{ borderColor: 'border.subtle' }} />}
+                    </Box>
+                  ))}
+                </Box>
+              )}
+
+              {/* Secondary nav — chevron, not bold */}
+              {secondaryNavItems && secondaryNavItems.length > 0 && (
+                <Box>
+                  <Divider sx={{ borderColor: 'border.subtle' }} />
+                  {secondaryNavItems.map((item) => (
+                    <NavSlideRow key={item.label} item={item} bold={false} onClick={() => setActivePanel(item)} />
+                  ))}
+                </Box>
               )}
             </Box>
-          ))}
-        </Box>
-      )}
-    </Drawer>
+
+            {/* Level 2 — sub panel */}
+            <Box
+              sx={{
+                position: 'absolute',
+                inset: 0,
+                overflow: 'auto',
+                pt: 5,
+                pb: 2,
+                bgcolor: 'background.paper',
+                transform: activePanel ? 'translateX(0)' : 'translateX(100%)',
+                transition: 'transform 280ms ease',
+              }}
+            >
+              <ButtonBase
+                onClick={() => setActivePanel(null)}
+                sx={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 0.5,
+                  width: '100%', px: 2, py: 1.5, mb: 2,
+                  color: 'primary.main', fontFamily: (t) => t.typography.fontFamily,
+                  '&:hover': { bgcolor: 'action.hover' },
+                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px' },
+                  '&:focus': { outline: 'none' },
+                }}
+              >
+                <Icon icon="chevron-left" size="sm" />
+                <Typography variant="body" sx={{ fontWeight: 600 }}>Back</Typography>
+              </ButtonBase>
+
+              {activePanel && (
+                <Box sx={{ px: 2 }}>
+                  <Typography variant="body" component="p" sx={{ fontWeight: 700, fontSize: '1.125rem', mb: 2 }}>
+                    {activePanel.label}
+                  </Typography>
+
+                  {activePanel.type === 'link' ? (
+                    /* Placeholder panel for plain link items */
+                    <NavPanelLink href={activePanel.href} label={activePanel.label} onClick={handleClose} />
+                  ) : (
+                    /* Megamenu columns */
+                    activePanel.columns.map((col, ci) => {
+                      const colHasChildren = (col.links && col.links.length > 0) || (col.groups && col.groups.length > 0)
+                      return (
+                        <Box key={ci}>
+                          {col.heading && (
+                            <Typography variant="body" component="p"
+                              sx={{ fontWeight: colHasChildren ? 700 : 400, fontSize: colHasChildren ? '1.125rem' : undefined, color: 'text.primary', mt: 2, mb: 0.5 }}
+                            >
+                              {col.heading}
+                            </Typography>
+                          )}
+                          <Box sx={col.heading ? { pl: 2 } : undefined}>
+                            {(col.links ?? []).map((link) => (
+                              <NavPanelLink key={link.href} {...link} prominent={!col.heading} onClick={handleClose} />
+                            ))}
+                          </Box>
+                          {col.groups?.map((subGroup, si) => {
+                            const subHasChildren = subGroup.links && subGroup.links.length > 0
+                            return (
+                              <Box key={si}>
+                                {subGroup.heading && (
+                                  <Typography variant="body" component="p"
+                                    sx={{ fontWeight: subHasChildren ? 700 : 400, fontSize: subHasChildren ? '1.125rem' : undefined, color: 'text.primary', mt: 2, mb: 0.5 }}
+                                  >
+                                    {subGroup.heading}
+                                  </Typography>
+                                )}
+                                <Box sx={subGroup.heading ? { pl: 2 } : undefined}>
+                                  {(subGroup.links ?? []).map((link) => (
+                                    <NavPanelLink key={link.href} {...link} prominent={!subGroup.heading} onClick={handleClose} />
+                                  ))}
+                                </Box>
+                              </Box>
+                            )
+                          })}
+                        </Box>
+                      )
+                    })
+                  )}
+                </Box>
+              )}
+            </Box>
+          </>
+        )}
+      </Box>
+    </MuiDrawer>
   )
 }

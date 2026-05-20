@@ -217,6 +217,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
         secondaryNavItems={secondaryNavItems}
         primaryCta={primaryCta}
         secondaryCta={secondaryCta}
+        utilityLinks={utilityLinks}
         onSearch={onSearch}
       />
     </>
