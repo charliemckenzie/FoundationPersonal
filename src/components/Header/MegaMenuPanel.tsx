@@ -26,18 +26,32 @@ interface NavColumnProps {
 }
 
 function NavColumn({ group, onClose }: NavColumnProps) {
+  // A heading is a true section header (bold) only when it has children underneath it.
+  // Standalone items (headingHref + no links + no groups) render as regular-weight links.
+  const hasChildren = (group.links && group.links.length > 0) || (group.groups && group.groups.length > 0)
+  const headingIsBold = hasChildren
+
+  const headingNode = group.heading ? (
+    group.headingHref ? (
+      <Box
+        component="a"
+        href={group.headingHref}
+        onClick={onClose}
+        sx={{ display: 'block', mb: headingIsBold ? 1 : 0, color: 'text.primary', textDecorationLine: 'none !important', '&:hover': { color: 'primary.main', textDecorationLine: 'none !important' }, '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px', borderRadius: (t) => `${t.shape.sm}px` }, '&:focus': { outline: 'none' } }}
+      >
+        <Typography variant="body" sx={{ fontWeight: headingIsBold ? 700 : 400, display: 'block' }}>{group.heading}</Typography>
+      </Box>
+    ) : (
+      <Typography variant="body" component="p" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, display: 'block' }}>
+        {group.heading}
+      </Typography>
+    )
+  ) : null
+
   if (group.groups && group.groups.length > 0) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-        {group.heading && (
-          <Typography
-            variant="body"
-            component="p"
-            sx={{ fontWeight: 700, color: 'text.heading', display: 'block' }}
-          >
-            {group.heading}
-          </Typography>
-        )}
+        {headingNode}
         {group.groups.map((subGroup, i) => (
           <NavColumn key={i} group={subGroup} onClose={onClose} />
         ))}
@@ -48,15 +62,7 @@ function NavColumn({ group, onClose }: NavColumnProps) {
   const prominent = !group.heading
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-      {group.heading && (
-        <Typography
-          variant="body"
-          component="p"
-          sx={{ fontWeight: 700, color: 'text.heading', mb: 1, display: 'block' }}
-        >
-          {group.heading}
-        </Typography>
-      )}
+      {headingNode}
       <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         {(group.links ?? []).map((link) => (
           <NavPanelLink key={link.href} {...link} prominent={prominent} onClick={onClose} />
@@ -71,14 +77,15 @@ function QSuperPromoPanel({ children }: { children?: ReactNode }) {
     <Box
       sx={{
         bgcolor: 'background.brandSecondary',
-        width: 260,
+        width: 300,
         flexShrink: 0,
+        m: 2,
+        borderRadius: (t) => `${t.shape.lg}px`,
         py: 5,
         px: 4,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        alignSelf: 'stretch',
       }}
     >
       {children ?? (
@@ -160,42 +167,54 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter,
             top: headerBottom,
             left: 0,
             right: 0,
-            bgcolor: 'background.paper',
-            borderBottom: 1,
-            borderColor: 'border.subtle',
-            boxShadow: 4,
             zIndex: (t) => t.zIndex.appBar + 1,
           }}
         >
           {isQSuper ? (
-            <Container maxWidth="lg" disableGutters sx={{ display: 'flex', alignItems: 'stretch' }}>
+            <Box
+              sx={{
+                maxWidth: (t) => t.breakpoints.values.lg,
+                mx: 'auto',
+                bgcolor: 'background.paper',
+                borderTop: '3px solid',
+                borderColor: 'primary.main',
+                borderBottom: '1px solid',
+                borderBottomColor: 'border.subtle',
+                borderRadius: (t) => `0 0 ${t.shape.lg}px ${t.shape.lg}px`,
+                boxShadow: 24,
+                display: 'flex',
+                alignItems: 'stretch',
+              }}
+            >
               <Box
                 sx={{
                   flex: 1,
                   display: 'grid',
-                  gridTemplateColumns: `repeat(${Math.min(item.columns.length, 3)}, 1fr)`,
-                  gap: 4,
-                  py: 4,
-                  px: 3,
+                  gridTemplateColumns: `repeat(${Math.min(item.columns.length, 2)}, 1fr)`,
+                  gap: 5,
+                  py: 5,
+                  px: 4,
                 }}
               >
-                {item.columns.slice(0, 3).map((col, i) => (
+                {item.columns.slice(0, 2).map((col, i) => (
                   <NavColumn key={i} group={col} onClose={onClose} />
                 ))}
               </Box>
               <QSuperPromoPanel>{item.promoCard?.children}</QSuperPromoPanel>
-            </Container>
+            </Box>
           ) : (
-            <Container maxWidth="lg" sx={{ py: 4 }}>
-              <Box sx={{ display: 'flex', gap: 4 }}>
-                <Box sx={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`, gap: 3 }}>
-                  {item.columns.map((col, i) => (
-                    <NavColumn key={i} group={col} onClose={onClose} />
-                  ))}
+            <Box sx={{ bgcolor: 'background.paper', borderBottom: 1, borderColor: 'border.subtle', boxShadow: 24 }}>
+              <Container maxWidth="lg" sx={{ py: 4 }}>
+                <Box sx={{ display: 'flex', gap: 4 }}>
+                  <Box sx={{ flex: 1, display: 'grid', gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`, gap: 3 }}>
+                    {item.columns.map((col, i) => (
+                      <NavColumn key={i} group={col} onClose={onClose} />
+                    ))}
+                  </Box>
+                  {item.promoCard && <PromoCard>{item.promoCard.children}</PromoCard>}
                 </Box>
-                {item.promoCard && <PromoCard>{item.promoCard.children}</PromoCard>}
-              </Box>
-            </Container>
+              </Container>
+            </Box>
           )}
         </Box>
       </Fade>

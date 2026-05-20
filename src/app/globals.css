@@ -38,3 +38,15 @@ a.link-underline,
 .link-hover-only a.link-underline {
   text-decoration-line: underline !important;
 }
+
+/* Suppress underline entirely — at rest and on hover */
+a.link-no-underline,
+.link-no-underline a {
+  text-decoration-line: none !important;
+}
+a.link-no-underline:hover,
+a.link-no-underline:focus-visible,
+.link-no-underline a:hover,
+.link-no-underline a:focus-visible {
+  text-decoration-line: none !important;
+}

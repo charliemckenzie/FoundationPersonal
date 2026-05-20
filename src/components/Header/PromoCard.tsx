@@ -9,8 +9,9 @@ interface PromoCardProps {
 export function PromoCard({ children, width = 280 }: PromoCardProps) {
   return (
     <Box
+      className="link-no-underline"
       sx={(t) => ({
-        bgcolor: 'background.brandClear',
+        bgcolor: 'background.tableStripe',
         borderRadius: `${t.shape.lg}px`,
         overflow: 'hidden',
         width,

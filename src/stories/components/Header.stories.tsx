@@ -5,10 +5,10 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
-import { createBrandTheme } from '../../app/themes/factory'
-import { themeB } from '../../app/themes/brands/theme-b'
 import { Header } from '../../components/Header'
 import { Button } from '../../components/Button'
+import { createBrandTheme } from '../../app/themes/factory'
+import { themeB } from '../../app/themes/brands/theme-b'
 import type {
   NavItemMegamenu,
   CtaAction,
@@ -63,23 +63,22 @@ const whyChooseUs: NavItemMegamenu = {
   promoCard: {
     children: (
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-        <Typography variant="h5" sx={{ color: 'text.heading' }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
           Focused on long-term returns
         </Typography>
         <Typography variant="body" sx={{ color: 'text.muted' }}>
-          We take care of your super. Join 2.4 million Australians who trust us.
+          We take care of your super. Join 2.4 million Australians who trust us to take care of theirs.
         </Typography>
-        <Button
-          label="Join us today"
-          variant="contained"
-          size="small"
-          onClick={() => { window.location.href = '/join' }}
-        />
+        <Box component="a" href="/join" sx={{ color: 'primary.main', textDecoration: 'none', fontWeight: 500, '&:hover': { textDecoration: 'underline' } }}>
+          Join us today.
+        </Box>
       </Box>
     ),
   },
   columns: [
     {
+      heading: 'Why choose us?',
+      headingHref: '/why-choose-us',
       links: [
         { label: 'Compare us', href: '/why/compare' },
         { label: 'Award-winning', href: '/why/awards' },
@@ -88,15 +87,14 @@ const whyChooseUs: NavItemMegamenu = {
       ],
     },
     {
-      heading: 'Member online',
-      links: [
-        { label: 'Mobile app', href: '/why/app' },
-      ],
-    },
-    {
-      heading: 'Ready to make the switch?',
-      links: [
-        { label: 'Join in 5 minutes', href: '/join' },
+      groups: [
+        { heading: 'Member online', headingHref: '/member-online' },
+        { heading: 'Mobile app', headingHref: '/mobile-app' },
+        {
+          heading: 'Ready to make the switch?',
+          headingHref: '/join',
+          links: [{ label: 'Join in 5 minutes', href: '/join/5-minutes' }],
+        },
       ],
     },
   ],
@@ -105,21 +103,89 @@ const whyChooseUs: NavItemMegamenu = {
 const superItem: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Super',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Be super informed
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          Stay in the know when it comes to your super with our articles and tools.
+        </Typography>
+        <Box component="a" href="/learn" sx={{ color: 'primary.main', textDecoration: 'none', fontWeight: 500, '&:hover': { textDecoration: 'underline' } }}>
+          Learn more →
+        </Box>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Your super',
-      links: [
-        { label: 'How super works', href: '/super/how' },
-        { label: 'Consolidate super', href: '/super/consolidate' },
-        { label: 'Super contributions', href: '/super/contributions' },
-        { label: 'Find lost super', href: '/super/lost' },
+      heading: 'Superannuation',
+      headingHref: '/super',
+      groups: [
+        {
+          heading: 'What is superannuation?',
+          headingHref: '/super/what-is',
+          links: [
+            { label: 'How much super should I have?', href: '/super/how-much' },
+            { label: 'Best super fund', href: '/super/best-fund' },
+          ],
+        },
+        {
+          heading: 'Account types',
+          headingHref: '/super/account-types',
+          links: [
+            { label: 'Investment performance', href: '/super/performance' },
+            { label: 'Super fees', href: '/super/fees' },
+            { label: 'Open a super account', href: '/super/open' },
+          ],
+        },
+        {
+          heading: 'Changing super funds',
+          headingHref: '/super/changing-funds',
+          links: [
+            { label: 'Changing jobs', href: '/super/changing-jobs' },
+            { label: 'ABN, USI, SPIN, fund Address', href: '/super/fund-details' },
+          ],
+        },
       ],
     },
     {
-      heading: 'Performance & fees',
-      links: [
-        { label: 'Investment performance', href: '/super/performance' },
-        { label: 'Fees & costs', href: '/super/fees' },
+      groups: [
+        {
+          heading: 'Consolidate super',
+          headingHref: '/super/consolidate',
+          links: [{ label: 'Find lost super', href: '/super/lost' }],
+        },
+        {
+          heading: 'Contribute to super',
+          headingHref: '/super/contribute',
+          links: [
+            { label: 'BPAY super contributions', href: '/super/bpay' },
+            { label: 'Government co-contribution', href: '/super/co-contribution' },
+            { label: 'Salary sacrifice', href: '/super/salary-sacrifice' },
+            { label: 'Voluntary contributions', href: '/super/voluntary' },
+          ],
+        },
+      ],
+    },
+    {
+      groups: [
+        {
+          heading: 'How to withdraw super',
+          headingHref: '/super/withdraw',
+          links: [
+            { label: 'Early access to super', href: '/super/early-access' },
+            { label: 'Claim a death benefit', href: '/super/death-benefit' },
+          ],
+        },
+        {
+          heading: 'Tax and super',
+          headingHref: '/super/tax',
+          links: [{ label: 'Tax deductions', href: '/super/tax-deductions' }],
+        },
+        { heading: 'FAQs', headingHref: '/super/faqs' },
+        { heading: 'Forms and documents', headingHref: '/super/forms' },
       ],
     },
   ],
@@ -128,20 +194,74 @@ const superItem: NavItemMegamenu = {
 const retirementItem: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Retirement',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Award-winning products
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          Keep your super working for you in retirement with our{' '}
+          <Box component="a" href="/retirement/products" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>innovative products</Box>.
+        </Typography>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Planning',
-      links: [
-        { label: 'Retirement guide', href: '/retirement/guide' },
-        { label: 'Income streams', href: '/retirement/income' },
-        { label: 'Age pension', href: '/retirement/pension' },
+      heading: 'Retirement',
+      headingHref: '/retirement',
+      groups: [
+        {
+          heading: 'Planning your retirement',
+          headingHref: '/retirement/planning',
+          links: [
+            { label: 'How much super will I need?', href: '/retirement/how-much' },
+            { label: 'When can I retire?', href: '/retirement/when' },
+            { label: 'Government Age Pension', href: '/retirement/age-pension' },
+          ],
+        },
+        {
+          heading: 'Manage your retirement',
+          headingHref: '/retirement/manage',
+          links: [
+            { label: 'Log in to your account', href: '/login' },
+            { label: 'Name a beneficiary', href: '/retirement/beneficiary' },
+            { label: 'Converting from TTR to Retirement', href: '/retirement/convert-ttr' },
+          ],
+        },
       ],
     },
     {
-      heading: 'Transition',
-      links: [
-        { label: 'When to retire', href: '/retirement/when' },
-        { label: 'Access your super', href: '/retirement/access' },
+      groups: [
+        {
+          heading: 'Getting ready to retire',
+          headingHref: '/retirement/getting-ready',
+          links: [{ label: 'How to withdraw super', href: '/super/withdraw' }],
+        },
+        {
+          heading: 'Our income accounts',
+          headingHref: '/retirement/income-accounts',
+          links: [
+            { label: 'Transition to Retirement Income account', href: '/retirement/ttr' },
+            { label: 'Retirement Income account', href: '/retirement/income-account' },
+            { label: 'Lifetime Pension', href: '/retirement/lifetime-pension' },
+            { label: 'Retirement Bonus', href: '/retirement/bonus' },
+          ],
+        },
+      ],
+    },
+    {
+      groups: [
+        {
+          heading: 'Advice & planning',
+          headingHref: '/retirement/advice',
+          links: [{ label: 'Your advice options', href: '/advice/options' }],
+        },
+        { heading: 'FAQs', headingHref: '/retirement/faqs' },
+        { heading: 'Retirement calculator', headingHref: '/retirement/calculator' },
+        { heading: 'Forms and documents', headingHref: '/forms' },
+        { heading: 'Super Savings PDS & guides', headingHref: '/pds' },
       ],
     },
   ],
@@ -150,20 +270,57 @@ const retirementItem: NavItemMegamenu = {
 const investmentsItem: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Investments',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Strong investment performance for your super
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          {"We've received SuperRatings' platinum performance rating 20 years in a row, and Canstar's 5-star awards for outstanding value retirement products since 2011."}
+        </Typography>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Investment options',
-      links: [
-        { label: 'MySuper Lifecycle', href: '/investments/mysuper' },
-        { label: 'Diversified options', href: '/investments/diversified' },
-        { label: 'Single sector options', href: '/investments/single' },
+      heading: 'Investments',
+      headingHref: '/investments',
+      groups: [
+        {
+          heading: 'Investment options',
+          headingHref: '/investments/options',
+          links: [
+            { label: 'Lifecycle option (default)', href: '/investments/lifecycle' },
+            { label: 'Diversified options', href: '/investments/diversified' },
+            { label: 'Asset class options', href: '/investments/asset-class' },
+          ],
+        },
+        { heading: 'Fees', headingHref: '/investments/fees' },
       ],
     },
     {
       heading: 'Performance',
+      headingHref: '/investments/performance',
       links: [
-        { label: 'Investment performance', href: '/investments/performance' },
-        { label: 'Investment updates', href: '/investments/updates' },
+        { label: 'Overview', href: '/investments/performance/overview' },
+        { label: 'Graphs', href: '/investments/performance/graphs' },
+        { label: 'Unit prices', href: '/investments/unit-prices' },
+      ],
+    },
+    {
+      groups: [
+        {
+          heading: 'Market update',
+          headingHref: '/investments/market-update',
+          links: [{ label: 'Investment reports', href: '/investments/reports' }],
+        },
+        {
+          heading: 'What we invest in',
+          headingHref: '/investments/what-we-invest',
+          links: [{ label: 'Sustainable investing', href: '/investments/sustainable' }],
+        },
+        { heading: 'Investment profile quiz', headingHref: '/investments/quiz' },
       ],
     },
   ],
@@ -172,21 +329,58 @@ const investmentsItem: NavItemMegamenu = {
 const insuranceItem: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Insurance',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Cover for your needs
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          Your{' '}
+          <Box component="a" href="/insurance/cover" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>insurance cover</Box>
+          {' '}can give you and your family financial protection and security.
+        </Typography>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Cover',
-      links: [
-        { label: 'Insurance cover', href: '/insurance/cover' },
-        { label: 'Death cover', href: '/insurance/death' },
-        { label: 'TPD cover', href: '/insurance/tpd' },
-        { label: 'Income protection', href: '/insurance/income' },
+      heading: 'Insurance',
+      headingHref: '/insurance',
+      groups: [
+        {
+          heading: 'Find the right insurance for you',
+          headingHref: '/insurance/find',
+          links: [
+            { label: 'Total & Permanent Disability (TPD) cover', href: '/insurance/tpd' },
+            { label: 'Death cover', href: '/insurance/death' },
+            { label: 'Income Protection cover', href: '/insurance/income-protection' },
+          ],
+        },
+        { heading: 'Nominate a beneficiary', headingHref: '/insurance/beneficiary' },
       ],
     },
     {
-      heading: 'Claims',
+      heading: 'Manage your insurance',
+      headingHref: '/insurance/manage',
       links: [
-        { label: 'Make a claim', href: '/insurance/claim' },
-        { label: 'Claims support', href: '/insurance/support' },
+        { label: 'Log in to your account', href: '/login' },
+        { label: 'Keep cover', href: '/insurance/keep-cover' },
+        { label: 'Restart cover', href: '/insurance/restart' },
+      ],
+    },
+    {
+      groups: [
+        {
+          heading: 'Make a claim',
+          headingHref: '/insurance/claims',
+          links: [
+            { label: 'Make a death benefit claim', href: '/insurance/death-claim' },
+            { label: 'Early Intervention', href: '/insurance/early-intervention' },
+          ],
+        },
+        { heading: 'Insurance quote', headingHref: '/insurance/quote' },
+        { heading: 'Insurance needs calculator', headingHref: '/insurance/calculator' },
       ],
     },
   ],
@@ -195,20 +389,58 @@ const insuranceItem: NavItemMegamenu = {
 const toolsItem: NavItemMegamenu = {
   type: 'megamenu',
   label: 'Tools & advice',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Get expert advice
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          Your membership includes{' '}
+          <Box component="a" href="/advice/art-account" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>advice about your ART account</Box>
+          {' '}over the phone.
+        </Typography>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Calculators',
-      links: [
-        { label: 'Retirement calculator', href: '/tools/retirement' },
-        { label: 'Insurance estimator', href: '/tools/insurance' },
-        { label: 'Fee comparison', href: '/tools/fees' },
+      heading: 'Tools & advice',
+      headingHref: '/tools',
+      groups: [
+        {
+          heading: 'Your advice options',
+          headingHref: '/advice/options',
+          links: [{ label: 'Book a financial adviser appointment', href: '/advice/book' }],
+        },
+        {
+          heading: 'PDS and guides',
+          headingHref: '/pds',
+          links: [
+            { label: 'Super Savings guide [PDF]', href: '/pds/super-savings' },
+            { label: 'Super Savings Insurance guide [PDF]', href: '/pds/insurance' },
+            { label: 'Super Savings Investment guide [PDF]', href: '/pds/investment' },
+          ],
+        },
       ],
     },
     {
-      heading: 'Advice',
+      groups: [
+        { heading: 'Events & seminars', headingHref: '/events' },
+        { heading: 'Forms & documents', headingHref: '/forms' },
+        { heading: 'Learn about super', headingHref: '/learn' },
+      ],
+    },
+    {
+      heading: 'Tools & calculators',
+      headingHref: '/tools/calculators',
       links: [
-        { label: 'Financial advice', href: '/advice' },
-        { label: 'Find an adviser', href: '/advice/find' },
+        { label: 'Contributions calculator', href: '/tools/contributions-calc' },
+        { label: 'Retirement calculator', href: '/tools/retirement-calc' },
+        { label: 'Risk profile quiz', href: '/tools/risk-quiz' },
+        { label: 'Compare funds', href: '/tools/compare-funds' },
+        { label: 'Get an insurance quote', href: '/tools/insurance-quote' },
+        { label: 'Calculate your insurance needs', href: '/tools/insurance-calc' },
       ],
     },
   ],
@@ -217,20 +449,64 @@ const toolsItem: NavItemMegamenu = {
 const forEmployers: NavItemMegamenu = {
   type: 'megamenu',
   label: 'For employers',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Use our clearing house
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          {"It's easy to pay multiple super funds for different employees with our clearing house."}
+        </Typography>
+        <Box component="a" href="/employers/clearing-house" sx={{ color: 'primary.main', textDecoration: 'none', fontWeight: 500, '&:hover': { textDecoration: 'underline' } }}>
+          Find out more
+        </Box>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Getting started',
-      links: [
-        { label: 'Set up super for employees', href: '/employers/setup' },
-        { label: 'Employer obligations', href: '/employers/obligations' },
-        { label: 'SuperStream', href: '/employers/superstream' },
+      heading: 'For employers',
+      headingHref: '/employers',
+      groups: [
+        {
+          heading: 'Why choose us?',
+          headingHref: '/employers/why',
+          links: [
+            { label: 'Employer brochure [PDF]', href: '/employers/brochure' },
+            { label: 'Register as an employer', href: '/employers/register' },
+          ],
+        },
+        { heading: 'Super for small & medium businesses', headingHref: '/employers/smb' },
       ],
     },
     {
-      heading: 'Tools',
-      links: [
-        { label: 'Employer portal', href: '/employers/portal' },
-        { label: 'Clearing house', href: '/employers/clearing-house' },
+      groups: [
+        {
+          heading: 'Pay super online',
+          headingHref: '/employers/pay-online',
+          links: [
+            { label: 'Clearing house', href: '/employers/clearing-house' },
+            { label: 'Log in to Employer Online', href: '/employers/login' },
+            { label: 'Employer Online', href: '/employers/portal' },
+          ],
+        },
+        {
+          heading: 'Employer obligations',
+          headingHref: '/employers/obligations',
+          links: [
+            { label: 'Superannuation Guarantee', href: '/employers/sg' },
+            { label: 'Important dates and deadlines', href: '/employers/dates' },
+          ],
+        },
+      ],
+    },
+    {
+      groups: [
+        { heading: 'Employer hub', headingHref: '/employers/hub' },
+        { heading: 'Small business handbook [PDF]', headingHref: '/employers/small-business-handbook' },
+        { heading: 'Employee handbook [PDF]', headingHref: '/employers/employee-handbook' },
+        { heading: 'Wall planner 2026 [PDF]', headingHref: '/employers/wall-planner' },
       ],
     },
   ],
@@ -239,13 +515,50 @@ const forEmployers: NavItemMegamenu = {
 const forAdvisers: NavItemMegamenu = {
   type: 'megamenu',
   label: 'For advisers',
+  promoCard: {
+    children: (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography variant="h5" sx={{ color: 'text.heading', fontWeight: 700 }}>
+          Adviser hub
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.muted' }}>
+          <Box component="a" href="/advisers/hub" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>Browse articles</Box>
+          {' '}and resources for financial advisers.
+        </Typography>
+      </Box>
+    ),
+  },
   columns: [
     {
-      heading: 'Resources',
+      heading: 'For advisers',
+      headingHref: '/advisers',
       links: [
-        { label: 'Adviser portal', href: '/advisers/portal' },
-        { label: 'Product information', href: '/advisers/products' },
-        { label: 'Technical resources', href: '/advisers/technical' },
+        { label: 'Why choose us', href: '/advisers/why' },
+        { label: 'Meet the team', href: '/advisers/team' },
+        { label: 'Login', href: '/advisers/login' },
+        { label: 'Register', href: '/advisers/register' },
+        { label: 'Contact us', href: '/contact' },
+      ],
+    },
+    {
+      heading: 'Products',
+      headingHref: '/advisers/products',
+      links: [
+        { label: 'Account types', href: '/advisers/products/accounts' },
+        { label: 'Insurances', href: '/advisers/products/insurance' },
+        { label: 'Investments', href: '/advisers/products/investments' },
+        { label: 'Advice Fees', href: '/advisers/products/fees' },
+      ],
+    },
+    {
+      heading: 'Resources',
+      headingHref: '/advisers/resources',
+      links: [
+        { label: 'Adviser Hub', href: '/advisers/hub' },
+        { label: 'AOL guides', href: '/advisers/aol' },
+        { label: 'Forms & Docs', href: '/advisers/forms' },
+        { label: 'PDS, TMDs & Guides', href: '/advisers/pds' },
+        { label: 'Common FAQs', href: '/advisers/faqs' },
       ],
     },
   ],
@@ -253,6 +566,7 @@ const forAdvisers: NavItemMegamenu = {
 
 const allNavItems = [whyChooseUs, superItem, retirementItem, investmentsItem, insuranceItem, toolsItem]
 const secondaryNavItems = [forEmployers, forAdvisers]
+
 
 const sampleCtaPrimary: CtaAction = {
   label: 'Join',
@@ -266,168 +580,22 @@ const sampleCtaSecondary: CtaAction = {
   menu: [
     { label: 'Member login', href: '/login/member' },
     { label: 'Employer login', href: '/login/employer' },
+    {
+      label: 'Setup online access',
+      items: [
+        { label: "I'm a member", href: '/setup/member' },
+        { label: "I'm an employer", href: '/setup/employer' },
+        { label: "I'm an adviser", href: '/setup/adviser' },
+      ],
+    },
   ],
 }
 
 const sampleUtilityLinks: UtilityLink[] = [
+  { label: 'Contact us', href: '/contact', icon: 'phone-sharp' },
   { label: 'Rewards', href: '/rewards', icon: 'gift' },
   { label: 'Learn', href: '/learn', icon: 'book-open' },
-  { label: 'Contact', href: '/contact', icon: 'phone-sharp' },
 ]
-
-const meta = {
-  title: 'Public Web / Header',
-  component: Header,
-  tags: ['autodocs'],
-  parameters: {
-    layout: 'fullscreen',
-    docs: {
-      description: {
-        component:
-          'Site header with two-row layout — utility bar (logo, search, utility links, CTAs) and a desktop megamenu nav strip. Collapses to a hamburger + drawer on tablet and mobile. Megamenu panels are full-width with optional promo card. All nav data is passed as props — the header has no internal routing logic.',
-      },
-    },
-  },
-  argTypes: {
-    // ─── Storybook-only controls ───────────────────────────────────────────
-    showHero: {
-      name: 'Show hero content',
-      description: 'Toggle a placeholder hero section below the header. Storybook demo only — not a component prop.',
-      control: 'boolean',
-      table: { category: 'Demo', defaultValue: { summary: 'false' } },
-    },
-    // ─── Navigation ────────────────────────────────────────────────────────
-    navItems: {
-      description: 'Primary navigation items. Each item is either a `megamenu` (with columns and optional promo card) or a plain `link`.',
-      control: false,
-      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
-    },
-    secondaryNavItems: {
-      description: 'Secondary nav items rendered right-aligned in the desktop nav strip (e.g. For employers, For advisers). Collapsible in the drawer.',
-      control: false,
-      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
-    },
-    // ─── Actions ───────────────────────────────────────────────────────────
-    primaryCta: {
-      description: 'Left CTA button — rendered with `outlined` style. Supports an optional dropdown `menu` array.',
-      control: false,
-      table: { category: 'Actions', type: { summary: 'CtaAction' } },
-    },
-    secondaryCta: {
-      description: 'Right CTA button — rendered with `contained` style. Supports an optional dropdown `menu` array.',
-      control: false,
-      table: { category: 'Actions', type: { summary: 'CtaAction' } },
-    },
-    utilityLinks: {
-      description: 'Icon + label utility links shown in the desktop utility bar (e.g. Rewards, Learn, Contact). Hidden on phone.',
-      control: false,
-      table: { category: 'Actions', type: { summary: 'UtilityLink[]' } },
-    },
-    // ─── Search ────────────────────────────────────────────────────────────
-    onSearch: {
-      description: 'Callback fired when the search form is submitted. When provided, the search bar is rendered. Omit to hide search entirely.',
-      control: false,
-      table: { category: 'Search', type: { summary: '(query: string) => void' } },
-    },    searchPlaceholder: {
-      description: 'Placeholder text for the search input. Defaults to `“Search”` if omitted.',
-      control: 'text',
-      table: { category: 'Search', type: { summary: 'string' } },
-    },    // ─── State ─────────────────────────────────────────────────────────────
-    condensed: {
-      description: 'Force the condensed (scrolled) state. Normally driven by scroll position — use this in Storybook or tests to preview the compact header without scrolling.',
-      control: 'boolean',
-      table: { category: 'State', defaultValue: { summary: 'false' } },
-    },
-  },
-} satisfies Meta<HeaderStoryArgs>
-
-export default meta
-type Story = StoryObj<typeof meta>
-
-export const Default: Story = {
-  args: {
-    navItems: allNavItems,
-    secondaryNavItems,
-    primaryCta: sampleCtaPrimary,
-    secondaryCta: sampleCtaSecondary,
-    utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
-    searchPlaceholder: 'Search Australian Retirement Trust',
-  },
-  render: (args) => {
-    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
-    return (
-      <>
-        <Header {...headerArgs} />
-        {showHero && <HeroPlaceholder />}
-      </>
-    )
-  },
-}
-
-export const MegaMenuVariant: Story = {
-  name: 'MegaMenu Variant',
-  args: {
-    navItems: allNavItems,
-    secondaryNavItems,
-    primaryCta: sampleCtaPrimary,
-    secondaryCta: sampleCtaSecondary,
-    utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
-    searchPlaceholder: 'Search Australian Retirement Trust',
-  },
-  render: (args) => {
-    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
-    return (
-      <>
-        <Header {...headerArgs} />
-        {showHero && <HeroPlaceholder />}
-      </>
-    )
-  },
-}
-
-export const MobileView: Story = {
-  name: 'Mobile View',
-  parameters: {
-    viewport: { defaultViewport: 'mobile1' },
-  },
-  args: {
-    navItems: allNavItems,
-    secondaryNavItems,
-    primaryCta: sampleCtaPrimary,
-    secondaryCta: sampleCtaSecondary,
-    utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
-    searchPlaceholder: 'Search Australian Retirement Trust',
-  },
-}
-
-export const Condensed: Story = {
-  name: 'Condensed (scrolled)',
-  parameters: {
-    docs: {
-      description: {
-        story: 'Single-row compact layout shown on desktop after scrolling past 50px. Logo collapses to the brand mark, nav moves inline, search becomes a pill icon, utility link icons are hidden. Pass `condensed={true}` to force this state without scrolling — useful for testing and visual regression.',
-      },
-    },
-  },
-  args: {
-    navItems: allNavItems,
-    primaryCta: sampleCtaPrimary,
-    secondaryCta: sampleCtaSecondary,
-    utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
-    searchPlaceholder: 'Search Australian Retirement Trust',
-    condensed: true,
-  },
-  render: (args) => {
-    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
-    return <Header {...headerArgs} />
-  },
-}
-
-// ─── QSuper brand nav data ────────────────────────────────────────────────────
 
 const qsuperAudienceLinks: AudienceLink[] = [
   { label: 'Personal', href: '/personal' },
@@ -441,43 +609,44 @@ const qsuperResourceLinks: ResourceLink[] = [
   { label: 'Contact us', href: '/contact' },
 ]
 
-const qsuperProductsItem: NavItemMegamenu = {
-  type: 'megamenu',
-  label: 'Products',
-  columns: [
-    {
-      // No heading — links render bold/prominent as primary nav items
-      links: [
-        { label: 'Why QSuper', href: '/why-qsuper', description: 'Awaken your super with Australian Retirement Trust' },
-        { label: 'Can I join QSuper', href: '/join' },
-        { label: 'Investment options', href: '/products/investments' },
-        { label: 'Fees', href: '/products/fees' },
-        { label: 'Financial advice', href: '/advice' },
-        { label: 'Compare us', href: '/compare' },
-      ],
-    },
-    {
-      heading: 'Insurance',
-      links: [
-        { label: 'Income protection', href: '/insurance/income' },
-        { label: 'Death cover', href: '/insurance/death' },
-        { label: 'TPD cover', href: '/insurance/tpd' },
-      ],
-    },
-    {
-      heading: 'Account types',
-      links: [
-        { label: 'Accumulation account', href: '/products/accumulation' },
-        { label: 'Transition to Retirement Income account', href: '/products/ttr' },
-        { label: 'Retirement Income account', href: '/products/income' },
-        { label: 'Lifetime Pension', href: '/products/lifetime' },
-      ],
-    },
-  ],
-}
-
 const qsuperNavItems: NavItemMegamenu[] = [
-  qsuperProductsItem,
+  {
+    type: 'megamenu',
+    label: 'Products',
+    columns: [
+      {
+        links: [
+          { label: 'Why QSuper', href: '/why-qsuper', description: 'Awaken your super with Australian Retirement Trust' },
+          { label: 'Can I join QSuper', href: '/join' },
+          { label: 'Investment options', href: '/products/investments' },
+          { label: 'Fees', href: '/products/fees' },
+          { label: 'Financial advice', href: '/advice' },
+          { label: 'Compare us', href: '/compare' },
+        ],
+      },
+      {
+        groups: [
+          {
+            heading: 'Insurance',
+            links: [
+              { label: 'Income protection', href: '/insurance/income' },
+              { label: 'Death cover', href: '/insurance/death' },
+              { label: 'TPD cover', href: '/insurance/tpd' },
+            ],
+          },
+          {
+            heading: 'Account types',
+            links: [
+              { label: 'Accumulation account', href: '/products/accumulation' },
+              { label: 'Transition to Retirement Income account', href: '/products/ttr' },
+              { label: 'Retirement Income account', href: '/products/income' },
+              { label: 'Lifetime Pension', href: '/products/lifetime' },
+            ],
+          },
+        ],
+      },
+    ],
+  },
   {
     type: 'megamenu',
     label: 'Super',
@@ -564,6 +733,122 @@ const qsuperNavItems: NavItemMegamenu[] = [
   },
 ]
 
+const meta = {
+  title: 'Public Web / Header',
+  component: Header,
+  tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+    docs: {
+      description: {
+        component:
+          'Site header with two-row layout — utility bar (logo, search, utility links, CTAs) and a desktop megamenu nav strip. Collapses to a hamburger + drawer on tablet and mobile. Megamenu panels are full-width with optional promo card. All nav data is passed as props — the header has no internal routing logic.',
+      },
+    },
+  },
+  argTypes: {
+    // ─── Storybook-only controls ───────────────────────────────────────────
+    showHero: {
+      name: 'Show hero content',
+      description: 'Toggle a placeholder hero section below the header. Storybook demo only — not a component prop.',
+      control: 'boolean',
+      table: { category: 'Demo', defaultValue: { summary: 'false' } },
+    },
+    // ─── Navigation ────────────────────────────────────────────────────────
+    navItems: {
+      description: 'Primary navigation items. Each item is either a `megamenu` (with columns and optional promo card) or a plain `link`.',
+      control: false,
+      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
+    },
+    secondaryNavItems: {
+      description: 'Secondary nav items rendered right-aligned in the desktop nav strip (e.g. For employers, For advisers). Collapsible in the drawer.',
+      control: false,
+      table: { category: 'Navigation', type: { summary: 'NavItem[]' } },
+    },
+    // ─── Actions ───────────────────────────────────────────────────────────
+    primaryCta: {
+      description: 'Left CTA button — rendered with `outlined` style. Supports an optional dropdown `menu` array.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'CtaAction' } },
+    },
+    secondaryCta: {
+      description: 'Right CTA button — rendered with `contained` style. Supports an optional dropdown `menu` array.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'CtaAction' } },
+    },
+    utilityLinks: {
+      description: 'Icon + label utility links shown in the desktop utility bar (e.g. Rewards, Learn, Contact). Hidden on phone.',
+      control: false,
+      table: { category: 'Actions', type: { summary: 'UtilityLink[]' } },
+    },
+    // ─── Search ────────────────────────────────────────────────────────────
+    onSearch: {
+      description: 'Callback fired when the search form is submitted. When provided, the search bar is rendered. Omit to hide search entirely.',
+      control: false,
+      table: { category: 'Search', type: { summary: '(query: string) => void' } },
+    },
+  },
+} satisfies Meta<HeaderStoryArgs>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Default: Story = {
+  args: {
+    navItems: allNavItems,
+    secondaryNavItems,
+    primaryCta: sampleCtaPrimary,
+    secondaryCta: sampleCtaSecondary,
+    utilityLinks: sampleUtilityLinks,
+    onSearch: (q: string) => console.log('search:', q),
+  },
+  render: (args) => {
+    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
+    return (
+      <>
+        <Header {...headerArgs} />
+        {showHero && <HeroPlaceholder />}
+      </>
+    )
+  },
+}
+
+export const MegaMenuVariant: Story = {
+  name: 'MegaMenu Variant',
+  args: {
+    navItems: allNavItems,
+    secondaryNavItems,
+    primaryCta: sampleCtaPrimary,
+    secondaryCta: sampleCtaSecondary,
+    utilityLinks: sampleUtilityLinks,
+    onSearch: (q: string) => console.log('search:', q),
+  },
+  render: (args) => {
+    const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
+    return (
+      <>
+        <Header {...headerArgs} />
+        {showHero && <HeroPlaceholder />}
+      </>
+    )
+  },
+}
+
+export const MobileView: Story = {
+  name: 'Mobile View',
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' },
+  },
+  args: {
+    navItems: allNavItems,
+    secondaryNavItems,
+    primaryCta: sampleCtaPrimary,
+    secondaryCta: sampleCtaSecondary,
+    utilityLinks: sampleUtilityLinks,
+    onSearch: (q: string) => console.log('search:', q),
+  },
+}
+
 export const QSuperBrand: Story = {
   name: 'QSuper brand',
   globals: { brand: 'theme-b' },
@@ -588,8 +873,8 @@ export const QSuperBrand: Story = {
     audienceLinks: qsuperAudienceLinks,
     resourceLinks: qsuperResourceLinks,
     activeAudienceHref: '/personal',
-    primaryCta: { label: 'Join', menu: [{ label: 'Join as a member', href: '/join/member' }, { label: 'Join as an employer', href: '/join/employer' }] },
-    secondaryCta: { label: 'Log In', menu: [{ label: 'Member login', href: '/login/member' }, { label: 'Employer login', href: '/login/employer' }] },
+    primaryCta: { label: 'Join' },
+    secondaryCta: { label: 'Log In' },
     onSearch: (q: string) => console.log('search:', q),
     searchPlaceholder: 'Search QSuper',
   },
@@ -603,4 +888,3 @@ export const QSuperBrand: Story = {
     )
   },
 }
-
