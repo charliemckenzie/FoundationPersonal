@@ -18,6 +18,7 @@ function NavSlideRow({ item, bold = true, onClick }: { item: NavItem; bold?: boo
   return (
     <Box>
       <ButtonBase
+        disableRipple
         onClick={onClick}
         sx={{
           width: '100%',
@@ -32,7 +33,7 @@ function NavSlideRow({ item, bold = true, onClick }: { item: NavItem; bold?: boo
           '&:focus': { outline: 'none' },
         }}
       >
-        <Typography variant="body" sx={{ fontWeight: bold ? 700 : 400, fontSize: '1.125rem' }}>
+        <Typography component="span" variant="body" sx={{ fontWeight: bold ? 600 : 400, fontSize: '1.125rem' }}>
           {item.label}
         </Typography>
         <Box sx={{ color: 'text.primary', display: 'flex' }}>
@@ -60,7 +61,7 @@ function UtilityRow({ label, href, onClick }: { label: string; href: string; onC
         textDecorationLine: 'none !important',
         fontSize: '1.125rem',
         lineHeight: 1.5,
-        fontWeight: 700,
+        fontWeight: 600,
         '&:hover': { bgcolor: 'action.hover', textDecorationLine: 'none !important' },
         '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px' },
       }}
@@ -213,10 +214,11 @@ export function NavDrawer({
               item.items?.length ? (
                 <Box key={item.label}>
                   <ButtonBase
+                    disableRipple
                     onClick={() => setExpandedMenuItem((p) => (p === item.label ? null : item.label))}
                     sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 3, py: 2, fontFamily: (t) => t.typography.fontFamily, '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' }, '&:focus': { outline: 'none' } }}
                   >
-                    <Typography variant="body">{item.label}</Typography>
+                    <Typography component="span" variant="body">{item.label}</Typography>
                     <Icon icon={expandedMenuItem === item.label ? 'chevron-up' : 'chevron-down'} size="sm" />
                   </ButtonBase>
                   {expandedMenuItem === item.label && (
@@ -329,6 +331,7 @@ export function NavDrawer({
               }}
             >
               <ButtonBase
+                disableRipple
                 onClick={() => setActivePanel(null)}
                 sx={{
                   display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 0.5,
@@ -340,7 +343,7 @@ export function NavDrawer({
                 }}
               >
                 <Icon icon="chevron-left" size="sm" />
-                <Typography variant="body" sx={{ fontWeight: 600 }}>Back</Typography>
+                <Box component="span" sx={{ fontWeight: 600, fontSize: '1rem', lineHeight: 1.5 }}>Back</Box>
               </ButtonBase>
 
               {activePanel && (

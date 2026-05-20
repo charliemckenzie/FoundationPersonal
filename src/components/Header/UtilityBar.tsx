@@ -62,7 +62,8 @@ export function UtilityBar({
                 bgcolor: 'action.hover',
                 borderRadius: 6,
                 px: 2,
-                py: 0.5,
+                height: '2.75rem',
+                ml: '1.25rem',
                 gap: 1,
                 outline: '2px solid transparent',
                 '&:focus-within': { outlineColor: 'border.focus' },
@@ -73,7 +74,7 @@ export function UtilityBar({
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder ?? 'Search'}
                 inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, fontSize: '0.9375rem' }}
+                sx={{ flex: 1, fontSize: '0.9375rem', '& input::placeholder': { color: 'text.primary', opacity: 0.6 } }}
               />
               <Box
                 component="button"
@@ -92,7 +93,7 @@ export function UtilityBar({
                   '&:focus': { outline: 'none' },
                 }}
               >
-                <Icon icon="magnifying-glass" size="md" />
+                <Icon icon="magnifying-glass" size="lg" />
               </Box>
             </Box>
           )}
