@@ -1,17 +1,71 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
 import InputBase from '@mui/material/InputBase'
+import MuiMenu from '@mui/material/Menu'
+import MenuItem from '@mui/material/MenuItem'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
+import { Button } from '../Button'
 import { Icon } from '../Icon'
 import { IconButton } from '../IconButton'
-import { HeaderCtaButton } from './CtaButton'
-import type { CtaAction, UtilityLink } from './types'
+import type { CtaAction, CtaMenuItem, UtilityLink } from './types'
+
+interface CtaButtonProps {
+  cta: CtaAction
+  variant: 'contained' | 'outlined'
+  size?: 'small' | 'medium' | 'large'
+  condensed?: boolean
+  noMenu?: boolean
+}
+
+function CtaButton({ cta, variant, size, condensed, noMenu }: CtaButtonProps) {
+  const [open, setOpen] = useState(false)
+  const anchorRef = useRef<HTMLButtonElement>(null)
+  const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
+
+  return (
+    <>
+      <Button
+        ref={anchorRef}
+        label={cta.label}
+        variant={variant}
+        size={size}
+        condensed={condensed}
+        endIcon={hasMenu ? 'chevron-down' : undefined}
+        aria-expanded={hasMenu ? open : undefined}
+        aria-haspopup={hasMenu ? 'menu' : undefined}
+        onClick={hasMenu ? () => setOpen((o) => !o) : cta.onClick}
+      />
+      {hasMenu && (
+        <MuiMenu
+          open={open}
+          anchorEl={anchorRef.current}
+          onClose={() => setOpen(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+          transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+          disableScrollLock
+        >
+          {cta.menu!.map((item: CtaMenuItem) => (
+            <MenuItem
+              key={item.href}
+              onClick={() => {
+                window.location.href = item.href
+                setOpen(false)
+              }}
+            >
+              {item.label}
+            </MenuItem>
+          ))}
+        </MuiMenu>
+      )}
+    </>
+  )
+}
 
 export interface UtilityBarProps {
   utilityLinks?: UtilityLink[]
@@ -21,7 +75,6 @@ export interface UtilityBarProps {
   onMenuOpen: () => void
   isMobile: boolean
   isPhone?: boolean
-  searchPlaceholder?: string
 }
 
 export function UtilityBar({
@@ -32,10 +85,13 @@ export function UtilityBar({
   onMenuOpen,
   isMobile,
   isPhone = false,
-  searchPlaceholder,
 }: UtilityBarProps) {
   const [query, setQuery] = useState('')
-  const handleSearchSubmit = (e: React.FormEvent) => { e.preventDefault(); if (query.trim()) onSearch?.(query.trim()) }
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (query.trim()) onSearch?.(query.trim())
+  }
 
   return (
     <Container maxWidth="lg">
@@ -45,11 +101,7 @@ export function UtilityBar({
           <Box sx={{ ml: '-12px' }}>
             <IconButton icon="bars" label="Open navigation menu" variant="ghost" onClick={onMenuOpen} />
           </Box>
-          {isPhone ? (
-            <Box component="a" href="/" aria-label="Go to home" sx={{ display: 'inline-flex', textDecoration: 'none', lineHeight: 0 }}><Logo size="md" variant="mark" /></Box>
-          ) : (
-            <Box component="a" href="/" aria-label="Go to home" sx={{ display: 'inline-flex', textDecoration: 'none', lineHeight: 0 }}><Logo size="md" /></Box>
-          )}
+          {isPhone ? <Logo size="md" variant="mark" /> : <Logo size="md" />}
           {!isPhone && onSearch && (
             <Box
               component="form"
@@ -62,19 +114,16 @@ export function UtilityBar({
                 bgcolor: 'action.hover',
                 borderRadius: 6,
                 px: 2,
-                height: '2.75rem',
-                ml: '1.25rem',
+                py: 0.5,
                 gap: 1,
-                outline: '2px solid transparent',
-                '&:focus-within': { outlineColor: 'border.focus' },
               }}
             >
               <InputBase
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder={searchPlaceholder ?? 'Search'}
+                placeholder="Search"
                 inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, fontSize: '0.9375rem', '& input::placeholder': { color: 'text.primary', opacity: 0.6 } }}
+                sx={{ flex: 1, fontSize: '0.9375rem' }}
               />
               <Box
                 component="button"
@@ -93,24 +142,22 @@ export function UtilityBar({
                   '&:focus': { outline: 'none' },
                 }}
               >
-                <Icon icon="magnifying-glass" size="lg" />
+                <Icon icon="magnifying-glass" size="md" />
               </Box>
             </Box>
           )}
           {isPhone && <Box sx={{ flex: 1 }} />}
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} sx={{ px: 2 }} />}
-              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} sx={{ px: 2 }} />}
+              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed noMenu={isPhone} />}
+              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed noMenu={isPhone} />}
             </Box>
           )}
         </Toolbar>
       ) : (
         /* Desktop: logo — search — utility links — CTAs */
-        <Toolbar disableGutters sx={{ gap: 3.5, pt: 2, pb: 2, alignItems: 'center' }}>
-          <Box component="a" href="/" aria-label="Go to home" sx={{ flexShrink: 0, display: 'inline-flex', textDecoration: 'none', '& > div': { height: '3.75rem' } }}>
-            <Logo size="lg" />
-          </Box>
+        <Toolbar disableGutters sx={{ gap: 3, py: 1.5 }}>
+          <Logo size="lg" />
 
           {onSearch && (
             <Box
@@ -124,18 +171,16 @@ export function UtilityBar({
                 bgcolor: 'action.hover',
                 borderRadius: 6,
                 px: 2,
-                height: '44px',
+                py: 0.5,
                 gap: 1,
-                outline: '2px solid transparent',
-                '&:focus-within': { outlineColor: 'border.focus' },
               }}
             >
               <InputBase
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder={searchPlaceholder ?? 'Search'}
+                placeholder="Search"
                 inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, fontSize: '0.9375rem', '& input::placeholder': { color: 'text.primary', opacity: 0.6 } }}
+                sx={{ flex: 1, fontSize: '0.9375rem' }}
               />
               <Box
                 component="button"
@@ -154,19 +199,18 @@ export function UtilityBar({
                   '&:focus': { outline: 'none' },
                 }}
               >
-                <Icon icon="magnifying-glass" size="lg" />
+                <Icon icon="magnifying-glass" size="md" />
               </Box>
             </Box>
           )}
 
           {utilityLinks && (
-            <Box sx={{ display: 'flex', gap: 1.5 }}>
+            <Box sx={{ display: 'flex', gap: 2 }}>
               {utilityLinks.map((link) => (
                 <ButtonBase
                   key={link.href}
                   component="a"
                   href={link.href}
-                  disableRipple
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
@@ -179,11 +223,15 @@ export function UtilityBar({
                     textDecoration: 'none',
                     '&, & *': { textDecoration: 'none !important' },
                     '&:hover': { color: 'primary.main' },
-                    '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                    '&:focus-visible': {
+                      outline: '2px solid',
+                      outlineColor: 'border.focus',
+                      outlineOffset: '2px',
+                    },
                     '&:focus': { outline: 'none' },
                   }}
                 >
-                  <Icon icon={link.icon} size="lg" />
+                  <Icon icon={link.icon} size="xl" />
                   <Typography variant="small" sx={{ color: 'inherit', lineHeight: 1.2 }}>
                     {link.label}
                   </Typography>
@@ -194,8 +242,8 @@ export function UtilityBar({
 
           {(secondaryCta || primaryCta) && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" condensed sx={{ px: 2 }} />}
-              {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" condensed sx={{ px: 2 }} />}
+              {primaryCta && <CtaButton cta={primaryCta} variant="outlined" condensed />}
+              {secondaryCta && <CtaButton cta={secondaryCta} variant="contained" condensed />}
             </Box>
           )}
         </Toolbar>
