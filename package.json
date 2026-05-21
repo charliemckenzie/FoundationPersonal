@@ -1,6 +1,9 @@
 {
-  "name": "@art/foundation",
+  "name": "@paolo-meyer_artghec/foundation",
   "version": "0.1.0",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "exports": {
     ".": {
       "import": "./dist/index.js",
