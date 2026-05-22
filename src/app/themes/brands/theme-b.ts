@@ -9,7 +9,7 @@ export const themeB: BrandConfig = {
   quaternary: qSkyBlue,   // Light Blue — #8CDDFF sits at [300]
   neutral,
   buttonBorderRadius: 8,
-  fontFamily: 'var(--font-open-sans), "Open Sans", system-ui, sans-serif',
+  fontFamily: 'Effra, system-ui, sans-serif',
   headingFontFamily: 'var(--font-merriweather), Merriweather, serif',
   logos: {
     primary: '/logos/qsuper/qsuper.svg',

@@ -16,7 +16,8 @@ export function PromoCard({ children, width = 280 }: PromoCardProps) {
         overflow: 'hidden',
         width,
         flexShrink: 0,
-        p: 3,
+        alignSelf: 'flex-start',
+        p: 4,
       })}
     >
       {children}

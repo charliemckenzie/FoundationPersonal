@@ -88,8 +88,12 @@ const whyChooseUs: NavItemMegamenu = {
     },
     {
       groups: [
-        { heading: 'Member online', headingHref: '/member-online' },
-        { heading: 'Mobile app', headingHref: '/mobile-app' },
+        { heading: 'Member online', headingHref: '/member-online', bold: true },
+        { heading: 'Mobile app', headingHref: '/mobile-app', bold: true },
+      ],
+    },
+    {
+      groups: [
         {
           heading: 'Ready to make the switch?',
           headingHref: '/join',
@@ -184,8 +188,8 @@ const superItem: NavItemMegamenu = {
           headingHref: '/super/tax',
           links: [{ label: 'Tax deductions', href: '/super/tax-deductions' }],
         },
-        { heading: 'FAQs', headingHref: '/super/faqs' },
-        { heading: 'Forms and documents', headingHref: '/super/forms' },
+        { heading: 'FAQs', headingHref: '/super/faqs', bold: true },
+        { heading: 'Forms and documents', headingHref: '/super/forms', bold: true },
       ],
     },
   ],
@@ -258,10 +262,10 @@ const retirementItem: NavItemMegamenu = {
           headingHref: '/retirement/advice',
           links: [{ label: 'Your advice options', href: '/advice/options' }],
         },
-        { heading: 'FAQs', headingHref: '/retirement/faqs' },
-        { heading: 'Retirement calculator', headingHref: '/retirement/calculator' },
-        { heading: 'Forms and documents', headingHref: '/forms' },
-        { heading: 'Super Savings PDS & guides', headingHref: '/pds' },
+        { heading: 'FAQs', headingHref: '/retirement/faqs', bold: true },
+        { heading: 'Retirement calculator', headingHref: '/retirement/calculator', bold: true },
+        { heading: 'Forms and documents', headingHref: '/forms', bold: true },
+        { heading: 'Super Savings PDS & guides', headingHref: '/pds', bold: true },
       ],
     },
   ],
@@ -296,7 +300,7 @@ const investmentsItem: NavItemMegamenu = {
             { label: 'Asset class options', href: '/investments/asset-class' },
           ],
         },
-        { heading: 'Fees', headingHref: '/investments/fees' },
+        { heading: 'Fees', headingHref: '/investments/fees', bold: true },
       ],
     },
     {
@@ -320,7 +324,7 @@ const investmentsItem: NavItemMegamenu = {
           headingHref: '/investments/what-we-invest',
           links: [{ label: 'Sustainable investing', href: '/investments/sustainable' }],
         },
-        { heading: 'Investment profile quiz', headingHref: '/investments/quiz' },
+        { heading: 'Investment profile quiz', headingHref: '/investments/quiz', bold: true },
       ],
     },
   ],
@@ -357,7 +361,7 @@ const insuranceItem: NavItemMegamenu = {
             { label: 'Income Protection cover', href: '/insurance/income-protection' },
           ],
         },
-        { heading: 'Nominate a beneficiary', headingHref: '/insurance/beneficiary' },
+        { heading: 'Nominate a beneficiary', headingHref: '/insurance/beneficiary', bold: true },
       ],
     },
     {
@@ -379,8 +383,8 @@ const insuranceItem: NavItemMegamenu = {
             { label: 'Early Intervention', href: '/insurance/early-intervention' },
           ],
         },
-        { heading: 'Insurance quote', headingHref: '/insurance/quote' },
-        { heading: 'Insurance needs calculator', headingHref: '/insurance/calculator' },
+        { heading: 'Insurance quote', headingHref: '/insurance/quote', bold: true },
+        { heading: 'Insurance needs calculator', headingHref: '/insurance/calculator', bold: true },
       ],
     },
   ],
@@ -426,9 +430,9 @@ const toolsItem: NavItemMegamenu = {
     },
     {
       groups: [
-        { heading: 'Events & seminars', headingHref: '/events' },
-        { heading: 'Forms & documents', headingHref: '/forms' },
-        { heading: 'Learn about super', headingHref: '/learn' },
+        { heading: 'Events & seminars', headingHref: '/events', bold: true },
+        { heading: 'Forms & documents', headingHref: '/forms', bold: true },
+        { heading: 'Learn about super', headingHref: '/learn', bold: true },
       ],
     },
     {
@@ -477,7 +481,7 @@ const forEmployers: NavItemMegamenu = {
             { label: 'Register as an employer', href: '/employers/register' },
           ],
         },
-        { heading: 'Super for small & medium businesses', headingHref: '/employers/smb' },
+        { heading: 'Super for small & medium businesses', headingHref: '/employers/smb', bold: true },
       ],
     },
     {
@@ -503,10 +507,10 @@ const forEmployers: NavItemMegamenu = {
     },
     {
       groups: [
-        { heading: 'Employer hub', headingHref: '/employers/hub' },
-        { heading: 'Small business handbook [PDF]', headingHref: '/employers/small-business-handbook' },
-        { heading: 'Employee handbook [PDF]', headingHref: '/employers/employee-handbook' },
-        { heading: 'Wall planner 2026 [PDF]', headingHref: '/employers/wall-planner' },
+        { heading: 'Employer hub', headingHref: '/employers/hub', bold: true },
+        { heading: 'Small business handbook [PDF]', headingHref: '/employers/small-business-handbook', bold: true },
+        { heading: 'Employee handbook [PDF]', headingHref: '/employers/employee-handbook', bold: true },
+        { heading: 'Wall planner 2026 [PDF]', headingHref: '/employers/wall-planner', bold: true },
       ],
     },
   ],
@@ -572,16 +576,21 @@ const sampleCtaPrimary: CtaAction = {
   label: 'Join',
   menu: [
     { label: 'Join as a member', href: '/join/member' },
-    { label: 'Join as an employer', href: '/join/employer' },
+    { label: 'Join to retire', href: '/join/retire' },
+    { label: 'Register as an employer', href: '/join/employer' },
+    { label: 'Register as an adviser', href: '/join/adviser' },
   ],
 }
 const sampleCtaSecondary: CtaAction = {
   label: 'Log in',
   menu: [
-    { label: 'Member login', href: '/login/member' },
-    { label: 'Employer login', href: '/login/employer' },
+    { label: 'Member log in', href: '/login/member' },
+    { label: 'Employer log in', href: '/login/employer' },
+    { label: 'Adviser log in', href: '/login/adviser' },
+    { label: 'Trustee log in', href: '/login/trustee' },
     {
       label: 'Setup online access',
+      description: "If you have an account with us but don't have online access, it only takes a few minutes to set it up:",
       items: [
         { label: "I'm a member", href: '/setup/member' },
         { label: "I'm an employer", href: '/setup/employer' },
@@ -592,9 +601,9 @@ const sampleCtaSecondary: CtaAction = {
 }
 
 const sampleUtilityLinks: UtilityLink[] = [
-  { label: 'Contact us', href: '/contact', icon: 'phone-sharp' },
   { label: 'Rewards', href: '/rewards', icon: 'gift' },
   { label: 'Learn', href: '/learn', icon: 'book-open' },
+  { label: 'Contact', href: '/contact', icon: 'phone-sharp' },
 ]
 
 const qsuperAudienceLinks: AudienceLink[] = [

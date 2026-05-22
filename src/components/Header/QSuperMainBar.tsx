@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import Toolbar from '@mui/material/Toolbar'
 import InputBase from '@mui/material/InputBase'
 import { Icon } from '../Icon'
+import { IconButton } from '../IconButton'
 import { HeaderCtaButton } from './CtaButton'
 import { NavItemButton } from './NavItemButton'
 import type { NavItem, CtaAction } from './types'
@@ -17,6 +18,9 @@ export interface QSuperMainBarProps {
   searchPlaceholder?: string
   activePanel: string | null
   onNavClick: (item: NavItem, el: HTMLButtonElement) => void
+  onNavHoverEnd?: () => void
+  showHamburger?: boolean
+  onMenuOpen?: () => void
 }
 
 export function QSuperMainBar({
@@ -27,6 +31,9 @@ export function QSuperMainBar({
   searchPlaceholder,
   activePanel,
   onNavClick,
+  onNavHoverEnd,
+  showHamburger = false,
+  onMenuOpen,
 }: QSuperMainBarProps) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [query, setQuery] = useState('')
@@ -49,22 +56,25 @@ export function QSuperMainBar({
   }
 
   return (
-    <Toolbar disableGutters sx={{ gap: 0, pt: '10px', pb: 0, minHeight: 'unset', alignItems: 'center' }}>
-      {/* Primary megamenu nav — hidden when search is expanded */}
-      {!searchOpen && (
+    <Toolbar disableGutters sx={{ gap: 0, pb: 0, minHeight: 'unset', alignItems: showHamburger ? 'center' : 'flex-end' }}>
+      {/* Megamenu nav (desktop only) */}
+      {!searchOpen && !showHamburger && (
         <Box
           component="nav"
           id="main-nav"
           aria-label="Main navigation"
-          sx={{ display: 'flex', '& .MuiTypography-root': { fontWeight: 400 } }}
+          sx={{ display: 'flex', ml: '-15px', '& .MuiTypography-root': { fontWeight: 400 } }}
         >
           {navItems.map((item) => (
             <NavItemButton
               key={item.label}
               item={item}
               active={activePanel === item.label}
-              sx={{ px: 1.25, fontSize: '0.9375rem', pb: '10px' }}
+              fontSize="1rem"
+              sx={{ px: '15px', color: '#4a4a4a' }}
               onClick={onNavClick}
+              onHover={onNavClick}
+              onHoverEnd={onNavHoverEnd}
             />
           ))}
         </Box>
@@ -84,10 +94,12 @@ export function QSuperMainBar({
               flex: 1,
               display: 'flex',
               alignItems: 'center',
+              alignSelf: 'center',
+              height: '40px',
+              boxSizing: 'border-box',
               bgcolor: 'action.hover',
               borderRadius: 1,
               px: 2,
-              py: 0.75,
               gap: 1,
               outline: '2px solid',
               outlineColor: 'border.focus',
@@ -130,12 +142,15 @@ export function QSuperMainBar({
             sx={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: 'center',
+              alignSelf: 'center',
               gap: 0.75,
               bgcolor: 'action.hover',
               borderRadius: 1,
-              pl: 1.5,
-              pr: 2,
-              py: '7px',
+              width: '86px',
+              height: '40px',
+              p: 0,
+              boxSizing: 'border-box',
               border: 'none',
               cursor: 'pointer',
               color: 'text.secondary',
@@ -155,9 +170,16 @@ export function QSuperMainBar({
 
       {/* CTAs — no dropdown menus in QSuper */}
       {(primaryCta || secondaryCta) && (
-        <Box sx={{ display: 'flex', gap: 1, ml: 1.5 }}>
-          {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed noMenu />}
-          {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed noMenu />}
+        <Box sx={{ display: 'flex', gap: 1, ml: 1.5, alignSelf: 'center' }}>
+          {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed noMenu sx={{ height: '40px' }} />}
+          {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed noMenu sx={{ height: '40px' }} />}
+        </Box>
+      )}
+
+      {/* Hamburger — tablet only, far right */}
+      {showHamburger && !searchOpen && (
+        <Box sx={{ alignSelf: 'center', ml: 1 }}>
+          <IconButton icon="bars" label="Open navigation menu" variant="ghost" onClick={onMenuOpen} />
         </Box>
       )}
     </Toolbar>

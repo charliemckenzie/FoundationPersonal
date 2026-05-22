@@ -29,20 +29,18 @@ export function NavItemButton({ item, active, secondary = false, fontSize, sx, o
       onMouseLeave={onHoverEnd}
       sx={[
         {
-        pt: 1,
-        pb: 1.5,
+        pt: '15px',
+        pb: 0,
         alignSelf: 'stretch',
         display: 'flex',
-        alignItems: 'center',
+        alignItems: 'flex-end',
         gap: 0.5,
         borderRadius: 0,
         fontFamily: 'inherit',
-        borderBottom: '2px solid',
-        borderColor: active ? 'primary.main' : 'transparent',
         color: active ? 'primary.main' : 'inherit',
         '&:hover': {
-          borderColor: 'primary.main',
           color: 'primary.main',
+          '& .nav-indicator': { borderColor: 'primary.main' },
         },
         '&:focus-visible': {
           outline: '2px solid',
@@ -56,7 +54,7 @@ export function NavItemButton({ item, active, secondary = false, fontSize, sx, o
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
     >
-      <Typography variant="body" component="span" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: '24px', fontWeight: secondary ? 400 : 600 }}>
+      <Typography variant="body" component="span" className="nav-indicator" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: '24px', fontWeight: secondary ? 400 : 600, borderBottom: '2px solid', borderColor: active ? 'primary.main' : 'transparent', pb: '15px' }}>
         {item.label}
       </Typography>
     </ButtonBase>

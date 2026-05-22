@@ -7,6 +7,8 @@ import Toolbar from '@mui/material/Toolbar'
 import InputBase from '@mui/material/InputBase'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
+import Divider from '@mui/material/Divider'
+import Collapse from '@mui/material/Collapse'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
@@ -25,8 +27,14 @@ interface CtaButtonProps {
 
 function CtaButton({ cta, variant, size, condensed, noMenu }: CtaButtonProps) {
   const [open, setOpen] = useState(false)
+  const [expanded, setExpanded] = useState<string | null>(null)
   const anchorRef = useRef<HTMLButtonElement>(null)
   const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
+
+  const handleClose = () => {
+    setOpen(false)
+    setExpanded(null)
+  }
 
   return (
     <>
@@ -45,22 +53,53 @@ function CtaButton({ cta, variant, size, condensed, noMenu }: CtaButtonProps) {
         <MuiMenu
           open={open}
           anchorEl={anchorRef.current}
-          onClose={() => setOpen(false)}
+          onClose={handleClose}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}
           disableScrollLock
+          slotProps={{ list: { sx: { py: 2 } }, paper: { sx: { border: '1px solid', borderColor: 'divider', borderRadius: '8px', mt: '8px', width: 250 } } }}
         >
-          {cta.menu!.map((item: CtaMenuItem) => (
-            <MenuItem
-              key={item.href}
-              onClick={() => {
-                window.location.href = item.href
-                setOpen(false)
-              }}
-            >
-              {item.label}
-            </MenuItem>
-          ))}
+          {cta.menu!.map((item: CtaMenuItem) =>
+            item.items?.length ? (
+              <Box key={item.label}>
+                <Divider sx={{ my: 1 }} />
+                <MenuItem
+                  onClick={() => setExpanded((p) => (p === item.label ? null : item.label))}
+                  sx={{ py: '7px', px: 3, fontSize: '1rem', display: 'flex', justifyContent: 'space-between', gap: 1 }}
+                >
+                  {item.label}
+                  <Icon icon={expanded === item.label ? 'chevron-up' : 'chevron-down'} size="sm" />
+                </MenuItem>
+                <Collapse in={expanded === item.label}>
+                  {item.description && (
+                    <Typography sx={{ px: 3, pt: 1, pb: 0.5, fontSize: '0.875rem', color: 'text.secondary', lineHeight: 1.5 }}>
+                      {item.description}
+                    </Typography>
+                  )}
+                  {item.items.map((sub) => (
+                    <MenuItem
+                      key={sub.label}
+                      onClick={() => { window.location.href = sub.href; handleClose() }}
+                      sx={{ py: '7px', px: 3, fontSize: '1rem' }}
+                    >
+                      {sub.label}
+                    </MenuItem>
+                  ))}
+                </Collapse>
+              </Box>
+            ) : (
+              <MenuItem
+                key={item.label}
+                onClick={() => {
+                  if (item.href) window.location.href = item.href
+                  handleClose()
+                }}
+                sx={{ py: '7px', px: 3, fontSize: '1rem' }}
+              >
+                {item.label}
+              </MenuItem>
+            )
+          )}
         </MuiMenu>
       )}
     </>

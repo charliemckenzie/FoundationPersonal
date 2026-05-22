@@ -14,6 +14,7 @@ export interface CtaSubItem {
 export interface CtaMenuItem {
   label: string
   href?: string
+  description?: string
   items?: CtaSubItem[]
 }
 
@@ -37,6 +38,8 @@ export interface NavGroup {
   heading?: string
   /** When set, the heading renders as a link. */
   headingHref?: string
+  /** Force the heading to render bold even when it has no children. */
+  bold?: boolean
   links?: NavLink[]
   /** Stack multiple sub-groups vertically within a single visual column. */
   groups?: NavGroup[]

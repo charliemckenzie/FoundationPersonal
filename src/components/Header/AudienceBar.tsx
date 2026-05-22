@@ -20,7 +20,7 @@ export function AudienceBar({ audienceLinks, resourceLinks, activeHref }: Audien
     >
       {/* Audience section links — e.g. Personal / Employers / Advisers */}
       {/* No dividers. Active tab has a top border flush with the browser edge. */}
-      <Box component="nav" aria-label="Audience navigation" sx={{ display: 'flex', alignItems: 'stretch' }}>
+      <Box component="nav" aria-label="Audience navigation" sx={{ display: 'flex', alignItems: 'stretch', gap: '15px', fontFamily: 'var(--font-open-sans), "Open Sans", system-ui, sans-serif' }}>
         {audienceLinks?.map((link) => (
           <Box
             key={link.href}
@@ -28,19 +28,19 @@ export function AudienceBar({ audienceLinks, resourceLinks, activeHref }: Audien
             href={link.href}
             aria-current={activeHref === link.href ? 'page' : undefined}
             sx={{
-              display: 'flex',
+              display: 'inline-flex',
               alignItems: 'center',
-              fontSize: '0.8125rem',
+              fontSize: '0.75rem',
               lineHeight: 1.5,
-              fontWeight: activeHref === link.href ? 700 : 400,
-              color: activeHref === link.href ? 'primary.main' : 'text.secondary',
+              fontWeight: 400,
+              color: activeHref === link.href ? 'primary.main' : '#757575',
               textDecoration: 'none !important',
-              px: 1.25,
+              px: 0,
               pt: '15px',
               pb: '15px',
-              borderTop: '3px solid',
+              borderTop: '2px solid',
               borderColor: activeHref === link.href ? 'primary.main' : 'transparent',
-              '&:hover': { color: 'primary.main' },
+              '&:hover': { color: '#757575', borderColor: 'primary.main' },
               '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
               '&:focus': { outline: 'none' },
             }}
@@ -51,14 +51,14 @@ export function AudienceBar({ audienceLinks, resourceLinks, activeHref }: Audien
       </Box>
 
       {/* Resource links — e.g. Calculators & forms / News Hub / Contact us */}
-      <Box component="nav" aria-label="Resource links" sx={{ display: 'flex', alignItems: 'center', gap: 2.5 }}>
+      <Box component="nav" aria-label="Resource links" sx={{ display: 'flex', alignItems: 'center', gap: 2.5, fontFamily: 'var(--font-open-sans), "Open Sans", system-ui, sans-serif' }}>
         {resourceLinks?.map((link) => (
           <Box
             key={link.href}
             component="a"
             href={link.href}
             sx={{
-              fontSize: '0.8125rem',
+              fontSize: '0.75rem',
               lineHeight: 1.5,
               color: 'text.secondary',
               textDecoration: 'none !important',

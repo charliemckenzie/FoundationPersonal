@@ -29,7 +29,7 @@ function NavColumn({ group, onClose }: NavColumnProps) {
   // A heading is a true section header (bold) only when it has children underneath it.
   // Standalone items (headingHref + no links + no groups) render as regular-weight links.
   const hasChildren = (group.links && group.links.length > 0) || (group.groups && group.groups.length > 0)
-  const headingIsBold = hasChildren
+  const headingIsBold = hasChildren || group.bold === true
 
   const headingNode = group.heading ? (
     group.headingHref ? (
@@ -80,7 +80,7 @@ function QSuperPromoPanel({ children }: { children?: ReactNode }) {
         width: 300,
         flexShrink: 0,
         m: 2,
-        borderRadius: (t) => `${t.shape.lg}px`,
+        borderRadius: (t) => `${t.shape.sm}px`,
         py: 5,
         px: 4,
         display: 'flex',
@@ -164,7 +164,7 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter,
           onMouseLeave={onMouseLeave}
           sx={{
             position: 'fixed',
-            top: headerBottom,
+            top: headerBottom - 2,
             left: 0,
             right: 0,
             zIndex: (t) => t.zIndex.appBar + 1,
@@ -180,7 +180,7 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter,
                 borderColor: 'primary.main',
                 borderBottom: '1px solid',
                 borderBottomColor: 'border.subtle',
-                borderRadius: (t) => `0 0 ${t.shape.lg}px ${t.shape.lg}px`,
+                borderRadius: (t) => `0 0 ${t.shape.sm}px ${t.shape.sm}px`,
                 boxShadow: 24,
                 display: 'flex',
                 alignItems: 'stretch',
@@ -211,7 +211,11 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter,
                       <NavColumn key={i} group={col} onClose={onClose} />
                     ))}
                   </Box>
-                  {item.promoCard && <PromoCard>{item.promoCard.children}</PromoCard>}
+                  {item.promoCard && (
+                    <Box sx={{ '& p': { lineHeight: 1.75 } }}>
+                      <PromoCard>{item.promoCard.children}</PromoCard>
+                    </Box>
+                  )}
                 </Box>
               </Container>
             </Box>
