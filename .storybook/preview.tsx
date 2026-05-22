@@ -55,7 +55,17 @@ const preview: Preview = {
               };
             }}
           />
-          <Story />
+          {/*
+           * Wrapper with display:contents so it doesn't affect layout, but it
+           * does anchor CSS font-family inheritance for this story's subtree.
+           * On the docs page all stories share the same document, so the last
+           * CssBaseline to mount (QSuper) sets body{font-family:Effra} globally.
+           * An inline fontFamily here intercepts that inherited value for every
+           * child element regardless of what body says.
+           */}
+          <div style={{ display: 'contents', fontFamily: theme.typography.fontFamily }}>
+            <Story />
+          </div>
         </ThemeProvider>
       );
     },

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { ThemeProvider } from '@mui/material/styles'
-import CssBaseline from '@mui/material/CssBaseline'
 import { Header } from '../../components/Header'
 import { Button } from '../../components/Button'
 import { createBrandTheme } from '../../app/themes/factory'
@@ -864,7 +863,6 @@ export const QSuperBrand: Story = {
   decorators: [
     (Story) => (
       <ThemeProvider theme={qsuperTheme}>
-        <CssBaseline />
         <Story />
       </ThemeProvider>
     ),
