@@ -79,7 +79,7 @@ export function QSuperHeader({
           top: 0,
           borderBottom: 1,
           borderColor: 'border.subtle',
-          zIndex: (t) => t.zIndex.appBar + 2,
+          zIndex: (t) => t.zIndex.stickyHeader,
           boxShadow: 0,
         }}
       >

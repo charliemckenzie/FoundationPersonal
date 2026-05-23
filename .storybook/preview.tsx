@@ -2,6 +2,8 @@ import type { Preview } from '@storybook/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import GlobalStyles from '@mui/material/GlobalStyles';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { createBrandTheme } from '../src/app/themes/factory';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
@@ -63,9 +65,11 @@ const preview: Preview = {
            * An inline fontFamily here intercepts that inherited value for every
            * child element regardless of what body says.
            */}
-          <div style={{ display: 'contents', fontFamily: theme.typography.fontFamily }}>
-            <Story />
-          </div>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div style={{ display: 'contents', fontFamily: theme.typography.fontFamily }}>
+              <Story />
+            </div>
+          </LocalizationProvider>
         </ThemeProvider>
       );
     },

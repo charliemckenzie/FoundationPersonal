@@ -68,6 +68,27 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
     brandConfig: brand,
     shadows,
     palette: { ...palette, mode },
+    // --- Transitions ---------------------------------------------------------
+    // Custom durations and easings extend MUI defaults (shortest=150, shorter=200,
+    // standard=300, complex=375) and are accessible via t.transitions.duration.*
+    // and t.transitions.easing.* in sx props and styleOverrides.
+    transitions: {
+      duration: {
+        form: 150,    // checkbox, radio, file-upload micro-interactions
+        spring: 350,  // form-progress track spring-like slide
+      },
+      easing: {
+        spring: 'cubic-bezier(0.25, 1, 0.5, 1)', // tabs indicator overshoot
+      },
+    },
+    // --- Z-index layer stack ------------------------------------------------
+    // Semantic tokens built on MUI defaults (appBar=1100, tooltip=1500).
+    // Use these instead of arithmetic offsets in components.
+    zIndex: {
+      megaMenu: 1101,     // appBar (1100) + 1  — mega-menu panel
+      stickyHeader: 1102, // appBar (1100) + 2  — condensed sticky header
+      skipLink: 1501,     // tooltip (1500) + 1 — skip-links above all overlays
+    },
     shape: {
       borderRadius: 4,
       none: 0,
@@ -475,6 +496,51 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             },
             '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
               borderTop: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
+            },
+          }),
+        },
+      },
+      // MUI X v9 — PickersOutlinedInput uses Mui-focused / Mui-error (global MUI state classes),
+      // NOT MuiPickersInputBase-focused. generateUtilityClass maps 'focused' → 'Mui-focused'.
+      // The color variant rule has specificity (0,4,0) via :not(.Mui-error).
+      // Theme styleOverrides inject after component defaults — equal specificity → override wins.
+      MuiPickersOutlinedInput: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            // PickersInputBaseRoot spreads theme.typography.body1 (≈18px when fontSize:16)
+            fontSize: '1rem',
+            borderRadius: `${theme.shape.sm}px`,
+            backgroundColor: theme.palette.background.paper,
+            '& fieldset': {
+              borderColor: theme.palette.border.input,
+              borderRadius: `${theme.shape.sm}px`,
+            },
+            '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': {
+              borderColor: theme.palette.border.input,
+            },
+            '&.Mui-disabled': {
+              backgroundColor: alpha(theme.palette.background.default, 0.6),
+            },
+            '&&.Mui-disabled fieldset': {
+              borderColor: alpha(theme.palette.border.input, 0.6),
+            },
+            // Kill MUI X's 2px focused border — base rule specificity (0,3,0)
+            '&.Mui-focused .MuiPickersOutlinedInput-notchedOutline': {
+              borderWidth: '1px',
+              borderColor: theme.palette.border.input,
+            },
+            // Kill MUI X's color variant rule — specificity (0,4,0) via :not — match exactly
+            '&.Mui-focused:not(.Mui-error) .MuiPickersOutlinedInput-notchedOutline': {
+              borderWidth: '1px',
+              borderColor: theme.palette.border.input,
+            },
+            '&.Mui-error .MuiPickersOutlinedInput-notchedOutline': {
+              borderColor: theme.palette.error.main,
+            },
+            // Focus ring matching TextField / Select / Autocomplete
+            '&.Mui-focused': {
+              outline: `2px solid ${theme.palette.border.focus}`,
+              outlineOffset: '2px',
             },
           }),
         },

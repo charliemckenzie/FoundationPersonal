@@ -113,6 +113,27 @@ declare module '@mui/material/styles' {
     quaternary?: SimplePaletteColorOptions;
   }
 
+  interface TransitionDuration {
+    /** Form micro-interactions: checkbox, radio, file upload (150 ms). */
+    form: number;
+    /** Spring-like animations: form-progress track (350 ms). */
+    spring: number;
+  }
+
+  interface TransitionEasing {
+    /** Overshoot easing used for the Tabs indicator spring (cubic-bezier(0.25, 1, 0.5, 1)). */
+    spring: string;
+  }
+
+  interface ZIndex {
+    /** Mega-menu panel — sits above the AppBar (1101). */
+    megaMenu: number;
+    /** Condensed sticky header — sits above the mega-menu (1102). */
+    stickyHeader: number;
+    /** Skip-links — must appear above all overlays including tooltips (1501). */
+    skipLink: number;
+  }
+
   interface TypographyVariants {
     'display-1': React.CSSProperties;
     'display-2': React.CSSProperties;

@@ -167,7 +167,7 @@ export function MegaMenuPanel({ item, open, headerBottom, onClose, onMouseEnter,
             top: headerBottom - 2,
             left: 0,
             right: 0,
-            zIndex: (t) => t.zIndex.appBar + 1,
+            zIndex: (t) => t.zIndex.megaMenu,
           }}
         >
           {isQSuper ? (

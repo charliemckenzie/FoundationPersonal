@@ -13,7 +13,10 @@
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist", "tokens.json"],
+  "files": [
+    "dist",
+    "tokens.json"
+  ],
   "scripts": {
     "dev": "next dev",
     "lib:build": "tsup",
@@ -28,16 +31,19 @@
     "sync-project-board": "NODE_EXTRA_CA_CERTS=/tmp/art-ca.pem node scripts/setup-github-project.mjs"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^9.0.0",
-    "@mui/material": "^9.0.0",
-    "@mui/material-nextjs": "^9.0.0",
-    "@tabler/icons-react": "^3.41.1",
+    "@emotion/react": ">=11.0.0",
+    "@emotion/styled": ">=11.0.0",
+    "@mui/icons-material": ">=9.0.0",
+    "@mui/material": ">=9.0.0",
+    "@mui/material-nextjs": ">=9.0.0",
+    "@mui/x-date-pickers": "^9.3.0",
+    "@tabler/icons-react": ">=3.0.0",
+    "dayjs": "^1.11.20",
     "lodash": "^4.18.1",
-    "next": "16.2.4",
-    "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "next": ">=16.0.0",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0",
+    "recharts": "^3.8.1"
   },
   "peerDependencies": {
     "@emotion/react": ">=11.0.0",

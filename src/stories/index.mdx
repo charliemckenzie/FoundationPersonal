@@ -5,9 +5,11 @@ import { useState } from 'react';
 
 # Component Status
 
-Full inventory of every component in Foundation — 10 stable, 7 in review, 23 draft. Sort by name or status.
+Full inventory of every component in Foundation — 10 stable, 7 in review, 32 draft. Sort by name or status.
 
 export const COMPONENTS = [
+  { name: 'BarChart',          status: 'draft',  story: '/?path=/story/components-charts-barchart--default' },
+  { name: 'LineChart',         status: 'draft',  story: '/?path=/story/components-charts-linechart--default' },
   { name: 'Accordion',         status: 'stable', story: '/?path=/story/components-expandable-accordion--default' },
   { name: 'AddressField',      status: 'draft',  story: '/?path=/story/form-components-addressfield--default' },
   { name: 'Alert',             status: 'review', story: '/?path=/story/components-alert--default' },
@@ -19,6 +21,9 @@ export const COMPONENTS = [
   { name: 'Checkbox',          status: 'stable', story: '/?path=/story/form-components-checkbox--default' },
   { name: 'Chip',              status: 'review', story: '/?path=/story/components-chip--default' },
   { name: 'DateOfBirthField',  status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
+  { name: 'DatePicker',        status: 'draft',  story: '/?path=/story/components-datepicker--default' },
+  { name: 'DateRangePicker',   status: 'draft',  story: '/?path=/story/components-daterangepicker--default' },
+  { name: 'Divider',           status: 'draft',  story: '/?path=/story/components-divider--default' },
   { name: 'Dialog',            status: 'draft',  story: '/?path=/story/components-dialog--default' },
   { name: 'Drawer',            status: 'draft',  story: '/?path=/story/components-drawer--default' },
   { name: 'ExpandableItem',    status: 'review', story: '/?path=/story/components-expandable-expandableitem--default' },
@@ -30,18 +35,23 @@ export const COMPONENTS = [
   { name: 'Icon',              status: 'draft',  story: '/?path=/story/components-icons-icon--default' },
   { name: 'IconButton',        status: 'stable', story: '/?path=/story/components-buttons-iconbutton--default' },
   { name: 'IconList',          status: 'draft',  story: '/?path=/story/components-iconlist--default' },
+  { name: 'LinearProgress',    status: 'draft',  story: '/?path=/story/components-linearprogress--default' },
   { name: 'Logo',              status: 'draft',  story: '/?path=/story/components-logo--default' },
   { name: 'Menu',              status: 'draft',  story: '/?path=/story/components-menu--default' },
   { name: 'Modal',             status: 'draft',  story: '/?path=/story/utilities-modal--default' },
+  { name: 'Pagination',        status: 'draft',  story: '/?path=/story/components-pagination--default' },
   { name: 'MoneyField',        status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
   { name: 'PercentageField',   status: 'draft',  story: '/?path=/story/form-components-textfield--specialized' },
   { name: 'QuickLinks',        status: 'draft',  story: '/?path=/story/public-web-section-navigation-tab--default' },
   { name: 'RadioGroup',        status: 'stable', story: '/?path=/story/form-components-radiogroup--default' },
   { name: 'Select',            status: 'review', story: '/?path=/story/form-components-select--default' },
   { name: 'SkipLinks',         status: 'stable', story: '/?path=/story/accessibility-skiplinks--default' },
+  { name: 'Skeleton',          status: 'draft',  story: '/?path=/story/components-skeleton--default' },
+  { name: 'Snackbar',          status: 'draft',  story: '/?path=/story/components-snackbar--default' },
   { name: 'Spinner',           status: 'draft',  story: '/?path=/story/components-spinner--default' },
   { name: 'Switch',            status: 'review', story: '/?path=/story/form-components-switch--default' },
-  { name: 'Table',             status: 'draft',  story: '/?path=/story/components-table--default' },
+  { name: 'Table',             status: 'draft',  story: '/?path=/story/components-tables-table--default' },
+  { name: 'ResponsiveTable',   status: 'draft',  story: '/?path=/story/components-tables-responsive-table--default' },
   { name: 'Tabs',              status: 'stable', story: '/?path=/story/components-tabs--default' },
   { name: 'TextButton',        status: 'stable', story: '/?path=/story/components-buttons-textbutton--default' },
   { name: 'TextField',         status: 'review', story: '/?path=/story/form-components-textfield--default' },

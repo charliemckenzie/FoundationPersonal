@@ -23,6 +23,8 @@ export interface SelectOption {
 
 export type SelectSize = 'small' | 'medium';
 
+const CONDENSED_REDUCTION = 0.25; // rem = 4px
+
 export interface SelectProps {
   label: string;
   options: SelectOption[];
@@ -30,6 +32,7 @@ export interface SelectProps {
   defaultValue?: string;
   placeholder?: string;
   size?: SelectSize;
+  condensed?: boolean;
   helperText?: string;
   errorMessage?: string;
   error?: boolean;
@@ -49,6 +52,7 @@ export function Select({
   defaultValue,
   placeholder,
   size = 'medium',
+  condensed = false,
   helperText,
   errorMessage,
   error = false,
@@ -135,16 +139,26 @@ export function Select({
           MenuProps={{ slotProps: { list: { sx: { py: '4px' } }, paper: { sx: (t) => ({ borderRadius: `${t.shape.sm}px` }) } } }}
           sx={(t) => ({
             ...buildInputStyles(t),
-            minHeight: size === 'small' ? '2.5rem' : '3rem',
+            minHeight: size === 'small'
+              ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
+              : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
             fontSize: '1rem',
             '& div.MuiSelect-select': {
               lineHeight: 1.5,
-              paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
-              paddingBottom: size === 'small' ? '0.5rem' : '0.75rem',
+              paddingTop: size === 'small'
+                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
+              paddingBottom: size === 'small'
+                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
             },
             '&& select.MuiInputBase-input': {
-              paddingTop: size === 'small' ? '0.5rem' : '0.75rem',
-              paddingBottom: size === 'small' ? '0.5rem' : '0.75rem',
+              paddingTop: size === 'small'
+                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
+              paddingBottom: size === 'small'
+                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
             },
           })}
         >

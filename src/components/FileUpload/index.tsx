@@ -8,7 +8,8 @@ import { Button } from '../Button';
 import { Icon } from '../Icon';
 import type React from 'react';
 import { dashedBorderSvg, isFileAccepted } from './helpers';
-import { FileListItem } from './FileListItem';
+import { FileCard } from './FileCard';
+import type { FileCardStatus } from './FileCard';
 
 export interface FileUploadProps {
   label?: string;
@@ -18,6 +19,7 @@ export interface FileUploadProps {
   description?: string;
   defaultFiles?: File[];
   uploadProgress?: Record<string, number>;
+  uploadError?: Record<string, string>;
   onChange?: (files: File[]) => void;
   error?: string;
   helperText?: string;
@@ -32,6 +34,7 @@ export function FileUpload({
   description,
   defaultFiles,
   uploadProgress,
+  uploadError,
   onChange,
   error,
   helperText,
@@ -217,15 +220,25 @@ export function FileUpload({
 
       {files.length > 0 && (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, mt: 0.5 }}>
-          {files.map((file, i) => (
-            <FileListItem
-              key={`${file.name}-${i}`}
-              file={file}
-              progress={uploadProgress?.[file.name]}
-              disabled={disabled}
-              onRemove={() => removeFile(i)}
-            />
-          ))}
+          {files.map((file, i) => {
+            const prog = uploadProgress?.[file.name];
+            const status: FileCardStatus =
+              uploadError?.[file.name]  ? 'error'
+              : prog == null           ? 'idle'
+              : prog >= 100            ? 'complete'
+              : 'uploading';
+            return (
+              <FileCard
+                key={`${file.name}-${i}`}
+                file={file}
+                status={status}
+                progress={prog}
+                errorMessage={uploadError?.[file.name]}
+                disabled={disabled}
+                onRemove={() => removeFile(i)}
+              />
+            );
+          })}
         </Box>
       )}
     </Box>

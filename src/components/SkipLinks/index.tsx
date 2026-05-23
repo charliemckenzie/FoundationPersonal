@@ -28,7 +28,7 @@ export function SkipLinks({ links = DEFAULT_LINKS }: SkipLinksProps) {
         position: 'fixed',
         top: '2.5rem',
         left: '2.5rem',
-        zIndex: (t) => t.zIndex.tooltip + 1,
+        zIndex: (t) => t.zIndex.skipLink,
         display: 'flex',
         flexDirection: 'column',
         gap: 0.5,

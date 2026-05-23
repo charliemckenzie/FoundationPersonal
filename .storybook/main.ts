@@ -7,7 +7,16 @@ const config: StorybookConfig = {
     '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)',
   ],
   addons: [
-    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        mdxPluginOptions: {
+          mdxCompileOptions: {
+            remarkPlugins: [remarkGfm],
+          },
+        },
+      },
+    },
     '@storybook/addon-a11y',
     '@chromatic-com/storybook',
     '@storybook/addon-vitest',
@@ -15,18 +24,6 @@ const config: StorybookConfig = {
   framework: {
     name: '@storybook/nextjs-vite',
     options: {},
-  },
-  docs: {
-    autodocs: 'tag',
-    mdxPluginOptions: {
-      mdxCompileOptions: {
-        remarkPlugins: [remarkGfm],
-      },
-    },
-  },
-  features: {
-    onboarding: false,
-    sidebarOnboardingChecklist: false,
   },
   staticDirs: ['../public'],
 };

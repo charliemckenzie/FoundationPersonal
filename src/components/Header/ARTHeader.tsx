@@ -105,7 +105,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
           top: 0,
           borderBottom: 1,
           borderColor: 'border.subtle',
-          zIndex: (t) => t.zIndex.appBar + 2,
+          zIndex: (t) => t.zIndex.stickyHeader,
           boxShadow: isCondensed ? 2 : 0,
           transition: 'box-shadow 0.2s ease',
         }}

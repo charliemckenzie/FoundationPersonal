@@ -34,7 +34,8 @@ For searchable option lists, use \`Autocomplete\` instead.
     native: false,
   },
   argTypes: {
-    size: { table: { disable: true } },
+    size: { control: 'select', options: ['small', 'medium'] },
+    condensed: { control: 'boolean' },
     error: { control: 'boolean' },
     required: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -64,6 +65,8 @@ export const Playground: Story = {
     label: 'Label',
     options: FRUIT_OPTIONS,
     placeholder: 'Select an option',
+    size: 'medium',
+    condensed: false,
   },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
 };
@@ -78,6 +81,47 @@ export const Default: Story = {
   },
   args: { label: 'Fruit', options: FRUIT_OPTIONS, placeholder: 'Select a fruit' },
   decorators: [(Story) => <div style={{ width: 240 }}><Story /></div>],
+};
+
+export const Sizes: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: [
+          'Two sizes cover the full range of layout needs.',
+          '',
+          '| Size | Default height | Condensed height |',
+          '|------|---------------|-----------------|',
+          '| Small | 40px | 36px |',
+          '| Medium | 48px | 44px |',
+          '',
+          '**Default** — use in standard form layouts, dialogs, and standalone inputs.',
+          '',
+          '**Condensed** — use in dense interfaces: table toolbars, filter bars, and anywhere vertical rhythm is tight. Apply the `condensed` prop; do not substitute a smaller size tier to save space.',
+          '',
+          '> **iOS zoom:** Input font size is fixed at `1rem` (16px) regardless of size or condensed state. iOS Safari automatically zooms the viewport when a focused input has a font size below 16px. Do not override the input font size.',
+        ].join('\n'),
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 280 }}>
+      <div>
+        <p style={{ margin: '0 0 12px', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#666' }}>Default</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Select label="Small" size="small" options={FRUIT_OPTIONS} placeholder="Small field" />
+          <Select label="Medium" size="medium" options={FRUIT_OPTIONS} placeholder="Medium field" />
+        </div>
+      </div>
+      <div>
+        <p style={{ margin: '0 0 12px', fontWeight: 600, fontSize: 13, textTransform: 'uppercase', letterSpacing: '0.05em', color: '#666' }}>Condensed</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <Select label="Small" size="small" condensed options={FRUIT_OPTIONS} placeholder="Small condensed" />
+          <Select label="Medium" size="medium" condensed options={FRUIT_OPTIONS} placeholder="Medium condensed" />
+        </div>
+      </div>
+    </div>
+  ),
 };
 
 export const WithLabels: Story = {
