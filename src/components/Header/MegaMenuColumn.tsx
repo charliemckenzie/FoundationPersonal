@@ -1,0 +1,78 @@
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
+import { NavPanelLink } from './NavPanelLink'
+import type { NavGroup } from './types'
+
+interface MegaMenuColumnProps {
+  group: NavGroup
+  onClose: () => void
+}
+
+/**
+ * One column inside a MegaMenuPanel. Recursively renders nested `groups` and
+ * shows the heading as a link (with underlined hover) when `headingHref` is set.
+ *
+ * Heading rendering rules:
+ *   - true section header (bold) when it has children underneath, OR explicitly `bold: true`
+ *   - standalone item (just headingHref, no children) renders as a regular-weight link
+ *   - "prominent" link styling kicks in when there's no heading at all
+ */
+export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
+  const hasChildren = (group.links && group.links.length > 0) || (group.groups && group.groups.length > 0)
+  const headingIsBold = hasChildren || group.bold === true
+
+  const headingNode = group.heading ? (
+    group.headingHref ? (
+      <Box
+        component="a"
+        href={group.headingHref}
+        onClick={onClose}
+        sx={{
+          display: 'block',
+          mb: headingIsBold ? 1 : 0,
+          color: 'text.primary',
+          textDecorationLine: 'none !important',
+          '&:hover': { color: 'primary.main', textDecorationLine: 'none !important' },
+          '&:focus-visible': {
+            outline: '2px solid',
+            outlineColor: 'border.focus',
+            outlineOffset: '2px',
+            borderRadius: (t) => `${t.shape.sm}px`,
+          },
+          '&:focus': { outline: 'none' },
+        }}
+      >
+        <Typography variant="body" sx={{ fontWeight: headingIsBold ? 700 : 400, display: 'block' }}>
+          {group.heading}
+        </Typography>
+      </Box>
+    ) : (
+      <Typography variant="body" component="p" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, display: 'block' }}>
+        {group.heading}
+      </Typography>
+    )
+  ) : null
+
+  if (group.groups && group.groups.length > 0) {
+    return (
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        {headingNode}
+        {group.groups.map((subGroup, i) => (
+          <MegaMenuColumn key={i} group={subGroup} onClose={onClose} />
+        ))}
+      </Box>
+    )
+  }
+
+  const prominent = !group.heading
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      {headingNode}
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        {(group.links ?? []).map((link) => (
+          <NavPanelLink key={link.href} {...link} prominent={prominent} onClick={onClose} />
+        ))}
+      </Box>
+    </Box>
+  )
+}

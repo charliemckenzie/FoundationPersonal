@@ -11,6 +11,7 @@ import { Button } from '../../Button';
 import { NavItem } from '../NavItem';
 import { MemberInfoCard } from '../MemberInfoCard';
 import { ThemeSwitcher } from '../ThemeSwitcher';
+import { MemberNavLogoHeader, MemberNavList } from '../hooks/memberNavParts';
 import {
   DEFAULT_MEMBER_ONLINE_COPY,
   type LogoSlot,
@@ -92,62 +93,28 @@ export function MobileNavDrawer({
         },
       }}
     >
-      <Box
-        sx={(t) => ({
-          px: 2,
-          py: 1.5,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: t.palette.primary.background,
-          borderBottom: `1px solid ${t.palette.border.subtle}`,
-          minHeight: '3.75rem',
-        })}
-      >
-        {homeHref !== undefined ? (
-          <Box
-            component="a"
-            href={homeHref}
-            aria-label={homeLabel}
+      <MemberNavLogoHeader
+        logo={logo}
+        homeHref={homeHref}
+        homeLabel={homeLabel}
+        onClick={onClose}
+        minHeight="3.75rem"
+        containerSx={{ px: 2, py: 1.5, justifyContent: 'space-between' }}
+        trailing={
+          <IconButton
+            icon="xmark"
+            iconStyle="light"
+            label={labels.closeMenuLabel}
+            variant="ghost"
+            color="primary"
+            size="small"
             onClick={onClose}
-            className="link-no-underline"
-            sx={(t) => ({
-              display: 'inline-flex',
-              alignItems: 'center',
-              borderRadius: `${t.shape.xs}px`,
-              color: 'inherit',
-              textDecoration: 'none',
-              '&:focus-visible': {
-                outline: `2px solid ${t.palette.border.focus}`,
-                outlineOffset: '4px',
-              },
-            })}
-          >
-            {logo}
-          </Box>
-        ) : (
-          logo
-        )}
-        <IconButton
-          icon="xmark"
-          iconStyle="light"
-          label={labels.closeMenuLabel}
-          variant="ghost"
-          color="primary"
-          size="small"
-          onClick={onClose}
-          showTooltip={false}
-        />
-      </Box>
+            showTooltip={false}
+          />
+        }
+      />
 
-      <Box
-        sx={{
-          flex: 1,
-          minHeight: 0,
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
+      <Box sx={{ flex: 1, minHeight: 0, position: 'relative', overflow: 'hidden' }}>
         <Box
           sx={{
             display: 'flex',
@@ -185,41 +152,23 @@ export function MobileNavDrawer({
               darkLabel={labels.darkLabel}
             />
             <Divider />
-            <Box
-              component="nav"
-              aria-label="Primary"
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            >
-              {primaryItems.map((item) => (
-                <NavItem
-                  key={item.id}
-                  label={item.label}
-                  icon={item.icon}
-                  active={activeItemId === item.id}
-                  hasChildren={(item.children?.length ?? 0) > 0}
-                  href={item.children === undefined ? item.href : undefined}
-                  onClick={() => handleItemClick(item)}
-                />
-              ))}
+            <Box component="nav" aria-label="Primary">
+              <MemberNavList
+                items={primaryItems}
+                activeItemId={activeItemId}
+                onItemClick={handleItemClick}
+              />
             </Box>
             {secondaryItems !== undefined && secondaryItems.length > 0 && (
               <>
                 <Divider />
-                <Box
-                  component="nav"
-                  aria-label="Secondary"
-                  sx={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  {secondaryItems.map((item) => (
-                    <NavItem
-                      key={item.id}
-                      label={item.label}
-                      active={activeItemId === item.id}
-                      variant="secondary"
-                      href={item.href}
-                      onClick={() => handleItemClick(item)}
-                    />
-                  ))}
+                <Box component="nav" aria-label="Secondary">
+                  <MemberNavList
+                    items={secondaryItems}
+                    activeItemId={activeItemId}
+                    onItemClick={handleItemClick}
+                    variant="secondary"
+                  />
                 </Box>
               </>
             )}

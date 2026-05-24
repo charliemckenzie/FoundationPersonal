@@ -4,9 +4,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import { NavItem } from '../NavItem';
 import { BalanceCard } from '../BalanceCard';
 import { NavFlyout } from '../NavFlyout';
+import { MemberNavLogoHeader, MemberNavList } from '../hooks/memberNavParts';
 import {
   DEFAULT_MEMBER_ONLINE_COPY,
   type LogoSlot,
@@ -85,11 +85,8 @@ export function SideNav({
   const closeFlyout = useCallback(() => setOpenFlyoutId(null), []);
 
   const setTriggerRef = useCallback((id: string) => (el: HTMLElement | null) => {
-    if (el === null) {
-      triggerRefs.current.delete(id);
-    } else {
-      triggerRefs.current.set(id, el);
-    }
+    if (el === null) triggerRefs.current.delete(id);
+    else triggerRefs.current.set(id, el);
   }, []);
 
   const flyoutOpen = openFlyoutId !== null;
@@ -109,41 +106,12 @@ export function SideNav({
         minHeight: 0,
       })}
     >
-      <Box
-        sx={(t) => ({
-          pt: 3,
-          px: 3,
-          pb: 0.5,
-          backgroundColor: t.palette.primary.background,
-          display: 'flex',
-          alignItems: 'center',
-          minHeight: '4rem',
-        })}
-      >
-        {homeHref !== undefined ? (
-          <Box
-            component="a"
-            href={homeHref}
-            aria-label={homeLabel}
-            className="link-no-underline"
-            sx={(t) => ({
-              display: 'inline-flex',
-              alignItems: 'center',
-              borderRadius: `${t.shape.xs}px`,
-              color: 'inherit',
-              textDecoration: 'none',
-              '&:focus-visible': {
-                outline: `2px solid ${t.palette.border.focus}`,
-                outlineOffset: '4px',
-              },
-            })}
-          >
-            {logo}
-          </Box>
-        ) : (
-          logo
-        )}
-      </Box>
+      <MemberNavLogoHeader
+        logo={logo}
+        homeHref={homeHref}
+        homeLabel={homeLabel}
+        containerSx={{ pt: 3, px: 3, pb: 0.5 }}
+      />
 
       <Box sx={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
         {balance !== undefined && (
@@ -153,55 +121,35 @@ export function SideNav({
         )}
 
         <Box component="nav" aria-label="Primary" sx={{ px: 1.5 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
-            {primaryItems.map((item) => {
-              const hasChildren = (item.children?.length ?? 0) > 0;
-              return (
-                <NavItem
-                  key={item.id}
-                  ref={setTriggerRef(item.id)}
-                  label={item.label}
-                  icon={item.icon}
-                  active={activeItemId === item.id}
-                  hasChildren={hasChildren}
-                  href={hasChildren ? undefined : item.href}
-                  onClick={() => handleItemClick(item)}
-                  onMouseEnter={hasChildren ? () => handleParentHover(item) : undefined}
-                  aria-haspopup={hasChildren ? 'menu' : undefined}
-                  aria-expanded={hasChildren ? openFlyoutId === item.id : undefined}
-                  aria-controls={hasChildren ? `${FLYOUT_ID_PREFIX}-${item.id}` : undefined}
-                />
-              );
-            })}
-          </Box>
+          <MemberNavList
+            items={primaryItems}
+            activeItemId={activeItemId}
+            onItemClick={handleItemClick}
+            itemRef={setTriggerRef}
+            onParentHover={handleParentHover}
+            openFlyoutId={openFlyoutId}
+            flyoutIdPrefix={FLYOUT_ID_PREFIX}
+          />
 
           {(secondaryItems !== undefined && secondaryItems.length > 0) || lastLoggedIn !== undefined ? (
             <>
               <Divider sx={{ my: 2, mx: 1, borderColor: 'border.subtle' }} />
               {secondaryItems !== undefined && secondaryItems.length > 0 && (
-                <Box
-                  component="nav"
-                  aria-label="Secondary"
-                  sx={{ display: 'flex', flexDirection: 'column' }}
-                >
-                  {secondaryItems.map((item) => (
-                    <NavItem
-                      key={item.id}
-                      label={item.label}
-                      active={activeItemId === item.id}
-                      variant="secondary"
-                      size="medium"
-                      href={item.href}
-                      onClick={() => handleItemClick(item)}
-                    />
-                  ))}
+                <Box component="nav" aria-label="Secondary">
+                  <MemberNavList
+                    items={secondaryItems}
+                    activeItemId={activeItemId}
+                    onItemClick={handleItemClick}
+                    variant="secondary"
+                    size="medium"
+                  />
                 </Box>
               )}
               {lastLoggedIn !== undefined && (
                 <>
                   <Divider sx={{ my: 2, mx: 1, borderColor: 'border.subtle' }} />
                   <Box sx={{ px: 1.5, pb: 1 }}>
-                    <Typography variant="small" sx={{ color: 'text.muted', fontSize: '0.8125rem', m: 0 }}>
+                    <Typography variant="caption" component="p" sx={{ color: 'text.muted', m: 0 }}>
                       {lastLoggedInLabel} {lastLoggedIn}
                     </Typography>
                   </Box>

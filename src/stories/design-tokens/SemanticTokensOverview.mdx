@@ -1,0 +1,92 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Design Tokens / Semantic Tokens Overview" />
+
+# Semantic Tokens Overview
+
+How the design tokens are structured, where to find them, and which token to reach for in a given situation.
+
+## Two-layer architecture
+
+```
+primitives  →  semantic  →  components
+ (raw hex)    (theme.palette.*)   (sx, MUI overrides)
+```
+
+- **Primitives** live in [primitives/colors.ts](?path=/docs/design-tokens-primitives--docs). 18 colour scales (`trueBlue`, `qBlue`, `livingCoral`, `salmon`, etc.) each with 11 steps (`50`–`950`). Raw hex only.
+- **Semantic tokens** live in [themes/semantic.ts](?path=/docs/design-tokens-colors--docs). Aliased from primitives. This is what every component should use.
+- **Components** read semantic tokens via `theme.palette.X` in `sx`, the MUI `color="primary"` prop, or the string shorthand `'primary.main'`.
+
+**Rule: components never reach into primitives.** If you need a colour, it should be a semantic token. If a semantic token doesn't exist yet, ask Moe.
+
+## Token tiers — when to use which
+
+| Tier | Example tokens | Use for |
+|---|---|---|
+| **Brand** | `primary.main`, `primary.background`, `secondary.text` | Focal actions, branded surfaces, identity moments |
+| **Status** | `error.main`, `error.background`, `success.icon` | Feedback (alerts, inline validation, system messages) |
+| **Surface** | `background.default`, `background.paper`, `background.elevated` | Page → card → modal hierarchy |
+| **Tinted surfaces** | `background.tintCool`, `background.tintWarm`, `background.tintNeutral` | Branded callout zones, highlighted blocks |
+| **Text** | `text.primary`, `text.heading`, `text.muted`, `text.link` | Body, headings, secondary copy, links |
+| **Border** | `border.subtle`, `border.default`, `border.input`, `border.focus` | Inner dividers, outlines, inputs, focus rings |
+| **Action** | `action.hover`, `action.selected`, `action.focus`, `action.disabled` | Interaction state overlays |
+
+### Brand colour fields
+
+Every brand colour (`primary`, `secondary`, `tertiary`, `quaternary`) has **eight** fields:
+
+| Field | Purpose |
+|---|---|
+| `.main` | Primary identity colour. Use for focal CTAs, active icons, key indicators. |
+| `.light` / `.dark` | Lighter / darker variants for hover, gradients, depth. |
+| `.contrastText` | Text that sits on `.main` and meets contrast. |
+| `.text` | Body text on a `.background`-tinted surface (e.g. dark blue text inside a tinted-blue badge). |
+| `.icon` | Icon fill — usually matches `.main`, called out for clarity. |
+| `.background` | Subtle tinted surface for selected states, chips, badge fills. |
+| `.border` | Companion border for `.background`. |
+
+Status colours (`error`, `warning`, `info`, `success`) follow the same pattern — fixed values across brands.
+
+## Brand-conditional values
+
+ART and QSuper share most token *names* but differ on some *values*. The differences live in each brand's `semanticOverrides` block:
+
+- [brands/foundation.ts](https://github.com/) — ART
+- [brands/theme-b.ts](https://github.com/) — QSuper
+
+What differs:
+
+| Token | ART (light) | QSuper (light) |
+|---|---|---|
+| `text.linkInverse` | `clearBlue[100]` | `white` (qBlue is lower-contrast, needs full white) |
+| `background.tintCool` | `skyBlue[200]` | `qSkyBlue[100]` |
+| `background.tintWarm` | `salmon[50]` | `neutral[100]` (QSuper has no warm-tinted brand surface) |
+
+This shape — **same token names everywhere, brand-specific values** — is what makes the tokens lossless to export to Figma as parallel modes (ART Light, ART Dark, QSuper Light, QSuper Dark).
+
+## Interaction state opacity
+
+`action.hover` / `action.selected` / `action.focus` are computed at runtime via `alpha(neutral[900], OPACITY.X.light)`. The opacity scalars live in a single `OPACITY` constant at the top of [semantic.ts](?path=/docs/design-tokens-colors--docs):
+
+```ts
+export const OPACITY = {
+  hover:    { light: 0.04, dark: 0.08 },
+  selected: { light: 0.08, dark: 0.16 },
+  focus:    { light: 0.12, dark: 0.12 },
+  // ...
+};
+```
+
+If you need to change interaction-state intensity, edit the constant once — the alpha calculations and the redundant `*Opacity` scalars all read from it.
+
+## Don't reinvent — extend
+
+If a component needs a colour and none of the existing semantic tokens fit, **don't hardcode a hex**. Ask Moe whether a new token belongs in the system or whether an existing token covers the case. New token? It lands in `semantic.ts` with a value in every brand × mode, gets a swatch in [Colors](?path=/docs/design-tokens-colors--docs), and flows to Figma on the next sync.
+
+## See also
+
+- [Colors](?path=/docs/design-tokens-colors--docs) — live swatches for every semantic token, light + dark, with contrast info
+- [Primitives](?path=/docs/design-tokens-primitives--docs) — raw colour scales
+- [Typography](?path=/docs/design-tokens-typography--docs) — type scale, heading hierarchy
+- [Shape](?path=/docs/design-tokens-shape--docs) — border radius scale
+- [Spacing & Shape](?path=/docs/design-tokens-spacing-shape--docs) — spacing scale

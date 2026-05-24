@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 export type HeroIconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl';
 /**
  * Background circle colour.
- * - `brand`  → ART: light blue (brandClear) / QSuper: brand blue (brandPrimary)
+ * - `brand`  → ART: light blue (tintNeutralCool) / QSuper: brand blue (brandPrimary)
  * - `white`  → white (paper) — both brands
  * - `grey`   → neutral surface (elevated) — ART only
  */
@@ -64,7 +64,7 @@ const CONTAINER_RATIO = 1.75;
 const BG_COLOR: Record<HeroIconBrand, Record<HeroIconBackground, string | undefined>> = {
   art: {
     none:  undefined,
-    brand: 'background.brandClear',
+    brand: 'background.tintNeutralCool',
     white: 'background.paper',
     grey:  'background.elevated',
   },

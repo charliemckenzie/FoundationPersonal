@@ -808,7 +808,7 @@ export const Default: Story = {
     primaryCta: sampleCtaPrimary,
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
+    onSearch: () => {},
   },
   render: (args) => {
     const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
@@ -829,7 +829,7 @@ export const MegaMenuVariant: Story = {
     primaryCta: sampleCtaPrimary,
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
+    onSearch: () => {},
   },
   render: (args) => {
     const { showHero, ...headerArgs } = args as typeof args & { showHero?: boolean }
@@ -853,7 +853,7 @@ export const MobileView: Story = {
     primaryCta: sampleCtaPrimary,
     secondaryCta: sampleCtaSecondary,
     utilityLinks: sampleUtilityLinks,
-    onSearch: (q: string) => console.log('search:', q),
+    onSearch: () => {},
   },
 }
 
@@ -882,7 +882,7 @@ export const QSuperBrand: Story = {
     activeAudienceHref: '/personal',
     primaryCta: { label: 'Join' },
     secondaryCta: { label: 'Log In' },
-    onSearch: (q: string) => console.log('search:', q),
+    onSearch: () => {},
     searchPlaceholder: 'Search QSuper',
   },
   render: (args) => {

@@ -675,7 +675,7 @@ type PromoArgs = ComponentProps<typeof Card> & {
 const bgTokenMap: Record<'white' | 'grey' | 'light blue', string> = {
   white: 'background.paper',
   grey: 'background.default',
-  'light blue': 'background.brandClear',
+  'light blue': 'background.tintNeutralCool',
 };
 
 export const PromoWithActions: StoryObj<PromoArgs> = {

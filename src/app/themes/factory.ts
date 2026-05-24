@@ -192,6 +192,14 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         fontWeight: 400,
         lineHeight: 1.5,
       },
+      // Caption — 12px metadata, footer notes, form helper text. Same role as MUI's
+      // legacy `caption` variant but defined under our own scale so the design system
+      // is self-contained (MUI's caption defaults are disabled via mui.d.ts).
+      caption: {
+        fontSize: '0.75rem',   // 12px
+        fontWeight: 400,
+        lineHeight: 1.5,
+      },
     },
     components: {
       MuiCssBaseline: {
@@ -557,6 +565,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             lead: 'p',
             body: 'p',
             small: 'p',
+            caption: 'span',
           },
         },
         styleOverrides: {

@@ -34,7 +34,7 @@ const QSUPER_BACKGROUNDS: HeroIconBackground[] = ['none', 'brand', 'white'];
 const BG_LABELS: Record<string, Record<HeroIconBackground, string>> = {
   art: {
     none:  'None',
-    brand: 'Light blue (brandClear)',
+    brand: 'Light blue (tintNeutralCool)',
     white: 'White (paper)',
     grey:  'Grey (elevated)',
   },

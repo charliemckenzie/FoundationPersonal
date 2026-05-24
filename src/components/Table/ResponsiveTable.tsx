@@ -7,19 +7,11 @@ import TableHead from '@mui/material/TableHead';
 import MuiTablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Icon } from '../Icon';
-import { Spinner } from '../Spinner';
+import { DENSITY_PY, MOBILE_TABLE_SX } from './parts/sharedConstants';
+import { TableLoadingRow, TableEmptyRow } from './parts/TableStateRows';
+import { ResponsiveCell } from './parts/ResponsiveCell';
 import type { TableColumn, TableDensity, TablePaginationConfig } from './index';
-
-/** Vertical padding values in MUI spacing units (1 unit = 8px). */
-const DENSITY_PY: Record<TableDensity, number> = {
-  condensed: 1,
-  default:   1.5,
-  spaced:    2,
-};
 
 export interface ResponsiveTableProps<T extends { id: string | number }> {
   columns: TableColumn<T>[];
@@ -75,11 +67,7 @@ export function ResponsiveTable<T extends { id: string | number }>({
   const toggleRow = (id: string | number) => {
     setExpandedRows((prev) => {
       const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        next.add(id);
-      }
+      if (next.has(id)) next.delete(id); else next.add(id);
       return next;
     });
   };
@@ -91,8 +79,6 @@ export function ResponsiveTable<T extends { id: string | number }>({
   const primaryKey = mobileLabel ? String(mobileLabel) : (colKeys[0] ?? '');
   const primaryColIndex = colKeys.indexOf(primaryKey);
   const primaryIdx = primaryColIndex >= 0 ? primaryColIndex : 0;
-
-  // Last non-primary column index in DOM order (used for border-bottom suppression)
   const lastNonPrimaryIdx =
     primaryIdx === columns.length - 1 ? columns.length - 2 : columns.length - 1;
 
@@ -102,10 +88,9 @@ export function ResponsiveTable<T extends { id: string | number }>({
     <TableContainer
       component={Paper}
       variant="outlined"
-      sx={{
+      sx={(t) => ({
         boxShadow: 'none',
-        borderRadius: '1rem',
-        // On mobile the outer border is removed — each row card has its own border
+        borderRadius: `${t.shape.lg}px`,
         '@media (max-width: 599px)': {
           border: 'none',
           background: 'transparent',
@@ -116,41 +101,9 @@ export function ResponsiveTable<T extends { id: string | number }>({
           borderBottom: 'none',
         },
         ...(containerMaxHeight != null ? { maxHeight: containerMaxHeight } : {}),
-      }}
+      })}
     >
-      <MuiTable
-        stickyHeader={stickyHeader}
-        aria-busy={loading}
-        sx={{
-          // On mobile: shift all table elements to block layout so rows stack
-          // as cards. Explicit role attributes on the HTML elements keep table
-          // semantics intact for screen readers regardless of CSS display value.
-          '@media (max-width: 599px)': {
-            display: 'block',
-            '& > thead': {
-              // sr-only: present in the accessibility tree but not visible
-              position: 'absolute',
-              width: '1px',
-              height: '1px',
-              padding: 0,
-              margin: '-1px',
-              overflow: 'hidden',
-              clip: 'rect(0, 0, 0, 0)',
-              whiteSpace: 'nowrap',
-              borderWidth: 0,
-            },
-            '& > tbody': {
-              display: 'block',
-              width: '100%',
-            },
-            '& > tfoot': {
-              display: 'block',
-              width: '100%',
-              '& tr': { display: 'flex', justifyContent: 'flex-end' },
-            },
-          },
-        }}
-      >
+      <MuiTable stickyHeader={stickyHeader} aria-busy={loading} sx={MOBILE_TABLE_SX}>
         <TableHead>
           <TableRow>
             {columns.map((col, i) => (
@@ -176,142 +129,50 @@ export function ResponsiveTable<T extends { id: string | number }>({
         </TableHead>
 
         <TableBody>
-          {loading && (
-            <TableRow>
-              <TableCell colSpan={columns.length} align="center" sx={{ py: 4 }}>
-                <Spinner size="medium" />
-              </TableCell>
-            </TableRow>
-          )}
-          {isEmpty && (
-            <TableRow>
-              <TableCell colSpan={columns.length} align="center" sx={{ py: 4 }}>
-                <Typography variant="body" color="text.muted">
-                  {emptyMessage}
-                </Typography>
-              </TableCell>
-            </TableRow>
-          )}
-          {!loading &&
-            rows.map((row, rowIndex) => {
-              const isExpanded = expandedRows.has(row.id);
-
-              return (
-                <TableRow
-                  key={row.id}
-                  hover
-                  sx={{
-                    ...(striped && rowIndex % 2 === 1
-                      ? { bgcolor: 'background.tableStripe' }
-                      : {}),
-                    '@media (max-width: 599px)': {
-                      display: 'flex',
-                      flexDirection: 'column',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                      borderRadius: '0.75rem',
-                      mb: 1,
-                      overflow: 'hidden',
-                      bgcolor: 'background.paper',
-                      // Suppress the generic TableRow hover on mobile — the
-                      // primary cell provides its own interactive feedback
-                      '&.MuiTableRow-hover:hover': {
-                        bgcolor: 'background.paper',
-                      },
-                    },
-                  }}
-                >
-                  {columns.map((col, i) => {
-                    const colKey = colKeys[i];
-                    const isPrimary = i === primaryIdx;
-                    const content = col.render
-                      ? col.render(row)
-                      : String((row as Record<string, unknown>)[colKey] ?? '');
-
-                    return (
-                      <TableCell
-                        key={colKey}
-                        align={col.align ?? 'left'}
-                        onClick={isPrimary ? () => toggleRow(row.id) : undefined}
-                        aria-expanded={isPrimary ? isExpanded : undefined}
-                        sx={{
-                          lineHeight: 1.5,
-                          py,
-                          px,
-                          ...(striped
-                            ? { borderBottom: 'none' }
-                            : { borderBottomColor: 'divider' }),
-                          '@media (max-width: 599px)': {
-                            // Primary cell: always visible, acts as accordion header
-                            // Other cells: hidden when collapsed, visible when expanded
-                            display: isPrimary || isExpanded ? 'flex' : 'none',
-                            order: isPrimary ? -1 : 0,
-                            alignItems: 'center',
-                            justifyContent: isPrimary ? 'space-between' : 'flex-start',
-                            py: 1.5,
-                            px: 2,
-                            borderBottom: isPrimary
-                              ? (isExpanded ? '1px solid' : 'none')
-                              : (i === lastNonPrimaryIdx ? 'none' : '1px solid'),
-                            borderColor: 'divider',
-                            // Reset striped background inside cards
-                            bgcolor: 'transparent',
-                            ...(isPrimary && {
-                              cursor: 'pointer',
-                              userSelect: 'none',
-                              '&:hover': { bgcolor: 'action.hover' },
-                              '&:active': { bgcolor: 'action.selected' },
-                            }),
-                          },
-                        }}
-                      >
-                        {/* Column label prefix — only shown on mobile for non-primary cells */}
-                        {!isPrimary && (
-                          <Box
-                            component="span"
-                            aria-hidden="true"
-                            sx={{
-                              display: { xs: 'block', sm: 'none' },
-                              fontWeight: 600,
-                              minWidth: '40%',
-                              pr: 1,
-                              color: 'text.secondary',
-                              fontSize: '0.875rem',
-                              lineHeight: 1.5,
-                            }}
-                          >
-                            {col.label}
-                          </Box>
-                        )}
-
-                        <Box component="span" sx={{ flex: 1 }}>
-                          {content}
-                        </Box>
-
-                        {/* Chevron — visual indicator only; the whole primary cell is the interactive trigger */}
-                        {isPrimary && (
-                          <Box
-                            component="span"
-                            aria-hidden="true"
-                            sx={{
-                              display: { xs: 'inline-flex', sm: 'none' },
-                              ml: 1,
-                              flexShrink: 0,
-                            }}
-                          >
-                            <Icon
-                              icon={isExpanded ? 'chevron-up' : 'chevron-down'}
-                              size="sm"
-                              color="inherit"
-                            />
-                          </Box>
-                        )}
-                      </TableCell>
-                    );
-                  })}
-                </TableRow>
-              );
-            })}
+          {loading && <TableLoadingRow colSpan={columns.length} />}
+          {isEmpty && <TableEmptyRow colSpan={columns.length} message={emptyMessage} />}
+          {!loading && rows.map((row, rowIndex) => {
+            const isExpanded = expandedRows.has(row.id);
+            return (
+              <TableRow
+                key={row.id}
+                hover
+                sx={(t) => ({
+                  ...(striped && rowIndex % 2 === 1
+                    ? { bgcolor: 'background.tableStripe' }
+                    : {}),
+                  '@media (max-width: 599px)': {
+                    display: 'flex',
+                    flexDirection: 'column',
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: `${t.shape.md}px`,
+                    mb: 1,
+                    overflow: 'hidden',
+                    bgcolor: 'background.paper',
+                    '&.MuiTableRow-hover:hover': { bgcolor: 'background.paper' },
+                  },
+                })}
+              >
+                {columns.map((col, i) => (
+                  <ResponsiveCell
+                    key={colKeys[i]}
+                    col={col}
+                    colKey={colKeys[i]}
+                    row={row}
+                    index={i}
+                    primaryIdx={primaryIdx}
+                    lastNonPrimaryIdx={lastNonPrimaryIdx}
+                    isExpanded={isExpanded}
+                    onToggle={() => toggleRow(row.id)}
+                    striped={striped}
+                    py={py}
+                    px={px}
+                  />
+                ))}
+              </TableRow>
+            );
+          })}
         </TableBody>
 
         {pagination && (

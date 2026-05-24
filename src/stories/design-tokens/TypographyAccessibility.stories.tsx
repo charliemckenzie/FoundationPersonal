@@ -415,18 +415,11 @@ function TypographyAccessibilityDoc() {
     { label: 'bg.brandPrimary', tokenPath: 'brandPrimary' },
     { label: 'bg.brandSecondary', tokenPath: 'brandSecondary' },
     { label: 'bg.brandTertiary', tokenPath: 'brandTertiary' },
-    // Brand-specific backgrounds
-    ...(brand.quaternary
-      ? [
-          { label: 'bg.brandGrey', tokenPath: 'brandGrey' },
-          { label: 'bg.brandLightBlue', tokenPath: 'brandLightBlue' },
-        ]
-      : [
-          { label: 'bg.brandSky', tokenPath: 'brandSky' },
-          { label: 'bg.brandClear', tokenPath: 'brandClear' },
-          { label: 'bg.brandWarm', tokenPath: 'brandWarm' },
-        ]
-    ),
+    // Normalised tinted surfaces — same names across brands; values per brand × mode
+    { label: 'bg.tintCool', tokenPath: 'tintCool' },
+    { label: 'bg.tintNeutralCool', tokenPath: 'tintNeutralCool' },
+    { label: 'bg.tintWarm', tokenPath: 'tintWarm' },
+    { label: 'bg.tintNeutral', tokenPath: 'tintNeutral' },
   ]
 
   const getLightText = (t: TextToken): string =>

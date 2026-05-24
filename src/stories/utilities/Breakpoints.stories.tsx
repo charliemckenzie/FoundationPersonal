@@ -130,7 +130,17 @@ function BreakpointsDoc() {
         Resize the Storybook viewport (toolbar) to see the active breakpoint change.
       </Typography>
       <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-        {BP_KEYS.map((bp) => (
+        {BP_KEYS.map((bp) => {
+          // Build the responsive maps as plain Records so TS doesn't try to widen
+          // the inferred sx union — the BP_KEYS × token-string permutations otherwise
+          // exceed the type-system's complexity limit.
+          const others = (val: string): Record<string, string> =>
+            Object.fromEntries(BP_KEYS.filter((b) => b !== bp).map((b) => [b, val]));
+          const borderColor: Record<string, string> = { [bp]: 'primary.main', ...others('divider') };
+          const bgcolor:    Record<string, string> = { [bp]: 'primary.background', ...others('background.paper') };
+          const colorMap:   Record<string, string> = { [bp]: 'primary.dark', ...others('text.muted') };
+          const display:    Record<string, string> = { [bp]: 'flex', ...others('none') };
+          return (
           <Box
             key={bp}
             sx={{
@@ -138,10 +148,10 @@ function BreakpointsDoc() {
               py: 1,
               borderRadius: 1,
               border: '2px solid',
-              borderColor: { [bp]: 'primary.main', ...Object.fromEntries(BP_KEYS.filter((b) => b !== bp).map((b) => [b, 'divider'])) },
-              bgcolor: { [bp]: 'primary.background', ...Object.fromEntries(BP_KEYS.filter((b) => b !== bp).map((b) => [b, 'background.paper'])) },
-              color: { [bp]: 'primary.dark', ...Object.fromEntries(BP_KEYS.filter((b) => b !== bp).map((b) => [b, 'text.muted'])) },
-              display: { [bp]: 'flex', ...Object.fromEntries(BP_KEYS.filter((b) => b !== bp).map((b) => [b, 'none'])) },
+              borderColor,
+              bgcolor,
+              color: colorMap,
+              display,
               alignItems: 'center',
               gap: 1,
             }}
@@ -153,7 +163,8 @@ function BreakpointsDoc() {
               ≥{bpValues[bp]}px
             </Typography>
           </Box>
-        ))}
+          );
+        })}
       </Box>
     </Box>
   )

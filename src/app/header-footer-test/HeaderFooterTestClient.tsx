@@ -190,7 +190,7 @@ export function HeaderFooterTestClient() {
             secondaryCta={secondaryCta}
             utilityLinks={utilityLinks}
             searchPlaceholder="Search Australian Retirement Trust"
-            onSearch={(q) => console.log('search:', q)}
+            onSearch={() => {}}
           />
 
           {/* Placeholder body */}

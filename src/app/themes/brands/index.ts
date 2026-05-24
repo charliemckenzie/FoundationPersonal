@@ -28,6 +28,37 @@ export interface GridConfig {
   maxWidth: number;
 }
 
+/**
+ * Per-brand semantic token overrides for one mode (light or dark).
+ *
+ * These are the values that *differ between brands* and used to be embedded as
+ * ternaries inside `semantic.ts` (`brand.quaternary ? X : Y`). Moving them onto
+ * the brand config makes the palette builder brand-agnostic and lets every brand
+ * declare a value for every token — required for the Figma export, which produces
+ * parallel modes (ART Light, ART Dark, QSuper Light, QSuper Dark).
+ */
+export interface BrandSemanticTokens {
+  /** Surface tints — soft branded fills for callouts, cards, and feature blocks. */
+  tintCool:        string;  // ART: skyBlue / QSuper: qSkyBlue
+  tintNeutralCool: string;  // ART: clearBlue / QSuper: qSkyBlue (lightest)
+  tintWarm:        string;  // ART: salmon / QSuper: neutral fallback
+  tintNeutral:     string;  // ART: neutral fallback / QSuper: brand neutral
+  /** Text colour overrides — values where ART and QSuper diverge for contrast reasons. */
+  text: {
+    primary:     string;
+    muted:       string;
+    /** Resting colour for links rendered on brand-coloured surfaces. */
+    linkInverse: string;
+  };
+  /** Divider colour — slightly different per brand for visual hierarchy in dark mode. */
+  divider: string;
+  /** Border colour overrides — input field contrast is brand-tuned. */
+  border: {
+    default: string;
+    input:   string;
+  };
+}
+
 export interface BrandConfig {
   name: string;
   primary: ColorScale;
@@ -38,6 +69,8 @@ export interface BrandConfig {
   buttonBorderRadius: string | number;
   fontFamily: string;
   headingFontFamily: string;
+  /** Brand-specific semantic token values for light and dark modes. */
+  semanticOverrides: { light: BrandSemanticTokens; dark: BrandSemanticTokens };
   grid?: GridConfig;
   /** Fixed data-visualisation colours for investment option allocations. QSuper only. */
   investmentAllocations?: Record<QSuperInvestmentAllocationKey, string>;

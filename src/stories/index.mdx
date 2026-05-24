@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 # Component Status
 
-Full inventory of every component in Foundation — 10 stable, 7 in review, 45 draft. Sort by name or status.
+Full inventory of every component in Foundation. Counts are computed from the data below so they stay accurate as the library grows. Sort by name or status.
 
 export const COMPONENTS = [
   { name: 'BarChart',          status: 'draft',  story: '/?path=/story/components-charts-barchart--default' },
@@ -73,7 +73,21 @@ export const COMPONENTS = [
 ];
 
 export const STATUS_ORDER = { stable: 0, review: 1, draft: 2 };
+
 export const STATUS_COLOR = { stable: '#2e7d32', review: '#f9a825', draft: '#c62828' };
+
+export const COUNTS = COMPONENTS.reduce(
+  (acc, c) => { acc[c.status] = (acc[c.status] || 0) + 1; return acc; },
+  { stable: 0, review: 0, draft: 0 }
+);
+
+export const StatusCounts = () => (
+  <p style={{ marginTop: 0 }}>
+    <strong>{COMPONENTS.length}</strong> components total — <strong>{COUNTS.stable}</strong> stable, <strong>{COUNTS.review}</strong> in review, <strong>{COUNTS.draft}</strong> draft.
+  </p>
+);
+
+<StatusCounts />
 
 export const ComponentTable = () => {
   const [sortCol, setSortCol] = useState('name');

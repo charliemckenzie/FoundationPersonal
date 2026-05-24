@@ -246,6 +246,133 @@ function ColorsDoc() {
     ] as TokenDualMode[] : []),
   ]
 
+  // Tinted-surface fields for each brand colour. Mirrors the status-colour pattern
+  // (.text · .icon · .background · .border). Use these for chips, badges, selected
+  // states, and any tinted brand surface — not .main/.light/.dark (those are for
+  // identity moments: focal CTAs, indicators, hero accents).
+  const brandTintTokens: TokenDualMode[] = [
+    // primary tints
+    {
+      label: 'primary.background',
+      lightValue: (lightPalette.primary as unknown as Record<string, string>).background,
+      darkValue: (darkPalette.primary as unknown as Record<string, string>).background,
+      lightSource: `${primaryName} 50 — tinted surface fill`,
+      darkSource: `${primaryName} 400 @ 16% — tinted overlay`,
+    },
+    {
+      label: 'primary.border',
+      lightValue: (lightPalette.primary as unknown as Record<string, string>).border,
+      darkValue: (darkPalette.primary as unknown as Record<string, string>).border,
+      lightSource: `${primaryName} 100 — companion border`,
+      darkSource: `${primaryName} 700 — companion border`,
+    },
+    {
+      label: 'primary.text',
+      lightValue: (lightPalette.primary as unknown as Record<string, string>).text,
+      darkValue: (darkPalette.primary as unknown as Record<string, string>).text,
+      lightSource: `${primaryName} 800 — text on .background`,
+      darkSource: `${primaryName} 200 — text on .background`,
+    },
+    {
+      label: 'primary.icon',
+      lightValue: (lightPalette.primary as unknown as Record<string, string>).icon,
+      darkValue: (darkPalette.primary as unknown as Record<string, string>).icon,
+      lightSource: `${primaryName} 600 — matches .main`,
+      darkSource: `${primaryName} 300 — matches .main`,
+    },
+    // secondary tints
+    {
+      label: 'secondary.background',
+      lightValue: (lightPalette.secondary as unknown as Record<string, string>).background,
+      darkValue: (darkPalette.secondary as unknown as Record<string, string>).background,
+      lightSource: `${secondaryName} 50 — tinted surface fill`,
+      darkSource: `${secondaryName} 400 @ 16% — tinted overlay`,
+    },
+    {
+      label: 'secondary.border',
+      lightValue: (lightPalette.secondary as unknown as Record<string, string>).border,
+      darkValue: (darkPalette.secondary as unknown as Record<string, string>).border,
+      lightSource: `${secondaryName} 100 — companion border`,
+      darkSource: `${secondaryName} 700 — companion border`,
+    },
+    {
+      label: 'secondary.text',
+      lightValue: (lightPalette.secondary as unknown as Record<string, string>).text,
+      darkValue: (darkPalette.secondary as unknown as Record<string, string>).text,
+      lightSource: `${secondaryName} 800 — text on .background`,
+      darkSource: `${secondaryName} 200 — text on .background`,
+    },
+    {
+      label: 'secondary.icon',
+      lightValue: (lightPalette.secondary as unknown as Record<string, string>).icon,
+      darkValue: (darkPalette.secondary as unknown as Record<string, string>).icon,
+      lightSource: `${secondaryName} 800 — matches .main`,
+      darkSource: `${secondaryName} 400 — matches .main`,
+    },
+    // tertiary tints (only present when brand defines tertiary)
+    ...(lightPalette.tertiary ? [
+      {
+        label: 'tertiary.background',
+        lightValue: (lightPalette.tertiary as unknown as Record<string, string>).background,
+        darkValue: (darkPalette.tertiary as unknown as Record<string, string>).background,
+        lightSource: `${getPrimitiveName(brand.tertiary!)} 50 — tinted surface fill`,
+        darkSource: `${getPrimitiveName(brand.tertiary!)} 400 @ 16%`,
+      },
+      {
+        label: 'tertiary.border',
+        lightValue: (lightPalette.tertiary as unknown as Record<string, string>).border,
+        darkValue: (darkPalette.tertiary as unknown as Record<string, string>).border,
+        lightSource: `${getPrimitiveName(brand.tertiary!)} 100 — companion border`,
+        darkSource: `${getPrimitiveName(brand.tertiary!)} 700`,
+      },
+      {
+        label: 'tertiary.text',
+        lightValue: (lightPalette.tertiary as unknown as Record<string, string>).text,
+        darkValue: (darkPalette.tertiary as unknown as Record<string, string>).text,
+        lightSource: `${getPrimitiveName(brand.tertiary!)} 800`,
+        darkSource: `${getPrimitiveName(brand.tertiary!)} 200`,
+      },
+      {
+        label: 'tertiary.icon',
+        lightValue: (lightPalette.tertiary as unknown as Record<string, string>).icon,
+        darkValue: (darkPalette.tertiary as unknown as Record<string, string>).icon,
+        lightSource: `${getPrimitiveName(brand.tertiary!)} 500 — matches .main`,
+        darkSource: `${getPrimitiveName(brand.tertiary!)} 400 — matches .main`,
+      },
+    ] as TokenDualMode[] : []),
+    // quaternary tints (only present when brand defines quaternary — QSuper)
+    ...(lightPalette.quaternary ? [
+      {
+        label: 'quaternary.background',
+        lightValue: (lightPalette.quaternary as unknown as Record<string, string>).background,
+        darkValue: (darkPalette.quaternary as unknown as Record<string, string>).background,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 50 — tinted surface fill`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 400 @ 16%`,
+      },
+      {
+        label: 'quaternary.border',
+        lightValue: (lightPalette.quaternary as unknown as Record<string, string>).border,
+        darkValue: (darkPalette.quaternary as unknown as Record<string, string>).border,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 100 — companion border`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 700`,
+      },
+      {
+        label: 'quaternary.text',
+        lightValue: (lightPalette.quaternary as unknown as Record<string, string>).text,
+        darkValue: (darkPalette.quaternary as unknown as Record<string, string>).text,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 800`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 100`,
+      },
+      {
+        label: 'quaternary.icon',
+        lightValue: (lightPalette.quaternary as unknown as Record<string, string>).icon,
+        darkValue: (darkPalette.quaternary as unknown as Record<string, string>).icon,
+        lightSource: `${getPrimitiveName(brand.quaternary!)} 500 — matches .main`,
+        darkSource: `${getPrimitiveName(brand.quaternary!)} 300 — matches .main`,
+      },
+    ] as TokenDualMode[] : []),
+  ]
+
   const feedbackTokens: TokenDualMode[] = [
     // error
     {
@@ -439,47 +566,35 @@ function ColorsDoc() {
       lightSource: 'tertiary 500',
       darkSource: `${neutralName} 800`,
     },
-    // ART-only tokens
-    ...(lightPalette.background!.brandSky ? [
-      {
-        label: 'background.brandSky',
-        lightValue: lightPalette.background!.brandSky!,
-        darkValue: darkPalette.background!.brandSky!,
-        lightSource: 'skyBlue 200 — #B9DCFB',
-        darkSource: `${neutralName} 800`,
-      },
-      {
-        label: 'background.brandClear',
-        lightValue: lightPalette.background!.brandClear!,
-        darkValue: darkPalette.background!.brandClear!,
-        lightSource: 'clearBlue 100 — #DDF5FF',
-        darkSource: `${neutralName} 800`,
-      },
-      {
-        label: 'background.brandWarm',
-        lightValue: lightPalette.background!.brandWarm!,
-        darkValue: darkPalette.background!.brandWarm!,
-        lightSource: 'salmon 50 — #F8EBE5',
-        darkSource: `${neutralName} 800`,
-      },
-    ] as TokenDualMode[] : []),
-    // QSuper-only tokens
-    ...(lightPalette.background!.brandGrey ? [
-      {
-        label: 'background.brandGrey',
-        lightValue: lightPalette.background!.brandGrey!,
-        darkValue: darkPalette.background!.brandGrey!,
-        lightSource: `${neutralName} 100 — #f4f6fb`,
-        darkSource: `${neutralName} 800`,
-      },
-      {
-        label: 'background.brandLightBlue',
-        lightValue: lightPalette.background!.brandLightBlue!,
-        darkValue: darkPalette.background!.brandLightBlue!,
-        lightSource: 'quaternary 100 — qSkyBlue[100] #d0eefb',
-        darkSource: `${neutralName} 800`,
-      },
-    ] as TokenDualMode[] : []),
+    // Normalised tinted surfaces — same names across brands; brand-specific values
+    {
+      label: 'background.tintCool',
+      lightValue: lightPalette.background!.tintCool!,
+      darkValue: darkPalette.background!.tintCool!,
+      lightSource: 'ART: skyBlue 200 / QSuper: qSkyBlue 100',
+      darkSource: `${neutralName} 800`,
+    },
+    {
+      label: 'background.tintNeutralCool',
+      lightValue: lightPalette.background!.tintNeutralCool!,
+      darkValue: darkPalette.background!.tintNeutralCool!,
+      lightSource: 'ART: clearBlue 100 / QSuper: qSkyBlue 50',
+      darkSource: `${neutralName} 800`,
+    },
+    {
+      label: 'background.tintWarm',
+      lightValue: lightPalette.background!.tintWarm!,
+      darkValue: darkPalette.background!.tintWarm!,
+      lightSource: `ART: salmon 50 / QSuper: ${neutralName} 100 (fallback)`,
+      darkSource: `${neutralName} 800`,
+    },
+    {
+      label: 'background.tintNeutral',
+      lightValue: lightPalette.background!.tintNeutral!,
+      darkValue: darkPalette.background!.tintNeutral!,
+      lightSource: `${neutralName} 100`,
+      darkSource: `${neutralName} 800`,
+    },
   ]
 
   const textTokens: TokenDualMode[] = [
@@ -629,9 +744,21 @@ function ColorsDoc() {
       <SectionHeading>Brand</SectionHeading>
       <SectionSubtitle>
         Swappable per brand. Sourced from the brand's primary and secondary primitive scales.
+        These are the identity tokens (.main · .light · .dark · .contrastText) — for tinted
+        surfaces (badges, chips, selected states), see "Brand Tinted Surfaces" below.
       </SectionSubtitle>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2, mb: 3 }}>
         {brandTokens.map((token) => (
+          <DualModeTokenRow key={token.label} {...token} />
+        ))}
+      </Box>
+
+      <SectionHeading>Brand Tinted Surfaces</SectionHeading>
+      <SectionSubtitle>
+        .background · .border · .text · .icon — the soft-tinted set for each brand colour. Use these for chips, badges, toggle-selected states, and any branded surface that isn't a focal CTA. In dark mode, .background is an alpha overlay so it composes onto any underlying surface. Status colours (error/warning/info/success) follow the same pattern — see Feedback below.
+      </SectionSubtitle>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2, mb: 3 }}>
+        {brandTintTokens.map((token) => (
           <DualModeTokenRow key={token.label} {...token} />
         ))}
       </Box>
@@ -672,7 +799,7 @@ function ColorsDoc() {
 
       <SectionHeading>Action</SectionHeading>
       <SectionSubtitle>
-        Interaction state overlays and disabled colours. hover, selected, and focus are semi-transparent overlays — they layer over any surface. Opacity scalars (both modes): hoverOpacity 0.04 · selectedOpacity 0.08 · disabledOpacity 0.38 · focusOpacity 0.12 · activatedOpacity 0.12
+        Interaction state overlays and disabled colours. hover, selected, and focus are semi-transparent overlays — they layer over any surface. Opacity scalars: hover 0.04 light / 0.08 dark · selected 0.08 light / 0.16 dark · focus 0.12 · activated 0.12 · disabled 0.38 (defined once in the OPACITY constant in semantic.ts so the alpha() calls and the *Opacity scalars can't drift apart).
       </SectionSubtitle>
       <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 2, mb: 3, maxWidth: 900 }}>
         {actionTokens.map((token) => (

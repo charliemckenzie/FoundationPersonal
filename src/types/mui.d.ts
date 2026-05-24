@@ -19,12 +19,12 @@ declare module '@mui/material/Typography' {
     lead: true;
     body: true;
     small: true;
+    caption: true;
     body1: false;
     body2: false;
     subtitle1: false;
     subtitle2: false;
     button: false;
-    caption: false;
     overline: false;
   }
 }
@@ -72,11 +72,14 @@ declare module '@mui/material/styles' {
     brandPrimary: string;
     brandSecondary: string;
     brandTertiary: string;
-    brandSky?: string;
-    brandClear?: string;
-    brandWarm?: string;
-    brandGrey?: string;
-    brandLightBlue?: string;
+    /** Cool-tinted brand surface. ART: skyBlue[200]. QSuper: qSkyBlue[100]. */
+    tintCool: string;
+    /** Lightest cool brand surface. ART: clearBlue[100]. QSuper: qSkyBlue[50]. */
+    tintNeutralCool: string;
+    /** Warm-tinted brand surface. ART: salmon[50]. QSuper: neutral[100] (fallback). */
+    tintWarm: string;
+    /** Neutral brand surface. ART: neutralART[100] (fallback). QSuper: neutral[100]. */
+    tintNeutral: string;
     tableStripe: string;
   }
 
@@ -144,6 +147,7 @@ declare module '@mui/material/styles' {
     lead: React.CSSProperties;
     body: React.CSSProperties;
     small: React.CSSProperties;
+    caption: React.CSSProperties;
   }
   interface TypographyVariantsOptions {
     'display-1'?: React.CSSProperties;
@@ -155,6 +159,7 @@ declare module '@mui/material/styles' {
     lead?: React.CSSProperties;
     body?: React.CSSProperties;
     small?: React.CSSProperties;
+    caption?: React.CSSProperties;
   }
 }
 

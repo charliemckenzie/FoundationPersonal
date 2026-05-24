@@ -1,26 +1,24 @@
-[07:30:07.028] [INFO] storybook v10.3.5
-[07:30:10.026] [PROMPT] Port 6006 is not available. 
-Would you like to run Storybook on port 6007 instead? {"choice":true}
-[07:30:10.990] [DEBUG] Getting package.json info for C:/Users/u302371/OneDrive - Australian Retirement Trust/Sites/Foundation/package.json...
-[07:30:14.501] [WARN] 🚨 Unable to index ./src/stories/components/Menu.stories.tsx:
-  SyntaxError: Identifier 'WithDestructiveAction' has already been declared. (158:13)
-    at constructor (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:12171:21)
-    at Parser.raise (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:16356:71)
-    at TypeScriptScopeHandler.checkRedeclarationInScope (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:13137:75)
-    at TypeScriptScopeHandler.declareName (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:13125:16)
-    at TypeScriptScopeHandler.declareName (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:15179:15)
-    at Parser.declareNameFromIdentifier (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:17010:20)
-    at Parser.checkIdentifier (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:17007:126)
-    at Parser.checkLVal (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:16974:16)
-    at Parser.parseVarId (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:20509:276)
-    at Parser.parseVarId (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-JXXWBFBF.js:18323:15)
-[07:30:14.514] [ERROR] Error: Unable to index ./src/stories/components/Menu.stories.tsx
-    at _StoryIndexGenerator.getIndexAndStats (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6282:15)
-    at async _StoryIndexGenerator.getIndex (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6271:13)
-    at async Object.experimental_serverChannel (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/@storybook/addon-vitest/dist/preset.js:464:14)
-    at async buildDevStandalone (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:8027:32)
-    at async withTelemetry (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
-    at async dev (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2736:3)
-    at async _Command.<anonymous> (file:///C:/Users/u302371/OneDrive%20-%20Australian%20Retirement%20Trust/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2806:92)
-[07:30:14.520] [WARN] Broken build, fix the error above.
+[17:11:11.199] [INFO] storybook v10.3.5
+[17:11:11.870] [DEBUG] Getting package.json info for C:/Users/adama/Sites/Foundation/package.json...
+[17:11:14.570] [WARN] 🚨 Unable to index ./src/stories/index.mdx:
+  Error: Could not parse expression with acorn
+    at file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6033:24
+    at async Promise.all (index 2)
+    at async Promise.all (index 0)
+    at async _StoryIndexGenerator.updateExtracted (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6016:5)
+    at async _StoryIndexGenerator.ensureExtracted (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6053:8)
+    at async _StoryIndexGenerator.initialize (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6012:5)
+    at async file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/presets/common-preset.js:1855:10
+    at async Object.experimental_serverChannel (file:///C:/Users/adama/Sites/Foundation/node_modules/@storybook/addon-vitest/dist/preset.js:450:29)
+    at async buildDevStandalone (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:8027:32)
+    at async withTelemetry (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
+[17:11:14.576] [ERROR] Error: Unable to index ./src/stories/index.mdx
+    at _StoryIndexGenerator.getIndexAndStats (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6282:15)
+    at async _StoryIndexGenerator.getIndex (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6271:13)
+    at async Object.experimental_serverChannel (file:///C:/Users/adama/Sites/Foundation/node_modules/@storybook/addon-vitest/dist/preset.js:464:14)
+    at async buildDevStandalone (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:8027:32)
+    at async withTelemetry (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
+    at async dev (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2736:3)
+    at async _Command.<anonymous> (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2806:92)
+[17:11:14.581] [WARN] Broken build, fix the error above.
 You may need to refresh the browser.

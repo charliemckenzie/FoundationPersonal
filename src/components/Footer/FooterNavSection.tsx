@@ -6,17 +6,18 @@ import Collapse from '@mui/material/Collapse';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import { useMediaQuery } from '@mui/material';
+import type { SxProps, Theme } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 import type { FooterNavSection as FooterNavSectionData } from './footerData';
 
-const linkSx = {
+const linkSx: SxProps<Theme> = (theme) => ({
   color: 'text.primary',
   textDecoration: 'none',
-  fontSize: '0.875rem',
-  lineHeight: 1.5,
+  fontSize: theme.typography.small.fontSize,
+  lineHeight: theme.typography.small.lineHeight,
   '&:hover': { textDecoration: 'underline' },
-} as const;
+});
 
 function LinkList({ links }: { links: FooterNavSectionData['links'] }) {
   return (
@@ -32,7 +33,7 @@ function LinkList({ links }: { links: FooterNavSectionData['links'] }) {
               {link.label}
             </Box>
           ) : (
-            <Typography component="span" sx={{ color: 'text.muted', fontSize: '0.875rem', lineHeight: 1.5 }}>
+            <Typography variant="small" component="span" sx={{ color: 'text.muted' }}>
               {link.label}
             </Typography>
           )}
@@ -52,16 +53,16 @@ export function FooterNavSection({ title, links, uppercaseTitle = false }: Foote
       <Box component="nav" aria-label={title}>
         <Box
           component="p"
-          sx={{
+          sx={(t) => ({
             fontWeight: 700,
             color: 'text.heading',
-            fontSize: uppercaseTitle ? '0.75rem' : '1rem',
+            fontSize: uppercaseTitle ? t.typography.caption.fontSize : t.typography.body.fontSize,
             lineHeight: 1.5,
             letterSpacing: uppercaseTitle ? '0.08em' : undefined,
             textTransform: uppercaseTitle ? 'uppercase' : 'none',
             m: 0,
             mb: 1.5,
-          }}
+          })}
         >
           {title}
         </Box>
@@ -93,7 +94,14 @@ export function FooterNavSection({ title, links, uppercaseTitle = false }: Foote
       >
         <Box
           component="span"
-          sx={{ fontWeight: 700, color: 'text.heading', fontSize: uppercaseTitle ? '0.75rem' : '1rem', lineHeight: 1.5, letterSpacing: uppercaseTitle ? '0.08em' : undefined, textTransform: uppercaseTitle ? 'uppercase' : 'none' }}
+          sx={(t) => ({
+            fontWeight: 700,
+            color: 'text.heading',
+            fontSize: uppercaseTitle ? t.typography.caption.fontSize : t.typography.body.fontSize,
+            lineHeight: 1.5,
+            letterSpacing: uppercaseTitle ? '0.08em' : undefined,
+            textTransform: uppercaseTitle ? 'uppercase' : 'none',
+          })}
         >
           {title}
         </Box>

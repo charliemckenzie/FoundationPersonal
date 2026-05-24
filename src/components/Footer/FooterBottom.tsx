@@ -1,18 +1,19 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import type { SxProps, Theme } from '@mui/material/styles';
 import { useTheme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 import { AwardPlaceholder } from './AwardPlaceholder';
 import { ART_LEGAL_LINKS, QSUPER_LEGAL_LINKS, ART_SOCIAL_LINKS, QSUPER_SOCIAL_LINKS, AOC_TEXT } from './footerData';
 
-const navLinkSx = {
+const navLinkSx: SxProps<Theme> = (theme) => ({
   color: 'text.primary',
   textDecoration: 'none',
-  fontSize: '0.875rem',
-  lineHeight: 1.5,
+  fontSize: theme.typography.small.fontSize,
+  lineHeight: theme.typography.small.lineHeight,
   '&:hover': { textDecoration: 'underline' },
-} as const;
+});
 
 const inlineLinkSx = {
   color: 'text.link',
@@ -82,8 +83,8 @@ export function FooterBottom() {
         </Box>
         {isQSuper ? (
           <Typography
-            component="p"
-            sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5, whiteSpace: { md: 'nowrap' } }}
+            variant="small"
+            sx={{ color: 'text.primary', whiteSpace: { md: 'nowrap' } }}
           >
             We&apos;re part of{' '}
             <Box component="a" href="https://www.australianretirementtrust.com.au" sx={inlineLinkSx}>
@@ -92,8 +93,8 @@ export function FooterBottom() {
           </Typography>
         ) : (
           <Typography
-            component="p"
-            sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5, whiteSpace: { md: 'nowrap' } }}
+            variant="small"
+            sx={{ color: 'text.primary', whiteSpace: { md: 'nowrap' } }}
           >
             © Australian Retirement Trust. All rights reserved.
           </Typography>
@@ -127,18 +128,18 @@ export function FooterBottom() {
         }}
       >
         <Typography
-          component="p"
-          sx={{ fontWeight: 700, color: 'text.heading', fontSize: '0.875rem', lineHeight: 1.5, mb: 1 }}
+          variant="small"
+          sx={{ fontWeight: 700, color: 'text.heading', mb: 1 }}
         >
           Acknowledgement of Country
         </Typography>
-        <Typography component="p" sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5 }}>
+        <Typography variant="small" sx={{ color: 'text.primary' }}>
           {AOC_TEXT}
         </Typography>
       </Box>
 
-      {/* Disclaimer */}
-      <Typography component="p" sx={{ color: 'text.muted', fontSize: '0.8125rem', lineHeight: 1.5 }}>
+      {/* Disclaimer — caption-sized small print */}
+      <Typography variant="caption" component="p" sx={{ color: 'text.muted' }}>
         The information on this website contains general information only. It doesn&apos;t consider
         your personal objectives, financial situation, or needs. Before making any decisions about{' '}
         {isQSuper ? 'QSuper' : 'ART'}, you should read the relevant{' '}

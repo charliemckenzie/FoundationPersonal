@@ -27,6 +27,7 @@
     "build-storybook": "storybook build",
     "check-setup": "node scripts/check-setup.mjs",
     "generate-tokens": "tsx scripts/generate-tokens.ts",
+    "figma-import": "node scripts/figma-import-variables.mjs",
     "sync-font-awesome-icons": "node scripts/sync-font-awesome-icons.mjs",
     "sync-project-board": "NODE_EXTRA_CA_CERTS=/tmp/art-ca.pem node scripts/setup-github-project.mjs"
   },

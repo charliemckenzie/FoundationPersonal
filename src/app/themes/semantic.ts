@@ -1,22 +1,61 @@
 import { alpha } from '@mui/material/styles';
 import type { PaletteOptions } from '@mui/material/styles';
-import { red, amber, blue, green, clearBlue, skyBlue, salmon, white, black } from './primitives/colors';
+import { red, amber, blue, green, white, black } from './primitives/colors';
 import type { BrandConfig } from './brands/index';
 
+// ── Opacity scalars — single source of truth for interaction-state overlays ──
+// Used by both the `alpha()` calls AND the `*Opacity` properties below, so any
+// change happens in one place. Also consumed by the Figma export script, which
+// emits these as `number/action/*-opacity` variables composed in Figma styles.
+export const OPACITY = {
+  hover:     { light: 0.04, dark: 0.08 },
+  selected:  { light: 0.08, dark: 0.16 },
+  focus:     { light: 0.12, dark: 0.12 },
+  activated: { light: 0.12, dark: 0.12 },
+  disabled:  { light: 0.38, dark: 0.38 },
+} as const;
+
+/**
+ * Build the LIGHT-mode MUI palette for a given brand.
+ *
+ * Structure mirrors `buildDarkPalette` exactly — every token defined here is also
+ * defined in dark, so theme consumers never see `undefined`. Brand-specific values
+ * (where ART and QSuper differ) are read from `brand.semanticOverrides` rather
+ * than embedded ternaries, so the token set is Figma-exportable as parallel modes.
+ *
+ * Token tiers (top-down):
+ *   - **Brand colours** (`primary`, `secondary`, `tertiary`, `quaternary`) — identity colours; each has `.main`/`.light`/`.dark`/`.contrastText` plus `.text`/`.icon`/`.background`/`.border` for tinted surfaces.
+ *   - **Status colours** (`error`, `warning`, `info`, `success`) — feedback colours with the same eight fields; values fixed across brands.
+ *   - **Background** — surface hierarchy: `default` (page) → `paper` (card) → `elevated` (modal/popover) → `brand*` (branded zones) → tints.
+ *   - **Text** — `heading`, `primary`, `muted`, `disabled`, `inverse`, `link`, `linkInverse`.
+ *   - **Border** — `subtle` (inner dividers, lighter than `divider`), `default` (card outlines), `input` (form fields, ≥3:1 contrast), `focus` (focus ring).
+ *   - **Action** — interaction-state overlays (`hover`, `selected`, `focus`, `disabled`) with companion `*Opacity` scalars.
+ */
 export function buildLightPalette(brand: BrandConfig): PaletteOptions {
+  const sem = brand.semanticOverrides.light;
   return {
+    /** Brand identity. Use `.main` for focal actions, `.background`/`.border` for tinted surfaces (chips, selected states). */
     primary: {
       light:        brand.primary[400],
       main:         brand.primary[600],
       dark:         brand.primary[700],
       contrastText: white,
+      text:         brand.primary[800],   // accessible body text on light brand-tinted surfaces (≥7:1)
+      icon:         brand.primary[600],   // icon fill matching .main
+      background:   brand.primary[50],    // subtle tinted surface (e.g. ToggleButton selected, badge fill)
+      border:       brand.primary[100],   // companion border for .background
     },
     secondary: {
       light:        brand.secondary[600],
       main:         brand.secondary[800],
       dark:         brand.secondary[900],
       contrastText: white,
+      text:         brand.secondary[800],
+      icon:         brand.secondary[800],
+      background:   brand.secondary[50],
+      border:       brand.secondary[100],
     },
+    /** Feedback / status. Each has `.main` (icon/border), `.background` (alert fill), `.text` (alert body), `.border` (alert outline). Values fixed across brands. */
     error: {
       light:        red[400],
       main:         red[600],
@@ -58,97 +97,136 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       contrastText: white,
     },
 
-    // Tertiary brand color (optional — only present when the brand defines one)
+    /** Tertiary brand colour (optional — only present when the brand defines one). */
     ...(brand.tertiary && {
       tertiary: {
         light:        brand.tertiary[400],
         main:         brand.tertiary[500],
         dark:         brand.tertiary[700],
         contrastText: brand.tertiary[950],
+        text:         brand.tertiary[800],
+        icon:         brand.tertiary[500],
+        background:   brand.tertiary[50],
+        border:       brand.tertiary[100],
       },
     }),
 
-    // Quaternary brand color — Light Blue (#8CDDFF); main anchored at [300]
+    /** Quaternary brand colour — QSuper Light Blue (#8CDDFF). Main anchored at [300]. */
     ...(brand.quaternary && {
       quaternary: {
         light:        brand.quaternary[100],
         main:         brand.quaternary[300],
         dark:         brand.quaternary[500],
         contrastText: brand.quaternary[950],
+        text:         brand.quaternary[800],
+        icon:         brand.quaternary[500],
+        background:   brand.quaternary[50],
+        border:       brand.quaternary[100],
       },
     }),
 
-    // Background
+    /**
+     * Surface hierarchy. Every token in this group has a value in every brand × mode
+     * so the Figma export is lossless.
+     *   - `default` = page background; `paper` = card; `elevated` = modal / popover
+     *   - `brandPrimary` / `brandSecondary` / `brandTertiary` = branded zones (hero sections, CTAs)
+     *   - `tintCool` / `tintNeutralCool` / `tintWarm` / `tintNeutral` = tinted brand surfaces; each brand fills with its own shade
+     *   - `tableStripe` = striped table rows
+     */
     background: {
-      default:        brand.neutral[50],    // Foundation: #f8fafc
-      paper:          white,               // #ffffff
-      elevated:       brand.neutral[100],  // Foundation: #f1f5f9
-      brandPrimary:   brand.primary[600],  // Foundation: trueBlue[600]  #0051ff
-      brandSecondary: brand.secondary[800], // Foundation: deepBlue[800]  #1c355e
-      brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600], // Foundation: livingCoral[500] #f24e49
-      ...(brand.quaternary === undefined
-        ? {
-            // ART-only brand backgrounds
-            brandSky:   skyBlue[200],    // #B9DCFB
-            brandClear: clearBlue[100],  // #DDF5FF
-            brandWarm:  salmon[50],      // #F8EBE5
-          }
-        : {
-            // QSuper-only brand backgrounds
-            brandGrey:      brand.neutral[100],      // neutral[100] — #f4f6fb
-            brandLightBlue: brand.quaternary[100],   // qSkyBlue[100] — stays tied to its own scale
-          }
-      ),
-      tableStripe: brand.neutral[100],  // ART: #f4f6fb / QSuper: #f4f6fb — closest match to #F2F2F2
+      default:        brand.neutral[50],
+      paper:          white,
+      elevated:       brand.neutral[100],
+      brandPrimary:   brand.primary[600],
+      brandSecondary: brand.secondary[800],
+      brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600],
+      tintCool:        sem.tintCool,
+      tintNeutralCool: sem.tintNeutralCool,
+      tintWarm:        sem.tintWarm,
+      tintNeutral:     sem.tintNeutral,
+      tableStripe:     brand.neutral[100],
     },
 
-    // Text & Borders
+    /**
+     * Text colours by semantic role.
+     *   - `heading` — display, h1-h6
+     *   - `primary` — body copy
+     *   - `muted` — secondary / metadata
+     *   - `disabled` — inactive controls (WCAG 2.2 SC 1.4.3 exempt)
+     *   - `inverse` — text on brand surfaces
+     *   - `link` / `linkInverse` — anchor rest state only; interaction states live in `MuiLink` styleOverrides
+     */
     text: {
-      primary:     brand.neutral[700],
-      muted:       brand.neutral[600],
+      primary:     sem.text.primary,
+      muted:       sem.text.muted,
       disabled:    brand.neutral[500],
       inverse:     white,
       heading:     brand.secondary[800],
       link:        brand.primary[600],
-      // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
-      linkInverse: brand.quaternary ? white : clearBlue[100], // QSuper: white (4.8:1 on brandPrimary) / ART: clearBlue[100]
+      linkInverse: sem.text.linkInverse,
     },
-    divider: brand.neutral[300],
+    divider: sem.divider,
+    /**
+     * Stroke / outline colours.
+     *   - `subtle` — inner dividers, one shade lighter than `divider`; for custom inner section breaks
+     *   - `default` — card / container outlines
+     *   - `input` — form fields, must hit ≥3:1 contrast
+     *   - `focus` — focus ring, matches brand primary
+     *
+     * `divider` (top-level) is consumed by MUI internals (List, Card, etc.). Don't override it in custom components.
+     */
     border: {
       subtle:  brand.neutral[200],
-      default: brand.neutral[300],
-      input:   brand.neutral[500],
-      focus:   brand.primary[600], // brand primary blue — ART: trueBlue[600] #0051ff / QSuper: qBlue[600] #0079d0
+      default: sem.border.default,
+      input:   sem.border.input,
+      focus:   brand.primary[600],
     },
+    /**
+     * Interaction-state overlays. Opacity scalars (`*Opacity`) come from the OPACITY constants
+     * above so the alpha() call and the scalar can never drift apart.
+     */
     action: {
-      active:             brand.neutral[600],        // icon/control active colour (e.g. checked checkbox, active icon button)
-      hover:              alpha(brand.neutral[900], 0.04),  // hover overlay on any surface
-      hoverOpacity:       0.04,
-      selected:           alpha(brand.neutral[900], 0.08),  // selected/expanded state overlay (e.g. accordion, list item)
-      selectedOpacity:    0.08,
-      disabled:           brand.neutral[500],        // disabled text and icons — matches text.disabled
-      disabledBackground: brand.neutral[200],        // disabled control fill (e.g. disabled button, input)
-      disabledOpacity:    0.38,
-      focus:              alpha(brand.neutral[900], 0.12),  // focus overlay (used by MUI internally for ripple-free focus)
-      focusOpacity:       0.12,
-      activatedOpacity:   0.12,                      // activated state opacity scalar (e.g. pressed chip)
+      active:             brand.neutral[600],
+      hover:              alpha(brand.neutral[900], OPACITY.hover.light),
+      hoverOpacity:       OPACITY.hover.light,
+      selected:           alpha(brand.neutral[900], OPACITY.selected.light),
+      selectedOpacity:    OPACITY.selected.light,
+      disabled:           brand.neutral[500],
+      disabledBackground: brand.neutral[200],
+      disabledOpacity:    OPACITY.disabled.light,
+      focus:              alpha(brand.neutral[900], OPACITY.focus.light),
+      focusOpacity:       OPACITY.focus.light,
+      activatedOpacity:   OPACITY.activated.light,
     },
   }
 }
 
+/**
+ * Build the DARK-mode MUI palette for a given brand. See `buildLightPalette` for the
+ * tier breakdown and structural contract — this mirrors it exactly.
+ */
 export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
+  const sem = brand.semanticOverrides.dark;
   return {
     primary: {
       light:        brand.primary[300],
       main:         brand.primary[300],
       dark:         brand.primary[400],
       contrastText: brand.primary[950],
+      text:         brand.primary[200],
+      icon:         brand.primary[300],
+      background:   alpha(brand.primary[400], 0.16),
+      border:       brand.primary[700],
     },
     secondary: {
       light:        brand.secondary[400],
       main:         brand.secondary[600],
       dark:         brand.secondary[800],
       contrastText: white,
+      text:         brand.secondary[200],
+      icon:         brand.secondary[400],
+      background:   alpha(brand.secondary[400], 0.16),
+      border:       brand.secondary[700],
     },
     error: {
       light:        red[300],
@@ -191,78 +269,74 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       contrastText: black,
     },
 
-    // Tertiary brand color (optional — only present when the brand defines one)
     ...(brand.tertiary && {
       tertiary: {
         light:        brand.tertiary[300],
         main:         brand.tertiary[400],
         dark:         brand.tertiary[600],
         contrastText: black,
+        text:         brand.tertiary[200],
+        icon:         brand.tertiary[400],
+        background:   alpha(brand.tertiary[400], 0.16),
+        border:       brand.tertiary[700],
       },
     }),
 
-    // Quaternary brand color — Light Blue; main anchored at [300]
     ...(brand.quaternary && {
       quaternary: {
         light:        brand.quaternary[200],
         main:         brand.quaternary[300],
         dark:         brand.quaternary[500],
         contrastText: black,
+        text:         brand.quaternary[100],
+        icon:         brand.quaternary[300],
+        background:   alpha(brand.quaternary[400], 0.16),
+        border:       brand.quaternary[700],
       },
     }),
 
-    // Background
     background: {
-      default:        brand.neutral[950],  // Foundation: #020617
-      paper:          brand.neutral[900],  // Foundation: #0f172a
-      elevated:       brand.neutral[800],  // Foundation: #1e293b
-      brandPrimary:   brand.neutral[800],  // Foundation: #1e293b (all brand surfaces unified at neutral[800] in dark mode)
-      brandSecondary: brand.neutral[800],  // Foundation: #1e293b
-      brandTertiary:  brand.neutral[800],  // Foundation: #1e293b
-      ...(brand.quaternary === undefined
-        ? {
-            brandSky:   brand.neutral[800],
-            brandClear: brand.neutral[800],
-            brandWarm:  brand.neutral[800],
-          }
-        : {
-            brandGrey:      brand.neutral[800],
-            brandLightBlue: brand.neutral[800],
-          }
-      ),
-      tableStripe: brand.neutral[800],  // dark mode stripe
+      default:        brand.neutral[950],
+      paper:          brand.neutral[900],
+      elevated:       brand.neutral[800],
+      brandPrimary:   brand.neutral[800],  // all brand surfaces unify at neutral[800] in dark mode
+      brandSecondary: brand.neutral[800],
+      brandTertiary:  brand.neutral[800],
+      tintCool:        sem.tintCool,
+      tintNeutralCool: sem.tintNeutralCool,
+      tintWarm:        sem.tintWarm,
+      tintNeutral:     sem.tintNeutral,
+      tableStripe:     brand.neutral[800],
     },
 
-    // Text & Borders
     text: {
-      primary:     brand.quaternary ? brand.neutral[50] : brand.neutral[300], // QSuper: neutral[50] / ART: neutral[300]
-      muted:       brand.quaternary ? brand.neutral[300] : brand.neutral[500], // QSuper: neutral[300] / ART: neutral[500]
+      primary:     sem.text.primary,
+      muted:       sem.text.muted,
       disabled:    brand.neutral[500],
       inverse:     brand.neutral[900],
       heading:     white,
       link:        brand.primary[300],
-      // linkInverse: resting colour only — interaction states (hover, active, visited) belong in components.MuiLink, not here
-      linkInverse: brand.quaternary ? white : clearBlue[100], // QSuper: white / ART: clearBlue[100]
+      linkInverse: sem.text.linkInverse,
     },
-    divider: brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
+    divider: sem.divider,
     border: {
-      subtle:  brand.neutral[800],  // Foundation: #282c34
-      default: brand.quaternary ? brand.neutral[700] : brand.neutral[600], // QSuper: neutral[700] / ART: neutral[600]
-      input:   brand.quaternary ? brand.neutral[400] : brand.neutral[500], // QSuper: neutral[400] / ART: neutral[500]
-      focus:   brand.primary[300], // brand primary blue (light tint for dark mode) — ART: trueBlue[300] / QSuper: qBlue[300]
+      subtle:  brand.neutral[800],
+      default: sem.border.default,
+      input:   sem.border.input,
+      focus:   brand.primary[300],
     },
     action: {
-      active:             brand.neutral[300],        // icon/control active colour
-      hover:              alpha(brand.neutral[50], 0.08),   // hover overlay — slightly stronger than light to read on dark surfaces
-      hoverOpacity:       0.08,
-      selected:           alpha(brand.neutral[50], 0.16),   // selected/expanded state overlay
-      selectedOpacity:    0.16,
-      disabled:           brand.neutral[500],        // disabled text and icons — matches text.disabled
-      disabledBackground: brand.neutral[800],        // disabled control fill
-      disabledOpacity:    0.38,
-      focus:              alpha(brand.neutral[50], 0.12),   // focus overlay
-      focusOpacity:       0.12,
-      activatedOpacity:   0.12,
+      active:             brand.neutral[300],
+      hover:              alpha(brand.neutral[50], OPACITY.hover.dark),
+      hoverOpacity:       OPACITY.hover.dark,
+      selected:           alpha(brand.neutral[50], OPACITY.selected.dark),
+      selectedOpacity:    OPACITY.selected.dark,
+      disabled:           brand.neutral[500],
+      disabledBackground: brand.neutral[800],
+      disabledOpacity:    OPACITY.disabled.dark,
+      focus:              alpha(brand.neutral[50], OPACITY.focus.dark),
+      focusOpacity:       OPACITY.focus.dark,
+      activatedOpacity:   OPACITY.activated.dark,
     },
   }
 }
