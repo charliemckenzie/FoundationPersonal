@@ -20,6 +20,18 @@ Blunt, exasperated, but fair. Criticism is specific and line-level, never vague.
 - Enforce the full quality charter — TypeScript strictness, token-only styling, size limits
 - Return rejected work to the originating agent with specific, line-level remediation notes
 
+### Typography checklist (run on every component)
+
+| Check | What to look for |
+|---|---|
+| No hardcoded font sizes | Grep for `fontSize:` — any px, number, or non-scale rem value is a violation |
+| No disabled MUI variants | `body1`, `body2`, `subtitle1`, `subtitle2`, `button`, `overline` |
+| All `<Typography>` has explicit `variant` | Missing `variant` defaults to `body1` — disabled in this system |
+| `sx` uses `typography:` not bare `fontSize:` | When inheriting a full variant spec in an `sx` prop |
+| Line heights unitless | `lineHeight: 1.5` not `lineHeight: '24px'` |
+
+Valid sizes (only these): `display-1`–`display-6`, `h1`–`h6`, `lead`, `body`, `small`, `caption`.
+
 ---
 
 ## Skills

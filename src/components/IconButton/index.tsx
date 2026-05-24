@@ -1,4 +1,5 @@
 import MuiIconButton from '@mui/material/IconButton';
+import type { SxProps, Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
 import { Tooltip } from '../Tooltip';
@@ -32,6 +33,7 @@ export interface IconButtonProps {
   showTooltip?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  sx?: SxProps<Theme>;
 }
 
 const BUTTON_SIZE_TO_ICON_SIZE = {
@@ -66,6 +68,7 @@ export function IconButton({
   showTooltip = true,
   onClick,
   type = 'button',
+  sx,
 }: IconButtonProps) {
   const resolvedColor: ButtonColorKeyResolved =
     color === 'default' || color === 'white' ? 'primary' : color;
@@ -101,6 +104,7 @@ export function IconButton({
           pointerEvents: 'none !important',
         },
         ...buildFocusStyles(reversed || color === 'white', resolvedColor),
+        ...(sx as object),
       }}
     >
       {loading ? (

@@ -151,14 +151,14 @@ export const WithAction: Story = {
       <Alert
         severity="info"
         message="A new version of the app is available."
-        action={<Button label="Refresh" size="small" variant="soft" color="info" />}
+        action={<Button label="Refresh" size="small" condensed variant="soft" color="info" />}
       />
       <Alert
         severity="info"
         title="Update available"
         message="A new version of the app is available with performance improvements and bug fixes. Refresh to apply the update."
         icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />}
-        action={<Button label="Refresh" size="small" variant="soft" color="info" />}
+        action={<Button label="Refresh" size="small" condensed variant="soft" color="info" />}
       />
     </div>
   ),

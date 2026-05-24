@@ -41,7 +41,6 @@ export const MemberNavLogoHeader = forwardRef(function MemberNavLogoHeader(
       ref={ref}
       sx={[
         (t) => ({
-          backgroundColor: t.palette.primary.background,
           borderBottom: trailing ? `1px solid ${t.palette.border.subtle}` : undefined,
           display: 'flex',
           alignItems: 'center',

@@ -85,6 +85,7 @@ export function Alert({
                 size="small"
                 showTooltip={false}
                 onClick={onClose}
+                sx={{ color: 'inherit' }}
               />
             )}
           </Box>
