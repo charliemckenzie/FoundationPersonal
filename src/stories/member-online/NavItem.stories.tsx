@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import { NavItem } from '../../components/MemberOnline';
 
 const meta: Meta<typeof NavItem> = {
-  title: 'Member Online / NavItem',
+  title: 'Member Online / Target State / NavItem',
   component: NavItem,
   tags: ['autodocs'],
   parameters: {

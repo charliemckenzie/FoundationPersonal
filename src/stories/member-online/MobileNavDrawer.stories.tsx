@@ -12,7 +12,7 @@ import {
 import type { ThemeMode } from '../../app/themes/ThemeModeContext';
 
 const meta: Meta<typeof MobileNavDrawer> = {
-  title: 'Member Online / MobileNavDrawer',
+  title: 'Member Online / Target State / MobileNavDrawer',
   component: MobileNavDrawer,
   tags: ['autodocs'],
   parameters: {

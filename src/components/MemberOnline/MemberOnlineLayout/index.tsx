@@ -113,7 +113,8 @@ export function MemberOnlineLayout({
     <Box
       sx={(t) => ({
         display: 'flex',
-        minHeight: '100vh',
+        height: '100vh',
+        overflow: 'hidden',
         backgroundColor: t.palette.background.paper,
       })}
     >
@@ -128,7 +129,7 @@ export function MemberOnlineLayout({
         onItemClick={onItemClick}
         lastLoggedIn={lastLoggedIn}
       />
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
         <MemberHeader
           user={user}
           mode={mode}
@@ -138,7 +139,7 @@ export function MemberOnlineLayout({
           onSearchSubmit={onSearchSubmit}
           onLogout={onLogout}
         />
-        <Box component="main" sx={{ flex: 1, minHeight: 0 }}>
+        <Box component="main" sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
           {children}
         </Box>
         <MemberFooter links={footerLinks} disclaimer={footerDisclaimer} />

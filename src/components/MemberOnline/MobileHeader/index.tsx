@@ -7,6 +7,8 @@ import { DEFAULT_MEMBER_ONLINE_COPY, type LogoSlot } from '../types';
 
 export interface MobileHeaderProps {
   logo: LogoSlot;
+  /** Logo shown below the `sm` breakpoint. Falls back to `logo` when not set. */
+  phoneLogo?: LogoSlot;
   /** When set, the logo becomes a link to this href (typically `'/'`). */
   homeHref?: string;
   /** Accessible label for the logo link. Defaults to `'Home'`. */
@@ -21,6 +23,7 @@ export interface MobileHeaderProps {
 
 export function MobileHeader({
   logo,
+  phoneLogo,
   homeHref,
   homeLabel = 'Home',
   onMenuOpen,
@@ -30,7 +33,7 @@ export function MobileHeader({
   searchLabel = DEFAULT_MEMBER_ONLINE_COPY.searchPlaceholder,
   logoutLabel = DEFAULT_MEMBER_ONLINE_COPY.logoutLabel,
 }: MobileHeaderProps) {
-  const logoNode = homeHref !== undefined ? (
+  const wrapWithLink = (node: React.ReactNode) => homeHref !== undefined ? (
     <Box
       component="a"
       href={homeHref}
@@ -48,9 +51,12 @@ export function MobileHeader({
         },
       })}
     >
-      {logo}
+      {node}
     </Box>
-  ) : logo;
+  ) : node;
+
+  const logoNode = wrapWithLink(logo);
+  const phoneLogoNode = phoneLogo !== undefined ? wrapWithLink(phoneLogo) : null;
 
   return (
     <Box
@@ -60,8 +66,8 @@ export function MobileHeader({
         alignItems: 'center',
         gap: 1.5,
         px: 2,
-        height: '3.75rem',
-        backgroundColor: t.palette.background.elevated,
+        height: '4.25rem',
+        backgroundColor: t.palette.background.paper,
         borderBottom: `1px solid ${t.palette.border.subtle}`,
       })}
     >
@@ -81,16 +87,23 @@ export function MobileHeader({
           label={searchLabel}
           variant="soft"
           color="primary"
-          size="small"
+          size="medium"
           onClick={onSearchOpen}
           showTooltip={false}
         />
       )}
-      <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>{logoNode}</Box>
+      <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+        {phoneLogoNode !== null ? (
+          <>
+            <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>{logoNode}</Box>
+            <Box sx={{ display: { xs: 'flex', sm: 'none' } }}>{phoneLogoNode}</Box>
+          </>
+        ) : logoNode}
+      </Box>
       <Button
         label={logoutLabel}
         variant="soft"
-        size="small"
+        size="medium"
         onClick={onLogout}
       />
     </Box>

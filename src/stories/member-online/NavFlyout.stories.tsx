@@ -8,7 +8,7 @@ import { MOCK_PRIMARY_ITEMS } from './mockData';
 const PUT_MONEY_IN = MOCK_PRIMARY_ITEMS.find((i) => i.id === 'put-money-in');
 
 const meta: Meta<typeof NavFlyout> = {
-  title: 'Member Online / NavFlyout',
+  title: 'Member Online / Target State / NavFlyout',
   component: NavFlyout,
   tags: ['autodocs'],
   parameters: {

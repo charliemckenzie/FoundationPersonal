@@ -7,7 +7,7 @@ import type { ThemeMode } from '../../app/themes/ThemeModeContext';
 type Size = 'small' | 'medium';
 
 const meta: Meta<typeof ThemeSwitcher> = {
-  title: 'Member Online / ThemeSwitcher',
+  title: 'Member Online / Target State / ThemeSwitcher',
   component: ThemeSwitcher,
   tags: ['autodocs'],
   parameters: {

@@ -49,7 +49,7 @@ export function Logo({ variant = 'primary', size = 'md', alt }: LogoProps) {
     <Box
       sx={(t) => ({
         color: 'primary.main',
-        height: { sm: t.spacing(3), md: t.spacing(5), lg: t.spacing(8) }[size],
+        height: { sm: t.spacing(3), md: t.spacing(5), lg: t.spacing(6.5) }[size],
         '& svg': { height: '100%', width: 'auto', display: 'block' },
       })}
     >

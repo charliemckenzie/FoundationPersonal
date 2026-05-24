@@ -15,7 +15,7 @@ import {
 } from './mockData';
 
 const meta: Meta<typeof MemberOnlineLayout> = {
-  title: 'Member Online / MemberOnlineLayout',
+  title: 'Member Online / Target State / MemberOnlineLayout',
   component: MemberOnlineLayout,
   tags: ['autodocs'],
   parameters: {

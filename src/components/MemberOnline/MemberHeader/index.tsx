@@ -47,22 +47,25 @@ export function MemberHeader({
         alignItems: 'center',
         gap: 2,
         px: 3,
-        height: '4rem',
-        backgroundColor: t.palette.background.elevated,
+        height: '4.5rem',
+        backgroundColor: t.palette.background.paper,
         borderBottom: `1px solid ${t.palette.border.subtle}`,
       })}
     >
       {!hideSearch && (
-        <SearchField
-          value={searchValue}
-          onChange={onSearchChange}
-          onSubmit={onSearchSubmit}
-          placeholder={searchPlaceholder}
-          shortcutHint={searchShortcut ?? undefined}
-        />
+        <Box sx={{ width: '15rem', flexShrink: 0 }}>
+          <SearchField
+            value={searchValue}
+            onChange={onSearchChange}
+            onSubmit={onSearchSubmit}
+            placeholder={searchPlaceholder}
+            shortcutHint={searchShortcut ?? undefined}
+            fullWidth
+          />
+        </Box>
       )}
-      <Box sx={{ flex: 1 }} />
       <UserChip user={user} />
+      <Box sx={{ flex: 1 }} />
       <ThemeSwitcher mode={mode} onChange={onModeChange} />
       <Button label={logoutLabel} variant="soft" size="small" onClick={onLogout} />
     </Box>

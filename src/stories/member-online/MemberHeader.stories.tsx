@@ -5,7 +5,7 @@ import { MOCK_USER } from './mockData';
 import type { ThemeMode } from '../../app/themes/ThemeModeContext';
 
 const meta: Meta<typeof MemberHeader> = {
-  title: 'Member Online / MemberHeader',
+  title: 'Member Online / Target State / MemberHeader',
   component: MemberHeader,
   tags: ['autodocs'],
   parameters: {

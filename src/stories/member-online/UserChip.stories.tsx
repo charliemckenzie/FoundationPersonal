@@ -4,7 +4,7 @@ import { UserChip } from '../../components/MemberOnline';
 import { MOCK_USER } from './mockData';
 
 const meta: Meta<typeof UserChip> = {
-  title: 'Member Online / UserChip',
+  title: 'Member Online / Target State / UserChip',
   component: UserChip,
   tags: ['autodocs'],
   parameters: {

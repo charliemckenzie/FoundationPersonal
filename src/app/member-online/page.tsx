@@ -95,7 +95,7 @@ export default function MemberOnlinePage() {
       secondaryItems={secondaryItems}
       footerLinks={FOOTER_LINKS}
       footerDisclaimer={FOOTER_DISCLAIMER}
-      logo={<Logo variant="primary" size="md" />}
+      logo={<Logo variant="primary" size="lg" />}
       mobileLogo={<Logo variant="mark" size="md" />}
       homeHref="/"
       activeItemId={activeId}

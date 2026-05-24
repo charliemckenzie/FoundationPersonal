@@ -1,8 +1,10 @@
 'use client';
 
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MuiTabs from '@mui/material/Tabs';
+import MuiTab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
+import { alpha } from '@mui/material/styles';
+import { Icon } from '../../Icon';
 import { DEFAULT_MEMBER_ONLINE_COPY } from '../types';
 import type { ThemeMode } from '../../../app/themes/ThemeModeContext';
 
@@ -10,78 +12,81 @@ export interface ThemeSwitcherProps {
   mode: ThemeMode;
   onChange: (mode: ThemeMode) => void;
   size?: 'small' | 'medium';
-  /** Hide labels and render icons only — useful for compact headers. */
-  iconOnly?: boolean;
   lightLabel?: string;
   darkLabel?: string;
 }
 
-function SunIcon() {
-  return (
-    <Box
-      component="svg"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      sx={{ width: '1.125rem', height: '1.125rem', color: 'inherit' }}
-    >
-      <circle cx="12" cy="12" r="4" fill="currentColor" />
-      <g stroke="currentColor" strokeWidth="1.75" strokeLinecap="round">
-        <line x1="12" y1="2.5" x2="12" y2="5" />
-        <line x1="12" y1="19" x2="12" y2="21.5" />
-        <line x1="2.5" y1="12" x2="5" y2="12" />
-        <line x1="19" y1="12" x2="21.5" y2="12" />
-        <line x1="5.2" y1="5.2" x2="6.9" y2="6.9" />
-        <line x1="17.1" y1="17.1" x2="18.8" y2="18.8" />
-        <line x1="5.2" y1="18.8" x2="6.9" y2="17.1" />
-        <line x1="17.1" y1="6.9" x2="18.8" y2="5.2" />
-      </g>
-    </Box>
-  );
-}
+const SEGMENTED_HEIGHT: Record<'small' | 'medium', number> = { small: 32, medium: 44 };
+const SEGMENTED_PADDING = 4;
+const SLIDE_TRANSITION =
+  'left 450ms cubic-bezier(0.25, 1, 0.5, 1), width 450ms cubic-bezier(0.25, 1, 0.5, 1)';
 
-function MoonIcon() {
-  return (
-    <Box
-      component="svg"
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-      sx={{ width: '1.125rem', height: '1.125rem', color: 'inherit' }}
-    >
-      <path
-        d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"
-        fill="currentColor"
-      />
-    </Box>
-  );
-}
+
 
 export function ThemeSwitcher({
   mode,
   onChange,
   size = 'small',
-  iconOnly = false,
   lightLabel = DEFAULT_MEMBER_ONLINE_COPY.lightLabel,
   darkLabel = DEFAULT_MEMBER_ONLINE_COPY.darkLabel,
 }: ThemeSwitcherProps) {
+  const h = SEGMENTED_HEIGHT[size];
+  const activeIndex = mode === 'dark' ? 1 : 0;
+
   return (
-    <ToggleButtonGroup
-      value={mode}
-      exclusive
-      size={size}
-      onChange={(_, next) => {
-        if (next === 'light' || next === 'dark') onChange(next);
-      }}
-      aria-label="Colour mode"
-      sx={{ '& .MuiToggleButton-root': { px: iconOnly ? 1 : 1.5, gap: 0.75 } }}
+    <Box
+      sx={(t) => ({
+        display: 'inline-flex',
+        bgcolor: alpha(t.palette.primary.main, 0.1),
+        borderRadius: `${t.shape.button}px`,
+        padding: `${SEGMENTED_PADDING}px`,
+      })}
     >
-      <ToggleButton value="light" aria-label={lightLabel}>
-        <SunIcon />
-        {!iconOnly && lightLabel}
-      </ToggleButton>
-      <ToggleButton value="dark" aria-label={darkLabel}>
-        <MoonIcon />
-        {!iconOnly && darkLabel}
-      </ToggleButton>
-    </ToggleButtonGroup>
+      <MuiTabs
+        value={activeIndex}
+        onChange={(_, next: number) => onChange(next === 0 ? 'light' : 'dark')}
+        aria-label="Colour mode"
+        selectionFollowsFocus
+        sx={(t) => ({
+          minHeight: h,
+          '& .MuiTabs-scroller': { overflow: 'visible !important' },
+          '& .MuiTabs-flexContainer': { gap: 0 },
+          '& .MuiTabs-indicator': {
+            top: 0,
+            bottom: 0,
+            height: '100%',
+            borderRadius: `${t.shape.button}px`,
+            bgcolor: 'primary.main',
+            zIndex: 0,
+            transition: SLIDE_TRANSITION,
+            '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
+          },
+          '& .MuiTab-root': {
+            minWidth: h,
+            width: h,
+            height: h,
+            minHeight: h,
+            padding: 0,
+            borderRadius: `${t.shape.button}px`,
+            border: 'none',
+            bgcolor: 'transparent',
+            color: t.palette.primary.main,
+            position: 'relative',
+            zIndex: 1,
+            '&.Mui-selected': { color: t.palette.primary.contrastText },
+            '&:hover': { bgcolor: alpha(t.palette.primary.main, 0.08) },
+            '&.Mui-selected:hover': { bgcolor: 'transparent' },
+            '&.Mui-focusVisible': {
+              outline: `2px solid ${t.palette.border.focus}`,
+              outlineOffset: 2,
+              zIndex: 2,
+            },
+          },
+        })}
+      >
+        <MuiTab icon={<Icon icon="sun-bright" size="md" />} aria-label={lightLabel} disableRipple />
+        <MuiTab icon={<Icon icon="moon" size="md" />} aria-label={darkLabel} disableRipple />
+      </MuiTabs>
+    </Box>
   );
 }

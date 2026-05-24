@@ -32,6 +32,7 @@ export function SkipLinks({ links = DEFAULT_LINKS }: SkipLinksProps) {
         display: 'flex',
         flexDirection: 'column',
         gap: 0.5,
+        pointerEvents: 'none',
       }}
     >
       {links.map(({ label, targetId, icon }) => (
@@ -54,9 +55,11 @@ export function SkipLinks({ links = DEFAULT_LINKS }: SkipLinksProps) {
             lineHeight: 1.5,
             overflow: 'hidden',
             // Hidden off the left edge of the viewport by default
+            pointerEvents: 'none',
             transform: 'translateX(calc(-100% - 3rem))',
             transition: 'transform 0.15s ease',
             '&:focus': {
+              pointerEvents: 'auto',
               transform: 'translateX(0)',
               outline: '3px solid',
               outlineColor: 'border.focus',

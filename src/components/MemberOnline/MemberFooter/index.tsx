@@ -2,7 +2,6 @@
 
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
 import type { MemberFooterLink } from '../types';
 
 export interface MemberFooterProps {
@@ -17,7 +16,7 @@ export function MemberFooter({ links, disclaimer }: MemberFooterProps) {
       component="footer"
       sx={(t) => ({
         px: { xs: 2, md: 3 },
-        py: 2,
+        py: 3,
         backgroundColor: t.palette.background.paper,
         borderTop: `1px solid ${t.palette.border.subtle}`,
       })}
@@ -25,28 +24,30 @@ export function MemberFooter({ links, disclaimer }: MemberFooterProps) {
       <Box
         component="nav"
         aria-label="Legal"
-        sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 1.5, md: 3 }, mb: disclaimer ? 1 : 0 }}
+        className="link-hover-only"
+        sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: disclaimer ? 1 : 0 }}
       >
         {links.map((link) => (
-          <Link
-            key={link.href}
+          <Box
+            key={link.label}
+            component="a"
             href={link.href}
-            underline="none"
             sx={{
-              fontSize: '0.9375rem',
-              color: 'text.primary',
+              fontSize: '1rem',
+              lineHeight: 1.5,
               fontWeight: 500,
-              '&:hover': { color: 'primary.main', textDecoration: 'underline' },
+              color: 'text.primary',
+              '&:hover': { color: 'primary.main' },
             }}
           >
             {link.label}
-          </Link>
+          </Box>
         ))}
       </Box>
       {disclaimer !== undefined && (
         <Typography
           variant="small"
-          sx={{ color: 'text.muted', fontSize: '0.8125rem', mt: 1, m: 0 }}
+          sx={{ '&&': { color: 'text.muted', fontSize: '0.875rem', lineHeight: 1.43 }, mt: 1, m: 0 }}
         >
           {disclaimer}
         </Typography>

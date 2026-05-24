@@ -3,7 +3,7 @@ import { MemberFooter } from '../../components/MemberOnline';
 import { MOCK_FOOTER_DISCLAIMER, MOCK_FOOTER_LINKS } from './mockData';
 
 const meta: Meta<typeof MemberFooter> = {
-  title: 'Member Online / MemberFooter',
+  title: 'Member Online / Target State / MemberFooter',
   component: MemberFooter,
   tags: ['autodocs'],
   parameters: {

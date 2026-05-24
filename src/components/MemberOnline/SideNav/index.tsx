@@ -30,7 +30,7 @@ export interface SideNavProps {
   lastLoggedIn?: string;
   /**
    * Custom width. When omitted, the SideNav uses responsive defaults:
-   * `md` 304px, `lg` 320px, `xl` 352px.
+   * `md` 296px, `lg` 320px, `xl` 352px.
    */
   width?: string | number | { md?: string | number; lg?: string | number; xl?: string | number };
   lastLoggedInLabel?: string;
@@ -48,7 +48,7 @@ export function SideNav({
   activeItemId,
   onItemClick,
   lastLoggedIn,
-  width = { md: '304px', lg: '320px', xl: '352px' },
+  width = { md: '296px', lg: '320px', xl: '352px' },
   lastLoggedInLabel = DEFAULT_MEMBER_ONLINE_COPY.lastLoggedInLabel,
 }: SideNavProps) {
   const [openFlyoutId, setOpenFlyoutId] = useState<string | null>(null);
@@ -103,7 +103,7 @@ export function SideNav({
         flexShrink: 0,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: t.palette.background.elevated,
+        backgroundColor: t.palette.background.default,
         borderRight: `1px solid ${t.palette.border.subtle}`,
         height: '100%',
         minHeight: 0,
@@ -111,10 +111,10 @@ export function SideNav({
     >
       <Box
         sx={(t) => ({
+          pt: 3,
           px: 3,
-          py: 2,
+          pb: 0.5,
           backgroundColor: t.palette.primary.background,
-          borderBottom: `1px solid ${t.palette.border.subtle}`,
           display: 'flex',
           alignItems: 'center',
           minHeight: '4rem',
@@ -147,13 +147,13 @@ export function SideNav({
 
       <Box sx={{ flex: 1, overflowY: 'auto', minHeight: 0 }}>
         {balance !== undefined && (
-          <Box sx={{ px: 1.5, py: 2 }}>
+          <Box sx={{ p: 1.5 }}>
             <BalanceCard balance={balance} />
           </Box>
         )}
 
         <Box component="nav" aria-label="Primary" sx={{ px: 1.5 }}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.25 }}>
             {primaryItems.map((item) => {
               const hasChildren = (item.children?.length ?? 0) > 0;
               return (
@@ -175,44 +175,42 @@ export function SideNav({
             })}
           </Box>
 
-          {secondaryItems !== undefined && secondaryItems.length > 0 && (
+          {(secondaryItems !== undefined && secondaryItems.length > 0) || lastLoggedIn !== undefined ? (
             <>
-              <Divider sx={{ my: 2, mx: 1 }} />
-              <Box
-                component="nav"
-                aria-label="Secondary"
-                sx={{ display: 'flex', flexDirection: 'column' }}
-              >
-                {secondaryItems.map((item) => (
-                  <NavItem
-                    key={item.id}
-                    label={item.label}
-                    active={activeItemId === item.id}
-                    variant="secondary"
-                    size="medium"
-                    href={item.href}
-                    onClick={() => handleItemClick(item)}
-                  />
-                ))}
-              </Box>
+              <Divider sx={{ my: 2, mx: 1, borderColor: 'border.subtle' }} />
+              {secondaryItems !== undefined && secondaryItems.length > 0 && (
+                <Box
+                  component="nav"
+                  aria-label="Secondary"
+                  sx={{ display: 'flex', flexDirection: 'column' }}
+                >
+                  {secondaryItems.map((item) => (
+                    <NavItem
+                      key={item.id}
+                      label={item.label}
+                      active={activeItemId === item.id}
+                      variant="secondary"
+                      size="medium"
+                      href={item.href}
+                      onClick={() => handleItemClick(item)}
+                    />
+                  ))}
+                </Box>
+              )}
+              {lastLoggedIn !== undefined && (
+                <>
+                  <Divider sx={{ my: 2, mx: 1, borderColor: 'border.subtle' }} />
+                  <Box sx={{ px: 1.5, pb: 1 }}>
+                    <Typography variant="small" sx={{ color: 'text.muted', fontSize: '0.8125rem', m: 0 }}>
+                      {lastLoggedInLabel} {lastLoggedIn}
+                    </Typography>
+                  </Box>
+                </>
+              )}
             </>
-          )}
+          ) : null}
         </Box>
       </Box>
-
-      {lastLoggedIn !== undefined && (
-        <Box
-          sx={(t) => ({
-            px: 3,
-            py: 2,
-            borderTop: `1px solid ${t.palette.border.subtle}`,
-          })}
-        >
-          <Typography variant="small" sx={{ color: 'text.muted', fontSize: '0.8125rem', m: 0 }}>
-            {lastLoggedInLabel} {lastLoggedIn}
-          </Typography>
-        </Box>
-      )}
 
       {lastFlyoutItem !== null && (
         <NavFlyout

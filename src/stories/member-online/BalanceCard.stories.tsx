@@ -4,7 +4,7 @@ import { BalanceCard } from '../../components/MemberOnline';
 import { MOCK_BALANCE } from './mockData';
 
 const meta: Meta<typeof BalanceCard> = {
-  title: 'Member Online / BalanceCard',
+  title: 'Member Online / Target State / BalanceCard',
   component: BalanceCard,
   tags: ['autodocs'],
   parameters: {

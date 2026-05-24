@@ -64,7 +64,7 @@ function rootSx(
     }),
     '&:hover': {
       backgroundColor: t.palette.background.paper,
-      color: active ? t.palette.primary.main : t.palette.primary.dark,
+      color: t.palette.text.link,
       textDecoration: 'none',
     },
     '&:visited': { color: 'inherit' },

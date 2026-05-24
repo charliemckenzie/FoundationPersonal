@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import { MemberSearchField } from '../..';
 
 const meta: Meta<typeof MemberSearchField> = {
-  title: 'Member Online / SearchField',
+  title: 'Member Online / Target State / SearchField',
   component: MemberSearchField,
   tags: ['autodocs'],
   parameters: {

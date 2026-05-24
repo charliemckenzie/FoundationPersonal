@@ -6,7 +6,7 @@ import { Logo } from '../../components/Logo';
 import { MOCK_BALANCE, MOCK_PRIMARY_ITEMS, MOCK_SECONDARY_ITEMS } from './mockData';
 
 const meta: Meta<typeof SideNav> = {
-  title: 'Member Online / SideNav',
+  title: 'Member Online / Target State / SideNav',
   component: SideNav,
   tags: ['autodocs'],
   parameters: {
