@@ -78,6 +78,7 @@ export function MobileHeader({
         variant="ghost"
         color="default"
         size="medium"
+        condensed
         onClick={onMenuOpen}
         showTooltip={false}
       />
@@ -88,6 +89,7 @@ export function MobileHeader({
           variant="soft"
           color="primary"
           size="medium"
+          condensed
           onClick={onSearchOpen}
           showTooltip={false}
         />
@@ -104,6 +106,7 @@ export function MobileHeader({
         label={logoutLabel}
         variant="soft"
         size="medium"
+        condensed
         onClick={onLogout}
       />
     </Box>

@@ -1,9 +1,10 @@
 'use client';
 
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import { Button } from '../../Button';
+import { IconButton } from '../../IconButton';
 import { UserChip } from '../UserChip';
-import { SearchField } from '../SearchField';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import { DEFAULT_MEMBER_ONLINE_COPY, type MemberUser } from '../types';
 import type { ThemeMode } from '../../../app/themes/ThemeModeContext';
@@ -53,16 +54,18 @@ export function MemberHeader({
       })}
     >
       {!hideSearch && (
-        <Box sx={{ width: '15rem', flexShrink: 0 }}>
-          <SearchField
-            value={searchValue}
-            onChange={onSearchChange}
-            onSubmit={onSearchSubmit}
-            placeholder={searchPlaceholder}
-            shortcutHint={searchShortcut ?? undefined}
-            fullWidth
-          />
-        </Box>
+        <IconButton
+          icon="magnifying-glass"
+          label={searchPlaceholder}
+          variant="soft"
+          color="primary"
+          size="small"
+          onClick={() => onSearchSubmit?.('')}
+          showTooltip={false}
+        />
+      )}
+      {!hideSearch && (
+        <Divider orientation="vertical" sx={{ height: '1.5rem', alignSelf: 'center', borderColor: 'border.subtle' }} />
       )}
       <UserChip user={user} />
       <Box sx={{ flex: 1 }} />

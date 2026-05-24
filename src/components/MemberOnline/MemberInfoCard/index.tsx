@@ -3,7 +3,7 @@
 import { useCallback, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { TextButton } from '../../TextButton';
+import { IconButton } from '../../IconButton';
 import {
   DEFAULT_MEMBER_ONLINE_COPY,
   type MemberBalance,
@@ -45,7 +45,7 @@ export function MemberInfoCard({
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Box>
+      <Box sx={{ px: 1.5 }}>
         <Typography variant="h5" sx={{ color: 'text.heading', m: 0, lineHeight: 1.3 }}>
           {user.name}
         </Typography>
@@ -69,8 +69,8 @@ export function MemberInfoCard({
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: 1.5,
-          px: 2,
-          py: 1.25,
+          px: 1.5,
+          py: 1.5,
           borderRadius: `${t.shape.sm}px`,
           backgroundColor: t.palette.primary.background,
         })}
@@ -78,21 +78,26 @@ export function MemberInfoCard({
         <Box>
           <Typography
             variant="small"
-            sx={{ color: 'text.primary', fontSize: '0.8125rem', m: 0 }}
+            sx={{ color: 'text.primary', fontSize: '0.875rem', m: 0 }}
           >
             {memberNumberLabel}
           </Typography>
           <Typography
             variant="body"
-            sx={{ color: 'text.heading', fontWeight: 700, m: 0, mt: 0.25, lineHeight: 1.3 }}
+            sx={{ color: 'text.heading', fontWeight: 700, m: 0, lineHeight: 1.3 }}
           >
             {user.memberNumber}
           </Typography>
         </Box>
-        <TextButton
+        <IconButton
+          icon="copy"
           label={copied ? copiedLabel : copyLabel}
+          variant="ghost"
+          color="primary"
+          size="medium"
+          condensed
           onClick={handleCopy}
-          size="small"
+          showTooltip={false}
         />
       </Box>
     </Box>

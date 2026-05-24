@@ -26,6 +26,8 @@ export interface MemberOnlineLayoutProps {
   footerLinks: MemberFooterLink[];
   /** Slot for the brand logo. Used in both the desktop SideNav header and the mobile header / drawer. */
   logo: LogoSlot;
+  /** Logo used in the mobile nav drawer. Falls back to `logo`. */
+  drawerLogo?: LogoSlot;
   /** Compact mark / icon-only logo used in the mobile header strip. Falls back to `logo`. */
   mobileLogo?: LogoSlot;
   /** When set, the logo becomes a link to this href (typically `'/'`). Applied to SideNav, MobileHeader, and MobileNavDrawer. */
@@ -50,6 +52,7 @@ export function MemberOnlineLayout({
   secondaryItems,
   footerLinks,
   logo,
+  drawerLogo,
   mobileLogo,
   homeHref,
   homeLabel,
@@ -88,7 +91,7 @@ export function MemberOnlineLayout({
         <MobileNavDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
-          logo={logo}
+          logo={drawerLogo ?? logo}
           homeHref={homeHref}
           homeLabel={homeLabel}
           user={user}
@@ -140,9 +143,13 @@ export function MemberOnlineLayout({
           onLogout={onLogout}
         />
         <Box component="main" sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
-          {children}
+          <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
+            <Box sx={{ flex: 1 }}>
+              {children}
+            </Box>
+            <MemberFooter links={footerLinks} disclaimer={footerDisclaimer} />
+          </Box>
         </Box>
-        <MemberFooter links={footerLinks} disclaimer={footerDisclaimer} />
       </Box>
     </Box>
   );

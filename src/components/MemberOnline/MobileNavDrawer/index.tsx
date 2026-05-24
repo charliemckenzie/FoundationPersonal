@@ -89,7 +89,7 @@ export function MobileNavDrawer({
       slotProps={{
         paper: {
           'aria-label': 'Member navigation',
-          sx: { width, maxWidth: '24rem', overflow: 'hidden' },
+          sx: { width, maxWidth: '24rem', overflow: 'hidden', backgroundColor: 'background.paper', backgroundImage: 'none' },
         },
       }}
     >
@@ -98,7 +98,7 @@ export function MobileNavDrawer({
         homeHref={homeHref}
         homeLabel={homeLabel}
         onClick={onClose}
-        minHeight="3.75rem"
+        minHeight="4.25rem"
         containerSx={{ px: 2, py: 1.5, justifyContent: 'space-between' }}
         trailing={
           <IconButton
@@ -107,7 +107,8 @@ export function MobileNavDrawer({
             label={labels.closeMenuLabel}
             variant="ghost"
             color="primary"
-            size="small"
+            size="medium"
+            condensed
             onClick={onClose}
             showTooltip={false}
           />
@@ -177,7 +178,7 @@ export function MobileNavDrawer({
               variant="outlined"
               fullWidth
               onClick={onLogout}
-              sx={{ mt: 1 }}
+              sx={{ mt: 1, flexShrink: 0 }}
             />
           </Box>
 
@@ -193,13 +194,18 @@ export function MobileNavDrawer({
               gap: 2,
             }}
           >
-            <TextButton
-              label={labels.backLabel}
-              startIcon="chevron-left"
-              iconDirection="left"
-              onClick={handleBack}
-            />
-            <Typography variant="h5" sx={{ color: 'text.heading', m: 0 }}>
+            <Box sx={{ mx: -2 }}>
+              <Box sx={{ px: 2, height: 48, display: 'flex', alignItems: 'center' }}>
+                <TextButton
+                  label={labels.backLabel}
+                  startIcon="chevron-left"
+                  iconDirection="left"
+                  onClick={handleBack}
+                />
+              </Box>
+              <Divider sx={{ borderColor: 'border.subtle' }} />
+            </Box>
+            <Typography variant="h5" sx={{ color: 'text.heading', m: 0, mt: 1, fontSize: '1rem', lineHeight: '1.5rem' }}>
               {drillItem?.label}
             </Typography>
             <Box

@@ -27,6 +27,7 @@ export interface IconButtonProps {
   variant?: IconButtonVariant;
   size?: IconButtonSize;
   color?: IconButtonColor;
+  condensed?: boolean;
   disabled?: boolean;
   loading?: boolean;
   reversed?: boolean;
@@ -48,6 +49,8 @@ const SIZE_STYLES: Record<IconButtonSize, { width: number; height: number }> = {
   large:  { width: 56, height: 56 },
 };
 
+const CONDENSED_REDUCTION = 4;
+
 const SPINNER_SIZE_MAP: Record<IconButtonSize, 'small' | 'medium' | 'large'> = {
   small: 'small',
   medium: 'small',
@@ -62,6 +65,7 @@ export function IconButton({
   variant = 'contained',
   size = 'medium',
   color = 'primary',
+  condensed = false,
   disabled = false,
   loading = false,
   reversed = false,
@@ -93,6 +97,10 @@ export function IconButton({
       type={type}
       sx={{
         ...SIZE_STYLES[size],
+        ...(condensed && {
+          width: SIZE_STYLES[size].width - CONDENSED_REDUCTION,
+          height: SIZE_STYLES[size].height - CONDENSED_REDUCTION,
+        }),
         ...variantStyles,
         ...reversedStyles,
         ...(loading && {

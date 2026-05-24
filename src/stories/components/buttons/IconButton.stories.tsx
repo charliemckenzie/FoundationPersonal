@@ -12,6 +12,7 @@ const meta: Meta<typeof IconButton> = {
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     iconStyle: { control: 'select', options: ['solid', 'regular', 'light', 'thin', 'duotone', 'sharp'] },
+    condensed: { control: 'boolean', description: 'Reduces width and height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
     showTooltip: { control: 'boolean' },
     loading: { control: 'boolean' },
     reversed: { control: 'boolean' },
@@ -39,12 +40,42 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: [
+          'Three sizes cover the full range of layout needs.',
+          '',
+          '| Size | Default | Condensed |',
+          '|------|---------|-----------|',
+          '| Small | 36×36px | 32×32px |',
+          '| Medium | 48×48px | 44×44px |',
+          '| Large | 56×56px | 52×52px |',
+          '',
+          '**Condensed** — use in dense interfaces: toolbars, mobile headers, and anywhere vertical rhythm is tight. Apply the `condensed` prop; do not drop a size tier instead.',
+        ].join('\n'),
+      },
+    },
+  },
   render: () => (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-      <IconButton icon="pen" label="Edit small" size="small" color="primary" />
-      <IconButton icon="pen" label="Edit medium" size="medium" color="primary" />
-      <IconButton icon="pen" label="Edit large" size="large" color="primary" />
-    </div>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Default</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <IconButton icon="pen" label="Small" size="small" color="primary" />
+          <IconButton icon="pen" label="Medium" size="medium" color="primary" />
+          <IconButton icon="pen" label="Large" size="large" color="primary" />
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Condensed</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <IconButton icon="pen" label="Small condensed" size="small" color="primary" condensed />
+          <IconButton icon="pen" label="Medium condensed" size="medium" color="primary" condensed />
+          <IconButton icon="pen" label="Large condensed" size="large" color="primary" condensed />
+        </Box>
+      </Box>
+    </Box>
   ),
 };
 
