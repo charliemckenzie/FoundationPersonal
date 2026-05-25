@@ -202,6 +202,15 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
     components: {
       MuiCssBaseline: {
         styleOverrides: (theme) => ({
+          // MUI v9 CssBaseline spreads theme.typography.body1 onto the body element.
+          // body1 is deleted from the theme (disabled variant), so we restore the
+          // essential properties here to keep the body's font-family correct.
+          body: {
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: theme.typography.fontWeightRegular,
+            lineHeight: 1.5,
+          },
           a: {
             color: theme.palette.text.link,
             textDecoration: 'underline',
