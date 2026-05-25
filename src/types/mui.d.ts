@@ -15,7 +15,6 @@ declare module '@mui/material/Typography' {
     'display-3': true;
     'display-4': true;
     'display-5': true;
-    'display-6': true;
     lead: true;
     body: true;
     small: true;
@@ -143,7 +142,6 @@ declare module '@mui/material/styles' {
     'display-3': React.CSSProperties;
     'display-4': React.CSSProperties;
     'display-5': React.CSSProperties;
-    'display-6': React.CSSProperties;
     lead: React.CSSProperties;
     body: React.CSSProperties;
     small: React.CSSProperties;
@@ -155,7 +153,6 @@ declare module '@mui/material/styles' {
     'display-3'?: React.CSSProperties;
     'display-4'?: React.CSSProperties;
     'display-5'?: React.CSSProperties;
-    'display-6'?: React.CSSProperties;
     lead?: React.CSSProperties;
     body?: React.CSSProperties;
     small?: React.CSSProperties;

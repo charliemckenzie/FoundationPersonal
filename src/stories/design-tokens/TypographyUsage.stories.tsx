@@ -21,6 +21,7 @@ const SPACING_SCALE = [
   { variant: 'lead',      mb: 2.5, mbPx: '20px' },
   { variant: 'body',      mb: 2,   mbPx: '16px' },
   { variant: 'small',     mb: 1.5, mbPx: '12px' },
+  { variant: 'caption',   mb: 1,   mbPx: '8px'  },
 ] as const
 
 function SpacingTable() {
@@ -177,6 +178,18 @@ function TypographyUsageDoc() {
         <MuiTypography variant="small" color="text.muted">
           Past performance is not a reliable indicator of future performance. This information is general in nature
           and does not take into account your personal financial situation or needs.
+        </MuiTypography>
+      </Section>
+
+      <Section label="Helper / metadata text" token="caption · text.muted">
+        <MuiTypography variant="caption" color="text.muted">
+          Last updated 14 May 2026 · File size 2.4 MB · PDF format
+        </MuiTypography>
+      </Section>
+
+      <Section label="Form field helper text" token="caption · text.secondary">
+        <MuiTypography variant="caption" color="text.secondary">
+          Must be at least 8 characters and include one number.
         </MuiTypography>
       </Section>
 

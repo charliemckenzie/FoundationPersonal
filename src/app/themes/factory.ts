@@ -108,50 +108,44 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       // Display headings - Bootstrap scale
       'display-1': {
         fontFamily: brand.headingFontFamily,
-        fontSize: '5rem',      // 80px
+        fontSize: 'clamp(2.5rem, 4.76vw + 1.43rem, 5rem)',    // 40px → 80px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-2': {
         fontFamily: brand.headingFontFamily,
-        fontSize: '4.5rem',    // 72px
+        fontSize: 'clamp(2.25rem, 4.29vw + 1.29rem, 4.5rem)', // 36px → 72px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-3': {
         fontFamily: brand.headingFontFamily,
-        fontSize: '4rem',      // 64px
+        fontSize: 'clamp(2rem, 3.81vw + 1.14rem, 4rem)',      // 32px → 64px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-4': {
         fontFamily: brand.headingFontFamily,
-        fontSize: '3.5rem',    // 56px
+        fontSize: 'clamp(1.875rem, 3.10vw + 1.18rem, 3.5rem)', // 30px → 56px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       'display-5': {
         fontFamily: brand.headingFontFamily,
-        fontSize: '3rem',      // 48px
-        fontWeight: 700,
-        lineHeight: 1.2,
-      },
-      'display-6': {
-        fontFamily: brand.headingFontFamily,
-        fontSize: '2.5rem',    // 40px
+        fontSize: 'clamp(1.75rem, 2.38vw + 1.21rem, 3rem)',   // 28px → 48px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       // Standard heading hierarchy - Bootstrap scale
       h1: {
         fontFamily: brand.headingFontFamily,
-        fontSize: '2.5rem',    // 40px
+        fontSize: 'clamp(1.75rem, 1.43vw + 1.43rem, 2.5rem)', // 28px → 40px
         fontWeight: 700,
         lineHeight: 1.2,
       },
       h2: {
         fontFamily: brand.headingFontFamily,
-        fontSize: '2rem',      // 32px
+        fontSize: 'clamp(1.5rem, 0.95vw + 1.29rem, 2rem)',    // 24px → 32px
         fontWeight: 700,
         lineHeight: 1.2,
       },
@@ -179,7 +173,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       // Body text variants - Bootstrap scale
       lead: {
         fontSize: '1.25rem',   // 20px
-        fontWeight: 300,
+        fontWeight: 300,       // Light on desktop; bumped to 400 on mobile via MuiTypography styleOverrides
         lineHeight: 1.6,
       },
       body: {
@@ -561,7 +555,6 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             'display-3': 'h1',
             'display-4': 'h1',
             'display-5': 'h2',
-            'display-6': 'h2',
             lead: 'p',
             body: 'p',
             small: 'p',
@@ -571,9 +564,15 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
             ...(['h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-                 'display-1', 'display-2', 'display-3', 'display-4', 'display-5', 'display-6',
+                 'display-1', 'display-2', 'display-3', 'display-4', 'display-5',
                 ].includes(ownerState.variant as string) && {
               color: theme.palette.text.heading,
+            }),
+            // lead: Light (300) on desktop, Normal (400) on mobile for legibility
+            ...(ownerState.variant === 'lead' && {
+              [theme.breakpoints.down('md')]: {
+                fontWeight: 400,
+              },
             }),
           }),
         },

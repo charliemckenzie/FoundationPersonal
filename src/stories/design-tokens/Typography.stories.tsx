@@ -5,15 +5,26 @@ import { useTheme } from '@mui/material/styles'
 
 const DISPLAY_VARIANTS = ['display-1', 'display-2', 'display-3', 'display-4', 'display-5', 'display-6'] as const
 const HEADING_VARIANTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
-const BODY_VARIANTS = ['lead', 'body', 'small'] as const
+const BODY_VARIANTS = ['lead', 'body', 'small', 'caption'] as const
 
 function remToPx(value: unknown): number {
-  return Math.round(parseFloat(String(value)) * 16)
+  const str = String(value)
+  // For clamp() values, extract the max (desktop) size for line-height calculations
+  const clampMax = str.match(/clamp\(.*,\s*([\d.]+rem)\s*\)$/)
+  if (clampMax) return Math.round(parseFloat(clampMax[1]) * 16)
+  return Math.round(parseFloat(str) * 16)
 }
 
 function formatSize(fontSize: unknown): string {
+  const str = String(fontSize)
+  const clampMatch = str.match(/^clamp\(\s*([\d.]+rem),.*,\s*([\d.]+rem)\s*\)$/)
+  if (clampMatch) {
+    const minPx = Math.round(parseFloat(clampMatch[1]) * 16)
+    const maxPx = Math.round(parseFloat(clampMatch[2]) * 16)
+    return `${clampMatch[1]} → ${clampMatch[2]} (${minPx}–${maxPx}px)`
+  }
   const px = remToPx(fontSize)
-  return `${String(fontSize)} (${px}px)`
+  return `${str} (${px}px)`
 }
 
 function formatWeight(weight: unknown): string {
