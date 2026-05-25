@@ -3,7 +3,7 @@ import Box from '@mui/material/Box'
 import MuiTypography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 
-const DISPLAY_VARIANTS = ['display-1', 'display-2', 'display-3', 'display-4', 'display-5', 'display-6'] as const
+const DISPLAY_VARIANTS = ['display-1', 'display-2', 'display-3', 'display-4', 'display-5'] as const
 const HEADING_VARIANTS = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const
 const BODY_VARIANTS = ['lead', 'body', 'small', 'caption'] as const
 

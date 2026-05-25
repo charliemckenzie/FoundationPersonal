@@ -10,7 +10,6 @@ This project uses **Bootstrap-style typography** instead of MUI's default varian
 - `display-3` — 4rem / 64px, weight 300
 - `display-4` — 3.5rem / 56px, weight 300
 - `display-5` — 3rem / 48px, weight 300
-- `display-6` — 2.5rem / 40px, weight 300
 
 ### Standard Headings
 - `h1` — 2.5rem / 40px, weight 500
@@ -77,7 +76,7 @@ The mapping isn't always 1:1. Consider the **semantic purpose**:
 - **Emphasized intro paragraph?** → `lead`
 - **Default paragraph text?** → `body`
 - **Small metadata, labels, captions?** → `small`
-- **Large attention-grabbing heading?** → `display-1` through `display-6`
+- **Large attention-grabbing heading?** → `display-1` through `display-5`
 - **Section headings?** → `h1` through `h6`
 
 ### 4. Special Cases

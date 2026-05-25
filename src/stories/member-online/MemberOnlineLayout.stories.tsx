@@ -51,7 +51,7 @@ function Demo() {
     >
       <Box sx={{ p: { xs: 3, md: 4 }, maxWidth: '64rem' }}>
         <Stack spacing={2}>
-          <Typography variant="display-6" component="h1">
+          <Typography variant="h1" component="h1">
             Hello, Adam
           </Typography>
           <Typography variant="lead" color="text.muted">

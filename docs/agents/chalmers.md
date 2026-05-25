@@ -30,7 +30,7 @@ Blunt, exasperated, but fair. Criticism is specific and line-level, never vague.
 | `sx` uses `typography:` not bare `fontSize:` | When inheriting a full variant spec in an `sx` prop |
 | Line heights unitless | `lineHeight: 1.5` not `lineHeight: '24px'` |
 
-Valid sizes (only these): `display-1`–`display-6`, `h1`–`h6`, `lead`, `body`, `small`, `caption`.
+Valid sizes (only these): `display-1`–`display-5`, `h1`–`h6`, `lead`, `body`, `small`, `caption`.
 
 ---
 

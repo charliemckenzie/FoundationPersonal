@@ -54,7 +54,7 @@ The design system has a fixed scale. Every violation is a bug.
 
 | Variant | Size | Use case |
 |---|---|---|
-| `display-1` → `display-6` | 80px → 40px | Hero / section headers (Merriweather) |
+| `display-1` → `display-5` | 80px → 48px | Hero / section headers (Merriweather) |
 | `h1` → `h3` | 40px → 28px | Page / section headings (Merriweather) |
 | `h4` → `h6` | 24px → 16px | Card / label headings (Noto Sans) |
 | `lead` | 20px | Intro paragraphs |

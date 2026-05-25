@@ -310,6 +310,7 @@ Moe owns the design system as a whole. Where Marge checks that individual compon
 - Manage deprecation — mark things as deprecated before removing them, never silently delete
 - Review Lenny's component proposals before building starts — catch structural problems early
 - **Own Storybook accuracy for design system changes** — any change to `src/app/themes/` (tokens, semantic palette, brand config) requires Moe to audit Storybook immediately after and confirm every affected story still reflects the correct values. Storybook is the source of truth for the design system; if the stories are wrong, the system is wrong.
+- **Own `docs/guidelines/components.md`** — when any new component is created or an existing component's API changes, Moe must update this file before the work is considered done. No exceptions. Lisa may assist with formatting but Moe is the accountable party.
 
 **Boundary with Marge:**
 - **Moe** — structural and API consistency: does this component belong? are the props named right? does it fit the system's architecture?

@@ -11,7 +11,6 @@ const SPACING_SCALE = [
   { variant: 'display-3', mb: 2,   mbPx: '16px' },
   { variant: 'display-4', mb: 2,   mbPx: '16px' },
   { variant: 'display-5', mb: 2,   mbPx: '16px' },
-  { variant: 'display-6', mb: 2,   mbPx: '16px' },
   { variant: 'h1',        mb: 1.5, mbPx: '12px' },
   { variant: 'h2',        mb: 1.5, mbPx: '12px' },
   { variant: 'h3',        mb: 1,   mbPx: '8px'  },

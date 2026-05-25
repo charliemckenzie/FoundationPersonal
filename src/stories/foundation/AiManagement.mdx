@@ -1,0 +1,144 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / AI Management" />
+
+# AI Management
+
+This project uses GitHub Copilot as the primary AI coding assistant. AI agents do not automatically know how this codebase is structured, what conventions we follow, or what components already exist. Instruction files tell them.
+
+This page explains how that system works so anyone on the team can use it, maintain it, and add to it.
+
+---
+
+## How It Works
+
+When GitHub Copilot opens a chat session, it automatically loads `.github/copilot-instructions.md` from the repository root. That file uses `@` references to pull in other documents as context. Every agent — regardless of which AI model is active — reads those documents before responding.
+
+```
+.github/copilot-instructions.md   ← loaded automatically by Copilot (all models)
+CLAUDE.md                          ← loaded by Claude Code CLI + Copilot on Claude model
+  │
+  ├── @AGENTS.md                   ← the agent team, their roles, and the component pipeline
+  ├── @docs/guidelines/typography.md   ← typography scale, allowed variants, sizing rules
+  └── @docs/guidelines/components.md  ← component catalogue + the rule to use existing ones
+```
+
+The result: every Copilot session starts with knowledge of the team structure, the design constraints, and the full component library — without anyone needing to paste context manually.
+
+---
+
+## The Guidelines Folder
+
+`docs/guidelines/` is the home for all AI instruction documents. Each file targets a specific area where AI output needs to be constrained or guided.
+
+<table>
+  <thead>
+    <tr>
+      <th>File</th>
+      <th>What it governs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>typography.md</code></td>
+      <td>Allowed typography variants, rem sizing rules, banned MUI variants</td>
+    </tr>
+    <tr>
+      <td><code>components.md</code></td>
+      <td>Full component catalogue; the rule to always use existing components first</td>
+    </tr>
+  </tbody>
+</table>
+
+These files are not documentation for humans first — they are instructions for AI. Write them accordingly: direct, specific, and unambiguous. Avoid prose where a table or list will do.
+
+---
+
+## When to Create a New Guideline
+
+If the same problem keeps recurring in AI output, that's a signal. A new guideline file is the fix.
+
+Common triggers:
+
+- An agent repeatedly uses a pattern you've corrected more than twice
+- A new area of the codebase has rules that aren't obvious from the code itself
+- A convention exists in the team's heads but nowhere in writing
+- A component, token, or API is consistently misused
+
+**Process:**
+
+1. Write the guideline in `docs/guidelines/` as a focused `.md` file
+2. Add an `@` reference to it in both `.github/copilot-instructions.md` and `CLAUDE.md`
+3. Keep it short — AI context has limits and specific files load every session
+
+---
+
+## Adding a Reference
+
+Both instruction files must be updated together. Open each and add the new reference on a new line:
+
+```
+@AGENTS.md
+@docs/guidelines/typography.md
+@docs/guidelines/components.md
+@docs/guidelines/your-new-file.md   ← add here
+```
+
+Files are: `.github/copilot-instructions.md` and `CLAUDE.md` in the repository root.
+
+---
+
+## Writing Effective Guideline Files
+
+<table>
+  <thead>
+    <tr>
+      <th>Do</th>
+      <th>Don't</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>State the rule first, explain second</td>
+      <td>Bury the constraint in paragraph four</td>
+    </tr>
+    <tr>
+      <td>Use tables for reference data (prop names, token names, etc.)</td>
+      <td>Write long prose when a list is clearer</td>
+    </tr>
+    <tr>
+      <td>Use strong language for hard rules: <strong>always</strong>, <strong>never</strong>, <strong>must</strong></td>
+      <td>Use hedging language: "try to", "consider", "it's recommended"</td>
+    </tr>
+    <tr>
+      <td>Include a concrete example of the wrong pattern and the right one</td>
+      <td>Assume the AI will infer what you mean</td>
+    </tr>
+    <tr>
+      <td>Keep each file focused on one area</td>
+      <td>Combine unrelated rules into one large file</td>
+    </tr>
+  </tbody>
+</table>
+
+---
+
+## Model Switching
+
+The instruction system is model-agnostic. Switching between Claude, GPT-4o, Codex, or Gemini in GitHub Copilot does not require any changes — `.github/copilot-instructions.md` is loaded regardless.
+
+`CLAUDE.md` additionally serves the Claude Code CLI (Anthropic's terminal tool). Keep both files identical to avoid divergence.
+
+---
+
+## For New Team Members
+
+You do not need to understand this system to use Copilot day-to-day. The files load silently in the background.
+
+You do need to understand it if you are:
+
+- **Getting unexpected output from an AI agent** — check whether a guideline file covers the area. If not, consider writing one.
+- **Building a new component** — `docs/guidelines/components.md` contains the rule that you must use an existing component first. AI agents are instructed to follow this; so should you.
+- **Adding a new convention to the codebase** — write it down in `docs/guidelines/` so AI agents learn it too.
+
+The goal is a shared understanding between the human team and the AI tools. When the guidelines are current, AI output requires less correction. When they fall behind, expect drift.

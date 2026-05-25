@@ -376,7 +376,6 @@ const typography: TokenGroup = {
     h3:      str('1.75rem',  'theme.typography.h3.fontSize',      '28px'),
     h2:      str('2rem',     'theme.typography.h2.fontSize',      '32px'),
     h1:      str('2.5rem',   'theme.typography.h1.fontSize',      '40px'),
-    'display-6': str('2.5rem', "theme.typography['display-6'].fontSize", '40px'),
     'display-5': str('3rem',   "theme.typography['display-5'].fontSize", '48px'),
     'display-4': str('3.5rem', "theme.typography['display-4'].fontSize", '56px'),
     'display-3': str('4rem',   "theme.typography['display-3'].fontSize", '64px'),

@@ -27,3 +27,4 @@
 - [x] The custom mobile summary column, the card header should always be on top collapsed or expanded (see expanded screen shot, designer should be on top)
 - [x] Setup a stripped column variant in the stripped story 
 - [x] Setup a bordered tables variant that has vertical and horizontal borders 
+

@@ -172,16 +172,19 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       },
       // Body text variants - Bootstrap scale
       lead: {
+        fontFamily: brand.fontFamily,
         fontSize: '1.25rem',   // 20px
         fontWeight: 300,       // Light on desktop; bumped to 400 on mobile via MuiTypography styleOverrides
         lineHeight: 1.6,
       },
       body: {
+        fontFamily: brand.fontFamily,
         fontSize: '1rem',      // 16px
         fontWeight: 400,
         lineHeight: 1.5,
       },
       small: {
+        fontFamily: brand.fontFamily,
         fontSize: '0.875rem',  // 14px
         fontWeight: 400,
         lineHeight: 1.5,
@@ -190,6 +193,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       // legacy `caption` variant but defined under our own scale so the design system
       // is self-contained (MUI's caption defaults are disabled via mui.d.ts).
       caption: {
+        fontFamily: brand.fontFamily,
         fontSize: '0.75rem',   // 12px
         fontWeight: 400,
         lineHeight: 1.5,
@@ -356,18 +360,19 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: {
             textTransform: 'none',
+            fontFamily: brand.fontFamily,
             fontSize: '1rem',
             fontWeight: 700,
-            lineHeight: 1,
+            lineHeight: 1.5,
             borderRadius: brand.buttonBorderRadius,
           },
           sizeSmall: {
             fontSize: '0.875rem',
-            lineHeight: 1,
+            lineHeight: 1.5,
           },
           sizeLarge: {
             fontSize: '1.25rem',
-            lineHeight: 1,
+            lineHeight: 1.5,
           },
         },
       },
@@ -451,6 +456,11 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: ({ ownerState, theme }) => ({
             textTransform: 'none',
+            // Replaces button defaults removed from theme.typography
+            fontFamily: brand.fontFamily,
+            fontSize: ownerState.size === 'small' ? '0.875rem' : ownerState.size === 'large' ? '1.25rem' : '1rem',
+            fontWeight: 600,
+            lineHeight: 1,
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.background.paper,
             borderColor: theme.palette.border.input,
@@ -502,6 +512,99 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           }),
         },
       },
+      // These components internally spread theme.typography.body1 / body2 / button for their
+      // default text styles. Since those variants are deleted from the theme, each component
+      // needs explicit overrides or they fall back to browser defaults.
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+        },
+      },
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            fontFamily: brand.fontFamily,
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+            margin: 0,
+            marginTop: '0.25rem',
+          },
+        },
+      },
+      MuiTooltip: {
+        styleOverrides: {
+          tooltip: {
+            fontSize: '0.875rem',
+            lineHeight: 1.5,
+          },
+        },
+      },
+      MuiMenuItem: {
+        styleOverrides: {
+          root: {
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+        },
+      },
+      MuiListItemText: {
+        styleOverrides: {
+          primary: {
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+          secondary: {
+            fontFamily: brand.fontFamily,
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+        },
+      },
+      MuiTab: {
+        styleOverrides: {
+          root: {
+            textTransform: 'none',
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: 700,
+            lineHeight: 1,
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          label: {
+            fontFamily: brand.fontFamily,
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+        },
+      },
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            fontFamily: brand.fontFamily,
+            fontSize: '1rem',
+            fontWeight: 400,
+            lineHeight: 1.5,
+          },
+          sizeSmall: {
+            fontSize: '0.875rem',
+          },
+        },
+      },
       // MUI X v9 — PickersOutlinedInput uses Mui-focused / Mui-error (global MUI state classes),
       // NOT MuiPickersInputBase-focused. generateUtilityClass maps 'focused' → 'Mui-focused'.
       // The color variant rule has specificity (0,4,0) via :not(.Mui-error).
@@ -549,6 +652,8 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       },
       MuiTypography: {
         defaultProps: {
+          // body1 is deleted from theme.typography — fall back to our `body` variant.
+          variant: 'body',
           variantMapping: {
             'display-1': 'h1',
             'display-2': 'h1',
@@ -579,6 +684,20 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       },
     },
   });
-  
+
+  // `createTheme` deep-merges MUI's hardcoded typography defaults (body1, body2,
+  // subtitle1, subtitle2, button, overline) before our custom variants land —
+  // they can't be overridden to nothing via the options object. Deleting them
+  // here makes the runtime theme match the TypeScript types (TypographyPropsVariantOverrides
+  // marks them all `false` in mui.d.ts). Any MUI-internal component that spreads
+  // one of these (e.g. MuiPickersOutlinedInput spreads body1) already has an
+  // explicit styleOverrides override, so nothing breaks.
+  const DISABLED_TYPOGRAPHY_VARIANTS = [
+    'body1', 'body2', 'subtitle1', 'subtitle2', 'button', 'overline',
+  ] as const;
+  for (const variant of DISABLED_TYPOGRAPHY_VARIANTS) {
+    delete (theme.typography as Record<string, unknown>)[variant];
+  }
+
   return theme;
 }

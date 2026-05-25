@@ -37,13 +37,25 @@ const eslintConfig = defineConfig([
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
       "no-restricted-syntax": [
-        "warn",
+        "error",
         {
           selector: STATIC_BRAND_PALETTE_ACCESS,
           message:
             'Charter: in sx, prefer the string shorthand (e.g. "primary.main") over the object form theme.palette.primary.main. ' +
             "If the colour key is prop-driven, use the dynamic access form theme.palette[colorVar].main inside a callback. " +
             "See AGENTS.md > Code Quality & Standards Charter.",
+        },
+        {
+          // Bans MUI's default Typography variants that are disabled in src/types/mui.d.ts.
+          // Valid scale: display-1 → display-5, h1–h6, lead, body, small, caption, inherit.
+          selector:
+            "JSXAttribute[name.name='variant']" +
+            "[value.type='Literal']" +
+            "[value.value=/^(body1|body2|subtitle1|subtitle2|button|overline)$/]",
+          message:
+            "Charter: MUI default Typography variants are disabled. " +
+            "Use the design system scale: display-1 → display-5, h1–h6, lead, body, small, caption. " +
+            "See src/types/mui.d.ts.",
         },
       ],
       // React 19 / Next 16 flag the "reset state on prop change" effect pattern as an
