@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Bj-mKKzh.js";import{E as t,T as n,c as r,n as i,s as a,t as o}from"./DefaultPropsProvider-ZDz6prh7.js";var s,c=e((()=>{n(),a(),o(),s=t({createStyledComponent:r(`div`,{name:`MuiStack`,slot:`Root`}),useThemeProps:e=>i({props:e,name:`MuiStack`})})})),l=e((()=>{c()}));export{s as n,l as t};

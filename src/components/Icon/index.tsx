@@ -68,20 +68,22 @@ function normalizeIconName(icon: string): string {
   return aliasOrName.replace(/_/g, '-');
 }
 
-function getStyleVariant(style: IconStyle): 'solid' | 'light' {
-  return style === 'light' ? 'light' : 'solid';
+function getStyleVariant(style: IconStyle): 'solid' | 'light' | 'regular' {
+  if (style === 'light') return 'light';
+  if (style === 'regular') return 'regular';
+  return 'solid';
 }
 
 function resolveIconPaths(icon: string, style: IconStyle): { primary: string; fallback: string } {
   const variant = getStyleVariant(style);
   const fallbackVariant = 'solid';
   const normalized = normalizeIconName(icon).replace(/\.svg$/i, '');
-  const withVariantSuffix = normalized.match(/-(solid|light)-full$/)
-    ? normalized.replace(/-(solid|light)-full$/, `-${variant}-full`)
+  const withVariantSuffix = normalized.match(/-(solid|light|regular)-full$/)
+    ? normalized.replace(/-(solid|light|regular)-full$/, `-${variant}-full`)
     : `${normalized}-${variant}-full`;
 
   const primary = `/icons/font-awesome/${variant}/${encodeURIComponent(withVariantSuffix)}.svg`;
-  const fallbackSuffix = withVariantSuffix.replace(/-(solid|light)-full$/, `-${fallbackVariant}-full`);
+  const fallbackSuffix = withVariantSuffix.replace(/-(solid|light|regular)-full$/, `-${fallbackVariant}-full`);
   const fallback = `/icons/font-awesome/${fallbackVariant}/${encodeURIComponent(fallbackSuffix)}.svg`;
 
   return { primary, fallback };

@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Bj-mKKzh.js";import{t}from"./react-DVKR3yZN.js";function n(e){return e?.props?.ref||null}var r=e((()=>{t()})),i=e((()=>{r()}));export{n,i as t};

@@ -1,0 +1,1 @@
+import{n as e}from"./chunk-Bj-mKKzh.js";import{et as t,nt as n,rt as r,tt as i}from"./DefaultPropsProvider-ZDz6prh7.js";function a(e){return r(`MuiInputLabel`,e)}var o,s=e((()=>{t(),n(),o=i(`MuiInputLabel`,[`root`,`focused`,`disabled`,`error`,`required`,`asterisk`,`formControl`,`sizeSmall`,`shrink`,`animated`,`standard`,`filled`,`outlined`])}));export{s as n,o as r,a as t};
