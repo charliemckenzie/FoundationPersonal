@@ -7,6 +7,8 @@ export { ThemeModeProvider, useThemeMode } from './app/themes/ThemeModeContext'
 export type { ThemeMode } from './app/themes/ThemeModeContext'
 
 // Components
+export { ArtieAIButton } from './components/ArtieAIButton'
+export type { ArtieAIButtonProps, ArtieAIButtonSize } from './components/ArtieAIButton'
 export { BarChart } from './components/Charts'
 export type { BarChartProps } from './components/Charts'
 export { LineChart } from './components/Charts'

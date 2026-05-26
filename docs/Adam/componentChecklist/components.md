@@ -28,3 +28,10 @@
 - [x] Setup a stripped column variant in the stripped story 
 - [x] Setup a bordered tables variant that has vertical and horizontal borders 
 
+
+In storybook the SideNav component I want to introduce variants of it, Accumulation (default), Zero Funds, Retirement Eligible, Retired. the items in each variant will change:
+- Accumulation: what we have currently
+- Zero Funds: primary nav will be Home, Investments, Put Money in, Future planning and insurance (secondary as is)
+- Retirement Eligible: as is, except take money out will have children (Setup an income stream and make up some others)
+- Retired: Put money in won't have children, Take money out will have children items (just make them up for the moment)
+

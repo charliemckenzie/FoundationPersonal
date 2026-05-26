@@ -1,9 +1,8 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import { Button } from '../../Button';
-import { IconButton } from '../../IconButton';
+import { ArtieAIButton } from '../../ArtieAIButton';
 import { UserChip } from '../UserChip';
 import { ThemeSwitcher } from '../ThemeSwitcher';
 import { DEFAULT_MEMBER_ONLINE_COPY, type MemberUser } from '../types';
@@ -54,18 +53,10 @@ export function MemberHeader({
       })}
     >
       {!hideSearch && (
-        <IconButton
-          icon="magnifying-glass"
-          label={searchPlaceholder}
-          variant="soft"
-          color="primary"
+        <ArtieAIButton
           size="small"
           onClick={() => onSearchSubmit?.('')}
-          showTooltip={false}
         />
-      )}
-      {!hideSearch && (
-        <Divider orientation="vertical" sx={{ height: '1.5rem', alignSelf: 'center', borderColor: 'border.subtle' }} />
       )}
       <UserChip user={user} />
       <Box sx={{ flex: 1 }} />
