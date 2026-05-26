@@ -37,6 +37,9 @@ export type { MemberFooterProps } from './MemberFooter';
 export { MemberOnlineLayout } from './MemberOnlineLayout';
 export type { MemberOnlineLayoutProps } from './MemberOnlineLayout';
 
+export { ContentContainer } from './ContentContainer';
+export type { ContentContainerProps, ContentContainerSize } from './ContentContainer';
+
 export type {
   MemberNavItem,
   MemberUser,

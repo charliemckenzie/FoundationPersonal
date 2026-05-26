@@ -12,6 +12,7 @@ export interface ThemeSwitcherProps {
   mode: ThemeMode;
   onChange: (mode: ThemeMode) => void;
   size?: 'small' | 'medium';
+  fullWidth?: boolean;
   lightLabel?: string;
   darkLabel?: string;
 }
@@ -27,6 +28,7 @@ export function ThemeSwitcher({
   mode,
   onChange,
   size = 'small',
+  fullWidth = false,
   lightLabel = DEFAULT_MEMBER_ONLINE_COPY.lightLabel,
   darkLabel = DEFAULT_MEMBER_ONLINE_COPY.darkLabel,
 }: ThemeSwitcherProps) {
@@ -36,7 +38,8 @@ export function ThemeSwitcher({
   return (
     <Box
       sx={(t) => ({
-        display: 'inline-flex',
+        display: fullWidth ? 'flex' : 'inline-flex',
+        width: fullWidth ? '100%' : undefined,
         bgcolor: alpha(t.palette.primary.main, 0.1),
         borderRadius: `${t.shape.button}px`,
         padding: `${SEGMENTED_PADDING}px`,
@@ -47,8 +50,10 @@ export function ThemeSwitcher({
         onChange={(_, next: number) => onChange(next === 0 ? 'light' : 'dark')}
         aria-label="Colour mode"
         selectionFollowsFocus
+        {...(fullWidth && { variant: 'fullWidth' })}
         sx={(t) => ({
           minHeight: h,
+          flex: fullWidth ? 1 : undefined,
           '& .MuiTabs-scroller': { overflow: 'visible !important' },
           '& .MuiTabs-flexContainer': { gap: 0 },
           '& .MuiTabs-indicator': {
@@ -62,17 +67,24 @@ export function ThemeSwitcher({
             '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
           },
           '& .MuiTab-root': {
-            minWidth: h,
-            width: h,
+            minWidth: fullWidth ? 0 : h,
+            width: fullWidth ? undefined : h,
+            flex: fullWidth ? 1 : undefined,
             height: h,
             minHeight: h,
-            padding: 0,
+            padding: fullWidth ? '0 1rem' : 0,
+            gap: '0.375rem',
             borderRadius: `${t.shape.button}px`,
             border: 'none',
             bgcolor: 'transparent',
             color: t.palette.primary.main,
             position: 'relative',
             zIndex: 1,
+            fontSize: '1rem',
+            lineHeight: 1.5,
+            fontWeight: 700,
+            textTransform: 'none',
+            letterSpacing: 0,
             '&.Mui-selected': { color: t.palette.primary.contrastText },
             '&:hover': { bgcolor: alpha(t.palette.primary.main, 0.08) },
             '&.Mui-selected:hover': { bgcolor: 'transparent' },
@@ -84,8 +96,20 @@ export function ThemeSwitcher({
           },
         })}
       >
-        <MuiTab icon={<Icon icon="sun-bright" size="md" />} aria-label={lightLabel} disableRipple />
-        <MuiTab icon={<Icon icon="moon" size="md" />} aria-label={darkLabel} disableRipple />
+        <MuiTab
+          icon={<Icon icon="sun-bright" size="md" />}
+          iconPosition="start"
+          label={fullWidth ? lightLabel : undefined}
+          aria-label={fullWidth ? undefined : lightLabel}
+          disableRipple
+        />
+        <MuiTab
+          icon={<Icon icon="moon" size="md" />}
+          iconPosition="start"
+          label={fullWidth ? darkLabel : undefined}
+          aria-label={fullWidth ? undefined : darkLabel}
+          disableRipple
+        />
       </MuiTabs>
     </Box>
   );

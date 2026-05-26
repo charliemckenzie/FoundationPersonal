@@ -37,7 +37,7 @@ export function BalanceCard({
       </Typography>
       <Typography
         variant="small"
-        sx={{ color: 'text.muted', fontSize: '0.75rem', mt: 0.25, m: 0 }}
+        sx={{ color: 'text.muted', mt: 0.25, m: 0 }}
       >
         {balance.asAt}
       </Typography>

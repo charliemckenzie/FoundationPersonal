@@ -38,6 +38,7 @@ export interface MobileNavDrawerProps {
   activeItemId?: string;
   onItemClick?: (item: MemberNavItem) => void;
   onLogout?: () => void;
+  lastLoggedIn?: string;
   width?: string | number;
   copy?: Partial<typeof DEFAULT_MEMBER_ONLINE_COPY>;
 }
@@ -57,6 +58,7 @@ export function MobileNavDrawer({
   activeItemId,
   onItemClick,
   onLogout,
+  lastLoggedIn,
   width = '90vw',
   copy = {},
 }: MobileNavDrawerProps) {
@@ -133,7 +135,9 @@ export function MobileNavDrawer({
               display: 'flex',
               flexDirection: 'column',
               overflowY: 'auto',
-              p: 2,
+              pt: 2,
+              px: 2,
+              pb: 5,
               gap: 2,
             }}
           >
@@ -145,14 +149,6 @@ export function MobileNavDrawer({
               copyLabel={labels.copyLabel}
               copiedLabel={labels.copiedLabel}
             />
-            <ThemeSwitcher
-              mode={mode}
-              onChange={onModeChange}
-              size="medium"
-              lightLabel={labels.lightLabel}
-              darkLabel={labels.darkLabel}
-            />
-            <Divider />
             <Box component="nav" aria-label="Primary">
               <MemberNavList
                 items={primaryItems}
@@ -162,7 +158,7 @@ export function MobileNavDrawer({
             </Box>
             {secondaryItems !== undefined && secondaryItems.length > 0 && (
               <>
-                <Divider />
+                <Divider sx={{ borderColor: 'border.subtle' }} />
                 <Box component="nav" aria-label="Secondary">
                   <MemberNavList
                     items={secondaryItems}
@@ -173,6 +169,17 @@ export function MobileNavDrawer({
                 </Box>
               </>
             )}
+            <Divider sx={{ borderColor: 'border.subtle' }} />
+            <Box sx={{ mt: 1 }}>
+              <ThemeSwitcher
+                mode={mode}
+                onChange={onModeChange}
+                size="medium"
+                fullWidth
+                lightLabel={labels.lightLabel}
+                darkLabel={labels.darkLabel}
+              />
+            </Box>
             <Button
               label={labels.logoutLabel}
               variant="outlined"
@@ -180,6 +187,11 @@ export function MobileNavDrawer({
               onClick={onLogout}
               sx={{ mt: 1, flexShrink: 0 }}
             />
+            {lastLoggedIn !== undefined && (
+              <Typography variant="small" component="p" sx={{ color: 'text.muted', m: 0, mt: 1, textAlign: 'center' }}>
+                {labels.lastLoggedInLabel} {lastLoggedIn}
+              </Typography>
+            )}
           </Box>
 
           <Box

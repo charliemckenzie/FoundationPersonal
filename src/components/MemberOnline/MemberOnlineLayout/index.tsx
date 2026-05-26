@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { SideNav } from '../SideNav';
 import { MemberHeader } from '../MemberHeader';
@@ -66,8 +65,7 @@ export function MemberOnlineLayout({
   onSearchSubmit,
   children,
 }: MemberOnlineLayoutProps) {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const isMobile = useMediaQuery('(max-width:1023.95px)');
   const { mode, setMode } = useThemeMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -82,7 +80,8 @@ export function MemberOnlineLayout({
         })}
       >
         <MobileHeader
-          logo={mobileLogo ?? logo}
+          logo={drawerLogo ?? mobileLogo ?? logo}
+          phoneLogo={mobileLogo}
           homeHref={homeHref}
           homeLabel={homeLabel}
           onMenuOpen={() => setDrawerOpen(true)}
@@ -103,6 +102,7 @@ export function MemberOnlineLayout({
           activeItemId={activeItemId}
           onItemClick={onItemClick}
           onLogout={onLogout}
+          lastLoggedIn={lastLoggedIn}
         />
         <Box component="main" sx={{ flex: 1, minHeight: 0 }}>
           {children}

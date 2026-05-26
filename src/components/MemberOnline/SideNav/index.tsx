@@ -149,7 +149,7 @@ export function SideNav({
                 <>
                   <Divider sx={{ my: 2, mx: 1, borderColor: 'border.subtle' }} />
                   <Box sx={{ px: 1.5, pb: 1 }}>
-                    <Typography variant="caption" component="p" sx={{ color: 'text.muted', m: 0 }}>
+                    <Typography variant="small" component="p" sx={{ color: 'text.muted', m: 0 }}>
                       {lastLoggedInLabel} {lastLoggedIn}
                     </Typography>
                   </Box>

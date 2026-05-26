@@ -173,7 +173,7 @@ export function Select({
             </>
           ) : (
             options.map((option) => (
-              <MenuItem key={option.value} value={option.value} disabled={option.disabled} sx={(t) => ({ fontSize: '1rem', mx: '4px', borderRadius: `${t.shape['xs']}px`, width: `calc(100% - 8px)` })}>
+              <MenuItem key={option.value} value={option.value} disabled={option.disabled} disableRipple sx={(t) => ({ fontSize: '1rem', mx: '4px', borderRadius: `${t.shape['xs']}px`, width: `calc(100% - 8px)` })}>
                 {option.label}
               </MenuItem>
             ))

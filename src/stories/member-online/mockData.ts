@@ -60,7 +60,7 @@ export const MOCK_PRIMARY_ITEMS: MemberNavItem[] = [
       },
     ],
   },
-  { id: 'take-money-out', label: 'Take money out', icon: 'arrow-up-from-line', href: '#' },
+  { id: 'take-money-out', label: 'Take money out', icon: 'money-simple-from-bracket', href: '#' },
   { id: 'future-planning', label: 'Future planning', icon: 'circle-question', href: '#' },
   { id: 'insurance', label: 'Insurance', icon: 'umbrella', href: '#' },
 ];

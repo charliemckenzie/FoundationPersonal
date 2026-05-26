@@ -58,6 +58,7 @@ function rootSx(
     borderRadius: `${t.shape.sm}px`,
     color: active ? t.palette.primary.main : t.palette.text.primary,
     fontWeight: 500,
+    '& .MuiListItemText-primary': { fontWeight: 500 },
     textDecoration: 'none',
     transition: t.transitions.create(['background-color', 'color'], {
       duration: t.transitions.duration.shortest,
@@ -144,7 +145,7 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
           primary: {
             sx: {
               fontSize: variant === 'primary' ? '1.125rem' : '1rem',
-              fontWeight: 'inherit',
+              fontWeight: 500,
               lineHeight: variant === 'primary' ? 28 / 18 : 1.5,
             },
           },

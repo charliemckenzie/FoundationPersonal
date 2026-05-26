@@ -46,7 +46,7 @@ export function MemberInfoCard({
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <Box sx={{ px: 1.5 }}>
-        <Typography variant="h5" sx={{ color: 'text.heading', m: 0, lineHeight: 1.3 }}>
+        <Typography variant="h6" sx={{ color: 'text.heading', m: 0, lineHeight: 1.3 }}>
           {user.name}
         </Typography>
         <Typography

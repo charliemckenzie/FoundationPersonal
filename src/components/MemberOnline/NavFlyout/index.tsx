@@ -80,6 +80,8 @@ export function NavFlyout({
                   p: 1.5,
                   borderRadius: '12px',
                   border: `1px solid ${t.palette.border.subtle}`,
+                  backgroundColor: t.palette.background.paper,
+                  backgroundImage: 'none',
                 })}
               >
                 <Box sx={{ display: 'flex', flexDirection: 'column' }}>
