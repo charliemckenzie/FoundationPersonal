@@ -1,13 +1,10 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { MemberOnlineLayout, ContentContainer } from '../../components/MemberOnline';
-import type { ContentContainerSize, MemberNavItem } from '../../components/MemberOnline';
-import { Logo } from '../../components/Logo';
-import { Select } from '../../components/Select';
+import type React from 'react';
+import { MemberOnlineLayout } from '../../../components/MemberOnline';
+import type { MemberNavItem } from '../../../components/MemberOnline';
+import { Logo } from '../../../components/Logo';
 
 const FOOTER_LINKS = [
   { label: 'Terms and conditions', href: '#' },
@@ -20,18 +17,8 @@ const FOOTER_LINKS = [
 const FOOTER_DISCLAIMER =
   'Australian Retirement Trust Pty Ltd ABN 88 010 720 840 AFSL No. 228975. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet lorem leo.';
 
-const SIZE_OPTIONS = [
-  { value: 'xs',  label: 'xs — 512px' },
-  { value: 'sm',  label: 'sm — 648px' },
-  { value: 'md',  label: 'md — 768px' },
-  { value: 'lg',  label: 'lg — 960px' },
-  { value: 'xl',  label: 'xl — 1200px' },
-  { value: '2xl', label: '2xl — 1440px' },
-];
-
-export default function MemberOnlinePage() {
+export default function MemberOnlineTemplate({ children }: { children: React.ReactNode }) {
   const [activeId, setActiveId] = useState('home');
-  const [containerSize, setContainerSize] = useState<ContentContainerSize>('lg');
 
   const primaryItems = useMemo<MemberNavItem[]>(() => [
     { id: 'home', label: 'Home', icon: 'house', href: '#' },
@@ -115,32 +102,7 @@ export default function MemberOnlinePage() {
       lastLoggedIn="24 May 2026"
       onLogout={() => alert('Logged out')}
     >
-      <ContentContainer size={containerSize}>
-        <Stack spacing={3}>
-          <Box sx={{ maxWidth: '12rem' }}>
-            <Select
-              label="Container size"
-              options={SIZE_OPTIONS}
-              value={containerSize}
-              onChange={(v) => setContainerSize(v as ContentContainerSize)}
-            />
-          </Box>
-          <Box
-            sx={{
-              bgcolor: 'action.hover',
-              borderRadius: 2,
-              height: '24rem',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="body" color="text.secondary">
-              Content area — {containerSize}
-            </Typography>
-          </Box>
-        </Stack>
-      </ContentContainer>
+      {children}
     </MemberOnlineLayout>
   );
 }

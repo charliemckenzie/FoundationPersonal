@@ -3,100 +3,200 @@
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import NextLink from 'next/link';
 import { Card } from '../components/Card';
+import { Chip } from '../components/Chip';
 import { Divider } from '../components/Divider';
-import { HeroIcon } from '../components/HeroIcon';
 
-interface PageEntry {
+interface PageLink {
+  label: string;
   href: string;
-  icon: string;
-  title: string;
-  description: string;
 }
 
-const CONTENT_PAGES: PageEntry[] = [
-  {
-    href: '/lost-super',
-    icon: 'Search',
-    title: 'Find lost super',
-    description: 'How to search for unclaimed super accounts and roll them into ART.',
-  },
-  {
-    href: '/contact-us',
-    icon: 'Call',
-    title: 'Contact us',
-    description: 'Phone, live chat, secure message, and branch options with business hours and FAQ.',
-  },
-  {
-    href: '/salary-sacrifice',
-    icon: 'Contributions Icon',
-    title: 'Salary sacrifice',
-    description: 'How pre-tax salary sacrifice contributions work, the cap, and how to set it up.',
-  },
-];
+interface Section {
+  heading: string;
+  pages: PageLink[];
+}
 
-const DEMO_PAGES: PageEntry[] = [
-  {
-    href: '/member-online',
-    icon: 'MO',
-    title: 'Member Online',
-    description: 'Member portal dashboard demo — balance, investments, quick actions, and nudges.',
-  },
-  {
-    href: '/beneficiaries',
-    icon: 'People',
-    title: 'Beneficiaries',
-    description: 'Nominated beneficiary management flow demo.',
-  },
-];
+interface Brand {
+  name: string;
+  sections: Section[];
+}
 
-function PageGrid({ pages }: { pages: PageEntry[] }) {
+const ART: Brand = {
+  name: 'ART',
+  sections: [
+    {
+      heading: 'Public Web',
+      pages: [
+        { label: 'Base', href: '/public-web' },
+        { label: 'News Article', href: '#' },
+        { label: 'Content Page', href: '#' },
+        { label: 'Homepage', href: '#' },
+      ],
+    },
+    {
+      heading: 'Member Online',
+      pages: [
+        { label: 'Authentication', href: '/member-online/login' },
+        { label: 'Portal', href: '/member-online' },
+      ],
+    },
+    {
+      heading: 'Adviser Online',
+      pages: [
+        { label: 'Authentication', href: '/adviser-online/login' },
+        { label: 'Portal', href: '/adviser-online' },
+      ],
+    },
+    {
+      heading: 'App',
+      pages: [],
+    },
+  ],
+};
+
+const QSUPER: Brand = {
+  name: 'QSuper',
+  sections: [
+    {
+      heading: 'Public Web',
+      pages: [
+        { label: 'Base', href: '/qsuper/public-web' },
+        { label: 'News Article', href: '#' },
+        { label: 'Content Page', href: '#' },
+        { label: 'Homepage', href: '#' },
+      ],
+    },
+    {
+      heading: 'Member Online',
+      pages: [
+        { label: 'Authentication', href: '/qsuper/member-online/login' },
+        { label: 'Portal', href: '/qsuper/member-online' },
+      ],
+    },
+    {
+      heading: 'App',
+      pages: [],
+    },
+  ],
+};
+
+const BRANDS = [ART, QSUPER];
+
+const BRAND_ACCENT: Record<string, string> = {
+  ART: 'primary.main',
+  QSuper: 'tertiary.main',
+};
+
+interface SectionCardProps {
+  section: Section;
+}
+
+function SectionCard({ section }: SectionCardProps) {
   return (
-    <Grid container spacing={3}>
-      {pages.map(({ href, icon, title, description }) => (
-        <Grid key={href} size={{ xs: 12, sm: 6, md: 4 }}>
-          <Card variant="contained" href={href} sx={{ height: '100%' }}>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-              <HeroIcon name={icon} brand="art" size="md" background="brand" aria-hidden />
-              <Box>
-                <Typography variant="h5" component="h3" sx={{ mb: 0.5 }}>
-                  {title}
-                </Typography>
-                <Typography variant="body" component="p" sx={{ color: 'text.secondary' }}>
-                  {description}
-                </Typography>
-              </Box>
-            </Box>
-          </Card>
-        </Grid>
+    <Card variant="contained">
+      <Stack spacing={2}>
+        <Typography variant="h6" component="h3" sx={{ color: 'text.muted' }}>
+          {section.heading}
+        </Typography>
+        {section.pages.length === 0 ? (
+          <Box>
+            <Chip label="Coming soon" variant="filled" color="default" size="small" />
+          </Box>
+        ) : (
+          <Stack component="ul" spacing={0.75} sx={{ m: 0, p: 0, listStyle: 'none' }}>
+            {section.pages.map((page) => {
+              const isDisabled = page.href === '#';
+              return (
+                <Box component="li" key={page.label}>
+                  {isDisabled ? (
+                    <Typography variant="body" component="span" sx={{ color: 'text.disabled' }}>
+                      {page.label}
+                    </Typography>
+                  ) : (
+                    <Typography
+                      component={NextLink}
+                      href={page.href}
+                      variant="body"
+                      sx={{
+                        color: 'primary.main',
+                        textDecoration: 'none',
+                        '&:hover': { textDecoration: 'underline' },
+                      }}
+                    >
+                      {page.label}
+                    </Typography>
+                  )}
+                </Box>
+              );
+            })}
+          </Stack>
+        )}
+      </Stack>
+    </Card>
+  );
+}
+
+interface BrandColumnProps {
+  brand: Brand;
+}
+
+function BrandColumn({ brand }: BrandColumnProps) {
+  const accent = BRAND_ACCENT[brand.name] ?? 'primary.main';
+  return (
+    <Stack spacing={3}>
+      <Box
+        sx={{
+          borderLeft: '3px solid',
+          borderColor: accent,
+          pl: 2,
+          py: 0.5,
+        }}
+      >
+        <Typography variant="h3" component="h2">
+          {brand.name}
+        </Typography>
+      </Box>
+      {brand.sections.map((section) => (
+        <SectionCard key={section.heading} section={section} />
       ))}
-    </Grid>
+    </Stack>
   );
 }
 
 export default function Home() {
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: { xs: 6, md: 10 } }}>
+    <Box
+      component="main"
+      sx={{ bgcolor: 'background.default', minHeight: '100vh', py: { xs: 6, md: 10 } }}
+    >
       <Container maxWidth="lg">
-        <Typography variant="display-5" component="h1" sx={{ mb: 1 }}>
-          Foundation
-        </Typography>
-        <Typography variant="lead" component="p" sx={{ color: 'text.secondary', mb: 8 }}>
-          Page index — select a page to preview.
-        </Typography>
+        <Box sx={{ mb: { xs: 6, md: 8 } }}>
+          <Chip label="Design System" variant="outlined" color="default" size="small" />
+          <Typography variant="display-5" component="h1" sx={{ mt: 2, mb: 1 }}>
+            Foundation
+          </Typography>
+          <Typography variant="lead" component="p" sx={{ color: 'text.secondary', mb: 4 }}>
+            A directory of the templates currently available in Foundation.
+          </Typography>
+          <Divider />
+        </Box>
 
-        <Typography variant="h3" sx={{ mb: 3 }}>
-          Content pages
-        </Typography>
-        <PageGrid pages={CONTENT_PAGES} />
-
-        <Divider sx={{ my: 6 }} />
-
-        <Typography variant="h3" sx={{ mb: 3 }}>
-          Demo pages
-        </Typography>
-        <PageGrid pages={DEMO_PAGES} />
+        <Grid container spacing={{ xs: 4, md: 6 }}>
+          {BRANDS.map((brand, i) => (
+            <Grid key={brand.name} size={{ xs: 12, md: 6 }}>
+              {i > 0 && (
+                <Box sx={{ display: { xs: 'block', md: 'none' }, mb: 4 }}>
+                  <Divider />
+                </Box>
+              )}
+              <BrandColumn brand={brand} />
+            </Grid>
+          ))}
+        </Grid>
       </Container>
     </Box>
   );

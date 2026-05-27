@@ -12,7 +12,7 @@ const meta = {
     docs: {
       description: {
         component:
-          'Specialised AI entry-point button with an animated conic-gradient ring that orbits the pill-shaped surface. The glowing ring sits outside the button border. Use to invoke Artie AI features — not as a general-purpose action button.',
+          'Specialised AI entry-point button with a light-to-vivid blue gradient (electric blue → sky blue). Use to invoke Artie AI features — not as a general-purpose action button.',
       },
     },
   },
@@ -76,7 +76,7 @@ export const Disabled: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Disabled state: animation stops, opacity reduces. The button remains inert.',
+        story: 'Disabled state: gradient dims via opacity reduction. The button remains inert.',
       },
     },
   },

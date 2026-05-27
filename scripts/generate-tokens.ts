@@ -361,8 +361,8 @@ const typography: TokenGroup = {
       heading: str('var(--font-merriweather), Merriweather, serif',             'theme.typography.h1.fontFamily', 'ART headings'),
     } as Record<string, Token>,
     qsuper: {
-      body:    str('Effra, system-ui, sans-serif', 'theme.typography.fontFamily', 'QSuper body'),
-      heading: str('var(--font-merriweather), Merriweather, serif', 'theme.typography.h1.fontFamily', 'QSuper headings'),
+      body:    str('var(--font-open-sans), "Open Sans", system-ui, sans-serif', 'theme.typography.fontFamily', 'QSuper body'),
+      heading: str('Effra, sans-serif', 'theme.typography.h1.fontFamily', 'QSuper headings'),
     } as Record<string, Token>,
   },
   fontSize: {
