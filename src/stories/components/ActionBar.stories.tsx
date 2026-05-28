@@ -86,9 +86,12 @@ export const ContainedIcon: StoryObj<DefaultArgs> = {
   ),
 };
 
-// ── With decorative image ──────────────────────────────────────────────────────
+// ── Contained with image ──────────────────────────────────────────────────────
 
-export const WithDecorative: Story = {
+type DecorativeArgs = ActionBarProps & { actionLabel: string };
+
+export const ContainedWithImage: StoryObj<DecorativeArgs> = {
+  name: 'Contained with image',
   parameters: {
     docs: {
       description: {
@@ -101,13 +104,36 @@ export const WithDecorative: Story = {
     variant: 'light',
     title: 'Title',
     description: 'Supporting description text goes here.',
-    image: {
-      src: DECORATIVE_PLACEHOLDER,
-      alt: 'Decorative image',
-      variant: 'decorative',
-    },
-    action: { label: 'Label', onClick: () => {} },
+    actionLabel: 'Label',
   },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['dark', 'primary', 'light'],
+      description: 'Background colour variant.',
+    },
+    actionLabel: {
+      name: 'Button label',
+      control: 'text',
+      description: 'CTA button label.',
+    },
+    image: { table: { disable: true } },
+    action: { table: { disable: true } },
+    sx: { table: { disable: true } },
+  },
+  render: ({ variant, title, description, actionLabel }) => (
+    <ActionBar
+      variant={variant}
+      title={title}
+      description={description}
+      image={{
+        src: DECORATIVE_PLACEHOLDER,
+        alt: 'Decorative image',
+        variant: 'decorative',
+      }}
+      action={{ label: actionLabel ?? 'Label', onClick: () => {} }}
+    />
+  ),
 };
 
 // ── Contained - No Icon ────────────────────────────────────────────────────────

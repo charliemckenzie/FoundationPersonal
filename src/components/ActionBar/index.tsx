@@ -141,7 +141,7 @@ export function ActionBar({
           }}
         >
           <Typography
-            variant="h5"
+            variant="h2"
             component="h3"
             sx={{ color: isInverse ? 'text.inverse' : 'text.heading' }}
           >
