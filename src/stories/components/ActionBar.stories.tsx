@@ -1,5 +1,4 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import Box from '@mui/material/Box';
 import { ActionBar } from '../../components/ActionBar';
 import type { ActionBarProps } from '../../components/ActionBar';
 import { HeroIcon } from '../../components/HeroIcon';
@@ -111,30 +110,46 @@ export const WithDecorative: Story = {
   },
 };
 
-// ── No image ───────────────────────────────────────────────────────────────────
+// ── Contained - No Icon ────────────────────────────────────────────────────────
 
-export const NoImage: Story = {
+type NoIconArgs = ActionBarProps & { actionLabel: string };
+
+export const ContainedNoIcon: StoryObj<NoIconArgs> = {
+  name: 'Contained - No Icon',
   parameters: {
     docs: {
       description: {
-        story: 'Image is optional. Title and description fill the available space.',
+        story: 'Icon is optional. Title and description fill the available space.',
       },
     },
   },
-  render: () => (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 800 }}>
-      <ActionBar
-        variant="dark"
-        title="Title"
-        description="Supporting description text goes here."
-        action={{ label: 'Label', onClick: () => {} }}
-      />
-      <ActionBar
-        variant="light"
-        title="Title"
-        description="Supporting description text goes here."
-        action={{ label: 'Label', onClick: () => {} }}
-      />
-    </Box>
+  args: {
+    variant: 'dark',
+    title: 'Title',
+    description: 'Supporting description text goes here.',
+    actionLabel: 'Label',
+  },
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['dark', 'primary', 'light'],
+      description: 'Background colour variant.',
+    },
+    actionLabel: {
+      name: 'Button label',
+      control: 'text',
+      description: 'CTA button label.',
+    },
+    image: { table: { disable: true } },
+    action: { table: { disable: true } },
+    sx: { table: { disable: true } },
+  },
+  render: ({ variant, title, description, actionLabel }) => (
+    <ActionBar
+      variant={variant}
+      title={title}
+      description={description}
+      action={{ label: actionLabel ?? 'Label', onClick: () => {} }}
+    />
   ),
 };
