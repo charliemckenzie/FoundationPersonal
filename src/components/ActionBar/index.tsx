@@ -54,28 +54,26 @@ const rootSxBase: SxProps<Theme> = {
   overflow: 'hidden',
 };
 
+// Colour only — layout spacing is applied per layout branch below.
 const rootSxByVariant: Record<'dark' | 'light' | 'primary', SxProps<Theme>> = {
-  dark: {
-    backgroundColor: 'background.brandSecondary',
-    flexDirection: { xs: 'column', sm: 'row' },
-    alignItems: { xs: 'flex-start', sm: 'center' },
-    gap: 3,
-    px: { xs: 3, sm: 4 },
-    py: 3,
-  },
-  primary: {
-    backgroundColor: 'background.brandPrimary',
-    flexDirection: { xs: 'column', sm: 'row' },
-    alignItems: { xs: 'flex-start', sm: 'center' },
-    gap: 3,
-    px: { xs: 3, sm: 4 },
-    py: 3,
-  },
-  light: {
-    backgroundColor: 'background.elevated',
-    flexDirection: { xs: 'column', sm: 'row' },
-    alignItems: 'stretch',
-  },
+  dark:    { backgroundColor: 'background.brandSecondary' },
+  primary: { backgroundColor: 'background.brandPrimary' },
+  light:   { backgroundColor: 'background.elevated' },
+};
+
+// Icon / no-image layout: spaced row with padding on the root.
+const iconLayoutRootSx: SxProps<Theme> = {
+  flexDirection: { xs: 'column', sm: 'row' },
+  alignItems: { xs: 'flex-start', sm: 'center' },
+  gap: 3,
+  px: { xs: 3, sm: 4 },
+  py: 3,
+};
+
+// Decorative layout: edge-to-edge image, content box provides its own padding.
+const decorativeLayoutRootSx: SxProps<Theme> = {
+  flexDirection: { xs: 'column', sm: 'row' },
+  alignItems: 'stretch',
 };
 
 // ── Main component ─────────────────────────────────────────────────────────────
@@ -91,15 +89,23 @@ export function ActionBar({
   const isDecorative = image?.variant === 'decorative';
   const isInverse = variant === 'dark' || variant === 'primary';
 
-  const mergedSx: SxProps<Theme> = [
+  const mergedDecorativeSx: SxProps<Theme> = [
     rootSxBase,
     rootSxByVariant[variant],
+    decorativeLayoutRootSx,
+    ...(Array.isArray(sx) ? sx : [sx ?? false]),
+  ];
+
+  const mergedIconSx: SxProps<Theme> = [
+    rootSxBase,
+    rootSxByVariant[variant],
+    iconLayoutRootSx,
     ...(Array.isArray(sx) ? sx : [sx ?? false]),
   ];
 
   if (isDecorative) {
     return (
-      <Box component="section" sx={mergedSx}>
+      <Box component="section" sx={mergedDecorativeSx}>
         <Box
           sx={{
             flexShrink: 0,
@@ -158,7 +164,7 @@ export function ActionBar({
 
   // Icon or no-image layout — title + description centred, button on the right
   return (
-    <Box component="section" sx={mergedSx}>
+    <Box component="section" sx={mergedIconSx}>
       {image?.variant === 'icon' && <IconImage src={image.src} alt={image.alt} icon={image.icon} />}
 
       <Box sx={{ flex: 1 }}>

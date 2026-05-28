@@ -43,7 +43,8 @@ type Story = StoryObj<typeof ActionBar>;
 
 type DefaultArgs = ActionBarProps & { iconName: string; actionLabel: string };
 
-export const Default: StoryObj<DefaultArgs> = {
+export const ContainedIcon: StoryObj<DefaultArgs> = {
+  name: 'Contained - Icon',
   args: {
     variant: 'dark',
     title: 'Title',
