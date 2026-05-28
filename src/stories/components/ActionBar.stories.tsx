@@ -87,26 +87,6 @@ export const ContainedIcon: StoryObj<DefaultArgs> = {
   ),
 };
 
-// ── With icon image ────────────────────────────────────────────────────────────
-
-export const WithIcon: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Icon image variant. The icon renders in a circular white container on the left; the CTA button sits on the right. Use for brand-coloured CTAs at the end of a content section.',
-      },
-    },
-  },
-  args: {
-    variant: 'dark',
-    title: 'Title',
-    description: 'Supporting description text goes here.',
-    image: { icon: <HeroIcon name="Goals" size="xl" background="white" />, variant: 'icon' },
-    action: { label: 'Label', onClick: () => {} },
-  },
-};
-
 // ── With decorative image ──────────────────────────────────────────────────────
 
 export const WithDecorative: Story = {
