@@ -87,43 +87,6 @@ export const ContainedIcon: StoryObj<DefaultArgs> = {
   ),
 };
 
-// ── All variants ───────────────────────────────────────────────────────────────
-
-export const Variants: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: 'All three colour variants.',
-      },
-    },
-  },
-  render: () => (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, maxWidth: 800 }}>
-      <ActionBar
-        variant="dark"
-        title="Title"
-        description="Supporting description text goes here."
-        image={{ icon: <HeroIcon name="Goals" size="xl" background="white" />, variant: 'icon' }}
-        action={{ label: 'Label', onClick: () => {} }}
-      />
-      <ActionBar
-        variant="primary"
-        title="Title"
-        description="Supporting description text goes here."
-        image={{ icon: <HeroIcon name="Goals" size="xl" background="white" />, variant: 'icon' }}
-        action={{ label: 'Label', onClick: () => {} }}
-      />
-      <ActionBar
-        variant="light"
-        title="Title"
-        description="Supporting description text goes here."
-        image={{ src: DECORATIVE_PLACEHOLDER, alt: 'Decorative image', variant: 'decorative' }}
-        action={{ label: 'Label', onClick: () => {} }}
-      />
-    </Box>
-  ),
-};
-
 // ── With icon image ────────────────────────────────────────────────────────────
 
 export const WithIcon: Story = {
