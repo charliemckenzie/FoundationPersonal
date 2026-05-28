@@ -12,8 +12,13 @@ export interface ActionBarAction {
 }
 
 export interface ActionBarImage {
-  src: string;
-  alt: string;
+  src?: string;
+  alt?: string;
+  /**
+   * ReactNode rendered inside the circular icon container (e.g. a `HeroIcon`).
+   * When provided, takes precedence over `src` for the `'icon'` variant.
+   */
+  icon?: React.ReactNode;
   /**
    * `'icon'` — small circular container on the left (e.g. a brand icon).
    * `'decorative'` — large bleed image on the left (e.g. a lifestyle photo).
@@ -34,9 +39,10 @@ export interface ActionBarProps {
   /**
    * `'dark'` — brand navy surface with inverse text and white button.
    * `'light'` — subtle tinted surface with standard text and primary button.
+   * `'primary'` — brand primary surface with inverse text and white button.
    * Default: `'light'`
    */
-  variant?: 'dark' | 'light';
+  variant?: 'dark' | 'light' | 'primary';
   sx?: SxProps<Theme>;
 }
 
@@ -48,9 +54,17 @@ const rootSxBase: SxProps<Theme> = {
   overflow: 'hidden',
 };
 
-const rootSxByVariant: Record<'dark' | 'light', SxProps<Theme>> = {
+const rootSxByVariant: Record<'dark' | 'light' | 'primary', SxProps<Theme>> = {
   dark: {
     backgroundColor: 'background.brandSecondary',
+    flexDirection: { xs: 'column', sm: 'row' },
+    alignItems: { xs: 'flex-start', sm: 'center' },
+    gap: 3,
+    px: { xs: 3, sm: 4 },
+    py: 3,
+  },
+  primary: {
+    backgroundColor: 'background.brandPrimary',
     flexDirection: { xs: 'column', sm: 'row' },
     alignItems: { xs: 'flex-start', sm: 'center' },
     gap: 3,
@@ -75,7 +89,7 @@ export function ActionBar({
   sx,
 }: ActionBarProps) {
   const isDecorative = image?.variant === 'decorative';
-  const isDark = variant === 'dark';
+  const isInverse = variant === 'dark' || variant === 'primary';
 
   const mergedSx: SxProps<Theme> = [
     rootSxBase,
@@ -123,19 +137,19 @@ export function ActionBar({
           <Typography
             variant="h5"
             component="h3"
-            sx={{ color: isDark ? 'text.inverse' : 'text.heading' }}
+            sx={{ color: isInverse ? 'text.inverse' : 'text.heading' }}
           >
             {title}
           </Typography>
           <Typography
             variant="body"
             component="p"
-            sx={{ color: isDark ? 'text.inverse' : 'text.primary' }}
+            sx={{ color: isInverse ? 'text.inverse' : 'text.primary' }}
           >
             {description}
           </Typography>
           <Box>
-            <ActionButton action={action} reversed={isDark} />
+            <ActionButton action={action} reversed={isInverse} />
           </Box>
         </Box>
       </Box>
@@ -145,26 +159,26 @@ export function ActionBar({
   // Icon or no-image layout — title + description centred, button on the right
   return (
     <Box component="section" sx={mergedSx}>
-      {image?.variant === 'icon' && <IconImage src={image.src} alt={image.alt} />}
+      {image?.variant === 'icon' && <IconImage src={image.src} alt={image.alt} icon={image.icon} />}
 
       <Box sx={{ flex: 1 }}>
         <Typography
           variant="h5"
           component="h3"
-          sx={{ color: isDark ? 'text.inverse' : 'text.heading', mb: 0.5 }}
+          sx={{ color: isInverse ? 'text.inverse' : 'text.heading', mb: 0.5 }}
         >
           {title}
         </Typography>
         <Typography
           variant="body"
           component="p"
-          sx={{ color: isDark ? 'text.inverse' : 'text.primary' }}
+          sx={{ color: isInverse ? 'text.inverse' : 'text.primary' }}
         >
           {description}
         </Typography>
       </Box>
 
-      <ActionButton action={action} reversed={isDark} />
+      <ActionButton action={action} reversed={isInverse} />
     </Box>
   );
 }

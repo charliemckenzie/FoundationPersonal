@@ -83,7 +83,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ['Foundation', 'Design Tokens', 'Components', '*'],
+        order: ['Foundation', 'Design Tokens', 'Components', ['Accordion', 'AddressField', 'Alert', 'Action Bar', '*'], '*'],
       },
     },
   },

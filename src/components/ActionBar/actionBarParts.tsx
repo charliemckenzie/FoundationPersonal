@@ -1,8 +1,12 @@
 import Box from '@mui/material/Box';
+import type { ReactNode } from 'react';
 import { Button } from '../Button';
 import type { ActionBarAction } from './index';
 
-export function IconImage({ src, alt }: { src: string; alt: string }) {
+export function IconImage({ src, alt, icon }: { src?: string; alt?: string; icon?: ReactNode }) {
+  if (icon) {
+    return <Box sx={{ flexShrink: 0 }}>{icon}</Box>;
+  }
   return (
     <Box
       sx={{
@@ -20,7 +24,7 @@ export function IconImage({ src, alt }: { src: string; alt: string }) {
       <Box
         component="img"
         src={src}
-        alt={alt}
+        alt={alt ?? ''}
         sx={{ width: '70%', height: '70%', objectFit: 'contain' }}
       />
     </Box>
