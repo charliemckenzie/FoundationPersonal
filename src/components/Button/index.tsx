@@ -36,6 +36,9 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   endIcon?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  /** When set, MUI renders the button as a native `<a>` element. */
+  href?: string;
+  target?: string;
   sx?: SxProps<Theme>;
 }
 

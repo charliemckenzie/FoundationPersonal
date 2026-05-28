@@ -4,6 +4,70 @@ A personal record of changes I've made or commissioned. Most recent first.
 
 ---
 
+## ActionBar — new component, stories, a11y fixes, and documentation
+**Date:** May 28, 2026
+**Branch:** `feat/action-bar`
+**Files:**
+- `src/components/ActionBar/index.tsx` (new)
+- `src/components/ActionBar/actionBarParts.tsx` (new)
+- `src/stories/components/ActionBar.stories.tsx` (new)
+- `src/components/Button/index.tsx`
+- `src/stories/index.mdx`
+- `.storybook/preview.tsx`
+- `src/index.ts`
+
+### What changed
+
+#### 1. New ActionBar component
+A new promotional banner component — `<ActionBar>` — added to the library.
+
+**Props:**
+- `title` — primary heading
+- `description` — supporting body text
+- `action` — CTA button config (`label`, `onClick`, `href`)
+- `image` — optional; `variant: 'icon'` for a small circular icon, `variant: 'decorative'` for a bleed image on the left
+- `variant` — `'dark'` (brand navy), `'primary'` (brand blue), `'light'` (neutral tinted surface). Default: `'light'`
+
+**Two layout branches:**
+- *Icon / no-image*: horizontal row — icon, heading + description, button. Responsive: stacks vertically on mobile.
+- *Decorative*: image fills left column (~38% width), content on the right with `h2`-sized heading. Responsive: image capped at 200px on mobile, stacks above content.
+
+Component split across two files (`index.tsx` + `actionBarParts.tsx`) to stay within the 200-line limit.
+
+#### 2. Three Storybook stories
+- **Contained - Icon** — playground with icon selector (ART icon library), variant control, and button label control
+- **Contained with image** — decorative image layout with variant and button label controls
+- **Contained - No Icon** — text-only layout with variant and button label controls
+
+#### 3. Library exports added
+`ActionBar`, `ActionBarProps`, `ActionBarAction`, and `ActionBarImage` exported from `src/index.ts`.
+
+#### 4. Component registered in Storybook
+- Added to `src/stories/index.mdx` status table as `draft`, positioned alphabetically after Alert
+- Added to `.storybook/preview.tsx` story sort order (`Action Bar` after `Alert`)
+
+#### 5. Accessibility fixes (Flanders review)
+- **WCAG 4.1.1 — Nested interactive controls**: The `ActionButton` was wrapping a `<button>` inside an `<a>` tag (invalid HTML). Fixed by adding `href` and `target` props to the `Button` component — MUI ButtonBase automatically renders as `<a>` when `href` is set — and passing `href` directly to `Button` instead of wrapping.
+- **WCAG 1.3.6 — Identify purpose**: Added `aria-label={title}` to both `<section>` renders so each ActionBar has an accessible name.
+
+#### 6. Story documentation (Lisa review)
+All three stories now have full usage descriptions covering layout purpose, responsive behaviour, and guidance on when to use each variant. Component-level description updated to cover all three variants and image slot options.
+
+---
+
+## Card — removed two stories
+**Date:** May 28, 2026
+**Files:** `src/stories/components/Card.stories.tsx`
+
+### What changed
+Removed two stories that were no longer needed:
+- **Contained — horizontal + icon** — removed export, type, and playground entry
+- **Open — horizontal image + actions** (Promo variant) — removed export, type, `bgTokenMap` constant, and playground entry
+
+The `PROMO_PLACEHOLDER_IMAGE` constant was also removed as it was only used by the Promo story.
+
+---
+
 ## Card — Playground story, autodocs, and controls clean-up
 **Date:** May 18, 2026
 **Files:** `src/stories/components/Card.stories.tsx`

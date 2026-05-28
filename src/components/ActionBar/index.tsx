@@ -105,7 +105,7 @@ export function ActionBar({
 
   if (isDecorative) {
     return (
-      <Box component="section" sx={mergedDecorativeSx}>
+      <Box component="section" aria-label={title} sx={mergedDecorativeSx}>
         <Box
           sx={{
             flexShrink: 0,
@@ -164,7 +164,7 @@ export function ActionBar({
 
   // Icon or no-image layout — title + description centred, button on the right
   return (
-    <Box component="section" sx={mergedIconSx}>
+    <Box component="section" aria-label={title} sx={mergedIconSx}>
       {image?.variant === 'icon' && <IconImage src={image.src} alt={image.alt} icon={image.icon} />}
 
       <Box sx={{ flex: 1 }}>

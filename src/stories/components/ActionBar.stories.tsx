@@ -17,7 +17,7 @@ const meta: Meta<typeof ActionBar> = {
     docs: {
       description: {
         component:
-          'A promotional banner placed after a section of content. Combines a title, supporting text, and a CTA button. Supports an optional icon or decorative image. Three colour variants: `dark` (brand navy), `primary` (brand primary), and `light` (neutral tinted surface).',
+          'A promotional banner placed after a section of content. Combines a heading, supporting text, and a single CTA button.\n\nThree colour variants: `dark` (brand navy), `primary` (brand blue), and `light` (neutral tinted surface). Dark and primary use inverse (white) text and a reversed button. Light uses standard text and a primary button.\n\nThe image slot is optional. Provide an icon for compact placements, a decorative image for brand-led or lifestyle placements, or omit it entirely for text-only use.',
       },
     },
   },
@@ -44,6 +44,14 @@ type DefaultArgs = ActionBarProps & { iconName: string; actionLabel: string };
 
 export const ContainedIcon: StoryObj<DefaultArgs> = {
   name: 'Contained - Icon',
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Use this layout when a brand icon adds visual weight to the message — for example, a product feature, a programme benefit, or a service category.\n\nThe icon sits to the left of the heading and copy. The CTA button anchors to the right on wider screens and stacks below on mobile.\n\nPick a **variant** to set the surface colour. Use `dark` or `primary` for high-contrast promotional placements. Use `light` for softer, embedded placements that sit within a white or grey page.',
+      },
+    },
+  },
   args: {
     variant: 'dark',
     title: 'Title',
@@ -96,7 +104,7 @@ export const ContainedWithImage: StoryObj<DecorativeArgs> = {
     docs: {
       description: {
         story:
-          'Decorative image variant. The image fills the left column; the CTA button renders below the text. Use for lifestyle or brand storytelling placements.',
+          'Use this layout for brand-led or lifestyle placements where a photograph or illustration adds emotional impact.\n\nThe image fills the left column — portrait aspect on wider screens, capped height on mobile. On small screens the image sits above the content and the layout stacks vertically.\n\nKeep the heading short and direct. The CTA button sits below the description.',
       },
     },
   },
@@ -145,7 +153,7 @@ export const ContainedNoIcon: StoryObj<NoIconArgs> = {
   parameters: {
     docs: {
       description: {
-        story: 'Icon is optional. Title and description fill the available space.',
+        story: 'Icon is optional. Use this layout when supporting imagery isn\'t available or when a leaner, text-focused presentation suits the context. The heading and description fill the full available width. The CTA button anchors to the right on wider screens and stacks below on mobile.',
       },
     },
   },

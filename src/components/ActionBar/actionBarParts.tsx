@@ -38,22 +38,15 @@ export function ActionButton({
   action: ActionBarAction;
   reversed: boolean;
 }) {
-  const btn = (
-    <Button
-      label={action.label}
-      variant="contained"
-      reversed={reversed}
-      onClick={action.href ? undefined : action.onClick}
-    />
+  return (
+    <Box sx={{ flexShrink: 0 }}>
+      <Button
+        label={action.label}
+        variant="contained"
+        reversed={reversed}
+        href={action.href}
+        onClick={action.href ? undefined : action.onClick}
+      />
+    </Box>
   );
-
-  if (action.href) {
-    return (
-      <a href={action.href} style={{ textDecoration: 'none', flexShrink: 0 }}>
-        {btn}
-      </a>
-    );
-  }
-
-  return <Box sx={{ flexShrink: 0 }}>{btn}</Box>;
 }
