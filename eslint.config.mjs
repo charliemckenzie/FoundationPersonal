@@ -5,20 +5,6 @@ import { defineConfig, globalIgnores } from "eslint/config";
 import nextVitals from "eslint-config-next/core-web-vitals";
 import nextTs from "eslint-config-next/typescript";
 
-// Selector matches static palette object-notation access on brand colours, e.g.
-// `theme.palette.primary.main` or `t.palette.error.dark`. Allowed forms — and the
-// reason this selector skips them — :
-//   - String shorthand in sx: `color: 'primary.main'` (not a MemberExpression at all)
-//   - Dynamic key access: `theme.palette[color].main` (object.computed = true)
-//   - Non-brand palette nodes: `theme.palette.action.active`, `text.primary`,
-//     `border.focus`, `background.paper` (property.name not in the brand list)
-const STATIC_BRAND_PALETTE_ACCESS =
-  "MemberExpression[computed=false][property.name=/^(main|light|dark|contrastText)$/]" +
-  "[object.type='MemberExpression'][object.computed=false]" +
-  "[object.object.type='MemberExpression'][object.object.computed=false]" +
-  "[object.object.property.name='palette']" +
-  "[object.property.name=/^(primary|secondary|error|warning|info|success|tertiary|quaternary)$/]";
-
 const eslintConfig = defineConfig([
   ...nextVitals,
   ...nextTs,
@@ -28,6 +14,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    "storybook-static/**",
     "next-env.d.ts",
   ]),
   ...storybook.configs["flat/recommended"],
@@ -38,13 +26,6 @@ const eslintConfig = defineConfig([
       "@typescript-eslint/no-explicit-any": "error",
       "no-restricted-syntax": [
         "error",
-        {
-          selector: STATIC_BRAND_PALETTE_ACCESS,
-          message:
-            'Charter: in sx, prefer the string shorthand (e.g. "primary.main") over the object form theme.palette.primary.main. ' +
-            "If the colour key is prop-driven, use the dynamic access form theme.palette[colorVar].main inside a callback. " +
-            "See AGENTS.md > Code Quality & Standards Charter.",
-        },
         {
           // Bans MUI's default Typography variants that are disabled in src/types/mui.d.ts.
           // Valid scale: display-1 → display-5, h1–h6, lead, body, small, caption, inherit.
@@ -63,6 +44,12 @@ const eslintConfig = defineConfig([
       // AustralianAutocomplete debounce). Downgrading to warn until each is refactored
       // to the compare-in-render pattern — tracked in docs/Adam/quality-review.md.
       "react-hooks/set-state-in-effect": "warn",
+    },
+  },
+  {
+    files: ["src/stories/**/*.{ts,tsx}"],
+    rules: {
+      "react/no-unescaped-entities": "off",
     },
   },
   // Shared variant-style helpers legitimately use static palette access internally

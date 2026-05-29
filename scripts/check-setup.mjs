@@ -103,7 +103,7 @@ console.log('\nTypeScript');
 check('TypeScript compiles without errors', () => {
   try {
     cmd(`npx tsc --noEmit --project "${join(root, 'tsconfig.json')}"`, );
-  } catch (err) {
+  } catch {
     throw new Error('TypeScript errors found. Run: npx tsc --noEmit to see them.');
   }
 });

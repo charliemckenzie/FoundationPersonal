@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { QuickLinks } from '../../components/QuickLinks';
 import type { QuickLinksProps } from '../../components/QuickLinks';
 import type { HeroIconBrand } from '../../components/HeroIcon';

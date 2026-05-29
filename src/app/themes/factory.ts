@@ -1,4 +1,5 @@
 import { createTheme, alpha, type Shadows } from '@mui/material/styles';
+import type {} from '@mui/x-date-pickers/themeAugmentation';
 import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
 
@@ -61,6 +62,26 @@ export const DARK_MODE_SHADOWS: Shadows = [
   '0px 11px 15px -7px rgba(0,0,0,0.5),0px 24px 38px 3px rgba(0,0,0,0.35),0px 9px 46px 8px rgba(0,0,0,0.3)',
 ]
 
+const FOUNDATION_TRANSITION_DURATION = {
+  shortest: 150,
+  shorter: 200,
+  short: 250,
+  standard: 300,
+  complex: 375,
+  enteringScreen: 225,
+  leavingScreen: 195,
+  form: 150,
+  spring: 350,
+};
+
+const FOUNDATION_TRANSITION_EASING = {
+  easeInOut: 'cubic-bezier(0.4, 0, 0.2, 1)',
+  easeOut: 'cubic-bezier(0.0, 0, 0.2, 1)',
+  easeIn: 'cubic-bezier(0.4, 0, 1, 1)',
+  sharp: 'cubic-bezier(0.4, 0, 0.6, 1)',
+  spring: 'cubic-bezier(0.25, 1, 0.5, 1)',
+};
+
 export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'light') {
   const palette = mode === 'dark' ? buildDarkPalette(brand) : buildLightPalette(brand);
   const shadows = mode === 'dark' ? DARK_MODE_SHADOWS : LIGHTER_SHADOWS;
@@ -73,13 +94,8 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
     // standard=300, complex=375) and are accessible via t.transitions.duration.*
     // and t.transitions.easing.* in sx props and styleOverrides.
     transitions: {
-      duration: {
-        form: 150,    // checkbox, radio, file-upload micro-interactions
-        spring: 350,  // form-progress track spring-like slide
-      },
-      easing: {
-        spring: 'cubic-bezier(0.25, 1, 0.5, 1)', // tabs indicator overshoot
-      },
+      duration: FOUNDATION_TRANSITION_DURATION,
+      easing: FOUNDATION_TRANSITION_EASING,
     },
     // --- Z-index layer stack ------------------------------------------------
     // Semantic tokens built on MUI defaults (appBar=1100, tooltip=1500).
@@ -705,7 +721,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
     'body1', 'body2', 'subtitle1', 'subtitle2', 'button', 'overline',
   ] as const;
   for (const variant of DISABLED_TYPOGRAPHY_VARIANTS) {
-    delete (theme.typography as Record<string, unknown>)[variant];
+    delete (theme.typography as unknown as Record<string, unknown>)[variant];
   }
 
   return theme;

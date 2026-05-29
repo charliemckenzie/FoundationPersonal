@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import { MobileHeader } from '../../components/MemberOnline';
 import { Logo } from '../../components/Logo';

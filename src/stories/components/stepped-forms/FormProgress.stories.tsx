@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { FormProgress, STEPPED_MIN_STEPS, STEPPED_MAX_STEPS, STEPPED_MAX_STEPS_LABELLED } from '../../../components/FormProgress';
 
 const Label = ({ first, children }: { first?: boolean; children: React.ReactNode }) => (

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Autocomplete, type AutocompleteOption } from '../../components/Autocomplete';
 
 const FRUIT_OPTIONS: AutocompleteOption[] = [

@@ -1,4 +1,7 @@
-import type { PaletteColor, SimplePaletteColorOptions } from '@mui/material/styles';
+import type {
+  PaletteColor as MuiPaletteColor,
+  SimplePaletteColorOptions as MuiSimplePaletteColorOptions,
+} from '@mui/material/styles';
 import type React from 'react';
 import type { BrandConfig } from '../app/themes/brands';
 
@@ -92,8 +95,8 @@ declare module '@mui/material/styles' {
 
   interface Palette {
     border: BorderTokens;
-    tertiary?: PaletteColor;
-    quaternary?: PaletteColor;
+    tertiary?: MuiPaletteColor;
+    quaternary?: MuiPaletteColor;
   }
 
   interface PaletteColor {
@@ -111,8 +114,8 @@ declare module '@mui/material/styles' {
 
   interface PaletteOptions {
     border?: Partial<BorderTokens>;
-    tertiary?: SimplePaletteColorOptions;
-    quaternary?: SimplePaletteColorOptions;
+    tertiary?: MuiSimplePaletteColorOptions;
+    quaternary?: MuiSimplePaletteColorOptions;
   }
 
   interface TransitionDuration {
@@ -157,6 +160,34 @@ declare module '@mui/material/styles' {
     body?: React.CSSProperties;
     small?: React.CSSProperties;
     caption?: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/styles/createTransitions' {
+  interface Duration {
+    /** Form micro-interactions: checkbox, radio, file upload (150 ms). */
+    form: number;
+    /** Spring-like animations: form-progress track (350 ms). */
+    spring: number;
+  }
+
+  interface Easing {
+    /** Overshoot easing used for the Tabs indicator spring. */
+    spring: string;
+  }
+}
+
+declare module '@mui/material/styles/createTransitions.js' {
+  interface Duration {
+    /** Form micro-interactions: checkbox, radio, file upload (150 ms). */
+    form: number;
+    /** Spring-like animations: form-progress track (350 ms). */
+    spring: number;
+  }
+
+  interface Easing {
+    /** Overshoot easing used for the Tabs indicator spring. */
+    spring: string;
   }
 }
 

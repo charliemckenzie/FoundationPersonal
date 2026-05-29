@@ -1,1 +1,0 @@
-import{n as e}from"./chunk-Bj-mKKzh.js";import{Dt as t,G as n,Ot as r,W as i}from"./DefaultPropsProvider-ZDz6prh7.js";var a,o=e((()=>{i(),r(),a=n({themeId:t})}));export{a as n,o as t};

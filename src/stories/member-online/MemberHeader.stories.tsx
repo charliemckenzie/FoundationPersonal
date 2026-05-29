@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import { MemberHeader } from '../../components/MemberOnline';
 import { MOCK_USER } from './mockData';

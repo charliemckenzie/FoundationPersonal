@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Accordion } from '../../../components/Accordion';
 import type { AccordionProps } from '../../../components/Accordion';
 import { Button } from '../../../components/Button';

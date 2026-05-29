@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MoneyField } from '../../components/MoneyField';
 
 const meta: Meta<typeof MoneyField> = {

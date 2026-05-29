@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Tabs } from '../../components/Tabs';
 import type { TabSize, TabStyle } from '../../components/Tabs';
 import Typography from '@mui/material/Typography';

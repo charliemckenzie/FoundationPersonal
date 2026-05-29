@@ -1,5 +1,5 @@
 import type { ComponentProps, ComponentType } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Checkbox } from '../../components/Checkbox';
 
 type CheckboxArgs = ComponentProps<typeof Checkbox> & {

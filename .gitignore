@@ -2,11 +2,14 @@ node_modules
 .next/
 out/
 dist/
+storybook-static/
+tsconfig.tsbuildinfo
 .env
 .env.local
 .env.*.local
 .npmrc
 package-lock.json
 .DS_Store
+**/.DS_Store
 *.tgz
-docs/.obsidian/
+**/.obsidian/

@@ -266,8 +266,8 @@ function BtnAction({ onClick, label, primary }: { onClick: () => void; label: st
 
 function TransitionsDoc() {
   const theme     = useTheme()
-  const durations = theme.transitions.duration as Record<string, number>
-  const easings   = theme.transitions.easing   as Record<string, string>
+  const durations = theme.transitions.duration as unknown as Record<string, number>
+  const easings   = theme.transitions.easing   as unknown as Record<string, string>
 
   return (
     <Box sx={{ p: 4 }}>

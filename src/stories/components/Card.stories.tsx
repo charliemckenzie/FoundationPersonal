@@ -1,5 +1,5 @@
 import type { ComponentProps } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { Card } from '../../components/Card';

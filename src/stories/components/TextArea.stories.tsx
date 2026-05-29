@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { TextArea, type TextAreaProps } from '../../components/TextArea';
 
 type TextAreaStoryArgs = TextAreaProps & { showHelperText?: boolean };

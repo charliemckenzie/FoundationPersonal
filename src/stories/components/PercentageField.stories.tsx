@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { PercentageField } from '../../components/PercentageField';
 
 const meta: Meta<typeof PercentageField> = {

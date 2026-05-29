@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import MuiMenu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
@@ -22,20 +22,19 @@ export interface HeaderCtaButtonProps {
 }
 
 export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: HeaderCtaButtonProps) {
-  const [open, setOpen] = useState(false)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
-  const anchorRef = useRef<HTMLButtonElement>(null)
   const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
+  const open = anchorEl !== null
 
   const handleClose = () => {
-    setOpen(false)
+    setAnchorEl(null)
     setExpanded(null)
   }
 
   return (
     <>
       <Button
-        ref={anchorRef}
         label={cta.label}
         variant={variant}
         size={size}
@@ -43,13 +42,13 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
         endIcon={hasMenu ? 'chevron-down' : undefined}
         aria-expanded={hasMenu ? open : undefined}
         aria-haspopup={hasMenu ? 'menu' : undefined}
-        onClick={hasMenu ? () => setOpen((o) => !o) : cta.onClick}
+        onClick={hasMenu ? (event) => setAnchorEl((current) => current === null ? event.currentTarget : null) : cta.onClick}
         sx={sx}
       />
       {hasMenu && (
         <MuiMenu
           open={open}
-          anchorEl={anchorRef.current}
+          anchorEl={anchorEl}
           onClose={handleClose}
           anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
           transformOrigin={{ vertical: 'top', horizontal: 'left' }}

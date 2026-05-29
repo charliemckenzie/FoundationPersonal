@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Skeleton } from '../../components/Skeleton';
@@ -71,7 +71,9 @@ export const CardPlaceholder: Story = {
           <Skeleton variant="text" width="40%" />
         </Box>
       </Box>
-      <Skeleton variant="rounded" height="8rem" sx={{ mb: 2 }} />
+      <Box sx={{ mb: 2 }}>
+        <Skeleton variant="rounded" height="8rem" />
+      </Box>
       <Skeleton variant="text" />
       <Skeleton variant="text" />
       <Skeleton variant="text" width="80%" />

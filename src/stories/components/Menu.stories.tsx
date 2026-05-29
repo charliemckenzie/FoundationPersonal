@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Menu, type MenuItemConfig } from '../../components/Menu';
 import { Button } from '../../components/Button';
 import { IconButton } from '../../components/IconButton';

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import { Button } from '../../../components/Button';
 import { BUTTON_ICON_OPTIONS } from '../../constants/buttonIcons';

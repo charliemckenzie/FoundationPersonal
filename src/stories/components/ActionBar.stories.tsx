@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { ActionBar } from '../../components/ActionBar';
 import type { ActionBarProps } from '../../components/ActionBar';
 import { HeroIcon } from '../../components/HeroIcon';

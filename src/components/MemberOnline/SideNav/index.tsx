@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
+import type { MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -53,40 +54,42 @@ export function SideNav({
 }: SideNavProps) {
   const [openFlyoutId, setOpenFlyoutId] = useState<string | null>(null);
   const [lastFlyoutItem, setLastFlyoutItem] = useState<MemberNavItem | null>(null);
-  const triggerRefs = useRef<Map<string, HTMLElement>>(new Map());
-
-  useEffect(() => {
-    if (openFlyoutId === null) return;
-    const item = primaryItems.find((i) => i.id === openFlyoutId);
-    if (item !== undefined) setLastFlyoutItem(item);
-  }, [openFlyoutId, primaryItems]);
+  const [flyoutAnchorEl, setFlyoutAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleItemClick = useCallback(
-    (item: MemberNavItem) => {
+    (item: MemberNavItem, event?: MouseEvent<HTMLElement>) => {
       if (item.children !== undefined && item.children.length > 0) {
-        setOpenFlyoutId((current) => (current === item.id ? null : item.id));
+        if (openFlyoutId === item.id) {
+          setOpenFlyoutId(null);
+          setFlyoutAnchorEl(null);
+          return;
+        }
+        setLastFlyoutItem(item);
+        setFlyoutAnchorEl(event?.currentTarget ?? null);
+        setOpenFlyoutId(item.id);
         return;
       }
       setOpenFlyoutId(null);
+      setFlyoutAnchorEl(null);
       onItemClick?.(item);
     },
-    [onItemClick],
+    [onItemClick, openFlyoutId],
   );
 
   const handleParentHover = useCallback(
-    (item: MemberNavItem) => {
+    (item: MemberNavItem, event?: MouseEvent<HTMLElement>) => {
       if (openFlyoutId === null) return;
       if (item.children === undefined || item.children.length === 0) return;
+      setLastFlyoutItem(item);
+      setFlyoutAnchorEl(event?.currentTarget ?? null);
       setOpenFlyoutId(item.id);
     },
     [openFlyoutId],
   );
 
-  const closeFlyout = useCallback(() => setOpenFlyoutId(null), []);
-
-  const setTriggerRef = useCallback((id: string) => (el: HTMLElement | null) => {
-    if (el === null) triggerRefs.current.delete(id);
-    else triggerRefs.current.set(id, el);
+  const closeFlyout = useCallback(() => {
+    setOpenFlyoutId(null);
+    setFlyoutAnchorEl(null);
   }, []);
 
   const flyoutOpen = openFlyoutId !== null;
@@ -125,7 +128,6 @@ export function SideNav({
             items={primaryItems}
             activeItemId={activeItemId}
             onItemClick={handleItemClick}
-            itemRef={setTriggerRef}
             onParentHover={handleParentHover}
             openFlyoutId={openFlyoutId}
             flyoutIdPrefix={FLYOUT_ID_PREFIX}
@@ -160,11 +162,11 @@ export function SideNav({
         </Box>
       </Box>
 
-      {lastFlyoutItem !== null && (
+      {lastFlyoutItem !== null && flyoutAnchorEl !== null && (
         <NavFlyout
           id={`${FLYOUT_ID_PREFIX}-${lastFlyoutItem.id}`}
           open={flyoutOpen}
-          anchorEl={triggerRefs.current.get(lastFlyoutItem.id) ?? null}
+          anchorEl={flyoutAnchorEl}
           title={lastFlyoutItem.label}
           items={lastFlyoutItem.children ?? []}
           onClose={closeFlyout}

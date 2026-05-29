@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from '@storybook/react';
-import { useRef, useState } from 'react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { Button } from '../../components/Button';
 import { NavFlyout } from '../../components/MemberOnline';
@@ -26,23 +26,22 @@ export default meta;
 type Story = StoryObj<typeof NavFlyout>;
 
 function Demo() {
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const [open, setOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const open = anchorEl !== null;
   return (
     <Box sx={{ display: 'flex', gap: 6, alignItems: 'center', p: 6 }}>
       <Button
-        ref={triggerRef}
         label="Open flyout"
-        onClick={() => setOpen((o) => !o)}
+        onClick={(event) => setAnchorEl((current) => current === null ? event.currentTarget : null)}
         aria-haspopup="menu"
         aria-expanded={open}
       />
       <NavFlyout
         open={open}
-        anchorEl={triggerRef.current}
+        anchorEl={anchorEl}
         title={PUT_MONEY_IN?.label}
         items={PUT_MONEY_IN?.children ?? []}
-        onClose={() => setOpen(false)}
+        onClose={() => setAnchorEl(null)}
       />
     </Box>
   );

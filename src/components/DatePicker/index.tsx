@@ -134,7 +134,7 @@ export function DatePicker({
               slotProps: {
                 input: {
                   readOnly: pickerOnly,
-                  sx: (theme) => ({
+                  sx: () => ({
                     minHeight: size === 'small'
                       ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
                       : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,

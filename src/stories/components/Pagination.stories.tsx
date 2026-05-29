@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Pagination } from '../../components/Pagination';
@@ -58,6 +58,7 @@ export const Default: Story = {
 };
 
 export const WithFirstLastButtons: Story = {
+  args: { count: 20 },
   parameters: {
     docs: {
       description: {
@@ -71,6 +72,7 @@ export const WithFirstLastButtons: Story = {
 };
 
 export const Disabled: Story = {
+  args: { count: 10 },
   parameters: {
     docs: {
       description: {
@@ -84,6 +86,7 @@ export const Disabled: Story = {
 };
 
 export const ManyPages: Story = {
+  args: { count: 50 },
   parameters: {
     docs: {
       description: {

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import type React from 'react';
 import { Alert, SEVERITY_ICONS } from '../../components/Alert';
 import type { AlertSeverity } from '../../components/Alert';

@@ -15,15 +15,14 @@ import { Header } from '../../components/Header';
 import { Select } from '../../components/Select';
 import { Menu } from '../../components/Menu';
 import { Button } from '../../components/Button';
-import { IconButton } from '../../components/IconButton';
 import { skyBlue } from '../../app/themes/primitives/colors';
 import type { NavItem } from '../../components/Header/types';
 
 const sampleNavItems: NavItem[] = [
-  { label: 'Super', href: '#' },
-  { label: 'Retirement', href: '#' },
-  { label: 'Investments', href: '#' },
-  { label: 'Insurance', href: '#' },
+  { type: 'link', label: 'Super', href: '#' },
+  { type: 'link', label: 'Retirement', href: '#' },
+  { type: 'link', label: 'Investments', href: '#' },
+  { type: 'link', label: 'Insurance', href: '#' },
 ];
 
 const accordionItems = [
@@ -155,7 +154,7 @@ export default function ReviewPage() {
           </Box>
         </Stack>
 
-        <Divider sx={{ my: 5 }} />
+        <Box sx={{ my: 5 }}><Divider /></Box>
 
         {/* Section 2: Accordion focus indicator fix */}
         <Box sx={{ mb: 6 }}>
@@ -178,7 +177,7 @@ export default function ReviewPage() {
           </Box>
         </Box>
 
-        <Divider sx={{ my: 5 }} />
+        <Box sx={{ my: 5 }}><Divider /></Box>
 
         {/* Section 3: Header audience bar — colour token fix */}
         <Box sx={{ mb: 6 }}>
@@ -204,7 +203,7 @@ export default function ReviewPage() {
           </Box>
         </Box>
 
-        <Divider sx={{ my: 5 }} />
+        <Box sx={{ my: 5 }}><Divider /></Box>
 
         {/* Section 4: Refactored components — Select & Menu with MobileDrawer */}
         <Box sx={{ mb: 6 }}>
@@ -251,7 +250,7 @@ export default function ReviewPage() {
           </Box>
         </Box>
 
-        <Divider sx={{ my: 5 }} />
+        <Box sx={{ my: 5 }}><Divider /></Box>
 
         {/* Section 5: Quick reference table */}
         <Box sx={{ mb: 6 }}>
@@ -325,7 +324,7 @@ export default function ReviewPage() {
           </Box>
         </Box>
 
-        <Divider sx={{ my: 5 }} />
+        <Box sx={{ my: 5 }}><Divider /></Box>
 
         {/* Section 6: Full audit narrative */}
         <Box sx={{ mb: 6 }}>

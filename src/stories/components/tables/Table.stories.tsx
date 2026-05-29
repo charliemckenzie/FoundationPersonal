@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { Table } from '../../../components/Table';
 import { Chip } from '../../../components/Chip';
 import type { TableColumn } from '../../../components/Table';

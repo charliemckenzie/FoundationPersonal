@@ -25,6 +25,17 @@ export { LinearProgress } from './components/LinearProgress'
 export { Skeleton } from './components/Skeleton'
 export { Snackbar } from './components/Snackbar'
 export { Alert } from './components/Alert'
+export { AddressField } from './components/AddressField'
+export type {
+  AddressFieldProps,
+  AddressFieldValue,
+  Address,
+  AustralianAddress,
+  InternationalAddress,
+  AddressSuggestion,
+  AddressLookupProvider,
+  AddressLookupConfig,
+} from './components/AddressField'
 export { Autocomplete } from './components/Autocomplete'
 export { Badge } from './components/Badge'
 export { Breadcrumb } from './components/Breadcrumb'
@@ -32,28 +43,69 @@ export { Button } from './components/Button'
 export { Card } from './components/Card'
 export { Checkbox } from './components/Checkbox'
 export { Chip } from './components/Chip'
+export { DateOfBirthField } from './components/DateOfBirthField'
+export type { DateOfBirthFieldProps } from './components/DateOfBirthField'
 export { Dialog } from './components/Dialog'
 export { Drawer } from './components/Drawer'
+export { ExpandableItem } from './components/ExpandableItem'
+export type { ExpandableItemProps } from './components/ExpandableItem'
 export { FileCard } from './components/FileUpload/FileCard'
 export type { FileCardProps, FileCardStatus } from './components/FileUpload/FileCard'
 export { FileUpload } from './components/FileUpload'
 export { Footer } from './components/Footer'
+export { FormProgress } from './components/FormProgress'
+export type {
+  FormProgressProps,
+  SimpleFormProgressProps,
+  SteppedFormProgressProps,
+  ResponsiveFormProgressProps,
+} from './components/FormProgress'
 export { Header } from './components/Header'
+export { HeroIcon } from './components/HeroIcon'
+export type { HeroIconProps, HeroIconSize, HeroIconBackground, HeroIconColor, HeroIconBrand } from './components/HeroIcon'
 export { Icon } from './components/Icon'
 export { IconButton } from './components/IconButton'
+export { IconList } from './components/IconList'
+export type { IconListProps, IconListItem, IconListType, IconListSize, HeadingElement } from './components/IconList'
 export { Logo } from './components/Logo'
+export { Menu } from './components/Menu'
+export type { MenuProps, MenuItemConfig } from './components/Menu'
 export { Modal } from './components/Modal'
+export { MoneyField } from './components/MoneyField'
+export type { MoneyFieldProps } from './components/MoneyField'
 export { Pagination } from './components/Pagination'
+export { PasswordField } from './components/PasswordField'
+export type { PasswordFieldProps, PasswordFieldSize } from './components/PasswordField'
+export { PercentageField } from './components/PercentageField'
+export type { PercentageFieldProps } from './components/PercentageField'
+export { QuickLinks } from './components/QuickLinks'
+export type { QuickLinksProps, QuickLinkItem } from './components/QuickLinks'
 export { RadioGroup } from './components/RadioGroup'
 export { Select } from './components/Select'
+export { SkipLinks } from './components/SkipLinks'
+export type { SkipLinksProps, SkipLink } from './components/SkipLinks'
 export { Spinner } from './components/Spinner'
+export { StepperActions } from './components/StepperActions'
+export type { StepperActionsProps } from './components/StepperActions'
 export { Switch } from './components/Switch'
 export { Table } from './components/Table'
 export type { TableColumn, TableDensity, TablePaginationConfig, TableProps } from './components/Table'
 export { ResponsiveTable } from './components/Table/ResponsiveTable'
 export type { ResponsiveTableProps } from './components/Table/ResponsiveTable'
 export { Tabs } from './components/Tabs'
+export { TextArea } from './components/TextArea'
+export type { TextAreaProps, TextAreaSize } from './components/TextArea'
+export { TextButton } from './components/TextButton'
+export type { TextButtonProps, TextButtonSize, TextButtonColor } from './components/TextButton'
 export { TextField } from './components/TextField'
+export { ToggleButtonGroup, ToggleButtonGroup as ToggleButton } from './components/ToggleButton'
+export type {
+  ToggleButtonGroupProps,
+  ToggleButtonOption,
+  ToggleButtonSize,
+  ToggleButtonColor,
+  ToggleButtonOrientation,
+} from './components/ToggleButton'
 export { Tooltip } from './components/Tooltip'
 
 // Member Online layout

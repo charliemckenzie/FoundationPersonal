@@ -20,7 +20,7 @@ const LAYERS: Array<{ key: string; custom?: boolean; description: string }> = [
 
 function ZIndexDoc() {
   const theme = useTheme()
-  const zIndex = theme.zIndex as Record<string, number>
+  const zIndex = theme.zIndex as unknown as Record<string, number>
 
   const values  = LAYERS.map((l) => zIndex[l.key] ?? 0)
   const minVal  = Math.min(...values)

@@ -1,7 +1,7 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import type { ReactNode, ForwardedRef } from 'react';
+import type { ReactNode, ForwardedRef, MouseEvent } from 'react';
 import { forwardRef } from 'react';
 import { NavItem, type NavItemSize } from '../NavItem';
 import type { LogoSlot, MemberNavItem } from '../types';
@@ -82,13 +82,13 @@ interface MemberNavListProps {
   items: MemberNavItem[];
   activeItemId?: string;
   /** Called when any item is clicked. The hook handles the parent-vs-leaf branch. */
-  onItemClick: (item: MemberNavItem) => void;
+  onItemClick: (item: MemberNavItem, event?: MouseEvent<HTMLElement>) => void;
   /** Optional ref setter for each item — used by SideNav to track flyout anchors. */
   itemRef?: (id: string) => (el: HTMLElement | null) => void;
   /** Style variant. 'secondary' renders a quieter section. */
   variant?: 'primary' | 'secondary';
   /** Optional hover handler for parent items. */
-  onParentHover?: (item: MemberNavItem) => void;
+  onParentHover?: (item: MemberNavItem, event?: MouseEvent<HTMLElement>) => void;
   /** When set, attaches `aria-expanded`/`aria-controls` for items with children. */
   openFlyoutId?: string | null;
   flyoutIdPrefix?: string;
@@ -128,10 +128,10 @@ export function MemberNavList({
             href={variant === 'secondary' ? item.href : hasChildren ? undefined : item.href}
             variant={variant}
             size={size}
-            onClick={() => onItemClick(item)}
+            onClick={(event) => onItemClick(item, event)}
             onMouseEnter={
               variant === 'primary' && hasChildren && onParentHover
-                ? () => onParentHover(item)
+                ? (event) => onParentHover(item, event)
                 : undefined
             }
             aria-haspopup={variant === 'primary' && hasChildren ? 'menu' : undefined}

@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import { ThemeSwitcher } from '../../components/MemberOnline';
@@ -24,9 +24,9 @@ const meta: Meta<typeof ThemeSwitcher> = {
 export default meta;
 type Story = StoryObj<typeof ThemeSwitcher>;
 
-function Demo({ iconOnly = false, size = 'small' }: { iconOnly?: boolean; size?: Size }) {
+function Demo({ fullWidth = false, size = 'small' }: { fullWidth?: boolean; size?: Size }) {
   const [mode, setMode] = useState<ThemeMode>('light');
-  return <ThemeSwitcher mode={mode} onChange={setMode} iconOnly={iconOnly} size={size} />;
+  return <ThemeSwitcher mode={mode} onChange={setMode} fullWidth={fullWidth} size={size} />;
 }
 
 export const Default: Story = {
@@ -34,7 +34,11 @@ export const Default: Story = {
 };
 
 export const IconOnly: Story = {
-  render: () => <Demo iconOnly />,
+  render: () => <Demo />,
+};
+
+export const FullWidth: Story = {
+  render: () => <Demo fullWidth />,
 };
 
 export const Sizes: Story = {

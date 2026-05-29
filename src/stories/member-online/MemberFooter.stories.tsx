@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { MemberFooter } from '../../components/MemberOnline';
 import { MOCK_FOOTER_DISCLAIMER, MOCK_FOOTER_LINKS } from './mockData';
 
