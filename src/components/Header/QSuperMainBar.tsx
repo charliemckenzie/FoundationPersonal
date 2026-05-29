@@ -71,7 +71,7 @@ export function QSuperMainBar({
               item={item}
               active={activePanel === item.label}
               fontSize="1rem"
-              sx={{ px: '15px', color: '#4a4a4a' }}
+              sx={{ px: '15px', color: 'text.primary' }}
               onClick={onNavClick}
               onHover={onNavClick}
               onHoverEnd={onNavHoverEnd}

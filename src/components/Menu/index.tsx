@@ -5,14 +5,13 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import type { Theme } from '@mui/material/styles';
 import type React from 'react';
-import { useDrawerDrag } from '../Dialog/useDrawerDrag';
+import { MobileDrawer } from '../inputs/MobileDrawer';
 
 export interface MenuItemConfig {
   /** Display label for the item. */
@@ -76,10 +75,6 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const { dragY, isDragging, handleDragStart, handleDragMove, handleDragEnd } = useDrawerDrag(
-    drawerOpen,
-    () => setDrawerOpen(false),
-  );
 
   function handleOpen(event: React.MouseEvent<HTMLElement>) {
     if (isMobile) {
@@ -152,49 +147,7 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
         })}
       </MuiMenu>
 
-      <Drawer
-        anchor="bottom"
-        open={drawerOpen}
-        onClose={handleDrawerClose}
-        slotProps={{
-          paper: {
-            sx: (t) => ({
-              borderRadius: `${t.shape.xl}px ${t.shape.xl}px 0 0`,
-              maxHeight: '80vh',
-              ...(dragY > 0 && {
-                transform: `translateY(${dragY}px)`,
-                transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                willChange: 'transform',
-              }),
-            }),
-          },
-        }}
-      >
-        <Box
-          aria-hidden="true"
-          onTouchStart={handleDragStart}
-          onTouchMove={handleDragMove}
-          onTouchEnd={handleDragEnd}
-          sx={(t) => ({
-            width: t.spacing(5),
-            height: t.spacing(0.5),
-            borderRadius: `${t.shape['xs']}px`,
-            backgroundColor: 'divider',
-            mx: 'auto',
-            mt: 1.5,
-            position: 'relative',
-            touchAction: 'none',
-            cursor: 'grab',
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -12,
-              bottom: -12,
-              left: -40,
-              right: -40,
-            },
-          })}
-        />
+      <MobileDrawer open={drawerOpen} onClose={handleDrawerClose}>
         <List sx={{ pt: 1, pb: 2, px: 1, overflowY: 'auto' }}>
           {items.map((item, index) => {
             const key = `${item.label}-${index}`;
@@ -229,7 +182,7 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
             );
           })}
         </List>
-      </Drawer>
+      </MobileDrawer>
     </>
   );
 }

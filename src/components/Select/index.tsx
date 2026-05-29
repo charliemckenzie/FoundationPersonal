@@ -7,12 +7,11 @@ import MuiSelect, { type SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import type React from 'react';
-import { useDrawerDrag } from '../Dialog/useDrawerDrag';
+import { MobileDrawer } from '../inputs/MobileDrawer';
 import { buildInputStyles } from '../inputs/variantStyles';
 
 export interface SelectOption {
@@ -24,6 +23,30 @@ export interface SelectOption {
 export type SelectSize = 'small' | 'medium';
 
 const CONDENSED_REDUCTION = 0.25; // rem = 4px
+
+function selectPadding(size: SelectSize, condensed: boolean): string {
+  const base = size === 'small' ? 0.5 : 0.75;
+  return `${base - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`;
+}
+
+function buildSelectSx(size: SelectSize, condensed: boolean) {
+  return (t: import('@mui/material/styles').Theme) => ({
+    ...buildInputStyles(t),
+    minHeight: size === 'small'
+      ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
+      : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
+    fontSize: '1rem',
+    '& div.MuiSelect-select': {
+      lineHeight: 1.5,
+      paddingTop: selectPadding(size, condensed),
+      paddingBottom: selectPadding(size, condensed),
+    },
+    '&& select.MuiInputBase-input': {
+      paddingTop: selectPadding(size, condensed),
+      paddingBottom: selectPadding(size, condensed),
+    },
+  });
+}
 
 export interface SelectProps {
   label: string;
@@ -76,7 +99,6 @@ export function Select({
   const [internalValue, setInternalValue] = useState<string>(defaultValue ?? '');
 
   const currentValue = value ?? internalValue;
-  const { dragY, isDragging, handleDragStart, handleDragMove, handleDragEnd } = useDrawerDrag(drawerOpen, () => setDrawerOpen(false));
 
   function handleChange(event: SelectChangeEvent) {
     setInternalValue(event.target.value);
@@ -137,30 +159,7 @@ export function Select({
           renderValue={!native && placeholder ? renderValue : undefined}
           inputProps={{ id: fieldId, name }}
           MenuProps={{ slotProps: { list: { sx: { py: '4px' } }, paper: { sx: (t) => ({ borderRadius: `${t.shape.sm}px` }) } } }}
-          sx={(t) => ({
-            ...buildInputStyles(t),
-            minHeight: size === 'small'
-              ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
-              : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
-            fontSize: '1rem',
-            '& div.MuiSelect-select': {
-              lineHeight: 1.5,
-              paddingTop: size === 'small'
-                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-              paddingBottom: size === 'small'
-                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-            },
-            '&& select.MuiInputBase-input': {
-              paddingTop: size === 'small'
-                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-              paddingBottom: size === 'small'
-                ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-            },
-          })}
+          sx={buildSelectSx(size, condensed)}
         >
           {native ? (
             <>
@@ -192,49 +191,7 @@ export function Select({
       )}
 
       {!native && (
-        <Drawer
-          anchor="bottom"
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          slotProps={{
-            paper: {
-              sx: (t) => ({
-                borderRadius: `${t.shape.xl}px ${t.shape.xl}px 0 0`,
-                maxHeight: '80vh',
-                ...(dragY > 0 && {
-                  transform: `translateY(${dragY}px)`,
-                  transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                  willChange: 'transform',
-                }),
-              }),
-            },
-          }}
-        >
-          <Box
-            aria-hidden="true"
-            onTouchStart={handleDragStart}
-            onTouchMove={handleDragMove}
-            onTouchEnd={handleDragEnd}
-            sx={(t) => ({
-              width: t.spacing(5),
-              height: t.spacing(0.5),
-              borderRadius: `${t.shape['xs']}px`,
-              backgroundColor: 'divider',
-              mx: 'auto',
-              mt: 1.5,
-              position: 'relative',
-              touchAction: 'none',
-              cursor: 'grab',
-              '&::before': {
-                content: '""',
-                position: 'absolute',
-                top: -12,
-                bottom: -12,
-                left: -40,
-                right: -40,
-              },
-            })}
-          />
+        <MobileDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)}>
           <List sx={{ pt: 1, pb: 2, px: 1, overflowY: 'auto' }}>
             {options.map((option) => (
               <ListItemButton
@@ -251,7 +208,7 @@ export function Select({
               </ListItemButton>
             ))}
           </List>
-        </Drawer>
+        </MobileDrawer>
       )}
     </Box>
   );

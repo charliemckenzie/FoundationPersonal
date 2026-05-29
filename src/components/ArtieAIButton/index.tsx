@@ -53,7 +53,7 @@ export function ArtieAIButton({
             // Darker stops keep white text AA-accessible throughout (8.9:1 / 5.9:1 / 3.4:1 at edge)
             ? `linear-gradient(195deg, ${t.palette.primary.dark}, ${t.palette.primary.main}, ${skyBlue[500]})`
             // Dark-mode palette shifts primary.main to #75a1ff — lighter gradient suits dark text
-            : `linear-gradient(195deg, ${t.palette.primary.main}, #5fa1fb, ${skyBlue[200]})`,
+            : `linear-gradient(195deg, ${t.palette.primary.main}, ${skyBlue[400]}, ${skyBlue[200]})`,
           color: t.palette.mode === 'light'
             ? t.palette.primary.contrastText  // white — 5.9:1+ across all stops ✓
             : t.palette.secondary.dark,       // #1c355e — 4.8:1+ across all stops ✓

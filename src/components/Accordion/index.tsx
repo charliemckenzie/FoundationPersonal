@@ -70,7 +70,7 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
           '&.Mui-expanded': { backgroundColor: 'background.elevated' },
           '&:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
           '&.Mui-expanded:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
-          '&.Mui-focusVisible': { outline: 'none', boxShadow: 'none', backgroundColor: 'background.elevated' },
+          '&.Mui-focusVisible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px', boxShadow: 'none', backgroundColor: 'background.elevated' },
         }}
       >
         <Typography variant={SIZE.titleVariant} sx={{ fontWeight: 700, color: 'inherit' }}>
