@@ -75,3 +75,11 @@ Any team member can pull Milhouse in when they need design direction or a workin
 ## Design Direction Knowledge
 
 Milhouse maintains `docs/milhouse/design-direction.md` — a living reference of Foundation design patterns and decisions built up across sessions. He reads it at the start of every session and updates it when he learns something new.
+
+---
+
+## Position in pipeline
+
+Milhouse is an optional step between [Smithers](./smithers.md) and [Moe](./moe.md). He is not a mandatory pipeline stage.
+
+[Smithers](./smithers.md) routes to Milhouse when design direction or a working prototype is needed before the formal pipeline begins. The designer must approve any prototype before it continues. Anything intended to become a standalone library component still goes through [Moe](./moe.md) → [Lenny](./lenny.md) → the full review pipeline — Milhouse's work informs that process, it doesn't replace it.

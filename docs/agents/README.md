@@ -12,16 +12,53 @@ Personality comes through in tone and word choice, but briefly. It's a seasoning
 
 ---
 
+## Relationship map
+
+```mermaid
+flowchart TD
+    D([Designer]) --> S[Smithers\nCoordinator]
+
+    S -->|component request| Moe[Moe\nDesign System]
+    S -->|backend work| C[Carl\nBackend Dev]
+    S -.->|design + prototype| M[Milhouse\nDesign Contractor]
+    S -->|onboarding| T[Troy McClure\nOnboarding]
+    S -.->|blocked from repo| B[Sideshow Bob\nAsync Planning]
+
+    M -.->|prototype informs| Moe
+    Moe -->|approved| L[Lenny\nFrontend Dev]
+    L --> Ch[Chalmers\nCode Quality]
+    C --> Ch
+
+    Ch --> Fl[Flanders\nAccessibility]
+    Fl --> Ma[Marge\nVisual Consistency]
+    Ma --> Li[Lisa\nDocumentation]
+    Li --> W[Willie\nStatus Gatekeeper]
+    W --> Fr[Frink\nVersion Control]
+    Fr --> D
+
+    Moe <-.->|standing team| Li
+    B -.->|planning doc| D
+
+    style M stroke-dasharray: 5 5
+    style B stroke-dasharray: 5 5
+    style T stroke-dasharray: 5 5
+```
+
+Solid arrows = mandatory pipeline steps. Dashed arrows = optional or off-pipeline relationships.
+
+---
+
 ## The pipeline
 
-Every new component follows this exact sequence. No step may be skipped. If a review fails, work returns to the previous agent with specific remediation notes.
+Every new component follows this sequence. No mandatory step may be skipped. If a review fails, work returns to the previous agent with specific remediation notes.
 
 | Step | Agent | Action |
 |---|---|---|
 | 1 | Designer | Submits request |
 | 2 | [Smithers](./smithers.md) | Assigns + scopes the work |
+| 2.5 _(optional)_ | [Milhouse](./milhouse.md) | Designs and prototypes — designer approves before pipeline continues |
 | 3 | [Moe](./moe.md) | Approves structure, API, and fit within the design system |
-| 4 | [Lenny](./lenny.md) | Builds the component |
+| 4 | [Lenny](./lenny.md) | Builds the component — [Carl](./carl.md) handles any backend work in parallel |
 | 5 | [Chalmers](./chalmers.md) | Code quality review |
 | 6 | [Flanders](./flanders.md) | Accessibility review |
 | 7 | [Marge](./marge.md) | Visual consistency review |
@@ -29,6 +66,14 @@ Every new component follows this exact sequence. No step may be skipped. If a re
 | 9 | [Willie](./willie.md) | Runs sign-off checklist; updates status in `src/stories/index.mdx` |
 | 10 | [Frink](./frink.md) | Commits + opens draft PR |
 | 11 | Designer | Reviews PR → merges to main |
+
+**Off-pipeline agents:**
+
+| Agent | When they're involved |
+|---|---|
+| [Milhouse](./milhouse.md) | Optional step 2.5 — design + prototype before formal pipeline |
+| [Troy McClure](./troy-mcclure.md) | New team member onboarding only |
+| [Sideshow Bob](./sideshow-bob.md) | When a team member is blocked from the repo — produces a planning doc; pipeline starts when they're back |
 
 ---
 
