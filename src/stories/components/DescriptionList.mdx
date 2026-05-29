@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Components / Description List / Overview" />
+
+# Description List
+
+A Description List displays simple label/value pairs in a card-style container. Use it to play back information — not to present comparative or structured data.
+
+---
+
+## When to use
+
+| Scenario | Use Description List? |
+|---|---|
+| Form summary — reviewing answers before submitting | Yes |
+| Profile or account detail view | Yes |
+| Showing relevant context at a step in a guided flow | Yes |
+| Displaying a single record's key fields | Yes |
+| Comparing multiple records side by side | No — use a Table |
+| Sorting or filtering rows | No — use a Table |
+| More than one value per label | No — use a Table |
+
+---
+
+## When not to use
+
+**Description List is not a table.** If the information has column headers, requires sorting, or shows multiple records in parallel, reach for the `Table` component instead.
+
+---
+
+## Anatomy
+
+```
+┌──────────────────────────────────────────┐
+│  Title (optional)                        │
+│ ─────────────────────────────────────── │
+│  Label                     Value         │
+│ ─────────────────────────────────────── │
+│  Label                     Value         │
+│ ─────────────────────────────────────── │
+│  Label          Description  Value       │
+└──────────────────────────────────────────┘
+```
+
+Each row is a `DescriptionList.Item` — a `dt`/`dd` pair inside a `dl`. The container provides the card chrome (border, background, radius).
+
+---
+
+## Accessibility
+
+`DescriptionList` renders a semantic `<dl>` with `<dt>` and `<dd>` pairs — the correct HTML structure for name/value groups. Screen readers announce each pair as a related unit.
+
+- Do not use `DescriptionList` for data that users will sort, filter, or compare — that meaning is lost in a `dl`. Use `<table>` (or the Foundation `Table` component) instead.
+- Keep labels short and descriptive. Avoid labels like "Value 1" or "Item".
+- If an `action` is present, ensure its accessible label describes the specific row, not just the action type. Use `aria-label="Edit date of birth"` rather than just `"Edit"`.

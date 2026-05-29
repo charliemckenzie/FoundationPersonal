@@ -39,6 +39,7 @@ If this document is out of date, flag it to Moe immediately.
 | `DateOfBirthField` | Date input optimised for date-of-birth capture |
 | `DatePicker` | Single-date form input with calendar popover |
 | `DateRangePicker` | Start + end date form input with calendar popover |
+| `DescriptionList` | Displays label/value pairs for record detail views. Compound component — use `DescriptionList.Item` for each row. Optional `title`, `action` slot per row. |
 | `Dialog` | Modal dialog with confirm/cancel actions; adapts to drawer on mobile |
 | `Divider` | Horizontal or vertical rule for separating content |
 | `Drawer` | Slide-out side panel — left, right, top, or bottom |
