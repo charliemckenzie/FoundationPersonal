@@ -48,13 +48,15 @@ const iconSizeMap: Record<ButtonSize, IconSize> = {
   large: 'xl',
 };
 
-const sizeStyles: Record<ButtonSize, { height: number; px: number }> = {
-  small:  { height: 40, px: 2 },
-  medium: { height: 48, px: 3 },
-  large:  { height: 56, px: 3.5 },
+// Heights in rem so they scale with browser font size and user zoom preferences.
+const sizeStyles: Record<ButtonSize, { height: string; px: number }> = {
+  small:  { height: '2.5rem', px: 2 },
+  medium: { height: '3rem',   px: 3 },
+  large:  { height: '3.5rem', px: 3.5 },
 };
 
-const CONDENSED_REDUCTION = 4;
+// 0.25rem — equivalent to the previous 4px constant.
+const CONDENSED_REDUCTION = '0.25rem';
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function Button({
   label,
@@ -102,30 +104,29 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       variant={muiVariant}
       size={size}
       color={resolvedColor}
-      disabled={disabled}
+      disabled={disabled || loading}
       aria-busy={loading}
       fullWidth={fullWidth}
       startIcon={startIconNode}
       endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
-      onClick={loading ? undefined : onClick}
+      onClick={onClick}
       type={type}
       {...rest}
       sx={[
         (theme) => ({
-        ...sizeStyles[size],
-        ...(condensed && { height: sizeStyles[size].height - CONDENSED_REDUCTION }),
-        ...(hasStartIcon && { paddingRight: `calc(${theme.spacing(sizeStyles[size].px)} + 4px)` }),
-        ...(hasEndIcon   && { paddingLeft:  `calc(${theme.spacing(sizeStyles[size].px)} + 4px)` }),
+        height: condensed
+          ? `calc(${sizeStyles[size].height} - ${CONDENSED_REDUCTION})`
+          : sizeStyles[size].height,
+        px: sizeStyles[size].px,
+        ...(hasStartIcon && { paddingRight: `calc(${theme.spacing(sizeStyles[size].px)} + 0.25rem)` }),
+        ...(hasEndIcon   && { paddingLeft:  `calc(${theme.spacing(sizeStyles[size].px)} + 0.25rem)` }),
         ...variantStyles,
         ...reversedStyles,
         ...(showSpinnerOnly && { position: 'relative' }),
-        ...(loading && {
-          cursor: 'not-allowed !important',
-          pointerEvents: 'none !important',
-        }),
+        // Belt-and-braces for href buttons where MUI disabled may not apply.
         '&.Mui-disabled, &:disabled': {
-          cursor: 'not-allowed !important',
-          pointerEvents: 'none !important',
+          cursor: 'not-allowed',
+          pointerEvents: 'none',
         },
         ...buildFocusStyles(reversed || color === 'white', resolvedColor),
       }),
@@ -138,6 +139,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       {showSpinnerOnly && (
         <Box
           component="span"
+          role="status"
+          aria-label="Loading"
           sx={{
             position: 'absolute',
             left: '50%',

@@ -71,6 +71,8 @@ export function NavDrawerAccordionItem({ item, isOpen, onToggle, onLinkClick }: 
     <Box>
       <ButtonBase
         disableRipple
+        aria-expanded={hasChildren ? isOpen : undefined}
+        aria-controls={hasChildren ? `nav-panel-${item.label}` : undefined}
         onClick={() => {
           if (hasChildren) {
             onToggle()
@@ -99,14 +101,14 @@ export function NavDrawerAccordionItem({ item, isOpen, onToggle, onLinkClick }: 
           {item.label}
         </Box>
         {hasChildren && (
-          <Box sx={{ display: 'flex', color: isOpen ? 'primary.main' : 'text.secondary' }}>
+          <Box aria-hidden="true" sx={{ display: 'flex', color: isOpen ? 'primary.main' : 'text.secondary' }}>
             <Icon icon={isOpen ? 'chevron-up' : 'chevron-down'} size="sm" />
           </Box>
         )}
       </ButtonBase>
 
       {hasChildren && (
-        <Collapse in={isOpen}>
+        <Collapse in={isOpen} id={`nav-panel-${item.label}`}>
           <Box sx={{ bgcolor: 'background.elevated' }}>
             {links.map((link, i) => (
               <Box key={link.href}>

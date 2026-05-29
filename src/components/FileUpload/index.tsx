@@ -1,4 +1,5 @@
 import { useState, useRef, useId, useCallback } from 'react';
+import type React from 'react';
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -6,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 import { Button } from '../Button';
 import { Icon } from '../Icon';
-import type React from 'react';
 import { dashedBorderSvg, isFileAccepted } from './helpers';
 import { FileCard } from './FileCard';
 import type { FileCardStatus } from './FileCard';
@@ -121,11 +121,20 @@ export function FileUpload({
       )}
 
       <Box
+        role="region"
+        aria-label={label ?? 'File upload'}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
         onDrop={handleDrop}
         onClick={() => { if (!disabled) inputRef.current?.click(); }}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (!disabled && (e.key === 'Enter' || e.key === ' ')) {
+            e.preventDefault();
+            inputRef.current?.click();
+          }
+        }}
+        tabIndex={disabled ? -1 : 0}
         sx={(theme) => ({
           display: 'flex',
           flexDirection: 'column',
@@ -195,15 +204,16 @@ export function FileUpload({
           )}
         </Box>
         <Button label="Browse files" variant="soft" size="small" disabled={disabled} />
-        <input
-          ref={inputRef}
+        <Box
+          component="input"
+          ref={inputRef as React.Ref<HTMLInputElement>}
           id={inputId}
           type="file"
           accept={accept}
           multiple={multiple}
           disabled={disabled}
           onChange={handleInputChange}
-          style={{ display: 'none' }}
+          sx={{ display: 'none' }}
           tabIndex={-1}
         />
       </Box>

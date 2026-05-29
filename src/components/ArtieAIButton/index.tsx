@@ -39,7 +39,7 @@ export function ArtieAIButton({
       component="button"
       type={type}
       disabled={disabled}
-      onClick={disabled ? undefined : onClick}
+      onClick={onClick}
       sx={[
         (t) => ({
           display: 'inline-flex',
@@ -79,7 +79,7 @@ export function ArtieAIButton({
         ...(Array.isArray(sxProp) ? sxProp : sxProp ? [sxProp] : []),
       ]}
     >
-      <Icon icon="sparkles" style="solid" size={iconSize} color="inherit" />
+      <Icon icon="sparkles" style="solid" size={iconSize} color="inherit" aria-hidden="true" />
       {label}
     </Box>
   );

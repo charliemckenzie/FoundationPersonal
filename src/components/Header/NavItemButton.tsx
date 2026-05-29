@@ -54,7 +54,7 @@ export function NavItemButton({ item, active, secondary = false, fontSize, sx, o
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
     >
-      <Typography variant="body" component="span" className="nav-indicator" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: '24px', fontWeight: secondary ? 400 : 600, borderBottom: '2px solid', borderColor: active ? 'primary.main' : 'transparent', pb: '15px' }}>
+      <Typography variant="body" component="span" className="nav-indicator" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: 1.5, fontWeight: secondary ? 400 : 600, borderBottom: '2px solid', borderColor: active ? 'primary.main' : 'transparent', pb: '15px' }}>
         {item.label}
       </Typography>
     </ButtonBase>

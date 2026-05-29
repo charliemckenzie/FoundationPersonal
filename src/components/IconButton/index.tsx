@@ -1,4 +1,5 @@
 import MuiIconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
 import type React from 'react';
 import { Icon, type IconStyle } from '../Icon';
@@ -43,13 +44,14 @@ const BUTTON_SIZE_TO_ICON_SIZE = {
   large: 'xl',
 } as const;
 
-const SIZE_STYLES: Record<IconButtonSize, { width: number; height: number }> = {
-  small:  { width: 36, height: 36 },
-  medium: { width: 48, height: 48 },
-  large:  { width: 56, height: 56 },
+// Sizes in rem so they scale with browser font size and user zoom preferences.
+const SIZE_STYLES: Record<IconButtonSize, { width: string; height: string }> = {
+  small:  { width: '2.25rem', height: '2.25rem' },
+  medium: { width: '3rem',    height: '3rem' },
+  large:  { width: '3.5rem',  height: '3.5rem' },
 };
 
-const CONDENSED_REDUCTION = 4;
+const CONDENSED_REDUCTION = '0.25rem';
 
 const SPINNER_SIZE_MAP: Record<IconButtonSize, 'small' | 'medium' | 'large'> = {
   small: 'small',
@@ -85,38 +87,43 @@ export function IconButton({
 
   const reversedStyles = reversed ? buildReversedStyles(variant, resolvedColor) : undefined;
 
+  const condensedWidth = condensed
+    ? `calc(${SIZE_STYLES[size].width} - ${CONDENSED_REDUCTION})`
+    : SIZE_STYLES[size].width;
+  const condensedHeight = condensed
+    ? `calc(${SIZE_STYLES[size].height} - ${CONDENSED_REDUCTION})`
+    : SIZE_STYLES[size].height;
+
   const button = (
     <MuiIconButton
       aria-label={label}
       aria-busy={loading}
       size={size}
       color={color === 'default' ? 'default' : undefined}
-      disabled={disabled}
+      disabled={disabled || loading}
       disableRipple
-      onClick={loading ? undefined : onClick}
+      onClick={onClick}
       type={type}
-      sx={{
-        ...SIZE_STYLES[size],
-        ...(condensed && {
-          width: SIZE_STYLES[size].width - CONDENSED_REDUCTION,
-          height: SIZE_STYLES[size].height - CONDENSED_REDUCTION,
-        }),
-        ...variantStyles,
-        ...reversedStyles,
-        ...(loading && {
-          cursor: 'not-allowed !important',
-          pointerEvents: 'none !important',
-        }),
-        '&.Mui-disabled, &:disabled': {
-          cursor: 'not-allowed !important',
-          pointerEvents: 'none !important',
+      sx={[
+        {
+          width: condensedWidth,
+          height: condensedHeight,
+          ...variantStyles,
+          ...reversedStyles,
+          // Belt-and-braces for href-style icon buttons where MUI disabled may not apply.
+          '&.Mui-disabled, &:disabled': {
+            cursor: 'not-allowed',
+            pointerEvents: 'none',
+          },
+          ...buildFocusStyles(reversed || color === 'white', resolvedColor),
         },
-        ...buildFocusStyles(reversed || color === 'white', resolvedColor),
-        ...(sx as object),
-      }}
+        ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
+      ]}
     >
       {loading ? (
-        <Spinner size={SPINNER_SIZE_MAP[size]} color="inherit" />
+        <Box component="span" role="status" aria-label="Loading" sx={{ display: 'inline-flex' }}>
+          <Spinner size={SPINNER_SIZE_MAP[size]} color="inherit" />
+        </Box>
       ) : (
         <Icon icon={icon} style={iconStyle} size={BUTTON_SIZE_TO_ICON_SIZE[size]} color="inherit" />
       )}
