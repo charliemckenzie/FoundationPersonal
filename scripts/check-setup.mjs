@@ -194,6 +194,28 @@ check('Plugin registry readable', () => {
   }
 })();
 
+// ── Font Awesome Pro ─────────────────────────────────────────────────────────
+console.log('\nFont Awesome Pro');
+
+check('.npmrc present with FA token', () => {
+  const npmrcPath = join(root, '.npmrc');
+  if (!existsSync(npmrcPath)) {
+    throw new Error(
+      '.npmrc missing — Font Awesome Pro icons will not install.\n' +
+      '     Fix: copy .npmrc.example (or ask a team member) and add your FA token.\n' +
+      '     See: docs/fontawesome-team-setup.md'
+    );
+  }
+  const contents = readFileSync(npmrcPath, 'utf8');
+  if (!contents.includes('npm.fontawesome.com') || !contents.includes('_authToken=') || contents.includes('YOUR_FONTAWESOME_PRO_TOKEN_HERE')) {
+    throw new Error(
+      'FA token not configured in .npmrc.\n' +
+      '     Fix: replace YOUR_FONTAWESOME_PRO_TOKEN_HERE with your actual token.\n' +
+      '     See: docs/fontawesome-team-setup.md'
+    );
+  }
+});
+
 // ── Git ───────────────────────────────────────────────────────────────────────
 console.log('\nGit');
 
