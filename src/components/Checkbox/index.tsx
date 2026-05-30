@@ -105,7 +105,7 @@ export function Checkbox({
   const containerSx = isBoxedOrCard
     ? (theme: Theme) => ({
         ml: 0,
-        gap: variant === 'card' ? 0 : 1,
+        gap: variant === 'card' ? 0 : 1.25,
         position: 'relative' as const,
         alignItems: variant === 'card' ? 'center' : description ? 'flex-start' : 'center',
         justifyContent: variant === 'card' && cardDirection === 'column' ? 'center' : undefined,
@@ -127,7 +127,7 @@ export function Checkbox({
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
       })
-    : { ml: 0, gap: 1, alignItems: description ? 'flex-start' : 'center' };
+    : { ml: 0, gap: 1.25, alignItems: description ? 'flex-start' : 'center' };
 
   const checkboxSx =
     variant === 'card'

@@ -22,6 +22,7 @@ export interface TextFieldProps {
   helperText?: string;
   errorMessage?: string;
   error?: boolean;
+  success?: boolean;
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -49,6 +50,7 @@ export function TextField({
   helperText,
   errorMessage,
   error = false,
+  success = false,
   required = false,
   disabled = false,
   fullWidth = false,
@@ -76,7 +78,7 @@ export function TextField({
           required={required}
           error={error}
           disabled={disabled}
-          sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+          sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!error && !disabled && { color: success ? 'success.main' : 'text.primary' }) }}
         >
           {label}
         </FormLabel>
@@ -106,6 +108,11 @@ export function TextField({
           input: {
             sx: (theme) => ({
               ...buildInputStyles(theme),
+              ...(success && !error && {
+                '& fieldset': { borderColor: theme.palette.success.main },
+                '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: theme.palette.success.main },
+                '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.success.main },
+              }),
               '& .MuiInputBase-input': { lineHeight: 1.5, ...(!multiline && { height: '1.5em' }) },
               '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' },
               ...(!label && {

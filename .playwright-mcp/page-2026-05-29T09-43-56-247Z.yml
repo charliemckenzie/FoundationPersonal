@@ -1,0 +1,67 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - banner "Storybook" [ref=e6]:
+      - heading "Storybook" [level=1] [ref=e7]
+      - img
+      - generic [ref=e11]:
+        - generic [ref=e13]:
+          - link "Skip to content" [ref=e14] [cursor=pointer]:
+            - /url: "#storybook-preview-wrapper"
+          - link "Storybook" [ref=e16] [cursor=pointer]:
+            - /url: ./
+            - img "Storybook" [ref=e17]
+          - switch "Settings" [ref=e22] [cursor=pointer]:
+            - img [ref=e23]
+        - generic [ref=e26]: Search for components
+        - search [ref=e27]:
+          - combobox "Search for components" [ref=e28]:
+            - generic:
+              - img
+            - searchbox "Search for components" [ref=e29]
+            - code: ⌃ K
+          - button "Create a new story" [ref=e30] [cursor=pointer]:
+            - img [ref=e31]
+        - navigation "Stories" [ref=e34]:
+          - heading "Stories" [level=2] [ref=e35]
+    - separator "Sidebar resize handle" [ref=e55]
+  - generic [ref=e57]:
+    - region "Toolbar" [ref=e58]:
+      - heading "Toolbar" [level=2] [ref=e59]
+      - toolbar [ref=e60]:
+        - button "Reload story" [ref=e62] [cursor=pointer]:
+          - img [ref=e63]
+        - generic [ref=e65]:
+          - switch "Change zoom level" [ref=e66] [cursor=pointer]: 100%
+          - button "Enter full screen" [ref=e67] [cursor=pointer]:
+            - img [ref=e68]
+          - button "Share" [ref=e70] [cursor=pointer]:
+            - img [ref=e71]
+    - main "Main preview area" [ref=e74]:
+      - heading "Main preview area" [level=2] [ref=e75]
+      - generic [ref=e76]:
+        - progressbar "Content is loading..." [ref=e78]
+        - generic [ref=e79]:
+          - link "Skip to sidebar" [ref=e80] [cursor=pointer]:
+            - /url: "#components-managed-list-managedlist--empty-state"
+          - iframe [ref=e84]:
+            
+  - generic [ref=e85]:
+    - separator "Addon panel resize handle" [ref=e86]
+    - region "Addon panel" [ref=e88]:
+      - heading "Addon panel" [level=2] [ref=e89]
+      - generic [ref=e90]:
+        - generic [ref=e92]:
+          - button "Move addon panel to right" [ref=e93] [cursor=pointer]:
+            - img [ref=e94]
+          - button "Hide addon panel" [ref=e97] [cursor=pointer]:
+            - img [ref=e98]
+        - generic [ref=e101]:
+          - generic [ref=e102]:
+            - generic [ref=e103]: Storybook add-ons
+            - generic [ref=e104]: Integrate your tools with Storybook to connect workflows and unlock advanced features.
+          - link "Explore integrations catalog" [ref=e106] [cursor=pointer]:
+            - /url: https://storybook.js.org/addons?ref=ui
+            - generic [ref=e107]:
+              - img [ref=e108]
+              - text: Explore integrations catalog
+              - img [ref=e111]

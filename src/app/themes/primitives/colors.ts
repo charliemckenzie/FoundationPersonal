@@ -54,10 +54,10 @@ export const neutralART: ColorScale = {
   400: '#b8b8b8',
   500: '#939393',
   600: '#6e6e6e',
-  700: '#333333',
-  800: '#292929',
-  900: '#1f1f1f',
-  950: '#121212',
+  700: '#4d4d4d',  // was #333333 — lightened to even out the 600→700 step (~13 L* vs prior 24 L*)
+  800: '#333333',  // was #292929 — spreads the previously compressed dark range
+  900: '#1f1f1f',  // was #1f1f1f — spreads the previously compressed dark range
+  950: '#121212',  // was #121212 — slight spread
 };
 
 /** Blue — default primary brand color */

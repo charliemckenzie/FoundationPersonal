@@ -56,11 +56,26 @@ ART and QSuper share most token *names* but differ on some *values*. The differe
 
 What differs:
 
-| Token | ART (light) | QSuper (light) |
+**Light mode**
+
+| Token | ART | QSuper |
 |---|---|---|
+| `text.primary` | `neutralART[800]` #333333 | `neutral[700]` |
 | `text.linkInverse` | `clearBlue[100]` | `white` (qBlue is lower-contrast, needs full white) |
 | `background.tintCool` | `skyBlue[200]` | `qSkyBlue[100]` |
+| `background.tintNeutralCool` | `clearBlue[100]` | `qSkyBlue[50]` |
 | `background.tintWarm` | `salmon[50]` | `neutral[100]` (QSuper has no warm-tinted brand surface) |
+
+**Dark mode**
+
+| Token | ART | QSuper |
+|---|---|---|
+| `text.primary` | `neutralART[300]` #dadada | `neutral[50]` — brighter; compensates for lower-contrast qBlue primary |
+| `text.muted` | `neutralART[400]` #b8b8b8 — stepped up to maintain 4.5:1 on elevated surface | `neutral[300]` |
+| `divider` | `neutralART[700]` #4d4d4d — subtler, recessed against dark surfaces | `neutral[700]` |
+| `border.default` | `neutralART[700]` #4d4d4d | `neutral[700]` |
+| `border.input` | `neutralART[500]` #939393 | `neutral[400]` |
+| `background.tintCool/Warm/Neutral/NeutralCool` | All unify at `neutralART[800]` #333333 | All unify at `neutral[800]` |
 
 This shape — **same token names everywhere, brand-specific values** — is what makes the tokens lossless to export to Figma as parallel modes (ART Light, ART Dark, QSuper Light, QSuper Dark).
 

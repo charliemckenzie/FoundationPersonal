@@ -54,7 +54,9 @@ If this document is out of date, flag it to Moe immediately.
 | `IconList` | Icon-prefixed list (custom icons or numbered) |
 | `LinearProgress` | Horizontal progress bar for loading or completion state |
 | `Logo` | Brand logo — primary, secondary, or mark; brand-aware |
+| `ManagedList` | Panel for user-managed item lists — header with icon/title, item rows with add/edit/delete, empty state, and optional bulk remove. Use for passkeys, beneficiaries, authorities, and similar. |
 | `MemberOnline` | Full member portal layout (nav, header, content area, footer) |
+| `MOBreadcrumb` | Member Online breadcrumb with optional back button — shows section path with active page in brand colour |
 | `Menu` | Dropdown menu triggered by any element; adapts to drawer on mobile |
 | `Modal` | Simple dialog wrapper with title, content, and action slots |
 | `MoneyField` | Currency input with thousand-separator formatting |
@@ -69,6 +71,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Snackbar` | Transient toast notification |
 | `Spinner` | Loading indicator |
 | `StepperActions` | Back / Next / Save / Exit action buttons for multi-step forms |
+| `StepTransition` | Directional slide-and-fade between steps — use in every multi-step form |
 | `Switch` | Toggle switch input |
 | `Table` | Data table with sorting, loading, and empty states |
 | `Tabs` | Tab navigation with content panels — default or segmented style |
@@ -94,6 +97,10 @@ Brand-aware site footer. Renders logo, navigation columns, and contact section. 
 **MemberOnline** — `src/components/MemberOnline/`  
 Complete member portal shell. Wraps a page with the authenticated nav, header, content area, and footer. Use as the root layout for any member-facing screen.  
 Key props: `user`, `balance`, `primaryItems`, `secondaryItems`, `footerLinks`, `logo`, `activeItemId`, `onItemClick`, `onLogout`
+
+**MOBreadcrumb** — `src/components/MemberOnline/MOBreadcrumb/`  
+Member Online breadcrumb navigation. Back button (ghost icon button) + vertical divider + breadcrumb items. Ancestor items render as muted links; the active page renders in the brand primary colour. Member Online only — do not use on public-facing pages (use `Breadcrumb` instead).  
+Key props: `items` (`{ label, href? }[]`), `onBack?: () => void`
 
 **Breadcrumb** — `src/components/Breadcrumb/`  
 Navigation trail. Truncates long paths automatically.  
@@ -227,6 +234,10 @@ Key props: `variant`, `value`, `steps`, `activeStep`, `maxStep`, `showStepIndica
 Back / Next / Save / Exit action bar for multi-step forms. Handles exit confirmation dialog internally.  
 Key props: `step`, `isSubmitStep`, `onBack`, `onNext`, `onExit`, `onSave`, `supportsSave`
 
+**StepTransition** — `src/components/StepTransition/`  
+Directional slide-and-fade transition between steps. Holds old content until the exit animation completes, then reveals new content, and animates its height so elements below (e.g. `StepperActions`) slide rather than jump. Drive it with `step` alone — direction is inferred from the change (a higher index slides forward). Respects `prefers-reduced-motion`. Pairs with `FormProgress` and `StepperActions` as the Foundation stepped form pattern.  
+Key props: `step`, `direction?` (`'forward' | 'backward'` — optional override for non-linear navigation; inferred by default), `children`
+
 ---
 
 ### Buttons & Actions
@@ -302,6 +313,11 @@ Data visualisation components (bar, line, pie etc.). Check the Storybook stories
 **Calendar** — `src/components/Calendar/`  
 Standalone calendar view. For form date inputs, use `DatePicker` or `DateRangePicker` instead.
 
+**ManagedList** — `src/components/ManagedList/`  
+Panel for displaying and managing a user-controlled list of items. Header with icon, title, description, and optional navigation chevron. Item rows with icon, name, optional badge, dot-separated metadata, and edit/delete action buttons. Footer with an add action and optional bulk remove. Empty state when no items exist.  
+Use for: passkeys, authenticator apps, beneficiaries, third-party authorities, connected accounts.  
+Key props: `icon`, `title`, `description`, `href`, `items`, `emptyIcon`, `emptyMessage`, `addLabel`, `onAdd`, `onRemoveAll`
+
 ---
 
 ## Composition Map
@@ -321,6 +337,7 @@ Understanding what composes what prevents accidental regressions.
 | QuickLinks | HeroIcon |
 | Select | Drawer (mobile) |
 | StepperActions | Button, TextButton, Dialog (exit confirm), Alert, Icon |
+| ManagedList | Icon, Chip, IconButton, TextButton, Divider |
 
 **Icon is a leaf dependency** — any change to it has blast radius across almost the entire component library.
 

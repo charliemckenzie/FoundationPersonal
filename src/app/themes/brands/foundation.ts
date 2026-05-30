@@ -15,7 +15,7 @@ const semanticOverrides: BrandConfig['semanticOverrides'] = {
     tintWarm:        salmon[50],       // #F8EBE5
     tintNeutral:     neutralART[100],  // #f2f2f2
     text: {
-      primary:     neutralART[700],
+      primary:     neutralART[800],
       muted:       neutralART[600],
       linkInverse: clearBlue[100],     // on trueBlue brand surface
     },
@@ -29,11 +29,11 @@ const semanticOverrides: BrandConfig['semanticOverrides'] = {
     tintNeutral:     neutralART[800],
     text: {
       primary:     neutralART[300],
-      muted:       neutralART[500],
+      muted:       neutralART[400],  // [500] drops to 3.92:1 on new lighter [800] elevated bg; [400] = 6.1:1 AAA
       linkInverse: clearBlue[100],
     },
-    divider: neutralART[600],
-    border:  { default: neutralART[600], input: neutralART[500] },
+    divider: neutralART[700],
+    border:  { default: neutralART[700], input: neutralART[500] },
   },
 };
 

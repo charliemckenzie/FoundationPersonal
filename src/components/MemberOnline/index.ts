@@ -40,6 +40,9 @@ export type { MemberOnlineLayoutProps } from './MemberOnlineLayout';
 export { ContentContainer } from './ContentContainer';
 export type { ContentContainerProps, ContentContainerSize } from './ContentContainer';
 
+export { MOBreadcrumb } from './MOBreadcrumb';
+export type { MOBreadcrumbProps, MOBreadcrumbItem } from './MOBreadcrumb';
+
 export type {
   MemberNavItem,
   MemberUser,

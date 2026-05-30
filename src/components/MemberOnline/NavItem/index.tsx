@@ -68,7 +68,7 @@ function rootSx(
       color: t.palette.text.link,
       textDecoration: 'none',
     },
-    '&:visited': { color: 'inherit' },
+    '&:visited': { color: active ? t.palette.primary.main : t.palette.text.primary },
     '&.Mui-focusVisible': {
       outline: `2px solid ${t.palette.border.focus}`,
       outlineOffset: '-2px',

@@ -27,8 +27,6 @@ function sanitize(input: string): string {
   return `${stripped.slice(0, firstDot)}.${dec}`;
 }
 
-const OVER_MAX = "You can't have more than 100%";
-
 export function PercentageField({
   label,
   defaultValue,
@@ -47,48 +45,31 @@ export function PercentageField({
   const [displayValue, setDisplayValue] = useState(() =>
     defaultValue != null ? Math.min(100, Math.max(0, defaultValue)).toFixed(2) : ''
   );
-  const [validationError, setValidationError] = useState(false);
-  const [validationMessage, setValidationMessage] = useState('');
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const sanitized = sanitize(e.target.value);
-    setDisplayValue(sanitized);
     const num = parseFloat(sanitized);
     if (sanitized && !isNaN(num) && num > 100) {
-      setValidationError(true);
-      setValidationMessage(OVER_MAX);
-    } else {
-      setValidationError(false);
-      setValidationMessage('');
-    }
-  };
-
-  const handleBlur: React.FocusEventHandler<HTMLInputElement> = () => {
-    if (!displayValue) {
-      setValidationError(false);
-      setValidationMessage('');
-      onChange?.(null);
+      setDisplayValue('100');
+      onChange?.(100);
       return;
     }
+    setDisplayValue(sanitized);
+    onChange?.(sanitized && !isNaN(num) ? Math.max(0, num) : null);
+  };
+
+  // Blur is formatting-only — the numeric value was already committed on every keystroke.
+  const handleBlur: React.FocusEventHandler<HTMLInputElement> = () => {
+    if (!displayValue) return;
     const num = parseFloat(displayValue);
     if (isNaN(num)) {
       setDisplayValue('');
-      setValidationError(false);
-      setValidationMessage('');
-      onChange?.(null);
       return;
     }
-    if (num > 100) {
-      setDisplayValue('');
-      onChange?.(null);
-      return;
-    }
-    const clamped = Math.max(0, num);
-    setDisplayValue(clamped.toFixed(2));
-    setValidationError(false);
-    setValidationMessage('');
-    onChange?.(clamped);
+    setDisplayValue(Math.min(100, Math.max(0, num)).toFixed(2));
   };
+
+  const isComplete = parseFloat(displayValue) === 100;
 
   return (
     <TextField
@@ -97,8 +78,9 @@ export function PercentageField({
       placeholder={placeholder}
       size={size}
       condensed={condensed}
-      helperText={validationMessage || helperText}
-      error={error || validationError}
+      helperText={helperText}
+      error={error}
+      success={isComplete}
       required={required}
       disabled={disabled}
       fullWidth={fullWidth}

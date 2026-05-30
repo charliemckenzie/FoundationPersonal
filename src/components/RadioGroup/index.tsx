@@ -52,7 +52,7 @@ const cardContainerSx = (args: {
   isItemDisabled: boolean;
 }) => (theme: Theme) => ({
   ml: 0,
-  gap: args.variant === 'card' ? 0 : 1,
+  gap: args.variant === 'card' ? 0 : 1.25,
   position: 'relative' as const,
   alignItems: args.variant === 'card' ? 'center' : args.description ? 'flex-start' : 'center',
   justifyContent: args.variant === 'card' && args.cardDirection === 'column' ? 'center' : undefined,
@@ -173,7 +173,7 @@ export function RadioGroup({
                 value={option.value}
                 label={labelNode}
                 disabled={isItemDisabled}
-                sx={{ ml: 0, gap: 1, alignItems: option.description ? 'flex-start' : 'center' }}
+                sx={{ ml: 0, gap: 1.25, alignItems: option.description ? 'flex-start' : 'center' }}
                 control={
                   <Radio
                     color={color}

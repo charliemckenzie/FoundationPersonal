@@ -42,6 +42,7 @@ const ART: Brand = {
       pages: [
         { label: 'Authentication', href: '/member-online/login' },
         { label: 'Portal', href: '/member-online' },
+        { label: 'Stepped form', href: '/member-online/beneficiaries' },
       ],
     },
     {
@@ -75,6 +76,7 @@ const QSUPER: Brand = {
       pages: [
         { label: 'Authentication', href: '/qsuper/member-online/login' },
         { label: 'Portal', href: '/qsuper/member-online' },
+        { label: 'Stepped form', href: '/qsuper/member-online/beneficiaries' },
       ],
     },
     {
