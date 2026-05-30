@@ -8,7 +8,7 @@ import type React from 'react';
 
 export type ChipVariant = 'filled' | 'outlined';
 export type ChipColor = 'default' | 'primary' | 'white';
-export type ChipSize = 'small' | 'medium';
+export type ChipSize = 'x-small' | 'small' | 'medium';
 export type ChipSeverity = 'error' | 'warning' | 'info' | 'success';
 
 const whiteSxFilled = {
@@ -74,8 +74,9 @@ export function Chip({
   const theme = useTheme();
   const isSeverity = Boolean(severity);
 
+  const iconSize = size === 'x-small' ? 'md' : size === 'small' ? 'lg' : 'xl';
   const resolvedIcon = icon && isValidElement(icon)
-    ? <Box component="span" sx={{ ml: size === 'small' ? 0.25 : 0.5, display: 'inline-flex' }}>{cloneElement(icon as ReactElement<{ size?: string; color?: string }>, isSeverity ? { size: size === 'small' ? 'lg' : 'xl', color: severity } : { size: size === 'small' ? 'lg' : 'xl', color: 'inherit' })}</Box>
+    ? <Box component="span" sx={{ ml: size === 'medium' ? 0.5 : 0.25, display: 'inline-flex' }}>{cloneElement(icon as ReactElement<{ size?: string; color?: string }>, isSeverity ? { size: iconSize, color: severity } : { size: iconSize, color: 'inherit' })}</Box>
     : icon;
 
   const smallPaddingSx = {
@@ -84,9 +85,22 @@ export function Chip({
       paddingRight: theme.spacing(1.5),
     },
   };
+  const xsmallPaddingSx = {
+    '& .MuiChip-label': {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
+  };
   const smallLabelSx = {
     '& .MuiChip-label': {
       fontSize: theme.typography.small.fontSize,
+      lineHeight: 1.5,
+    },
+  };
+  const xsmallLabelSx = {
+    '& .MuiChip-label': {
+      fontSize: theme.typography.caption.fontSize,
+      fontWeight: 700,
       lineHeight: 1.5,
     },
   };
@@ -102,15 +116,17 @@ export function Chip({
       ? variant === 'outlined' ? whiteSxOutlined : whiteSxFilled
       : undefined;
   const chipSx: SxProps<Theme> = !isSeverity
-    ? [baseSx ?? false, size === 'small' && smallPaddingSx, size === 'small' && smallLabelSx, Boolean(icon) && iconLabelSx]
-    : [baseSx ?? false, size === 'small' && smallLabelSx];
+    ? [baseSx ?? false, size === 'small' && smallPaddingSx, size === 'x-small' && xsmallPaddingSx, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx, Boolean(icon) && iconLabelSx]
+    : [baseSx ?? false, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx];
+
+  const muiSize = size === 'x-small' ? 'small' : size;
 
   return (
     <MuiChip
       label={label}
       variant={isSeverity ? 'filled' : variant}
       color={muiColor}
-      size={size}
+      size={muiSize}
       icon={resolvedIcon}
       avatar={avatar}
       disabled={disabled}

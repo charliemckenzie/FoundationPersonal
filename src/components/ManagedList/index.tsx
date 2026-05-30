@@ -81,6 +81,7 @@ export function ManagedList({
   addIcon = 'plus',
   onAdd,
   onRemoveAll,
+  removeAllLabel = 'Remove all',
   itemVariant = 'card',
   metadataVariant = 'row',
 }: ManagedListProps) {
@@ -149,7 +150,7 @@ export function ManagedList({
 
         <PanelFooter
           primary={{ icon: addIcon, label: addLabel, onClick: onAdd }}
-          secondary={onRemoveAll ? { icon: 'trash', label: 'Remove all', onClick: onRemoveAll } : undefined}
+          secondary={onRemoveAll ? { icon: 'trash', label: removeAllLabel, onClick: onRemoveAll } : undefined}
         />
       </Box>
     </ManagedListContext.Provider>

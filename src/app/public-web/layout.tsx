@@ -4,6 +4,8 @@ import type React from 'react';
 import Box from '@mui/material/Box';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
+import { PageTransition } from '../../components/PageTransition';
+import { PAGE_TRANSITION_EXCLUDE } from '../pageTransition.config';
 import {
   NAV_ITEMS,
   SECONDARY_NAV_ITEMS,
@@ -12,7 +14,7 @@ import {
   UTILITY_LINKS,
 } from './navData';
 
-export default function PublicWebTemplate({ children }: { children: React.ReactNode }) {
+export default function PublicWebLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header
@@ -24,7 +26,9 @@ export default function PublicWebTemplate({ children }: { children: React.ReactN
         onSearch={(query) => console.log('search:', query)}
       />
       <Box component="main" sx={{ flex: 1 }}>
-        {children}
+        <PageTransition excludePaths={PAGE_TRANSITION_EXCLUDE}>
+          {children}
+        </PageTransition>
       </Box>
       <Footer />
     </Box>

@@ -5,6 +5,8 @@ import type React from 'react';
 import { MemberOnlineLayout } from '../../../../components/MemberOnline';
 import type { MemberNavItem } from '../../../../components/MemberOnline';
 import { Logo } from '../../../../components/Logo';
+import { PageTransition } from '../../../../components/PageTransition';
+import { PAGE_TRANSITION_EXCLUDE } from '../../../pageTransition.config';
 
 const FOOTER_LINKS = [
   { label: 'Terms and conditions', href: '#' },
@@ -16,7 +18,7 @@ const FOOTER_LINKS = [
 const FOOTER_DISCLAIMER =
   'QSuper is a division of Australian Retirement Trust Pty Ltd ABN 88 010 720 840 AFSL No. 228975. Lorem ipsum dolor sit amet, consectetur adipiscing elit.';
 
-export default function QSuperMemberOnlineTemplate({ children }: { children: React.ReactNode }) {
+export default function QSuperMemberOnlineLayout({ children }: { children: React.ReactNode }) {
   const [activeId, setActiveId] = useState('home');
 
   const primaryItems = useMemo<MemberNavItem[]>(() => [
@@ -74,7 +76,9 @@ export default function QSuperMemberOnlineTemplate({ children }: { children: Rea
       lastLoggedIn="24 May 2026"
       onLogout={() => alert('Logged out')}
     >
-      {children}
+      <PageTransition excludePaths={PAGE_TRANSITION_EXCLUDE}>
+        {children}
+      </PageTransition>
     </MemberOnlineLayout>
   );
 }

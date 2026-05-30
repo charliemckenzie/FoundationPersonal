@@ -78,3 +78,24 @@ export const MobileDevice: Story = {
   },
   render: (args) => wrap(<ManagedListItem {...args} />),
 };
+
+/** Beneficiary variant — named beneficiary and Legal Personal Representative together. */
+export const Beneficiary: Story = {
+  render: () => wrap(
+    <>
+      <ManagedListItem
+        id="1"
+        name="Jane Smith"
+        metadata={['Spouse · Age: 42', '0400 000 000 · jane.smith@example.com']}
+        metadataVariant="column"
+        allocation={{ label: 'Allocation', value: '60%' }}
+      />
+      <ManagedListItem
+        id="2"
+        name="Legal Personal Representative"
+        metadata={[]}
+        allocation={{ label: 'Allocation', value: '40%' }}
+      />
+    </>
+  ),
+};

@@ -153,6 +153,41 @@ export const WithRemoveAll: Story = {
 };
 
 
+/** Beneficiary variant — column metadata, right-aligned allocation, panel-level Update and Delete footer actions. */
+export const BeneficiaryVariant: Story = {
+  args: {
+    icon: 'users',
+    title: 'Your binding nominations',
+    description: 'Submitted 18 Apr 2026',
+    itemVariant: 'list',
+    metadataVariant: 'column',
+    items: [
+      {
+        id: '1',
+        name: 'Jane Smith',
+        metadata: ['Spouse · Age: 42', '0400 000 000 · jane.smith@example.com'],
+        allocation: { label: 'Allocation', value: '60%' },
+      },
+      {
+        id: '2',
+        name: 'Legal Personal Representative',
+        metadata: [],
+        allocation: { label: 'Allocation', value: '40%' },
+      },
+    ],
+    addLabel: 'Update',
+    addIcon: 'pen',
+    onAdd: noop,
+    onRemoveAll: noop,
+    removeAllLabel: 'Delete',
+  },
+  render: (args) => (
+    <Box sx={{ maxWidth: 600 }}>
+      <ManagedList {...args} />
+    </Box>
+  ),
+};
+
 /** Connected list variant — items joined with dividers inside a bordered group, no individual card borders. Split footer shows Edit and Remove all actions. */
 export const Connected: Story = {
   args: {

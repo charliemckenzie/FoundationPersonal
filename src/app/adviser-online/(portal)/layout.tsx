@@ -3,8 +3,10 @@
 import type React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { PageTransition } from '../../../components/PageTransition';
+import { PAGE_TRANSITION_EXCLUDE } from '../../pageTransition.config';
 
-export default function AdviserOnlineTemplate({ children }: { children: React.ReactNode }) {
+export default function AdviserOnlineLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
       <Box
@@ -22,7 +24,9 @@ export default function AdviserOnlineTemplate({ children }: { children: React.Re
         </Typography>
       </Box>
       <Box component="main">
-        {children}
+        <PageTransition excludePaths={PAGE_TRANSITION_EXCLUDE}>
+          {children}
+        </PageTransition>
       </Box>
     </Box>
   );

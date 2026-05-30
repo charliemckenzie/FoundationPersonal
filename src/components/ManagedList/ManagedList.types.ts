@@ -1,3 +1,10 @@
+export interface ManagedListAllocation {
+  /** Label shown before the value. Defaults to 'Allocation'. */
+  label?: string;
+  /** Bold value shown after the label (e.g. '100%'). */
+  value: string;
+}
+
 export interface ManagedListItemProps {
   id: string;
   /** Font Awesome icon name shown inline with the item name. Optional. */
@@ -13,6 +20,8 @@ export interface ManagedListItemProps {
   onDelete?: () => void;
   /** Overrides the parent's `metadataVariant` for this row only. */
   metadataVariant?: 'row' | 'column';
+  /** Displays a right-aligned label + bold value (e.g. 'Allocation 100%'). Use for the beneficiary variant. */
+  allocation?: ManagedListAllocation;
 }
 
 export interface ManagedListProps {
@@ -32,8 +41,10 @@ export interface ManagedListProps {
   /** Font Awesome icon for the add action button. Defaults to 'plus'. */
   addIcon?: string;
   onAdd: () => void;
-  /** If provided, a 'Remove all' button is rendered alongside the add button. */
+  /** If provided, a secondary footer button is rendered alongside the add button. */
   onRemoveAll?: () => void;
+  /** Label for the secondary footer button. Defaults to 'Remove all'. */
+  removeAllLabel?: string;
   /** `card` (default) renders each item as a bordered card with gaps. `list` renders items as a connected list with dividers; per-row edit/delete are hidden — use a footer Edit action instead. */
   itemVariant?: 'card' | 'list';
   /** `row` (default) joins metadata entries with a dot separator. `column` stacks each entry on its own line. */

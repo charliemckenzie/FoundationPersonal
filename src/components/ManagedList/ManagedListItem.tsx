@@ -15,6 +15,7 @@ export function ManagedListItem({
   onEdit,
   onDelete,
   metadataVariant: metadataVariantOverride,
+  allocation,
 }: ManagedListItemProps) {
   const { itemVariant, metadataVariant: contextMetadataVariant } = useManagedListContext();
   const metadataVariant = metadataVariantOverride ?? contextMetadataVariant;
@@ -64,6 +65,16 @@ export function ManagedListItem({
           </Typography>
         )}
       </Box>
+      {allocation && (
+        <Box sx={{ flexShrink: 0, textAlign: 'right', ml: 1 }}>
+          <Typography variant="body" sx={{ color: 'text.muted' }}>
+            {allocation.label ?? 'Allocation'}{' '}
+            <Box component="span" sx={{ color: 'text.primary', fontWeight: 700 }}>
+              {allocation.value}
+            </Box>
+          </Typography>
+        </Box>
+      )}
       {showActions && (
         <Box sx={{ display: 'flex', gap: 0.5, flexShrink: 0 }}>
           {onEdit && <IconButton icon="pen" label="Edit" variant="ghost" size="small" onClick={onEdit} />}

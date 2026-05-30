@@ -4,6 +4,8 @@ import type React from 'react';
 import Box from '@mui/material/Box';
 import { Header } from '../../../components/Header';
 import { Footer } from '../../../components/Footer';
+import { PageTransition } from '../../../components/PageTransition';
+import { PAGE_TRANSITION_EXCLUDE } from '../../pageTransition.config';
 import {
   NAV_ITEMS,
   AUDIENCE_LINKS,
@@ -12,7 +14,7 @@ import {
   SECONDARY_CTA,
 } from './navData';
 
-export default function QSuperPublicWebTemplate({ children }: { children: React.ReactNode }) {
+export default function QSuperPublicWebLayout({ children }: { children: React.ReactNode }) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header
@@ -26,7 +28,9 @@ export default function QSuperPublicWebTemplate({ children }: { children: React.
         searchPlaceholder="Search QSuper"
       />
       <Box component="main" sx={{ flex: 1 }}>
-        {children}
+        <PageTransition excludePaths={PAGE_TRANSITION_EXCLUDE}>
+          {children}
+        </PageTransition>
       </Box>
       <Footer />
     </Box>

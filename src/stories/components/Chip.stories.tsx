@@ -45,7 +45,7 @@ const meta: Meta<ChipStoryArgs> = {
       if: { arg: 'variant', neq: 'alert' },
     },
     color: { control: 'select', options: ['default', 'primary', 'white'], if: { arg: 'variant', neq: 'alert' } },
-    size: { control: 'select', options: ['small', 'medium'] },
+    size: { control: 'select', options: ['x-small', 'small', 'medium'] },
     disabled: { table: { disable: true } },
     icon: { table: { disable: true } },
     avatar: { table: { disable: true } },
@@ -163,6 +163,7 @@ export const Colors: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+      <Chip label="X-Small" size="x-small" color="primary" />
       <Chip label="Small" size="small" color="primary" />
       <Chip label="Medium" size="medium" color="primary" />
     </div>

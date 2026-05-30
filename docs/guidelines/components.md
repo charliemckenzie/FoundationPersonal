@@ -60,6 +60,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Menu` | Dropdown menu triggered by any element; adapts to drawer on mobile |
 | `Modal` | Simple dialog wrapper with title, content, and action slots |
 | `MoneyField` | Currency input with thousand-separator formatting |
+| `PageTransition` | Fades the content area between page navigations; reusable, global, per-route opt-out, respects reduced motion |
 | `Pagination` | Page navigation for lists and tables |
 | `PasswordField` | Password input with show/hide toggle |
 | `PercentageField` | Percentage input clamped 0–100 |
@@ -120,6 +121,10 @@ Key props: `label`, `tabs`, `size`, `tabStyle`, `defaultTab`, `reversed`, `onCha
 **QuickLinks** — `src/components/QuickLinks/`  
 Horizontal icon + label navigation strip. Scrolls horizontally on mobile.  
 Key props: `items`, `brand`, `iconSize`, `activeHref`
+
+**PageTransition** — `src/components/PageTransition/`  
+Reusable, global content-area fade between page navigations. Place inside a persistent section `layout.tsx`, wrapping the page content (not the header/footer), so only the content cross-fades while chrome stays put. Keyed off `usePathname()` — consumers pass only `children`. Built on framer-motion (`AnimatePresence` + a frozen router segment) hidden behind the component. Respects `prefers-reduced-motion`. The fade fires on navigation, so it plays when you move *into* and *out of* a stepped form too — state-based step flows (single route, e.g. beneficiaries) keep their `StepTransition` between steps and need no exclusion. Opt out via `excludePaths` (central list in `src/app/pageTransition.config.ts`) only for flows that drive steps with real routes, or the per-instance `disabled` prop. Tune motion in `src/components/PageTransition/variants.ts`. This is for **page-level** route transitions — for between-step transitions inside a form, use `StepTransition`.  
+Key props: `disabled`, `excludePaths`
 
 ---
 
@@ -338,6 +343,7 @@ Understanding what composes what prevents accidental regressions.
 | Select | Drawer (mobile) |
 | StepperActions | Button, TextButton, Dialog (exit confirm), Alert, Icon |
 | ManagedList | Icon, Chip, IconButton, TextButton, Divider |
+| PageTransition | framer-motion (external), Next App Router (`usePathname`, `LayoutRouterContext`) |
 
 **Icon is a leaf dependency** — any change to it has blast radius across almost the entire component library.
 
