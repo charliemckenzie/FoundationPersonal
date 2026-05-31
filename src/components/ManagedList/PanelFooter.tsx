@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 import { elevatedFocusRingSx } from './styles';
@@ -46,7 +45,7 @@ function FooterButton({ action, position }: { action: PanelFooterAction; positio
           position === 'full' ? `0 0 ${t.shape.lg}px ${t.shape.lg}px`
           : position === 'left' ? `0 0 0 ${t.shape.lg}px`
           : `0 0 ${t.shape.lg}px 0`,
-        '&:hover': { backgroundColor: alpha(t.palette.primary.main, 0.08) },
+        '&:hover': { backgroundColor: t.palette.action.hover },
         '&:focus-visible': elevatedFocusRingSx,
       })}
     >

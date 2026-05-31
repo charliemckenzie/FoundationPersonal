@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import type { Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 import { ManagedListItem } from './ManagedListItem';
+import { ManagedListSkeleton } from './ManagedListSkeleton';
 import { ManagedListContext, type ManagedListContextValue } from './context';
 import { PanelFooter } from './PanelFooter';
 import { focusRingSx } from './styles';
@@ -84,11 +85,24 @@ export function ManagedList({
   removeAllLabel = 'Remove all',
   itemVariant = 'card',
   metadataVariant = 'row',
+  loading = false,
+  loadingItemCount = 3,
 }: ManagedListProps) {
   const contextValue = useMemo<ManagedListContextValue>(
     () => ({ itemVariant, metadataVariant }),
     [itemVariant, metadataVariant],
   );
+
+  if (loading) {
+    return (
+      <ManagedListSkeleton
+        itemCount={loadingItemCount}
+        itemVariant={itemVariant}
+        splitFooter={onRemoveAll !== undefined}
+        hasHeaderLink={href !== undefined}
+      />
+    );
+  }
 
   return (
     <ManagedListContext.Provider value={contextValue}>
@@ -102,7 +116,20 @@ export function ManagedList({
         })}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 3, py: 2.5 }}>
-          <Icon icon={icon} size="xl" color="primary" />
+          <Box
+            sx={(t: Theme) => ({
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: t.spacing(5),
+              height: t.spacing(5),
+              borderRadius: '50%',
+              backgroundColor: 'background.default',
+              flexShrink: 0,
+            })}
+          >
+            <Icon icon={icon} size="xl" color="primary" />
+          </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="h6">{title}</Typography>
             <Typography variant="small" sx={{ color: 'text.muted' }}>
@@ -158,3 +185,6 @@ export function ManagedList({
 }
 
 ManagedList.Item = ManagedListItem;
+
+export { ManagedListSkeleton } from './ManagedListSkeleton';
+export type { ManagedListSkeletonProps } from './ManagedListSkeleton';

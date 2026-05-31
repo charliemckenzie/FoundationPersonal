@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import MuiTextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormLabel from '@mui/material/FormLabel';
@@ -6,11 +6,18 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type React from 'react';
 import { buildInputStyles } from '../inputs/variantStyles';
+import { validateEmail, validatePhone } from '../inputs/validation';
 
 export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date';
 export type TextFieldSize = 'small' | 'medium';
 
 const CONDENSED_REDUCTION = 0.25; // rem = 4px
+
+// Format validators run automatically on blur for these input types.
+const FORMAT_VALIDATORS: Partial<Record<TextFieldType, (value: string) => string | null>> = {
+  email: validateEmail,
+  tel: validatePhone,
+};
 
 export interface TextFieldProps {
   label?: string;
@@ -70,15 +77,39 @@ export function TextField({
   const generatedId = useId();
   const fieldId = id ?? generatedId;
 
+  // Built-in format validation (email/tel). Runs on blur, re-checks on change
+  // once the field has been touched. An externally supplied error always wins.
+  const formatValidator = FORMAT_VALIDATORS[type];
+  const [touched, setTouched] = useState(false);
+  const [builtInError, setBuiltInError] = useState<string | null>(null);
+
+  const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
+    if (formatValidator) {
+      setTouched(true);
+      setBuiltInError(formatValidator(e.target.value));
+    }
+    onBlur?.(e);
+  };
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (formatValidator && touched) setBuiltInError(formatValidator(e.target.value));
+    onChange?.(e);
+  };
+
+  const externalError = error || !!errorMessage;
+  const showBuiltInError = !externalError && touched && builtInError != null;
+  const effectiveError = error || showBuiltInError;
+  const effectiveErrorMessage = errorMessage ?? (showBuiltInError ? builtInError : undefined);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>
       {label && (
         <FormLabel
           htmlFor={fieldId}
           required={required}
-          error={error}
+          error={effectiveError}
           disabled={disabled}
-          sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!error && !disabled && { color: success ? 'success.main' : 'text.primary' }) }}
+          sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!effectiveError && !disabled && { color: success ? 'success.main' : 'text.primary' }) }}
         >
           {label}
         </FormLabel>
@@ -90,25 +121,25 @@ export function TextField({
         type={type}
         size={size}
         helperText={helperText}
-        error={error}
+        error={effectiveError}
         required={required}
         disabled={disabled}
         fullWidth={fullWidth}
         multiline={multiline}
         rows={rows}
-        onChange={onChange}
-        onBlur={onBlur}
+        onChange={handleChange}
+        onBlur={handleBlur}
         onFocus={onFocus}
         id={fieldId}
         name={name}
         autoComplete={autoComplete}
         slotProps={{
           ...(htmlInputProps && { htmlInput: htmlInputProps }),
-          formHelperText: { role: error && !errorMessage ? 'alert' : undefined, error: errorMessage ? false : undefined, sx: { mx: 0 } },
+          formHelperText: { role: effectiveError && !effectiveErrorMessage ? 'alert' : undefined, error: effectiveErrorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
               ...buildInputStyles(theme),
-              ...(success && !error && {
+              ...(success && !effectiveError && {
                 '& fieldset': { borderColor: theme.palette.success.main },
                 '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: theme.palette.success.main },
                 '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.success.main },
@@ -150,9 +181,9 @@ export function TextField({
           },
         }}
       />
-      {error && errorMessage && (
+      {effectiveError && effectiveErrorMessage && (
         <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
-          {errorMessage}
+          {effectiveErrorMessage}
         </FormHelperText>
       )}
     </Box>

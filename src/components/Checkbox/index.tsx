@@ -127,7 +127,7 @@ export function Checkbox({
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
       })
-    : { ml: 0, gap: 1.25, alignItems: description ? 'flex-start' : 'center' };
+    : { ml: 0, gap: 1.25, alignItems: 'flex-start' };
 
   const checkboxSx =
     variant === 'card'

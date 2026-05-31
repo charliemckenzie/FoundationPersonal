@@ -48,6 +48,7 @@ export function AlertDialog({
             width: '18.75rem',
             borderRadius: (t: Theme) => `${t.shape['xl']}px`,
             backgroundColor: 'background.paper',
+            backgroundImage: 'none',
             overflow: 'hidden',
             m: 2,
           },

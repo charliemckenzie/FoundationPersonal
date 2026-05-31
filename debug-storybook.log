@@ -1,24 +1,12 @@
-[17:11:11.199] [INFO] storybook v10.3.5
-[17:11:11.870] [DEBUG] Getting package.json info for C:/Users/adama/Sites/Foundation/package.json...
-[17:11:14.570] [WARN] 🚨 Unable to index ./src/stories/index.mdx:
-  Error: Could not parse expression with acorn
-    at file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6033:24
-    at async Promise.all (index 2)
-    at async Promise.all (index 0)
-    at async _StoryIndexGenerator.updateExtracted (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6016:5)
-    at async _StoryIndexGenerator.ensureExtracted (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6053:8)
-    at async _StoryIndexGenerator.initialize (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6012:5)
-    at async file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/presets/common-preset.js:1855:10
-    at async Object.experimental_serverChannel (file:///C:/Users/adama/Sites/Foundation/node_modules/@storybook/addon-vitest/dist/preset.js:450:29)
-    at async buildDevStandalone (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:8027:32)
-    at async withTelemetry (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
-[17:11:14.576] [ERROR] Error: Unable to index ./src/stories/index.mdx
-    at _StoryIndexGenerator.getIndexAndStats (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6282:15)
-    at async _StoryIndexGenerator.getIndex (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:6271:13)
-    at async Object.experimental_serverChannel (file:///C:/Users/adama/Sites/Foundation/node_modules/@storybook/addon-vitest/dist/preset.js:464:14)
-    at async buildDevStandalone (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/core-server/index.js:8027:32)
-    at async withTelemetry (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/_node-chunks/chunk-FIR43JGQ.js:225:12)
-    at async dev (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2736:3)
-    at async _Command.<anonymous> (file:///C:/Users/adama/Sites/Foundation/node_modules/storybook/dist/bin/core.js:2806:92)
-[17:11:14.581] [WARN] Broken build, fix the error above.
+[07:24:09.141] [INFO] storybook v10.3.5
+[07:24:11.110] [DEBUG] Getting package.json info for C:/Users/adama/Sites/Foundation/package.json...
+[07:24:14.532] [DEBUG] Serving static files from [36mnode_modules/@chromatic-com/storybook/assets[39m at [36m/addon-visual-tests-assets[39m
+[07:24:14.532] [DEBUG] Serving static files from [36mpublic[39m at [36m/[39m
+[07:24:14.532] [INFO] Starting...
+[07:24:15.065] [DEBUG] Starting preview..
+[07:24:15.147] [DEBUG] Using tsconfig paths for react-docgen
+[07:24:15.495] [INFO] [43mVite[49m Re-optimizing dependencies because lockfile has changed
+[07:24:15.548] [ERROR] Failed to build the preview
+[07:24:15.549] [ERROR] [38;2;241;97;97mError: EBUSY: resource busy or locked, unlink '.\node_modules\.cache\storybook\10.3.5\1c3385a5d25e538d10b518b310c74d3ca2690b6aaffeadccd74da79736171f86\sb-vite\deps\List-BFkZelQw.js'[39m
+[07:24:15.552] [WARN] Broken build, fix the error above.
 You may need to refresh the browser.

@@ -49,4 +49,8 @@ export interface ManagedListProps {
   itemVariant?: 'card' | 'list';
   /** `row` (default) joins metadata entries with a dot separator. `column` stacks each entry on its own line. */
   metadataVariant?: 'row' | 'column';
+  /** When true, renders a skeleton placeholder matching the panel layout instead of the items. */
+  loading?: boolean;
+  /** Number of skeleton item rows to render while `loading`. Defaults to 3. */
+  loadingItemCount?: number;
 }

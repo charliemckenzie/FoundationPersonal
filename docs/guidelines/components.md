@@ -43,6 +43,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Dialog` | Modal dialog with confirm/cancel actions; adapts to drawer on mobile |
 | `Divider` | Horizontal or vertical rule for separating content |
 | `Drawer` | Slide-out side panel — left, right, top, or bottom |
+| `ExpandableCardList` | List of expandable cards, one open at a time, each with a custom header summary and an optional sibling action (e.g. Remove). Use for editable item lists like beneficiaries. |
 | `ExpandableItem` | Single collapsible content panel (lighter than Accordion) |
 | `FileUpload` | Drag-and-drop file input with preview and validation |
 | `Footer` | Brand-aware site footer with logo, nav, and contact sections |
@@ -154,6 +155,10 @@ Key props: `items`, `defaultExpanded`, `variant`, `showCloseAll`, `onChange`
 Single collapsible panel. Lighter than Accordion — use when you only need one expandable section, not a list of them.  
 Key props: `label`, `defaultExpanded`, `expanded`, `onChange`, `disabled`
 
+**ExpandableCardList** — `src/components/ExpandableCardList/`  
+Controlled list of expandable cards, one open at a time. Each card has a custom header (`renderHeader(expanded)`), optional right-aligned meta (`renderAside`), an optional sibling action button (`action` — e.g. Remove), and body content. The disclosure and the action are separate sibling buttons (never nested), so the header is fully keyboard and screen-reader accessible; collapsed cards unmount, leaving their fields out of the tab order. Use for editable item lists (beneficiaries and similar) where the classic Accordion's single-button header can't carry a per-item action. Header content must be inline/phrasing (use `component="span"`). Pass `headingLevel` only when the cards are genuine document sections.  
+Key props: `items` (`{ id, renderHeader, renderAside?, action?, content, disabled? }`), `expandedId`, `onExpandedChange`, `headingLevel?`
+
 **Menu** — `src/components/Menu/`  
 Dropdown menu triggered by any element. Adapts to a bottom drawer on mobile.  
 Key props: `trigger`, `items`, `id`, `onOpenChange`
@@ -174,8 +179,8 @@ Key props: `severity`, `message`, `title`, `icon`, `action`, `onClose`
 ### Form Inputs
 
 **TextField** — `src/components/TextField/`  
-The default single-line input. Supports `text`, `email`, `password`, `number`, `tel`, `url`, `search`, `date` types. Start/end adornments built in.  
-Key props: `label`, `value`, `type`, `size`, `multiline`, `startAdornment`, `endAdornment`, `error`, `helperText`
+The default single-line input. Supports `text`, `email`, `password`, `number`, `tel`, `url`, `search`, `date` types. Start/end adornments built in. `email` and `tel` types self-validate format on blur and show their own error; pass `error`/`errorMessage` to override with your own.  
+Key props: `label`, `value`, `type`, `size`, `multiline`, `startAdornment`, `endAdornment`, `error`, `errorMessage`, `helperText`
 
 **TextArea** — `src/components/TextArea/`  
 Multi-line text input. Use instead of `TextField` with `multiline` when you need explicit textarea semantics.
@@ -188,10 +193,11 @@ Currency input. Formats with thousand separators; normalises value on blur.
 Key props: `label`, `defaultValue`, `placeholder`, `size`, `helperText`, `onChange`
 
 **PercentageField** — `src/components/PercentageField/`  
-Percentage input. Validates and clamps to 0–100.
+Percentage input. Validates and clamps to 0–100. Controlled via `value` (reflects external resets) or uncontrolled via `defaultValue`.  
+Key props: `label`, `value`, `defaultValue`, `error`, `helperText`, `onChange`
 
 **DateOfBirthField** — `src/components/DateOfBirthField/`  
-Date input defaulting to 1900–today range. Use for date-of-birth capture specifically.
+Date input defaulting to 1900–today range. Use for date-of-birth capture specifically. Self-validates on blur (rejects future dates, invalid dates, and implausible ages) and shows its own error; pass `error`/`errorMessage` to override.
 
 **DatePicker** — `src/components/DatePicker/`  
 Single-date form input with calendar popover. Use for arbitrary date selection in forms.
@@ -319,9 +325,9 @@ Data visualisation components (bar, line, pie etc.). Check the Storybook stories
 Standalone calendar view. For form date inputs, use `DatePicker` or `DateRangePicker` instead.
 
 **ManagedList** — `src/components/ManagedList/`  
-Panel for displaying and managing a user-controlled list of items. Header with icon, title, description, and optional navigation chevron. Item rows with icon, name, optional badge, dot-separated metadata, and edit/delete action buttons. Footer with an add action and optional bulk remove. Empty state when no items exist.  
+Panel for displaying and managing a user-controlled list of items. Header with a circled icon (40px, `background.default`), title, description, and optional navigation chevron. Item rows with icon, name, optional badge, dot-separated metadata, and edit/delete action buttons. Footer with an add action and optional bulk remove. Empty state when no items exist. Set `loading` to render a `Skeleton`-based placeholder that mirrors the panel layout.  
 Use for: passkeys, authenticator apps, beneficiaries, third-party authorities, connected accounts.  
-Key props: `icon`, `title`, `description`, `href`, `items`, `emptyIcon`, `emptyMessage`, `addLabel`, `onAdd`, `onRemoveAll`
+Key props: `icon`, `title`, `description`, `href`, `items`, `emptyIcon`, `emptyMessage`, `addLabel`, `onAdd`, `onRemoveAll`, `loading`, `loadingItemCount`
 
 ---
 
@@ -335,6 +341,7 @@ Understanding what composes what prevents accidental regressions.
 | AddressField | Checkbox, internal address capture |
 | Card | Button (open/promo variants) |
 | Dialog | Button, Icon |
+| ExpandableCardList | Icon, Tooltip, Collapse (MUI) |
 | Footer | Logo, internal nav/contact sections |
 | FormProgress | Button, Menu, Icon, Tooltip |
 | MemberOnline | Header, Footer, Drawer, Logo, Icon |
@@ -342,7 +349,7 @@ Understanding what composes what prevents accidental regressions.
 | QuickLinks | HeroIcon |
 | Select | Drawer (mobile) |
 | StepperActions | Button, TextButton, Dialog (exit confirm), Alert, Icon |
-| ManagedList | Icon, Chip, IconButton, TextButton, Divider |
+| ManagedList | Icon, Chip, IconButton, TextButton, Divider, Skeleton |
 | PageTransition | framer-motion (external), Next App Router (`usePathname`, `LayoutRouterContext`) |
 
 **Icon is a leaf dependency** — any change to it has blast radius across almost the entire component library.

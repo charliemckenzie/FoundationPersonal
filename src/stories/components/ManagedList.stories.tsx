@@ -18,6 +18,8 @@ const meta: Meta<ManagedListProps> = {
     addLabel:     { control: 'text' },
     addIcon:      { control: 'text' },
     metadataVariant: { control: 'radio', options: ['row', 'column'] },
+    loading:      { control: 'boolean' },
+    loadingItemCount: { control: { type: 'number', min: 1, max: 6 } },
     items:        { table: { disable: true } },
     onAdd:        { table: { disable: true } },
     onRemoveAll:  { table: { disable: true } },
@@ -180,6 +182,53 @@ export const BeneficiaryVariant: Story = {
     onAdd: noop,
     onRemoveAll: noop,
     removeAllLabel: 'Delete',
+  },
+  render: (args) => (
+    <Box sx={{ maxWidth: 600 }}>
+      <ManagedList {...args} />
+    </Box>
+  ),
+};
+
+/**
+ * Loading state — set `loading` to render a skeleton placeholder that mirrors the panel layout.
+ * Uses the base `Skeleton` component. `loadingItemCount` controls the number of placeholder rows.
+ * `splitFooter` and the header chevron are inferred from `onRemoveAll` and `href`.
+ */
+export const Loading: Story = {
+  args: {
+    icon: 'key',
+    title: 'Passkeys',
+    description: 'Manage your passkeys for faster, more secure sign-in',
+    href: '/settings/passkeys',
+    items: [],
+    addLabel: 'Add passkey',
+    onAdd: noop,
+    onRemoveAll: noop,
+    loading: true,
+    loadingItemCount: 3,
+  },
+  render: (args) => (
+    <Box sx={{ maxWidth: 600 }}>
+      <ManagedList {...args} />
+    </Box>
+  ),
+};
+
+/** Loading state for the connected `list` variant — placeholder rows joined with dividers. */
+export const LoadingListVariant: Story = {
+  args: {
+    icon: 'users',
+    title: 'Your binding nominations',
+    description: 'Loading your nominations…',
+    itemVariant: 'list',
+    items: [],
+    addLabel: 'Update',
+    addIcon: 'pen',
+    onAdd: noop,
+    onRemoveAll: noop,
+    loading: true,
+    loadingItemCount: 2,
   },
   render: (args) => (
     <Box sx={{ maxWidth: 600 }}>

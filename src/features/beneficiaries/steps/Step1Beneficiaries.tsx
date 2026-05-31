@@ -6,18 +6,20 @@ import { Alert } from '../../../components/Alert';
 import { BeneficiaryRepeater } from '../BeneficiaryRepeater';
 import { AllocationTotal } from '../AllocationTotal';
 import type { BeneficiaryDraft } from '../types';
+import type { Step1Validation } from '../utils';
 import { totalAllocation } from '../utils';
 
 interface Step1BeneficiariesProps {
   beneficiaries: BeneficiaryDraft[];
   onChange: (updated: BeneficiaryDraft[]) => void;
-  error: string | null;
+  validation: Step1Validation | null;
   expandedId: string;
   onExpandedChange: (id: string) => void;
 }
 
-export function Step1Beneficiaries({ beneficiaries, onChange, error, expandedId, onExpandedChange }: Step1BeneficiariesProps) {
+export function Step1Beneficiaries({ beneficiaries, onChange, validation, expandedId, onExpandedChange }: Step1BeneficiariesProps) {
   const total = totalAllocation(beneficiaries);
+  const hasFieldErrors = validation ? Object.keys(validation.fieldErrors).length > 0 : false;
 
   return (
     <Stack spacing={3}>
@@ -28,11 +30,19 @@ export function Step1Beneficiaries({ beneficiaries, onChange, error, expandedId,
         </Typography>
       </div>
 
-      <BeneficiaryRepeater beneficiaries={beneficiaries} onChange={onChange} expandedId={expandedId} onExpandedChange={onExpandedChange} />
+      <BeneficiaryRepeater
+        beneficiaries={beneficiaries}
+        onChange={onChange}
+        expandedId={expandedId}
+        onExpandedChange={onExpandedChange}
+        fieldErrors={validation?.fieldErrors ?? {}}
+      />
 
-      <AllocationTotal total={total} />
+      <AllocationTotal total={total} attempted={validation !== null} />
 
-      {error && <Alert severity="error" message={error} />}
+      {hasFieldErrors && (
+        <Alert severity="error" message="Please complete the highlighted fields before continuing." />
+      )}
     </Stack>
   );
 }

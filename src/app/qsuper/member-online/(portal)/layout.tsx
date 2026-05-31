@@ -48,7 +48,6 @@ export default function QSuperMemberOnlineLayout({ children }: { children: React
     },
     { id: 'take-money-out', label: 'Take money out', icon: 'money-simple-from-bracket', href: '#' },
     { id: 'insurance', label: 'Insurance', icon: 'umbrella', href: '#' },
-    { id: 'defined-benefit', label: 'Defined Benefit', icon: 'building-columns', href: '#' },
   ], []);
 
   const secondaryItems = useMemo<MemberNavItem[]>(() => [

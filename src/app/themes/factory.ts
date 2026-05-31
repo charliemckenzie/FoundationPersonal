@@ -613,7 +613,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             fontFamily: brand.fontFamily,
             fontSize: '0.875rem',
             fontWeight: 400,
-            lineHeight: 1.5,
+            lineHeight: 1,
           },
         },
       },

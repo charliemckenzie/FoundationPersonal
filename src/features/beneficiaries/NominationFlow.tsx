@@ -15,7 +15,8 @@ import { SubmissionSuccess } from './SubmissionSuccess';
 import { useBeneficiaries } from './BeneficiariesContext';
 import type { BeneficiaryDraft, ExpiryOption } from './types';
 import { StepTransition } from '../../components/StepTransition';
-import { validateBeneficiaries, buildNomination, createDraft } from './utils';
+import { validateStep1, buildNomination, createDraft } from './utils';
+import type { Step1Validation } from './utils';
 
 const STEPS = [
   { id: 'beneficiaries' },
@@ -39,6 +40,7 @@ export function NominationFlow({ overviewPath }: NominationFlowProps) {
   const [expiry, setExpiry] = useState<ExpiryOption>('none');
   const [declarationChecked, setDeclarationChecked] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [step1Validation, setStep1Validation] = useState<Step1Validation | null>(null);
   const [submitted, setSubmitted] = useState(false);
 
   function advance(next: number) {
@@ -49,7 +51,7 @@ export function NominationFlow({ overviewPath }: NominationFlowProps) {
 
   function handleBeneficiariesChange(updated: BeneficiaryDraft[]) {
     setBeneficiaries(updated);
-    if (error !== null) setError(validateBeneficiaries(updated));
+    if (step1Validation) setStep1Validation(validateStep1(updated));
   }
 
   function handleDeclarationChange(checked: boolean) {
@@ -59,8 +61,13 @@ export function NominationFlow({ overviewPath }: NominationFlowProps) {
 
   function handleNext() {
     if (activeStep === 0) {
-      const err = validateBeneficiaries(beneficiaries);
-      if (err) { setError(err); return; }
+      const validation = validateStep1(beneficiaries);
+      if (validation.hasErrors) {
+        setStep1Validation(validation);
+        if (validation.firstInvalidId) setExpandedId(validation.firstInvalidId);
+        return;
+      }
+      setStep1Validation(null);
       if (beneficiaries.length > 1) collapseOnEnteredRef.current = true;
     }
     if (activeStep === 2) {
@@ -122,7 +129,7 @@ export function NominationFlow({ overviewPath }: NominationFlowProps) {
 
           <StepTransition step={activeStep} onEntered={handleStepEntered}>
             {activeStep === 0 ? (
-              <Step1Beneficiaries beneficiaries={beneficiaries} onChange={handleBeneficiariesChange} error={error} expandedId={expandedId} onExpandedChange={setExpandedId} />
+              <Step1Beneficiaries beneficiaries={beneficiaries} onChange={handleBeneficiariesChange} validation={step1Validation} expandedId={expandedId} onExpandedChange={setExpandedId} />
             ) : activeStep === 1 ? (
               <Step2Expiry expiry={expiry} onChange={setExpiry} />
             ) : (

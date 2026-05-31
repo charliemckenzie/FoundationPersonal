@@ -118,8 +118,9 @@ export function Dialog({
                 transform: `translateY(${dragY}px)`,
                 transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                 willChange: 'transform',
+                backgroundImage: 'none',
               })
-            : { borderRadius: (t) => `${t.shape['xl']}px` },
+            : { borderRadius: (t) => `${t.shape['xl']}px`, backgroundImage: 'none' },
         },
       }}
     >

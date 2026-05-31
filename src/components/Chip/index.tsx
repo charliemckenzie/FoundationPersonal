@@ -86,6 +86,7 @@ export function Chip({
     },
   };
   const xsmallPaddingSx = {
+    height: '1.25rem',
     '& .MuiChip-label': {
       paddingLeft: theme.spacing(1),
       paddingRight: theme.spacing(1),
@@ -94,14 +95,12 @@ export function Chip({
   const smallLabelSx = {
     '& .MuiChip-label': {
       fontSize: theme.typography.small.fontSize,
-      lineHeight: 1.5,
     },
   };
   const xsmallLabelSx = {
     '& .MuiChip-label': {
       fontSize: theme.typography.caption.fontSize,
       fontWeight: 700,
-      lineHeight: 1.5,
     },
   };
   const iconLabelSx = {

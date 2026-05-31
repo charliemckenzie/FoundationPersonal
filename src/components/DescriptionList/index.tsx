@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { SxProps, Theme } from '@mui/material/styles';
 import React from 'react';
+import { DescriptionListSkeleton } from './DescriptionListSkeleton';
 
 type ValueAlign = 'left' | 'right';
 export type DescriptionListDensity = 'condensed' | 'default' | 'spaced';
@@ -44,6 +45,10 @@ export interface DescriptionListProps {
   valueFontWeight?: number;
   /** When true, stacks label above value on xs screens. Defaults to `true`. */
   responsive?: boolean;
+  /** When true, renders a skeleton placeholder matching the list layout. */
+  loading?: boolean;
+  /** Number of skeleton rows to render while `loading`. Defaults to 3. */
+  loadingRowCount?: number;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
 }
@@ -147,11 +152,23 @@ function DescriptionListItem({ label, description, value, valueDescription, acti
 
 DescriptionListItem.displayName = 'DescriptionListItem';
 
-function DescriptionList({ title, valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, children, sx }: DescriptionListProps) {
+function DescriptionList({ title, valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, loading = false, loadingRowCount = 3, children, sx }: DescriptionListProps) {
   const contextValue = React.useMemo<DescriptionListContextValue>(
     () => ({ valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive }),
     [valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive],
   );
+
+  if (loading) {
+    return (
+      <DescriptionListSkeleton
+        rowCount={loadingRowCount}
+        title={!!title}
+        density={density}
+        responsive={responsive}
+        sx={sx}
+      />
+    );
+  }
 
   return (
     <DescriptionListContext.Provider value={contextValue}>
@@ -205,3 +222,5 @@ DescriptionList.displayName = 'DescriptionList';
 DescriptionList.Item = DescriptionListItem;
 
 export { DescriptionList };
+export { DescriptionListSkeleton } from './DescriptionListSkeleton';
+export type { DescriptionListSkeletonProps } from './DescriptionListSkeleton';

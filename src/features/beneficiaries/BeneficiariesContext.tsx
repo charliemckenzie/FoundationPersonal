@@ -3,6 +3,8 @@
 import React, { createContext, useContext, useState } from 'react';
 import type { Nomination } from './types';
 
+const STORAGE_KEY = 'qsuper_beneficiaries_nomination';
+
 interface BeneficiariesContextValue {
   nomination: Nomination | null;
   saveNomination: (n: Nomination) => void;
@@ -15,11 +17,26 @@ const BeneficiariesContext = createContext<BeneficiariesContextValue>({
   clearNomination: () => {},
 });
 
-export function BeneficiariesProvider({ children }: { children: React.ReactNode }) {
-  const [nomination, setNomination] = useState<Nomination | null>(null);
+function readFromStorage(): Nomination | null {
+  try {
+    const raw = sessionStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Nomination) : null;
+  } catch {
+    return null;
+  }
+}
 
-  const saveNomination = (n: Nomination) => setNomination(n);
-  const clearNomination = () => setNomination(null);
+export function BeneficiariesProvider({ children }: { children: React.ReactNode }) {
+  const [nomination, setNomination] = useState<Nomination | null>(readFromStorage);
+
+  const saveNomination = (n: Nomination) => {
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(n));
+    setNomination(n);
+  };
+  const clearNomination = () => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    setNomination(null);
+  };
 
   return (
     <BeneficiariesContext.Provider value={{ nomination, saveNomination, clearNomination }}>

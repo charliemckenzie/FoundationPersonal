@@ -2,8 +2,10 @@
 
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '../../components/MemberOnline';
+import { Dialog } from '../../components/Dialog';
 import { ManagedList } from '../../components/ManagedList';
 import type { ManagedListItemProps } from '../../components/ManagedList/ManagedList.types';
 import { useBeneficiaries } from './BeneficiariesContext';
@@ -17,22 +19,38 @@ export function BeneficiariesOverview({ basePath }: BeneficiariesOverviewProps) 
   const router = useRouter();
   const { nomination, clearNomination } = useBeneficiaries();
 
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  // Mocked loading delay so the skeleton state can be tested in the running app.
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   function handleUpdate() {
     router.push(`${basePath}/new`);
   }
 
+  function handleConfirmRemove() {
+    clearNomination();
+    setConfirmOpen(false);
+  }
+
   const items: ManagedListItemProps[] = nomination
-    ? nomination.beneficiaries.map((b) => ({
-        id: b.id,
-        name: `${b.firstName} ${b.lastName}`,
-        badge: `Allocation ${b.allocation}%`,
-        metadata: [
-          relationshipLabel(b.relationship),
-          b.dateOfBirth ? formatDate(b.dateOfBirth) : '',
-          [b.phone, b.email].filter((v): v is string => !!v).join(' · '),
-        ].filter((v): v is string => !!v),
-        metadataVariant: 'column' as const,
-      }))
+    ? nomination.beneficiaries.map((b) => {
+        const isLPR = b.relationship === 'lpr';
+        return {
+          id: b.id,
+          name: isLPR ? relationshipLabel(b.relationship) : `${b.firstName} ${b.lastName}`.trim(),
+          allocation: { value: `${b.allocation}%` },
+          metadata: [
+            isLPR ? null : [relationshipLabel(b.relationship), b.dateOfBirth ? formatDate(b.dateOfBirth) : ''].filter(Boolean).join(' · '),
+            [b.phone, b.email].filter((v): v is string => !!v).join(' · '),
+          ].filter((v): v is string => !!v && v.length > 0),
+          metadataVariant: 'column' as const,
+        };
+      })
     : [];
 
   const panelDescription = nomination
@@ -62,12 +80,24 @@ export function BeneficiariesOverview({ basePath }: BeneficiariesOverviewProps) 
             emptyMessage="No binding nominations on file"
             addLabel={addLabel}
             onAdd={handleUpdate}
-            onRemoveAll={nomination ? clearNomination : undefined}
+            onRemoveAll={nomination ? () => setConfirmOpen(true) : undefined}
             itemVariant="list"
             metadataVariant="column"
+            loading={loading}
+            loadingItemCount={2}
           />
         </Stack>
       </Stack>
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        variant="alert"
+        title="Are you sure?"
+        description="This will remove all beneficiaries that have been nominated."
+        confirmLabel="Confirm"
+        onConfirm={handleConfirmRemove}
+      />
     </ContentContainer>
   );
 }

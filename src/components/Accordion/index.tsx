@@ -3,7 +3,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import { useCallback, useState } from 'react';
+import { useCallback, useId, useState } from 'react';
 import { Icon } from '../Icon';
 import { Button } from '../Button';
 import type React from 'react';
@@ -34,6 +34,10 @@ interface AccordionPanelProps {
 }
 
 function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
+  const uid = useId();
+  const headerId = `${uid}-header`;
+  const contentId = `${uid}-content`;
+
   const handleChange = useCallback(
     (_e: React.SyntheticEvent, isExpanded: boolean) => onChange?.(item.id, isExpanded),
     [item.id, onChange],
@@ -49,20 +53,25 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
       sx={(t) => ({
         border: 1,
         borderColor: item.disabled ? 'border.subtle' : 'border.default',
-        borderRadius: `${t.spacing(1)} !important`,
+        borderRadius: `${t.spacing(2)} !important`,
         backgroundColor: 'background.paper',
         overflow: 'hidden',
         '&::before': { display: 'none' },
-        '&:focus-within': {
-          outline: `2px solid ${t.palette.border.focus}`,
+        // Focus ring wraps the whole panel (offset outside the card) when the header is
+        // keyboard-focused — matches Button/ExpandableItem. The card's own overflow:hidden
+        // does not clip its own outline. Note: MUI wraps the summary in a heading element,
+        // so the summary is not a direct child — use a descendant selector, not `>`.
+        '&:has(.MuiAccordionSummary-root.Mui-focusVisible)': {
+          outline: '2px solid',
+          outlineColor: 'border.focus',
           outlineOffset: '2px',
         },
       })}
     >
       <AccordionSummary
         expandIcon={<Icon icon="chevron_down" size={SIZE.iconSize} />}
-        aria-controls={`${item.id}-content`}
-        id={`${item.id}-header`}
+        aria-controls={contentId}
+        id={headerId}
         sx={{
           py: SIZE.summaryPy,
           px: SIZE.summaryPx,
@@ -70,14 +79,18 @@ function AccordionPanel({ item, expanded, onChange }: AccordionPanelProps) {
           '&.Mui-expanded': { backgroundColor: 'background.elevated' },
           '&:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
           '&.Mui-expanded:hover:not(.Mui-disabled)': { backgroundColor: 'background.elevated' },
-          '&.Mui-focusVisible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '-2px', boxShadow: 'none', backgroundColor: 'background.elevated' },
+          // The visible ring lives on the parent card (see above). Keep the summary's own
+          // surface unchanged on focus — override MUI's default grey action.focus fill so the
+          // ring is the sole indicator, like Button.
+          '&.Mui-focusVisible': { outline: 'none', boxShadow: 'none', backgroundColor: 'background.paper' },
+          '&.Mui-expanded.Mui-focusVisible': { backgroundColor: 'background.elevated' },
         }}
       >
         <Typography variant={SIZE.titleVariant} sx={{ fontWeight: 700, color: 'inherit' }}>
           {item.title}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails id={`${item.id}-content`} sx={{ px: SIZE.detailsPx, pt: SIZE.detailsPt, pb: SIZE.detailsPb }}>
+      <AccordionDetails id={contentId} sx={{ px: SIZE.detailsPx, pt: SIZE.detailsPt, pb: SIZE.detailsPb }}>
         {typeof item.content === 'string' ? (
           <Typography variant="body" color="text.muted">
             {item.content}

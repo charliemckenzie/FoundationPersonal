@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Skeleton } from '../../components/Skeleton';
 
 const meta: Meta<typeof Skeleton> = {
-  title: 'Components / Skeleton',
+  title: 'Components / Loading Indicators / Skeleton',
   component: Skeleton,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

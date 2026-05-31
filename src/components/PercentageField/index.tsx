@@ -5,6 +5,8 @@ import type React from 'react';
 
 export interface PercentageFieldProps {
   label?: string;
+  /** Controlled value. When provided, the field reflects it (e.g. external resets). */
+  value?: number | null;
   defaultValue?: number;
   placeholder?: string;
   size?: TextFieldSize;
@@ -27,8 +29,13 @@ function sanitize(input: string): string {
   return `${stripped.slice(0, firstDot)}.${dec}`;
 }
 
+function format(value: number | null | undefined): string {
+  return value != null ? Math.min(100, Math.max(0, value)).toFixed(2) : '';
+}
+
 export function PercentageField({
   label,
+  value,
   defaultValue,
   placeholder = '0.00',
   size,
@@ -43,8 +50,18 @@ export function PercentageField({
   name,
 }: PercentageFieldProps) {
   const [displayValue, setDisplayValue] = useState(() =>
-    defaultValue != null ? Math.min(100, Math.max(0, defaultValue)).toFixed(2) : ''
+    format(value !== undefined ? value : defaultValue)
   );
+  const [focused, setFocused] = useState(false);
+  const [prevValue, setPrevValue] = useState(value);
+
+  // Reflect a controlled value that changed externally (e.g. a reset), but never
+  // while the user is editing. Adjusting state during render is the React-blessed
+  // alternative to a syncing effect.
+  if (value !== undefined && value !== prevValue && !focused) {
+    setPrevValue(value);
+    setDisplayValue(value === null ? '' : format(value));
+  }
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const sanitized = sanitize(e.target.value);
@@ -58,15 +75,18 @@ export function PercentageField({
     onChange?.(sanitized && !isNaN(num) ? Math.max(0, num) : null);
   };
 
+  const handleFocus: React.FocusEventHandler<HTMLInputElement> = () => setFocused(true);
+
   // Blur is formatting-only — the numeric value was already committed on every keystroke.
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = () => {
+    setFocused(false);
     if (!displayValue) return;
     const num = parseFloat(displayValue);
     if (isNaN(num)) {
       setDisplayValue('');
       return;
     }
-    setDisplayValue(Math.min(100, Math.max(0, num)).toFixed(2));
+    setDisplayValue(format(num));
   };
 
   const isComplete = parseFloat(displayValue) === 100;
@@ -86,6 +106,7 @@ export function PercentageField({
       fullWidth={fullWidth}
       endAdornment="%"
       onChange={handleChange}
+      onFocus={handleFocus}
       onBlur={handleBlur}
       id={id}
       name={name}

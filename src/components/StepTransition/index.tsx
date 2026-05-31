@@ -153,7 +153,7 @@ export function StepTransition({ step, direction, onEntered, children }: StepTra
   return (
     <Box
       ref={shellRef}
-      sx={{ overflow: 'hidden', transition: reduceMotion ? 'none' : `height ${enterMs}ms ${enterEase}` }}
+      sx={{ overflow: phase === 'idle' ? 'visible' : 'hidden', transition: reduceMotion ? 'none' : `height ${enterMs}ms ${enterEase}` }}
     >
       <Box
         ref={contentRef}

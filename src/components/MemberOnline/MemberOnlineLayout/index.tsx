@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import { SideNav } from '../SideNav';
 import { MemberHeader } from '../MemberHeader';
 import { MobileHeader } from '../MobileHeader';
@@ -65,28 +64,50 @@ export function MemberOnlineLayout({
   onSearchSubmit,
   children,
 }: MemberOnlineLayoutProps) {
-  const isMobile = useMediaQuery('(max-width:1023.95px)');
   const { mode, setMode } = useThemeMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  if (isMobile) {
-    return (
-      <Box
-        sx={(t) => ({
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-          backgroundColor: t.palette.background.paper,
-        })}
-      >
-        <MobileHeader
-          logo={drawerLogo ?? mobileLogo ?? logo}
-          phoneLogo={mobileLogo}
+  return (
+    <Box
+      sx={(t) => ({
+        display: 'flex',
+        flexDirection: { xs: 'column', lg: 'row' },
+        height: { xs: 'auto', lg: '100vh' },
+        minHeight: { xs: '100vh', lg: 'unset' },
+        overflow: { xs: 'visible', lg: 'hidden' },
+        backgroundColor: t.palette.background.paper,
+      })}
+    >
+      {/* Desktop sidenav — hidden on mobile via CSS */}
+      <Box sx={{ display: { xs: 'none', lg: 'flex' } }}>
+        <SideNav
+          logo={logo}
           homeHref={homeHref}
           homeLabel={homeLabel}
-          onMenuOpen={() => setDrawerOpen(true)}
-          onLogout={onLogout}
+          primaryItems={primaryItems}
+          secondaryItems={secondaryItems}
+          balance={balance}
+          activeItemId={activeItemId}
+          onItemClick={onItemClick}
+          lastLoggedIn={lastLoggedIn}
         />
+      </Box>
+
+      {/* Main column — always the same React subtree */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: { lg: 'hidden' } }}>
+        {/* Mobile header — hidden on desktop via CSS */}
+        <Box sx={{ display: { xs: 'flex', lg: 'none' } }}>
+          <MobileHeader
+            logo={drawerLogo ?? mobileLogo ?? logo}
+            phoneLogo={mobileLogo}
+            homeHref={homeHref}
+            homeLabel={homeLabel}
+            onMenuOpen={() => setDrawerOpen(true)}
+            onLogout={onLogout}
+          />
+        </Box>
+
+        {/* Mobile nav drawer — always mounted, portal-based, invisible when closed */}
         <MobileNavDrawer
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
@@ -104,45 +125,25 @@ export function MemberOnlineLayout({
           onLogout={onLogout}
           lastLoggedIn={lastLoggedIn}
         />
-        <Box component="main" sx={{ flex: 1, minHeight: 0 }}>
-          {children}
-        </Box>
-        <MemberFooter links={footerLinks} disclaimer={footerDisclaimer} />
-      </Box>
-    );
-  }
 
-  return (
-    <Box
-      sx={(t) => ({
-        display: 'flex',
-        height: '100vh',
-        overflow: 'hidden',
-        backgroundColor: t.palette.background.paper,
-      })}
-    >
-      <SideNav
-        logo={logo}
-        homeHref={homeHref}
-        homeLabel={homeLabel}
-        primaryItems={primaryItems}
-        secondaryItems={secondaryItems}
-        balance={balance}
-        activeItemId={activeItemId}
-        onItemClick={onItemClick}
-        lastLoggedIn={lastLoggedIn}
-      />
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: 'hidden' }}>
-        <MemberHeader
-          user={user}
-          mode={mode}
-          onModeChange={setMode}
-          searchValue={searchValue}
-          onSearchChange={onSearchChange}
-          onSearchSubmit={onSearchSubmit}
-          onLogout={onLogout}
-        />
-        <Box component="main" sx={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+        {/* Desktop header — hidden on mobile via CSS */}
+        <Box sx={{ display: { xs: 'none', lg: 'block' } }}>
+          <MemberHeader
+            user={user}
+            mode={mode}
+            onModeChange={setMode}
+            searchValue={searchValue}
+            onSearchChange={onSearchChange}
+            onSearchSubmit={onSearchSubmit}
+            onLogout={onLogout}
+          />
+        </Box>
+
+        {/* Page content — stable tree position on every viewport */}
+        <Box
+          component="main"
+          sx={{ flex: 1, minHeight: 0, overflowY: { lg: 'auto' } }}
+        >
           <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ flex: 1 }}>
               {children}
