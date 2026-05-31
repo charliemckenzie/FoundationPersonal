@@ -10,10 +10,10 @@ const meta: Meta<ManagedListProps> = {
   parameters: { layout: 'padded' },
   argTypes: {
     icon:         { control: 'text' },
+    iconStyle:    { control: 'radio', options: ['solid', 'regular', 'light'] },
     title:        { control: 'text' },
     description:  { control: 'text' },
     href:         { control: 'text' },
-    emptyIcon:    { control: 'text' },
     emptyMessage: { control: 'text' },
     addLabel:     { control: 'text' },
     addIcon:      { control: 'text' },

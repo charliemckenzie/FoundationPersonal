@@ -10,7 +10,7 @@ import { PanelFooter } from './PanelFooter';
 import { focusRingSx } from './styles';
 import type { ManagedListProps } from './ManagedList.types';
 
-function EmptyState({ icon, message, onClick }: { icon: string; message: string; onClick: () => void }) {
+function EmptyState({ message, onClick }: { message: string; onClick: () => void }) {
   return (
     <Box
       component="button"
@@ -37,7 +37,7 @@ function EmptyState({ icon, message, onClick }: { icon: string; message: string;
         '&:focus-visible': focusRingSx,
       })}
     >
-      <Icon icon={icon} size="2xl" color="text.disabled" />
+      <Icon icon="file-circle-plus" style="light" size="2xl" color="text.disabled" />
       <Typography variant="small" sx={{ color: 'text.muted' }}>
         {message}
       </Typography>
@@ -72,11 +72,11 @@ function HeaderChevronLink({ href, title }: { href: string; title: string }) {
 
 export function ManagedList({
   icon,
+  iconStyle = 'solid',
   title,
   description,
   href,
   items,
-  emptyIcon,
   emptyMessage = 'No items added',
   addLabel,
   addIcon = 'plus',
@@ -128,7 +128,7 @@ export function ManagedList({
               flexShrink: 0,
             })}
           >
-            <Icon icon={icon} size="xl" color="primary" />
+            <Icon icon={icon} style={iconStyle} size="xl" color="primary" />
           </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="h6">{title}</Typography>
@@ -148,7 +148,7 @@ export function ManagedList({
           }}
         >
           {items.length === 0 ? (
-            <EmptyState icon={emptyIcon ?? icon} message={emptyMessage} onClick={onAdd} />
+            <EmptyState message={emptyMessage} onClick={onAdd} />
           ) : itemVariant === 'list' ? (
             <Box
               component="ul"

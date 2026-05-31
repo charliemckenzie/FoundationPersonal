@@ -73,7 +73,8 @@ export function BeneficiariesOverview({ basePath }: BeneficiariesOverviewProps) 
           </div>
 
           <ManagedList
-            icon="circle-check"
+            icon="flower-tulip"
+            iconStyle="light"
             title="Your binding nominations"
             description={panelDescription}
             items={items}

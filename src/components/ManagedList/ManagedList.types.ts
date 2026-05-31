@@ -27,13 +27,13 @@ export interface ManagedListItemProps {
 export interface ManagedListProps {
   /** Font Awesome icon name for the panel header. */
   icon: string;
+  /** Font Awesome style variant for the header icon. Defaults to 'solid'. */
+  iconStyle?: 'solid' | 'regular' | 'light';
   title: string;
   description: string;
   /** If provided, a chevron link is rendered in the header. */
   href?: string;
   items: ManagedListItemProps[];
-  /** Icon for the empty state. Defaults to the header icon. */
-  emptyIcon?: string;
   /** Text for the empty state. Defaults to 'No items added'. */
   emptyMessage?: string;
   /** Label for the add action button (e.g. 'Add passkey'). */
