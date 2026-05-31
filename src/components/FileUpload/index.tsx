@@ -111,8 +111,8 @@ export function FileUpload({
           disabled={disabled}
           error={!!displayError}
           sx={{
+            typography: 'body',
             fontWeight: 700,
-            fontSize: '1rem',
             ...(!displayError && !disabled && { color: 'text.primary' }),
           }}
         >

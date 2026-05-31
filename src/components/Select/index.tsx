@@ -35,7 +35,7 @@ function buildSelectSx(size: SelectSize, condensed: boolean) {
     minHeight: size === 'small'
       ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
       : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
-    fontSize: '1rem',
+    fontSize: t.typography.body.fontSize,
     '& div.MuiSelect-select': {
       lineHeight: 1.5,
       paddingTop: selectPadding(size, condensed),
@@ -172,7 +172,7 @@ export function Select({
             </>
           ) : (
             options.map((option) => (
-              <MenuItem key={option.value} value={option.value} disabled={option.disabled} disableRipple sx={(t) => ({ fontSize: '1rem', mx: '4px', borderRadius: `${t.shape['xs']}px`, width: `calc(100% - 8px)` })}>
+              <MenuItem key={option.value} value={option.value} disabled={option.disabled} disableRipple sx={(t) => ({ fontSize: t.typography.body.fontSize, mx: '4px', borderRadius: `${t.shape['xs']}px`, width: `calc(100% - 8px)` })}>
                 {option.label}
               </MenuItem>
             ))
@@ -203,7 +203,7 @@ export function Select({
               >
                 <ListItemText
                   primary={option.label}
-                  slotProps={{ primary: { sx: { fontSize: '1rem' } } }}
+                  slotProps={{ primary: { sx: { typography: 'body' } } }}
                 />
               </ListItemButton>
             ))}

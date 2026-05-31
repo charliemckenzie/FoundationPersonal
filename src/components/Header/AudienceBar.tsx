@@ -30,8 +30,7 @@ export function AudienceBar({ audienceLinks, resourceLinks, activeHref }: Audien
             sx={{
               display: 'inline-flex',
               alignItems: 'center',
-              fontSize: '0.75rem',
-              lineHeight: 1.5,
+              typography: 'caption',
               fontWeight: 400,
               color: activeHref === link.href ? 'primary.main' : 'text.muted',
               textDecoration: 'none !important',
@@ -58,8 +57,7 @@ export function AudienceBar({ audienceLinks, resourceLinks, activeHref }: Audien
             component="a"
             href={link.href}
             sx={{
-              fontSize: '0.75rem',
-              lineHeight: 1.5,
+              typography: 'caption',
               color: 'text.secondary',
               textDecoration: 'none !important',
               '&:hover': { color: 'primary.main' },

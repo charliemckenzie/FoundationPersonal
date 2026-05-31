@@ -25,8 +25,10 @@ If this document is out of date, flag it to Moe immediately.
 | Component | What it does |
 |---|---|
 | `Accordion` | Expandable content panels — one open at a time or multi-open |
+| `ActionBar` | Promo/CTA banner — title, description, action button, and optional icon or decorative image |
 | `AddressField` | Dual residential + postal address capture with autocomplete |
 | `Alert` | Inline status message — error, warning, info, success |
+| `ArtieAIButton` | Gradient "Ask Artie" AI-assistant call-to-action button |
 | `Autocomplete` | Searchable dropdown with grouping and custom option rendering |
 | `Badge` | Count or dot overlay on a child element (e.g. notification bubble on an icon) |
 | `Breadcrumb` | Navigation trail showing current location in the hierarchy |
@@ -134,6 +136,10 @@ Key props: `disabled`, `excludePaths`
 **Card** — `src/components/Card/`  
 Three layouts: `contained` (free-form children with border + radius), `open` (image top + title + CTAs), `promo` (image-left horizontal).  
 Key props: `variant`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
+
+**ActionBar** — `src/components/ActionBar/`  
+Promotional CTA banner. A horizontal surface with a title, description, and a single `contained` action button, plus an optional left-hand icon (small circular container, or any node such as a `HeroIcon`) or a `decorative` bleed image. Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). Stacks vertically on mobile.  
+Key props: `title`, `description`, `action`, `image`, `variant`, `sx`
 
 **Dialog** — `src/components/Dialog/`  
 Modal dialog with confirm/cancel. Five semantic variants: `neutral`, `info`, `warning`, `danger`, `alert`. Adapts to a bottom drawer on mobile. Prefer over Modal when you need a confirm pattern.  
@@ -268,6 +274,10 @@ Key props: `label`, `size`, `color`, `startIcon`, `endIcon`, `loading`
 **ToggleButton** — `src/components/ToggleButton/`  
 Toggle button group. Exclusive (single select) or multi-select. Horizontal or vertical.  
 Key props: `options`, `ariaLabel`, `value`, `exclusive`, `color`, `size`, `orientation`
+
+**ArtieAIButton** — `src/components/ArtieAIButton/`  
+Branded "Ask Artie" AI-assistant call-to-action. A gradient pill (primary → sky blue) with a `sparkles` icon and label; text stays AA-accessible across every gradient stop in both light and dark mode. This is **not** a Foundation `Button` — it is a standalone, purpose-built button for the AI assistant entry point. Use only for that entry point; for all other actions use `Button`.  
+Key props: `label`, `size`, `disabled`, `onClick`, `type`
 
 ---
 

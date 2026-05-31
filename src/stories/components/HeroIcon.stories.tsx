@@ -47,7 +47,7 @@ const BG_LABELS: Record<string, Record<HeroIconBackground, string>> = {
 };
 
 const meta: Meta<typeof HeroIcon> = {
-  title: 'Components / Icons / Hero Icon',
+  title: 'Atomic Components / Icons / Hero Icon',
   component: HeroIcon,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

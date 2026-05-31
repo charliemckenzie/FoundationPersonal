@@ -86,8 +86,7 @@ export function MOBreadcrumb({ items, onBack }: MOBreadcrumbProps) {
                   component="a"
                   href={item.href ?? '#'}
                   sx={{
-                    fontSize: '0.875rem',
-                    lineHeight: 1.5,
+                    typography: 'small',
                     fontWeight: 500,
                     color: 'text.primary',
                     textDecoration: 'none',

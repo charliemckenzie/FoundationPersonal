@@ -140,22 +140,22 @@ export function TextField({
             sx: (theme) => ({
               ...buildInputStyles(theme),
               ...(success && !effectiveError && {
-                '& fieldset': { borderColor: theme.palette.success.main },
-                '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: theme.palette.success.main },
-                '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: theme.palette.success.main },
+                '& fieldset': { borderColor: 'success.main' },
+                '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: 'success.main' },
+                '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'success.main' },
               }),
               '& .MuiInputBase-input': { lineHeight: 1.5, ...(!multiline && { height: '1.5em' }) },
               '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' },
               ...(!label && {
                 '& .MuiInputBase-input::placeholder': {
-                  color: theme.palette.text.muted,
+                  color: 'text.muted',
                   opacity: 1,
                 },
               }),
               minHeight: size === 'small'
                 ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
                 : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
-              fontSize: '1rem',
+              typography: 'body',
               '& .MuiInputAdornment-root': {
                 alignSelf: 'stretch',
                 alignItems: 'center',

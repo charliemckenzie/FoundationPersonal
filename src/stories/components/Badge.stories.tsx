@@ -6,7 +6,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { Badge } from '../../components/Badge';
 
 const meta: Meta<typeof Badge> = {
-  title: 'Components / Badge',
+  title: 'Atomic Components / Badge',
   component: Badge,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

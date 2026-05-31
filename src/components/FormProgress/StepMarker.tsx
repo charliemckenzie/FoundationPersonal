@@ -33,7 +33,7 @@ export function StepMarker({ state, label, showLabelAsTooltip, onClick, ariaLabe
   const sharedSx = [MARKER_BASE_SX, MARKER_STATE_SX[state]];
 
   const labelEl = label != null && !showLabelAsTooltip ? (
-    <Typography variant="small" className="fm-label" sx={{ fontSize: '0.75rem', lineHeight: 1.4, textAlign: 'center', px: 0.5, color: state === 'active' ? 'primary.main' : 'text.muted', transition: 'color 0.15s ease' }}>
+    <Typography variant="small" className="fm-label" sx={(t) => ({ fontSize: t.typography.caption.fontSize, lineHeight: 1.4, textAlign: 'center', px: 0.5, color: state === 'active' ? 'primary.main' : 'text.muted', transition: 'color 0.15s ease' })}>
       {label}
     </Typography>
   ) : null;

@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const meta: Meta<typeof Spinner> = {
-  title: 'Components / Loading Indicators / Spinner',
+  title: 'Atomic Components / Loading Indicators / Spinner',
   component: Spinner,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

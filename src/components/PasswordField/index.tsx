@@ -20,7 +20,7 @@ export function PasswordField(props: PasswordFieldProps) {
         border: 'none',
         padding: '0 0.25rem',
         cursor: 'pointer',
-        fontSize: '0.875rem',
+        fontSize: t.typography.small.fontSize,
         fontWeight: 600,
         color: 'primary.main',
         lineHeight: 1,

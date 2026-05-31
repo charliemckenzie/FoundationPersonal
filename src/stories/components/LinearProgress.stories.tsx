@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { LinearProgress } from '../../components/LinearProgress';
 
 const meta: Meta<typeof LinearProgress> = {
-  title: 'Components / Loading Indicators / LinearProgress',
+  title: 'Atomic Components / Loading Indicators / LinearProgress',
   component: LinearProgress,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

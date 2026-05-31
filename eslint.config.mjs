@@ -46,6 +46,35 @@ const eslintConfig = defineConfig([
       "react-hooks/set-state-in-effect": "warn",
     },
   },
+  // Charter: never hardcode a font size in component code. Use a Typography
+  // variant, the `typography: '<variant>'` sx shorthand, or a theme token
+  // (t.typography.<variant>.fontSize). See docs/guidelines/typography.md.
+  // Scoped to components — app demo pages and story fixtures may use literals.
+  {
+    files: ["src/components/**/*.{ts,tsx}"],
+    rules: {
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector:
+            "JSXAttribute[name.name='variant']" +
+            "[value.type='Literal']" +
+            "[value.value=/^(body1|body2|subtitle1|subtitle2|button|overline)$/]",
+          message:
+            "Charter: MUI default Typography variants are disabled. " +
+            "Use the design system scale: display-1 → display-5, h1–h6, lead, body, small, caption. " +
+            "See src/types/mui.d.ts.",
+        },
+        {
+          selector: "Property[key.name='fontSize'][value.type='Literal']",
+          message:
+            "Charter: don't hardcode font sizes. Use a Typography variant, the " +
+            "`typography: '<variant>'` sx shorthand, or t.typography.<variant>.fontSize. " +
+            "See docs/guidelines/typography.md.",
+        },
+      ],
+    },
+  },
   {
     files: ["src/stories/**/*.{ts,tsx}"],
     rules: {
@@ -60,6 +89,27 @@ const eslintConfig = defineConfig([
       "src/components/buttons/variantStyles.ts",
       "src/components/inputs/variantStyles.ts",
       "src/app/themes/**/*.ts",
+    ],
+    rules: {
+      "no-restricted-syntax": "off",
+    },
+  },
+  // Components with intentional bespoke or icon-glyph font sizes that have no
+  // typography-token equivalent (control sizes, icon-wrapper glyphs, sub-caption
+  // captions). Exempt from no-restricted-syntax here; the banned Typography
+  // variants are still caught at the type level via src/types/mui.d.ts.
+  {
+    files: [
+      "src/components/ArtieAIButton/index.tsx",
+      "src/components/Footer/AwardPlaceholder.tsx",
+      "src/components/Footer/FooterContact.tsx",
+      "src/components/FormProgress/StepCounter.tsx",
+      "src/components/FormProgress/StepMarker.tsx",
+      "src/components/Header/NavDrawer.tsx",
+      "src/components/Header/NavDrawerParts.tsx",
+      "src/components/Header/QSuperPromoPanel.tsx",
+      "src/components/MemberOnline/SearchField/index.tsx",
+      "src/components/SkipLinks/index.tsx",
     ],
     rules: {
       "no-restricted-syntax": "off",

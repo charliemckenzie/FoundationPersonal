@@ -11,7 +11,7 @@ function renderFlagOption(
   option: AutocompleteOption
 ): React.ReactNode {
   return (
-    <Box component="li" {...props} key={option.value} sx={{ display: 'flex', alignItems: 'center', gap: '0.625rem', fontSize: '1rem' }}>
+    <Box component="li" {...props} key={option.value} sx={{ display: 'flex', alignItems: 'center', gap: '0.625rem', typography: 'body' }}>
       <Box
         component="img"
         loading="lazy"

@@ -61,14 +61,14 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
                 <Divider sx={{ my: 1 }} />
                 <MenuItem
                   onClick={() => setExpanded((p) => (p === item.label ? null : item.label))}
-                  sx={{ py: '7px', px: 3, fontSize: '1rem', display: 'flex', justifyContent: 'space-between', gap: 1 }}
+                  sx={{ py: '7px', px: 3, typography: 'body', display: 'flex', justifyContent: 'space-between', gap: 1 }}
                 >
                   {item.label}
                   <Icon icon={expanded === item.label ? 'chevron-up' : 'chevron-down'} size="sm" />
                 </MenuItem>
                 <Collapse in={expanded === item.label}>
                   {item.description && (
-                    <Typography sx={{ px: 3, pt: 1, pb: 0.5, fontSize: '0.875rem', color: 'text.secondary', lineHeight: 1.5 }}>
+                    <Typography variant="small" sx={{ px: 3, pt: 1, pb: 0.5, color: 'text.secondary' }}>
                       {item.description}
                     </Typography>
                   )}
@@ -76,7 +76,7 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
                     <MenuItem
                       key={sub.label}
                       onClick={() => { window.location.href = sub.href; handleClose() }}
-                      sx={{ py: '7px', px: 3, fontSize: '1rem' }}
+                      sx={{ py: '7px', px: 3, typography: 'body' }}
                     >
                       {sub.label}
                     </MenuItem>
@@ -90,7 +90,7 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
                   if (item.href) window.location.href = item.href
                   handleClose()
                 }}
-                sx={{ py: '7px', px: 3, fontSize: '1rem' }}
+                sx={{ py: '7px', px: 3, typography: 'body' }}
               >
                 {item.label}
               </MenuItem>

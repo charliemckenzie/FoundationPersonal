@@ -67,12 +67,12 @@ export function LineChart({
           )}
           <XAxis
             dataKey={xKey}
-            tick={{ fill: theme.palette.text.secondary, fontSize: '0.75rem' }}
+            tick={{ fill: theme.palette.text.secondary, fontSize: theme.typography.caption.fontSize }}
             axisLine={{ stroke: theme.palette.divider }}
             tickLine={false}
           />
           <YAxis
-            tick={{ fill: theme.palette.text.secondary, fontSize: '0.75rem' }}
+            tick={{ fill: theme.palette.text.secondary, fontSize: theme.typography.caption.fontSize }}
             axisLine={false}
             tickLine={false}
           />
@@ -84,7 +84,7 @@ export function LineChart({
                 border: `1px solid ${theme.palette.divider}`,
                 borderRadius: `${theme.shape.borderRadius}px`,
                 color: theme.palette.text.primary,
-                fontSize: '0.875rem',
+                fontSize: theme.typography.small.fontSize,
               }}
             />
           )}
@@ -92,7 +92,7 @@ export function LineChart({
             <Legend
               wrapperStyle={{
                 color: theme.palette.text.secondary,
-                fontSize: '0.875rem',
+                fontSize: theme.typography.small.fontSize,
               }}
             />
           )}

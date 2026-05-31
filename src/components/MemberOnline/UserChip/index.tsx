@@ -34,12 +34,12 @@ export function UserChip({
         sx={(t) => ({
           width: '2.5rem',
           height: '2.5rem',
-          fontSize: '0.875rem',
+          fontSize: t.typography.small.fontSize,
           fontWeight: 600,
           backgroundColor: t.palette.mode === 'dark'
             ? alpha(t.palette.primary.main, 0.15)
             : alpha(t.palette.primary.main, 0.08),
-          color: t.palette.primary.main,
+          color: 'primary.main',
         })}
       >
         {initials}
@@ -48,13 +48,13 @@ export function UserChip({
         <Box sx={{ lineHeight: 1.2 }}>
           <Typography
             variant="small"
-            sx={{ color: 'text.heading', fontWeight: 700, m: 0, fontSize: '0.875rem', lineHeight: 1.43 }}
+            sx={{ color: 'text.heading', fontWeight: 700, m: 0, lineHeight: 1.43 }}
           >
             {user.name}
           </Typography>
           <Typography
             variant="small"
-            sx={{ color: 'text.muted', fontSize: '0.875rem', fontWeight: 500, m: 0, lineHeight: 1.43 }}
+            sx={{ color: 'text.muted', fontWeight: 500, m: 0, lineHeight: 1.43 }}
           >
             {memberNumberLabel} {user.memberNumber}
           </Typography>

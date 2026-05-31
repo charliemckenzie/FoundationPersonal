@@ -111,7 +111,7 @@ export function QSuperMainBar({
               onChange={(e) => setQuery(e.target.value)}
               placeholder={searchPlaceholder ?? 'Search'}
               inputProps={{ 'aria-label': 'Search' }}
-              sx={{ flex: 1, fontSize: '0.875rem' }}
+              sx={{ flex: 1, typography: 'small' }}
             />
             <Box
               component="button"
@@ -161,7 +161,7 @@ export function QSuperMainBar({
             }}
           >
             <Icon icon="magnifying-glass" size="md" />
-            <Box component="span" sx={{ fontSize: '0.875rem', lineHeight: 1.5 }}>
+            <Box component="span" sx={{ typography: 'small' }}>
               Search
             </Box>
           </Box>

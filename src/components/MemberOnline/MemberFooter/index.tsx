@@ -17,7 +17,7 @@ export function MemberFooter({ links, disclaimer }: MemberFooterProps) {
       sx={(t) => ({
         px: { xs: 2, md: 3 },
         py: 3,
-        backgroundColor: t.palette.background.paper,
+        backgroundColor: 'background.paper',
         borderTop: `1px solid ${t.palette.border.subtle}`,
       })}
     >
@@ -33,8 +33,7 @@ export function MemberFooter({ links, disclaimer }: MemberFooterProps) {
             component="a"
             href={link.href}
             sx={{
-              fontSize: '1rem',
-              lineHeight: 1.5,
+              typography: 'body',
               fontWeight: 500,
               color: 'text.primary',
               '&:hover': { color: 'primary.main' },
@@ -47,7 +46,7 @@ export function MemberFooter({ links, disclaimer }: MemberFooterProps) {
       {disclaimer !== undefined && (
         <Typography
           variant="small"
-          sx={{ '&&': { color: 'text.muted', fontSize: '0.875rem', lineHeight: 1.43 }, mt: 1, m: 0 }}
+          sx={(t) => ({ '&&': { color: 'text.muted', fontSize: t.typography.small.fontSize, lineHeight: 1.43 }, mt: 1, m: 0 })}
         >
           {disclaimer}
         </Typography>

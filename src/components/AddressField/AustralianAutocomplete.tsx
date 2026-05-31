@@ -27,29 +27,29 @@ function isPopulated(v: AustralianAddress): boolean {
 }
 
 const inputSx = (t: Theme) => ({
-  fontSize: '1rem',
+  fontSize: t.typography.body.fontSize,
   borderRadius: `${t.shape.sm}px`,
-  backgroundColor: t.palette.background.paper,
+  backgroundColor: 'background.paper',
   '&.MuiAutocomplete-inputRoot': { paddingTop: 0, paddingBottom: 0 },
   '&.Mui-disabled': { backgroundColor: alpha(t.palette.background.default, 0.6) },
   '&&.Mui-disabled fieldset': { borderColor: alpha(t.palette.border.input, 0.6) },
   '&.MuiAutocomplete-inputRoot .MuiAutocomplete-input': { paddingTop: '12px', paddingBottom: '12px', lineHeight: 1.5 },
-  '& fieldset': { borderColor: t.palette.border.input, borderRadius: `${t.shape.sm}px` },
-  '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': { borderColor: t.palette.border.input },
+  '& fieldset': { borderColor: 'border.input', borderRadius: `${t.shape.sm}px` },
+  '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': { borderColor: 'border.input' },
   '&.Mui-focused': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
-  '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderWidth: '1px', borderColor: t.palette.border.input },
+  '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderWidth: '1px', borderColor: 'border.input' },
 });
 
 const listboxSx = (t: Theme) => ({
   py: '4px',
-  '& .MuiAutocomplete-option': { fontSize: '1rem', mx: '4px', borderRadius: `${t.shape.xs}px`, width: 'calc(100% - 8px)' },
+  '& .MuiAutocomplete-option': { fontSize: t.typography.body.fontSize, mx: '4px', borderRadius: `${t.shape.xs}px`, width: 'calc(100% - 8px)' },
 });
 
 const paperSx = (t: Theme) => ({
   borderRadius: `${t.shape.sm}px`,
   boxShadow: t.shadows[8],
-  '& .MuiAutocomplete-noOptions': { fontSize: '1rem' },
-  '& .MuiAutocomplete-loading': { fontSize: '1rem' },
+  '& .MuiAutocomplete-noOptions': { fontSize: t.typography.body.fontSize },
+  '& .MuiAutocomplete-loading': { fontSize: t.typography.body.fontSize },
 });
 
 export function AustralianAutocomplete({
@@ -107,7 +107,7 @@ export function AustralianAutocomplete({
   }
 
   const linkSx = (t: Theme) => ({
-    fontSize: '0.875rem',
+    fontSize: t.typography.small.fontSize,
     color: 'primary.main',
     fontFamily: t.typography.fontFamily,
     fontWeight: 400,
@@ -128,12 +128,12 @@ export function AustralianAutocomplete({
         <Box sx={(t) => ({
           border: `1px solid ${t.palette.border.input}`,
           borderRadius: `${t.shape.sm}px`,
-          backgroundColor: t.palette.background.paper,
+          backgroundColor: 'background.paper',
           px: '14px',
           py: '12px',
         })}>
-          <Typography sx={{ fontSize: '1rem', lineHeight: 1.5 }}>{addrLine1}</Typography>
-          <Typography sx={{ fontSize: '1rem', lineHeight: 1.5 }}>{addrLine2}</Typography>
+          <Typography variant="body">{addrLine1}</Typography>
+          <Typography variant="body">{addrLine2}</Typography>
         </Box>
         <ButtonBase disableRipple onClick={handleChangeAddress} disabled={disabled} sx={linkSx}>
           Change address
@@ -165,7 +165,7 @@ export function AustralianAutocomplete({
         <FormLabel
           htmlFor={labelId}
           disabled={disabled}
-          sx={{ fontWeight: 700, fontSize: '1rem', color: 'text.primary' }}
+          sx={{ typography: 'body', fontWeight: 700, color: 'text.primary' }}
         >
           Search for your address
         </FormLabel>
@@ -194,8 +194,8 @@ export function AustralianAutocomplete({
           renderOption={(props, option) => (
             <Box component="li" {...props} key={option.id}>
               <Stack spacing={0}>
-                <Typography sx={{ fontSize: '1rem', lineHeight: 1.5 }}>{option.label}</Typography>
-                <Typography sx={{ fontSize: '0.875rem', color: 'text.secondary', lineHeight: 1.43 }}>
+                <Typography variant="body">{option.label}</Typography>
+                <Typography variant="small" sx={{ color: 'text.secondary', lineHeight: 1.43 }}>
                   {option.description}
                 </Typography>
               </Stack>
@@ -219,7 +219,7 @@ export function AustralianAutocomplete({
         onClick={handleUseManual}
         disabled={disabled}
         sx={(t) => ({
-          fontSize: '0.875rem',
+          fontSize: t.typography.small.fontSize,
           color: 'primary.main',
           fontFamily: t.typography.fontFamily,
           fontWeight: 400,

@@ -46,8 +46,9 @@ export function AddressField({ onChange, defaultHasPostalAddress = false, disabl
   return (
     <Stack spacing={3}>
       <Typography
+        variant="body"
         component="h3"
-        sx={{ fontWeight: 700, fontSize: '1rem', color: 'text.primary', lineHeight: 1.5 }}
+        sx={{ fontWeight: 700, color: 'text.primary' }}
       >
         Residential address
       </Typography>
@@ -71,8 +72,9 @@ export function AddressField({ onChange, defaultHasPostalAddress = false, disabl
         <Stack spacing={3}>
           <Divider />
           <Typography
+            variant="body"
             component="h3"
-            sx={{ fontWeight: 700, fontSize: '1rem', color: 'text.primary', lineHeight: 1.5 }}
+            sx={{ fontWeight: 700, color: 'text.primary' }}
           >
             Postal address
           </Typography>

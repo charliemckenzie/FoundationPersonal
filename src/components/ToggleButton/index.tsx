@@ -65,7 +65,7 @@ export function ToggleButtonGroup({
       {label && (
         <FormLabel
           error={error}
-          sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && { color: 'text.primary' }) }}
+          sx={{ typography: 'body', fontWeight: 700, ...(!error && { color: 'text.primary' }) }}
         >
           {label}
         </FormLabel>

@@ -22,7 +22,7 @@ interface ChipStoryArgs extends Omit<ChipProps, 'variant'> {
 }
 
 const meta: Meta<ChipStoryArgs> = {
-  title: 'Components / Chip',
+  title: 'Atomic Components / Chip',
   // ChipStoryArgs adds an 'alert' variant for the playground that maps to severity
   // colours at render time. The real ChipProps.variant is only 'filled' | 'outlined'.
   component: Chip as never,

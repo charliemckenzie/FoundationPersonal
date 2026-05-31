@@ -52,7 +52,7 @@ export interface MenuProps {
 
 function itemSx(t: Theme, color: MenuItemConfig['color'] = 'default') {
   return {
-    fontSize: '1rem',
+    fontSize: t.typography.body.fontSize,
     mx: '4px',
     borderRadius: `${t.shape.xs}px`,
     width: 'calc(100% - 8px)',
@@ -135,7 +135,7 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
               {item.icon !== undefined && <ListItemIcon>{item.icon}</ListItemIcon>}
               <ListItemText
                 primary={item.label}
-                slotProps={{ primary: { sx: { fontSize: '1rem' } } }}
+                slotProps={{ primary: { sx: { typography: 'body' } } }}
               />
             </MuiMenuItem>
           );
@@ -173,7 +173,7 @@ export function Menu({ trigger, items, id, onOpenChange }: MenuProps) {
                   )}
                   <ListItemText
                     primary={item.label}
-                    slotProps={{ primary: { sx: { fontSize: '1rem' } } }}
+                    slotProps={{ primary: { sx: { typography: 'body' } } }}
                   />
                 </ListItemButton>
                 {item.dividerAfter === true && !isLast && <Divider sx={{ my: '4px' }} />}

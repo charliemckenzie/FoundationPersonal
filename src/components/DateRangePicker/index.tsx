@@ -58,7 +58,7 @@ export function DateRangePicker({
           sx={(t) => ({
             margin: 0,
             paddingX: '0.875rem',
-            fontSize: '0.75rem',
+            fontSize: t.typography.caption.fontSize,
             color: error ? 'error.main' : 'text.muted',
             fontFamily: t.typography.fontFamily,
           })}

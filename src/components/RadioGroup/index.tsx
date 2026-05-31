@@ -120,7 +120,7 @@ export function RadioGroup({
         <FormLabel
           sx={{
             color: 'text.primary',
-            fontSize: '1rem',
+            typography: 'body',
             fontWeight: legendBold ? 600 : 400,
             mb: 1,
             '&.Mui-focused': { color: 'text.primary' },

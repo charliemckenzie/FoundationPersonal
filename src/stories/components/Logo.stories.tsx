@@ -6,7 +6,7 @@ import { Logo } from '../../components/Logo';
 type Story = StoryObj<typeof Logo>;
 
 const meta: Meta<typeof Logo> = {
-  title: 'Components / Logo',
+  title: 'Atomic Components / Logo',
   component: Logo,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

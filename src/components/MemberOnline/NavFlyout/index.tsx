@@ -80,7 +80,7 @@ export function NavFlyout({
                   p: 1.5,
                   borderRadius: '12px',
                   border: `1px solid ${t.palette.border.subtle}`,
-                  backgroundColor: t.palette.background.paper,
+                  backgroundColor: 'background.paper',
                   backgroundImage: 'none',
                 })}
               >
@@ -108,10 +108,10 @@ export function NavFlyout({
                         cursor: 'pointer',
                         border: 0,
                         background: 'transparent',
-                        color: t.palette.text.primary,
+                        color: 'text.primary',
                         borderRadius: `${t.shape.sm}px`,
                         font: 'inherit',
-                        '&:hover': { backgroundColor: t.palette.action.hover },
+                        '&:hover': { backgroundColor: 'action.hover' },
                         '&:focus-visible': {
                           outline: `2px solid ${t.palette.border.focus}`,
                           outlineOffset: '-2px',
@@ -133,14 +133,14 @@ export function NavFlyout({
                       <Box sx={{ flex: 1 }}>
                         <Typography
                           variant="small"
-                          sx={{ color: 'inherit', fontWeight: 500, fontSize: '1rem', lineHeight: 1.5, m: 0 }}
+                          sx={{ color: 'inherit', typography: 'body', fontWeight: 500, m: 0 }}
                         >
                           {item.label}
                         </Typography>
                         {item.description !== undefined && (
                           <Typography
                             variant="small"
-                            sx={{ color: 'text.muted', fontSize: '0.875rem', lineHeight: 20 / 14, m: 0, mt: 0.25 }}
+                            sx={{ color: 'text.muted', lineHeight: 20 / 14, m: 0, mt: 0.25 }}
                           >
                             {item.description}
                           </Typography>

@@ -217,7 +217,7 @@ export function MobileNavDrawer({
               </Box>
               <Divider sx={{ borderColor: 'border.subtle' }} />
             </Box>
-            <Typography variant="h5" sx={{ color: 'text.heading', m: 0, mt: 1, fontSize: '1rem', lineHeight: '1.5rem' }}>
+            <Typography variant="h5" sx={(t) => ({ color: 'text.heading', m: 0, mt: 1, fontSize: t.typography.body.fontSize, lineHeight: 1.5 })}>
               {drillItem?.label}
             </Typography>
             <Box

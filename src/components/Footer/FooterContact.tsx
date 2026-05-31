@@ -7,8 +7,7 @@ import { ART_FUND_DETAILS, ART_SOCIAL_LINKS } from './footerData';
 const linkSx = {
   color: 'text.link',
   textDecoration: 'none',
-  fontSize: '0.875rem',
-  lineHeight: 1.5,
+  typography: 'small',
   '&:hover': { textDecoration: 'underline' },
 } as const;
 
@@ -39,11 +38,11 @@ export function FooterContact() {
         component="a"
         href="tel:131184"
         className="link-hover-only"
-        sx={{ color: 'primary.main', fontWeight: 700, fontSize: '1rem', lineHeight: 1.5, mb: 0.5, display: 'block', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
+        sx={{ color: 'primary.main', typography: 'body', fontWeight: 700, mb: 0.5, display: 'block', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
       >
         Call 13 11 84
       </Box>
-      <Typography component="p" sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5 }}>
+      <Typography component="p" sx={{ color: 'text.primary', typography: 'small' }}>
         8am–7:30pm AEST Monday to Friday
       </Typography>
       <Box component="a" href="#" sx={linkSx}>
@@ -53,11 +52,11 @@ export function FooterContact() {
       {/* Fund details */}
       <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
         {ART_FUND_DETAILS.map(({ label, value }) => (
-          <Typography key={label} component="p" sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5 }}>
+          <Typography key={label} component="p" sx={{ color: 'text.primary', typography: 'small' }}>
             <Box component="span" sx={{ fontWeight: 700 }}>{label}: </Box>{value}
           </Typography>
         ))}
-        <Typography component="p" sx={{ color: 'text.primary', fontSize: '0.875rem', lineHeight: 1.5 }}>
+        <Typography component="p" sx={{ color: 'text.primary', typography: 'small' }}>
           <Box component="span" sx={{ fontWeight: 700 }}>QSuper accounts: </Box>
           <Box component="a" href="#" sx={linkSx}>QSuper USIs</Box>
         </Typography>

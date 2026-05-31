@@ -31,7 +31,7 @@ export function BalanceCard({
         sx={{ color: 'text.primary', fontWeight: 400, lineHeight: 1.4, m: 0 }}
       >
         {label}{' '}
-        <Box component="span" sx={{ fontWeight: 700, fontSize: '1rem', lineHeight: 1.5 }}>
+        <Box component="span" sx={{ typography: 'body', fontWeight: 700 }}>
           {balance.amount}
         </Box>
       </Typography>

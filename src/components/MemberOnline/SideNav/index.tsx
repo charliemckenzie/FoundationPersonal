@@ -103,7 +103,7 @@ export function SideNav({
         flexShrink: 0,
         display: 'flex',
         flexDirection: 'column',
-        backgroundColor: t.palette.background.default,
+        backgroundColor: 'background.default',
         borderRight: `1px solid ${t.palette.border.subtle}`,
         height: '100%',
         minHeight: 0,

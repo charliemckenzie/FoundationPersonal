@@ -55,16 +55,16 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
         width: fullWidth ? '100%' : 'auto',
         minWidth: isPill ? '14rem' : '16rem',
         borderRadius: isPill ? `${t.shape.full}px` : `${t.shape.sm}px`,
-        backgroundColor: t.palette.background.paper,
+        backgroundColor: 'background.paper',
         border: `1px solid ${t.palette.border.subtle}`,
         transition: t.transitions.create(['border-color', 'box-shadow'], {
           duration: t.transitions.duration.shortest,
         }),
-        '&:hover': { borderColor: t.palette.border.default },
+        '&:hover': { borderColor: 'border.default' },
         '&:focus-within': {
           outline: `2px solid ${t.palette.border.focus}`,
           outlineOffset: '2px',
-          borderColor: t.palette.border.focus,
+          borderColor: 'border.focus',
         },
       })}
     >
@@ -116,8 +116,8 @@ export const SearchField = forwardRef<HTMLInputElement, SearchFieldProps>(functi
             px: 0.75,
             borderRadius: `${t.shape.xs}px`,
             border: `1px solid ${t.palette.border.subtle}`,
-            color: t.palette.text.muted,
-            fontSize: '0.75rem',
+            color: 'text.muted',
+            fontSize: t.typography.caption.fontSize,
             fontWeight: 600,
             fontVariantNumeric: 'tabular-nums',
           })}

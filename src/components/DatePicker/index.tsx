@@ -69,7 +69,7 @@ export function DatePicker({
             required={required}
             error={hasError}
             disabled={disabled}
-            sx={{ fontWeight: 700, fontSize: size === 'small' ? '0.875rem' : '1rem', ...(!hasError && !disabled && { color: 'text.primary' }) }}
+            sx={(t) => ({ fontWeight: 700, fontSize: size === 'small' ? t.typography.small.fontSize : t.typography.body.fontSize, ...(!hasError && !disabled && { color: 'text.primary' }) })}
           >
             {label}
           </FormLabel>
@@ -107,11 +107,11 @@ export function DatePicker({
                 width: size === 'small' ? '2rem' : '2.25rem',
                 height: size === 'small' ? '2rem' : '2.25rem',
                 borderRadius: '50%',
-                color: theme.palette.action.active,
+                color: 'action.active',
                 backgroundColor: 'transparent',
-                '&:hover': { backgroundColor: theme.palette.action.hover },
-                '&:active': { backgroundColor: theme.palette.action.selected },
-                '&.Mui-disabled': { color: theme.palette.action.disabled },
+                '&:hover': { backgroundColor: 'action.hover' },
+                '&:active': { backgroundColor: 'action.selected' },
+                '&.Mui-disabled': { color: 'action.disabled' },
                 '&.Mui-focusVisible': {
                   outline: `2px solid ${theme.palette.border.focus}`,
                   outlineOffset: '2px',

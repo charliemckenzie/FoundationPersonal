@@ -41,7 +41,7 @@ export interface AutocompleteProps {
 
 const inputSx = (t: Theme) => ({
   ...buildInputStyles(t),
-  fontSize: '1rem',
+  fontSize: t.typography.body.fontSize,
   // MUI Autocomplete adds `padding: 9px` via `.MuiAutocomplete-inputRoot.MuiOutlinedInput-root`.
   // Matching that class directly beats it on injection order (sx injects later).
   '&.MuiAutocomplete-inputRoot': {
@@ -58,16 +58,16 @@ const inputSx = (t: Theme) => ({
 const listboxSx = (t: Theme) => ({
   py: '4px',
   '& .MuiAutocomplete-option': {
-    fontSize: '1rem',
+    fontSize: t.typography.body.fontSize,
     mx: '4px',
     borderRadius: `${t.shape.xs}px`,
     width: `calc(100% - 8px)`,
   },
   '& .MuiAutocomplete-groupLabel': {
-    fontSize: '0.75rem',
+    fontSize: t.typography.caption.fontSize,
     fontWeight: 700,
     lineHeight: 2,
-    color: t.palette.text.muted,
+    color: 'text.muted',
     textTransform: 'uppercase',
     letterSpacing: '0.08em',
   },
@@ -122,7 +122,7 @@ export function Autocomplete({
         required={required}
         error={error}
         disabled={disabled}
-        sx={{ fontWeight: 700, fontSize: '1rem', ...(!error && !disabled && { color: 'text.primary' }) }}
+        sx={{ typography: 'body', fontWeight: 700, ...(!error && !disabled && { color: 'text.primary' }) }}
       >
         {label}
       </FormLabel>

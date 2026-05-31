@@ -48,7 +48,7 @@ export function MemberHeader({
         gap: 2,
         px: 3,
         height: '4.5rem',
-        backgroundColor: t.palette.background.paper,
+        backgroundColor: 'background.paper',
         borderBottom: `1px solid ${t.palette.border.subtle}`,
       })}
     >

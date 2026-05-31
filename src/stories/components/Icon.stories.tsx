@@ -137,7 +137,7 @@ const FONT_AWESOME_REGULAR_ICONS = [
 ] as const;
 
 const meta: Meta<typeof Icon> = {
-  title: 'Components / Icons / Icon',
+  title: 'Atomic Components / Icons / Icon',
   component: Icon,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

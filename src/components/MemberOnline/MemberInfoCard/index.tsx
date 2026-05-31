@@ -78,7 +78,7 @@ export function MemberInfoCard({
         <Box>
           <Typography
             variant="small"
-            sx={{ color: 'text.primary', fontSize: '0.875rem', m: 0 }}
+            sx={{ color: 'text.primary', m: 0 }}
           >
             {memberNumberLabel}
           </Typography>

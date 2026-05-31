@@ -113,7 +113,7 @@ export function CondensedBar({
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder ?? 'Search'}
                 inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, fontSize: '0.875rem' }}
+                sx={{ flex: 1, typography: 'small' }}
               />
               <Box
                 component="button"

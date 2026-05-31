@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Divider } from '../../components/Divider';
 
 const meta: Meta<typeof Divider> = {
-  title: 'Components / Divider',
+  title: 'Atomic Components / Divider',
   component: Divider,
   tags: ['autodocs'],
   parameters: { layout: 'padded' },

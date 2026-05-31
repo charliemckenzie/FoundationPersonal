@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
 const meta: Meta<typeof Tooltip> = {
-  title: 'Components / Tooltip',
+  title: 'Atomic Components / Tooltip',
   component: Tooltip,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

@@ -44,9 +44,9 @@ export interface CardProps {
 const cardBaseSx = (theme: Theme) => ({
   boxShadow: 'none',
   border: '1px solid',
-  borderColor: theme.palette.border.default,
+  borderColor: 'border.default',
   borderRadius: `${theme.shape.lg}px`,
-  backgroundColor: theme.palette.background.paper,
+  backgroundColor: 'background.paper',
   overflow: 'hidden',
 });
 

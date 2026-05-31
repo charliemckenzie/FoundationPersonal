@@ -50,9 +50,8 @@ export function SkipLinks({ links = DEFAULT_LINKS }: SkipLinksProps) {
             border: '2px solid',
             borderColor: 'primary.main',
             borderRadius: '0.5rem',
+            typography: 'small',
             fontWeight: 700,
-            fontSize: '0.875rem',
-            lineHeight: 1.5,
             overflow: 'hidden',
             // Hidden off the left edge of the viewport by default
             pointerEvents: 'none',
@@ -102,7 +101,7 @@ export function SkipLinks({ links = DEFAULT_LINKS }: SkipLinksProps) {
               userSelect: 'none',
             }}
           >
-            <Box component="span" sx={{ fontSize: '1rem', lineHeight: 1 }}>↩</Box>
+            <Box component="span" sx={{ fontSize: (t) => t.typography.body.fontSize, lineHeight: 1 }}>↩</Box>
             <Box component="span">ENTER</Box>
           </Box>
         </Box>

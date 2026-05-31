@@ -125,7 +125,7 @@ function Demo() {
 }
 
 const meta: Meta<typeof StepTransition> = {
-  title: 'Components / Step Transition',
+  title: 'Components / Stepped Forms / Step Transition',
   component: StepTransition,
   tags: ['autodocs'],
   parameters: {

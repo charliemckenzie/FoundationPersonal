@@ -64,8 +64,8 @@ function rootSx(
       duration: t.transitions.duration.shortest,
     }),
     '&:hover': {
-      backgroundColor: t.palette.background.paper,
-      color: t.palette.text.link,
+      backgroundColor: 'background.paper',
+      color: 'text.link',
       textDecoration: 'none',
     },
     '&:visited': { color: active ? t.palette.primary.main : t.palette.text.primary },
