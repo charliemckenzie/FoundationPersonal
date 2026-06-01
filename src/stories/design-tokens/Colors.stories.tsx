@@ -10,6 +10,14 @@ const primitiveNameByStop500 = Object.fromEntries(
   Object.entries(primitiveScales).map(([name, scale]) => [scale[500], name])
 )
 
+/** Full reverse-lookup: hex value → "scaleName stop" (e.g. "neutral 700"). */
+const primitiveByHex: Record<string, string> = {}
+for (const [name, scale] of Object.entries(primitiveScales)) {
+  for (const [stop, value] of Object.entries(scale as Record<string, string>)) {
+    primitiveByHex[value as string] = `${name} ${stop}`
+  }
+}
+
 interface TokenDualMode {
   label: string
   lightValue: string
@@ -609,8 +617,8 @@ function ColorsDoc() {
       label: 'text.heading',
       lightValue: lightPalette.text!.heading!,
       darkValue: darkPalette.text!.heading!,
-      lightSource: `${secondaryName} 800 — heading text`,
-      darkSource: '#ffffff — heading text',
+      lightSource: `${primitiveByHex[lightPalette.text!.heading!] ?? lightPalette.text!.heading!} — heading text`,
+      darkSource: `${primitiveByHex[darkPalette.text!.heading!] ?? darkPalette.text!.heading!} — heading text`,
     },
     {
       label: 'text.muted',

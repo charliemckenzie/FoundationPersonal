@@ -20,6 +20,7 @@ const semanticOverrides: BrandConfig['semanticOverrides'] = {
     text: {
       primary:     neutral[700],
       muted:       neutral[600],
+      heading:     neutral[700],     // same as text.primary — QSuper uses body copy colour for headings
       linkInverse: '#ffffff',        // white on qBlue brand surface (4.8:1)
     },
     divider: neutral[300],
@@ -33,6 +34,7 @@ const semanticOverrides: BrandConfig['semanticOverrides'] = {
     text: {
       primary:     neutral[50],       // brighter than ART (neutral[300]) — qBlue is lower-contrast
       muted:       neutral[300],
+      heading:     neutral[50],       // same as text.primary
       linkInverse: '#ffffff',
     },
     divider: neutral[700],

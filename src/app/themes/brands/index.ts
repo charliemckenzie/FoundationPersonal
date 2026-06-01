@@ -47,6 +47,8 @@ export interface BrandSemanticTokens {
   text: {
     primary:     string;
     muted:       string;
+    /** Override for heading text colour. Defaults to `brand.secondary[800]` (light) / `white` (dark) when absent. */
+    heading?:    string;
     /** Resting colour for links rendered on brand-coloured surfaces. */
     linkInverse: string;
   };
