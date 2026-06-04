@@ -48,3 +48,10 @@ export type LifetimePensionStepId =
   | 'funding'
   | 'payments'
   | 'review';
+
+export interface LifetimePensionDraft {
+  state: LifetimePensionState;
+  activeStep: number;
+  savedAt: string;
+  expiresAt: string;
+}

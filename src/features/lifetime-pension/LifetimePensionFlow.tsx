@@ -1,15 +1,20 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
+import { Icon } from '../../components/Icon';
+import { Snackbar } from '../../components/Snackbar';
 import { StepperActions } from '../../components/StepperActions';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, TARGET_PERCENT } from './constants';
+import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIntro } from './steps/StepIntro';
@@ -17,7 +22,7 @@ import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
-import type { LifetimePensionState, LifetimePensionStepId } from './types';
+import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId } from './types';
 import {
   eligibilityStepValid,
   fundingStepValid,
@@ -47,6 +52,13 @@ export function LifetimePensionFlow() {
   const [submitted, setSubmitted] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
   const [showInsuranceModal, setShowInsuranceModal] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [resumeDraft, setResumeDraft] = useState<LifetimePensionDraft | null>(null);
+  const isReadyToAutoSaveRef = useRef(false);
+  const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const hasSavedOnceRef = useRef(false);
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
   const eligible = useMemo(() => isEligible(state), [state]);
@@ -124,6 +136,61 @@ export function LifetimePensionFlow() {
     }
   }
 
+  // Load any existing draft on mount
+  useEffect(() => {
+    loadDraft().then((draft) => {
+      if (draft) {
+        setResumeDraft(draft);
+      } else {
+        isReadyToAutoSaveRef.current = true;
+      }
+    });
+  }, []);
+
+  // Debounced auto-save on any state or step change (skip intro step)
+  useEffect(() => {
+    if (!isReadyToAutoSaveRef.current) return;
+    if (activeStep === 0) return;
+    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
+
+    setIsSaving(true);
+    saveDebounceRef.current = setTimeout(() => {
+      saveDraft(state, activeStep).then(() => {
+        setIsSaving(false);
+        setLastSavedAt(new Date());
+        if (!hasSavedOnceRef.current) {
+          hasSavedOnceRef.current = true;
+          setSnackbarOpen(true);
+        }
+      });
+    }, 500);
+
+    return () => {
+      if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
+    };
+  }, [state, activeStep]);
+
+  // Clean up draft after successful submission
+  useEffect(() => {
+    if (submitted) deleteDraft();
+  }, [submitted]);
+
+  function handleResumeConfirm() {
+    if (resumeDraft) {
+      setState(resumeDraft.state);
+      setActiveStep(resumeDraft.activeStep);
+      setLastSavedAt(new Date(resumeDraft.savedAt));
+    }
+    setResumeDraft(null);
+    isReadyToAutoSaveRef.current = true;
+  }
+
+  function handleResumeDismiss() {
+    deleteDraft();
+    setResumeDraft(null);
+    isReadyToAutoSaveRef.current = true;
+  }
+
   if (submitted) {
     return (
       <ContentContainer size="md">
@@ -153,6 +220,21 @@ export function LifetimePensionFlow() {
             activeStep={activeStep}
             showStepIndicator
           />
+
+          {(isSaving || lastSavedAt !== null) && activeStep > 0 && (
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
+              {isSaving ? (
+                <CircularProgress size={12} color="primary" sx={{ display: 'block' }} />
+              ) : (
+                <Icon icon="circle-check" size="sm" color="success" />
+              )}
+              <Typography variant="caption" color="text.secondary" component="span">
+                {isSaving
+                  ? 'Saving...'
+                  : `Last saved at ${lastSavedAt!.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' })}`}
+              </Typography>
+            </Box>
+          )}
 
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
@@ -253,9 +335,28 @@ export function LifetimePensionFlow() {
             onNext={handleNext}
             onBack={handleBack}
             onExit={() => router.push('/member-online')}
+            exitDialogDescription={
+              lastSavedAt !== null
+                ? 'Your progress has been auto-saved. You can return to this application within 30 days.'
+                : undefined
+            }
           />
         </Stack>
       </ContentContainer>
+
+      {resumeDraft !== null && (
+        <Dialog
+          open
+          onClose={handleResumeDismiss}
+          title="Continue your application?"
+          description={`You have a saved application from ${new Date(resumeDraft.savedAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}. Would you like to continue where you left off?`}
+          variant="neutral"
+          hideCloseButton
+          confirmLabel="Continue where I left off"
+          cancelLabel="Start fresh"
+          onConfirm={handleResumeConfirm}
+        />
+      )}
 
       <Dialog
         open={showInsuranceModal}
@@ -270,6 +371,14 @@ export function LifetimePensionFlow() {
           setShowInsuranceModal(false);
           advance(activeStep + 1);
         }}
+      />
+
+      <Snackbar
+        open={snackbarOpen}
+        message="Progress saved"
+        severity="success"
+        duration={3000}
+        onClose={() => setSnackbarOpen(false)}
       />
     </>
   );

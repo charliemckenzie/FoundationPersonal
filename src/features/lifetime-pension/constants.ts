@@ -72,3 +72,6 @@ export const INITIAL_STATE: LifetimePensionState = {
 
 export const MIN_PURCHASE_AMOUNT = 10000;
 export const TARGET_PERCENT = [10, 20, 30, 60, 80, 100] as const;
+
+export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
+export const DRAFT_EXPIRY_DAYS = 30;
