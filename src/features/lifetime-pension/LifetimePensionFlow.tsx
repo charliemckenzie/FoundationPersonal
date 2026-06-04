@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack';
 import { useRouter } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
+import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, TARGET_PERCENT } from './constants';
@@ -45,6 +46,7 @@ export function LifetimePensionFlow() {
   const [activeStep, setActiveStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [showValidation, setShowValidation] = useState(false);
+  const [showInsuranceModal, setShowInsuranceModal] = useState(false);
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
   const eligible = useMemo(() => isEligible(state), [state]);
@@ -52,6 +54,12 @@ export function LifetimePensionFlow() {
   const hasInvalidTransferAmounts = useMemo(() => {
     return state.accounts.some(
       (account) => account.selected && (account.transferAmount <= 0 || account.transferAmount > account.balance)
+    );
+  }, [state.accounts]);
+
+  const hasFullBalanceTransfer = useMemo(() => {
+    return state.accounts.some(
+      (account) => account.selected && account.balance > 0 && account.transferAmount >= account.balance
     );
   }, [state.accounts]);
 
@@ -90,6 +98,11 @@ export function LifetimePensionFlow() {
       return;
     }
 
+    if (activeStep === 3 && hasFullBalanceTransfer) {
+      setShowInsuranceModal(true);
+      return;
+    }
+
     if (activeStep === STEP_KEYS.length - 1) {
       setSubmitted(true);
       return;
@@ -100,9 +113,6 @@ export function LifetimePensionFlow() {
 
   function updateState(next: LifetimePensionState) {
     setState(next);
-    if (showValidation) {
-      setShowValidation(false);
-    }
   }
 
   function updateStepFromReview(stepId: LifetimePensionStepId) {
@@ -246,6 +256,21 @@ export function LifetimePensionFlow() {
           />
         </Stack>
       </ContentContainer>
+
+      <Dialog
+        open={showInsuranceModal}
+        onClose={() => setShowInsuranceModal(false)}
+        title="Your insurance cover may be affected"
+        description="Transferring your full account balance will leave $0 remaining. This may result in the cancellation of your insurance cover. Do you want to continue?"
+        variant="neutral"
+        hideCloseButton
+        confirmLabel="Continue anyway"
+        cancelLabel="Go back"
+        onConfirm={() => {
+          setShowInsuranceModal(false);
+          advance(activeStep + 1);
+        }}
+      />
     </>
   );
 }

@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Alert } from '../../../components/Alert';
 import { DescriptionList } from '../../../components/DescriptionList';
+import { Alert } from '../../../components/Alert';
 import { TextField } from '../../../components/TextField';
 import type { BankDetails } from '../types';
 import { formatCurrency, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
@@ -29,9 +29,6 @@ export function StepPayments({
 
   const bsbDigits = parseBsbDigits(bankDetails.bsb);
   const bsbBankName = lookupBsbBank(bankDetails.bsb);
-  const bankDetailsComplete = Boolean(
-    bsbDigits.length === 6 && bankDetails.accountNumber.trim() && bankDetails.accountName.trim()
-  );
 
   return (
     <Stack spacing={4}>
@@ -77,7 +74,9 @@ export function StepPayments({
             fullWidth
             value={bankDetails.bsb}
             placeholder="000-000"
-            helperText={bsbBankName ?? undefined}
+            helperText={showValidation && bsbDigits.length < 6 ? undefined : (bsbBankName ?? undefined)}
+            error={showValidation && bsbDigits.length < 6}
+            errorMessage={showValidation && bsbDigits.length < 6 ? 'A valid 6-digit BSB is required' : undefined}
             onChange={(event) => {
               const digits = parseBsbDigits(event.target.value);
               updateField('bsb', formatBsb(digits));
@@ -89,19 +88,17 @@ export function StepPayments({
             fullWidth
             value={bankDetails.accountNumber}
             onChange={(event) => updateField('accountNumber', event.target.value)}
+            error={showValidation && !bankDetails.accountNumber.trim()}
+            errorMessage={showValidation && !bankDetails.accountNumber.trim() ? 'Account number is required' : undefined}
           />
           <TextField
             label="Account name"
             fullWidth
             value={bankDetails.accountName}
             onChange={(event) => updateField('accountName', event.target.value)}
+            error={showValidation && !bankDetails.accountName.trim()}
+            errorMessage={showValidation && !bankDetails.accountName.trim() ? 'Account name is required' : undefined}
           />
-          {showValidation && !bankDetailsComplete && (
-            <Alert
-              severity="error"
-              message="Complete all bank details before continuing."
-            />
-          )}
         </Stack>
       </Box>
       </Stack>

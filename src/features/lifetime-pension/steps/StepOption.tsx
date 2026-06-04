@@ -40,17 +40,13 @@ export function StepOption({
   showValidation,
 }: StepOptionProps) {
   const spouseMode = pensionOption === 'spouse';
-  const spouseFieldsIncomplete = spouseMode &&
-    (!spouseDetails.firstName.trim() ||
-      !spouseDetails.lastName.trim() ||
-      !spouseDetails.residentialAddress.trim() ||
-      !spouseDetails.emailAddress.trim() ||
-      !spouseDetails.dateOfBirth.trim() ||
-      !spouseDetails.mobilePhone.trim() ||
-      !spouseDetails.consentChecked);
 
   function updateField<K extends keyof SpouseDetails>(key: K, value: SpouseDetails[K]) {
     onSpouseDetailsChange({ ...spouseDetails, [key]: value });
+  }
+
+  function fieldError(value: string) {
+    return showValidation && spouseMode && !value.trim();
   }
 
   return (
@@ -115,6 +111,8 @@ export function StepOption({
                   fullWidth
                   value={spouseDetails.firstName}
                   onChange={(event) => updateField('firstName', event.target.value)}
+                  error={fieldError(spouseDetails.firstName)}
+                  errorMessage={fieldError(spouseDetails.firstName) ? 'First name is required' : undefined}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -123,6 +121,8 @@ export function StepOption({
                   fullWidth
                   value={spouseDetails.lastName}
                   onChange={(event) => updateField('lastName', event.target.value)}
+                  error={fieldError(spouseDetails.lastName)}
+                  errorMessage={fieldError(spouseDetails.lastName) ? 'Last name is required' : undefined}
                 />
               </Grid>
               <Grid size={12}>
@@ -139,6 +139,8 @@ export function StepOption({
                   fullWidth
                   value={spouseDetails.residentialAddress}
                   onChange={(event) => updateField('residentialAddress', event.target.value)}
+                  error={fieldError(spouseDetails.residentialAddress)}
+                  errorMessage={fieldError(spouseDetails.residentialAddress) ? 'Residential address is required' : undefined}
                 />
               </Grid>
               <Grid size={12}>
@@ -148,6 +150,8 @@ export function StepOption({
                   type="email"
                   value={spouseDetails.emailAddress}
                   onChange={(event) => updateField('emailAddress', event.target.value)}
+                  error={fieldError(spouseDetails.emailAddress)}
+                  errorMessage={fieldError(spouseDetails.emailAddress) ? 'Email address is required' : undefined}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
@@ -155,44 +159,51 @@ export function StepOption({
                   fullWidth
                   value={spouseDetails.dateOfBirth}
                   onChange={(event) => updateField('dateOfBirth', event.target.value)}
+                  error={fieldError(spouseDetails.dateOfBirth)}
+                  errorMessage={fieldError(spouseDetails.dateOfBirth) ? 'Date of birth is required' : undefined}
                 />
               </Grid>
               <Grid size={{ xs: 12, md: 6 }}>
                 <TextField
                   label="Mobile phone"
                   fullWidth
-                  type="tel"
                   value={spouseDetails.mobilePhone}
-                  onChange={(event) => updateField('mobilePhone', event.target.value)}
+                  onChange={(event) => {
+                    const numeric = event.target.value.replace(/\D/g, '');
+                    updateField('mobilePhone', numeric);
+                  }}
+                  error={fieldError(spouseDetails.mobilePhone)}
+                  errorMessage={fieldError(spouseDetails.mobilePhone) ? 'Mobile phone is required' : undefined}
+                  htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
                 />
               </Grid>
               <Grid size={12}>
                 <TextField
                   label="Home phone"
                   fullWidth
-                  type="tel"
                   value={spouseDetails.homePhone}
-                  onChange={(event) => updateField('homePhone', event.target.value)}
+                  onChange={(event) => {
+                    const numeric = event.target.value.replace(/\D/g, '');
+                    updateField('homePhone', numeric);
+                  }}
                   helperText="Optional field"
+                  htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
                 />
               </Grid>
             </Grid>
 
             <Box sx={{ pt: 1 }}>
               <Checkbox
-                variant="boxed"
                 checked={spouseDetails.consentChecked}
                 onChange={(checked) => updateField('consentChecked', checked)}
                 label="I understand this nomination is permanent and give permission for ART to contact my spouse for this application."
               />
+              {showValidation && spouseMode && !spouseDetails.consentChecked && (
+                <Typography variant="caption" sx={{ color: 'error.main', mt: 0.5, display: 'block' }}>
+                  Consent confirmation is required
+                </Typography>
+              )}
             </Box>
-
-            {showValidation && spouseFieldsIncomplete && (
-              <Alert
-                severity="error"
-                message="Complete the required spouse details and consent confirmation before continuing."
-              />
-            )}
           </Stack>
         </Box>
       )}
