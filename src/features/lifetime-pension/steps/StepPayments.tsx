@@ -5,7 +5,7 @@ import { Alert } from '../../../components/Alert';
 import { DescriptionList } from '../../../components/DescriptionList';
 import { TextField } from '../../../components/TextField';
 import type { BankDetails } from '../types';
-import { formatCurrency } from '../utils';
+import { formatCurrency, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
 
 interface StepPaymentsProps {
   purchasePrice: number;
@@ -27,8 +27,10 @@ export function StepPayments({
     onBankDetailsChange({ ...bankDetails, [key]: value });
   }
 
+  const bsbDigits = parseBsbDigits(bankDetails.bsb);
+  const bsbBankName = lookupBsbBank(bankDetails.bsb);
   const bankDetailsComplete = Boolean(
-    bankDetails.bsb.trim() && bankDetails.accountNumber.trim() && bankDetails.accountName.trim()
+    bsbDigits.length === 6 && bankDetails.accountNumber.trim() && bankDetails.accountName.trim()
   );
 
   return (
@@ -74,7 +76,13 @@ export function StepPayments({
             label="BSB"
             fullWidth
             value={bankDetails.bsb}
-            onChange={(event) => updateField('bsb', event.target.value)}
+            placeholder="000-000"
+            helperText={bsbBankName ?? undefined}
+            onChange={(event) => {
+              const digits = parseBsbDigits(event.target.value);
+              updateField('bsb', formatBsb(digits));
+            }}
+            htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9\\-]*', maxLength: 7 }}
           />
           <TextField
             label="Account number"
