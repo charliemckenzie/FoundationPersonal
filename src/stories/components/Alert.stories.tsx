@@ -122,9 +122,19 @@ export const WithIcon: Story = {
 };
 
 export const WithTitle: Story = {
+  name: 'With Title',
+  parameters: {
+    docs: {
+      description: {
+        story: 'Use `title` to add a bold heading above the message. Pair with `icon` for full visual treatment.',
+      },
+    },
+  },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-      <Alert severity="error" title="Error" message="The form could not be submitted. Check the fields below." />
+      <Alert severity="error" title="Error" message="The form could not be submitted. Check the fields below." icon={<Icon icon={SEVERITY_ICONS.error} color="inherit" size="lg" />} />
+      <Alert severity="warning" title="You are not eligible for this account yet" message="To open a Lifetime Pension account, you will need to be permanently retired or have left an employer on or after turning 60." icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />} />
+      <Alert severity="info" title="Update available" message="A new version of the app is available with performance improvements and bug fixes." icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />} />
       <Alert severity="success" title="Saved" message="Your profile has been updated successfully." icon={<Icon icon={SEVERITY_ICONS.success} color="inherit" size="lg" />} />
     </div>
   ),

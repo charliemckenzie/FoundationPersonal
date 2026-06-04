@@ -187,7 +187,7 @@ function DescriptionList({ title, valueAlign = 'left', density = 'default', labe
         ]}
       >
         {title && (
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 2 }}>
+          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
             {title}
           </Typography>
         )}

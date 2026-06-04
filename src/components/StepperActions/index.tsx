@@ -169,7 +169,7 @@ export function StepperActions({
           onClose={handleExitClose}
           title={exitDialogTitle}
           description={exitDialogDescription}
-          variant="alert"
+          variant="neutral"
           confirmLabel={exitDialogConfirmLabel}
           cancelLabel={exitDialogCancelLabel}
           onConfirm={handleExitConfirm}

@@ -35,6 +35,7 @@ export interface DialogProps {
   size?: DialogSize;
   loading?: boolean;
   disableCloseOnBackdrop?: boolean;
+  hideCloseButton?: boolean;
   alertButtonLayout?: AlertButtonLayout;
   extraActions?: ReadonlyArray<AlertAction>;
   mobileDisplay?: DialogMobileDisplay;
@@ -64,6 +65,7 @@ export function Dialog({
   size = 'small',
   loading = false,
   disableCloseOnBackdrop = false,
+  hideCloseButton = false,
   alertButtonLayout = 'row',
   extraActions,
   mobileDisplay = 'drawer',
@@ -167,24 +169,26 @@ export function Dialog({
         <Typography id="dialog-title" variant="h5" component="h2" sx={{ color: 'text.heading' }}>
           {title}
         </Typography>
-        <IconButton
-          size="small"
-          onClick={onClose}
-          aria-label="Close"
-          disableRipple
-          sx={(t) => ({
-            position: 'absolute',
-            top: t.spacing(2),
-            right: t.spacing(2),
-            width: t.spacing(4),
-            height: t.spacing(4),
-            borderRadius: '50%',
-            ...buildSoftStyles('secondary'),
-            color: 'inherit',
-          })}
-        >
-          <Icon icon="xmark" size="md" />
-        </IconButton>
+        {!hideCloseButton && (
+          <IconButton
+            size="small"
+            onClick={onClose}
+            aria-label="Close"
+            disableRipple
+            sx={(t) => ({
+              position: 'absolute',
+              top: t.spacing(2),
+              right: t.spacing(2),
+              width: t.spacing(4),
+              height: t.spacing(4),
+              borderRadius: '50%',
+              ...buildSoftStyles('secondary'),
+              color: 'inherit',
+            })}
+          >
+            <Icon icon="xmark" size="md" />
+          </IconButton>
+        )}
       </DialogTitle>
       {hasBody && (
         <DialogContent sx={{ px: 4 }}>
