@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
-import { type Theme } from '@mui/material/styles';
+import type { SxProps, Theme } from '@mui/material/styles';
 import { selectedSoftBg } from '../inputs/variantStyles';
 import { RadioUncheckedIcon, RadioCheckedIcon } from './icons';
 import { RadioCardLabel } from './RadioCardLabel';
@@ -39,6 +39,8 @@ export interface RadioGroupProps {
   disabled?: boolean;
   required?: boolean;
   legendBold?: boolean;
+  legendSx?: SxProps<Theme>;
+  sublabel?: React.ReactNode;
   cardDirection?: 'column' | 'row';
   onChange?: (value: string) => void;
   name?: string;
@@ -106,6 +108,8 @@ export function RadioGroup({
   disabled = false,
   required = false,
   legendBold = true,
+  legendSx,
+  sublabel,
   cardDirection = 'column',
   onChange,
   name,
@@ -118,18 +122,26 @@ export function RadioGroup({
     <FormControl error={error} disabled={disabled} required={required}>
       {legend && (
         <FormLabel
-          sx={{
-            color: 'text.primary',
-            typography: 'body',
-            fontWeight: legendBold ? 600 : 400,
-            mb: 1,
-            '&.Mui-focused': { color: 'text.primary' },
-            '&.Mui-error': { color: 'error.main' },
-            '&.Mui-disabled': { color: 'text.disabled' },
-          }}
+          sx={[
+            {
+              color: 'text.primary',
+              typography: 'body',
+              fontWeight: legendBold ? 600 : 400,
+              mb: 1,
+              '&.Mui-focused': { color: 'text.primary' },
+              '&.Mui-error': { color: 'error.main' },
+              '&.Mui-disabled': { color: 'text.disabled' },
+            },
+            ...(Array.isArray(legendSx) ? legendSx : legendSx ? [legendSx] : []),
+          ]}
         >
           {legend}
         </FormLabel>
+      )}
+      {sublabel && (
+        <Box sx={{ mb: 2 }}>
+          {sublabel}
+        </Box>
       )}
       <MuiRadioGroup
         value={value}

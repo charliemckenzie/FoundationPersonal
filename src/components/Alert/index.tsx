@@ -8,7 +8,7 @@ export type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
 
 export interface AlertProps {
   severity: AlertSeverity;
-  message: string;
+  message: React.ReactNode;
   title?: string;
   icon?: React.ReactNode;
   action?: React.ReactNode;
@@ -68,7 +68,7 @@ export function Alert({
         <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
           {icon && <Box sx={{ display: 'flex', mt: '2px', color: `${severity}.icon` }}>{icon}</Box>}
           <Box>
-            {title && <AlertTitle component="h4" sx={{ fontWeight: 'fontWeightBold', fontSize: 'inherit', m: 0 }}>{title}</AlertTitle>}
+            {title && <AlertTitle component="h4" sx={{ typography: 'body', m: 0, fontWeight: 700 }}>{title}</AlertTitle>}
             <Box component="span" sx={visiblyHiddenSx}>{SEVERITY_LABELS[severity]}: </Box>
             {message}
           </Box>

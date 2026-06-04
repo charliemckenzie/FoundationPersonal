@@ -43,6 +43,7 @@ const ART: Brand = {
         { label: 'Authentication', href: '/member-online/login' },
         { label: 'Portal', href: '/member-online' },
         { label: 'Stepped form', href: '/member-online/beneficiaries' },
+        { label: 'Lifetime pension form', href: '/member-online/lifetime-pension' },
       ],
     },
     {
