@@ -4,7 +4,6 @@ import Typography from '@mui/material/Typography';
 import { Alert, SEVERITY_ICONS } from '../../../components/Alert';
 import { Checkbox } from '../../../components/Checkbox';
 import { Icon } from '../../../components/Icon';
-import { ToggleButtonGroup } from '../../../components/ToggleButton';
 import { Tooltip } from '../../../components/Tooltip';
 import type { AgeScenario } from '../types';
 
@@ -44,34 +43,20 @@ export function StepIntro({
 
   return (
     <Stack spacing={4}>
-      <Typography component="h1" variant="h2">
-        Open a Lifetime Pension account
-      </Typography>
-
-      <Stack spacing={2}>
+      <Stack spacing={1}>
+        <Typography component="h1" variant="h2">
+          Open a Lifetime Pension account
+        </Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
           A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
           It combines your contribution with others in a shared investment pool.
         </Typography>
+      </Stack>
 
-        <ToggleButtonGroup
-        label="Preview age scenario"
-        ariaLabel="Preview age scenario"
-        value={ageScenario}
-        options={[
-          { value: '60-64', label: 'Aged 60-64' },
-          { value: '65-plus', label: 'Aged 65+' },
-        ]}
-        onChange={(value) => {
-          if (value === '60-64' || value === '65-plus') {
-            onAgeScenarioChange(value);
-          }
-        }}
-      />
-
-      <Box
-        sx={{
-          border: '1px solid',
+      <Stack spacing={2}>
+        <Box
+          sx={{
+            border: '1px solid',
           borderColor: 'border.default',
           borderRadius: (t) => `${t.shape.md}px`,
           backgroundColor: 'background.paper',
@@ -90,9 +75,24 @@ export function StepIntro({
                   color={isAged6564 ? 'info' : 'text.muted'}
                 />
               </Box>
-              <Typography variant="body" sx={{ fontWeight: 700, color: 'secondary.main' }}>
-                Aged 60-80
-              </Typography>
+              <Box
+                component="button"
+                onClick={() => onAgeScenarioChange(ageScenario === '60-64' ? '65-plus' : '60-64')}
+                sx={{
+                  background: 'none',
+                  border: 'none',
+                  p: 0,
+                  fontFamily: 'inherit',
+                  fontSize: 'inherit',
+                  lineHeight: 'inherit',
+                  fontWeight: 700,
+                  color: 'secondary.main',
+                  cursor: 'pointer',
+                  '&:hover': { color: 'primary.main' },
+                }}
+              >
+                {ageScenario === '60-64' ? 'Aged 60-64' : 'Aged 65+'}
+              </Box>
             </Box>
 
             <Stack spacing={0.75} sx={{ pl: 5.25 }}>
