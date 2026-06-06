@@ -29,7 +29,7 @@ function IconCircle({ icon, cardDirection, isSelected, disabled }: { icon: strin
         color: disabled
           ? theme.palette.action.disabled
           : isSelected
-          ? theme.palette.common.white
+          ? theme.palette.primary.contrastText
           : theme.palette.primary.main,
         backgroundColor: disabled
           ? theme.palette.action.disabledBackground
@@ -73,7 +73,7 @@ function CornerIndicator({ isSelected, disabled }: { isSelected: boolean; disabl
       })}
     >
       {isSelected && (
-        <Box component="span" sx={{ color: 'common.white', display: 'inline-flex', lineHeight: 0 }}>
+        <Box component="span" sx={{ color: 'primary.contrastText', display: 'inline-flex', lineHeight: 0 }}>
           <Icon icon="check" size="sm" color="inherit" style="solid" />
         </Box>
       )}

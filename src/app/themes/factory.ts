@@ -1,6 +1,6 @@
 import { createTheme, alpha, type Shadows } from '@mui/material/styles';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { buildLightPalette, buildDarkPalette } from './semantic';
+import { buildLightPalette, buildDarkPalette, TINT } from './semantic';
 import type { BrandConfig } from './brands/index';
 
 // MUI module augmentations live in src/types/mui.d.ts so they apply globally
@@ -484,7 +484,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             // Replaces button defaults removed from theme.typography
             fontFamily: brand.fontFamily,
             fontSize: ownerState.size === 'small' ? '0.875rem' : ownerState.size === 'large' ? '1.25rem' : '1rem',
-            fontWeight: 600,
+            fontWeight: 400,
             lineHeight: 1,
             color: theme.palette.text.primary,
             backgroundColor: theme.palette.background.paper,
@@ -500,9 +500,17 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             },
             '&.Mui-selected': {
               borderColor: theme.palette.primary.main,
-              backgroundColor: theme.palette.primary.softMain!,
-              color: theme.palette.primary.dark,
+              backgroundColor: theme.palette.primary.softMain ?? alpha(theme.palette.primary.main, TINT.main[theme.palette.mode as 'light' | 'dark']),
+              color: theme.palette.primary.main,
               zIndex: 1,
+              '&:hover': {
+                backgroundColor: theme.palette.primary.softDark ?? alpha(theme.palette.primary.main, TINT.dark[theme.palette.mode as 'light' | 'dark']),
+                color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light,
+              },
+              '&:active': {
+                backgroundColor: theme.palette.primary.softDeeper ?? alpha(theme.palette.primary.main, TINT.deeper[theme.palette.mode as 'light' | 'dark']),
+                color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light,
+              },
             },
             '&.Mui-focusVisible': {
               outline: `2px solid ${theme.palette.border.focus}`,

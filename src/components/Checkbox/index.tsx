@@ -5,7 +5,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import { type Theme } from '@mui/material/styles';
-import { selectedSoftBg } from '../inputs/variantStyles';
+import { selectedCardStyles } from '../inputs/variantStyles';
 import { CheckboxUncheckedIcon, CheckboxIndeterminateIcon, CheckboxCheckedIcon } from './icons';
 import { CheckboxCardLabel } from './CheckboxCardLabel';
 
@@ -122,8 +122,8 @@ export function Checkbox({
         cursor: disabled ? 'default' : 'pointer',
         transition: 'border-color 150ms ease, background-color 150ms ease',
         backgroundColor: 'background.paper',
-        ...(isSelected && { backgroundColor: selectedSoftBg(theme) }),
-        ...(!disabled && { '&:hover': { backgroundColor: 'action.hover' } }),
+        ...(isSelected && selectedCardStyles(theme)),
+        ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
       })

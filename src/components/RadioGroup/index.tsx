@@ -7,7 +7,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
-import { selectedSoftBg } from '../inputs/variantStyles';
+import { selectedCardStyles } from '../inputs/variantStyles';
 import { RadioUncheckedIcon, RadioCheckedIcon } from './icons';
 import { RadioCardLabel } from './RadioCardLabel';
 
@@ -70,8 +70,8 @@ const cardContainerSx = (args: {
   cursor: args.isItemDisabled ? 'default' : 'pointer',
   transition: 'border-color 150ms ease, background-color 150ms ease',
   backgroundColor: 'background.paper',
-  ...(args.isSelected && { backgroundColor: selectedSoftBg(theme) }),
-  ...(!args.isItemDisabled && { '&:hover': { backgroundColor: 'action.hover' } }),
+  ...(args.isSelected && selectedCardStyles(theme)),
+  ...(!args.isItemDisabled && !args.isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
   '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
   '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
 });

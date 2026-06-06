@@ -30,7 +30,7 @@ function IconCircle({ icon, cardDirection, isSelected, isItemDisabled }: { icon:
         color: isItemDisabled
           ? theme.palette.action.disabled
           : isSelected
-          ? theme.palette.common.white
+          ? theme.palette.primary.contrastText
           : theme.palette.primary.main,
         backgroundColor: isItemDisabled
           ? theme.palette.action.disabledBackground

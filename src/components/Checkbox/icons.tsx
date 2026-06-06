@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { alpha } from '@mui/material/styles';
+import { alpha, type Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
 
 const SQUARE_BASE = {
@@ -42,7 +42,7 @@ export function CheckboxUncheckedIcon({ error, disabled }: { error?: boolean; di
 export function CheckboxIndeterminateIcon() {
   return (
     <Box component="span" sx={FILLED_SQUARE_SX}>
-      <Box component="span" sx={{ color: 'common.white', display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
+      <Box component="span" sx={{ color: (t: Theme) => t.palette.primary.contrastText, display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
         <Icon icon="minus" size="lg" color="inherit" />
       </Box>
     </Box>
@@ -52,7 +52,7 @@ export function CheckboxIndeterminateIcon() {
 export function CheckboxCheckedIcon() {
   return (
     <Box component="span" sx={FILLED_SQUARE_SX}>
-      <Box component="span" sx={{ color: 'common.white', display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
+      <Box component="span" sx={{ color: (t: Theme) => t.palette.primary.contrastText, display: 'flex', lineHeight: 0, mt: '-0.0625rem' }}>
         <Icon icon="check" size="lg" color="inherit" />
       </Box>
     </Box>

@@ -1,13 +1,28 @@
 import { alpha, type Theme } from '@mui/material/styles';
+import { TINT } from '../../app/themes/semantic';
+
+/** Soft background for unselected icon circles in card labels. Static fill only — no hover. */
+export function selectedSoftBg(theme: Theme): string {
+  return theme.palette.primary.softMain ?? alpha(theme.palette.primary.main, TINT.main[theme.palette.mode as 'light' | 'dark']);
+}
 
 /**
- * Soft-selected background for selectable card / boxed states.
- * Returns `primary.softMain` (TINT scale in themes/semantic.ts) — the same
- * base fill used by soft buttons, so every selected card surface moves together.
+ * Full soft-interaction styles for selected boxed/card states.
+ * Resting → softMain, hover → softDark, active → softDeeper.
+ * Mirrors the soft Button variant so every selected surface moves together.
  * Used by Checkbox and RadioGroup boxed/card variants.
  */
-export function selectedSoftBg(theme: Theme): string {
-  return theme.palette.primary.softMain!;
+export function selectedCardStyles(theme: Theme) {
+  const mode = theme.palette.mode as 'light' | 'dark';
+  return {
+    backgroundColor: theme.palette.primary.softMain ?? alpha(theme.palette.primary.main, TINT.main[mode]),
+    '&:hover': {
+      backgroundColor: theme.palette.primary.softDark ?? alpha(theme.palette.primary.main, TINT.dark[mode]),
+    },
+    '&:active': {
+      backgroundColor: theme.palette.primary.softDeeper ?? alpha(theme.palette.primary.main, TINT.deeper[mode]),
+    },
+  };
 }
 
 /**
