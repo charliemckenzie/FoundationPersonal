@@ -71,10 +71,10 @@ export function FileCard({
             ? theme.palette.success.main
             : theme.palette.primary.main,
           backgroundColor: isError
-            ? alpha(theme.palette.error.main, 0.08)
+            ? theme.palette.error.background!
             : isComplete
-            ? alpha(theme.palette.success.main, 0.08)
-            : alpha(theme.palette.primary.main, 0.08),
+            ? theme.palette.success.background!
+            : theme.palette.primary.softMain!,
         })}
       >
         <Icon icon={ICON_NAME[status]} size="lg" color="inherit" />

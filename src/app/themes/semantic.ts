@@ -15,6 +15,39 @@ export const OPACITY = {
   disabled:  { light: 0.38, dark: 0.38 },
 } as const;
 
+// ── Brand-tint interaction surfaces — single source of truth ─────────────────
+// Four-level intensity scale for tinted surfaces across Button, Tabs, inputs, and
+// FileUpload. Components read the named palette tokens (e.g. `palette.primary.softMain`)
+// and never call `alpha()` themselves. Edit a value here to shift every component
+// using that level in one place.
+//
+//   softLight  — barely-there hover overlay (outlined button hover)
+//   softMain   — base fill / hover overlay (soft resting, ghost hover, outlined active)
+//   softDark   — deepened fill on hover (soft hover, ghost active)
+//   softDeeper — pressed / active feedback (soft active only)
+//
+// softMain, softDark, softDeeper are mode-aware because dark surfaces need higher
+// opacity to produce the same perceived fill weight.
+export const TINT = {
+  light:  0.04,                             // flat — same in both modes
+  main:   { light: 0.08, dark: 0.14 },
+  dark:   { light: 0.15, dark: 0.23 },
+  deeper: { light: 0.20, dark: 0.29 },
+} as const;
+
+/**
+ * Compose the four brand-tint interaction surface tokens for one colour channel.
+ * Spread into each brand colour channel in the palette builders.
+ */
+function tintSurfaces(main: string, mode: 'light' | 'dark') {
+  return {
+    softLight:  alpha(main, TINT.light),
+    softMain:   alpha(main, TINT.main[mode]),
+    softDark:   alpha(main, TINT.dark[mode]),
+    softDeeper: alpha(main, TINT.deeper[mode]),
+  };
+}
+
 /**
  * Build the LIGHT-mode MUI palette for a given brand.
  *
@@ -40,20 +73,14 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       main:         brand.primary[600],
       dark:         brand.primary[700],
       contrastText: white,
-      text:         brand.primary[800],   // accessible body text on light brand-tinted surfaces (≥7:1)
-      icon:         brand.primary[600],   // icon fill matching .main
-      background:   brand.primary[50],    // subtle tinted surface (e.g. ToggleButton selected, badge fill)
-      border:       brand.primary[100],   // companion border for .background
+      ...tintSurfaces(brand.primary[600], 'light'),
     },
     secondary: {
       light:        brand.secondary[600],
       main:         brand.secondary[800],
       dark:         brand.secondary[900],
       contrastText: white,
-      text:         brand.secondary[800],
-      icon:         brand.secondary[800],
-      background:   brand.secondary[50],
-      border:       brand.secondary[100],
+      ...tintSurfaces(brand.secondary[800], 'light'),
     },
     /** Feedback / status. Each has `.main` (icon/border), `.background` (alert fill), `.text` (alert body), `.border` (alert outline). Values fixed across brands. */
     error: {
@@ -104,10 +131,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
         main:         brand.tertiary[500],
         dark:         brand.tertiary[700],
         contrastText: brand.tertiary[950],
-        text:         brand.tertiary[800],
-        icon:         brand.tertiary[500],
-        background:   brand.tertiary[50],
-        border:       brand.tertiary[100],
+        ...tintSurfaces(brand.tertiary[500], 'light'),
       },
     }),
 
@@ -118,10 +142,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
         main:         brand.quaternary[300],
         dark:         brand.quaternary[500],
         contrastText: brand.quaternary[950],
-        text:         brand.quaternary[800],
-        icon:         brand.quaternary[500],
-        background:   brand.quaternary[50],
-        border:       brand.quaternary[100],
+        ...tintSurfaces(brand.quaternary[300], 'light'),
       },
     }),
 
@@ -209,24 +230,18 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
   const sem = brand.semanticOverrides.dark;
   return {
     primary: {
-      light:        brand.primary[300],
+      light:        brand.primary[100],
       main:         brand.primary[300],
       dark:         brand.primary[400],
       contrastText: brand.primary[950],
-      text:         brand.primary[200],
-      icon:         brand.primary[300],
-      background:   alpha(brand.primary[400], 0.16),
-      border:       brand.primary[700],
+      ...tintSurfaces(brand.primary[300], 'dark'),
     },
     secondary: {
       light:        brand.secondary[400],
       main:         brand.secondary[600],
       dark:         brand.secondary[800],
       contrastText: white,
-      text:         brand.secondary[200],
-      icon:         brand.secondary[400],
-      background:   alpha(brand.secondary[400], 0.16),
-      border:       brand.secondary[700],
+      ...tintSurfaces(brand.secondary[600], 'dark'),
     },
     error: {
       light:        red[300],
@@ -275,10 +290,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
         main:         brand.tertiary[400],
         dark:         brand.tertiary[600],
         contrastText: black,
-        text:         brand.tertiary[200],
-        icon:         brand.tertiary[400],
-        background:   alpha(brand.tertiary[400], 0.16),
-        border:       brand.tertiary[700],
+        ...tintSurfaces(brand.tertiary[400], 'dark'),
       },
     }),
 
@@ -288,10 +300,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
         main:         brand.quaternary[300],
         dark:         brand.quaternary[500],
         contrastText: black,
-        text:         brand.quaternary[100],
-        icon:         brand.quaternary[300],
-        background:   alpha(brand.quaternary[400], 0.16),
-        border:       brand.quaternary[700],
+        ...tintSurfaces(brand.quaternary[300], 'dark'),
       },
     }),
 

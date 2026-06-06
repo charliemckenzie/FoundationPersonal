@@ -1,5 +1,6 @@
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
+import { TINT } from '../../app/themes/semantic';
 
 export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'white';
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost' | 'soft';
@@ -27,25 +28,30 @@ export function buildContainedStyles(color: ButtonColorKeyResolved) {
   };
 }
 
+type Mode = 'light' | 'dark';
+const m = (t: Theme): Mode => t.palette.mode as Mode;
+
+// In light mode, darken text on hover/active to maintain contrast against the deepening fill.
+// In dark mode, lighten text to primary.light (trueBlue[200]) — brighter than main for better
+// contrast against the darkened fills on paper and elevated surfaces.
+const interactiveColor = (theme: Theme, color: ButtonColorKeyResolved) =>
+  theme.palette.mode === 'light' ? theme.palette[color].dark : theme.palette[color].light;
+
 export function buildSoftStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: (theme: Theme) =>
-      theme.palette.mode === 'dark'
-        ? alpha(theme.palette[color].main, 0.15)
-        : alpha(theme.palette[color].main, 0.08),
+      theme.palette[color].softMain ?? alpha(theme.palette[color].main, TINT.main[m(theme)]),
     color: (theme: Theme) => theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {
       backgroundColor: (theme: Theme) =>
-        theme.palette.mode === 'dark'
-          ? alpha(theme.palette[color].main, 0.25)
-          : alpha(theme.palette[color].main, 0.15),
+        theme.palette[color].softDark ?? alpha(theme.palette[color].main, TINT.dark[m(theme)]),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&:active': {
       backgroundColor: (theme: Theme) =>
-        theme.palette.mode === 'dark'
-          ? alpha(theme.palette[color].main, 0.30)
-          : alpha(theme.palette[color].main, 0.20),
+        theme.palette[color].softDeeper ?? alpha(theme.palette[color].main, TINT.deeper[m(theme)]),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&.Mui-disabled': {
       backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
@@ -60,10 +66,14 @@ export function buildGhostStyles(color: ButtonColorKeyResolved) {
     color: (theme: Theme) => theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
+      backgroundColor: (theme: Theme) =>
+        theme.palette[color].softDark ?? alpha(theme.palette[color].main, TINT.dark[m(theme)]),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.12),
+      backgroundColor: (theme: Theme) =>
+        theme.palette[color].softDeeper ?? alpha(theme.palette[color].main, TINT.deeper[m(theme)]),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&.Mui-disabled': {
       backgroundColor: 'transparent',
@@ -80,11 +90,16 @@ export function buildOutlinedStyles(color: ButtonColorKeyResolved) {
     color: (theme: Theme) => theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.04),
-      borderColor: (theme: Theme) => theme.palette[color].main,
+      backgroundColor: (theme: Theme) =>
+        theme.palette[color].softDark ?? alpha(theme.palette[color].main, TINT.dark[m(theme)]),
+      borderColor: (theme: Theme) => interactiveColor(theme, color),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => alpha(theme.palette[color].main, 0.08),
+      backgroundColor: (theme: Theme) =>
+        theme.palette[color].softDeeper ?? alpha(theme.palette[color].main, TINT.deeper[m(theme)]),
+      borderColor: (theme: Theme) => interactiveColor(theme, color),
+      color: (theme: Theme) => interactiveColor(theme, color),
     },
     '&.Mui-disabled': {
       backgroundColor: 'transparent',
@@ -99,8 +114,8 @@ export function buildWhiteStyles() {
     backgroundColor: (theme: Theme) => theme.palette.background.paper,
     color: (theme: Theme) => theme.palette.primary.main,
     boxShadow: 'none',
-    '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.08), boxShadow: 'none' },
-    '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.primary.main, 0.12), boxShadow: 'none' },
+    '&:hover': { backgroundColor: (theme: Theme) => theme.palette.primary.softMain!, boxShadow: 'none' },
+    '&:active': { backgroundColor: (theme: Theme) => theme.palette.primary.softDark!, boxShadow: 'none' },
     '&.Mui-disabled': {
       backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.3),
       color: (theme: Theme) => alpha(theme.palette.primary.main, 0.4),

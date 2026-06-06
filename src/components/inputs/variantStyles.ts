@@ -1,15 +1,13 @@
 import { alpha, type Theme } from '@mui/material/styles';
 
 /**
- * Mode-aware soft-selected background for selectable card / boxed states.
- * Mirrors buildSoftStyles in buttons/variantStyles.ts (0.08 light, 0.15 dark)
- * so every "soft selected" surface in the library drifts together.
+ * Soft-selected background for selectable card / boxed states.
+ * Returns `primary.softMain` (TINT scale in themes/semantic.ts) — the same
+ * base fill used by soft buttons, so every selected card surface moves together.
  * Used by Checkbox and RadioGroup boxed/card variants.
  */
 export function selectedSoftBg(theme: Theme): string {
-  return theme.palette.mode === 'dark'
-    ? alpha(theme.palette.primary.main, 0.15)
-    : alpha(theme.palette.primary.main, 0.08);
+  return theme.palette.primary.softMain!;
 }
 
 /**

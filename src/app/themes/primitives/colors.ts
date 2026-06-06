@@ -54,8 +54,8 @@ export const neutralART: ColorScale = {
   400: '#b8b8b8',
   500: '#939393',
   600: '#6e6e6e',
-  700: '#4d4d4d',  // was #333333 — lightened to even out the 600→700 step (~13 L* vs prior 24 L*)
-  800: '#333333',  // was #292929 — spreads the previously compressed dark range
+  700: '#4a4a4a',  // was #4d4d4d — darkened to maintain graduation with new 800
+  800: '#2c2c2c',  // was #333333 — darkened for dark mode elevated contrast headroom
   900: '#1f1f1f',  // was #1f1f1f — spreads the previously compressed dark range
   950: '#121212',  // was #121212 — slight spread
 };
@@ -80,7 +80,7 @@ export const trueBlue: ColorScale = {
   50:  '#e5eeff',
   100: '#c2d7ff',
   200: '#8fb6ff',
-  300: '#75a1ff',
+  300: '#7ca7ff',
   400: '#5c8fff',
   500: '#427eff',
   600: '#0051ff',

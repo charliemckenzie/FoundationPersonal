@@ -38,7 +38,7 @@ function segmentedColors(theme: Theme, reversed: boolean): SegmentedColors {
       : theme.palette.primary.contrastText,
     hoverBg:  reversed
       ? alpha(theme.palette.common.white, 0.12)
-      : alpha(theme.palette.primary.main, 0.08),
+      : theme.palette.primary.softMain!,
   };
 }
 
@@ -91,14 +91,10 @@ function buildDefaultSx(theme: Theme, size: TabSize) {
     py: 0,
     height,
     minHeight: height,
-    bgcolor: theme.palette.mode === 'dark'
-      ? alpha(theme.palette.primary.main, 0.15)
-      : alpha(theme.palette.primary.main, 0.08),
+    bgcolor: theme.palette.primary.softMain,
     color: theme.palette.primary.main,
     '&:hover': {
-      bgcolor: theme.palette.mode === 'dark'
-        ? alpha(theme.palette.primary.main, 0.25)
-        : alpha(theme.palette.primary.main, 0.15),
+      bgcolor: theme.palette.primary.softDark,
     },
     '&.Mui-selected': {
       bgcolor: 'primary.main',
