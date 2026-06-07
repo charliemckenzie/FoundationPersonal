@@ -11,6 +11,7 @@ const meta: Meta<typeof CloseButton> = {
   parameters: { layout: 'centered' },
   argTypes: {
     variant: { control: 'select', options: ['ghost', 'soft'] },
+    size: { control: 'select', options: ['sm', 'md'] },
     color: {
       control: 'select',
       options: ['muted', 'error', 'warning', 'info', 'success'],
@@ -26,6 +27,15 @@ type Story = StoryObj<typeof CloseButton>;
 
 export const Default: Story = {
   args: { onClick: () => {} },
+};
+
+export const Sizes: Story = {
+  render: () => (
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <CloseButton onClick={() => {}} size="sm" />
+      <CloseButton onClick={() => {}} size="md" />
+    </Box>
+  ),
 };
 
 export const Colors: Story = {

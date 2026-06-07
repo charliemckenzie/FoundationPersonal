@@ -171,7 +171,8 @@ export function Dialog({
         {!hideCloseButton && (
           <CloseButton
             onClick={onClose}
-            sx={(t) => ({ position: 'absolute', top: t.spacing(2), right: t.spacing(2) })}
+            size={showAsDrawer ? 'md' : 'sm'}
+            sx={(t) => ({ position: 'absolute', top: t.spacing(1.5), right: t.spacing(1.5) })}
           />
         )}
       </DialogTitle>
