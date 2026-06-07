@@ -158,6 +158,13 @@ function ColorsDoc() {
       darkSource: `${primaryName} 400`,
     },
     {
+      label: 'primary.deeper',
+      lightValue: lightPalette.primary!.deeper!,
+      darkValue: darkPalette.primary!.deeper!,
+      lightSource: `${primaryName} 900 — contained/reversed active (pressed)`,
+      darkSource: `${primaryName} 500 — contained/reversed active (pressed)`,
+    },
+    {
       label: 'primary.contrastText',
       lightValue: lightPalette.primary!.contrastText!,
       darkValue: darkPalette.primary!.contrastText!,
@@ -184,6 +191,13 @@ function ColorsDoc() {
       darkValue: darkPalette.secondary!.dark!,
       lightSource: `${secondaryName} 900`,
       darkSource: `${secondaryName} 800`,
+    },
+    {
+      label: 'secondary.deeper',
+      lightValue: lightPalette.secondary!.deeper!,
+      darkValue: darkPalette.secondary!.deeper!,
+      lightSource: `${secondaryName} 950 — contained/reversed active (pressed)`,
+      darkSource: `${secondaryName} 900 — contained/reversed active (pressed)`,
     },
     {
       label: 'secondary.contrastText',
@@ -213,6 +227,13 @@ function ColorsDoc() {
         darkValue: darkPalette.tertiary!.dark!,
         lightSource: `${getPrimitiveName(brand.tertiary!)} 700`,
         darkSource: `${getPrimitiveName(brand.tertiary!)} 600`,
+      },
+      {
+        label: 'tertiary.deeper',
+        lightValue: lightPalette.tertiary.deeper!,
+        darkValue: darkPalette.tertiary!.deeper!,
+        lightSource: `${getPrimitiveName(brand.tertiary!)} 900 — contained/reversed active (pressed)`,
+        darkSource: `${getPrimitiveName(brand.tertiary!)} 700 — contained/reversed active (pressed)`,
       },
       {
         label: 'tertiary.contrastText',
@@ -665,7 +686,7 @@ function ColorsDoc() {
       <SectionSubtitle>
         Your brand&apos;s identity colours. Use these for buttons, active states, links, and key UI moments. Values change per brand — ART and QSuper each have their own scale.
       </SectionSubtitle>
-      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 2, mb: 3 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 2, mb: 3 }}>
         {brandTokens.map((token) => (
           <DualModeTokenRow key={token.label} {...token} />
         ))}

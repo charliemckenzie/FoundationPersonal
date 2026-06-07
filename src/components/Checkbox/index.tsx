@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import MuiCheckbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
@@ -92,6 +92,12 @@ export function Checkbox({
   id,
   name,
 }: CheckboxProps) {
+  const generatedId = useId();
+  const checkboxId = id ?? generatedId;
+  const errorId = error && errorMessage ? `${checkboxId}-error` : undefined;
+  const helperId = helperText ? `${checkboxId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   const [internalChecked, setInternalChecked] = React.useState(defaultChecked ?? false);
   const resolvedChecked = checked !== undefined ? checked : internalChecked;
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
@@ -157,8 +163,9 @@ export function Checkbox({
             indeterminate={indeterminate}
             color={color}
             size={size}
-            id={id}
+            id={checkboxId}
             name={name}
+            slotProps={{ input: { 'aria-invalid': error ? true : undefined, 'aria-describedby': describedBy } }}
             disableRipple
             icon={variant === 'card' ? undefined : <CheckboxUncheckedIcon error={error} disabled={disabled} />}
             checkedIcon={variant === 'card' ? undefined : <CheckboxCheckedIcon />}
@@ -169,12 +176,12 @@ export function Checkbox({
         }
       />
       {helperText && (
-        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
           {helperText}
         </FormHelperText>
       )}
       {error && errorMessage && (
-        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

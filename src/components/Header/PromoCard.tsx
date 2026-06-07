@@ -11,7 +11,7 @@ export function PromoCard({ children, width = 280 }: PromoCardProps) {
     <Box
       className="link-no-underline"
       sx={(t) => ({
-        bgcolor: 'background.tableStripe',
+        bgcolor: 'background.elevated',
         borderRadius: `${t.shape.lg}px`,
         overflow: 'hidden',
         width,

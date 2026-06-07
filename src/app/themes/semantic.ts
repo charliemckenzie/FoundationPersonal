@@ -72,6 +72,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       light:        brand.primary[400],
       main:         brand.primary[600],
       dark:         brand.primary[700],
+      deeper:       brand.primary[900],
       contrastText: white,
       ...tintSurfaces(brand.primary[600], 'light'),
     },
@@ -79,6 +80,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       light:        brand.secondary[600],
       main:         brand.secondary[800],
       dark:         brand.secondary[900],
+      deeper:       brand.secondary[950],
       contrastText: white,
       ...tintSurfaces(brand.secondary[800], 'light'),
     },
@@ -130,6 +132,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
         light:        brand.tertiary[400],
         main:         brand.tertiary[500],
         dark:         brand.tertiary[700],
+        deeper:       brand.tertiary[900],
         contrastText: brand.tertiary[950],
         ...tintSurfaces(brand.tertiary[500], 'light'),
       },
@@ -152,7 +155,6 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
      *   - `default` = page background; `paper` = card; `elevated` = modal / popover
      *   - `brandPrimary` / `brandSecondary` / `brandTertiary` = branded zones (hero sections, CTAs)
      *   - `tintCool` / `tintNeutralCool` / `tintWarm` / `tintNeutral` = tinted brand surfaces; each brand fills with its own shade
-     *   - `tableStripe` = striped table rows
      */
     background: {
       default:        brand.neutral[50],
@@ -165,7 +167,6 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       tintNeutralCool: sem.tintNeutralCool,
       tintWarm:        sem.tintWarm,
       tintNeutral:     sem.tintNeutral,
-      tableStripe:     brand.neutral[100],
     },
 
     /**
@@ -233,6 +234,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       light:        brand.primary[100],
       main:         brand.primary[300],
       dark:         brand.primary[400],
+      deeper:       brand.primary[500],
       contrastText: brand.primary[950],
       ...tintSurfaces(brand.primary[300], 'dark'),
     },
@@ -240,6 +242,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       light:        brand.secondary[400],
       main:         brand.secondary[600],
       dark:         brand.secondary[800],
+      deeper:       brand.secondary[900],
       contrastText: white,
       ...tintSurfaces(brand.secondary[600], 'dark'),
     },
@@ -289,6 +292,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
         light:        brand.tertiary[300],
         main:         brand.tertiary[400],
         dark:         brand.tertiary[600],
+        deeper:       brand.tertiary[700],
         contrastText: black,
         ...tintSurfaces(brand.tertiary[400], 'dark'),
       },
@@ -315,7 +319,6 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       tintNeutralCool: sem.tintNeutralCool,
       tintWarm:        sem.tintWarm,
       tintNeutral:     sem.tintNeutral,
-      tableStripe:     brand.neutral[800],
     },
 
     text: {

@@ -20,7 +20,7 @@ const meta = {
     variant:         { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
     size:            { control: 'select', options: ['small', 'medium', 'large'] },
     condensed:       { control: 'boolean', description: 'Reduces height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
-    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success', 'white'] },
+    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     disabled:        { control: 'boolean' },
     loading:         { control: 'boolean' },
     hideLoadingText: { control: 'boolean' },
@@ -128,46 +128,6 @@ export const Sizes: Story = {
   ),
 };
 
-export const Colors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: [
-          'Use **Primary** for the vast majority of actions.',
-          '',
-          '**White** — use when a button sits on a dark or neutral non-brand surface. The contained variant has a white/paper background with primary-coloured text. Soft, outlined, and ghost use white strokes and text against the dark surface.',
-          '',
-          'Use `reversed` when the background is a brand colour. Use `white` when the background is a neutral dark (e.g. a dark section, a photo overlay, a dark card).',
-          '',
-          'Avoid cycling through semantic colours to create visual interest. Colour communicates intent.',
-        ].join('\n'),
-      },
-    },
-  },
-  render: () => (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Primary</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button label="Contained" variant="contained" color="primary" />
-          <Button label="Soft"      variant="soft"      color="primary" />
-          <Button label="Outlined"  variant="outlined"  color="primary" />
-          <Button label="Ghost"     variant="ghost"     color="primary" />
-        </Box>
-      </Box>
-      <Box>
-        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>White</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button label="Contained" variant="contained" color="white" />
-          <Button label="Soft"      variant="soft"      color="white" />
-          <Button label="Outlined"  variant="outlined"  color="white" />
-          <Button label="Ghost"     variant="ghost"     color="white" />
-        </Box>
-      </Box>
-    </Box>
-  ),
-};
-
 export const WithIcons: Story = {
   parameters: {
     docs: {
@@ -180,6 +140,16 @@ export const WithIcons: Story = {
           '**End icon** — use for direction or consequence (e.g. `arrow-right` after "Next", `arrow-up-right` to signal leaving the site).',
           '',
           'Do not use both a start and end icon on the same button.',
+          '',
+          '---',
+          '',
+          '**Decorative vs meaningful icons**',
+          '',
+          'Most button icons are decorative — the label already communicates everything and the icon simply reinforces it visually. These are correctly hidden from screen readers (`aria-hidden`).',
+          '',
+          'Some icons carry information that is not present in the label — for example, `arrow-up-right` communicating that a link opens in a new tab. When the icon adds meaning, use `endIconLabel` or `startIconLabel` to describe what it communicates. The description is appended to the button\'s accessible name: *"Find out more, opens in a new tab"*.',
+          '',
+          'Rule of thumb: if removing the icon would change what a sighted user understands about the action, it needs a label.',
         ].join('\n'),
       },
     },
@@ -208,6 +178,18 @@ export const WithIcons: Story = {
           <Button label="Will leave site"   endIcon="arrow-up-right" />
           <Button label="Open menu"         endIcon="chevron-down" />
           <Button label="More"              endIcon="ellipsis" />
+        </Box>
+      </Box>
+
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Meaningful icons</Box>
+        <Box sx={{ mb: 1.5, typography: 'small', color: 'text.muted' }}>
+          These icons convey information not present in the visible label. Use <code>endIconLabel</code> or <code>startIconLabel</code> so screen readers announce the full meaning.
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Find out more"   endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
+          <Button label="View on map"     endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
+          <Button label="Visit website"   endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
         </Box>
       </Box>
 
@@ -302,7 +284,7 @@ function ReversedShowcase() {
         flexDirection: 'column',
         gap: 6,
         p: 6,
-        bgcolor: 'background.brandPrimary',
+        bgcolor: 'background.brandSecondary',
       }}
     >
       <Box>
@@ -353,8 +335,8 @@ function ReversedShowcase() {
   );
 }
 
-export const OnPrimaryBackground: Story = {
-  name: 'Reversed — On Primary Background',
+export const OnSecondaryBackground: Story = {
+  name: 'Reversed — On Secondary Background',
   parameters: {
     layout: 'fullscreen',
     docs: {

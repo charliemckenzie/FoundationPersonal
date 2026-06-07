@@ -48,6 +48,9 @@ export function FileUpload({
   const [isDragOver, setIsDragOver] = useState(false);
 
   const displayError = error ?? (internalError || undefined);
+  const errorId = displayError ? `${inputId}-error` : undefined;
+  const helperId = helperText && !displayError ? `${inputId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
 
   const processFiles = useCallback(
     (incoming: FileList | null) => {
@@ -123,6 +126,7 @@ export function FileUpload({
       <Box
         role="region"
         aria-label={label ?? 'File upload'}
+        aria-describedby={describedBy}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -219,11 +223,11 @@ export function FileUpload({
       </Box>
 
       {displayError ? (
-        <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
           {displayError}
         </FormHelperText>
       ) : helperText ? (
-        <FormHelperText sx={{ mx: 0, mt: 0 }}>
+        <FormHelperText id={helperId} sx={{ mx: 0, mt: 0 }}>
           {helperText}
         </FormHelperText>
       ) : null}

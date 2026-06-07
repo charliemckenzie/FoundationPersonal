@@ -33,7 +33,9 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   reversed?: boolean;
   condensed?: boolean;
   startIcon?: string;
+  startIconLabel?: string;
   endIcon?: string;
+  endIconLabel?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
   /** When set, MUI renders the button as a native `<a>` element. */
@@ -70,7 +72,9 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   reversed = false,
   condensed = false,
   startIcon,
+  startIconLabel,
   endIcon,
+  endIconLabel,
   onClick,
   type = 'button',
   sx: sxProp,
@@ -94,7 +98,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
 
   const startIconNode = (() => {
     if (loading && !hideLoadingText) return <CircularProgress size={spinnerSize} color="inherit" />;
-    if (!loading && startIcon) return <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" />;
+    if (!loading && startIcon) return <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" aria-label={startIconLabel} />;
     return undefined;
   })();
 
@@ -104,11 +108,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       variant={muiVariant}
       size={size}
       color={resolvedColor}
-      disabled={disabled || loading}
-      aria-busy={loading}
+      disabled={disabled}
+      aria-busy={loading || undefined}
       fullWidth={fullWidth}
       startIcon={startIconNode}
-      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
+      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" aria-label={endIconLabel} /> : undefined}
       onClick={onClick}
       type={type}
       {...rest}
@@ -123,6 +127,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         ...variantStyles,
         ...reversedStyles,
         ...(showSpinnerOnly && { position: 'relative' }),
+        ...(loading && { pointerEvents: 'none' }),
+        ...(loading && !hideLoadingText && { '& .MuiButton-startIcon': { marginRight: '0.75rem' } }),
         // Belt-and-braces for href buttons where MUI disabled may not apply.
         '&.Mui-disabled, &:disabled': {
           cursor: 'not-allowed',

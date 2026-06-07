@@ -9,10 +9,9 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
 import { Button } from '../Button';
 import { Icon, type IconColor } from '../Icon';
-import { buildSoftStyles } from '../buttons/variantStyles';
+import { CloseButton } from '../CloseButton';
 import { AlertDialog } from './AlertDialog';
 import { useDrawerDrag } from './useDrawerDrag';
 
@@ -170,24 +169,10 @@ export function Dialog({
           {title}
         </Typography>
         {!hideCloseButton && (
-          <IconButton
-            size="small"
+          <CloseButton
             onClick={onClose}
-            aria-label="Close"
-            disableRipple
-            sx={(t) => ({
-              position: 'absolute',
-              top: t.spacing(2),
-              right: t.spacing(2),
-              width: t.spacing(4),
-              height: t.spacing(4),
-              borderRadius: '50%',
-              ...buildSoftStyles('secondary'),
-              color: 'inherit',
-            })}
-          >
-            <Icon icon="xmark" size="md" />
-          </IconButton>
+            sx={(t) => ({ position: 'absolute', top: t.spacing(2), right: t.spacing(2) })}
+          />
         )}
       </DialogTitle>
       {hasBody && (

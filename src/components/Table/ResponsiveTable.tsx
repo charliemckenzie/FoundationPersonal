@@ -11,7 +11,7 @@ import { useState } from 'react';
 import { DENSITY_PY, MOBILE_TABLE_SX } from './parts/sharedConstants';
 import { TableLoadingRow, TableEmptyRow } from './parts/TableStateRows';
 import { ResponsiveCell } from './parts/ResponsiveCell';
-import type { TableColumn, TableDensity, TablePaginationConfig } from './index';
+import type { TableColumn, TableDensity, TablePaginationConfig, TableHeaderStyle } from './index';
 
 export interface ResponsiveTableProps<T extends { id: string | number }> {
   columns: TableColumn<T>[];
@@ -20,7 +20,7 @@ export interface ResponsiveTableProps<T extends { id: string | number }> {
   emptyMessage?: string;
   stickyHeader?: boolean;
   containerMaxHeight?: string | number;
-  /** Alternates row background colour using the tableStripe semantic token. */
+  /** Alternates row background colour using the background.elevated token. */
   striped?: boolean;
   /** Vertical cell padding size. Defaults to 'default'. */
   density?: TableDensity;
@@ -36,6 +36,12 @@ export interface ResponsiveTableProps<T extends { id: string | number }> {
    * Defaults to the first column.
    */
   mobileLabel?: keyof T | string;
+  /**
+   * Header background style. `primary` (default) uses the brand primary colour
+   * with contrasting text. `paper` uses the paper surface with bold default text —
+   * useful inside cards or panels where a coloured header would be too heavy.
+   */
+  headerStyle?: TableHeaderStyle;
 }
 
 /**
@@ -61,6 +67,7 @@ export function ResponsiveTable<T extends { id: string | number }>({
   horizontalPadding = true,
   pagination,
   mobileLabel,
+  headerStyle = 'primary',
 }: ResponsiveTableProps<T>) {
   const [expandedRows, setExpandedRows] = useState<Set<string | number>>(new Set());
 
@@ -71,6 +78,11 @@ export function ResponsiveTable<T extends { id: string | number }>({
       return next;
     });
   };
+
+  const isPaperHeader = headerStyle === 'paper';
+  const headerSx = isPaperHeader
+    ? { fontWeight: 700, bgcolor: 'background.paper', color: 'text.primary', lineHeight: 1.5, borderBottom: '1px solid', borderBottomColor: 'border.input' }
+    : { fontWeight: 600, bgcolor: 'primary.main', color: 'primary.contrastText', lineHeight: 1.5 };
 
   const py = DENSITY_PY[density];
   const px = horizontalPadding ? 2.5 : 1;
@@ -113,14 +125,7 @@ export function ResponsiveTable<T extends { id: string | number }>({
                 scope="col"
                 align={col.align ?? 'left'}
                 width={col.width}
-                sx={{
-                  fontWeight: 600,
-                  bgcolor: 'primary.main',
-                  color: 'primary.contrastText',
-                  lineHeight: 1.5,
-                  py,
-                  px,
-                }}
+                sx={{ ...headerSx, py, px }}
               >
                 {col.label}
               </TableCell>
@@ -139,7 +144,7 @@ export function ResponsiveTable<T extends { id: string | number }>({
                 hover
                 sx={(t) => ({
                   ...(striped && rowIndex % 2 === 1
-                    ? { bgcolor: 'background.tableStripe' }
+                    ? { bgcolor: 'background.elevated' }
                     : {}),
                   '@media (max-width: 599px)': {
                     display: 'flex',

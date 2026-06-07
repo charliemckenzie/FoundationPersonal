@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import MuiRadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -114,6 +114,11 @@ export function RadioGroup({
   onChange,
   name,
 }: RadioGroupProps) {
+  const groupId = useId();
+  const errorId = error && errorMessage ? `${groupId}-error` : undefined;
+  const helperId = helperText ? `${groupId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
   const resolvedValue = value !== undefined ? value : internalValue;
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
@@ -148,6 +153,7 @@ export function RadioGroup({
         defaultValue={defaultValue}
         name={name}
         row={direction === 'row'}
+        aria-describedby={describedBy}
         onChange={(e) => {
           if (value === undefined) setInternalValue(e.target.value);
           onChange?.(e.target.value);
@@ -230,12 +236,12 @@ export function RadioGroup({
         })}
       </MuiRadioGroup>
       {helperText && (
-        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
           {helperText}
         </FormHelperText>
       )}
       {error && errorMessage && (
-        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

@@ -82,7 +82,6 @@ declare module '@mui/material/styles' {
     tintWarm: string;
     /** Neutral brand surface. ART: neutralART[100] (fallback). QSuper: neutral[100]. */
     tintNeutral: string;
-    tableStripe: string;
   }
 
   interface TypeText {
@@ -117,6 +116,8 @@ declare module '@mui/material/styles' {
     softDark?: string;
     /** 20%/30% tint — soft active (pressed feedback). Mode-aware. */
     softDeeper?: string;
+    /** Deepest solid step — active/pressed state for contained and reversed buttons. Light: [900], dark: [500]. */
+    deeper?: string;
   }
   interface SimplePaletteColorOptions {
     text?: string;
@@ -124,10 +125,10 @@ declare module '@mui/material/styles' {
     background?: string;
     border?: string;
     softLight?: string;
-
     softMain?: string;
     softDark?: string;
     softDeeper?: string;
+    deeper?: string;
   }
 
   interface PaletteOptions {

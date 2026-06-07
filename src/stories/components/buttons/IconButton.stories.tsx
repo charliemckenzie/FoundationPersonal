@@ -10,7 +10,6 @@ const meta: Meta<typeof IconButton> = {
   argTypes: {
     variant: { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
     size: { control: 'select', options: ['small', 'medium', 'large'] },
-    color: { control: 'select', options: ['default', 'primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     iconStyle: { control: 'select', options: ['solid', 'regular', 'light', 'thin', 'duotone', 'sharp'] },
     condensed: { control: 'boolean', description: 'Reduces width and height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
     showTooltip: { control: 'boolean' },
@@ -30,12 +29,12 @@ export const Default: Story = {
 
 export const Variants: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-      <IconButton icon="pen" label="Edit (contained)" variant="contained" color="primary" />
-      <IconButton icon="pen" label="Edit (outlined)" variant="outlined" color="primary" />
-      <IconButton icon="pen" label="Edit (ghost)" variant="ghost" color="primary" />
-      <IconButton icon="pen" label="Edit (soft)" variant="soft" color="primary" />
-    </div>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <IconButton icon="pen" label="Edit (contained)" variant="contained" />
+      <IconButton icon="pen" label="Edit (outlined)" variant="outlined" />
+      <IconButton icon="pen" label="Edit (ghost)" variant="ghost" />
+      <IconButton icon="pen" label="Edit (soft)" variant="soft" />
+    </Box>
   ),
 };
 
@@ -62,138 +61,47 @@ export const Sizes: Story = {
       <Box>
         <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Default</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Small" size="small" color="primary" />
-          <IconButton icon="pen" label="Medium" size="medium" color="primary" />
-          <IconButton icon="pen" label="Large" size="large" color="primary" />
+          <IconButton icon="pen" label="Small" size="small" />
+          <IconButton icon="pen" label="Medium" size="medium" />
+          <IconButton icon="pen" label="Large" size="large" />
         </Box>
       </Box>
       <Box>
         <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Condensed</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Small condensed" size="small" color="primary" condensed />
-          <IconButton icon="pen" label="Medium condensed" size="medium" color="primary" condensed />
-          <IconButton icon="pen" label="Large condensed" size="large" color="primary" condensed />
+          <IconButton icon="pen" label="Small condensed" size="small" condensed />
+          <IconButton icon="pen" label="Medium condensed" size="medium" condensed />
+          <IconButton icon="pen" label="Large condensed" size="large" condensed />
         </Box>
       </Box>
     </Box>
   ),
 };
 
-export const Colors: Story = {
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Contained</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="contained" color="primary" />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="contained" color="secondary" />
-          <IconButton icon="circle-info" label="Info" variant="contained" color="info" />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="contained" color="warning" />
-          <IconButton icon="trash" label="Error" variant="contained" color="error" />
-          <IconButton icon="check" label="Success" variant="contained" color="success" />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Soft</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="soft" color="primary" />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="soft" color="secondary" />
-          <IconButton icon="circle-info" label="Info" variant="soft" color="info" />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="soft" color="warning" />
-          <IconButton icon="trash" label="Error" variant="soft" color="error" />
-          <IconButton icon="check" label="Success" variant="soft" color="success" />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Ghost</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="ghost" color="primary" />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="ghost" color="secondary" />
-          <IconButton icon="circle-info" label="Info" variant="ghost" color="info" />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="ghost" color="warning" />
-          <IconButton icon="trash" label="Error" variant="ghost" color="error" />
-          <IconButton icon="check" label="Success" variant="ghost" color="success" />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Outlined</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="outlined" color="primary" />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="outlined" color="secondary" />
-          <IconButton icon="circle-info" label="Info" variant="outlined" color="info" />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="outlined" color="warning" />
-          <IconButton icon="trash" label="Error" variant="outlined" color="error" />
-          <IconButton icon="check" label="Success" variant="outlined" color="success" />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
 export const CommonlyUsedIcons: Story = {
   render: () => (
-    <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-      <IconButton icon="info" label="Information" variant="soft" color="primary" />
-      <IconButton icon="chevron-left" label="Previous" variant="soft" color="primary" />
-      <IconButton icon="chevron-right" label="Next" variant="soft" color="primary" />
-      <IconButton icon="pen" label="Edit" variant="soft" color="primary" />
-      <IconButton icon="trash" label="Delete" variant="soft" color="primary" />
-    </div>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <IconButton icon="circle-info" label="Information" variant="soft" />
+      <IconButton icon="chevron-left" label="Previous" variant="soft" />
+      <IconButton icon="chevron-right" label="Next" variant="soft" />
+      <IconButton icon="pen" label="Edit" variant="soft" />
+      <IconButton icon="trash" label="Delete" variant="soft" />
+    </Box>
   ),
 };
 
 export const Disabled: Story = {
-  args: { icon: 'pen', label: 'Edit (disabled)', disabled: true, color: 'primary' },
+  args: { icon: 'pen', label: 'Edit (disabled)', disabled: true },
 };
 
 export const Loading: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Contained</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="contained" color="primary" loading />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="contained" color="secondary" loading />
-          <IconButton icon="circle-info" label="Info" variant="contained" color="info" loading />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="contained" color="warning" loading />
-          <IconButton icon="trash" label="Error" variant="contained" color="error" loading />
-          <IconButton icon="check" label="Success" variant="contained" color="success" loading />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Soft</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="soft" color="primary" loading />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="soft" color="secondary" loading />
-          <IconButton icon="circle-info" label="Info" variant="soft" color="info" loading />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="soft" color="warning" loading />
-          <IconButton icon="trash" label="Error" variant="soft" color="error" loading />
-          <IconButton icon="check" label="Success" variant="soft" color="success" loading />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Ghost</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="ghost" color="primary" loading />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="ghost" color="secondary" loading />
-          <IconButton icon="circle-info" label="Info" variant="ghost" color="info" loading />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="ghost" color="warning" loading />
-          <IconButton icon="trash" label="Error" variant="ghost" color="error" loading />
-          <IconButton icon="check" label="Success" variant="ghost" color="success" loading />
-        </div>
-      </div>
-      <div>
-        <div style={{ marginBottom: 8, fontWeight: 600 }}>Outlined</div>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <IconButton icon="pen" label="Primary" variant="outlined" color="primary" loading />
-          <IconButton icon="magnifying-glass" label="Secondary" variant="outlined" color="secondary" loading />
-          <IconButton icon="circle-info" label="Info" variant="outlined" color="info" loading />
-          <IconButton icon="triangle-exclamation" label="Warning" variant="outlined" color="warning" loading />
-          <IconButton icon="trash" label="Error" variant="outlined" color="error" loading />
-          <IconButton icon="check" label="Success" variant="outlined" color="success" loading />
-        </div>
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+      <IconButton icon="pen" label="Contained" variant="contained" loading />
+      <IconButton icon="pen" label="Outlined" variant="outlined" loading />
+      <IconButton icon="pen" label="Ghost" variant="ghost" loading />
+      <IconButton icon="pen" label="Soft" variant="soft" loading />
+    </Box>
   ),
 };
 

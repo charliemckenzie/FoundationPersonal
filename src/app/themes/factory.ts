@@ -275,10 +275,11 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
             padding: '8px 16px',
-            minHeight: '2.75rem',
+            minHeight: '3.5rem',
             borderRadius: `${theme.shape.sm}px`,
             alignItems: 'center',
             gap: '12px',
+            boxShadow: 'none',
             ...(ownerState.variant === 'standard' && ownerState.severity === 'error' && {
               backgroundColor: theme.palette.error.background!,
               color:           theme.palette.error.text!,
@@ -303,7 +304,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           icon: {
             padding: 0,
             margin: 0,
-            alignSelf: 'flex-start',
+            alignSelf: 'center',
             height: '1.5rem',
             display: 'flex',
             alignItems: 'center',
@@ -329,6 +330,33 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             lineHeight: 1.5,
             margin: 0,
           },
+        },
+      },
+      MuiSnackbar: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            // Scoped override — keeps severity snackbar (MuiAlert inside MuiSnackbar)
+            // independent from the standalone Alert component.
+            '& .MuiAlert-root': {
+              padding: '8px 16px',
+              minHeight: '3.5rem',
+              borderRadius: `${theme.shape.sm}px`,
+              alignItems: 'center',
+              gap: '12px',
+              boxShadow: 'none',
+            },
+          }),
+        },
+      },
+      MuiSnackbarContent: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            minHeight: '3.5rem',
+            borderRadius: `${theme.shape.sm}px`,
+            boxShadow: 'none',
+            backgroundColor: theme.palette.background.brandSecondary,
+            color: theme.palette.text.inverse,
+          }),
         },
       },
       // Link interaction states — light mode and dark mode.
@@ -393,7 +421,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           },
           sizeSmall: {
             fontSize: '0.875rem',
-            lineHeight: 1.5,
+            lineHeight: 1,
           },
           sizeLarge: {
             fontSize: '1.25rem',

@@ -60,6 +60,10 @@ export function DatePicker({
   const hasError = error || !!errorMessage;
   const [pickerOpen, setPickerOpen] = useState(false);
 
+  const errorId = hasError && errorMessage ? `${fieldId}-error` : undefined;
+  const helperId = helperText && !hasError ? `${fieldId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>
@@ -134,6 +138,8 @@ export function DatePicker({
               slotProps: {
                 input: {
                   readOnly: pickerOnly,
+                  'aria-invalid': hasError ? true : undefined,
+                  'aria-describedby': describedBy,
                   sx: () => ({
                     minHeight: size === 'small'
                       ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
@@ -166,12 +172,12 @@ export function DatePicker({
           }}
         />
         {hasError && errorMessage && (
-          <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+          <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
             {errorMessage}
           </FormHelperText>
         )}
         {!hasError && helperText && (
-          <FormHelperText sx={{ mx: 0, mt: 0 }}>
+          <FormHelperText id={helperId} sx={{ mx: 0, mt: 0 }}>
             {helperText}
           </FormHelperText>
         )}

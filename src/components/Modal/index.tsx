@@ -2,8 +2,7 @@ import MuiDialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import MuiIconButton from '@mui/material/IconButton';
-import { Icon } from '../Icon';
+import { CloseButton } from '../CloseButton';
 import type React from 'react';
 
 export type ModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
@@ -49,19 +48,11 @@ export function Modal({
       {title && (
         <DialogTitle id="modal-title" sx={{ pr: 6 }}>
           {title}
-          <MuiIconButton
-            aria-label="Close modal"
+          <CloseButton
             onClick={onClose}
-            size="small"
-            sx={(t) => ({
-              position: 'absolute',
-              top: t.spacing(1),
-              right: t.spacing(1),
-              color: 'text.muted',
-            })}
-          >
-            <Icon icon="cross" size="sm" />
-          </MuiIconButton>
+            label="Close"
+            sx={(t) => ({ position: 'absolute', top: t.spacing(1), right: t.spacing(1) })}
+          />
         </DialogTitle>
       )}
       <DialogContent dividers>{children}</DialogContent>

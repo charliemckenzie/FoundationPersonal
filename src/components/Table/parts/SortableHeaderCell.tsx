@@ -7,6 +7,8 @@ import type { TableColumn } from '../index';
 
 function NoIcon() { return null; }
 
+export type TableHeaderStyle = 'primary' | 'paper';
+
 interface SortableHeaderCellProps<T> {
   col: TableColumn<T>;
   colKey: string;
@@ -17,6 +19,7 @@ interface SortableHeaderCellProps<T> {
   bordered: boolean;
   py: number;
   px: number;
+  headerStyle: TableHeaderStyle;
 }
 
 /**
@@ -33,15 +36,13 @@ export function SortableHeaderCell<T>({
   bordered,
   py,
   px,
+  headerStyle,
 }: SortableHeaderCellProps<T>) {
-  const baseSx = {
-    fontWeight: 600,
-    bgcolor: 'primary.main',
-    color: 'primary.contrastText',
-    lineHeight: 1.5,
-    py,
-    px,
-  };
+  const isPaper = headerStyle === 'paper';
+
+  const baseSx = isPaper
+    ? { fontWeight: 700, bgcolor: 'background.paper', color: 'text.primary', lineHeight: 1.5, py, px, borderBottom: '1px solid', borderBottomColor: 'border.input' }
+    : { fontWeight: 600, bgcolor: 'primary.main', color: 'primary.contrastText', lineHeight: 1.5, py, px };
 
   return (
     <TableCell
@@ -51,11 +52,9 @@ export function SortableHeaderCell<T>({
       width={col.width}
       sortDirection={col.sortable && isActiveSort ? sortOrder : false}
       sx={bordered
-        ? (t) => ({
-            ...baseSx,
-            borderRight: '1px solid',
-            borderRightColor: alpha(t.palette.primary.contrastText, 0.25),
-          })
+        ? isPaper
+          ? { ...baseSx, borderRight: '1px solid', borderRightColor: 'divider' }
+          : (t) => ({ ...baseSx, borderRight: '1px solid', borderRightColor: alpha(t.palette.primary.contrastText, 0.25) })
         : baseSx
       }
     >

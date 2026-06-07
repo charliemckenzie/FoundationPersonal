@@ -101,6 +101,10 @@ export function TextField({
   const effectiveError = error || showBuiltInError;
   const effectiveErrorMessage = errorMessage ?? (showBuiltInError ? builtInError : undefined);
 
+  const errorId = effectiveError && effectiveErrorMessage ? `${fieldId}-error` : undefined;
+  const helperId = helperText ? `${fieldId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>
       {label && (
@@ -134,8 +138,12 @@ export function TextField({
         name={name}
         autoComplete={autoComplete}
         slotProps={{
-          ...(htmlInputProps && { htmlInput: htmlInputProps }),
-          formHelperText: { role: effectiveError && !effectiveErrorMessage ? 'alert' : undefined, error: effectiveErrorMessage ? false : undefined, sx: { mx: 0 } },
+          htmlInput: {
+            ...htmlInputProps,
+            'aria-invalid': effectiveError ? true : undefined,
+            'aria-describedby': describedBy,
+          },
+          formHelperText: { id: helperId, role: effectiveError && !effectiveErrorMessage ? 'alert' : undefined, error: effectiveErrorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
             sx: (theme) => ({
               ...buildInputStyles(theme),
@@ -182,7 +190,7 @@ export function TextField({
         }}
       />
       {effectiveError && effectiveErrorMessage && (
-        <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
           {effectiveErrorMessage}
         </FormHelperText>
       )}

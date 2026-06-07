@@ -131,7 +131,7 @@ interface BrandModeSteps {
   secondary: { light: number | string; main: number | string; dark: number | string; text: number | string; icon: number | string; background: number | string; border: number | string };
   /** Status colours use the same eight-step pattern regardless of brand. */
   status:    { light: number | string; main: number | string; dark: number | string; text: number | string; icon: number | string; background: number | string; border: number | string };
-  bg:        { default: number | string; paper: number | string | null; elevated: number | string; tableStripe: number | string };
+  bg:        { default: number | string; paper: number | string | null; elevated: number | string };
   borderSubtle: number | string;
   actionActive: number | string;
   actionDisabled: number | string;
@@ -142,7 +142,7 @@ const LIGHT_STEPS: BrandModeSteps = {
   primary:   { light: 400, main: 600, dark: 700, text: 800, icon: 600, background: 50,  border: 100 },
   secondary: { light: 600, main: 800, dark: 900, text: 800, icon: 800, background: 50,  border: 100 },
   status:    { light: 400, main: 600, dark: 700, text: 800, icon: 600, background: 50,  border: 100 },
-  bg:        { default: 50, paper: null /* literal white */, elevated: 100, tableStripe: 100 },
+  bg:        { default: 50, paper: null /* literal white */, elevated: 100 },
   borderSubtle: 200,
   actionActive: 600,
   actionDisabled: 500,
@@ -154,7 +154,7 @@ const DARK_STEPS: BrandModeSteps = {
   primary:   { light: 300, main: 300, dark: 400, text: 200, icon: 300, background: 400 /* applied with alpha */, border: 700 },
   secondary: { light: 400, main: 600, dark: 800, text: 200, icon: 400, background: 400, border: 700 },
   status:    { light: 300, main: 400, dark: 600, text: 300, icon: 400, background: 950, border: 900 },
-  bg:        { default: 950, paper: 900, elevated: 800, tableStripe: 800 },
+  bg:        { default: 950, paper: 900, elevated: 800 },
   borderSubtle: 800,
   actionActive: 300,
   actionDisabled: 500,
@@ -266,7 +266,6 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
       tintNeutralCool: hexToAlias(sem.tintNeutralCool, 'background.tintNeutralCool', BG_FILL),
       tintWarm:        hexToAlias(sem.tintWarm,        'background.tintWarm',        BG_FILL),
       tintNeutral:     hexToAlias(sem.tintNeutral,     'background.tintNeutral',     BG_FILL),
-      tableStripe:     colorAlias(neutral, steps.bg.tableStripe, 'background.tableStripe', BG_FILL),
     },
     text: {
       primary:     hexToAlias(sem.text.primary, 'text.primary', TEXT_FILL),

@@ -18,7 +18,7 @@ export function buildContainedStyles(color: ButtonColorKeyResolved) {
       boxShadow: 'none',
     },
     '&:active': {
-      backgroundColor: (theme: Theme) => theme.palette[color].dark,
+      backgroundColor: (theme: Theme) => theme.palette[color].deeper ?? theme.palette[color].dark,
       boxShadow: 'none',
     },
     '&.Mui-disabled': {
@@ -138,6 +138,46 @@ export function buildFocusStyles(isReversed: boolean, resolvedColor: ButtonColor
   };
 }
 
+export function buildMutedGhostStyles() {
+  return {
+    backgroundColor: 'transparent',
+    color: (theme: Theme) => theme.palette.text.muted,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette.text.primary, TINT.dark[m(theme)]),
+      color: (theme: Theme) => theme.palette.text.primary,
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette.text.primary, TINT.deeper[m(theme)]),
+      color: (theme: Theme) => theme.palette.text.primary,
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'transparent',
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  };
+}
+
+export function buildMutedElevatedStyles() {
+  return {
+    backgroundColor: (theme: Theme) => theme.palette.background.elevated,
+    color: (theme: Theme) => theme.palette.text.muted,
+    boxShadow: 'none',
+    '&:hover': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette.text.primary, TINT.dark[m(theme)]),
+      color: (theme: Theme) => theme.palette.text.primary,
+    },
+    '&:active': {
+      backgroundColor: (theme: Theme) => alpha(theme.palette.text.primary, TINT.deeper[m(theme)]),
+      color: (theme: Theme) => theme.palette.text.primary,
+    },
+    '&.Mui-disabled': {
+      backgroundColor: 'transparent',
+      color: (theme: Theme) => theme.palette.action.disabled,
+    },
+  };
+}
+
 export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColorKeyResolved) {
   return {
     ...(variant === 'contained' && {
@@ -149,11 +189,25 @@ export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColo
           ? theme.palette[color].contrastText
           : theme.palette[color].main,
       boxShadow: 'none',
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88), boxShadow: 'none' },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80), boxShadow: 'none' },
+      '&:hover': {
+        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.88),
+        boxShadow: 'none',
+        // Light mode: text tracks the lightening bg — primary.dark (L=0.069) on #e0eaff (L=0.82) = 7.30:1 ✅
+        color: (theme: Theme) =>
+          theme.palette.mode === 'light' ? theme.palette[color].dark : theme.palette[color].contrastText,
+      },
+      '&:active': {
+        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.80),
+        boxShadow: 'none',
+        // Light mode: primary.deeper on #ccdcff (L=0.71) = 10.31:1 ✅ (primary.main = 4.21:1 ❌)
+        color: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? (theme.palette[color].deeper ?? theme.palette[color].dark)
+            : theme.palette[color].contrastText,
+      },
       '&.Mui-disabled': {
-        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30),
-        color: (theme: Theme) => alpha(theme.palette.common.white, 0.50),
+        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.23),
+        color: (theme: Theme) => alpha(theme.palette.common.white, 0.65),
       },
     }),
     ...(variant === 'outlined' && {
@@ -161,28 +215,59 @@ export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColo
       borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.5),
       color: (theme: Theme) => theme.palette.common.white,
       '&:hover': {
-        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12),
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, TINT.dark.light)
+            : alpha(theme.palette.common.white, 0.12),
+        borderColor: (theme: Theme) => theme.palette.common.white,
+      },
+      '&:active': {
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, 0.25)
+            : alpha(theme.palette.common.white, 0.18),
         borderColor: (theme: Theme) => theme.palette.common.white,
       },
       '&.Mui-disabled': {
-        borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30),
-        color: (theme: Theme) => alpha(theme.palette.common.white, 0.30),
+        borderColor: (theme: Theme) => alpha(theme.palette.common.white, 0.60),
+        color: (theme: Theme) => alpha(theme.palette.common.white, 0.60),
       },
     }),
     ...(variant === 'ghost' && {
       backgroundColor: 'transparent',
       color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.12) },
-      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
+      '&:hover': {
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, TINT.dark.light)
+            : alpha(theme.palette.common.white, 0.12),
+      },
+      '&:active': {
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, 0.25)
+            : alpha(theme.palette.common.white, 0.18),
+      },
+      '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.60) },
     }),
     ...(variant === 'soft' && {
       backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
       color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.25) },
-      '&:active': { backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.30) },
+      '&:hover': {
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, TINT.dark.light)
+            : alpha(theme.palette.common.white, 0.25),
+      },
+      '&:active': {
+        backgroundColor: (theme: Theme) =>
+          theme.palette.mode === 'light'
+            ? alpha(theme.palette.common.black, 0.25)
+            : alpha(theme.palette.common.white, 0.30),
+      },
       '&.Mui-disabled': {
-        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.10),
-        color: (theme: Theme) => alpha(theme.palette.common.white, 0.30),
+        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
+        color: (theme: Theme) => alpha(theme.palette.common.white, 0.60),
       },
     }),
   };

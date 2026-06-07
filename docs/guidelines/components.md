@@ -34,6 +34,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Breadcrumb` | Navigation trail showing current location in the hierarchy |
 | `Button` | Primary action button — contained, soft, ghost, outlined |
 | `Calendar` | Date picker calendar view; use DatePicker for form inputs |
+| `CloseButton` | Dismiss / close icon button — standardised X button used by Alert, Dialog, Drawer, and Modal |
 | `Card` | Contained, open (image + CTA), or promo (horizontal) content cards |
 | `Charts` | Data visualisation — bar, line, pie etc. |
 | `Checkbox` | Single checkbox input — default, boxed, or card layout |
@@ -263,6 +264,7 @@ Key props: `step`, `direction?` (`'forward' | 'backward'` — optional override 
 The primary action button. Four variants: `contained`, `soft`, `ghost`, `outlined`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
 Key props: `label`, `variant`, `size`, `color`, `loading`, `startIcon`, `endIcon`, `reversed`
 
+
 **IconButton** — `src/components/IconButton/`  
 Icon-only button with optional tooltip. Same variants as Button.  
 Key props: `icon`, `label` (accessible name), `variant`, `size`, `color`, `loading`, `showTooltip`
@@ -282,6 +284,10 @@ Key props: `label`, `size`, `disabled`, `onClick`, `type`
 ---
 
 ### Display & Feedback
+
+**CloseButton** — `src/components/CloseButton/`  
+Standardised dismiss / close icon button. Renders an `xmark` icon with a circular hit target. Used internally by Alert, Dialog, Drawer, and Modal — use it whenever you need a standalone close/dismiss action. Two variants: `ghost` (transparent background, default) for surfaces where the button sits against the page; `soft` (tinted fill) for dialog headers and alert actions. `color` drives both the icon colour and the tint, making it straightforward to match severity — e.g. `variant="soft" color="error"` inside an error alert. The `label` prop sets the accessible `aria-label` (default: `"Close"`); always pass a descriptive label when context matters.  
+Key props: `onClick`, `label`, `variant`, `color`, `size`, `sx`
 
 **Icon** — `src/components/Icon/`  
 Font Awesome SVG icon. Supports six styles: `solid`, `light`, `regular`, `thin`, `duotone`, `sharp`. The leaf dependency — used by almost every other component.  
