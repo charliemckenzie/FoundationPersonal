@@ -35,7 +35,8 @@ If this document is out of date, flag it to Moe immediately.
 | `Button` | Primary action button — contained, soft, ghost, outlined |
 | `Calendar` | Date picker calendar view; use DatePicker for form inputs |
 | `CloseButton` | Dismiss / close icon button — standardised X button used by Alert, Dialog, Drawer, and Modal |
-| `Card` | Contained, open (image + CTA), or promo (horizontal) content cards |
+| `Card` | Closed/open operating model with top section modes (image, hero icon, none), body content, and bottom actions |
+| `CardV2` | Fresh card model with three style variants: contained, border, and open |
 | `Charts` | Data visualisation — bar, line, pie etc. |
 | `Checkbox` | Single checkbox input — default, boxed, or card layout |
 | `Chip` | Compact label, status badge, or dismissible tag |
@@ -135,8 +136,12 @@ Key props: `disabled`, `excludePaths`
 ### Containment & Overlay
 
 **Card** — `src/components/Card/`  
-Three layouts: `contained` (free-form children with border + radius), `open` (image top + title + CTAs), `promo` (image-left horizontal).  
-Key props: `variant`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
+Operating model: `closed` (bordered and padded) or `open` (borderless and non-contained), plus `promo` for legacy horizontal image-left layout. `contained` remains as a backwards-compatible alias of `closed`. Top section modes for open/closed are `image`, `heroIcon`, or `none`. Middle section holds title/subtitle and body content. Bottom section holds action buttons when provided.  
+Key props: `variant`, `topSection`, `heroIcon`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
+
+**CardV2** — `src/components/CardV2/`  
+New baseline card primitive with three visual styles: `contained` (surface background + 32px contained padding), `border` (transparent background + border + 32px contained padding), and `open` (borderless + no contained padding). Supports optional top section, middle content section, and bottom actions section.  
+Key props: `variant`, `topSection`, `header`, `body`, `actions`, `children`, `sx`
 
 **ActionBar** — `src/components/ActionBar/`  
 Promotional CTA banner. A horizontal surface with a title, description, and a single `contained` action button, plus an optional left-hand icon (small circular container, or any node such as a `HeroIcon`) or a `decorative` bleed image. Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). Stacks vertically on mobile.  

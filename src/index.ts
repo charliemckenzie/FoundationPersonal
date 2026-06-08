@@ -46,6 +46,14 @@ export { Badge } from './components/Badge'
 export { Breadcrumb } from './components/Breadcrumb'
 export { Button } from './components/Button'
 export { Card } from './components/Card'
+export { CardV2, CardV2Grid } from './components/CardV2'
+export type {
+  CardV2Props,
+  CardV2GridProps,
+  CardV2Variant,
+  CardV2HeaderVariant,
+  CardV2BodyVariant,
+} from './components/CardV2'
 export { Checkbox } from './components/Checkbox'
 export { Chip } from './components/Chip'
 export { DateOfBirthField } from './components/DateOfBirthField'

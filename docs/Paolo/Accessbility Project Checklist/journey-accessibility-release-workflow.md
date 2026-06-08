@@ -1,4 +1,4 @@
-# Journey QA Workflow — Research & Recommendation
+# Journey Accessibility and Release Workflow
 
 **Author**: Jade | **Researched**: June 2026 | **Status**: Refined for journey-based delivery
 
@@ -109,7 +109,11 @@ Use one report format for all projects:
 ## Primary guide to use
 
 Use this workflow with the release checklist at:
-- `docs/workflows/accessibility-release-checklist.md`
+- [accessibility-release-checklist.md](./accessibility-release-checklist.md)
+- [ba-vpat-guidance.md](./ba-vpat-guidance.md)
+
+Example implementation:
+- [mfa-journey-example.md](./mfa-journey-example.md)
 
 ## Compliance note (AU context)
 
@@ -119,4 +123,4 @@ Use this workflow with the release checklist at:
 
 ## Suggested next step
 
-Create a dedicated journey QA guide in `docs/workflows/` that pairs this recommendation with concrete examples (for example MFA setup, password reset, onboarding, and high-risk account changes).
+Use and adapt [mfa-journey-example.md](./mfa-journey-example.md) as the first reusable journey template for other projects.
