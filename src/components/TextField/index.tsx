@@ -4,9 +4,12 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
+import type { Theme } from '@mui/material/styles';
 import type React from 'react';
 import { buildInputStyles } from '../inputs/variantStyles';
 import { validateEmail, validatePhone } from '../inputs/validation';
+import { InputSelectContainer } from '../InputSelect';
+import type { SelectAdornmentConfig } from '../InputSelect';
 
 export type TextFieldType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'search' | 'date';
 export type TextFieldSize = 'small' | 'medium';
@@ -18,6 +21,52 @@ const FORMAT_VALIDATORS: Partial<Record<TextFieldType, (value: string) => string
   email: validateEmail,
   tel: validatePhone,
 };
+
+interface InputSxConfig {
+  size: TextFieldSize;
+  condensed: boolean;
+  multiline: boolean;
+  hasLabel: boolean;
+  borderless?: boolean;
+  success?: boolean;
+  error?: boolean;
+}
+
+function buildFieldInputSx(config: InputSxConfig) {
+  return (theme: Theme) => ({
+    ...buildInputStyles(theme),
+    ...(config.borderless && {
+      border: 'none',
+      '& fieldset': { border: 'none' },
+      '&.Mui-focused': { outline: 'none' },
+    }),
+    ...(!config.borderless && config.success && !config.error && {
+      '& fieldset': { borderColor: 'success.main' },
+      '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: 'success.main' },
+      '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'success.main' },
+    }),
+    '& .MuiInputBase-input': { lineHeight: 1.5, ...(!config.multiline && { height: '1.5em' }) },
+    ...(!config.borderless && { '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' } }),
+    ...(!config.hasLabel && {
+      '& .MuiInputBase-input::placeholder': { color: 'text.muted', opacity: 1 },
+    }),
+    minHeight: config.size === 'small'
+      ? `${2.5 - (config.condensed ? CONDENSED_REDUCTION : 0)}rem`
+      : `${3 - (config.condensed ? CONDENSED_REDUCTION : 0)}rem`,
+    typography: 'body',
+    '& .MuiInputAdornment-root': { alignSelf: 'stretch', alignItems: 'center', maxHeight: 'none' },
+    ...(!config.multiline && {
+      '& .MuiOutlinedInput-input': {
+        paddingTop: config.size === 'small'
+          ? `${0.5 - (config.condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+          : `${0.75 - (config.condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
+        paddingBottom: config.size === 'small'
+          ? `${0.5 - (config.condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
+          : `${0.75 - (config.condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
+      },
+    }),
+  });
+}
 
 export interface TextFieldProps {
   label?: string;
@@ -38,6 +87,7 @@ export interface TextFieldProps {
   rows?: number;
   startAdornment?: React.ReactNode;
   endAdornment?: React.ReactNode;
+  selectAdornment?: SelectAdornmentConfig;
   onChange?: React.ChangeEventHandler<HTMLInputElement>;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;
@@ -66,6 +116,7 @@ export function TextField({
   rows,
   startAdornment,
   endAdornment,
+  selectAdornment,
   onChange,
   onBlur,
   onFocus,
@@ -77,6 +128,9 @@ export function TextField({
   const generatedId = useId();
   const fieldId = id ?? generatedId;
 
+  // Track focus for unified container (InputSelect mode)
+  const [isFocused, setIsFocused] = useState(false);
+
   // Built-in format validation (email/tel). Runs on blur, re-checks on change
   // once the field has been touched. An externally supplied error always wins.
   const formatValidator = FORMAT_VALIDATORS[type];
@@ -84,6 +138,7 @@ export function TextField({
   const [builtInError, setBuiltInError] = useState<string | null>(null);
 
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
+    setIsFocused(false);
     if (formatValidator) {
       setTouched(true);
       setBuiltInError(formatValidator(e.target.value));
@@ -118,6 +173,28 @@ export function TextField({
           {label}
         </FormLabel>
       )}
+      {selectAdornment ? (
+        <InputSelectContainer
+          selectAdornment={selectAdornment}
+          error={effectiveError}
+          disabled={disabled}
+          focused={isFocused}
+          size={size}
+          id={fieldId}
+        >
+          {renderMuiInput(true)}
+        </InputSelectContainer>
+      ) : renderMuiInput(false)}
+      {effectiveError && effectiveErrorMessage && (
+        <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
+          {effectiveErrorMessage}
+        </FormHelperText>
+      )}
+    </Box>
+  );
+
+  function renderMuiInput(borderless: boolean) {
+    return (
       <MuiTextField
         value={value}
         defaultValue={defaultValue}
@@ -128,12 +205,12 @@ export function TextField({
         error={effectiveError}
         required={required}
         disabled={disabled}
-        fullWidth={fullWidth}
+        fullWidth={borderless || fullWidth}
         multiline={multiline}
         rows={rows}
         onChange={handleChange}
         onBlur={handleBlur}
-        onFocus={onFocus}
+        onFocus={(e) => { setIsFocused(true); onFocus?.(e as React.FocusEvent<HTMLInputElement>); }}
         id={fieldId}
         name={name}
         autoComplete={autoComplete}
@@ -145,41 +222,7 @@ export function TextField({
           },
           formHelperText: { id: helperId, role: effectiveError && !effectiveErrorMessage ? 'alert' : undefined, error: effectiveErrorMessage ? false : undefined, sx: { mx: 0 } },
           input: {
-            sx: (theme) => ({
-              ...buildInputStyles(theme),
-              ...(success && !effectiveError && {
-                '& fieldset': { borderColor: 'success.main' },
-                '&:hover:not(.Mui-focused):not(.Mui-disabled) fieldset': { borderColor: 'success.main' },
-                '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'success.main' },
-              }),
-              '& .MuiInputBase-input': { lineHeight: 1.5, ...(!multiline && { height: '1.5em' }) },
-              '& .MuiInputBase-input[type="date"]::-webkit-date-and-time-value': { minHeight: '1.5em' },
-              ...(!label && {
-                '& .MuiInputBase-input::placeholder': {
-                  color: 'text.muted',
-                  opacity: 1,
-                },
-              }),
-              minHeight: size === 'small'
-                ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
-                : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
-              typography: 'body',
-              '& .MuiInputAdornment-root': {
-                alignSelf: 'stretch',
-                alignItems: 'center',
-                maxHeight: 'none',
-              },
-              ...(!multiline && {
-                '& .MuiOutlinedInput-input': {
-                  paddingTop: size === 'small'
-                    ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                    : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-                  paddingBottom: size === 'small'
-                    ? `${0.5 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`
-                    : `${0.75 - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`,
-                },
-              }),
-            }),
+            sx: buildFieldInputSx({ size, condensed, multiline, hasLabel: !!label, borderless, success, error: effectiveError }),
             startAdornment: startAdornment ? (
               <InputAdornment position="start">{startAdornment}</InputAdornment>
             ) : undefined,
@@ -189,11 +232,6 @@ export function TextField({
           },
         }}
       />
-      {effectiveError && effectiveErrorMessage && (
-        <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
-          {effectiveErrorMessage}
-        </FormHelperText>
-      )}
-    </Box>
-  );
+    );
+  }
 }

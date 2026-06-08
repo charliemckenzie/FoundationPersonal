@@ -111,6 +111,8 @@ export type { TextAreaProps, TextAreaSize } from './components/TextArea'
 export { TextButton } from './components/TextButton'
 export type { TextButtonProps, TextButtonSize, TextButtonColor } from './components/TextButton'
 export { TextField } from './components/TextField'
+export { InputSelectContainer } from './components/InputSelect'
+export type { SelectAdornmentConfig, SelectAdornmentOption, InputSelectContainerProps } from './components/InputSelect'
 export { ToggleButtonGroup, ToggleButtonGroup as ToggleButton } from './components/ToggleButton'
 export type {
   ToggleButtonGroupProps,
