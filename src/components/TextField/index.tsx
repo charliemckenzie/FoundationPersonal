@@ -158,7 +158,8 @@ export function TextField({
 
   const errorId = effectiveError && effectiveErrorMessage ? `${fieldId}-error` : undefined;
   const helperId = helperText ? `${fieldId}-helper-text` : undefined;
-  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+  const selectDescId = selectAdornment ? `${fieldId}-select` : undefined;
+  const describedBy = [selectDescId, errorId, helperId].filter(Boolean).join(' ') || undefined;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.5, ...(fullWidth && { width: '100%' }) }}>

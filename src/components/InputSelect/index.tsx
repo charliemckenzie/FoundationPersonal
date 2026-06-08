@@ -50,11 +50,15 @@ export function InputSelectContainer({
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [buttonFocused, setButtonFocused] = useState(false);
   const [internalValue, setInternalValue] = useState(selectAdornment.defaultValue ?? '');
 
   const currentValue = selectAdornment.value ?? internalValue;
   const selectedOption = selectAdornment.options.find((o) => o.value === currentValue);
   const displayText = selectedOption?.label ?? selectAdornment.placeholder ?? '';
+
+  // Container ring shows when either the input or the button is focused
+  const containerFocused = focused || buttonFocused;
 
   function handleOpen() {
     if (disabled) return;
@@ -89,11 +93,11 @@ export function InputSelectContainer({
           backgroundColor: disabled
             ? `color-mix(in srgb, ${t.palette.background.default} 60%, transparent)`
             : t.palette.background.paper,
-          ...(focused && !error && {
+          ...(containerFocused && !error && {
             outline: `2px solid ${t.palette.border.focus}`,
             outlineOffset: '2px',
           }),
-          ...(focused && error && {
+          ...(containerFocused && error && {
             outline: `2px solid ${t.palette.border.focus}`,
             outlineOffset: '2px',
             borderColor: t.palette.error.main,
@@ -119,7 +123,10 @@ export function InputSelectContainer({
           component="button"
           type="button"
           ref={anchorRef}
+          tabIndex={0}
           onClick={handleOpen}
+          onFocus={() => setButtonFocused(true)}
+          onBlur={() => setButtonFocused(false)}
           disabled={disabled}
           aria-haspopup="listbox"
           aria-expanded={menuOpen || drawerOpen}
@@ -131,7 +138,7 @@ export function InputSelectContainer({
             gap: 0.75,
             px: 1.5,
             border: 'none',
-            backgroundColor: 'transparent',
+            backgroundColor: buttonFocused ? t.palette.action.selected : 'transparent',
             cursor: disabled ? 'default' : 'pointer',
             flexShrink: 0,
             minWidth: 'fit-content',
@@ -143,7 +150,7 @@ export function InputSelectContainer({
             },
             '&:focus-visible': {
               outline: 'none',
-              backgroundColor: t.palette.action.hover,
+              backgroundColor: t.palette.action.selected,
             },
           })}
         >

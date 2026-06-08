@@ -6,7 +6,7 @@ import { PercentageField } from '../../components/PercentageField';
 import Box from '@mui/material/Box';
 
 const meta: Meta = {
-  title: 'Form Components / TextInput / Input with Select',
+  title: 'Form Components / TextInput / InputSelect',
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
