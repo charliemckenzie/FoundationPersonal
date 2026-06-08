@@ -42,13 +42,9 @@ export function StepFunding({
 }: StepFundingProps) {
   return (
     <Stack spacing={4}>
-      <Typography component="h1" variant="h2">
-        Purchase price and funding
-      </Typography>
-
       <Stack spacing={2}>
         <div>
-          <Typography variant="h4" sx={{ mb: 1 }}>
+          <Typography variant="h5" sx={{ mb: 0.5 }}>
             Your purchase details
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -62,12 +58,12 @@ export function StepFunding({
           borderColor: 'border.default',
           borderRadius: (t) => `${t.shape.md}px`,
           backgroundColor: 'background.paper',
-          p: 4,
+          p: 3,
         }}
       >
         <Stack spacing={2}>
           <div>
-            <Typography variant="h5" sx={{ mb: 1 }}>Purchase and transfer from</Typography>
+            <Typography variant="h6" sx={{ mb: 1 }}>Purchase and transfer from</Typography>
             <Typography variant="small" sx={{ color: 'text.primary' }}>
               All balances accurate as of 12 June 2025.
             </Typography>

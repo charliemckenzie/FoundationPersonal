@@ -31,6 +31,8 @@ const DescriptionListContext = React.createContext<DescriptionListContextValue>(
 export interface DescriptionListProps {
   /** Optional heading displayed above the rows. */
   title?: string;
+  /** Typography variant for the title. Defaults to `h5`. */
+  titleVariant?: 'h4' | 'h5' | 'h6';
   /** Alignment of the value column for all rows. Defaults to `left`. */
   valueAlign?: ValueAlign;
   /** Row padding density. Defaults to `default` (12px). */
@@ -152,7 +154,7 @@ function DescriptionListItem({ label, description, value, valueDescription, acti
 
 DescriptionListItem.displayName = 'DescriptionListItem';
 
-function DescriptionList({ title, valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, loading = false, loadingRowCount = 3, children, sx }: DescriptionListProps) {
+function DescriptionList({ title, titleVariant = 'h5', valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, loading = false, loadingRowCount = 3, children, sx }: DescriptionListProps) {
   const contextValue = React.useMemo<DescriptionListContextValue>(
     () => ({ valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive }),
     [valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive],
@@ -187,7 +189,7 @@ function DescriptionList({ title, valueAlign = 'left', density = 'default', labe
         ]}
       >
         {title && (
-          <Typography variant="h5" sx={{ fontWeight: 700, mb: 2 }}>
+          <Typography variant={titleVariant} sx={{ fontWeight: 700, mb: 2 }}>
             {title}
           </Typography>
         )}

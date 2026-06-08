@@ -43,16 +43,6 @@ export function StepIntro({
 
   return (
     <Stack spacing={4}>
-      <Stack spacing={1}>
-        <Typography component="h1" variant="h2">
-          Open a Lifetime Pension account
-        </Typography>
-        <Typography variant="body" sx={{ color: 'text.primary' }}>
-          A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
-          It combines your contribution with others in a shared investment pool.
-        </Typography>
-      </Stack>
-
       <Stack spacing={2}>
         <Box
           sx={{
@@ -60,7 +50,7 @@ export function StepIntro({
           borderColor: 'border.default',
           borderRadius: (t) => `${t.shape.md}px`,
           backgroundColor: 'background.paper',
-          p: 4,
+          p: 3,
         }}
       >
         <Stack spacing={2}>
@@ -131,7 +121,7 @@ export function StepIntro({
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Icon icon="circle-check" size="2xl" color="info" />
             </Box>
-            <Typography variant="body" sx={{ fontWeight: 700, color: 'secondary.main' }}>
+            <Typography variant="h6" sx={{ color: 'secondary.main' }}>
               $10,000 minimum purchase amount
             </Typography>
           </Box>
