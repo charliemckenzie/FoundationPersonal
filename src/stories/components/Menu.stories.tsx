@@ -105,7 +105,7 @@ export const Default: Story = {
       { label: 'Share', icon: showIcons ? <Icon icon="share" size="md" /> : undefined, onClick: () => {} },
     ];
     return (
-      <Menu trigger={<Button label="Open menu" variant="soft" />} items={items} />
+      <Menu trigger={<Button label="Open menu" variant="outlined" />} items={items} />
     );
   },
 };
@@ -116,7 +116,7 @@ export const Default: Story = {
 export const WithIcons: Story = {
   render: () => (
     <Menu
-      trigger={<Button label="Actions" variant="soft" />}
+      trigger={<Button label="Actions" variant="outlined" />}
       items={ICON_ITEMS}
     />
   ),
@@ -128,7 +128,7 @@ export const WithIcons: Story = {
 export const WithDividers: Story = {
   render: () => (
     <Menu
-      trigger={<Button label="More actions" variant="soft" />}
+      trigger={<Button label="More actions" variant="outlined" />}
       items={DIVIDED_ITEMS}
     />
   ),
@@ -140,7 +140,7 @@ export const WithDividers: Story = {
 export const WithDisabledItem: Story = {
   render: () => (
     <Menu
-      trigger={<Button label="Options" variant="soft" />}
+      trigger={<Button label="Options" variant="outlined" />}
       items={WITH_DISABLED}
     />
   ),
@@ -152,7 +152,7 @@ export const WithDisabledItem: Story = {
 export const WithIconButtonTrigger: Story = {
   render: () => (
     <Menu
-      trigger={<IconButton icon="ellipsis" label="More options" variant="soft" />}
+      trigger={<IconButton icon="ellipsis" label="More options" variant="outlined" />}
       items={BASIC_ITEMS}
     />
   ),
@@ -178,7 +178,7 @@ const LONG_LIST_ITEMS: MenuItemConfig[] = [
 export const LongList: Story = {
   render: () => (
     <Menu
-      trigger={<Button label="Account" variant="soft" />}
+      trigger={<Button label="Account" variant="outlined" />}
       items={LONG_LIST_ITEMS}
     />
   ),
@@ -196,7 +196,7 @@ export const WithChevron: Story = {
           trigger={
             <Button
               label="Options"
-              variant="soft"
+              variant="outlined"
               endIcon="chevron-down"
               sx={{
                 '& .MuiButton-endIcon': {

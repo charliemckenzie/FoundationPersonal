@@ -61,7 +61,7 @@ export function MemberHeader({
       <UserChip user={user} />
       <Box sx={{ flex: 1 }} />
       <ThemeSwitcher mode={mode} onChange={onModeChange} />
-      <Button label={logoutLabel} variant="soft" size="small" onClick={onLogout} />
+      <Button label={logoutLabel} variant="outlined" size="small" onClick={onLogout} />
     </Box>
   );
 }

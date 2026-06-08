@@ -207,7 +207,7 @@ export function FileUpload({
             </Typography>
           )}
         </Box>
-        <Button label="Browse files" variant="soft" size="small" disabled={disabled} />
+        <Button label="Browse files" variant="outlined" size="small" disabled={disabled} />
         <Box
           component="input"
           ref={inputRef as React.Ref<HTMLInputElement>}

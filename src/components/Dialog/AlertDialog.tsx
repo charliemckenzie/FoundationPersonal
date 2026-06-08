@@ -82,15 +82,15 @@ export function AlertDialog({
             <Button label={confirmLabel} variant="contained" color="primary" fullWidth loading={loading} onClick={onConfirm} />
           )}
           {extraActions?.map((a) => (
-            <Button key={a.label} label={a.label} variant="soft" color="primary" fullWidth onClick={a.onClick} />
+            <Button key={a.label} label={a.label} variant="outlined" color="primary" fullWidth onClick={a.onClick} />
           ))}
-          <Button label={cancelLabel} variant="soft" color="primary" fullWidth onClick={onClose} />
+          <Button label={cancelLabel} variant="outlined" color="primary" fullWidth onClick={onClose} />
         </Box>
       ) : (
         <Box sx={{ display: 'flex', gap: 1.5, px: 2.5, pb: 2.5 }}>
           {onConfirm ? (
             <>
-              <Button label={cancelLabel} variant="soft" color="primary" fullWidth onClick={onClose} />
+              <Button label={cancelLabel} variant="outlined" color="primary" fullWidth onClick={onClose} />
               <Button label={confirmLabel} variant="contained" color="primary" fullWidth loading={loading} onClick={onConfirm} />
             </>
           ) : (

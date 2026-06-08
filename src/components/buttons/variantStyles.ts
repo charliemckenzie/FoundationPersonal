@@ -3,7 +3,7 @@ import type { Theme } from '@mui/material/styles';
 import { TINT } from '../../app/themes/semantic';
 
 export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'white';
-export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost' | 'soft';
+export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost';
 
 /** Resolved color key — 'white' is always pre-mapped to 'primary' before calling the variant helpers. */
 export type ButtonColorKeyResolved = Exclude<ButtonColorKey, 'white'>;
@@ -36,29 +36,6 @@ const m = (t: Theme): Mode => t.palette.mode as Mode;
 // contrast against the darkened fills on paper and elevated surfaces.
 const interactiveColor = (theme: Theme, color: ButtonColorKeyResolved) =>
   theme.palette.mode === 'light' ? theme.palette[color].dark : theme.palette[color].light;
-
-export function buildSoftStyles(color: ButtonColorKeyResolved) {
-  return {
-    backgroundColor: (theme: Theme) =>
-      theme.palette[color].softMain ?? alpha(theme.palette[color].main, TINT.main[m(theme)]),
-    color: (theme: Theme) => theme.palette[color].main,
-    boxShadow: 'none',
-    '&:hover': {
-      backgroundColor: (theme: Theme) =>
-        theme.palette[color].softDark ?? alpha(theme.palette[color].main, TINT.dark[m(theme)]),
-      color: (theme: Theme) => interactiveColor(theme, color),
-    },
-    '&:active': {
-      backgroundColor: (theme: Theme) =>
-        theme.palette[color].softDeeper ?? alpha(theme.palette[color].main, TINT.deeper[m(theme)]),
-      color: (theme: Theme) => interactiveColor(theme, color),
-    },
-    '&.Mui-disabled': {
-      backgroundColor: (theme: Theme) => theme.palette.action.disabledBackground,
-      color: (theme: Theme) => theme.palette.action.disabled,
-    },
-  };
-}
 
 export function buildGhostStyles(color: ButtonColorKeyResolved) {
   return {
@@ -249,26 +226,6 @@ export function buildReversedStyles(variant: ButtonVariantKey, color: ButtonColo
             : alpha(theme.palette.common.white, 0.18),
       },
       '&.Mui-disabled': { color: (theme: Theme) => alpha(theme.palette.common.white, 0.60) },
-    }),
-    ...(variant === 'soft' && {
-      backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
-      color: (theme: Theme) => theme.palette.common.white,
-      '&:hover': {
-        backgroundColor: (theme: Theme) =>
-          theme.palette.mode === 'light'
-            ? alpha(theme.palette.common.black, TINT.dark.light)
-            : alpha(theme.palette.common.white, 0.25),
-      },
-      '&:active': {
-        backgroundColor: (theme: Theme) =>
-          theme.palette.mode === 'light'
-            ? alpha(theme.palette.common.black, 0.25)
-            : alpha(theme.palette.common.white, 0.30),
-      },
-      '&.Mui-disabled': {
-        backgroundColor: (theme: Theme) => alpha(theme.palette.common.white, 0.15),
-        color: (theme: Theme) => alpha(theme.palette.common.white, 0.60),
-      },
     }),
   };
 }

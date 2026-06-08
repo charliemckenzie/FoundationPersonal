@@ -32,7 +32,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Autocomplete` | Searchable dropdown with grouping and custom option rendering |
 | `Badge` | Count or dot overlay on a child element (e.g. notification bubble on an icon) |
 | `Breadcrumb` | Navigation trail showing current location in the hierarchy |
-| `Button` | Primary action button — contained, soft, ghost, outlined |
+| `Button` | Primary action button — contained, outlined, ghost |
 | `Calendar` | Date picker calendar view; use DatePicker for form inputs |
 | `CloseButton` | Dismiss / close icon button — standardised X button used by Alert, Dialog, Drawer, and Modal |
 | `Card` | Closed/open operating model with top section modes (image, hero icon, none), body content, and bottom actions |
@@ -266,12 +266,12 @@ Key props: `step`, `direction?` (`'forward' | 'backward'` — optional override 
 ### Buttons & Actions
 
 **Button** — `src/components/Button/`  
-The primary action button. Four variants: `contained`, `soft`, `ghost`, `outlined`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
+The primary action button. Three variants: `contained`, `outlined`, `ghost`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
 Key props: `label`, `variant`, `size`, `color`, `loading`, `startIcon`, `endIcon`, `reversed`
 
 
 **IconButton** — `src/components/IconButton/`  
-Icon-only button with optional tooltip. Same variants as Button.  
+Icon-only button with optional tooltip. Same variants as Button (`contained`, `outlined`, `ghost`).  
 Key props: `icon`, `label` (accessible name), `variant`, `size`, `color`, `loading`, `showTooltip`
 
 **TextButton** — `src/components/TextButton/`  

@@ -7,7 +7,6 @@ import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
 import {
   buildContainedStyles,
-  buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
@@ -73,7 +72,6 @@ export function IconButton({
 }: IconButtonProps) {
   const variantStyles =
     variant === 'contained' ? buildContainedStyles('primary')
-    : variant === 'soft'    ? buildSoftStyles('primary')
     : variant === 'ghost'   ? buildGhostStyles('primary')
     : buildOutlinedStyles('primary');
 

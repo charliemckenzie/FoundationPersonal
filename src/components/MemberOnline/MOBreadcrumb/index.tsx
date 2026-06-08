@@ -27,7 +27,7 @@ export function MOBreadcrumb({ items, onBack }: MOBreadcrumbProps) {
           <IconButton
             icon="chevron-left"
             label="Go back"
-            variant="soft"
+            variant="outlined"
             size="small"
             color="primary"
             showTooltip={false}

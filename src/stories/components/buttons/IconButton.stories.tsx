@@ -8,7 +8,7 @@ const meta: Meta<typeof IconButton> = {
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
   argTypes: {
-    variant: { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
+    variant: { control: 'select', options: ['contained', 'outlined', 'ghost'] },
     size: { control: 'select', options: ['small', 'medium', 'large'] },
     iconStyle: { control: 'select', options: ['solid', 'regular', 'light', 'thin', 'duotone', 'sharp'] },
     condensed: { control: 'boolean', description: 'Reduces width and height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
@@ -33,7 +33,6 @@ export const Variants: Story = {
       <IconButton icon="pen" label="Edit (contained)" variant="contained" />
       <IconButton icon="pen" label="Edit (outlined)" variant="outlined" />
       <IconButton icon="pen" label="Edit (ghost)" variant="ghost" />
-      <IconButton icon="pen" label="Edit (soft)" variant="soft" />
     </Box>
   ),
 };
@@ -81,11 +80,11 @@ export const Sizes: Story = {
 export const CommonlyUsedIcons: Story = {
   render: () => (
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-      <IconButton icon="circle-info" label="Information" variant="soft" />
-      <IconButton icon="chevron-left" label="Previous" variant="soft" />
-      <IconButton icon="chevron-right" label="Next" variant="soft" />
-      <IconButton icon="pen" label="Edit" variant="soft" />
-      <IconButton icon="trash" label="Delete" variant="soft" />
+      <IconButton icon="circle-info" label="Information" variant="outlined" />
+      <IconButton icon="chevron-left" label="Previous" variant="outlined" />
+      <IconButton icon="chevron-right" label="Next" variant="outlined" />
+      <IconButton icon="pen" label="Edit" variant="outlined" />
+      <IconButton icon="trash" label="Delete" variant="outlined" />
     </Box>
   ),
 };
@@ -100,7 +99,6 @@ export const Loading: Story = {
       <IconButton icon="pen" label="Contained" variant="contained" loading />
       <IconButton icon="pen" label="Outlined" variant="outlined" loading />
       <IconButton icon="pen" label="Ghost" variant="ghost" loading />
-      <IconButton icon="pen" label="Soft" variant="soft" loading />
     </Box>
   ),
 };
@@ -120,7 +118,6 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Variants</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <IconButton icon="pen" label="Contained" variant="contained" reversed />
-          <IconButton icon="magnifying-glass" label="Soft" variant="soft" reversed />
           <IconButton icon="circle-info" label="Outlined" variant="outlined" reversed />
           <IconButton icon="trash" label="Ghost" variant="ghost" reversed />
         </Box>
@@ -137,7 +134,6 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Disabled</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <IconButton icon="pen" label="Contained" variant="contained" reversed disabled />
-          <IconButton icon="magnifying-glass" label="Soft" variant="soft" reversed disabled />
           <IconButton icon="circle-info" label="Outlined" variant="outlined" reversed disabled />
           <IconButton icon="trash" label="Ghost" variant="ghost" reversed disabled />
         </Box>
@@ -146,7 +142,6 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Loading</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <IconButton icon="pen" label="Contained" variant="contained" reversed loading />
-          <IconButton icon="magnifying-glass" label="Soft" variant="soft" reversed loading />
           <IconButton icon="circle-info" label="Outlined" variant="outlined" reversed loading />
           <IconButton icon="trash" label="Ghost" variant="ghost" reversed loading />
         </Box>

@@ -1,0 +1,314 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import Box from '@mui/material/Box';
+import { Alert } from '../../../../components/Alert';
+
+<Meta title="Components / Buttons / WCAG Conformance Reports / Button - WCAG Conformance Report" />
+
+# WCAG Conformance Report
+
+Generate a report like this for another component by prompting `/conformanceReport` followed by the component name. The conformance workflow will run the review, produce findings, and document the report in Storybook.
+
+This page is a component-level WCAG evidence report for `Button`.
+
+| Field | Value |
+|---|---|
+| Component | Button |
+| Storybook path | Components / Buttons / Button |
+| Standard | WCAG 2.2 AA (component-relevant criteria) |
+| Last reviewed | 08 / 06 / 2026 |
+| Reviewer | Flanders workflow (`/conformanceReport`) |
+| Review status | <span style={{ color: 'green' }}>✅ Pass - no confirmed failures</span> |
+| Scope note | Public Button review scope is `primary` plus `reversed` only |
+
+## Scope
+
+- Variants: `contained`, `outlined`, `ghost`
+- Sizes: `small`, `medium`, `large`, including `condensed`
+- States: default, hover, focus-visible, active, disabled, loading, reversed-on-brand-background
+- Content patterns: text-only, start icon, end icon, meaningful icon labels
+
+## Findings
+
+<Alert severity="success" title="Status: No confirmed findings" message="No confirmed accessibility issues are currently open for the documented Button scope. Manual assistive technology checks are still pending." />
+
+| Severity | WCAG SC | Evidence type | Source | Issue | Required action |
+|---|---|---|---|---|---|
+| <span style={{ color: 'green' }}>✅ No findings</span> | — | — | — | No confirmed issues are currently open for the documented Button scope. | Continue with pending manual screen reader and keyboard checks for full sign-off. |
+
+## Standard conformance test set
+
+The evidence model for this report is assertion-based: each test records acceptance criteria and observed outcomes.
+
+| Test ID | WCAG SC | Check | Acceptance criteria | Observed result | Status | Evidence |
+|---|---|---|---|---|---|---|
+| ST-SEMANTICS-01 | <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a>, <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Semantic role/state and accessible naming path | Control exposes native button semantics and supports accessible naming for meaningful icons | Native `<button>` semantics are used and icon labeling hooks (`startIconLabel`, `endIconLabel`) are available | <span style={{ color: 'green' }}>✅ Pass</span> | Component implementation and notes in this report |
+| ST-KEYBOARD-01 | <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a>, <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Keyboard activation and busy/disabled interaction model | Loading state prevents activation and preserves state semantics | Loading state applies disabled interaction behavior while preserving `aria-busy` intent in component behavior | <span style={{ color: 'green' }}>✅ Pass</span> | Component implementation review and conformance matrix notes |
+| ST-FOCUS-01 | <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Focus-visible indicator presence and contrast | Focus-visible style exists and measured contrast is >= 3:1 | Focus-visible style exists in shared variant styles; measured minimum focus-visible contrast in scope is 5.18:1 | <span style={{ color: 'green' }}>✅ Pass</span> | Shared styles and measured contrast summary in this report |
+| ST-SIZE-01 | <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | Target size minimum | Interactive target is at least 24 by 24 CSS px equivalent | Minimum button height is 2.5rem (40px equivalent at default root size) | <span style={{ color: 'green' }}>✅ Pass</span> | Button sizing tokens and component implementation |
+| ST-CONTRAST-01 | <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a>, <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Contrast matrix across in-scope variants/surfaces/modes/states | No measured value falls below threshold (text >= 4.5:1, non-text >= 3:1, focus >= 3:1) | 96 combinations measured in documented scope with zero threshold failures | <span style={{ color: 'green' }}>✅ Pass</span> | Contrast summary and matrix in this report |
+| ST-SCREENREADER-01 | <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Screen reader announcement/state behavior | NVDA/VoiceOver checks confirm expected naming and state announcements | Not executed in this review pass | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Pending manual assistive technology verification |
+
+## Evidence records (audit basis)
+
+This section states the direct evidence used for each standard test result.
+
+| Test ID | Evidence source | Observed evidence | Basis for status |
+|---|---|---|---|
+| ST-SEMANTICS-01 | Component source review (`src/components/Button/index.tsx`) | Native button element and icon-label props are present | <span style={{ color: 'green' }}>✅ Pass</span> because semantic role/state and naming path are explicitly implemented |
+| ST-KEYBOARD-01 | Component source review (`src/components/Button/index.tsx`) | Loading state applies disabled interaction behavior | <span style={{ color: 'green' }}>✅ Pass</span> because activation is blocked while busy state semantics are retained |
+| ST-FOCUS-01 | Shared styles and measured contrast outcomes (`src/components/buttons/variantStyles.ts`, contrast summary below) | Focus-visible styles exist and minimum measured focus-visible contrast is 5.18:1 | <span style={{ color: 'green' }}>✅ Pass</span> because focus indicator is present and exceeds 3:1 threshold |
+| ST-SIZE-01 | Button size definitions in implementation | Minimum button height is 2.5rem (40px equivalent at default root size) | <span style={{ color: 'green' }}>✅ Pass</span> because target exceeds 24 by 24 minimum |
+| ST-CONTRAST-01 | Measured matrix run (`npx tsx .\scripts\button-contrast-review.ts --colors=primary`) and published table below | 96 combinations measured; zero text/non-text/focus threshold failures | <span style={{ color: 'green' }}>✅ Pass</span> because all measured values satisfy thresholds |
+| ST-SCREENREADER-01 | Manual assistive technology check | Not executed in this review pass | <span style={{ color: 'orange' }}>🟡 Not tested</span> because no NVDA/VoiceOver evidence was captured |
+
+## Pending verification (not yet tested)
+
+- Screen reader announcement quality for loading transitions (`aria-busy` and spinner-only mode) in NVDA and VoiceOver.
+- Manual keyboard walkthrough in a running browser session for all variants/states.
+
+These are verification tasks, not confirmed issues.
+
+## Contrast summary
+
+### Supported scope summary
+
+| Scope slice | Result |
+|---|---|
+| `primary` on `default`, `paper`, and `elevated` | Included in review |
+| `primary` with `reversed` on `brandSecondary` | Included in review |
+| `secondary`, `error`, `warning`, `info`, `success` | Excluded from this public component review. These are not documented Button options. |
+
+### Contrast Matrix summary
+
+This table documents the default `primary` button across all required surfaces, modes, and reversed use on `brandSecondary`.
+Measured outcomes are summary minima across the component states listed below.
+
+WCAG reference thresholds for this table:
+
+- Measured text contrast must be at least `4.5:1`
+- Measured non-text contrast must be at least `3:1`
+- Measured focus-visible contrast must be at least `3:1`
+
+### State coverage results
+
+| State | Items reviewed | Passes | Issues | Outcome |
+|---|---|---|---|---|
+| Resting | 24 | 24 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Hover | 24 | 24 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Active | 24 | 24 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Focus-visible | 24 | 24 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+<Box sx={(t) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: t.spacing(1),
+  my: t.spacing(2),
+  '& details': {
+    border: `1px solid ${t.palette.divider}`,
+    borderRadius: `${t.shape.borderRadius * 2}px`,
+    overflow: 'hidden',
+    backgroundColor: t.palette.background.paper,
+  },
+  '& summary': {
+    cursor: 'pointer',
+    listStyle: 'none',
+    padding: `${t.spacing(2)} ${t.spacing(3)}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontWeight: 700,
+    fontSize: '0.875rem',
+    color: t.palette.text.primary,
+    userSelect: 'none',
+    transition: 'background-color 0.15s ease',
+    '&:hover': { backgroundColor: t.palette.action.hover },
+    '&::-webkit-details-marker': { display: 'none' },
+    '&::marker': { content: 'none' },
+    '&::after': {
+      content: '"+"',
+      fontSize: '1.125rem',
+      fontWeight: 300,
+      flexShrink: 0,
+      marginLeft: t.spacing(2),
+      lineHeight: 1,
+    },
+  },
+  '& details[open] > summary': {
+    borderBottom: `1px solid ${t.palette.divider}`,
+    backgroundColor: t.palette.action.selected,
+  },
+  '& details[open] > summary:hover': {
+    backgroundColor: t.palette.action.hover,
+  },
+  '& details[open] > summary::after': {
+    content: '"\u2212"',
+  },
+  '& details > :not(summary)': {
+    padding: `${t.spacing(2)} ${t.spacing(3)}`,
+    overflowX: 'auto',
+    margin: 0,
+  },
+})}>
+
+<details>
+<summary><strong>Resting state</strong> - 24 reviewed, 24 pass, 0 issues</summary>
+
+| Mode | Variant | Surface | Measured text contrast | Measured non-text contrast | Outcome |
+|---|---|---|---|---|---|
+| light | contained reversed | brandSecondary | 5.80 | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | default | 5.80 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | elevated | 5.80 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | paper | 5.80 | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost reversed | brandSecondary | 12.21 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | default | 5.32 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | elevated | 5.18 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | paper | 5.80 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined reversed | brandSecondary | 12.21 | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | default | 5.32 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | elevated | 5.18 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | paper | 5.80 | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained reversed | brandSecondary | 19.90 | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | default | 8.37 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | elevated | 8.37 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | paper | 8.37 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost reversed | brandSecondary | 13.97 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | default | 7.88 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | elevated | 5.87 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | paper | 6.93 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined reversed | brandSecondary | 13.97 | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | default | 7.88 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | elevated | 5.87 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | paper | 6.93 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+</details>
+
+<details>
+<summary><strong>Hover state</strong> - 24 reviewed, 24 pass, 0 issues</summary>
+
+| Mode | Variant | Surface | Measured text contrast | Measured non-text contrast | Outcome |
+|---|---|---|---|---|---|
+| light | contained reversed | brandSecondary | 7.11 | 9.85 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | default | 8.82 | 8.09 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | elevated | 8.82 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | paper | 8.82 | 8.82 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost reversed | brandSecondary | 13.73 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | default | 6.41 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | elevated | 6.28 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | paper | 6.97 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined reversed | brandSecondary | 13.73 | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | default | 6.41 | 8.09 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | elevated | 6.28 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | paper | 6.97 | 8.82 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained reversed | brandSecondary | 15.94 | 11.19 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | default | 6.47 | 6.09 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | elevated | 6.47 | 4.54 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | paper | 6.47 | 5.36 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost reversed | brandSecondary | 9.59 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | default | 8.58 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | elevated | 6.31 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | paper | 7.38 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined reversed | brandSecondary | 9.59 | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | default | 8.58 | 12.90 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | elevated | 6.31 | 9.61 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | paper | 7.38 | 11.35 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+</details>
+
+<details>
+<summary><strong>Active state</strong> - 24 reviewed, 24 pass, 0 issues</summary>
+
+| Mode | Variant | Surface | Measured text contrast | Measured non-text contrast | Outcome |
+|---|---|---|---|---|---|
+| light | contained reversed | brandSecondary | 9.81 | 8.44 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | default | 14.18 | 13.01 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | elevated | 14.18 | 12.67 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | paper | 14.18 | 14.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost reversed | brandSecondary | 14.72 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | default | 5.92 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | elevated | 5.81 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | paper | 6.40 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined reversed | brandSecondary | 14.72 | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | default | 5.92 | 8.09 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | elevated | 5.81 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | paper | 6.40 | 8.82 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained reversed | brandSecondary | 13.56 | 9.51 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | default | 5.36 | 5.05 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | elevated | 5.36 | 3.76 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | paper | 5.36 | 4.44 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost reversed | brandSecondary | 7.81 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | default | 7.47 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | elevated | 5.58 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | paper | 6.50 | N/A | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined reversed | brandSecondary | 7.81 | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | default | 7.47 | 12.90 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | elevated | 5.58 | 9.61 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | paper | 6.50 | 11.35 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+</details>
+
+<details>
+<summary><strong>Focus-visible state</strong> - 24 reviewed, 24 pass, 0 issues</summary>
+
+Measured value is focus ring (`border.focus` token) contrast against the adjacent surface. The focus ring colour is the same across all variants, so values are surface-dependent only.
+
+| Mode | Variant | Surface | Measured focus-visible contrast | Outcome |
+|---|---|---|---|---|
+| light | contained reversed | brandSecondary | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | default | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | elevated | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | contained | paper | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost reversed | brandSecondary | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | default | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | elevated | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | ghost | paper | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined reversed | brandSecondary | 12.21 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | default | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | elevated | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | outlined | paper | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained reversed | brandSecondary | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | default | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | elevated | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | contained | paper | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost reversed | brandSecondary | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | default | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | elevated | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | ghost | paper | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined reversed | brandSecondary | 13.97 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | default | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | elevated | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | outlined | paper | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+</details>
+
+</Box>
+
+## Conformance matrix (component scope)
+
+This matrix summarizes the final criterion-level conformance outcome for this component, based on the evidence recorded in the standard test set, evidence records, and measured contrast results in this report.
+
+| WCAG SC | Criterion | Status | Evidence / Notes |
+|---|---|---|---|
+| <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | Info and Relationships | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Native `<button>` semantics are used and icon labeling hooks are available. |
+| <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | Contrast (Minimum) | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | The documented public scope (`primary` plus `reversed`) passed the measured text contrast matrix. |
+| <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | Non-text Contrast | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | The documented public scope passed measured non-text contrast checks in this review. |
+| <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a> | Keyboard | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Loading state now applies disabled semantics, preventing pointer and keyboard activation while busy. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-order" target="_blank" rel="noopener noreferrer">2.4.3</a> | Focus Order | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires manual keyboard walkthrough in running Storybook. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a> | Focus Visible | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | `Mui-focusVisible` outline styles are defined in shared variant styles. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-not-obscured-minimum" target="_blank" rel="noopener noreferrer">2.4.11</a> | Focus Not Obscured (Minimum) | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires runtime checks in composed page contexts with sticky regions. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Focus Appearance | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | The documented public scope passed measured focus contrast checks in this review. |
+| <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | Target Size (Minimum) | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Minimum button height is 2.5rem (40px equivalent at default root size), above 24px minimum. |
+| <a href="https://www.w3.org/TR/WCAG22/#on-input" target="_blank" rel="noopener noreferrer">3.2.2</a> | On Input | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires interaction testing in composed flows. |
+| <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Name, Role, Value | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Loading semantics now remain consistent with disabled interaction behavior while preserving `aria-busy`. |
+
+## Known limitations and usage constraints
+
+- Do not use `reversed` on light or neutral surfaces; colour assumptions are inverted and can fail contrast.
+- When an icon adds meaning not present in visible text (for example, opens in a new tab), provide `startIconLabel` or `endIconLabel`.
+- Disabled buttons should include nearby explanatory text; do not rely on disabled state alone for guidance.
+- Unsupported semantic colors are out of scope for this public Button report. If they become documented options, rerun the conformance review for them.
+
+## Remediation and ownership
+
+- Owner: Design System team
+- Next review trigger: any token or theme change affecting button colours, focus ring, or sizing
+- Status tracking: update this page and link issues in the component change log when gaps are found

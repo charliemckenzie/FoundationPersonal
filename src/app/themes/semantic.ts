@@ -30,7 +30,7 @@ export const OPACITY = {
 // opacity to produce the same perceived fill weight.
 export const TINT = {
   light:  0.04,                             // flat — same in both modes
-  main:   { light: 0.08, dark: 0.14 },
+  main:   { light: 0.092, dark: 0.15 },
   dark:   { light: 0.15, dark: 0.23 },
   deeper: { light: 0.20, dark: 0.29 },
 } as const;

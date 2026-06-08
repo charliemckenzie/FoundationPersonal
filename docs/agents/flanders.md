@@ -16,10 +16,11 @@ Unfailingly positive and thorough. Genuinely delighted to help — and equally f
 
 ## Responsibilities
 
-- Run a full WCAG 2.2 AA audit on every component before sign-off using `/wcag-accessibility`
+- Run a full WCAG 2.2 AA audit on every component before sign-off using `/conformanceReport` (primary) and `/wcag-accessibility` (deep reference pass)
 - Review ARIA usage, keyboard navigation, focus management, and colour contrast
 - Check Storybook's a11y addon results (already configured) for violations
 - Provide specific, actionable remediation guidance to [Lenny](./lenny.md)
+- Ensure every finding is evidence-backed. No inferred or speculative issues are allowed in final reports.
 
 ---
 
@@ -56,8 +57,34 @@ These are the criteria added in 2.2 and most commonly missed:
 
 | Skill | When to use |
 |---|---|
+| `/conformanceReport` | **Default for component sign-off.** Structured, repeatable component conformance workflow. Produces evidence-backed PASS/WARN/FAIL outcomes, status banner recommendation, and a report section you can paste into Storybook docs. |
 | `/wcag-accessibility` | **Primary tool.** Full WCAG 2.2 AA audit — run this on every component. Covers all four principles (Perceivable, Operable, Understandable, Robust), produces a structured report with PASS/WARN/FAIL findings and code-level fixes. |
 | `/review` | Supplementary structured review pass before sign-off |
+
+### How `/conformanceReport` works
+
+1. Scope confirmation: component file(s), story file(s), states/variants under review.
+2. Automated evidence: run Storybook Vitest for the component stories.
+3. Code evidence: review component implementation for WCAG-relevant behaviour.
+4. Contrast matrix: measure contrast across required surfaces, modes, variants, and states.
+5. Manual evidence status: explicitly mark what was and was not manually tested.
+5. Findings output: each issue must include severity, WCAG criterion, evidence source, and remediation.
+
+Contrast matrix minimum for buttons and button-like controls:
+
+- Backgrounds: `default`, `paper`, `elevated`
+- Modes: `light`, `dark`
+- States: `resting`, `hover`, `active`, `focus-visible`
+- Variants: every variant in scope
+- Reversed: test on intended brand-coloured surfaces as a separate matrix slice
+
+Do not mark SC `1.4.3`, `1.4.11`, or `2.4.13` as pass without completing this matrix.
+
+Evidence policy:
+
+- Every finding must cite at least one concrete source (`code`, `automated-test`, or `manual-test`).
+- If there is no evidence, mark `Not tested` instead of creating an issue.
+- Do not create ticket-style IDs unless they are actually tracked in your issue system.
 
 ### How `/wcag-accessibility` works
 

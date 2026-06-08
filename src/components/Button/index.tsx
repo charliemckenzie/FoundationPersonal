@@ -6,7 +6,6 @@ import React from 'react';
 import type { SxProps, Theme } from '@mui/material/styles';
 import {
   buildContainedStyles,
-  buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
@@ -80,7 +79,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   sx: sxProp,
   ...rest
 }, ref) {
-  const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
+  const isDisabled = disabled || loading;
+  const muiVariant = variant === 'ghost' ? 'text' : variant;
   const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   const showSpinnerOnly = loading && hideLoadingText;
   const hasStartIcon = (!loading && !!startIcon) || (loading && !hideLoadingText);
@@ -90,7 +90,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   const variantStyles =
     color === 'white' && variant === 'contained' ? buildWhiteStyles()
     : variant === 'contained' ? buildContainedStyles(resolvedColor)
-    : variant === 'soft'      ? buildSoftStyles(resolvedColor)
     : variant === 'ghost'     ? buildGhostStyles(resolvedColor)
     : buildOutlinedStyles(resolvedColor);
 
@@ -108,7 +107,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       variant={muiVariant}
       size={size}
       color={resolvedColor}
-      disabled={disabled}
+      disabled={isDisabled}
       aria-busy={loading || undefined}
       fullWidth={fullWidth}
       startIcon={startIconNode}

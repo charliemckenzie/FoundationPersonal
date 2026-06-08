@@ -86,7 +86,7 @@ export function MobileHeader({
         <IconButton
           icon="magnifying-glass"
           label={searchLabel}
-          variant="soft"
+          variant="outlined"
           color="primary"
           size="medium"
           condensed
@@ -104,7 +104,7 @@ export function MobileHeader({
       </Box>
       <Button
         label={logoutLabel}
-        variant="soft"
+        variant="outlined"
         size="medium"
         condensed
         onClick={onLogout}
