@@ -39,6 +39,7 @@ export const Duration: StoryObj = {
         label="Duration"
         defaultValue="10"
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },
@@ -63,6 +64,7 @@ export const MoneyWithFrequency: StoryObj = {
         label="Contribution"
         defaultValue={100}
         selectAdornment={{
+          label: 'Frequency',
           options: [
             { value: 'weekly', label: 'Weekly' },
             { value: 'fortnightly', label: 'Fortnightly' },
@@ -88,6 +90,7 @@ export const PercentageWithType: StoryObj = {
         label="Interest rate"
         defaultValue={7.5}
         selectAdornment={{
+          label: 'Rate type',
           options: [
             { value: 'percent', label: 'Percent' },
             { value: 'basis', label: 'Basis pts' },
@@ -113,6 +116,7 @@ export const ErrorState: StoryObj = {
         error
         errorMessage="Duration must be greater than zero"
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },
@@ -133,6 +137,7 @@ export const Disabled: StoryObj = {
         defaultValue="10"
         disabled
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },
@@ -155,6 +160,7 @@ export const SmallSize: StoryObj = {
         defaultValue="6"
         size="small"
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },
@@ -178,6 +184,7 @@ export const WithPlaceholder: StoryObj = {
         label="Duration"
         defaultValue="10"
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },
@@ -201,6 +208,7 @@ export const WithDisabledOption: StoryObj = {
         label="Contribution"
         defaultValue={250}
         selectAdornment={{
+          label: 'Frequency',
           options: [
             { value: 'weekly', label: 'Weekly' },
             { value: 'fortnightly', label: 'Fortnightly', disabled: true },
@@ -223,6 +231,7 @@ export const Uncontrolled: StoryObj = {
         label="Duration"
         defaultValue="5"
         selectAdornment={{
+          label: 'Unit',
           options: [
             { value: 'years', label: 'Years' },
             { value: 'months', label: 'Months' },

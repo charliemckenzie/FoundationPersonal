@@ -20,6 +20,7 @@ export interface SelectAdornmentConfig {
   value?: string;
   defaultValue?: string;
   placeholder?: string;
+  label?: string;
   onChange?: (value: string) => void;
 }
 
@@ -130,7 +131,9 @@ export function InputSelectContainer({
           disabled={disabled}
           aria-haspopup="listbox"
           aria-expanded={menuOpen || drawerOpen}
-          aria-label={!currentValue ? (selectAdornment.placeholder ?? 'Select option') : undefined}
+          aria-label={selectAdornment.label
+            ? `${selectAdornment.label}: ${displayText || selectAdornment.placeholder || 'Select option'}`
+            : (!currentValue ? (selectAdornment.placeholder ?? 'Select option') : undefined)}
           id={selectId}
           sx={(t) => ({
             display: 'flex',
@@ -154,6 +157,24 @@ export function InputSelectContainer({
             },
           })}
         >
+          {selectAdornment.label && (
+            <Box
+              component="span"
+              sx={{
+                position: 'absolute',
+                width: '1px',
+                height: '1px',
+                padding: 0,
+                margin: '-1px',
+                overflow: 'hidden',
+                clip: 'rect(0, 0, 0, 0)',
+                whiteSpace: 'nowrap',
+                borderWidth: 0,
+              }}
+            >
+              {selectAdornment.label}:
+            </Box>
+          )}
           <Box component="span" sx={{ whiteSpace: 'nowrap' }}>
             {displayText}
           </Box>
