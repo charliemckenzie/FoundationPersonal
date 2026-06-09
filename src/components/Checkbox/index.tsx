@@ -117,7 +117,7 @@ export function Checkbox({
         justifyContent: variant === 'card' && cardDirection === 'column' ? 'center' : undefined,
         '& .MuiFormControlLabel-label': variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
         border: '1px solid',
-        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.default',
+        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.input',
         borderRadius: '0.5rem',
         minHeight: '3rem',
         minWidth: variant === 'card' && cardDirection === 'column' ? '9rem' : undefined,

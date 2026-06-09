@@ -60,7 +60,7 @@ const cardContainerSx = (args: {
   justifyContent: args.variant === 'card' && args.cardDirection === 'column' ? 'center' : undefined,
   '& .MuiFormControlLabel-label': args.variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
   border: '1px solid',
-  borderColor: args.isSelected ? 'primary.main' : 'border.default',
+  borderColor: args.isSelected ? 'primary.main' : 'border.input',
   borderRadius: '0.5rem',
   minHeight: '3rem',
   minWidth: args.variant === 'card' && args.cardDirection === 'column' ? '9rem' : undefined,
