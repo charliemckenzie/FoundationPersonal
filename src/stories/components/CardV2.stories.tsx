@@ -37,6 +37,8 @@ const meta: Meta<typeof CardV2> = {
 export default meta;
 type Story = StoryObj<typeof CardV2>;
 type TopSectionMode = 'image' | 'heroIcon' | 'fontAwesomeIcon' | 'none';
+type CardBackgroundOption = 'white' | 'neutral' | 'cool';
+type HeroIconBackgroundOption = 'none' | 'white' | 'neutral' | 'cool';
 type CtaCount = 'none' | 'single' | 'double';
 type CtaType = 'button' | 'textButton';
 
@@ -45,7 +47,11 @@ interface ControlsArgs {
   expanded: boolean;
   headerVariant: 'display-1' | 'display-2' | 'display-3' | 'display-4' | 'display-5' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
   bodyVariant: 'lead' | 'body' | 'small';
+  topSectionPosition: 'top' | 'left';
+  topSectionMobileBehavior: 'keep-left' | 'stack-top';
   topSectionMode: TopSectionMode;
+  cardBackground: CardBackgroundOption;
+  heroIconBackground: HeroIconBackgroundOption;
   ctaCount: CtaCount;
   primaryCtaType: CtaType;
   secondaryCtaType: CtaType;
@@ -66,10 +72,28 @@ const CONTROLS_ARG_TYPES = {
     control: 'select',
     options: ['lead', 'body', 'small'],
   },
+  topSectionPosition: {
+    control: 'select',
+    options: ['top', 'left'],
+  },
+  topSectionMobileBehavior: {
+    control: 'select',
+    options: ['keep-left', 'stack-top'],
+    description: 'When topSectionPosition is left, choose whether mobile stays row or stacks top section above content.',
+  },
   topSectionMode: {
-    name: 'topSection',
     control: 'select',
     options: ['image', 'heroIcon', 'fontAwesomeIcon', 'none'],
+  },
+  cardBackground: {
+    control: 'select',
+    options: ['white', 'neutral', 'cool'],
+    description: 'Card background token mapping: white=background.paper, neutral=background.tintNeutral (#F2F2F2), cool=background.tintNeutralCool (#DDF5FF).',
+  },
+  heroIconBackground: {
+    control: 'select',
+    options: ['none', 'white', 'neutral', 'cool'],
+    description: 'Hero icon background token mapping with allowed combinations enforced by card background.',
   },
   ctaCount: {
     control: 'select',
@@ -91,16 +115,47 @@ const CONTROLS_DEFAULT_ARGS: ControlsArgs = {
   expanded: false,
   headerVariant: 'h5',
   bodyVariant: 'body',
+  topSectionPosition: 'left',
+  topSectionMobileBehavior: 'keep-left',
   topSectionMode: 'image',
+  cardBackground: 'white',
+  heroIconBackground: 'cool',
   ctaCount: 'double',
   primaryCtaType: 'button',
   secondaryCtaType: 'button',
   useLongCtaLabels: false,
 };
 
+const CARD_BACKGROUND_TOKEN_MAP: Record<CardBackgroundOption, 'background.paper' | 'background.tintNeutral' | 'background.tintNeutralCool'> = {
+  white: 'background.paper',
+  neutral: 'background.tintNeutral',
+  cool: 'background.tintNeutralCool',
+};
+
+const HERO_ICON_BG_TOKEN_MAP: Record<Exclude<HeroIconBackgroundOption, 'none'>, 'white' | 'grey' | 'brand'> = {
+  white: 'white',
+  neutral: 'grey',
+  cool: 'brand',
+};
+
+function resolveAllowedHeroBackground(
+  cardBackground: CardBackgroundOption,
+  requested: HeroIconBackgroundOption,
+): HeroIconBackgroundOption {
+  if (cardBackground === 'white') {
+    return requested;
+  }
+
+  if (cardBackground === 'neutral' || cardBackground === 'cool') {
+    return requested === 'none' || requested === 'white' ? requested : 'none';
+  }
+
+  return requested;
+}
+
 function iconTopSectionPadding(variant: ControlsArgs['variant'], expanded: boolean) {
   if (variant === 'open') {
-    return { px: 0, py: '1.5rem' };
+    return { px: 0, pt: '1.5rem', pb: 0 };
   }
 
   const padding = expanded ? '3.5rem' : '2rem';
@@ -166,8 +221,30 @@ function buildCtas({
   };
 }
 
-function renderInteractiveCard({ topSectionMode, ctaCount, primaryCtaType, secondaryCtaType, useLongCtaLabels, ...args }: ControlsArgs) {
-  const iconPaddingSx = iconTopSectionPadding(args.variant, args.expanded);
+function renderInteractiveCard({
+  topSectionMode,
+  topSectionPosition,
+  topSectionMobileBehavior,
+  cardBackground,
+  heroIconBackground,
+  ctaCount,
+  primaryCtaType,
+  secondaryCtaType,
+  useLongCtaLabels,
+  ...args
+}: ControlsArgs) {
+  const isIconMode = topSectionMode === 'heroIcon' || topSectionMode === 'fontAwesomeIcon';
+  const effectiveTopSectionPosition = isIconMode ? topSectionPosition : 'top';
+  const iconOnLeft = effectiveTopSectionPosition === 'left';
+  const effectiveHeroBackground = resolveAllowedHeroBackground(cardBackground, heroIconBackground);
+  const heroBackgroundProp = effectiveHeroBackground === 'none' ? 'none' : HERO_ICON_BG_TOKEN_MAP[effectiveHeroBackground];
+  const isHeroBackgroundNone = effectiveHeroBackground === 'none';
+  const iconPaddingSx = iconOnLeft ? {} : iconTopSectionPadding(args.variant, args.expanded);
+  const iconAlignmentSx = {
+    ...iconPaddingSx,
+    display: 'flex',
+    justifyContent: iconOnLeft ? 'flex-start' : 'center',
+  };
   const cardSx =
     topSectionMode === 'fontAwesomeIcon'
       ? {
@@ -177,6 +254,10 @@ function renderInteractiveCard({ topSectionMode, ctaCount, primaryCtaType, secon
           },
         }
       : { maxWidth: 420 };
+
+  const cardSurfaceSx = {
+    backgroundColor: CARD_BACKGROUND_TOKEN_MAP[cardBackground],
+  };
 
   const topSection =
     topSectionMode === 'image'
@@ -190,14 +271,20 @@ function renderInteractiveCard({ topSectionMode, ctaCount, primaryCtaType, secon
         )
       : topSectionMode === 'heroIcon'
         ? (
-            <Box sx={iconPaddingSx}>
-              <HeroIcon name="Calculator" brand="art" background="brand" containerSizeOverride="5.5rem" iconSizeOverride="2.75rem" />
+            <Box sx={iconAlignmentSx}>
+              <HeroIcon
+                name="Calculator"
+                brand="art"
+                background={heroBackgroundProp}
+                containerSizeOverride={isHeroBackgroundNone ? undefined : (iconOnLeft ? '5rem' : '5.5rem')}
+                iconSizeOverride={isHeroBackgroundNone ? '3rem' : (iconOnLeft ? '2.5rem' : '2.75rem')}
+              />
             </Box>
           )
         : topSectionMode === 'fontAwesomeIcon'
           ? (
-              <Box sx={{ ...iconPaddingSx, display: 'flex', justifyContent: 'flex-start' }}>
-                <Icon icon="shield-heart" size="3xl" color="primary" />
+              <Box sx={{ ...iconAlignmentSx, fontSize: '2.25rem' }}>
+                <Icon icon="house" size="inherit" color="primary" />
               </Box>
             )
         : undefined;
@@ -213,10 +300,12 @@ function renderInteractiveCard({ topSectionMode, ctaCount, primaryCtaType, secon
     <CardV2
       {...args}
       topSection={topSection}
+      topSectionPosition={effectiveTopSectionPosition}
+      topSectionMobileBehavior={topSectionMobileBehavior}
       header="Card heading"
       body="Body content sits in the middle section and remains separate from the top section and bottom actions."
       ctas={ctas}
-      sx={cardSx}
+      sx={[cardSx, cardSurfaceSx]}
     />
   );
 }

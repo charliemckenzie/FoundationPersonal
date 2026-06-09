@@ -13,6 +13,8 @@ import { TextButton } from '../TextButton';
 
 export type CardV2Variant = 'contained' | 'border' | 'open';
 export type CardV2CtaKind = 'button' | 'textButton';
+export type CardV2TopSectionPosition = 'top' | 'left';
+export type CardV2TopSectionMobileBehavior = 'keep-left' | 'stack-top';
 export type CardV2HeaderVariant =
   | 'display-1'
   | 'display-2'
@@ -49,6 +51,14 @@ export interface CardV2Props {
   expanded?: boolean;
   /** Optional top section (image, hero icon, or any custom node). */
   topSection?: React.ReactNode;
+  /** Placement of the top section relative to content. Defaults to top. */
+  topSectionPosition?: CardV2TopSectionPosition;
+  /**
+   * Mobile behavior when topSectionPosition is left.
+   * - keep-left: keep row layout at all breakpoints.
+   * - stack-top: switch to column on mobile so top section moves above content.
+   */
+  topSectionMobileBehavior?: CardV2TopSectionMobileBehavior;
   /** Optional header content rendered at the start of the content section. */
   header?: React.ReactNode;
   /** Header typography variant when header is a text primitive. Defaults to h5. */
@@ -109,35 +119,56 @@ function sectionPadding(variant: CardV2Variant, expanded: boolean) {
   return { px: padding, pb: padding, pt: 0 };
 }
 
-function contentPadding(variant: CardV2Variant, hasTopSection: boolean, expanded: boolean) {
+function contentPadding(
+  variant: CardV2Variant,
+  expanded: boolean,
+  hasTopSection: boolean,
+  hasBottomSection: boolean,
+) {
   if (variant === 'open') {
+    const openBottomPadding = hasBottomSection ? '1.5rem' : (expanded ? CARD_PADDING_EXPANDED : CARD_PADDING);
+
     return {
       px: 0,
       py: '1.5rem',
-      '&:last-child': { pb: '1.5rem' },
+      '&:last-child': { pb: openBottomPadding },
     };
   }
 
-  if (!hasTopSection) {
-    const padding = expanded ? CARD_PADDING_EXPANDED : CARD_PADDING;
+  const basePadding = expanded ? CARD_PADDING_EXPANDED : CARD_PADDING;
 
+  // No top and no bottom sections should use full card padding in all directions.
+  if (!hasTopSection && !hasBottomSection) {
     return {
-      p: padding,
-      '&:last-child': { pb: padding },
+      p: basePadding,
+      '&:last-child': { pb: basePadding },
     };
   }
 
-  if (expanded) {
+  if (!hasTopSection && hasBottomSection) {
     return {
-      px: CARD_PADDING_EXPANDED,
-      py: '1rem',
+      px: basePadding,
+      pt: basePadding,
+      pb: '1rem',
       '&:last-child': { pb: '1rem' },
     };
   }
 
+  if (hasTopSection && !hasBottomSection) {
+    return {
+      px: basePadding,
+      pt: '1rem',
+      pb: basePadding,
+      '&:last-child': { pb: basePadding },
+    };
+  }
+
+  const horizontalPadding = expanded ? CARD_PADDING_EXPANDED : CARD_PADDING;
+
   return {
-    px: '2rem',
-    py: '1rem',
+    px: horizontalPadding,
+    pt: '1rem',
+    pb: '1rem',
     '&:last-child': { pb: '1rem' },
   };
 }
@@ -146,6 +177,8 @@ export function CardV2({
   variant = 'contained',
   expanded = false,
   topSection,
+  topSectionPosition = 'top',
+  topSectionMobileBehavior = 'keep-left',
   header,
   headerVariant = 'h5',
   body,
@@ -159,6 +192,16 @@ export function CardV2({
   const hasPrimaryCta = Boolean(ctas?.primary);
   const hasSecondaryCta = Boolean(ctas?.secondary);
   const hasStructuredCtas = hasPrimaryCta || hasSecondaryCta;
+  const hasBottomSection = Boolean(actions || hasStructuredCtas);
+  const isTopSectionLeft = hasTopSection && topSectionPosition === 'left';
+  const shouldStackTopOnMobile = isTopSectionLeft && topSectionMobileBehavior === 'stack-top';
+  const sectionPaddingValue = expanded ? CARD_PADDING_EXPANDED : CARD_PADDING;
+  const rightColumnContentBottom = hasBottomSection
+    ? '1rem'
+    : variant === 'open'
+      ? '1.5rem'
+      : sectionPaddingValue;
+  const rightColumnBottom = variant === 'open' ? 0 : sectionPaddingValue;
   const isDoubleTextButtonCtas =
     hasPrimaryCta
     && hasSecondaryCta
@@ -203,6 +246,22 @@ export function CardV2({
     );
   };
 
+  const bottomSectionContent = actions ?? (
+    <Box
+      sx={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: isDoubleTextButtonCtas ? 'column' : 'row',
+        flexWrap: isDoubleTextButtonCtas ? 'nowrap' : 'wrap',
+        alignItems: isDoubleTextButtonCtas ? 'flex-start' : 'center',
+        gap: 1,
+      }}
+    >
+      {ctas?.primary && renderCta(ctas.primary, 'primary')}
+      {ctas?.secondary && renderCta(ctas.secondary, 'secondary')}
+    </Box>
+  );
+
   return (
     <MuiCard
       sx={[
@@ -214,7 +273,7 @@ export function CardV2({
         ...(Array.isArray(sx) ? sx : [sx ?? false]),
       ]}
     >
-      {hasTopSection && (
+      {hasTopSection && !isTopSectionLeft && (
         <Box
           sx={variant === 'open'
             ? (theme) => ({
@@ -227,31 +286,48 @@ export function CardV2({
         </Box>
       )}
 
-      <CardContent sx={contentPadding(variant, hasTopSection, expanded)}>
-        {renderSectionText(header, headerVariant, 'h3', 'text.heading', 2)}
-        {renderSectionText(body, bodyVariant, 'p', 'text.primary', 0)}
-        {children}
-      </CardContent>
-
-      {(actions || hasStructuredCtas) && (
-        <CardActions sx={sectionPadding(variant, expanded)}>
-          {actions ?? (
+      {isTopSectionLeft
+        ? (
             <Box
               sx={{
-                width: '100%',
                 display: 'flex',
-                flexDirection: isDoubleTextButtonCtas ? 'column' : 'row',
-                flexWrap: isDoubleTextButtonCtas ? 'nowrap' : 'wrap',
+                flexDirection: shouldStackTopOnMobile ? { xs: 'column', sm: 'row' } : 'row',
                 alignItems: 'flex-start',
-                gap: 1,
+                gap: '1.5rem',
+                px: variant === 'open' ? 0 : sectionPaddingValue,
+                pt: variant === 'open' ? '1.5rem' : sectionPaddingValue,
               }}
             >
-              {ctas?.primary && renderCta(ctas.primary, 'primary')}
-              {ctas?.secondary && renderCta(ctas.secondary, 'secondary')}
+              <Box sx={{ flexShrink: 0 }}>{topSection}</Box>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ pb: rightColumnContentBottom }}>
+                  {renderSectionText(header, headerVariant, 'h3', 'text.heading', 2)}
+                  {renderSectionText(body, bodyVariant, 'p', 'text.primary', 0)}
+                  {children}
+                </Box>
+                {hasBottomSection && (
+                  <Box sx={{ pb: rightColumnBottom }}>
+                    {bottomSectionContent}
+                  </Box>
+                )}
+              </Box>
             </Box>
+          )
+        : (
+            <>
+              <CardContent sx={contentPadding(variant, expanded, hasTopSection, hasBottomSection)}>
+                {renderSectionText(header, headerVariant, 'h3', 'text.heading', 2)}
+                {renderSectionText(body, bodyVariant, 'p', 'text.primary', 0)}
+                {children}
+              </CardContent>
+
+              {hasBottomSection && (
+                <CardActions sx={sectionPadding(variant, expanded)}>
+                  {bottomSectionContent}
+                </CardActions>
+              )}
+            </>
           )}
-        </CardActions>
-      )}
     </MuiCard>
   );
 }

@@ -51,6 +51,8 @@ export type {
   CardV2Props,
   CardV2GridProps,
   CardV2Variant,
+  CardV2TopSectionPosition,
+  CardV2TopSectionMobileBehavior,
   CardV2HeaderVariant,
   CardV2BodyVariant,
 } from './components/CardV2'
