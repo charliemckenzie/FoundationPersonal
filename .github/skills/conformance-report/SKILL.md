@@ -82,6 +82,30 @@ If any input is missing, mark scope as partial before reviewing.
   - Non-text contrast / focus indicator contrast (`1.4.11`, `2.4.13` where relevant)
 - If a component has special surfaces or semantic backgrounds beyond the default matrix, add them explicitly to scope.
 
+**State-change contrast (SC 1.4.11 — mandatory for stateful controls)**
+
+SC 1.4.11 has two distinct obligations. Both must be measured explicitly:
+
+1. **Component boundary contrast** — the visual boundary of each interactive element (e.g. its border) against the adjacent surface. Already covered by the per-state matrix above.
+
+2. **State-change contrast** — when colour is the *only* visual signal distinguishing two states (e.g. selected vs unselected), the difference in visual presentation *between those states* must itself meet 3:1. This is separate from per-state measurements.
+
+Rules for state-change contrast:
+- For every pair of states where the visual difference is conveyed by colour alone (no simultaneous change in weight, border thickness, shape, icon, underline, or other non-colour cue), measure the contrast between the **selected-state appearance and the unselected-state appearance**.
+- "Colour alone" means the only visual difference is fill colour, border colour, or text colour — with no accompanying weight change, border-width change, or other non-colour signal present.
+- Measurements required per surface × mode combination:
+  - Selected background vs unselected background
+  - Selected border vs unselected border (at the shared seam between adjacent buttons, if applicable)
+- If either measurement is below 3:1 AND no non-colour differentiator is present, record it as a FAIL against SC 1.4.11.
+- If a non-colour cue is present (e.g. `fontWeight: 700` on selected, or `borderWidth: 2px` on selected), state-change contrast is not required — document which non-colour cue satisfies it.
+
+Add a dedicated `ST-STATE-CHANGE-01` row to the standard test set:
+- Test ID: `ST-STATE-CHANGE-01`
+- WCAG SC: `1.4.11`
+- Check: State-change visual differentiation — selected vs unselected (or on vs off)
+- Acceptance criteria: Either (a) a non-colour cue distinguishes the states, OR (b) the contrast between selected and unselected visual presentation is ≥ 3:1 on every in-scope surface and mode
+- Observed result: document whether a non-colour cue is present, and if not, record the measured between-state contrast values
+
 6. Findings classification
 - `FAIL`: confirmed accessibility failure that must be fixed.
 - `WARN`: confirmed risk/defect with lower severity or partial uncertainty.
@@ -146,6 +170,7 @@ Minimum required checks for interactive controls:
 - `ST-FOCUS-01`: Focus-visible indicator definition and contrast threshold (`2.4.7`, `2.4.13`)
 - `ST-SIZE-01`: Target size minimum check (`2.5.8`)
 - `ST-CONTRAST-01`: Text/non-text/focus contrast matrix across in-scope modes/surfaces/states (`1.4.3`, `1.4.11`, `2.4.13`)
+- `ST-STATE-CHANGE-01`: State-change visual differentiation — selected/active/on vs unselected/inactive/off. Required for any stateful control where states are distinguished by colour. Either a non-colour cue is present, or between-state contrast ≥ 3:1 on all surfaces/modes. (`1.4.11`)
 - `ST-SCREENREADER-01`: Screen reader announcement/state behavior (mark `NOT TESTED` if not executed) (`4.1.2`)
 
 ### Contrast matrix
@@ -186,6 +211,24 @@ When using the summary matrix, include both of the following:
 ---
 
 ## Storybook Report Integration
+
+### File and folder structure (mandatory)
+
+The conformance report MDX must live alongside the component's stories in a named subfolder. Do not place the report as a sibling file next to other component story files.
+
+Required structure:
+```
+src/stories/components/
+  ComponentName/
+    ComponentName.stories.tsx     ← existing stories (Storybook title unchanged)
+    WCAGConformanceReport.mdx     ← conformance report (title: .../WCAG Conformance Report)
+```
+
+If the component stories are not already in a subfolder, move them into one as part of creating the report. Update all relative import paths after moving (one extra `../` level required).
+
+The component must remain discoverable in the Storybook sidebar at its existing path. Moving stories into a subfolder does not change the sidebar entry as long as the `title` in the stories file is unchanged.
+
+### Report page rules
 
 When updating a component WCAG report page:
 1. Do not add a top-of-page status banner.

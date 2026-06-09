@@ -126,9 +126,14 @@ export function Checkbox({
         ...(variant === 'card' && cardDirection === 'row' && { pr: '2.5rem' }),
         py: variant === 'card' ? 2 : description ? 1.5 : 0,
         cursor: disabled ? 'default' : 'pointer',
-        transition: 'border-color 150ms ease, background-color 150ms ease',
+        transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
         backgroundColor: 'background.paper',
-        ...(isSelected && selectedCardStyles(theme)),
+        ...(isSelected && {
+          ...selectedCardStyles(theme),
+          // Inset shadow gives visual weight of a 2px border without changing box model.
+          // Non-colour differentiator (thickness) between selected and unselected, no layout shift.
+          boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+        }),
         ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },

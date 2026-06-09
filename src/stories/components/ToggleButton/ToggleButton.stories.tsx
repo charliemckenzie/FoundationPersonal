@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { ToggleButtonGroup } from '../../components/ToggleButton';
+import { ToggleButtonGroup } from '../../../components/ToggleButton';
 
 const ALIGNMENT_OPTIONS = [
   { value: 'left', label: 'Left' },
@@ -77,6 +77,17 @@ export const WithError: Story = {
 
 export const Vertical: Story = {
   args: { options: ALIGNMENT_OPTIONS, ariaLabel: 'Text alignment', orientation: 'vertical', defaultValue: 'center' },
+};
+
+export const Connected: Story = {
+  name: 'Variant — Connected',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment (small)" size="small" defaultValue="left" variant="connected" />
+      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment (medium)" size="medium" defaultValue="left" variant="connected" />
+      <ToggleButtonGroup options={ALIGNMENT_OPTIONS} ariaLabel="Text alignment (large)" size="large" defaultValue="left" variant="connected" />
+    </div>
+  ),
 };
 
 export const WithDisabledOption: Story = {

@@ -521,6 +521,8 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             position: 'relative',
             zIndex: 0,
             height: ownerState.size === 'small' ? '2.25rem' : ownerState.size === 'large' ? '3.5rem' : '3rem',
+            paddingLeft: ownerState.size === 'small' ? '0.75rem' : ownerState.size === 'large' ? '1.25rem' : '1rem',
+            paddingRight: ownerState.size === 'small' ? '0.75rem' : ownerState.size === 'large' ? '1.25rem' : '1rem',
             '&.Mui-disabled': {
               backgroundColor: alpha(theme.palette.background.default, 0.6),
               borderColor: alpha(theme.palette.border.input, 0.6),
@@ -528,16 +530,20 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             },
             '&.Mui-selected': {
               borderColor: theme.palette.primary.main,
+              // Inset shadow gives the visual weight of a 2px border without changing the box model.
+              // This provides a non-colour differentiator (thickness) between selected and unselected
+              // without causing layout shift. Cleared by Mui-focusVisible (focus ring takes over).
+              boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
               backgroundColor: theme.palette.primary.softMain ?? alpha(theme.palette.primary.main, TINT.main[theme.palette.mode as 'light' | 'dark']),
-              color: theme.palette.primary.main,
+              color: theme.palette.text.primary,
               zIndex: 1,
               '&:hover': {
                 backgroundColor: theme.palette.primary.softDark ?? alpha(theme.palette.primary.main, TINT.dark[theme.palette.mode as 'light' | 'dark']),
-                color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light,
+                color: theme.palette.text.primary,
               },
               '&:active': {
                 backgroundColor: theme.palette.primary.softDeeper ?? alpha(theme.palette.primary.main, TINT.deeper[theme.palette.mode as 'light' | 'dark']),
-                color: theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light,
+                color: theme.palette.text.primary,
               },
             },
             '&.Mui-focusVisible': {
@@ -552,22 +558,28 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       MuiToggleButtonGroup: {
         styleOverrides: {
           root: ({ theme }) => ({
-            '& .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+            // Connected layout — MUI sets borderLeft: '1px solid transparent' on middle/last
+            // buttons and borderLeft: 0 on selected+selected. Fix the colours per state.
+            // Scoped to horizontal/vertical so overrides don't bleed across orientations.
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton': {
               borderLeft: `1px solid ${theme.palette.border.input}`,
             },
-            '& .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton.Mui-selected, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton.Mui-selected': {
               borderLeft: `1px solid ${theme.palette.primary.main}`,
             },
-            '& .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton.Mui-disabled, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton.Mui-disabled': {
               borderLeft: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
             },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-grouped.Mui-selected + .MuiToggleButtonGroup-grouped.Mui-selected': {
+              borderLeft: `1px solid ${theme.palette.primary.main}`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton': {
               borderTop: `1px solid ${theme.palette.border.input}`,
             },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton.Mui-selected, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton.Mui-selected': {
               borderTop: `1px solid ${theme.palette.primary.main}`,
             },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton.Mui-disabled, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton.Mui-disabled': {
               borderTop: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
             },
           }),

@@ -4,10 +4,12 @@ import MuiToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
 import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import { alpha, type Theme } from '@mui/material/styles';
 
 export type ToggleButtonSize = 'small' | 'medium' | 'large';
 export type ToggleButtonColor = 'standard' | 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
 export type ToggleButtonOrientation = 'horizontal' | 'vertical';
+export type ToggleButtonVariant = 'separated' | 'connected';
 
 export interface ToggleButtonOption {
   value: string;
@@ -30,6 +32,9 @@ export interface ToggleButtonGroupProps {
   label?: string;
   error?: boolean;
   errorMessage?: string;
+  /** Layout variant. `separated` renders buttons with a gap and individual rounded corners.
+   *  `connected` renders buttons as a joined group sharing borders. Defaults to `separated`. */
+  variant?: ToggleButtonVariant;
 }
 
 export function ToggleButtonGroup({
@@ -47,6 +52,7 @@ export function ToggleButtonGroup({
   label,
   error = false,
   errorMessage,
+  variant = 'separated',
 }: ToggleButtonGroupProps) {
   const isControlled = valueProp !== undefined;
   const helperId = useId();
@@ -83,12 +89,46 @@ export function ToggleButtonGroup({
         aria-label={ariaLabel}
         aria-invalid={error ? 'true' : undefined}
         aria-describedby={error && errorMessage ? helperId : undefined}
-        sx={error ? {
-          '& .MuiToggleButton-root': { borderColor: 'error.main' },
-          '& .MuiToggleButton-root.Mui-selected': { borderColor: 'error.main' },
-          '& .MuiToggleButtonGroup-grouped:not(:first-of-type)': { borderLeftColor: 'error.main' },
-          '& .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': { borderLeftColor: 'error.main' },
-        } : undefined}
+        sx={(theme: Theme) => ({
+          // Separated variant: gap layout with all-rounded corners and full borders on every side.
+          // Applied via sx (injected after styleOverrides) so it wins over MUI's built-in
+          // connected-layout rules without needing !important in the theme.
+          ...(variant === 'separated' && {
+            gap: '8px',
+            '& .MuiToggleButtonGroup-firstButton, & .MuiToggleButtonGroup-middleButton, & .MuiToggleButtonGroup-lastButton': {
+              borderRadius: `${theme.shape.sm}px !important`,
+            },
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton': {
+              marginLeft: '0 !important',
+              borderLeft: `1px solid ${theme.palette.border.input} !important`,
+            },
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton.Mui-selected, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton.Mui-selected': {
+              borderLeft: `1px solid ${theme.palette.primary.main} !important`,
+            },
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton.Mui-disabled, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton.Mui-disabled': {
+              borderLeft: `1px solid ${alpha(theme.palette.border.input, 0.6)} !important`,
+            },
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-grouped.Mui-selected + .MuiToggleButtonGroup-grouped.Mui-selected': {
+              marginLeft: '0 !important',
+              borderLeft: `1px solid ${theme.palette.primary.main} !important`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton': {
+              marginTop: '0 !important',
+              borderTop: `1px solid ${theme.palette.border.input} !important`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton.Mui-selected, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton.Mui-selected': {
+              borderTop: `1px solid ${theme.palette.primary.main} !important`,
+            },
+            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-middleButton.Mui-disabled, &.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-lastButton.Mui-disabled': {
+              borderTop: `1px solid ${alpha(theme.palette.border.input, 0.6)} !important`,
+            },
+          }),
+          ...(error && {
+            '& .MuiToggleButton-root': { borderColor: theme.palette.error.main },
+            '& .MuiToggleButton-root.Mui-selected': { borderColor: theme.palette.error.main },
+            '&.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-middleButton, &.MuiToggleButtonGroup-horizontal .MuiToggleButtonGroup-lastButton': { borderLeftColor: theme.palette.error.main },
+          }),
+        })}
       >
         {options.map((opt) => (
           <MuiToggleButton key={opt.value} value={opt.value} disabled={opt.disabled} aria-label={opt.label} disableRipple>

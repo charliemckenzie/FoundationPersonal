@@ -68,9 +68,14 @@ const cardContainerSx = (args: {
   ...(args.variant === 'boxed' && { pr: '1.25rem' }),
   py: args.variant === 'card' ? 2 : args.description ? 1.5 : 0,
   cursor: args.isItemDisabled ? 'default' : 'pointer',
-  transition: 'border-color 150ms ease, background-color 150ms ease',
+  transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
   backgroundColor: 'background.paper',
-  ...(args.isSelected && selectedCardStyles(theme)),
+  ...(args.isSelected && {
+    ...selectedCardStyles(theme),
+    // Inset shadow gives visual weight of a 2px border without changing box model.
+    // Non-colour differentiator (thickness) between selected and unselected, no layout shift.
+    boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+  }),
   ...(!args.isItemDisabled && !args.isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
   '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
   '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
