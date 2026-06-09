@@ -132,7 +132,7 @@ export function InputSelectContainer({
           aria-haspopup="listbox"
           aria-expanded={menuOpen || drawerOpen}
           aria-label={selectAdornment.label
-            ? `${selectAdornment.label}: ${displayText || selectAdornment.placeholder || 'Select option'}`
+            ? `Edit ${selectAdornment.label}: ${displayText || selectAdornment.placeholder || 'Select option'}`
             : (!currentValue ? (selectAdornment.placeholder ?? 'Select option') : undefined)}
           id={selectId}
           sx={(t) => ({
