@@ -52,7 +52,7 @@ export const neutralART: ColorScale = {
   200: '#e8e8e8',
   300: '#dadada',
   400: '#b8b8b8',
-  500: '#939393',
+  500: '#8C8C8C',
   600: '#6e6e6e',
   700: '#4a4a4a',  // was #4d4d4d — darkened to maintain graduation with new 800
   800: '#2c2c2c',  // was #333333 — darkened for dark mode elevated contrast headroom

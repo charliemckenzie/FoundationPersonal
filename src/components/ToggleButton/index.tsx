@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useId } from 'react';
 import MuiToggleButton from '@mui/material/ToggleButton';
 import MuiToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Box from '@mui/material/Box';
@@ -49,6 +49,7 @@ export function ToggleButtonGroup({
   errorMessage,
 }: ToggleButtonGroupProps) {
   const isControlled = valueProp !== undefined;
+  const helperId = useId();
   const [internalValue, setInternalValue] = useState<string | string[]>(
     defaultValue ?? (exclusive ? '' : [])
   );
@@ -80,6 +81,8 @@ export function ToggleButtonGroup({
         fullWidth={fullWidth}
         onChange={handleChange}
         aria-label={ariaLabel}
+        aria-invalid={error ? 'true' : undefined}
+        aria-describedby={error && errorMessage ? helperId : undefined}
         sx={error ? {
           '& .MuiToggleButton-root': { borderColor: 'error.main' },
           '& .MuiToggleButton-root.Mui-selected': { borderColor: 'error.main' },
@@ -94,7 +97,7 @@ export function ToggleButtonGroup({
         ))}
       </MuiToggleButtonGroup>
       {error && errorMessage && (
-        <FormHelperText error sx={{ mx: 0 }}>
+        <FormHelperText id={helperId} error sx={{ mx: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}
