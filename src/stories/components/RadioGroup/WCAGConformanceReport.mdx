@@ -1,0 +1,339 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+import Box from '@mui/material/Box';
+import { Alert } from '../../../components/Alert';
+
+<Meta title="Form Components / RadioGroup / WCAG Conformance Report" />
+
+# WCAG Conformance Report
+
+This page is a component-level WCAG evidence report for `RadioGroup`.
+
+| Field | Value |
+|---|---|
+| Component | RadioGroup |
+| Storybook path | Form Components / RadioGroup |
+| Standard | WCAG 2.2 AA (component-relevant criteria) |
+| Last reviewed | 09 / 06 / 2026 |
+| Reviewer | Flanders workflow (`/conformanceReport`) |
+| Review status | <span style={{ color: 'green' }}>✅ Pass — no open findings</span> |
+| Scope | All three variants (default, boxed, card), light + dark mode, standard surfaces (default, paper, elevated) |
+
+## Scope
+
+**Variants:** `default` (bare radio list), `boxed` (bordered row cards), `card` (visual tile picker)
+
+**States:** resting-unselected, hover-unselected, resting-selected, hover-selected, active-selected, focus-visible, disabled (exempt)
+
+**Sizes:** `small`, `medium`
+
+**Composition:** `legend`, `helperText`, `errorMessage`, `description` per option, `disabled` per option, `required`
+
+**Surfaces:** `default`, `paper`, `elevated` in both `light` and `dark` mode
+
+**Out of scope:** reversed / brand-surface placement (no reversed RadioGroup variant exists in the design system). Custom `color` prop values other than `primary`.
+
+---
+
+## Findings
+
+<Alert severity="success" title="Status: No open findings" message="RG-01 (missing aria-labelledby on radiogroup) resolved by adding a stable labelId derived from useId() to FormLabel and aria-labelledby to MuiRadioGroup." />
+
+| ID | Severity | WCAG SC | Evidence type | Source | Issue | Remediation |
+|---|---|---|---|---|---|---|
+| RG-01 | <span style={{ color: 'green' }}>✅ Resolved</span> | <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a>, <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | code | `src/components/RadioGroup/index.tsx` | `div[role="radiogroup"]` had no `aria-labelledby` pointing to the `FormLabel`. MUI v5 does not automatically wire this association — it must be set explicitly. The visual legend text ("Select an option") was not programmatically associated as the group's accessible name, which could cause screen readers to announce the group without its label. | Resolved 09 / 06 / 2026: `labelId` derived from `useId()` added; `FormLabel` receives `id={labelId}`; `MuiRadioGroup` receives `aria-labelledby={labelId}`. `src/components/RadioGroup/index.tsx`. |
+
+---
+
+## Standard conformance test set
+
+| Test ID | WCAG SC | Check | Acceptance criteria | Observed result | Status | Evidence |
+|---|---|---|---|---|---|---|
+| ST-SEMANTICS-01 | <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a>, <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Semantic role/state and accessible name path | `div[role="radiogroup"]` has an accessible name; each radio has a label; error state is programmatically identified | `MuiRadioGroup` renders `div[role="radiogroup"]` with `aria-labelledby` pointing to `FormLabel[id]` (RG-01 fix). Each radio is a native `<input type="radio">` labelled by `FormControlLabel`. Error state: `FormControl error` propagates; `FormHelperText[role="alert"]` is rendered; `aria-describedby` on the group links to the error and helper text IDs via stable `useId()` values. `required` propagated via `FormControl` context. | <span style={{ color: 'green' }}>✅ Pass</span> | `src/components/RadioGroup/index.tsx`; RG-01 resolved 09 / 06 / 2026 |
+| ST-KEYBOARD-01 | <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a>, <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Keyboard activation and disabled/loading interaction model | Tab reaches the group; arrow keys navigate between options; disabled options are unreachable | Native radio inputs. Tab enters the group; arrow keys move selection within it (browser-native radiogroup keyboard model). Per-option `disabled` propagates `disabled` attribute to the native input, removing it from the tab sequence. Group-level `disabled` disables all radios. | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Code review `src/components/RadioGroup/index.tsx` — implementation confirmed; manual keyboard walkthrough pending |
+| ST-FOCUS-01 | <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Focus-visible indicator definition and contrast | Focus indicator is defined for all variants; measured contrast ≥ 3:1 on all in-scope surfaces | **Default variant:** `MuiRadio.styleOverrides.root` in `factory.ts` applies `outline: 2px solid border.focus; outlineOffset: 2px` on `.Mui-focusVisible`. **Boxed/card variants:** `cardRadioSx` suppresses the radio's own outline; the `FormControlLabel` container catches focus via `:has(.Mui-focusVisible)` and applies the same 2px outline. Minimum measured focus contrast: **5.18:1** (light / elevated). | <span style={{ color: 'green' }}>✅ Pass</span> | `src/app/themes/factory.ts` line 492; `src/components/RadioGroup/index.tsx` `cardContainerSx` / `cardRadioSx`; contrast matrix in this report |
+| ST-SIZE-01 | <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | Target size minimum | Interactive target ≥ 24 × 24 CSS px | **Default variant:** radio circle = 1.5 rem (24 px); the full `FormControlLabel` row (radio + label) is the click target, exceeding 24 px wide. Gap between items = `gap: 1.5` (12 px); because the full-width `FormControlLabel` extends the target width far beyond 24 px, the effective click area satisfies 2.5.8. **Boxed/card variants:** full card container is the target; minimum height = 3 rem (48 px), far exceeding 24 × 24 px. | <span style={{ color: 'green' }}>✅ Pass</span> | `src/components/RadioGroup/index.tsx` `cardContainerSx` — `minHeight: '3rem'`; `RadioUncheckedIcon` — `1.5rem` circle |
+| ST-CONTRAST-01 | <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a>, <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Contrast matrix across all in-scope variants/surfaces/modes/states | No measured value below threshold: label text ≥ 4.5:1, description text ≥ 4.5:1, non-text border ≥ 3:1, focus ring ≥ 3:1 | 90 combinations measured (see matrix below). **0 failures.** Label text minimum: 6.75:1 (dark / active-selected). Description text (unselected, text.muted): minimum 4.68:1 (light / default surface, default variant). Description text (selected boxed/card, text.primary): minimum 9.04:1. Non-text border minimum: 3.00:1 (light / elevated, unselected). Focus minimum: 5.18:1 (light / elevated). | <span style={{ color: 'green' }}>✅ Pass</span> | `scripts/radio-group-contrast-review.ts`; full matrix below |
+| ST-STATE-CHANGE-01 | <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | State-change visual differentiation — selected vs unselected | Either (a) a non-colour cue distinguishes the states, OR (b) between-state contrast ≥ 3:1 on all surfaces/modes | **Default variant:** presence/absence of the inner dot in `RadioCheckedIcon` is a shape cue — not colour alone. **Boxed/card variants:** selected state applies `boxShadow: inset 0 0 0 1px primary.main`, producing an effective 2px visual border (1px solid border + 1px inset shadow) vs 1px unselected. Between-state border contrast (1.72:1 light / 1.41:1 dark) and background contrast (1.15:1 light / 1.30:1 dark) are both below 3:1, but the non-colour thickness cue satisfies the criterion. | <span style={{ color: 'green' }}>✅ Pass</span> | `src/components/RadioGroup/index.tsx` `cardContainerSx` — `boxShadow` on `isSelected`; `src/components/RadioGroup/icons.tsx` `RadioCheckedIcon` |
+| ST-SCREENREADER-01 | <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Screen reader announcement and state behaviour | NVDA/VoiceOver confirm group role, group name, individual option labels, and checked state on navigation | Not executed in this review pass | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Pending manual AT verification |
+
+---
+
+## Contrast matrix
+
+### Summary
+
+Measured values are minima representative across all state-level combinations. Disabled state is exempt from contrast requirements per WCAG 1.4.3 Note 1 and is excluded.
+
+States included: `resting-unselected`, `resting-selected`, `hover-unselected`, `hover-selected`, `active-selected`, `focus-visible`.
+
+Note: boxed and card variants share identical token values. The matrix rows marked **boxed/card** apply to both.
+
+Note on description text color: for boxed/card variants in **unselected** states, descriptions use `text.muted`; in **selected** states, `RadioCardLabel.descriptionSx` switches to `text.primary`. The minimums below reflect this per-state logic.
+
+WCAG thresholds:
+- Label text (1.4.3): **≥ 4.5:1**
+- Description text (1.4.3): **≥ 4.5:1**
+- Non-text / border (1.4.11): **≥ 3:1**
+- Focus-visible ring (2.4.13): **≥ 3:1**
+
+| Mode | Variant | Surface | Min label text contrast | Min desc text contrast | Min border contrast | Min focus contrast | Outcome |
+|---|---|---|---|---|---|---|---|
+| light | default | default | 13.97 | 4.68 † | 3.08 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | paper | 13.97 | 5.10 | 3.36 | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | elevated | 13.97 | 5.10 | 3.00 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | boxed/card | default | 10.14 | 4.72 ‡ | 3.08 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | boxed/card | paper | 10.14 | 4.72 ‡ | 3.36 | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | boxed/card | elevated | 10.14 | 4.72 ‡ | 3.00 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | default | 11.79 | 8.31 | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | paper | 11.79 | 8.31 | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | elevated | 11.79 | 8.31 | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | boxed/card | default | 6.75 | 6.65 ‡ | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | boxed/card | paper | 6.75 | 6.65 ‡ | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | boxed/card | elevated | 6.75 | 6.65 ‡ | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+† Default variant: desc text (`text.muted` / `#6e6e6e`) on `background.default` (`#f5f5f5`). FormControlLabel has transparent background; effective contrast is against the page surface.
+
+‡ Boxed/card variant: minimum is `text.muted` in hover-unselected state on the card fill. Selected states use `text.primary` and measure ≥ 9.04:1.
+
+### State coverage results
+
+| State | Items reviewed | Passes | Issues | Outcome |
+|---|---|---|---|---|
+| Resting (unselected + selected) | 36 | 36 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Hover (unselected + selected) | 24 | 24 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Active (selected only) | 12 | 12 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| Focus-visible | 18 | 18 | 0 | <span style={{ color: 'green' }}>✅ Pass</span> |
+
+<Box sx={(t) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: t.spacing(1),
+  my: t.spacing(2),
+  '& details': {
+    border: `1px solid ${t.palette.divider}`,
+    borderRadius: `${t.shape.borderRadius * 2}px`,
+    overflow: 'hidden',
+    backgroundColor: t.palette.background.paper,
+  },
+  '& summary': {
+    cursor: 'pointer',
+    listStyle: 'none',
+    padding: `${t.spacing(2)} ${t.spacing(3)}`,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    fontWeight: 700,
+    fontSize: '0.875rem',
+    color: t.palette.text.primary,
+    userSelect: 'none',
+    transition: 'background-color 0.15s ease',
+    '&:hover': { backgroundColor: t.palette.action.hover },
+    '&::-webkit-details-marker': { display: 'none' },
+    '&::marker': { content: 'none' },
+    '&::after': {
+      content: '"+"',
+      fontSize: '1.125rem',
+      fontWeight: 300,
+      flexShrink: 0,
+      marginLeft: t.spacing(2),
+      lineHeight: 1,
+    },
+  },
+  '& details[open] > summary': {
+    borderBottom: `1px solid ${t.palette.divider}`,
+    backgroundColor: t.palette.action.selected,
+  },
+  '& details[open] > summary:hover': {
+    backgroundColor: t.palette.action.hover,
+  },
+  '& details[open] > summary::after': {
+    content: '"\u2212"',
+  },
+  '& details > :not(summary)': {
+    padding: `${t.spacing(2)} ${t.spacing(3)}`,
+    overflowX: 'auto',
+    margin: 0,
+  },
+})}>
+
+<details>
+<summary><strong>Resting state</strong> — 36 reviewed, 36 pass, 0 issues</summary>
+
+Border is measured against the adjacent page surface (WCAG 1.4.11). Text is measured against the component's own fill (radio icon fill for default; card fill for boxed/card).
+Default variant: selected = checked radio icon (primary.main border vs surface). Boxed/card: selected = soft-tinted card fill.
+Desc text column shows text.muted for unselected, text.primary for selected (boxed/card).
+
+| Mode | Variant | Surface | Selection | Label text | Desc text | Component bg | Border hex | Surface hex | Border contrast | Label contrast | Desc contrast | Outcome |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| light | default | default | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #f5f5f5 | 3.08 | 13.97 | 4.68 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | paper | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #ffffff | 3.36 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | elevated | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #f2f2f2 | 3.00 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | default | selected | #2c2c2c | #6e6e6e | #ffffff | #0051ff | #f5f5f5 | 5.32 | 13.97 | 4.68 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | paper | selected | #2c2c2c | #6e6e6e | #ffffff | #0051ff | #ffffff | 5.80 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | elevated | selected | #2c2c2c | #6e6e6e | #ffffff | #0051ff | #f2f2f2 | 5.18 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | default | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #f5f5f5 | 3.08 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #ffffff | 3.36 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | unselected | #2c2c2c | #6e6e6e | #ffffff | #8c8c8c | #f2f2f2 | 3.00 | 13.97 | 5.10 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | default | selected | #2c2c2c | #2c2c2c | #e8efff | #0051ff | #f5f5f5 | 5.32 | 12.12 | 12.12 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | selected | #2c2c2c | #2c2c2c | #e8efff | #0051ff | #ffffff | 5.80 | 12.12 | 12.12 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | selected | #2c2c2c | #2c2c2c | #e8efff | #0051ff | #f2f2f2 | 5.18 | 12.12 | 12.12 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | default | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #121212 | 5.57 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | paper | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #1f1f1f | 4.90 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | elevated | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #2c2c2c | 4.15 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | default | selected | #dadada | #b8b8b8 | #1f1f1f | #7ca7ff | #121212 | 7.88 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | paper | selected | #dadada | #b8b8b8 | #1f1f1f | #7ca7ff | #1f1f1f | 6.93 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | elevated | selected | #dadada | #b8b8b8 | #1f1f1f | #7ca7ff | #2c2c2c | 5.87 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #121212 | 5.57 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #1f1f1f | 4.90 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | unselected | #dadada | #b8b8b8 | #1f1f1f | #8c8c8c | #2c2c2c | 4.15 | 11.79 | 8.31 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | selected | #dadada | #dadada | #2d3341 | #7ca7ff | #121212 | 7.88 | 9.04 | 9.04 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | selected | #dadada | #dadada | #2d3341 | #7ca7ff | #1f1f1f | 6.93 | 9.04 | 9.04 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | selected | #dadada | #dadada | #2d3341 | #7ca7ff | #2c2c2c | 5.87 | 9.04 | 9.04 | <span style={{ color: 'green' }}>✅</span> |
+
+Note — default variant, selected resting: desc text (#6e6e6e / #b8b8b8 in dark) stays text.muted because default variant has no container background. The radio selection state doesn't affect label or desc text colour.
+
+</details>
+
+<details>
+<summary><strong>Hover state</strong> — 24 reviewed, 24 pass, 0 issues</summary>
+
+Hover only applies to boxed/card variants (default variant radios have no hover background). Unselected hover: `action.hover` overlay composited on `background.paper` → `#f6f6f6` (light) / `#303030` (dark). Selected hover uses `primary.softDark` tint (`TINT.dark`).
+
+| Mode | Variant | Surface | Selection | Label text | Desc text | Component bg | Border hex | Surface hex | Border contrast | Label contrast | Desc contrast | Outcome |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| light | boxed/card | default | unselected | #2c2c2c | #6e6e6e | #f6f6f6 | #8c8c8c | #f5f5f5 | 3.08 | 12.92 | 4.72 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | unselected | #2c2c2c | #6e6e6e | #f6f6f6 | #8c8c8c | #ffffff | 3.36 | 12.92 | 4.72 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | unselected | #2c2c2c | #6e6e6e | #f6f6f6 | #8c8c8c | #f2f2f2 | 3.00 | 12.92 | 4.72 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | default | selected | #2c2c2c | #2c2c2c | #d9e5ff | #0051ff | #f5f5f5 | 5.32 | 11.04 | 11.04 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | selected | #2c2c2c | #2c2c2c | #d9e5ff | #0051ff | #ffffff | 5.80 | 11.04 | 11.04 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | selected | #2c2c2c | #2c2c2c | #d9e5ff | #0051ff | #f2f2f2 | 5.18 | 11.04 | 11.04 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | unselected | #dadada | #b8b8b8 | #303030 | #8c8c8c | #121212 | 5.57 | 9.44 | 6.65 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | unselected | #dadada | #b8b8b8 | #303030 | #8c8c8c | #1f1f1f | 4.90 | 9.44 | 6.65 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | unselected | #dadada | #b8b8b8 | #303030 | #8c8c8c | #2c2c2c | 4.15 | 9.44 | 6.65 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | selected | #dadada | #dadada | #343e53 | #7ca7ff | #121212 | 7.88 | 7.66 | 7.66 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | selected | #dadada | #dadada | #343e53 | #7ca7ff | #1f1f1f | 6.93 | 7.66 | 7.66 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | selected | #dadada | #dadada | #343e53 | #7ca7ff | #2c2c2c | 5.87 | 7.66 | 7.66 | <span style={{ color: 'green' }}>✅</span> |
+
+</details>
+
+<details>
+<summary><strong>Active state</strong> — 12 reviewed, 12 pass, 0 issues</summary>
+
+Active (press) only applies to boxed/card selected cards. Background uses `primary.softDeeper` tint (`TINT.deeper`). Default variant has no card container, so no active background state.
+
+| Mode | Variant | Surface | Selection | Label text | Desc text | Component bg | Border hex | Surface hex | Border contrast | Label contrast | Desc contrast | Outcome |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| light | boxed/card | default | selected | #2c2c2c | #2c2c2c | #ccdcff | #0051ff | #f5f5f5 | 5.32 | 10.14 | 10.14 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | selected | #2c2c2c | #2c2c2c | #ccdcff | #0051ff | #ffffff | 5.80 | 10.14 | 10.14 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | selected | #2c2c2c | #2c2c2c | #ccdcff | #0051ff | #f2f2f2 | 5.18 | 10.14 | 10.14 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | selected | #dadada | #dadada | #3a4660 | #7ca7ff | #121212 | 7.88 | 6.75 | 6.75 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | selected | #dadada | #dadada | #3a4660 | #7ca7ff | #1f1f1f | 6.93 | 6.75 | 6.75 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | selected | #dadada | #dadada | #3a4660 | #7ca7ff | #2c2c2c | 5.87 | 6.75 | 6.75 | <span style={{ color: 'green' }}>✅</span> |
+
+</details>
+
+<details>
+<summary><strong>Focus-visible state</strong> — 18 reviewed, 18 pass, 0 issues</summary>
+
+Focus ring is `border.focus` measured against the adjacent page surface (`outlineOffset: 2px` means the ring sits outside any border). **Default variant:** `MuiRadio.styleOverrides.root` applies 2px outline on `.Mui-focusVisible`. **Boxed/card:** container `:has(.Mui-focusVisible)` applies 2px outline; radio's own outline suppressed via `cardRadioSx`.
+
+| Mode | Variant | Surface | Focus ring hex | Surface hex | Label contrast | Border contrast | Focus contrast | Outcome |
+|---|---|---|---|---|---|---|---|---|
+| light | default | default | #0051ff | #f5f5f5 | 13.97 | 3.08 | 5.32 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | paper | #0051ff | #ffffff | 13.97 | 3.36 | 5.80 | <span style={{ color: 'green' }}>✅</span> |
+| light | default | elevated | #0051ff | #f2f2f2 | 13.97 | 3.00 | 5.18 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | default | #0051ff | #f5f5f5 | 13.97 | 3.08 | 5.32 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | paper | #0051ff | #ffffff | 13.97 | 3.36 | 5.80 | <span style={{ color: 'green' }}>✅</span> |
+| light | boxed/card | elevated | #0051ff | #f2f2f2 | 13.97 | 3.00 | 5.18 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | default | #7ca7ff | #121212 | 11.79 | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | paper | #7ca7ff | #1f1f1f | 11.79 | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅</span> |
+| dark | default | elevated | #7ca7ff | #2c2c2c | 11.79 | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | default | #7ca7ff | #121212 | 11.79 | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | paper | #7ca7ff | #1f1f1f | 11.79 | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅</span> |
+| dark | boxed/card | elevated | #7ca7ff | #2c2c2c | 11.79 | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅</span> |
+
+Note — boxed/card focus: `:has()` CSS pseudo-class used for focus delegation. Browser support: Chrome 105+ (Aug 2022), Firefox 121+ (Dec 2023), Safari 15.4+ (Mar 2022). Globally ~97% as of mid-2026.
+
+</details>
+
+</Box>
+
+---
+
+## Pass outcomes
+
+| WCAG SC | Result | Evidence |
+|---|---|---|
+| <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Error state exposed via `FormControl error`; helper and error text linked via `aria-describedby` to stable `useId()` IDs on the group; legend linked via `aria-labelledby` (RG-01 fix). |
+| <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | 90 combinations measured. Label text minimum: 6.75:1 (dark / active-selected). Desc text (unselected): minimum 4.68:1 (light / default variant / default surface). Desc text (selected boxed/card): minimum 9.04:1. Disabled state exempt under WCAG 1.4.3 Note 1. |
+| <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All 90 border combinations pass. Minimum: 3.00:1 (light / elevated, unselected). State-change: non-colour cue present — default radio conveys checked state via shape (inner dot); boxed/card conveys selection via border thickness (inset shadow, effective 2px vs 1px). |
+| <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Native `<input type="radio">` elements; `disabled` attribute prevents focus and activation for disabled options. Pending manual keyboard verification. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | `MuiRadio.styleOverrides.root` defines `.Mui-focusVisible` outline for default variant; `:has(.Mui-focusVisible)` on container handles boxed/card. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | 2 px outline with 2 px offset; minimum measured focus contrast 5.18:1 across all combinations. Perimeter of focus indicator exceeds smallest enclosing shape for all variants. |
+| <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Default radio circle: 1.5 rem (24 px). Boxed/card container minimum height: 3 rem (48 px). Full `FormControlLabel` row is the click target for all variants. |
+| <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Group has accessible name via `aria-labelledby` (RG-01 fix). Each radio has a label via `FormControlLabel`. Error and helper text linked via `aria-describedby`. Required state propagated via `FormControl`. |
+
+---
+
+## Not tested
+
+- **ST-KEYBOARD-01**: Manual keyboard walkthrough not performed. Implementation is native radio inputs with standard browser keyboard model (Tab to enter, arrow keys to navigate). Verification pending.
+- **ST-SCREENREADER-01** (<a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a>): NVDA and VoiceOver have not been run. Pending verification of: group role + name announcement; individual option name and checked state; error message association via `aria-describedby`; `required` state announcement.
+- **2.4.3 Focus Order**: Requires manual keyboard walkthrough in a composed page to verify natural focus sequence through the group and surrounding content.
+- **2.4.11 Focus Not Obscured**: Requires runtime checks in pages with sticky headers or other overlapping regions.
+- **3.2.2 On Input**: Requires interaction testing in composed flows to confirm no unexpected context changes when selecting a radio option.
+- **3.3.2 Labels or Instructions**: `legend` and `helperText` props provide visual context; adequacy of instructions in all deployment scenarios is not audited here.
+
+Contrast matrix is complete for all in-scope surfaces and modes. Reversed/brand-surface use is out of scope.
+
+---
+
+## Conformance matrix
+
+| WCAG SC | Criterion | Status | Notes |
+|---|---|---|---|
+| <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | Info and Relationships | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Error/helper associated via aria-describedby; legend via aria-labelledby (RG-01 fix). |
+| <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | Contrast (Minimum) | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All 90 text contrast combinations pass; minimum 4.68:1 (default variant, desc, light). |
+| <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | Non-text Contrast | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All border combinations pass; minimum 3.00:1. State-change: non-colour cues present on all variants. |
+| <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a> | Keyboard | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Native radio inputs; disabled attribute used correctly. Manual verification pending. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-order" target="_blank" rel="noopener noreferrer">2.4.3</a> | Focus Order | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires manual walkthrough in composed page context. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a> | Focus Visible | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Focus-visible styles defined in theme factory and component; all variants covered. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-not-obscured-minimum" target="_blank" rel="noopener noreferrer">2.4.11</a> | Focus Not Obscured (Minimum) | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires runtime checks in composed contexts. |
+| <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Focus Appearance | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | 2 px outline, 2 px offset; minimum contrast 5.18:1. |
+| <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | Target Size (Minimum) | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Radio 24 px; card containers 48 px. All variants exceed 24 × 24 px minimum. |
+| <a href="https://www.w3.org/TR/WCAG22/#on-input" target="_blank" rel="noopener noreferrer">3.2.2</a> | On Input | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires interaction testing in composed flows. |
+| <a href="https://www.w3.org/TR/WCAG22/#labels-or-instructions" target="_blank" rel="noopener noreferrer">3.3.2</a> | Labels or Instructions | <span style={{ color: 'orange' }}>🟡 Not tested</span> | legend/helperText props provide context; adequacy untested. |
+| <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Name, Role, Value | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Group has accessible name; radios have labels; error state exposed. |
+
+---
+
+## Status decision
+
+Status is **green**. One finding was identified and resolved during this review:
+
+- **RG-01** — `4.1.2 / 1.3.1`: Code review identified that `div[role="radiogroup"]` lacked `aria-labelledby` pointing to the `FormLabel`. MUI v5 does not wire this automatically. Resolved 09 / 06 / 2026 by adding `labelId` (derived from `useId()`), assigning `id={labelId}` to `FormLabel`, and `aria-labelledby={labelId}` to `MuiRadioGroup` in `src/components/RadioGroup/index.tsx`.
+
+Manual keyboard traversal (ST-KEYBOARD-01) and screen reader verification (ST-SCREENREADER-01) remain pending but are not confirmed failures.
+
+---
+
+## Notes on reproducibility
+
+The contrast script measures all three variants, both modes, all three standard surfaces, and all relevant states:
+
+```
+npx tsx .\scripts\radio-group-contrast-review.ts
+```
+
+Expected: **90 rows measured, 0 failures.**
+
+Note: boxed and card variants share identical token values and are measured as `boxed` in the script (card rows are deduplicated). The script correctly models `RadioCardLabel.descriptionSx` logic — selected states use `text.primary` for desc text; unselected states use `text.muted`.
+
+---
+
+## Remediation and ownership
+
+- Owner: Design System team
+- **RG-01 resolved** 09 / 06 / 2026 — `src/components/RadioGroup/index.tsx` — `labelId` added; `FormLabel id` and `MuiRadioGroup aria-labelledby` wired
+- Next review trigger: any change to `border.input`, `primary.main`, focus ring colour, description text colour tokens, or component sizing
+- Rerun script after any token change to confirm zero failures

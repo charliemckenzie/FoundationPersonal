@@ -214,19 +214,74 @@ When using the summary matrix, include both of the following:
 
 ### File and folder structure (mandatory)
 
-The conformance report MDX must live alongside the component's stories in a named subfolder. Do not place the report as a sibling file next to other component story files.
+**Rule: every component gets its own named subfolder. Both the stories file AND the conformance report MDX go inside that subfolder together. Never create a subfolder for only one of them.**
 
-Required structure:
+#### Step-by-step (follow this exactly)
+
+1. Check whether `src/stories/components/ComponentName/` already exists as a folder.
+   - If it does, skip to step 3.
+   - If it does NOT exist, create it.
+
+2. Move `src/stories/components/ComponentName.stories.tsx` INTO the new subfolder:
+   ```
+   src/stories/components/ComponentName/ComponentName.stories.tsx
+   ```
+   Then update every relative import inside that file — add one extra `../` level to each import.
+
+3. Create `WCAGConformanceReport.mdx` INSIDE the same subfolder, alongside the stories file:
+   ```
+   src/stories/components/ComponentName/WCAGConformanceReport.mdx
+   ```
+
+#### Before and after (single-file component example)
+
+**Before:**
 ```
 src/stories/components/
-  ComponentName/
-    ComponentName.stories.tsx     ← existing stories (Storybook title unchanged)
-    WCAGConformanceReport.mdx     ← conformance report (title: .../WCAG Conformance Report)
+  ComponentName.stories.tsx     ← flat file, no subfolder
 ```
 
-If the component stories are not already in a subfolder, move them into one as part of creating the report. Update all relative import paths after moving (one extra `../` level required).
+**After:**
+```
+src/stories/components/
+  ComponentName/                ← NEW folder named after the component
+    ComponentName.stories.tsx   ← stories MOVED here (title prop unchanged)
+    WCAGConformanceReport.mdx   ← conformance report CREATED here
+```
 
-The component must remain discoverable in the Storybook sidebar at its existing path. Moving stories into a subfolder does not change the sidebar entry as long as the `title` in the stories file is unchanged.
+**What NOT to do — these are both wrong:**
+
+❌ Report alongside the stories file at the flat level (no subfolder):
+```
+src/stories/components/
+  ComponentName.stories.tsx
+  WCAGConformanceReport.mdx     ← WRONG — not in a subfolder
+```
+
+❌ Report in a subfolder but stories left at the flat level (split structure):
+```
+src/stories/components/
+  ComponentName.stories.tsx     ← WRONG — stories not moved
+  ComponentName/
+    WCAGConformanceReport.mdx   ← WRONG — report is alone in the folder
+```
+
+#### Import path note
+
+Moving into a subfolder adds one level — update all relative imports accordingly:
+- `../../components/Foo` → `../../../components/Foo`
+
+#### Storybook sidebar result
+
+The component must remain discoverable at its existing sidebar path. Moving stories into a subfolder does not change the sidebar entry as long as the `title` in the stories file is unchanged.
+
+```
+Form Components
+  ComponentName               ← unchanged entry (from ComponentName.stories.tsx title)
+    Playground                ← story
+    Default                   ← story
+    WCAG Conformance Report   ← nested MDX page
+```
 
 ### Report page rules
 

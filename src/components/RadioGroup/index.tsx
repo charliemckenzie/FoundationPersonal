@@ -120,6 +120,7 @@ export function RadioGroup({
   name,
 }: RadioGroupProps) {
   const groupId = useId();
+  const labelId = legend ? `${groupId}-label` : undefined;
   const errorId = error && errorMessage ? `${groupId}-error` : undefined;
   const helperId = helperText ? `${groupId}-helper-text` : undefined;
   const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
@@ -132,6 +133,7 @@ export function RadioGroup({
     <FormControl error={error} disabled={disabled} required={required}>
       {legend && (
         <FormLabel
+          id={labelId}
           sx={[
             {
               color: 'text.primary',
@@ -158,6 +160,7 @@ export function RadioGroup({
         defaultValue={defaultValue}
         name={name}
         row={direction === 'row'}
+        aria-labelledby={labelId}
         aria-describedby={describedBy}
         onChange={(e) => {
           if (value === undefined) setInternalValue(e.target.value);

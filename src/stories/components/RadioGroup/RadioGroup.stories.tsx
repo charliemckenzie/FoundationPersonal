@@ -1,6 +1,6 @@
 import type { ComponentProps, ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
-import { RadioGroup } from '../../components/RadioGroup';
+import { RadioGroup } from '../../../components/RadioGroup';
 
 type RadioGroupArgs = ComponentProps<typeof RadioGroup> & { showHelperText: boolean; cardIcon: string; showLegend: boolean };
 
