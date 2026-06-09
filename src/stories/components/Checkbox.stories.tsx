@@ -8,7 +8,7 @@ type CheckboxArgs = ComponentProps<typeof Checkbox> & {
 };
 
 const meta: Meta<CheckboxArgs> = {
-  title: 'Form Components / Checkbox',
+  title: 'Form Components / Checkbox / Checkbox',
   component: Checkbox as ComponentType<CheckboxArgs>,
   tags: ['autodocs'],
   decorators: [
@@ -30,11 +30,12 @@ const meta: Meta<CheckboxArgs> = {
     docs: {
       description: {
         component: `
-Checkbox supports three variants:
+Checkbox supports two variants:
 
 - \`default\` — a standard checkbox with label, helper text, and optional description. Use for binary choices in standard form layouts.
 - \`boxed\` — a full-width bordered row. Use for settings lists or permission toggles where visual separation between options improves scannability.
-- \`card\` — a tappable card tile with an optional icon. Use for selection UIs where visual distinction matters — product types, preference pickers, onboarding answers.
+
+For card tile multi-select groups use **CheckboxCardGroup**. For compact button-style multi-select groups use **CheckboxButtonGroup**.
 
 All variants support \`error\`, \`disabled\`, and \`description\`. The \`indeterminate\` state is available on the default variant for parent-child selection patterns.
         `.trim(),
@@ -44,7 +45,6 @@ All variants support \`error\`, \`disabled\`, and \`description\`. The \`indeter
   args: {
     label: 'Accept terms and conditions',
     variant: 'default',
-    icon: 'piggy-bank',
     indeterminate: false,
     disabled: false,
     required: false,
@@ -56,10 +56,10 @@ All variants support \`error\`, \`disabled\`, and \`description\`. The \`indeter
     description: 'Additional context about this option.',
   },
   argTypes: {
-    variant: { control: 'select', options: ['default', 'boxed', 'card'] },
+    variant: { control: 'select', options: ['default', 'boxed'] },
     label: { control: 'text' },
-    icon: { control: 'select', options: ['piggy-bank', 'chart-line', 'umbrella', 'star', 'heart', 'bolt', 'shield', 'house'], if: { arg: 'variant', eq: 'card' } },
-    cardDirection: { if: { arg: 'variant', eq: 'card' } },
+    icon: { table: { disable: true } },
+    cardDirection: { table: { disable: true } },
     color: { table: { disable: true } },
     size: { table: { disable: true } },
     checked: { table: { disable: true } },
@@ -208,68 +208,6 @@ export const Boxed: Story = {
           <Checkbox variant="boxed" label="Email notifications" description="Receive updates about your account activity." />
           <Checkbox variant="boxed" label="SMS alerts" description="Get urgent alerts sent directly to your phone." defaultChecked />
           <Checkbox variant="boxed" label="Marketing emails" description="Offers, promotions, and product news." disabled />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-export const Card: Story = {
-  name: 'Card - Column',
-  parameters: {
-    docs: {
-      description: {
-        story: '**Usage guidance:** Use `variant="card"` with `cardDirection="column"` (default) for visual tile selectors — product type choosers, preference pickers, or onboarding answer cards. Always pair with `icon` to maximise the visual impact.',
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>Without description</p>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 12 }}>
-          <Checkbox variant="card" label="Savings" icon="piggy-bank" />
-          <Checkbox variant="card" label="Investment" icon="chart-line" defaultChecked />
-          <Checkbox variant="card" label="Insurance" icon="umbrella" disabled />
-        </div>
-      </div>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>With description</p>
-        <div style={{ display: 'flex', flexDirection: 'row', gap: 12 }}>
-          <Checkbox variant="card" label="Savings" description="Grow your balance" icon="piggy-bank" />
-          <Checkbox variant="card" label="Investment" description="Build long-term wealth" icon="chart-line" defaultChecked />
-          <Checkbox variant="card" label="Insurance" description="Protect what matters" icon="umbrella" />
-        </div>
-      </div>
-    </div>
-  ),
-};
-
-export const CardLeft: Story = {
-  name: 'Card - Row',
-  parameters: {
-    docs: {
-      description: {
-        story: '**Usage guidance:** Use `cardDirection="row"` for horizontal-layout cards arranged in a vertical list. Better than `column` when descriptions are longer or when vertical space is limited.',
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>Without description</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 320 }}>
-          <Checkbox variant="card" cardDirection="row" label="Savings" icon="piggy-bank" />
-          <Checkbox variant="card" cardDirection="row" label="Investment" icon="chart-line" defaultChecked />
-          <Checkbox variant="card" cardDirection="row" label="Insurance" icon="umbrella" disabled />
-        </div>
-      </div>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>With description</p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 320 }}>
-          <Checkbox variant="card" cardDirection="row" label="Savings" description="Grow your balance" icon="piggy-bank" />
-          <Checkbox variant="card" cardDirection="row" label="Investment" description="Build long-term wealth" icon="chart-line" defaultChecked />
-          <Checkbox variant="card" cardDirection="row" label="Insurance" description="Protect what matters" icon="umbrella" />
         </div>
       </div>
     </div>

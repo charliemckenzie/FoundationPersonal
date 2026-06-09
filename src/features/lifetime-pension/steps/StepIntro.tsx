@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { Alert, SEVERITY_ICONS } from '../../../components/Alert';
 import { Checkbox } from '../../../components/Checkbox';
 import { Icon } from '../../../components/Icon';
-import { ToggleButtonGroup } from '../../../components/ToggleButton';
+import { RadioButtonGroup } from '../../../components/RadioGroup/RadioButtonGroup';
 import { Tooltip } from '../../../components/Tooltip';
 import type { AgeScenario } from '../types';
 
@@ -54,20 +54,19 @@ export function StepIntro({
           It combines your contribution with others in a shared investment pool.
         </Typography>
 
-        <ToggleButtonGroup
-        label="Preview age scenario"
-        ariaLabel="Preview age scenario"
-        value={ageScenario}
-        options={[
-          { value: '60-64', label: 'Aged 60-64' },
-          { value: '65-plus', label: 'Aged 65+' },
-        ]}
-        onChange={(value) => {
-          if (value === '60-64' || value === '65-plus') {
-            onAgeScenarioChange(value);
-          }
-        }}
-      />
+        <RadioButtonGroup
+          legend="Preview age scenario"
+          value={ageScenario}
+          options={[
+            { value: '60-64', label: 'Aged 60-64' },
+            { value: '65-plus', label: 'Aged 65+' },
+          ]}
+          onChange={(value) => {
+            if (value === '60-64' || value === '65-plus') {
+              onAgeScenarioChange(value);
+            }
+          }}
+        />
 
       <Box
         sx={{

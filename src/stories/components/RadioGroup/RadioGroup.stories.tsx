@@ -2,7 +2,7 @@ import type { ComponentProps, ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { RadioGroup } from '../../../components/RadioGroup';
 
-type RadioGroupArgs = ComponentProps<typeof RadioGroup> & { showHelperText: boolean; cardIcon: string; showLegend: boolean };
+type RadioGroupArgs = ComponentProps<typeof RadioGroup> & { showHelperText: boolean; showLegend: boolean };
 
 const SIZE_OPTIONS = [
   { value: 'xs', label: 'Extra small' },
@@ -16,29 +16,14 @@ const SIZE_OPTIONS_WITH_DESCRIPTION = [
   { value: 'md', label: 'Medium', description: 'Our most popular size.' },
 ];
 
-const CONTACT_OPTIONS = [
-  { value: 'savings', label: 'Savings', icon: 'piggy-bank' },
-  { value: 'investment', label: 'Investment', icon: 'chart-line' },
-  { value: 'insurance', label: 'Insurance', icon: 'umbrella' },
-];
-
-const CONTACT_OPTIONS_WITH_DESCRIPTION = [
-  { value: 'savings', label: 'Savings', description: 'Grow your balance', icon: 'piggy-bank' },
-  { value: 'investment', label: 'Investment', description: 'Build long-term wealth', icon: 'chart-line' },
-  { value: 'insurance', label: 'Insurance', description: 'Protect what matters', icon: 'umbrella' },
-];
-
 const meta: Meta<RadioGroupArgs> = {
-  title: 'Form Components / RadioGroup',
+  title: 'Form Components / RadioGroup / RadioGroup',
   component: RadioGroup as ComponentType<RadioGroupArgs>,
   tags: ['autodocs'],
   decorators: [
     (Story, { args }) => {
-      const { showHelperText, showLegend, cardIcon, ...rest } = args;
-      const options = rest.variant === 'card' && cardIcon
-        ? rest.options?.map(opt => ({ ...opt, icon: cardIcon }))
-        : rest.options;
-      return <Story args={{ ...rest, options, legend: showLegend ? rest.legend : undefined, helperText: showHelperText ? rest.helperText : undefined }} />;
+      const { showHelperText, showLegend, ...rest } = args;
+      return <Story args={{ ...rest, legend: showLegend ? rest.legend : undefined, helperText: showHelperText ? rest.helperText : undefined }} />;
     },
   ],
   parameters: {
@@ -47,11 +32,12 @@ const meta: Meta<RadioGroupArgs> = {
     docs: {
       description: {
         component: `
-RadioGroup renders a set of mutually exclusive options. Three variants:
+RadioGroup renders a set of mutually exclusive options. Two variants:
 
 - \`default\` — a standard radio list with an optional legend and helper text. Use for most single-choice selections.
 - \`boxed\` — bordered rows. Use for settings or option tables where visual separation between choices improves scannability.
-- \`card\` — visual tile selection. Use for product or preference pickers where icons and descriptions add meaning.
+
+For card tile layouts use **RadioCardGroup**. For compact button-style selections use **RadioButtonGroup**.
 
 All variants support \`error\`, \`disabled\`, and \`description\` on individual options.
         `.trim(),
@@ -60,7 +46,6 @@ All variants support \`error\`, \`disabled\`, and \`description\` on individual 
   },
   args: {
     variant: 'default',
-    cardIcon: 'piggy-bank',
     showLegend: true,
     legend: 'Select an option',
     legendBold: true,
@@ -72,9 +57,7 @@ All variants support \`error\`, \`disabled\`, and \`description\` on individual 
     helperText: "We'll use this to send you relevant updates.",
   },
   argTypes: {
-    variant: { control: 'select', options: ['default', 'boxed', 'card'] },
-    cardIcon: { control: 'select', options: ['piggy-bank', 'chart-line', 'umbrella', 'star', 'heart', 'bolt', 'shield', 'house'], if: { arg: 'variant', eq: 'card' } },
-    cardDirection: { if: { arg: 'variant', eq: 'card' } },
+    variant: { control: 'select', options: ['default', 'boxed'] },
     direction: { control: 'select', options: ['column', 'row'] },
     showLegend: { control: 'boolean' },
     legend: { control: 'text', if: { arg: 'showLegend', truthy: true } },
@@ -85,6 +68,7 @@ All variants support \`error\`, \`disabled\`, and \`description\` on individual 
     helperText: { control: 'text', if: { arg: 'showHelperText', truthy: true } },
     color: { table: { disable: true } },
     size: { table: { disable: true } },
+    cardDirection: { table: { disable: true } },
   },
 };
 
@@ -201,52 +185,6 @@ export const Boxed: Story = {
       <div>
         <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>With description</p>
         <RadioGroup legend="Size" options={SIZE_OPTIONS_WITH_DESCRIPTION} variant="boxed" defaultValue="sm" />
-      </div>
-    </div>
-  ),
-};
-
-export const Card: Story = {
-  name: 'Card - Column',
-  parameters: {
-    docs: {
-      description: {
-        story: '**Usage guidance:** Use `variant="card"` with `cardDirection="column"` for visual tile pickers — product selectors, preference cards, or onboarding choices. Pair with `icon` on each option for maximum visual clarity.',
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>Without description</p>
-        <RadioGroup legend="Contact preference" options={CONTACT_OPTIONS} variant="card" direction="row" defaultValue="savings" />
-      </div>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>With description</p>
-        <RadioGroup legend="Contact preference" options={CONTACT_OPTIONS_WITH_DESCRIPTION} variant="card" direction="row" defaultValue="savings" />
-      </div>
-    </div>
-  ),
-};
-
-export const CardLeft: Story = {
-  name: 'Card - Row',
-  parameters: {
-    docs: {
-      description: {
-        story: '**Usage guidance:** Use `cardDirection="row"` for horizontal-layout cards arranged in a vertical list. Better than `column` when descriptions are longer or vertical space is limited.',
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 24, width: 360 }}>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>Without description</p>
-        <RadioGroup legend="Contact preference" options={CONTACT_OPTIONS} variant="card" cardDirection="row" defaultValue="savings" />
-      </div>
-      <div>
-        <p style={{ fontSize: '0.75rem', fontWeight: 600, margin: '0 0 8px' }}>With description</p>
-        <RadioGroup legend="Contact preference" options={CONTACT_OPTIONS_WITH_DESCRIPTION} variant="card" cardDirection="row" defaultValue="savings" />
       </div>
     </div>
   ),

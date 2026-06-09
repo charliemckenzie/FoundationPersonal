@@ -19,7 +19,7 @@ export interface RadioOption {
   disabled?: boolean;
 }
 
-export type RadioGroupVariant = 'default' | 'boxed' | 'card';
+export type RadioGroupVariant = 'default' | 'boxed' | 'card' | 'button';
 export type RadioGroupDirection = 'column' | 'row';
 export type RadioColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
 export type RadioSize = 'small' | 'medium';
@@ -98,6 +98,32 @@ const defaultRadioSx = {
   '&:hover, &:active': { backgroundColor: 'transparent' },
 };
 
+const buttonContainerSx = (args: {
+  isSelected: boolean;
+  isItemDisabled: boolean;
+}) => (theme: Theme) => ({
+  ml: 0,
+  mr: 0,
+  gap: 0,
+  alignItems: 'center',
+  border: '1px solid',
+  borderColor: args.isSelected ? 'primary.main' : 'border.input',
+  borderRadius: `${theme.shape.sm}px`,
+  height: '3rem',
+  px: 2,
+  cursor: args.isItemDisabled ? 'default' : 'pointer',
+  transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
+  backgroundColor: 'background.paper',
+  ...(args.isSelected && {
+    ...selectedCardStyles(theme),
+    boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+  }),
+  ...(!args.isItemDisabled && !args.isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
+  '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+  '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
+  '& .MuiFormControlLabel-label': { typography: 'body', fontSize: '1rem', lineHeight: 1 },
+});
+
 export function RadioGroup({
   legend,
   options,
@@ -128,11 +154,19 @@ export function RadioGroup({
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
   const resolvedValue = value !== undefined ? value : internalValue;
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
+  const isButton = variant === 'button';
 
   return (
-    <FormControl error={error} disabled={disabled} required={required}>
+    <FormControl
+      component="fieldset"
+      error={error}
+      disabled={disabled}
+      required={required}
+      sx={{ border: 'none', p: 0, m: 0, minWidth: 0 }}
+    >
       {legend && (
         <FormLabel
+          component="legend"
           id={labelId}
           sx={[
             {
@@ -166,11 +200,11 @@ export function RadioGroup({
           if (value === undefined) setInternalValue(e.target.value);
           onChange?.(e.target.value);
         }}
-        sx={{ gap: isBoxedOrCard ? 1 : 1.5 }}
+        sx={{ gap: isBoxedOrCard || isButton ? 1 : 1.5 }}
       >
         {options.map((option) => {
           const isItemDisabled = disabled || (option.disabled ?? false);
-          const isSelected = isBoxedOrCard && option.value === resolvedValue;
+          const isSelected = (isBoxedOrCard || isButton) && option.value === resolvedValue;
           const isCardVariant = isBoxedOrCard;
 
           const labelNode = isCardVariant ? (
@@ -191,6 +225,27 @@ export function RadioGroup({
               </Box>
             </Box>
           ) : option.label;
+
+          if (isButton) {
+            return (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                label={option.label}
+                disabled={isItemDisabled}
+                sx={buttonContainerSx({ isSelected, isItemDisabled })}
+                control={
+                  <Radio
+                    color={color}
+                    size={size}
+                    disableRipple
+                    disableTouchRipple
+                    sx={cardRadioSx}
+                  />
+                }
+              />
+            );
+          }
 
           if (!isBoxedOrCard) {
             return (

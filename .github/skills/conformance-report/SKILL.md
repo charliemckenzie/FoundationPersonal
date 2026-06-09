@@ -271,16 +271,42 @@ src/stories/components/
 Moving into a subfolder adds one level — update all relative imports accordingly:
 - `../../components/Foo` → `../../../components/Foo`
 
-#### Storybook sidebar result
+#### Storybook sidebar title format (mandatory)
 
-The component must remain discoverable at its existing sidebar path. Moving stories into a subfolder does not change the sidebar entry as long as the `title` in the stories file is unchanged.
+Both the stories file and the conformance report MDX must use the component folder as an intermediate path segment in their `title` / `Meta title` values.
+
+**Stories file** (`ComponentName.stories.tsx`):
+```ts
+title: 'Form Components / ComponentName / ComponentName'
+//                          ^^^^^^^^^^^^   ^^^^^^^^^^^^
+//                          folder segment  stories entry
+```
+
+**Conformance report** (`WCAGConformanceReport.mdx`):
+```mdx
+<Meta title="Form Components / ComponentName / WCAG Conformance Report" />
+```
+
+This produces the correct sidebar shape:
 
 ```
 Form Components
-  ComponentName               ← unchanged entry (from ComponentName.stories.tsx title)
-    Playground                ← story
-    Default                   ← story
-    WCAG Conformance Report   ← nested MDX page
+  ComponentName               ← folder node (from the shared path prefix)
+    ComponentName             ← stories entry  (Playground, Default, etc.)
+    WCAG Conformance Report   ← MDX page
+```
+
+**What NOT to do — wrong title formats:**
+
+❌ Stories title without the folder segment (conformance report becomes orphaned or misplaced):
+```ts
+title: 'Form Components / ComponentName'   // WRONG
+```
+
+❌ Conformance report title without the folder segment:
+```mdx
+<Meta title="Form Components / ComponentName / WCAG Conformance Report" />
+// OK only if the stories file ALSO uses the folder-segment pattern above
 ```
 
 ### Report page rules

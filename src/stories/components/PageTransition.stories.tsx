@@ -60,7 +60,7 @@ function Demo() {
 }
 
 const meta: Meta<typeof PageTransition> = {
-  title: 'Components / Page Transition',
+  title: 'Utilities / Page Transition',
   component: PageTransition,
   tags: ['autodocs'],
   parameters: {
