@@ -15,7 +15,7 @@ const SIZE_OPTIONS = [
 ];
 
 const meta: Meta<typeof ToggleButtonGroup> = {
-  title: 'Form Components / ToggleButton',
+  title: 'Form Components / Toggle Button / Toggle Button',
   component: ToggleButtonGroup,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

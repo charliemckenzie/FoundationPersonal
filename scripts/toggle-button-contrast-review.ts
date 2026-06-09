@@ -167,7 +167,8 @@ for (const mode of modes) {
     {
       const selBgAlpha = alpha(primaryMain, tintMain);
       const bgHex    = resolve(selBgAlpha, buttonBg);
-      const textHex  = toHex(parseColor(primaryMain));
+      // Selected state uses text.primary (not primary.main) — theme factory updated 09/06/2026
+      const textHex  = toHex(parseColor(textPrimary));
       const borderHex = toHex(parseColor(primaryMain)); // selected border = primary.main
       rows.push({
         mode, surface, state: 'selected-resting',
@@ -185,7 +186,8 @@ for (const mode of modes) {
     {
       const selHoverBgAlpha = alpha(primaryMain, tintDark);
       const bgHex  = resolve(selHoverBgAlpha, buttonBg);
-      const textHex = toHex(parseColor(mode === 'light' ? primaryDark : primaryLight));
+      // Selected state uses text.primary — theme factory updated 09/06/2026
+      const textHex = toHex(parseColor(textPrimary));
       const borderHex = toHex(parseColor(primaryMain));
       rows.push({
         mode, surface, state: 'selected-hover',
@@ -203,7 +205,8 @@ for (const mode of modes) {
     {
       const selActiveBgAlpha = alpha(primaryMain, tintDeeper);
       const bgHex  = resolve(selActiveBgAlpha, buttonBg);
-      const textHex = toHex(parseColor(mode === 'light' ? primaryDark : primaryLight));
+      // Selected state uses text.primary — theme factory updated 09/06/2026
+      const textHex = toHex(parseColor(textPrimary));
       const borderHex = toHex(parseColor(primaryMain));
       rows.push({
         mode, surface, state: 'selected-active',

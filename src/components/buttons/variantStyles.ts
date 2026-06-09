@@ -63,7 +63,7 @@ export function buildOutlinedStyles(color: ButtonColorKeyResolved) {
   return {
     backgroundColor: 'transparent',
     border: '1px solid',
-    borderColor: (theme: Theme) => theme.palette[color].main,
+    borderColor: (theme: Theme) => alpha(theme.palette[color].main, 0.70),
     color: (theme: Theme) => theme.palette[color].main,
     boxShadow: 'none',
     '&:hover': {

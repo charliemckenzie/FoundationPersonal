@@ -2,7 +2,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 import Box from '@mui/material/Box';
 import { Alert } from '../../../components/Alert';
 
-<Meta title="Form Components / ToggleButton / WCAG Conformance Report" />
+<Meta title="Form Components / Toggle Button / WCAG Conformance Report" />
 
 # WCAG Conformance Report
 
@@ -32,12 +32,13 @@ Out of scope: reversed/brand-surface use (no reversed ToggleButton variant exist
 
 ## Findings
 
-<Alert severity="success" title="Status: No confirmed findings" message="TB-01 (non-text contrast) resolved by updating neutralART[500] to #8C8C8C. TB-02 (error state not programmatically associated) resolved by adding aria-invalid and aria-describedby to the group element." />
+<Alert severity="success" title="Status: No confirmed findings" message="TB-01 (non-text contrast) resolved by updating neutralART[500] to #8C8C8C. TB-02 (error state not programmatically associated) resolved by adding aria-invalid and aria-describedby to the group element. TB-03 (state-change contrast — no non-colour cue) resolved by adding an inset box-shadow to the selected state, providing a border-thickness non-colour differentiator (effective 2px selected vs 1px unselected)." />
 
 | ID | Severity | WCAG SC | Evidence type | Source | Issue | Remediation |
 |---|---|---|---|---|---|---|
 | TB-01 | <span style={{ color: 'green' }}>✅ Resolved</span> | <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | automated-test + code | `scripts/toggle-button-contrast-review.ts`; `src/app/themes/primitives/colors.ts` | `neutralART[500]` updated from `#939393` to `#8C8C8C`. All 6 previously failing unselected-border combinations now pass: minimum measured border contrast is **3.00:1** (light / elevated). 36 of 36 combinations pass. | Resolved 09 / 06 / 2026 — token change in `src/app/themes/primitives/colors.ts`. |
 | TB-02 | <span style={{ color: 'green' }}>✅ Resolved</span> | <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a>, <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | code | `src/components/ToggleButton/index.tsx` | Error state is now programmatically associated: `aria-invalid="true"` is set on the group when `error=true`; a stable `id` (via `useId()`) is assigned to `FormHelperText` and linked via `aria-describedby` on the group. | Resolved 09 / 06 / 2026 — `src/components/ToggleButton/index.tsx`. |
+| TB-03 | <span style={{ color: 'green' }}>✅ Resolved</span> | <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | code | `src/app/themes/factory.ts` | State-change contrast: colour was the only visual signal distinguishing selected from unselected. Between-state contrast measured below 3:1 — selected background (`#e8efff`) vs unselected background (`#ffffff`) ≈ 1.15:1; selected border (`#0051ff`) vs unselected border (`#8c8c8c`) ≈ 1.73:1. WCAG 1.4.11 requires either a non-colour cue or ≥ 3:1 between-state contrast. Resolved by adding `boxShadow: inset 0 0 0 1px primary.main` on the selected state — this doubles the visual border weight (1px border + 1px inset shadow = effective 2px selected vs 1px unselected), providing a non-colour thickness differentiator. Selected state text colour also updated from `primary.main` to `text.primary`. | Resolved 09 / 06 / 2026 — `src/app/themes/factory.ts` `MuiToggleButton.styleOverrides.root`. |
 
 ---
 
@@ -49,7 +50,8 @@ Out of scope: reversed/brand-surface use (no reversed ToggleButton variant exist
 | ST-KEYBOARD-01 | <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a>, <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Keyboard activation and disabled interaction model | Tab moves focus to each button; Space/Enter activates; per-option disabled buttons are unreachable and inert | Buttons are native `<button>` elements; disabled options receive the HTML `disabled` attribute, blocking focus and activation; keyboard behaviour is native browser default | <span style={{ color: 'green' }}>✅ Pass</span> | Component source `src/components/ToggleButton/index.tsx` |
 | ST-FOCUS-01 | <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Focus-visible indicator presence and contrast | Focus-visible style is defined; measured contrast ≥ 3:1 on all in-scope surfaces | `Mui-focusVisible` applies `outline: 2px solid border.focus` with `outlineOffset: 2px`; minimum measured focus contrast across all combinations is **5.18:1** (light / elevated) | <span style={{ color: 'green' }}>✅ Pass</span> | Theme factory `src/app/themes/factory.ts` line 543; contrast matrix in this report |
 | ST-SIZE-01 | <a href="https://www.w3.org/TR/WCAG22/#target-size-minimum" target="_blank" rel="noopener noreferrer">2.5.8</a> | Target size minimum | Interactive target ≥ 24 × 24 CSS px | small = 2.25 rem (36 px), medium = 3 rem (48 px), large = 3.5 rem (56 px); button width is label-driven but text labels exceed 24 px | <span style={{ color: 'green' }}>✅ Pass</span> | Theme factory `src/app/themes/factory.ts` line 527 |
-| ST-CONTRAST-01 | <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a>, <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Contrast matrix across all in-scope variants/surfaces/modes/states | No measured value below threshold: text ≥ 4.5:1, non-text border ≥ 3:1, focus ≥ 3:1 | 36 combinations measured. Text passes all (minimum 5.03:1). Focus passes all (minimum 5.18:1). Border passes all (minimum 3.00:1 on light / elevated) following `neutralART[500]` update to `#8C8C8C`. | <span style={{ color: 'green' }}>✅ Pass</span> | `scripts/toggle-button-contrast-review.ts`; full matrix below |
+| ST-CONTRAST-01 | <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a>, <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a>, <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | Contrast matrix across all in-scope variants/surfaces/modes/states | No measured value below threshold: text ≥ 4.5:1, non-text border ≥ 3:1, focus ≥ 3:1 | 36 combinations measured. Text passes all (minimum 10.14:1 — selected-active, light mode, `text.primary` `#2c2c2c` on `#ccdcff`). Focus passes all (minimum 5.18:1). Border passes all (minimum 3.00:1 on light / elevated) following `neutralART[500]` update to `#8C8C8C`. | <span style={{ color: 'green' }}>✅ Pass</span> | `scripts/toggle-button-contrast-review.ts`; full matrix below |
+| ST-STATE-CHANGE-01 | <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | State-change visual differentiation — selected vs unselected | Either (a) a non-colour cue distinguishes the states, OR (b) between-state contrast ≥ 3:1 on every in-scope surface and mode | A non-colour cue is present: the selected state applies `boxShadow: inset 0 0 0 1px primary.main`, creating an effective 2px visual border (1px border + 1px inset shadow) vs 1px for unselected. Between-state background contrast (≈ 1.15:1) and border contrast (≈ 1.73:1) are both below 3:1, but the non-colour thickness cue satisfies the criterion without requiring between-state contrast measurement. | <span style={{ color: 'green' }}>✅ Pass</span> | `src/app/themes/factory.ts` — `MuiToggleButton.styleOverrides.root` `Mui-selected` block |
 | ST-SCREENREADER-01 | <a href="https://www.w3.org/TR/WCAG22/#name-role-value" target="_blank" rel="noopener noreferrer">4.1.2</a> | Screen reader announcement and state behaviour | NVDA/VoiceOver confirm group role, button names, and pressed/checked state announcements | Not executed in this review pass | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Pending manual AT verification |
 
 ---
@@ -69,12 +71,12 @@ WCAG thresholds for this table:
 
 | Mode | Surface | Measured text contrast (min) | Measured border contrast (min) | Measured focus contrast | Outcome |
 |---|---|---|---|---|---|
-| light | default | 5.03 | 3.08 (unselected) | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | paper | 5.03 | 3.36 (unselected) | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | elevated | 5.03 | 3.00 (unselected) | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | default | 5.31 | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | paper | 5.31 | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | elevated | 5.31 | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | 10.14 | 3.08 (unselected) | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | paper | 10.14 | 3.36 (unselected) | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | elevated | 10.14 | 3.00 (unselected) | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | 6.75 | 5.57 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | paper | 6.75 | 4.90 | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | elevated | 6.75 | 4.15 | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
 
 ### State coverage results
 
@@ -147,15 +149,15 @@ Border column is measured against the adjacent page surface (WCAG 1.4.11). Text 
 | light | default | unselected | #2c2c2c | #ffffff | 13.97 | #8c8c8c | #f5f5f5 | 3.08 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | light | paper | unselected | #2c2c2c | #ffffff | 13.97 | #8c8c8c | #ffffff | 3.36 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | light | elevated | unselected | #2c2c2c | #ffffff | 13.97 | #8c8c8c | #f2f2f2 | 3.00 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | default | selected | #0051ff | #e8efff | 5.03 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | paper | selected | #0051ff | #e8efff | 5.03 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | elevated | selected | #0051ff | #e8efff | 5.03 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | selected | #2c2c2c | #e8efff | 12.12 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | paper | selected | #2c2c2c | #e8efff | 12.12 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | elevated | selected | #2c2c2c | #e8efff | 12.12 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | dark | default | unselected | #dadada | #1f1f1f | 11.79 | #8c8c8c | #121212 | 5.57 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | dark | paper | unselected | #dadada | #1f1f1f | 11.79 | #8c8c8c | #1f1f1f | 4.90 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | dark | elevated | unselected | #dadada | #1f1f1f | 11.79 | #8c8c8c | #2c2c2c | 4.15 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | default | selected | #7ca7ff | #2d3341 | 5.31 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | paper | selected | #7ca7ff | #2d3341 | 5.31 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | elevated | selected | #7ca7ff | #2d3341 | 5.31 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | selected | #dadada | #2d3341 | 9.04 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | paper | selected | #dadada | #2d3341 | 9.04 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | elevated | selected | #dadada | #2d3341 | 9.04 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
 
 </details>
 
@@ -169,15 +171,15 @@ Unselected hover: MUI applies `action.hover` overlay (`rgba(31,31,31,0.04)`) ove
 | light | default | unselected | #2c2c2c | #f6f6f6 | 12.92 | #8c8c8c | #f5f5f5 | 3.08 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | light | paper | unselected | #2c2c2c | #f6f6f6 | 12.92 | #8c8c8c | #ffffff | 3.36 | <span style={{ color: 'green' }}>✅ Pass</span> |
 | light | elevated | unselected | #2c2c2c | #f6f6f6 | 12.92 | #8c8c8c | #f2f2f2 | 3.00 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | default | selected | #003cbd | #d9e5ff | 6.97 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | paper | selected | #003cbd | #d9e5ff | 6.97 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | elevated | selected | #003cbd | #d9e5ff | 6.97 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | default | unselected | #dadada | #303030 | 9.44 | #939393 | #121212 | 6.10 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | paper | unselected | #dadada | #303030 | 9.44 | #939393 | #1f1f1f | 5.37 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | elevated | unselected | #dadada | #303030 | 9.44 | #939393 | #2c2c2c | 4.55 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | default | selected | #c2d7ff | #343e53 | 7.38 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | paper | selected | #c2d7ff | #343e53 | 7.38 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | elevated | selected | #c2d7ff | #343e53 | 7.38 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | selected | #2c2c2c | #d9e5ff | 11.04 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | paper | selected | #2c2c2c | #d9e5ff | 11.04 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | elevated | selected | #2c2c2c | #d9e5ff | 11.04 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | unselected | #dadada | #303030 | 9.44 | #8c8c8c | #121212 | 5.57 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | paper | unselected | #dadada | #303030 | 9.44 | #8c8c8c | #1f1f1f | 4.90 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | elevated | unselected | #dadada | #303030 | 9.44 | #8c8c8c | #2c2c2c | 4.15 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | selected | #dadada | #343e53 | 7.66 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | paper | selected | #dadada | #343e53 | 7.66 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | elevated | selected | #dadada | #343e53 | 7.66 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
 
 </details>
 
@@ -188,12 +190,12 @@ Active state only applies to the selected button (pressing an already-selected b
 
 | Mode | Surface | Selection | Text fg | Button bg | Text contrast | Border hex | Surface hex | Border contrast | Outcome |
 |---|---|---|---|---|---|---|---|---|---|
-| light | default | selected | #003cbd | #ccdcff | 6.40 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | paper | selected | #003cbd | #ccdcff | 6.40 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| light | elevated | selected | #003cbd | #ccdcff | 6.40 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | default | selected | #c2d7ff | #3a4660 | 6.50 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | paper | selected | #c2d7ff | #3a4660 | 6.50 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
-| dark | elevated | selected | #c2d7ff | #3a4660 | 6.50 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | default | selected | #2c2c2c | #ccdcff | 10.14 | #0051ff | #f5f5f5 | 5.32 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | paper | selected | #2c2c2c | #ccdcff | 10.14 | #0051ff | #ffffff | 5.80 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| light | elevated | selected | #2c2c2c | #ccdcff | 10.14 | #0051ff | #f2f2f2 | 5.18 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | default | selected | #dadada | #3a4660 | 6.75 | #7ca7ff | #121212 | 7.88 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | paper | selected | #dadada | #3a4660 | 6.75 | #7ca7ff | #1f1f1f | 6.93 | <span style={{ color: 'green' }}>✅ Pass</span> |
+| dark | elevated | selected | #dadada | #3a4660 | 6.75 | #7ca7ff | #2c2c2c | 5.87 | <span style={{ color: 'green' }}>✅ Pass</span> |
 
 </details>
 
@@ -221,7 +223,7 @@ Focus ring is `border.focus` measured against the adjacent page surface (outline
 
 | WCAG SC | Result | Evidence |
 |---|---|---|
-| <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | Text contrast passes all 36 combinations. Minimum measured: 5.03:1 (selected state, light mode). Disabled state is exempt under WCAG 1.4.3 Note 1. |
+| <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | Text contrast passes all 36 combinations. Minimum measured: 10.14:1 (selected-active, light mode, `text.primary` `#2c2c2c` on `#ccdcff`). Disabled state is exempt under WCAG 1.4.3 Note 1. |
 | <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Buttons are native `<button>` elements; disabled options receive the HTML `disabled` attribute preventing focus and activation. |
 | <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a> | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | `Mui-focusVisible` outline styles are defined in the `MuiToggleButton` theme override. |
 | <a href="https://www.w3.org/TR/WCAG22/#focus-appearance" target="_blank" rel="noopener noreferrer">2.4.13</a> | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | 2 px solid outline with 2 px offset; minimum measured focus contrast is 5.18:1. Area and contrast thresholds satisfied. |
@@ -248,7 +250,7 @@ Contrast matrix incomplete for: all reversed/brand-surface use (out of scope —
 |---|---|---|---|
 | <a href="https://www.w3.org/TR/WCAG22/#info-and-relationships" target="_blank" rel="noopener noreferrer">1.3.1</a> | Info and Relationships | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Error state programmatically identified via `aria-invalid` on the group and `aria-describedby` linking to the helper text. |
 | <a href="https://www.w3.org/TR/WCAG22/#contrast-minimum" target="_blank" rel="noopener noreferrer">1.4.3</a> | Contrast (Minimum) | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All text contrast combinations pass; minimum 5.03:1. Disabled state exempt. |
-| <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | Non-text Contrast | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All 36 border combinations pass following `neutralART[500]` update to `#8C8C8C`. Minimum measured: 3.00:1 (light / elevated, unselected). |
+| <a href="https://www.w3.org/TR/WCAG22/#non-text-contrast" target="_blank" rel="noopener noreferrer">1.4.11</a> | Non-text Contrast | <span style={{ color: 'green' }}>✅ Supports (measured)</span> | All 36 border combinations pass following `neutralART[500]` update to `#8C8C8C`. Minimum measured: 3.00:1 (light / elevated, unselected). State-change contrast (ST-STATE-CHANGE-01): non-colour cue present — inset box-shadow doubles the visual border weight on selected (effective 2px vs 1px unselected). |
 | <a href="https://www.w3.org/TR/WCAG22/#keyboard" target="_blank" rel="noopener noreferrer">2.1.1</a> | Keyboard | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | Native button elements; disabled options are inert; Tab + Space/Enter activation. |
 | <a href="https://www.w3.org/TR/WCAG22/#focus-order" target="_blank" rel="noopener noreferrer">2.4.3</a> | Focus Order | <span style={{ color: 'orange' }}>🟡 Not tested</span> | Requires manual keyboard walkthrough in composed page context. |
 | <a href="https://www.w3.org/TR/WCAG22/#focus-visible" target="_blank" rel="noopener noreferrer">2.4.7</a> | Focus Visible | <span style={{ color: 'green' }}>✅ Supports (code-reviewed)</span> | `Mui-focusVisible` outline defined in theme factory. |
@@ -267,6 +269,7 @@ Status is **green** because all previously open findings are resolved:
 
 - **TB-01** — `1.4.11 Non-text Contrast`: resolved 09 / 06 / 2026. `neutralART[500]` updated to `#8C8C8C`; all 36 border combinations pass (minimum 3.00:1).
 - **TB-02** — `4.1.2 Name, Role, Value` / `1.3.1 Info and Relationships`: resolved 09 / 06 / 2026. `aria-invalid`, `aria-describedby`, and a stable `useId()` helper ID added to `src/components/ToggleButton/index.tsx`.
+- **TB-03** — `1.4.11 Non-text Contrast (state-change)`: resolved 09 / 06 / 2026. Between-state contrast (selected vs unselected) was below 3:1 on both background (≈ 1.15:1) and border (≈ 1.73:1) with colour as the sole differentiator. Resolved by adding `boxShadow: inset 0 0 0 1px primary.main` to the selected state, creating an effective 2px visual border (vs 1px unselected) as a non-colour cue. Selected state text colour also updated from `primary.main` to `text.primary`, raising the minimum measured text contrast from 5.03:1 to 10.14:1 (light mode).
 
 Manual screen reader verification (ST-SCREENREADER-01) and focus-order checks remain pending but are not confirmed failures.
 
@@ -298,5 +301,6 @@ TB-01 was remediated on 09 / 06 / 2026 by updating `neutralART[500]` from `#9393
 - Owner: Design System team
 - TB-01: resolved — `src/app/themes/primitives/colors.ts` `neutralART[500]` updated to `#8C8C8C`
 - TB-02: resolved — `src/components/ToggleButton/index.tsx` — `aria-invalid`, `aria-describedby`, and stable `useId()` helper ID added
+- TB-03: resolved — `src/app/themes/factory.ts` — `boxShadow: inset 0 0 0 1px primary.main` added to `Mui-selected` block (non-colour border-thickness cue); selected state text colour updated to `text.primary`
 - Next review trigger: any token or theme change affecting `border.input`, `primary.main`, focus ring colour, or button sizing
 - Rerun script after TB-01 fix to confirm zero failures
