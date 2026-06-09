@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import type { ArgTypes, Meta, StoryObj } from '@storybook/nextjs-vite';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -58,12 +58,41 @@ interface ControlsArgs {
   useLongCtaLabels: boolean;
 }
 
-const CONTROLS_ARG_TYPES = {
+const CONTROLS_ARG_TYPES: Partial<ArgTypes<ControlsArgs>> = {
+  // — Card style —
   variant: {
     control: 'select',
     options: ['contained', 'border', 'open'],
   },
+  cardBackground: {
+    control: 'select',
+    options: ['white', 'neutral', 'cool'],
+    description: 'Card surface colour: white = background.paper, neutral = background.tintNeutral, cool = background.tintNeutralCool.',
+  },
   expanded: { control: 'boolean' },
+
+  // — Top section —
+  topSectionMode: {
+    control: 'select',
+    options: ['heroIcon', 'fontAwesomeIcon', 'image', 'none'],
+  },
+  topSectionPosition: {
+    control: 'select',
+    options: ['left', 'top'],
+    description: 'Only applies to heroIcon and fontAwesomeIcon modes.',
+  },
+  topSectionMobileBehavior: {
+    control: 'select',
+    options: ['keep-left', 'stack-top'],
+    description: 'When topSectionPosition is left — keep row on mobile or stack icon above content.',
+  },
+  heroIconBackground: {
+    control: 'select',
+    options: ['cool', 'neutral', 'white', 'none'],
+    description: 'Hero icon background. Only applies to heroIcon mode.',
+  },
+
+  // — Content —
   headerVariant: {
     control: 'select',
     options: ['display-1', 'display-2', 'display-3', 'display-4', 'display-5', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
@@ -72,32 +101,11 @@ const CONTROLS_ARG_TYPES = {
     control: 'select',
     options: ['lead', 'body', 'small'],
   },
-  topSectionPosition: {
-    control: 'select',
-    options: ['top', 'left'],
-  },
-  topSectionMobileBehavior: {
-    control: 'select',
-    options: ['keep-left', 'stack-top'],
-    description: 'When topSectionPosition is left, choose whether mobile stays row or stacks top section above content.',
-  },
-  topSectionMode: {
-    control: 'select',
-    options: ['image', 'heroIcon', 'fontAwesomeIcon', 'none'],
-  },
-  cardBackground: {
-    control: 'select',
-    options: ['white', 'neutral', 'cool'],
-    description: 'Card background token mapping: white=background.paper, neutral=background.tintNeutral (#F2F2F2), cool=background.tintNeutralCool (#DDF5FF).',
-  },
-  heroIconBackground: {
-    control: 'select',
-    options: ['none', 'white', 'neutral', 'cool'],
-    description: 'Hero icon background token mapping with allowed combinations enforced by card background.',
-  },
+
+  // — CTAs —
   ctaCount: {
     control: 'select',
-    options: ['none', 'single', 'double'],
+    options: ['double', 'single', 'none'],
   },
   primaryCtaType: {
     control: 'select',
@@ -108,18 +116,18 @@ const CONTROLS_ARG_TYPES = {
     options: ['button', 'textButton'],
   },
   useLongCtaLabels: { control: 'boolean' },
-} as const;
+};
 
 const CONTROLS_DEFAULT_ARGS: ControlsArgs = {
   variant: 'contained',
+  cardBackground: 'white',
   expanded: false,
+  topSectionMode: 'heroIcon',
+  topSectionPosition: 'top',
+  topSectionMobileBehavior: 'keep-left',
+  heroIconBackground: 'cool',
   headerVariant: 'h5',
   bodyVariant: 'body',
-  topSectionPosition: 'left',
-  topSectionMobileBehavior: 'keep-left',
-  topSectionMode: 'image',
-  cardBackground: 'white',
-  heroIconBackground: 'cool',
   ctaCount: 'double',
   primaryCtaType: 'button',
   secondaryCtaType: 'button',
@@ -243,7 +251,7 @@ function renderInteractiveCard({
   const iconAlignmentSx = {
     ...iconPaddingSx,
     display: 'flex',
-    justifyContent: iconOnLeft ? 'flex-start' : 'center',
+    justifyContent: 'flex-start',
   };
   const cardSx =
     topSectionMode === 'fontAwesomeIcon'
@@ -366,7 +374,11 @@ export const TopSectionModes: Story = {
 
       <CardV2
         variant="contained"
-        topSection={<HeroIcon name="Calculator" brand="art" background="brand" containerSizeOverride="5.5rem" iconSizeOverride="2.75rem" />}
+        topSection={
+          <Box sx={{ px: '2rem', pt: '2rem', display: 'flex', justifyContent: 'flex-start' }}>
+            <HeroIcon name="Calculator" brand="art" background="brand" containerSizeOverride="5.5rem" iconSizeOverride="2.75rem" />
+          </Box>
+        }
         header={<BaseContent />}
         actions={<BaseActions />}
       />
