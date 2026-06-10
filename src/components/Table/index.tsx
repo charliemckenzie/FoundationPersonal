@@ -11,6 +11,8 @@ import { TableLoadingRow, TableEmptyRow } from './parts/TableStateRows';
 import { useTableSort } from './parts/useTableSort';
 import { TablePaginationFooter } from './parts/TablePaginationFooter';
 import { SortableHeaderCell } from './parts/SortableHeaderCell';
+import type { TableHeaderStyle } from './parts/SortableHeaderCell';
+export type { TableHeaderStyle };
 
 export interface TableColumn<T> {
   key: keyof T | string;
@@ -48,7 +50,7 @@ export interface TableProps<T extends { id: string | number }> {
    * work — without a bounded container height the header has nothing to stick to.
    */
   containerMaxHeight?: string | number;
-  /** Alternates row background colour using the tableStripe semantic token. */
+  /** Alternates row background colour using the background.elevated token. */
   striped?: boolean;
   /** Direction of striping when striped is true. Defaults to 'row'. */
   stripeDirection?: 'row' | 'column';
@@ -63,6 +65,12 @@ export interface TableProps<T extends { id: string | number }> {
    * The consumer is responsible for slicing `rows` to the current page.
    */
   pagination?: TablePaginationConfig;
+  /**
+   * Header background style. `primary` (default) uses the brand primary colour
+   * with contrasting text. `paper` uses the paper surface with bold default text —
+   * useful inside cards or panels where a coloured header would be too heavy.
+   */
+  headerStyle?: TableHeaderStyle;
 }
 
 export function Table<T extends { id: string | number }>({
@@ -78,6 +86,7 @@ export function Table<T extends { id: string | number }>({
   density = 'default',
   horizontalPadding = true,
   pagination,
+  headerStyle = 'primary',
 }: TableProps<T>) {
   const { sortKey, sortOrder, sortedRows, handleSortClick } = useTableSort(rows);
   const isEmpty = !loading && rows.length === 0;
@@ -112,6 +121,7 @@ export function Table<T extends { id: string | number }>({
                 bordered={bordered && i < columns.length - 1}
                 py={py}
                 px={px}
+                headerStyle={headerStyle}
               />
             ))}
           </TableRow>
@@ -124,7 +134,7 @@ export function Table<T extends { id: string | number }>({
               key={row.id}
               hover
               sx={striped && stripeDirection === 'row' && rowIndex % 2 === 1
-                ? { bgcolor: 'background.tableStripe' }
+                ? { bgcolor: 'background.elevated' }
                 : undefined
               }
             >
@@ -137,7 +147,7 @@ export function Table<T extends { id: string | number }>({
                     py,
                     px,
                     ...(striped && stripeDirection === 'column' && i % 2 === 0
-                      ? { bgcolor: 'background.tableStripe' }
+                      ? { bgcolor: 'background.elevated' }
                       : {}),
                     ...(striped && stripeDirection === 'row' && !bordered
                       ? { borderBottom: 'none' }

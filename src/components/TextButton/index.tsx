@@ -120,7 +120,7 @@ export function TextButton({
           pointerEvents: 'none',
         }),
         '&:hover:not(:disabled)': {
-          color: reversed ? alpha(theme.palette.common.white, 0.88) : theme.palette[color].dark,
+          color: reversed ? alpha(theme.palette.common.white, 0.80) : theme.palette[color].dark,
           ...(isUsingDefaultIcon && !loading && {
             '& .text-button-icon': {
               transform: iconDirection === 'left' ? `translateX(-${theme.spacing(0.5)})` : `translateX(${theme.spacing(0.5)})`,

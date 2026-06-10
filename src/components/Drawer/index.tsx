@@ -2,7 +2,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { IconButton } from '../IconButton';
+import { CloseButton } from '../CloseButton';
 import type React from 'react';
 
 export type DrawerAnchor = 'left' | 'right' | 'top' | 'bottom';
@@ -61,15 +61,7 @@ export function Drawer({
               >
                 {title}
               </Typography>
-              <IconButton
-                icon="xmark"
-                label="Close drawer"
-                variant="ghost"
-                color="primary"
-                size="small"
-                showTooltip={false}
-                onClick={onClose}
-              />
+              <CloseButton onClick={onClose} label="Close drawer" />
             </Box>
             <Divider />
           </>

@@ -103,6 +103,9 @@ export function Autocomplete({
 }: AutocompleteProps) {
   const generatedId = useId();
   const fieldId = id ?? generatedId;
+  const errorId = error && errorMessage ? `${fieldId}-error` : undefined;
+  const helperId = helperText ? `${fieldId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
 
   const controlledProps = value !== undefined ? { value } : {};
 
@@ -156,13 +159,19 @@ export function Autocomplete({
             slotProps={{
               ...params.slotProps,
               input: { ...params.slotProps?.input, sx: inputSx },
-              htmlInput: { ...params.slotProps?.htmlInput, name },
+              htmlInput: {
+                ...params.slotProps?.htmlInput,
+                name,
+                'aria-invalid': error ? true : undefined,
+                'aria-describedby': describedBy,
+              },
             }}
           />
         )}
       />
       {helperText && (
         <FormHelperText
+          id={helperId}
           error={error && !errorMessage}
           disabled={disabled}
           role={error && !errorMessage ? 'alert' : undefined}
@@ -172,7 +181,7 @@ export function Autocomplete({
         </FormHelperText>
       )}
       {error && errorMessage && (
-        <FormHelperText error disabled={disabled} role="alert" sx={{ mx: 0, mt: 0 }}>
+        <FormHelperText error disabled={disabled} role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

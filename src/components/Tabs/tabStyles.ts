@@ -1,6 +1,12 @@
 import { alpha, type Theme } from '@mui/material/styles';
 
 export type TabSize = 'small' | 'medium' | 'large';
+
+// Mirrors the same helper in variantStyles.ts — darken in light mode / lighten in dark mode
+// so text maintains contrast against deepening tinted fills on hover.
+function interactiveColor(theme: Theme) {
+  return theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.light;
+}
 export type TabStyle = 'default' | 'white' | 'segmented';
 
 export const SIZE_CONFIG = {
@@ -28,23 +34,28 @@ interface SegmentedColors {
   inactive: string;
   active:   string;
   hoverBg:  string;
+  activeBg: string;
 }
 
 function segmentedColors(theme: Theme, reversed: boolean): SegmentedColors {
+  const isLight = theme.palette.mode === 'light';
   return {
     inactive: reversed ? theme.palette.common.white : theme.palette.primary.main,
     active:   reversed
       ? (theme.palette.mode === 'dark' ? theme.palette.primary.contrastText : theme.palette.primary.main)
       : theme.palette.primary.contrastText,
     hoverBg:  reversed
-      ? alpha(theme.palette.common.white, 0.12)
-      : alpha(theme.palette.primary.main, 0.08),
+      ? (isLight ? alpha(theme.palette.common.black, 0.15) : alpha(theme.palette.common.white, 0.12))
+      : theme.palette.primary.softDark!,
+    activeBg: reversed
+      ? (isLight ? alpha(theme.palette.common.black, 0.25) : alpha(theme.palette.common.white, 0.18))
+      : theme.palette.primary.softDeeper!,
   };
 }
 
 function buildSegmentedSx(theme: Theme, size: TabSize, reversed: boolean, equalWidth?: number) {
   const h = SEGMENTED_HEIGHT[size];
-  const { inactive, active, hoverBg } = segmentedColors(theme, reversed);
+  const { inactive, active, hoverBg, activeBg } = segmentedColors(theme, reversed);
   return {
     borderRadius: `${theme.shape.button}px`,
     border: 'none',
@@ -62,8 +73,10 @@ function buildSegmentedSx(theme: Theme, size: TabSize, reversed: boolean, equalW
     zIndex: 1,
     ...(equalWidth !== undefined && { width: equalWidth, minWidth: equalWidth }),
     '&.Mui-selected': { bgcolor: 'transparent', color: active },
-    '&:hover': { bgcolor: hoverBg },
-    '&.Mui-selected:hover': { bgcolor: 'transparent' },
+    '&:hover': { bgcolor: hoverBg, ...(!reversed && { color: interactiveColor(theme) }) },
+    '&:active': { bgcolor: activeBg, ...(!reversed && { color: interactiveColor(theme) }) },
+    '&.Mui-selected:hover': { bgcolor: 'transparent', color: active },
+    '&.Mui-selected:active': { bgcolor: 'transparent', color: active },
     '&.Mui-focusVisible': {
       outline: '2px solid',
       outlineColor: reversed ? theme.palette.common.white : 'primary.main',
@@ -91,14 +104,11 @@ function buildDefaultSx(theme: Theme, size: TabSize) {
     py: 0,
     height,
     minHeight: height,
-    bgcolor: theme.palette.mode === 'dark'
-      ? alpha(theme.palette.primary.main, 0.15)
-      : alpha(theme.palette.primary.main, 0.08),
+    bgcolor: theme.palette.primary.softMain,
     color: theme.palette.primary.main,
     '&:hover': {
-      bgcolor: theme.palette.mode === 'dark'
-        ? alpha(theme.palette.primary.main, 0.25)
-        : alpha(theme.palette.primary.main, 0.15),
+      bgcolor: theme.palette.primary.softDark,
+      color: interactiveColor(theme),
     },
     '&.Mui-selected': {
       bgcolor: 'primary.main',
@@ -133,13 +143,23 @@ function buildReversedSx(theme: Theme, size: TabSize) {
     minHeight: height,
     bgcolor: alpha(theme.palette.common.white, 0.15),
     color: theme.palette.common.white,
-    '&:hover': { bgcolor: alpha(theme.palette.common.white, 0.25) },
+    '&:hover': {
+      bgcolor: theme.palette.mode === 'light'
+        ? alpha(theme.palette.common.black, 0.15)
+        : alpha(theme.palette.common.white, 0.25),
+    },
+    '&:active': {
+      bgcolor: theme.palette.mode === 'light'
+        ? alpha(theme.palette.common.black, 0.25)
+        : alpha(theme.palette.common.white, 0.30),
+    },
     '&.Mui-selected': {
       bgcolor: theme.palette.common.white,
       color: theme.palette.mode === 'dark'
         ? theme.palette.primary.contrastText
         : theme.palette.primary.main,
       '&:hover': { bgcolor: alpha(theme.palette.common.white, 0.88) },
+      '&:active': { bgcolor: alpha(theme.palette.common.white, 0.80) },
     },
     '&.Mui-focusVisible': {
       outline: '2px solid',

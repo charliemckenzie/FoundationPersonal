@@ -71,7 +71,7 @@ export function TablePaginationFooter({ pagination, colSpan }: TablePaginationFo
             <IconButton
               icon="chevron-left"
               label="Previous page"
-              variant="soft"
+              variant="outlined"
               size="small"
               color="primary"
               disabled={pagination.page === 0}
@@ -80,7 +80,7 @@ export function TablePaginationFooter({ pagination, colSpan }: TablePaginationFo
             <IconButton
               icon="chevron-right"
               label="Next page"
-              variant="soft"
+              variant="outlined"
               size="small"
               color="primary"
               disabled={pagination.page >= totalPages - 1}

@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useId } from 'react';
 import MuiCheckbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Box from '@mui/material/Box';
 import { type Theme } from '@mui/material/styles';
-import { selectedSoftBg } from '../inputs/variantStyles';
+import { selectedCardStyles } from '../inputs/variantStyles';
 import { CheckboxUncheckedIcon, CheckboxIndeterminateIcon, CheckboxCheckedIcon } from './icons';
 import { CheckboxCardLabel } from './CheckboxCardLabel';
 
-export type CheckboxVariant = 'default' | 'boxed' | 'card';
+export type CheckboxVariant = 'default' | 'boxed' | 'card' | 'button';
 export type CheckboxColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
 export type CheckboxSize = 'small' | 'medium';
 export type LabelPlacement = 'end' | 'start' | 'top' | 'bottom';
@@ -92,17 +92,47 @@ export function Checkbox({
   id,
   name,
 }: CheckboxProps) {
+  const generatedId = useId();
+  const checkboxId = id ?? generatedId;
+  const errorId = error && errorMessage ? `${checkboxId}-error` : undefined;
+  const helperId = helperText ? `${checkboxId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   const [internalChecked, setInternalChecked] = React.useState(defaultChecked ?? false);
   const resolvedChecked = checked !== undefined ? checked : internalChecked;
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
-  const isSelected = isBoxedOrCard && resolvedChecked;
+  const isButton = variant === 'button';
+  const isSelected = (isBoxedOrCard || isButton) && resolvedChecked;
 
   const handleChange = (_e: React.ChangeEvent<HTMLInputElement>, isChecked: boolean) => {
     if (checked === undefined) setInternalChecked(isChecked);
     onChange?.(isChecked);
   };
 
-  const containerSx = isBoxedOrCard
+  const containerSx = isButton
+    ? (theme: Theme) => ({
+        ml: 0,
+        mr: 0,
+        gap: 0,
+        alignItems: 'center',
+        border: '1px solid',
+        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.input',
+        borderRadius: `${theme.shape.sm}px`,
+        height: '3rem',
+        px: 2,
+        cursor: disabled ? 'default' : 'pointer',
+        transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
+        backgroundColor: 'background.paper',
+        ...(isSelected && {
+          ...selectedCardStyles(theme),
+          boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+        }),
+        ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
+        '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+        '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
+        '& .MuiFormControlLabel-label': { fontSize: '1rem', lineHeight: 1 },
+      })
+    : isBoxedOrCard
     ? (theme: Theme) => ({
         ml: 0,
         gap: variant === 'card' ? 0 : 1.25,
@@ -111,7 +141,7 @@ export function Checkbox({
         justifyContent: variant === 'card' && cardDirection === 'column' ? 'center' : undefined,
         '& .MuiFormControlLabel-label': variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
         border: '1px solid',
-        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.default',
+        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.input',
         borderRadius: '0.5rem',
         minHeight: '3rem',
         minWidth: variant === 'card' && cardDirection === 'column' ? '9rem' : undefined,
@@ -120,17 +150,22 @@ export function Checkbox({
         ...(variant === 'card' && cardDirection === 'row' && { pr: '2.5rem' }),
         py: variant === 'card' ? 2 : description ? 1.5 : 0,
         cursor: disabled ? 'default' : 'pointer',
-        transition: 'border-color 150ms ease, background-color 150ms ease',
+        transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
         backgroundColor: 'background.paper',
-        ...(isSelected && { backgroundColor: selectedSoftBg(theme) }),
-        ...(!disabled && { '&:hover': { backgroundColor: 'action.hover' } }),
+        ...(isSelected && {
+          ...selectedCardStyles(theme),
+          // Inset shadow gives visual weight of a 2px border without changing box model.
+          // Non-colour differentiator (thickness) between selected and unselected, no layout shift.
+          boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+        }),
+        ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
       })
     : { ml: 0, gap: 1.25, alignItems: 'flex-start' };
 
   const checkboxSx =
-    variant === 'card'
+    variant === 'card' || variant === 'button'
       ? {
           position: 'absolute' as const,
           width: '1px',
@@ -157,24 +192,25 @@ export function Checkbox({
             indeterminate={indeterminate}
             color={color}
             size={size}
-            id={id}
+            id={checkboxId}
             name={name}
+            slotProps={{ input: { 'aria-invalid': error ? true : undefined, 'aria-describedby': describedBy } }}
             disableRipple
-            icon={variant === 'card' ? undefined : <CheckboxUncheckedIcon error={error} disabled={disabled} />}
-            checkedIcon={variant === 'card' ? undefined : <CheckboxCheckedIcon />}
-            indeterminateIcon={variant === 'card' ? undefined : <CheckboxIndeterminateIcon />}
+            icon={(variant === 'card' || variant === 'button') ? undefined : <CheckboxUncheckedIcon error={error} disabled={disabled} />}
+            checkedIcon={(variant === 'card' || variant === 'button') ? undefined : <CheckboxCheckedIcon />}
+            indeterminateIcon={(variant === 'card' || variant === 'button') ? undefined : <CheckboxIndeterminateIcon />}
             onChange={handleChange}
             sx={checkboxSx}
           />
         }
       />
       {helperText && (
-        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
           {helperText}
         </FormHelperText>
       )}
       {error && errorMessage && (
-        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

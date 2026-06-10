@@ -82,7 +82,6 @@ declare module '@mui/material/styles' {
     tintWarm: string;
     /** Neutral brand surface. ART: neutralART[100] (fallback). QSuper: neutral[100]. */
     tintNeutral: string;
-    tableStripe: string;
   }
 
   interface TypeText {
@@ -100,16 +99,36 @@ declare module '@mui/material/styles' {
   }
 
   interface PaletteColor {
-    text: string;
-    icon: string;
-    background: string;
-    border: string;
+    /** Present on status colours (error/warning/info/success) only. Use .softMain for brand-colour tinted surfaces. */
+    text?: string;
+    /** @deprecated No consumers. Use .main directly. */
+    icon?: string;
+    /** Present on status colours (error/warning/info/success) only. Use .softMain for brand-colour tinted surfaces. */
+    background?: string;
+    /** Present on status colours (error/warning/info/success) only. */
+    border?: string;
+    // ── Interaction surface tokens (brand colours only; status colours use `.background`) ──
+    /** 4% tint — outlined button hover. Flat; same value in both modes. */
+    softLight?: string;
+    /** 8%/15% tint — soft resting fill, ghost hover, outlined active. Mode-aware. */
+    softMain?: string;
+    /** 15%/25% tint — soft hover, ghost active. Mode-aware. */
+    softDark?: string;
+    /** 20%/30% tint — soft active (pressed feedback). Mode-aware. */
+    softDeeper?: string;
+    /** Deepest solid step — active/pressed state for contained and reversed buttons. Light: [900], dark: [500]. */
+    deeper?: string;
   }
   interface SimplePaletteColorOptions {
     text?: string;
     icon?: string;
     background?: string;
     border?: string;
+    softLight?: string;
+    softMain?: string;
+    softDark?: string;
+    softDeeper?: string;
+    deeper?: string;
   }
 
   interface PaletteOptions {

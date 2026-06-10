@@ -1,0 +1,68 @@
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import { CardV2, CardV2Grid } from '../../../components/CardV2';
+import { Divider } from '../../../components/Divider';
+
+const CARD_BODY = 'Resize the viewport to test behavior: stack below tablet, two-up at tablet, and capped rows on desktop.';
+
+function DemoCard({ label }: { label: string }) {
+  return (
+    <CardV2
+      variant="contained"
+      header={label}
+      body={CARD_BODY}
+      ctas={{
+        primary: { label: 'Primary action' },
+        secondary: { label: 'Secondary action' },
+      }}
+    />
+  );
+}
+
+function Section({ title, count }: { title: string; count: number }) {
+  return (
+    <Stack spacing={2.5}>
+      <Typography variant="h4" component="h2">
+        {title}
+      </Typography>
+      <CardV2Grid>
+        {Array.from({ length: count }, (_, index) => (
+          <DemoCard key={`${title}-${index + 1}`} label={`Card ${index + 1}`} />
+        ))}
+      </CardV2Grid>
+    </Stack>
+  );
+}
+
+export default function PaoloCardsResponsivePage() {
+  return (
+    <Box sx={{ py: { xs: 5, md: 8 }, bgcolor: 'background.default' }}>
+      <Container maxWidth="xl">
+        <Stack spacing={4}>
+          <Box>
+            <Typography variant="display-5" component="h1" sx={{ mb: 1 }}>
+              Paolo Local: Card Responsive Grid
+            </Typography>
+            <Typography variant="lead" component="p" sx={{ color: 'text.secondary' }}>
+              This page is a local dev sandbox for CardV2 responsive grid behavior.
+            </Typography>
+          </Box>
+
+          <Divider />
+
+          <Section title="Two Cards" count={2} />
+
+          <Divider />
+
+          <Section title="Three Cards" count={3} />
+
+          <Divider />
+
+          <Section title="Six Cards" count={6} />
+        </Stack>
+      </Container>
+    </Box>
+  );
+}

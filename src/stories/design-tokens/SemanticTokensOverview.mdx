@@ -4,104 +4,95 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 # Semantic Tokens Overview
 
-How the design tokens are structured, where to find them, and which token to reach for in a given situation.
+Which token to reach for and why. All live swatches are in [Colors](?path=/docs/design-tokens-colors--docs).
 
-## Two-layer architecture
+## Token groups
 
-```
-primitives  →  semantic  →  components
- (raw hex)    (theme.palette.*)   (sx, MUI overrides)
-```
-
-- **Primitives** live in [primitives/colors.ts](?path=/docs/design-tokens-primitives--docs). 18 colour scales (`trueBlue`, `qBlue`, `livingCoral`, `salmon`, etc.) each with 11 steps (`50`–`950`). Raw hex only.
-- **Semantic tokens** live in [themes/semantic.ts](?path=/docs/design-tokens-colors--docs). Aliased from primitives. This is what every component should use.
-- **Components** read semantic tokens via `theme.palette.X` in `sx`, the MUI `color="primary"` prop, or the string shorthand `'primary.main'`.
-
-**Rule: components never reach into primitives.** If you need a colour, it should be a semantic token. If a semantic token doesn't exist yet, ask Moe.
-
-## Token tiers — when to use which
-
-| Tier | Example tokens | Use for |
+| Group | What it covers | Example use |
 |---|---|---|
-| **Brand** | `primary.main`, `primary.background`, `secondary.text` | Focal actions, branded surfaces, identity moments |
-| **Status** | `error.main`, `error.background`, `success.icon` | Feedback (alerts, inline validation, system messages) |
-| **Surface** | `background.default`, `background.paper`, `background.elevated` | Page → card → modal hierarchy |
-| **Tinted surfaces** | `background.tintCool`, `background.tintWarm`, `background.tintNeutral` | Branded callout zones, highlighted blocks |
-| **Text** | `text.primary`, `text.heading`, `text.muted`, `text.link` | Body, headings, secondary copy, links |
-| **Border** | `border.subtle`, `border.default`, `border.input`, `border.focus` | Inner dividers, outlines, inputs, focus rings |
-| **Action** | `action.hover`, `action.selected`, `action.focus`, `action.disabled` | Interaction state overlays |
+| **Brand** | Identity colours — primary, secondary, and optional tertiary/quaternary | Buttons, active states, links, key UI moments |
+| **Interaction Surfaces** | Tinted fills for interactive states | Soft buttons, ghost hovers, selected cards |
+| **Status** | Feedback colours — error, warning, info, success | Alerts, validation messages, status indicators |
+| **Surface** | Page, card, and modal backgrounds | Layout hierarchy |
+| **Text** | Semantic text roles | Body, headings, muted labels, links |
+| **Border** | Dividers, outlines, focus rings | Separators, form fields, keyboard focus |
+| **Action** | Hover, selected, focus, and disabled overlays | Interaction states on neutral surfaces |
 
-### Brand colour fields
+---
 
-Every brand colour (`primary`, `secondary`, `tertiary`, `quaternary`) has **eight** fields:
+## Brand colours
 
-| Field | Purpose |
+Each brand colour (`primary`, `secondary`, `tertiary`, `quaternary`) has these fields:
+
+| Field | When to use |
 |---|---|
-| `.main` | Primary identity colour. Use for focal CTAs, active icons, key indicators. |
-| `.light` / `.dark` | Lighter / darker variants for hover, gradients, depth. |
-| `.contrastText` | Text that sits on `.main` and meets contrast. |
-| `.text` | Body text on a `.background`-tinted surface (e.g. dark blue text inside a tinted-blue badge). |
-| `.icon` | Icon fill — usually matches `.main`, called out for clarity. |
-| `.background` | Subtle tinted surface for selected states, chips, badge fills. |
-| `.border` | Companion border for `.background`. |
+| `.main` | The identity colour itself — buttons, active icons, indicators, links |
+| `.light` | A lighter variant — in dark mode, used as the text colour on hover and active interactive fills for improved contrast |
+| `.dark` | A darker variant — in light mode, used as the text colour on hover interactive fills for improved contrast; contained button hover background |
+| `.deeper` | The deepest solid step — active/pressed background for contained buttons and reversed buttons (soft, outlined, ghost). Light: [900], dark: [500] |
+| `.contrastText` | Text placed directly on a `.main`-coloured surface |
+| `.softLight` | The subtlest tinted fill — outlined button hover |
+| `.softMain` | The base tinted fill — soft button resting state, selected inputs and cards |
+| `.softDark` | Deepened fill — soft button hover, ghost button pressed |
+| `.softDeeper` | Deepest fill — soft button pressed |
 
-Status colours (`error`, `warning`, `info`, `success`) follow the same pattern — fixed values across brands.
+The `soft*` tokens are the **interaction surfaces** — see the section below.
 
-## Brand-conditional values
+Status colours (`error`, `warning`, `info`, `success`) additionally carry `.background`, `.text`, and `.border` for alert and status surfaces. These don't exist on brand colours.
 
-ART and QSuper share most token *names* but differ on some *values*. The differences live in each brand's `semanticOverrides` block:
+---
 
-- [brands/foundation.ts](https://github.com/) — ART
-- [brands/theme-b.ts](https://github.com/) — QSuper
+## Interaction surfaces
 
-What differs:
+Four intensity levels for brand-coloured tinted fills, used across buttons, tabs, and selectable inputs:
+
+| Token | Intensity | Used for |
+|---|---|---|
+| `.softLight` | Lightest | Outlined button — hover |
+| `.softMain` | Base | Soft button resting · ghost button hover · outlined button active · selected card/input |
+| `.softDark` | Medium | Soft button hover · ghost button active |
+| `.softDeeper` | Deepest | Soft button pressed |
+
+All four levels are darker in dark mode to maintain the same perceived fill weight.
+
+---
+
+## ART vs QSuper — where values differ
+
+Token *names* are the same across both brands. These values differ:
 
 **Light mode**
 
 | Token | ART | QSuper |
 |---|---|---|
-| `text.primary` | `neutralART[800]` #333333 | `neutral[700]` |
-| `text.linkInverse` | `clearBlue[100]` | `white` (qBlue is lower-contrast, needs full white) |
-| `background.tintCool` | `skyBlue[200]` | `qSkyBlue[100]` |
-| `background.tintNeutralCool` | `clearBlue[100]` | `qSkyBlue[50]` |
-| `background.tintWarm` | `salmon[50]` | `neutral[100]` (QSuper has no warm-tinted brand surface) |
+| `text.primary` | #333333 | Slightly lighter neutral |
+| `text.linkInverse` | Light blue | White — QSuper's primary is lower-contrast so needs full white on dark backgrounds |
+| `background.tintCool` | Sky blue | QSuper sky blue |
+| `background.tintNeutralCool` | Clear blue | QSuper sky blue (lighter) |
+| `background.tintWarm` | Salmon | Neutral grey — QSuper has no warm brand tint |
 
 **Dark mode**
 
 | Token | ART | QSuper |
 |---|---|---|
-| `text.primary` | `neutralART[300]` #dadada | `neutral[50]` — brighter; compensates for lower-contrast qBlue primary |
-| `text.muted` | `neutralART[400]` #b8b8b8 — stepped up to maintain 4.5:1 on elevated surface | `neutral[300]` |
-| `divider` | `neutralART[700]` #4d4d4d — subtler, recessed against dark surfaces | `neutral[700]` |
-| `border.default` | `neutralART[700]` #4d4d4d | `neutral[700]` |
-| `border.input` | `neutralART[500]` #939393 | `neutral[400]` |
-| `background.tintCool/Warm/Neutral/NeutralCool` | All unify at `neutralART[800]` #333333 | All unify at `neutral[800]` |
+| `text.primary` | #dadada | Brighter white — compensates for QSuper's lower-contrast primary |
+| `text.muted` | Slightly lighter | Neutral grey |
+| `divider` | Subtle dark | Neutral dark |
+| `border.default` | Subtle dark | Neutral dark |
+| `border.input` | Mid-grey | QSuper neutral |
+| `background.tint*` | All unify to dark charcoal | All unify to dark neutral |
 
-This shape — **same token names everywhere, brand-specific values** — is what makes the tokens lossless to export to Figma as parallel modes (ART Light, ART Dark, QSuper Light, QSuper Dark).
+---
 
-## Interaction state opacity
+## Don't introduce new colours
 
-`action.hover` / `action.selected` / `action.focus` are computed at runtime via `alpha(neutral[900], OPACITY.X.light)`. The opacity scalars live in a single `OPACITY` constant at the top of [semantic.ts](?path=/docs/design-tokens-colors--docs):
+If none of the existing tokens fit a design decision, don't reach for a raw hex value. Raise it with Moe — it either belongs as a new token in the system (available to every brand and mode) or an existing token covers the case and just needs to be applied differently.
 
-```ts
-export const OPACITY = {
-  hover:    { light: 0.04, dark: 0.08 },
-  selected: { light: 0.08, dark: 0.16 },
-  focus:    { light: 0.12, dark: 0.12 },
-  // ...
-};
-```
-
-If you need to change interaction-state intensity, edit the constant once — the alpha calculations and the redundant `*Opacity` scalars all read from it.
-
-## Don't reinvent — extend
-
-If a component needs a colour and none of the existing semantic tokens fit, **don't hardcode a hex**. Ask Moe whether a new token belongs in the system or whether an existing token covers the case. New token? It lands in `semantic.ts` with a value in every brand × mode, gets a swatch in [Colors](?path=/docs/design-tokens-colors--docs), and flows to Figma on the next sync.
+---
 
 ## See also
 
-- [Colors](?path=/docs/design-tokens-colors--docs) — live swatches for every semantic token, light + dark, with contrast info
+- [Colors](?path=/docs/design-tokens-colors--docs) — live swatches, light + dark, with contrast info
 - [Primitives](?path=/docs/design-tokens-primitives--docs) — raw colour scales
 - [Typography](?path=/docs/design-tokens-typography--docs) — type scale, heading hierarchy
-- [Shape](?path=/docs/design-tokens-shape--docs) — border radius scale
-- [Spacing & Shape](?path=/docs/design-tokens-spacing-shape--docs) — spacing scale
+- [Spacing & Shape](?path=/docs/design-tokens-spacing-shape--docs) — spacing and radius scale

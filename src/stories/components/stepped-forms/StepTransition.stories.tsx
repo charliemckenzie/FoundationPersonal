@@ -3,9 +3,9 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { StepTransition } from '../../components/StepTransition';
-import { FormProgress } from '../../components/FormProgress';
-import { StepperActions } from '../../components/StepperActions';
+import { StepTransition } from '../../../components/StepTransition';
+import { FormProgress } from '../../../components/FormProgress';
+import { StepperActions } from '../../../components/StepperActions';
 
 const DEMO_STEPS = [
   { id: 'personal', label: 'Personal details' },
@@ -125,7 +125,7 @@ function Demo() {
 }
 
 const meta: Meta<typeof StepTransition> = {
-  title: 'Components / Stepped Forms / Step Transition',
+  title: 'Form Components / Stepped Forms / Step Transition',
   component: StepTransition,
   tags: ['autodocs'],
   parameters: {

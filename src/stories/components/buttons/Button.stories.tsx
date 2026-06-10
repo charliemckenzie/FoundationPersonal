@@ -11,16 +11,16 @@ const meta = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Primary action component with contained, soft, outlined, and ghost variants. Includes loading, disabled, size, color, icon, and reversed-on-brand-background examples.',
+        component: 'Primary action component with contained, outlined, and ghost variants. Includes loading, disabled, size, color, icon, and reversed-on-brand-background examples.',
       },
     },
   },
   argTypes: {
     label:           { control: 'text' },
-    variant:         { control: 'select', options: ['contained', 'outlined', 'ghost', 'soft'] },
+    variant:         { control: 'select', options: ['contained', 'outlined', 'ghost'] },
     size:            { control: 'select', options: ['small', 'medium', 'large'] },
     condensed:       { control: 'boolean', description: 'Reduces height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
-    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success', 'white'] },
+    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
     disabled:        { control: 'boolean' },
     loading:         { control: 'boolean' },
     hideLoadingText: { control: 'boolean' },
@@ -67,9 +67,7 @@ export const Variants: Story = {
         story: [
           '**Contained** — highest visual weight. Use for the single primary action on a screen. One per view.',
           '',
-          '**Soft** — medium weight. Use for secondary actions alongside a contained button, or as a standalone action that needs presence without dominance.',
-          '',
-          '**Outlined** — medium-low weight. Use when the action is important but should not compete with contained or soft buttons. 1px border at full opacity.',
+          '**Outlined** — medium-low weight. Use when the action is important but should not compete with contained buttons. 1px border at full opacity.',
           '',
           '**Ghost** — lowest weight. Use for tertiary actions, cancellation, or destructive flows where de-emphasis is intentional.',
         ].join('\n'),
@@ -79,7 +77,6 @@ export const Variants: Story = {
   render: () => (
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
       <Button label="Contained" variant="contained" />
-      <Button label="Soft" variant="soft" />
       <Button label="Outlined" variant="outlined" />
       <Button label="Ghost" variant="ghost" />
     </Box>
@@ -128,46 +125,6 @@ export const Sizes: Story = {
   ),
 };
 
-export const Colors: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: [
-          'Use **Primary** for the vast majority of actions.',
-          '',
-          '**White** — use when a button sits on a dark or neutral non-brand surface. The contained variant has a white/paper background with primary-coloured text. Soft, outlined, and ghost use white strokes and text against the dark surface.',
-          '',
-          'Use `reversed` when the background is a brand colour. Use `white` when the background is a neutral dark (e.g. a dark section, a photo overlay, a dark card).',
-          '',
-          'Avoid cycling through semantic colours to create visual interest. Colour communicates intent.',
-        ].join('\n'),
-      },
-    },
-  },
-  render: () => (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <Box>
-        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Primary</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button label="Contained" variant="contained" color="primary" />
-          <Button label="Soft"      variant="soft"      color="primary" />
-          <Button label="Outlined"  variant="outlined"  color="primary" />
-          <Button label="Ghost"     variant="ghost"     color="primary" />
-        </Box>
-      </Box>
-      <Box>
-        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>White</Box>
-        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
-          <Button label="Contained" variant="contained" color="white" />
-          <Button label="Soft"      variant="soft"      color="white" />
-          <Button label="Outlined"  variant="outlined"  color="white" />
-          <Button label="Ghost"     variant="ghost"     color="white" />
-        </Box>
-      </Box>
-    </Box>
-  ),
-};
-
 export const WithIcons: Story = {
   parameters: {
     docs: {
@@ -180,6 +137,16 @@ export const WithIcons: Story = {
           '**End icon** — use for direction or consequence (e.g. `arrow-right` after "Next", `arrow-up-right` to signal leaving the site).',
           '',
           'Do not use both a start and end icon on the same button.',
+          '',
+          '---',
+          '',
+          '**Decorative vs meaningful icons**',
+          '',
+          'Most button icons are decorative — the label already communicates everything and the icon simply reinforces it visually. These are correctly hidden from screen readers (`aria-hidden`).',
+          '',
+          'Some icons carry information that is not present in the label — for example, `arrow-up-right` communicating that a link opens in a new tab. When the icon adds meaning, use `endIconLabel` or `startIconLabel` to describe what it communicates. The description is appended to the button\'s accessible name: *"Find out more, opens in a new tab"*.',
+          '',
+          'Rule of thumb: if removing the icon would change what a sighted user understands about the action, it needs a label.',
         ].join('\n'),
       },
     },
@@ -211,6 +178,18 @@ export const WithIcons: Story = {
         </Box>
       </Box>
 
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Meaningful icons</Box>
+        <Box sx={{ mb: 1.5, typography: 'small', color: 'text.muted' }}>
+          These icons convey information not present in the visible label. Use <code>endIconLabel</code> or <code>startIconLabel</code> so screen readers announce the full meaning.
+        </Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button label="Find out more"   endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
+          <Button label="View on map"     endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
+          <Button label="Visit website"   endIcon="arrow-up-right" endIconLabel="opens in a new tab" />
+        </Box>
+      </Box>
+
     </Box>
   ),
 };
@@ -237,18 +216,16 @@ export const Loading: Story = {
         <Box sx={{ mb: 1, fontWeight: 600 }}>Spinner Only (default)</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button label="Primary" variant="contained" color="primary" loading />
-          <Button label="Primary" variant="soft" color="primary" loading />
-          <Button label="Primary" variant="ghost" color="primary" loading />
           <Button label="Primary" variant="outlined" color="primary" loading />
+          <Button label="Primary" variant="ghost" color="primary" loading />
         </Box>
       </Box>
       <Box>
         <Box sx={{ mb: 1, fontWeight: 600 }}>With Label (hideLoadingText=false)</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
           <Button label="Saving..." variant="contained" color="primary" loading hideLoadingText={false} />
-          <Button label="Saving..." variant="soft" color="primary" loading hideLoadingText={false} />
-          <Button label="Saving..." variant="ghost" color="primary" loading hideLoadingText={false} />
           <Button label="Saving..." variant="outlined" color="primary" loading hideLoadingText={false} />
+          <Button label="Saving..." variant="ghost" color="primary" loading hideLoadingText={false} />
         </Box>
       </Box>
     </Box>
@@ -272,7 +249,6 @@ export const Disabled: Story = {
   render: () => (
     <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
       <Button label="Contained" variant="contained" disabled />
-      <Button label="Soft" variant="soft" disabled />
       <Button label="Outlined" variant="outlined" disabled />
       <Button label="Ghost" variant="ghost" disabled />
     </Box>
@@ -302,14 +278,13 @@ function ReversedShowcase() {
         flexDirection: 'column',
         gap: 6,
         p: 6,
-        bgcolor: 'background.brandPrimary',
+        bgcolor: 'background.brandSecondary',
       }}
     >
       <Box>
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Variants</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Button label="Contained" variant="contained" reversed />
-          <Button label="Soft" variant="soft" reversed />
           <Button label="Outlined" variant="outlined" reversed />
           <Button label="Ghost" variant="ghost" reversed />
         </Box>
@@ -326,7 +301,6 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Disabled</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Button label="Contained" variant="contained" reversed disabled />
-          <Button label="Soft" variant="soft" reversed disabled />
           <Button label="Outlined" variant="outlined" reversed disabled />
           <Button label="Ghost" variant="ghost" reversed disabled />
         </Box>
@@ -335,26 +309,24 @@ function ReversedShowcase() {
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Loading — Spinner Only (default)</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Button label="Primary" variant="contained" reversed loading />
-          <Button label="Primary" variant="soft" reversed loading />
-          <Button label="Primary" variant="ghost" reversed loading />
           <Button label="Primary" variant="outlined" reversed loading />
+          <Button label="Primary" variant="ghost" reversed loading />
         </Box>
       </Box>
       <Box>
         <Box sx={{ mb: 1, fontWeight: 600, color: 'common.white' }}>Loading — With Label</Box>
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', flexWrap: 'wrap' }}>
           <Button label="Saving..." variant="contained" reversed loading hideLoadingText={false} />
-          <Button label="Saving..." variant="soft" reversed loading hideLoadingText={false} />
-          <Button label="Saving..." variant="ghost" reversed loading hideLoadingText={false} />
           <Button label="Saving..." variant="outlined" reversed loading hideLoadingText={false} />
+          <Button label="Saving..." variant="ghost" reversed loading hideLoadingText={false} />
         </Box>
       </Box>
     </Box>
   );
 }
 
-export const OnPrimaryBackground: Story = {
-  name: 'Reversed — On Primary Background',
+export const OnSecondaryBackground: Story = {
+  name: 'Reversed — On Secondary Background',
   parameters: {
     layout: 'fullscreen',
     docs: {
@@ -362,7 +334,7 @@ export const OnPrimaryBackground: Story = {
         story: [
           'Use `reversed` when buttons sit on a brand-coloured background (hero banners, coloured cards, branded headers).',
           '',
-          'All four variants adapt: contained becomes white-fill, outlined uses a white border, ghost and soft use white-tinted backgrounds.',
+          'All variants adapt: contained becomes white-fill, outlined uses a white border, and ghost uses a white-tinted background.',
           '',
           'Do not use reversed on neutral or light backgrounds — the contrast assumptions are inverted and accessibility will fail.',
         ].join('\n'),

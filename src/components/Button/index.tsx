@@ -6,7 +6,6 @@ import React from 'react';
 import type { SxProps, Theme } from '@mui/material/styles';
 import {
   buildContainedStyles,
-  buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
@@ -33,7 +32,9 @@ export interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonE
   reversed?: boolean;
   condensed?: boolean;
   startIcon?: string;
+  startIconLabel?: string;
   endIcon?: string;
+  endIconLabel?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
   /** When set, MUI renders the button as a native `<a>` element. */
@@ -70,13 +71,16 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   reversed = false,
   condensed = false,
   startIcon,
+  startIconLabel,
   endIcon,
+  endIconLabel,
   onClick,
   type = 'button',
   sx: sxProp,
   ...rest
 }, ref) {
-  const muiVariant = variant === 'soft' || variant === 'ghost' ? 'text' : variant;
+  const isDisabled = disabled || loading;
+  const muiVariant = variant === 'ghost' ? 'text' : variant;
   const spinnerSize = size === 'small' ? 14 : size === 'large' ? 18 : 16;
   const showSpinnerOnly = loading && hideLoadingText;
   const hasStartIcon = (!loading && !!startIcon) || (loading && !hideLoadingText);
@@ -86,7 +90,6 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
   const variantStyles =
     color === 'white' && variant === 'contained' ? buildWhiteStyles()
     : variant === 'contained' ? buildContainedStyles(resolvedColor)
-    : variant === 'soft'      ? buildSoftStyles(resolvedColor)
     : variant === 'ghost'     ? buildGhostStyles(resolvedColor)
     : buildOutlinedStyles(resolvedColor);
 
@@ -94,7 +97,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
 
   const startIconNode = (() => {
     if (loading && !hideLoadingText) return <CircularProgress size={spinnerSize} color="inherit" />;
-    if (!loading && startIcon) return <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" />;
+    if (!loading && startIcon) return <Icon icon={startIcon} size={iconSizeMap[size]} color="inherit" aria-label={startIconLabel} />;
     return undefined;
   })();
 
@@ -104,11 +107,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
       variant={muiVariant}
       size={size}
       color={resolvedColor}
-      disabled={disabled || loading}
-      aria-busy={loading}
+      disabled={isDisabled}
+      aria-busy={loading || undefined}
       fullWidth={fullWidth}
       startIcon={startIconNode}
-      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" /> : undefined}
+      endIcon={loading ? undefined : endIcon ? <Icon icon={endIcon} size={iconSizeMap[size]} color="inherit" aria-label={endIconLabel} /> : undefined}
       onClick={onClick}
       type={type}
       {...rest}
@@ -123,6 +126,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         ...variantStyles,
         ...reversedStyles,
         ...(showSpinnerOnly && { position: 'relative' }),
+        ...(loading && { pointerEvents: 'none' }),
+        ...(loading && !hideLoadingText && { '& .MuiButton-startIcon': { marginRight: '0.75rem' } }),
         // Belt-and-braces for href buttons where MUI disabled may not apply.
         '&.Mui-disabled, &:disabled': {
           cursor: 'not-allowed',

@@ -1,6 +1,8 @@
 import MuiSnackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import type React from 'react';
+import { Icon } from '../Icon';
+import { SEVERITY_ICONS } from '../Alert';
 
 export type SnackbarSeverity = 'success' | 'error' | 'warning' | 'info';
 
@@ -19,6 +21,13 @@ export interface SnackbarProps {
   action?: React.ReactNode;
   anchorOrigin?: SnackbarAnchorOrigin;
 }
+
+const ICON_MAPPING = {
+  success: <Icon icon={SEVERITY_ICONS.success} style="solid" color="inherit" size="lg" />,
+  error:   <Icon icon={SEVERITY_ICONS.error}   style="solid" color="inherit" size="lg" />,
+  warning: <Icon icon={SEVERITY_ICONS.warning} style="solid" color="inherit" size="lg" />,
+  info:    <Icon icon={SEVERITY_ICONS.info}    style="solid" color="inherit" size="lg" />,
+};
 
 export function Snackbar({
   open,
@@ -40,7 +49,13 @@ export function Snackbar({
         }}
         anchorOrigin={anchorOrigin}
       >
-        <MuiAlert onClose={onClose} severity={severity} variant="filled" sx={{ width: '100%' }}>
+        <MuiAlert
+          onClose={onClose}
+          severity={severity}
+          variant="filled"
+          iconMapping={ICON_MAPPING}
+          sx={{ width: '100%' }}
+        >
           {message}
         </MuiAlert>
       </MuiSnackbar>

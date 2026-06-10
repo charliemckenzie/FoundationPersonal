@@ -7,19 +7,15 @@ import { Tooltip } from '../Tooltip';
 import { Spinner } from '../Spinner';
 import {
   buildContainedStyles,
-  buildSoftStyles,
   buildGhostStyles,
   buildOutlinedStyles,
   buildReversedStyles,
   buildFocusStyles,
-  type ButtonColorKey,
-  type ButtonColorKeyResolved,
   type ButtonVariantKey,
 } from '../buttons/variantStyles';
 
 export type IconButtonVariant = ButtonVariantKey;
 export type IconButtonSize = 'small' | 'medium' | 'large';
-export type IconButtonColor = ButtonColorKey | 'default';
 
 export interface IconButtonProps {
   icon: string;
@@ -27,7 +23,6 @@ export interface IconButtonProps {
   label: string;
   variant?: IconButtonVariant;
   size?: IconButtonSize;
-  color?: IconButtonColor;
   condensed?: boolean;
   disabled?: boolean;
   loading?: boolean;
@@ -66,7 +61,6 @@ export function IconButton({
   label,
   variant = 'contained',
   size = 'medium',
-  color = 'primary',
   condensed = false,
   disabled = false,
   loading = false,
@@ -76,16 +70,12 @@ export function IconButton({
   type = 'button',
   sx,
 }: IconButtonProps) {
-  const resolvedColor: ButtonColorKeyResolved =
-    color === 'default' || color === 'white' ? 'primary' : color;
-
   const variantStyles =
-    variant === 'contained' ? buildContainedStyles(resolvedColor)
-    : variant === 'soft'    ? buildSoftStyles(resolvedColor)
-    : variant === 'ghost'   ? buildGhostStyles(resolvedColor)
-    : buildOutlinedStyles(resolvedColor);
+    variant === 'contained' ? buildContainedStyles('primary')
+    : variant === 'ghost'   ? buildGhostStyles('primary')
+    : buildOutlinedStyles('primary');
 
-  const reversedStyles = reversed ? buildReversedStyles(variant, resolvedColor) : undefined;
+  const reversedStyles = reversed ? buildReversedStyles(variant, 'primary') : undefined;
 
   const condensedWidth = condensed
     ? `calc(${SIZE_STYLES[size].width} - ${CONDENSED_REDUCTION})`
@@ -97,10 +87,9 @@ export function IconButton({
   const button = (
     <MuiIconButton
       aria-label={label}
-      aria-busy={loading}
+      aria-busy={loading || undefined}
       size={size}
-      color={color === 'default' ? 'default' : undefined}
-      disabled={disabled || loading}
+      disabled={disabled}
       disableRipple
       onClick={onClick}
       type={type}
@@ -110,12 +99,13 @@ export function IconButton({
           height: condensedHeight,
           ...variantStyles,
           ...reversedStyles,
+          ...(loading && { pointerEvents: 'none' }),
           // Belt-and-braces for href-style icon buttons where MUI disabled may not apply.
           '&.Mui-disabled, &:disabled': {
             cursor: 'not-allowed',
             pointerEvents: 'none',
           },
-          ...buildFocusStyles(reversed || color === 'white', resolvedColor),
+          ...buildFocusStyles(reversed, 'primary'),
         },
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}

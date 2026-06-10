@@ -48,6 +48,11 @@ const meta: Meta<typeof ResponsiveTable> = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
+    headerStyle: {
+      control: 'select',
+      options: ['primary', 'paper'],
+      description: "Header background. `primary` uses the brand colour with contrasting text. `paper` uses the paper surface with bold default text.",
+    },
     density: {
       control: 'select',
       options: ['condensed', 'default', 'spaced'],
@@ -56,6 +61,7 @@ const meta: Meta<typeof ResponsiveTable> = {
     striped: {
       control: 'boolean',
       description: 'Alternates row background colour.',
+      table: { defaultValue: { summary: 'false' } },
     },
     mobileLabel: {
       control: 'select',
@@ -80,9 +86,25 @@ type Story = StoryObj<typeof ResponsiveTable<User>>;
  * row collapse into an expandable card.
  */
 export const Default: Story = {
-  args: { density: 'default', striped: false },
+  args: { density: 'default', striped: false, headerStyle: 'primary' },
   render: (args) => (
     <ResponsiveTable {...args} columns={COLUMNS} rows={ROWS.slice(0, 4)} />
+  ),
+};
+
+export const HeaderStyles: Story = {
+  name: 'Header Styles',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Primary (default)</p>
+        <ResponsiveTable columns={COLUMNS} rows={ROWS.slice(0, 4)} headerStyle="primary" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Paper</p>
+        <ResponsiveTable columns={COLUMNS} rows={ROWS.slice(0, 4)} headerStyle="paper" />
+      </div>
+    </div>
   ),
 };
 

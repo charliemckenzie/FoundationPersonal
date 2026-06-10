@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TextField } from '../TextField';
 import type { TextFieldSize } from '../TextField';
+import type { SelectAdornmentConfig } from '../InputSelect';
 import type React from 'react';
 
 export interface PercentageFieldProps {
@@ -16,6 +17,7 @@ export interface PercentageFieldProps {
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  selectAdornment?: SelectAdornmentConfig;
   onChange?: (value: number | null) => void;
   id?: string;
   name?: string;
@@ -45,6 +47,7 @@ export function PercentageField({
   required,
   disabled,
   fullWidth,
+  selectAdornment,
   onChange,
   id,
   name,
@@ -105,6 +108,7 @@ export function PercentageField({
       disabled={disabled}
       fullWidth={fullWidth}
       endAdornment="%"
+      selectAdornment={selectAdornment}
       onChange={handleChange}
       onFocus={handleFocus}
       onBlur={handleBlur}

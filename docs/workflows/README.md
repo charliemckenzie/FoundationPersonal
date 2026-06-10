@@ -2,8 +2,6 @@
 
 Reference guides for successfully implemented workflows in this project. Version-controlled alongside the code they describe, and synced to the Obsidian vault for offline reference.
 
-**Obsidian vault location:** `C:\Users\User\iCloudDrive\iCloud~md~obsidian\Paolo 2nd Brain\`
-
 ---
 
 ## Guides
@@ -11,6 +9,7 @@ Reference guides for successfully implemented workflows in this project. Version
 | Guide | What it covers |
 |---|---|
 | [Figma Design Tokens](./figma-design-tokens.md) | Generate `tokens.json` from TypeScript theme files and import as Figma variables with scopes and Dev Mode code references |
+| [Accessibility Release Checklist](../Paolo/Accessbility%20Project%20Checklist/accessibility-release-checklist.md) | Project-agnostic, journey-based BA + Technical Lead sign-off workflow for major releases, with deferred issue governance and Jira/Confluence-ready reporting |
 
 ---
 

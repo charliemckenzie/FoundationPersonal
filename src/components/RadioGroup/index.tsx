@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useId } from 'react';
 import MuiRadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -7,7 +7,7 @@ import FormLabel from '@mui/material/FormLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import Box from '@mui/material/Box';
 import type { SxProps, Theme } from '@mui/material/styles';
-import { selectedSoftBg } from '../inputs/variantStyles';
+import { selectedCardStyles } from '../inputs/variantStyles';
 import { RadioUncheckedIcon, RadioCheckedIcon } from './icons';
 import { RadioCardLabel } from './RadioCardLabel';
 
@@ -19,7 +19,7 @@ export interface RadioOption {
   disabled?: boolean;
 }
 
-export type RadioGroupVariant = 'default' | 'boxed' | 'card';
+export type RadioGroupVariant = 'default' | 'boxed' | 'card' | 'button';
 export type RadioGroupDirection = 'column' | 'row';
 export type RadioColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
 export type RadioSize = 'small' | 'medium';
@@ -60,7 +60,7 @@ const cardContainerSx = (args: {
   justifyContent: args.variant === 'card' && args.cardDirection === 'column' ? 'center' : undefined,
   '& .MuiFormControlLabel-label': args.variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
   border: '1px solid',
-  borderColor: args.isSelected ? 'primary.main' : 'border.default',
+  borderColor: args.isSelected ? 'primary.main' : 'border.input',
   borderRadius: '0.5rem',
   minHeight: '3rem',
   minWidth: args.variant === 'card' && args.cardDirection === 'column' ? '9rem' : undefined,
@@ -68,10 +68,15 @@ const cardContainerSx = (args: {
   ...(args.variant === 'boxed' && { pr: '1.25rem' }),
   py: args.variant === 'card' ? 2 : args.description ? 1.5 : 0,
   cursor: args.isItemDisabled ? 'default' : 'pointer',
-  transition: 'border-color 150ms ease, background-color 150ms ease',
+  transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
   backgroundColor: 'background.paper',
-  ...(args.isSelected && { backgroundColor: selectedSoftBg(theme) }),
-  ...(!args.isItemDisabled && { '&:hover': { backgroundColor: 'action.hover' } }),
+  ...(args.isSelected && {
+    ...selectedCardStyles(theme),
+    // Inset shadow gives visual weight of a 2px border without changing box model.
+    // Non-colour differentiator (thickness) between selected and unselected, no layout shift.
+    boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+  }),
+  ...(!args.isItemDisabled && !args.isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
   '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
   '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
 });
@@ -92,6 +97,32 @@ const defaultRadioSx = {
   WebkitTapHighlightColor: 'transparent',
   '&:hover, &:active': { backgroundColor: 'transparent' },
 };
+
+const buttonContainerSx = (args: {
+  isSelected: boolean;
+  isItemDisabled: boolean;
+}) => (theme: Theme) => ({
+  ml: 0,
+  mr: 0,
+  gap: 0,
+  alignItems: 'center',
+  border: '1px solid',
+  borderColor: args.isSelected ? 'primary.main' : 'border.input',
+  borderRadius: `${theme.shape.sm}px`,
+  height: '3rem',
+  px: 2,
+  cursor: args.isItemDisabled ? 'default' : 'pointer',
+  transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
+  backgroundColor: 'background.paper',
+  ...(args.isSelected && {
+    ...selectedCardStyles(theme),
+    boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
+  }),
+  ...(!args.isItemDisabled && !args.isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
+  '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+  '& .MuiRadio-root.Mui-focusVisible': { outline: 'none' },
+  '& .MuiFormControlLabel-label': { typography: 'body', fontSize: '1rem', lineHeight: 1 },
+});
 
 export function RadioGroup({
   legend,
@@ -114,14 +145,29 @@ export function RadioGroup({
   onChange,
   name,
 }: RadioGroupProps) {
+  const groupId = useId();
+  const labelId = legend ? `${groupId}-label` : undefined;
+  const errorId = error && errorMessage ? `${groupId}-error` : undefined;
+  const helperId = helperText ? `${groupId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
+
   const [internalValue, setInternalValue] = React.useState(defaultValue ?? '');
   const resolvedValue = value !== undefined ? value : internalValue;
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
+  const isButton = variant === 'button';
 
   return (
-    <FormControl error={error} disabled={disabled} required={required}>
+    <FormControl
+      component="fieldset"
+      error={error}
+      disabled={disabled}
+      required={required}
+      sx={{ border: 'none', p: 0, m: 0, minWidth: 0 }}
+    >
       {legend && (
         <FormLabel
+          component="legend"
+          id={labelId}
           sx={[
             {
               color: 'text.primary',
@@ -148,15 +194,17 @@ export function RadioGroup({
         defaultValue={defaultValue}
         name={name}
         row={direction === 'row'}
+        aria-labelledby={labelId}
+        aria-describedby={describedBy}
         onChange={(e) => {
           if (value === undefined) setInternalValue(e.target.value);
           onChange?.(e.target.value);
         }}
-        sx={{ gap: isBoxedOrCard ? 1 : 1.5 }}
+        sx={{ gap: isBoxedOrCard || isButton ? 1 : 1.5 }}
       >
         {options.map((option) => {
           const isItemDisabled = disabled || (option.disabled ?? false);
-          const isSelected = isBoxedOrCard && option.value === resolvedValue;
+          const isSelected = (isBoxedOrCard || isButton) && option.value === resolvedValue;
           const isCardVariant = isBoxedOrCard;
 
           const labelNode = isCardVariant ? (
@@ -177,6 +225,27 @@ export function RadioGroup({
               </Box>
             </Box>
           ) : option.label;
+
+          if (isButton) {
+            return (
+              <FormControlLabel
+                key={option.value}
+                value={option.value}
+                label={option.label}
+                disabled={isItemDisabled}
+                sx={buttonContainerSx({ isSelected, isItemDisabled })}
+                control={
+                  <Radio
+                    color={color}
+                    size={size}
+                    disableRipple
+                    disableTouchRipple
+                    sx={cardRadioSx}
+                  />
+                }
+              />
+            );
+          }
 
           if (!isBoxedOrCard) {
             return (
@@ -230,12 +299,12 @@ export function RadioGroup({
         })}
       </MuiRadioGroup>
       {helperText && (
-        <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
+        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
           {helperText}
         </FormHelperText>
       )}
       {error && errorMessage && (
-        <FormHelperText error role="alert" sx={{ ml: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

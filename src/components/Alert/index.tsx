@@ -2,7 +2,7 @@ import MuiAlert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import type React from 'react';
-import { IconButton } from '../IconButton';
+import { CloseButton } from '../CloseButton';
 
 export type AlertSeverity = 'error' | 'warning' | 'info' | 'success';
 
@@ -77,15 +77,11 @@ export function Alert({
           <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0, pl: action ? { xs: 4, sm: 0 } : 0 }}>
             {action}
             {onClose && (
-              <IconButton
-                icon="xmark"
+              <CloseButton
+                onClick={onClose}
                 label={`Dismiss ${SEVERITY_LABELS[severity]} alert`}
                 variant="soft"
                 color={severity}
-                size="small"
-                showTooltip={false}
-                onClick={onClose}
-                sx={{ color: 'inherit' }}
               />
             )}
           </Box>

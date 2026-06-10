@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { TextField } from '../TextField';
 import type { TextFieldSize } from '../TextField';
+import type { SelectAdornmentConfig } from '../InputSelect';
 import type React from 'react';
 
 export interface MoneyFieldProps {
@@ -14,6 +15,7 @@ export interface MoneyFieldProps {
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
+  selectAdornment?: SelectAdornmentConfig;
   onChange?: (value: number | null) => void;
   id?: string;
   name?: string;
@@ -65,6 +67,7 @@ export function MoneyField({
   required,
   disabled,
   fullWidth,
+  selectAdornment,
   onChange,
   id,
   name,
@@ -114,6 +117,7 @@ export function MoneyField({
       disabled={disabled}
       fullWidth={fullWidth}
       startAdornment="$"
+      selectAdornment={selectAdornment}
       onChange={handleChange}
       onBlur={handleBlur}
       id={id}

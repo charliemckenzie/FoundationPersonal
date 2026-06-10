@@ -90,6 +90,9 @@ export function Select({
   const generatedId = useId();
   const fieldId = id ?? generatedId;
   const labelId = `${fieldId}-label`;
+  const errorId = error && errorMessage ? `${fieldId}-error` : undefined;
+  const helperId = helperText ? `${fieldId}-helper-text` : undefined;
+  const describedBy = [errorId, helperId].filter(Boolean).join(' ') || undefined;
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -157,7 +160,7 @@ export function Select({
           defaultValue={selectDefaultValue}
           onChange={handleChange}
           renderValue={!native && placeholder ? renderValue : undefined}
-          inputProps={{ id: fieldId, name }}
+          inputProps={{ id: fieldId, name, 'aria-invalid': error ? true : undefined, 'aria-describedby': describedBy }}
           MenuProps={{ slotProps: { list: { sx: { py: '4px' } }, paper: { sx: (t) => ({ borderRadius: `${t.shape.sm}px` }) } } }}
           sx={buildSelectSx(size, condensed)}
         >
@@ -179,13 +182,13 @@ export function Select({
           )}
         </MuiSelect>
         {helperText && (
-          <FormHelperText error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ mx: 0 }}>
+          <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ mx: 0 }}>
             {helperText}
           </FormHelperText>
         )}
       </MuiFormControl>
       {error && errorMessage && (
-        <FormHelperText error role="alert" sx={{ mx: 0, mt: 0 }}>
+        <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
           {errorMessage}
         </FormHelperText>
       )}

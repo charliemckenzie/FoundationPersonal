@@ -72,7 +72,7 @@ export function MemberInfoCard({
           px: 1.5,
           py: 1.5,
           borderRadius: `${t.shape.sm}px`,
-          backgroundColor: t.palette.primary.background,
+          backgroundColor: t.palette.primary.softMain!,
         })}
       >
         <Box>

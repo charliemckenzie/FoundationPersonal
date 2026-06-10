@@ -32,7 +32,7 @@ export function StepCounter({ activeStep, maxStep, steps, showMenu, onStepClick 
         trigger={
           <Button
             label={label}
-            variant="soft"
+            variant="outlined"
             size="small"
             condensed
             endIcon="chevron-down"
@@ -54,7 +54,7 @@ export function StepCounter({ activeStep, maxStep, steps, showMenu, onStepClick 
 
   return (
     <Box component="span" sx={{ pointerEvents: 'none' }}>
-      <Button label={label} variant="soft" size="small" condensed />
+      <Button label={label} variant="outlined" size="small" condensed />
     </Box>
   );
 }

@@ -109,7 +109,7 @@ export function StepperActions({
           {step > 1 && (
             <Button
               label={backLabel}
-              variant="soft"
+              variant="outlined"
               color="primary"
               size="medium"
               onClick={onBack}

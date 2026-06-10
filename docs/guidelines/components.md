@@ -32,9 +32,11 @@ If this document is out of date, flag it to Moe immediately.
 | `Autocomplete` | Searchable dropdown with grouping and custom option rendering |
 | `Badge` | Count or dot overlay on a child element (e.g. notification bubble on an icon) |
 | `Breadcrumb` | Navigation trail showing current location in the hierarchy |
-| `Button` | Primary action button — contained, soft, ghost, outlined |
+| `Button` | Primary action button — contained, outlined, ghost |
 | `Calendar` | Date picker calendar view; use DatePicker for form inputs |
-| `Card` | Contained, open (image + CTA), or promo (horizontal) content cards |
+| `CloseButton` | Dismiss / close icon button — standardised X button used by Alert, Dialog, Drawer, and Modal |
+| `Card` | Closed/open operating model with top section modes (image, hero icon, none), body content, and bottom actions |
+| `CardV2` | Fresh card model with three style variants: contained, border, and open |
 | `Charts` | Data visualisation — bar, line, pie etc. |
 | `Checkbox` | Single checkbox input — default, boxed, or card layout |
 | `Chip` | Compact label, status badge, or dismissible tag |
@@ -134,8 +136,12 @@ Key props: `disabled`, `excludePaths`
 ### Containment & Overlay
 
 **Card** — `src/components/Card/`  
-Three layouts: `contained` (free-form children with border + radius), `open` (image top + title + CTAs), `promo` (image-left horizontal).  
-Key props: `variant`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
+Operating model: `closed` (bordered and padded) or `open` (borderless and non-contained), plus `promo` for legacy horizontal image-left layout. `contained` remains as a backwards-compatible alias of `closed`. Top section modes for open/closed are `image`, `heroIcon`, or `none`. Middle section holds title/subtitle and body content. Bottom section holds action buttons when provided.  
+Key props: `variant`, `topSection`, `heroIcon`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
+
+**CardV2** — `src/components/CardV2/`  
+New baseline card primitive with three visual styles: `contained` (surface background + 32px contained padding), `border` (transparent background + border + 32px contained padding), and `open` (borderless + no contained padding). Supports optional top section, middle content section, and bottom actions section.  
+Key props: `variant`, `topSection`, `header`, `body`, `actions`, `children`, `sx`
 
 **ActionBar** — `src/components/ActionBar/`  
 Promotional CTA banner. A horizontal surface with a title, description, and a single `contained` action button, plus an optional left-hand icon (small circular container, or any node such as a `HeroIcon`) or a `decorative` bleed image. Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). Stacks vertically on mobile.  
@@ -260,11 +266,12 @@ Key props: `step`, `direction?` (`'forward' | 'backward'` — optional override 
 ### Buttons & Actions
 
 **Button** — `src/components/Button/`  
-The primary action button. Four variants: `contained`, `soft`, `ghost`, `outlined`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
+The primary action button. Three variants: `contained`, `outlined`, `ghost`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
 Key props: `label`, `variant`, `size`, `color`, `loading`, `startIcon`, `endIcon`, `reversed`
 
+
 **IconButton** — `src/components/IconButton/`  
-Icon-only button with optional tooltip. Same variants as Button.  
+Icon-only button with optional tooltip. Same variants as Button (`contained`, `outlined`, `ghost`).  
 Key props: `icon`, `label` (accessible name), `variant`, `size`, `color`, `loading`, `showTooltip`
 
 **TextButton** — `src/components/TextButton/`  
@@ -282,6 +289,10 @@ Key props: `label`, `size`, `disabled`, `onClick`, `type`
 ---
 
 ### Display & Feedback
+
+**CloseButton** — `src/components/CloseButton/`  
+Standardised dismiss / close icon button. Renders an `xmark` icon with a circular hit target. Used internally by Alert, Dialog, Drawer, and Modal — use it whenever you need a standalone close/dismiss action. Two variants: `ghost` (transparent background, default) for surfaces where the button sits against the page; `soft` (tinted fill) for dialog headers and alert actions. `color` drives both the icon colour and the tint, making it straightforward to match severity — e.g. `variant="soft" color="error"` inside an error alert. The `label` prop sets the accessible `aria-label` (default: `"Close"`); always pass a descriptive label when context matters.  
+Key props: `onClick`, `label`, `variant`, `color`, `size`, `sx`
 
 **Icon** — `src/components/Icon/`  
 Font Awesome SVG icon. Supports six styles: `solid`, `light`, `regular`, `thin`, `duotone`, `sharp`. The leaf dependency — used by almost every other component.  

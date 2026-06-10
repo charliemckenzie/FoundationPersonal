@@ -81,6 +81,11 @@ const meta: Meta<typeof Table> = {
   tags: ['autodocs'],
   parameters: { layout: 'padded' },
   argTypes: {
+    headerStyle: {
+      control: 'select',
+      options: ['primary', 'paper'],
+      description: "Header background. `primary` uses the brand colour with contrasting text. `paper` uses the paper surface with bold default text.",
+    },
     density: {
       control: 'select',
       options: ['condensed', 'default', 'spaced'],
@@ -98,6 +103,7 @@ const meta: Meta<typeof Table> = {
     bordered: {
       control: 'boolean',
       description: 'Adds vertical column separators for a full grid appearance.',
+      table: { defaultValue: { summary: 'false' } },
     },
     stickyHeader: {
       control: 'boolean',
@@ -120,8 +126,24 @@ export default meta;
 type Story = StoryObj<typeof Table<User>>;
 
 export const Default: Story = {
-  args: { density: 'default', striped: false, stickyHeader: false },
+  args: { density: 'default', striped: false, bordered: false, stickyHeader: false },
   render: (args) => <Table {...args} columns={COLUMNS} rows={ROWS.slice(0, 4)} />,
+};
+
+export const HeaderStyles: Story = {
+  name: 'Header Styles',
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Primary (default)</p>
+        <Table columns={COLUMNS} rows={ROWS.slice(0, 4)} headerStyle="primary" />
+      </div>
+      <div>
+        <p style={{ marginBottom: 8, fontWeight: 600 }}>Paper</p>
+        <Table columns={COLUMNS} rows={ROWS.slice(0, 4)} headerStyle="paper" />
+      </div>
+    </div>
+  ),
 };
 
 export const Striped: Story = {

@@ -1,6 +1,6 @@
 import { createTheme, alpha, type Shadows } from '@mui/material/styles';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { buildLightPalette, buildDarkPalette } from './semantic';
+import { buildLightPalette, buildDarkPalette, TINT } from './semantic';
 import type { BrandConfig } from './brands/index';
 
 // MUI module augmentations live in src/types/mui.d.ts so they apply globally
@@ -275,35 +275,36 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         styleOverrides: {
           root: ({ theme, ownerState }) => ({
             padding: '8px 16px',
-            minHeight: '2.75rem',
+            minHeight: '3.5rem',
             borderRadius: `${theme.shape.sm}px`,
             alignItems: 'center',
             gap: '12px',
+            boxShadow: 'none',
             ...(ownerState.variant === 'standard' && ownerState.severity === 'error' && {
-              backgroundColor: theme.palette.error.background,
-              color:           theme.palette.error.text,
-              border:          `1px solid ${theme.palette.error.border}`,
+              backgroundColor: theme.palette.error.background!,
+              color:           theme.palette.error.text!,
+              border:          `1px solid ${theme.palette.error.border!}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'warning' && {
-              backgroundColor: theme.palette.warning.background,
-              color:           theme.palette.warning.text,
-              border:          `1px solid ${theme.palette.warning.border}`,
+              backgroundColor: theme.palette.warning.background!,
+              color:           theme.palette.warning.text!,
+              border:          `1px solid ${theme.palette.warning.border!}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'info' && {
-              backgroundColor: theme.palette.info.background,
-              color:           theme.palette.info.text,
-              border:          `1px solid ${theme.palette.info.border}`,
+              backgroundColor: theme.palette.info.background!,
+              color:           theme.palette.info.text!,
+              border:          `1px solid ${theme.palette.info.border!}`,
             }),
             ...(ownerState.variant === 'standard' && ownerState.severity === 'success' && {
-              backgroundColor: theme.palette.success.background,
-              color:           theme.palette.success.text,
-              border:          `1px solid ${theme.palette.success.border}`,
+              backgroundColor: theme.palette.success.background!,
+              color:           theme.palette.success.text!,
+              border:          `1px solid ${theme.palette.success.border!}`,
             }),
           }),
           icon: {
             padding: 0,
             margin: 0,
-            alignSelf: 'flex-start',
+            alignSelf: 'center',
             height: '1.5rem',
             display: 'flex',
             alignItems: 'center',
@@ -329,6 +330,33 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             lineHeight: 1.5,
             margin: 0,
           },
+        },
+      },
+      MuiSnackbar: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            // Scoped override — keeps severity snackbar (MuiAlert inside MuiSnackbar)
+            // independent from the standalone Alert component.
+            '& .MuiAlert-root': {
+              padding: '8px 16px',
+              minHeight: '3.5rem',
+              borderRadius: `${theme.shape.sm}px`,
+              alignItems: 'center',
+              gap: '12px',
+              boxShadow: 'none',
+            },
+          }),
+        },
+      },
+      MuiSnackbarContent: {
+        styleOverrides: {
+          root: ({ theme }) => ({
+            minHeight: '3.5rem',
+            borderRadius: `${theme.shape.sm}px`,
+            boxShadow: 'none',
+            backgroundColor: theme.palette.background.brandSecondary,
+            color: theme.palette.text.inverse,
+          }),
         },
       },
       // Link interaction states — light mode and dark mode.
@@ -393,7 +421,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
           },
           sizeSmall: {
             fontSize: '0.875rem',
-            lineHeight: 1.5,
+            lineHeight: 1,
           },
           sizeLarge: {
             fontSize: '1.25rem',
@@ -473,66 +501,6 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             '& input[type="radio"]': {
               appearance: 'none',
               WebkitAppearance: 'none',
-            },
-          }),
-        },
-      },
-      MuiToggleButton: {
-        styleOverrides: {
-          root: ({ ownerState, theme }) => ({
-            textTransform: 'none',
-            // Replaces button defaults removed from theme.typography
-            fontFamily: brand.fontFamily,
-            fontSize: ownerState.size === 'small' ? '0.875rem' : ownerState.size === 'large' ? '1.25rem' : '1rem',
-            fontWeight: 600,
-            lineHeight: 1,
-            color: theme.palette.text.primary,
-            backgroundColor: theme.palette.background.paper,
-            borderColor: theme.palette.border.input,
-            borderRadius: `${theme.shape.sm}px`,
-            position: 'relative',
-            zIndex: 0,
-            height: ownerState.size === 'small' ? '2.25rem' : ownerState.size === 'large' ? '3.5rem' : '3rem',
-            '&.Mui-disabled': {
-              backgroundColor: alpha(theme.palette.background.default, 0.6),
-              borderColor: alpha(theme.palette.border.input, 0.6),
-              color: theme.palette.action.disabled,
-            },
-            '&.Mui-selected': {
-              borderColor: theme.palette.primary.main,
-              backgroundColor: theme.palette.primary.background,
-              color: theme.palette.primary.dark,
-              zIndex: 1,
-            },
-            '&.Mui-focusVisible': {
-              outline: `2px solid ${theme.palette.border.focus}`,
-              outlineOffset: '2px',
-              boxShadow: 'none',
-              zIndex: 2,
-            },
-          }),
-        },
-      },
-      MuiToggleButtonGroup: {
-        styleOverrides: {
-          root: ({ theme }) => ({
-            '& .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
-              borderLeft: `1px solid ${theme.palette.border.input}`,
-            },
-            '& .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
-              borderLeft: `1px solid ${theme.palette.primary.main}`,
-            },
-            '& .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
-              borderLeft: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
-            },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped:not(:first-of-type)': {
-              borderTop: `1px solid ${theme.palette.border.input}`,
-            },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-selected:not(:first-of-type)': {
-              borderTop: `1px solid ${theme.palette.primary.main}`,
-            },
-            '&.MuiToggleButtonGroup-vertical .MuiToggleButtonGroup-grouped.Mui-disabled:not(:first-of-type)': {
-              borderTop: `1px solid ${alpha(theme.palette.border.input, 0.6)}`,
             },
           }),
         },
