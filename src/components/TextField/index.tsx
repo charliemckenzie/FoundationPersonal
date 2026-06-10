@@ -175,16 +175,23 @@ export function TextField({
         </FormLabel>
       )}
       {selectAdornment ? (
-        <InputSelectContainer
-          selectAdornment={selectAdornment}
-          error={effectiveError}
-          disabled={disabled}
-          focused={isFocused}
-          size={size}
-          id={fieldId}
-        >
-          {renderMuiInput(true)}
-        </InputSelectContainer>
+        <>
+          <InputSelectContainer
+            selectAdornment={selectAdornment}
+            error={effectiveError}
+            disabled={disabled}
+            focused={isFocused}
+            size={size}
+            id={fieldId}
+          >
+            {renderMuiInput(true)}
+          </InputSelectContainer>
+          {helperText && !effectiveError && (
+            <FormHelperText id={helperId} sx={{ mx: 0, mt: 0 }}>
+              {helperText}
+            </FormHelperText>
+          )}
+        </>
       ) : renderMuiInput(false)}
       {effectiveError && effectiveErrorMessage && (
         <FormHelperText error role="alert" id={errorId} sx={{ mx: 0, mt: 0 }}>
@@ -202,7 +209,7 @@ export function TextField({
         placeholder={placeholder}
         type={type}
         size={size}
-        helperText={helperText}
+        helperText={borderless ? undefined : helperText}
         error={effectiveError}
         required={required}
         disabled={disabled}
