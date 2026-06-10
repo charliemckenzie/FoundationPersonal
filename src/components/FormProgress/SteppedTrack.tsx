@@ -14,7 +14,8 @@ export interface SteppedTrackProps {
 }
 
 export function SteppedTrack({ steps, activeStep, maxStep, onStepClick, tooltipLabels, ariaLabel, sx }: SteppedTrackProps) {
-  const fillPct = ((2 * activeStep + 1) / (2 * steps.length) * 100).toFixed(4);
+  const rawPct = (2 * activeStep + 1) / (2 * steps.length) * 100;
+  const fillPct = Math.min(rawPct, 100).toFixed(4);
   const trackTop = `calc(${MARKER_SIZE} / 2 - ${STEPPED_TRACK_H / 2}px)`;
   return (
     <Box role="list" aria-label={ariaLabel ?? 'Form progress'} sx={{ position: 'relative', ...sx }}>
