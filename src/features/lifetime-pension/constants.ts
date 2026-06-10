@@ -2,7 +2,6 @@ import type { FormProgressStep } from '../../components/FormProgress';
 import type { FundingAccount, LifetimePensionState, SpouseDetails } from './types';
 
 export const LIFETIME_PENSION_STEPS: FormProgressStep[] = [
-  { id: 'intro', label: 'Open account' },
   { id: 'eligibility', label: 'Eligibility check' },
   { id: 'option', label: 'Choose option' },
   { id: 'funding', label: 'Purchase and funding' },
@@ -71,7 +70,16 @@ export const INITIAL_STATE: LifetimePensionState = {
 };
 
 export const MIN_PURCHASE_AMOUNT = 10000;
-export const TARGET_PERCENT = [10, 20, 30, 60, 80, 100] as const;
+export const TARGET_PERCENT = [20, 30, 60, 80, 100] as const;
 
 export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
+
+export const STEP_TITLES = [
+  'Open a Lifetime Pension account',
+  'Eligibility check',
+  'Choose an option',
+  'Purchase price and funding',
+  'Payments',
+  'Review',
+] as const;

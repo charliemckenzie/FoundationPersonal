@@ -35,8 +35,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Button` | Primary action button — contained, outlined, ghost |
 | `Calendar` | Date picker calendar view; use DatePicker for form inputs |
 | `CloseButton` | Dismiss / close icon button — standardised X button used by Alert, Dialog, Drawer, and Modal |
-| `Card` | Closed/open operating model with top section modes (image, hero icon, none), body content, and bottom actions |
-| `CardV2` | Fresh card model with three style variants: contained, border, and open |
+| `Card` | Card primitive with three style variants (contained, border, open), optional top section modes (image, hero icon, none), body content, and bottom actions |
 | `Charts` | Data visualisation — bar, line, pie etc. |
 | `Checkbox` | Single checkbox input — default, boxed, or card layout |
 | `Chip` | Compact label, status badge, or dismissible tag |
@@ -144,8 +143,8 @@ Key props: `disabled`, `excludePaths`
 Operating model: `closed` (bordered and padded) or `open` (borderless and non-contained), plus `promo` for legacy horizontal image-left layout. `contained` remains as a backwards-compatible alias of `closed`. Top section modes for open/closed are `image`, `heroIcon`, or `none`. Middle section holds title/subtitle and body content. Bottom section holds action buttons when provided.  
 Key props: `variant`, `topSection`, `heroIcon`, `title`, `subtitle`, `imageSrc`, `primaryAction`, `secondaryAction`, `badge`, `onClick`, `href`, `sx`
 
-**CardV2** — `src/components/CardV2/`  
-New baseline card primitive with three visual styles: `contained` (surface background + 32px contained padding), `border` (transparent background + border + 32px contained padding), and `open` (borderless + no contained padding). Supports optional top section, middle content section, and bottom actions section.  
+**Card** — `src/components/Card/`  
+Baseline card primitive with three visual styles: `contained` (surface background + 32px contained padding), `border` (transparent background + border + 32px contained padding), and `open` (borderless + no contained padding). Supports optional top section, middle content section, and bottom actions section.  
 Key props: `variant`, `topSection`, `header`, `body`, `actions`, `children`, `sx`
 
 **ActionBar** — `src/components/ActionBar/`  

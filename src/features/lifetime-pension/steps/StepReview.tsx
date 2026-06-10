@@ -96,7 +96,7 @@ function PrintCard() {
         <Typography variant="h6" sx={{ color: 'text.heading' }}>
           Lifetime Pension application
         </Typography>
-        <Typography variant="body" sx={{ color: 'text.primary' }}>
+        <Typography variant="small" sx={{ color: 'text.primary' }}>
           This is a permanent purchase after the cooling-off period
         </Typography>
       </Stack>
@@ -123,10 +123,10 @@ function DeclarationBox() {
       sx={{
         backgroundColor: 'action.hover',
         borderRadius: (t) => `${t.shape.lg}px`,
-        p: 4,
+        p: 3,
       }}
     >
-      <Typography variant="h5" sx={{ mb: 2 }}>Declaration and authorisation</Typography>
+      <Typography variant="h6" sx={{ mb: 2 }}>Declaration and authorisation</Typography>
       <Box component="ul" sx={{ m: 0, pl: 3, display: 'flex', flexDirection: 'column', gap: 1 }}>
         {([
           <>I have received, read and understood the accompanying <DeclLink href="#">Product Disclosure Statement for Income Account and Lifetime Pension (PDS)</DeclLink> which summarises the significant information about the Lifetime Pension.</>,
@@ -144,7 +144,7 @@ function DeclarationBox() {
           'I am a citizen or permanent resident of Australia or citizen of New Zealand.',
           'To the best of my knowledge, the information I have provided on this form is correct.',
         ] as React.ReactNode[]).map((item, i) => (
-          <Typography key={i} component="li" variant="body" sx={{ color: 'text.primary' }}>
+          <Typography key={i} component="li" variant="small" sx={{ color: 'text.primary' }}>
             {item}
           </Typography>
         ))}
@@ -166,13 +166,6 @@ export function StepReview({
 
   return (
     <Stack spacing={0}>
-      <Stack spacing={0.5} sx={{ mb: 2 }}>
-        <Typography component="h1" variant="h2">Review</Typography>
-        <Typography variant="body" sx={{ color: 'text.primary' }}>
-          Take a moment to confirm your details before submitting.
-        </Typography>
-      </Stack>
-
       <PrintCard />
 
       {/* Option */}

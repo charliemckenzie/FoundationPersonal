@@ -13,7 +13,7 @@ import { StepTransition } from '../../components/StepTransition';
 import { Icon } from '../../components/Icon';
 import { Snackbar } from '../../components/Snackbar';
 import { StepperActions } from '../../components/StepperActions';
-import { INITIAL_STATE, LIFETIME_PENSION_STEPS, TARGET_PERCENT } from './constants';
+import { INITIAL_STATE, LIFETIME_PENSION_STEPS, STEP_TITLES, TARGET_PERCENT } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
@@ -153,8 +153,8 @@ export function LifetimePensionFlow() {
     if (activeStep === 0) return;
     if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
 
-    setIsSaving(true);
     saveDebounceRef.current = setTimeout(() => {
+      setIsSaving(true);
       saveDraft(state, activeStep).then(() => {
         setIsSaving(false);
         setLastSavedAt(new Date());
@@ -213,29 +213,67 @@ export function LifetimePensionFlow() {
 
       <ContentContainer size="md">
         <Stack spacing={4} sx={{ py: 4 }}>
-          <FormProgress
-            variant="simple"
-            value={TARGET_PERCENT[activeStep]}
-            steps={LIFETIME_PENSION_STEPS}
-            activeStep={activeStep}
-            showStepIndicator
-          />
-
-          {(isSaving || lastSavedAt !== null) && activeStep > 0 && (
-            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75 }}>
-              {isSaving ? (
-                <CircularProgress size={12} color="primary" sx={{ display: 'block' }} />
-              ) : (
-                <Icon icon="circle-check" size="sm" color="success" />
-              )}
-              <Typography variant="caption" color="text.secondary" component="span">
-                {isSaving
-                  ? 'Saving...'
-                  : `Last saved at ${lastSavedAt!.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' })}`}
+          <div>
+            <Typography
+              variant="h2"
+              component="h1"
+              sx={{ mb: activeStep === 0 ? 1 : 3 }}
+            >
+              {STEP_TITLES[activeStep]}
+            </Typography>
+            {activeStep === 0 && (
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
+                It combines your contribution with others in a shared investment pool.
               </Typography>
-            </Box>
-          )}
+            )}
+            {activeStep > 0 && (
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                <FormProgress
+                  variant="simple"
+                  value={TARGET_PERCENT[activeStep - 1]}
+                  steps={LIFETIME_PENSION_STEPS}
+                  activeStep={activeStep - 1}
+                  showStepIndicator
+                  stepMenu
+                  onStepClick={(i) => advance(i + 1)}
+                  sx={{ flex: 1, minWidth: 0 }}
+                />
+                {/* Always rendered so FormProgress never resizes when save status appears */}
+                <Box
+                  aria-live="polite"
+                  aria-hidden={!(isSaving || lastSavedAt !== null)}
+                  sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 0.75,
+                    flexShrink: 0,
+                    width: '11rem',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    opacity: isSaving || lastSavedAt !== null ? 1 : 0,
+                    transition: 'opacity 0.2s ease',
+                    pointerEvents: isSaving || lastSavedAt !== null ? 'auto' : 'none',
+                  }}
+                >
+                  {isSaving ? (
+                    <CircularProgress size={12} color="primary" sx={{ display: 'block' }} />
+                  ) : (
+                    <Icon icon="circle-check" size="sm" color="success" />
+                  )}
+                  <Typography variant="caption" color="text.secondary" component="span">
+                    {isSaving
+                      ? 'Saving...'
+                      : lastSavedAt
+                      ? `Last saved at ${lastSavedAt.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' })}`
+                      : '\u00A0'}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+          </div>
 
+          <Box sx={{ mt: activeStep === 0 ? '16px !important' : '32px !important' }}>
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
               <StepIntro
@@ -327,6 +365,7 @@ export function LifetimePensionFlow() {
               />
             )}
           </StepTransition>
+          </Box>
 
           <StepperActions
             step={activeStep + 1}

@@ -32,13 +32,9 @@ export function StepPayments({
 
   return (
     <Stack spacing={4}>
-      <Typography component="h1" variant="h2">
-        Payments
-      </Typography>
-
       <Stack spacing={2}>
         <div>
-          <Typography variant="h4" sx={{ mb: 1 }}>
+          <Typography variant="h5" sx={{ mb: 0.5 }}>
             Estimated payments
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -46,7 +42,7 @@ export function StepPayments({
           </Typography>
         </div>
 
-      <DescriptionList title="Payment amounts" valueAlign="right" density="condensed">
+      <DescriptionList title="Payment amounts" titleVariant="h6" valueAlign="right" density="condensed">
         <DescriptionList.Item label="Purchase price" value={formatCurrency(purchasePrice)} />
         <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(982.25)} />
         <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />
@@ -60,11 +56,11 @@ export function StepPayments({
           borderColor: 'border.default',
           borderRadius: (t) => `${t.shape.md}px`,
           backgroundColor: 'background.paper',
-          p: 4,
+          p: 3,
         }}
       >
         <Stack spacing={2}>
-          <Typography variant="h5">Bank details</Typography>
+          <Typography variant="h6">Bank details</Typography>
           <Alert
             severity="warning"
             message="Please check your BSB and account number carefully. Incorrect details may delay payments."

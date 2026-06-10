@@ -51,13 +51,9 @@ export function StepOption({
 
   return (
     <Stack spacing={4}>
-      <Typography component="h1" variant="h2">
-        Choose an option
-      </Typography>
-
       <Stack spacing={2}>
         <div>
-          <Typography variant="h4" sx={{ mb: 1 }}>
+          <Typography variant="h5" sx={{ mb: 0.5 }}>
             Select a single or spouse option
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -94,11 +90,11 @@ export function StepOption({
             borderColor: 'border.default',
             borderRadius: (t) => `${t.shape.md}px`,
             backgroundColor: 'background.paper',
-            p: 4,
+            p: 3,
           }}
         >
           <Stack spacing={2.5}>
-            <Typography variant="h5">Spouse details</Typography>
+            <Typography variant="h6">Spouse details</Typography>
             <Alert
               severity="warning"
               message="The spouse you nominate for this option is permanent and cannot be changed once selected."

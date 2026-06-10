@@ -32,13 +32,9 @@ export function StepEligibility({
 
   return (
     <Stack spacing={4}>
-      <Typography component="h1" variant="h2">
-        Eligibility check
-      </Typography>
-
       <Stack spacing={2}>
         <div>
-          <Typography variant="h4" sx={{ mb: 1 }}>
+          <Typography variant="h5" sx={{ mb: 0.5 }}>
             Confirm this account is right for me
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -53,14 +49,14 @@ export function StepEligibility({
           borderColor: 'border.default',
           borderRadius: (t) => `${t.shape.md}px`,
           backgroundColor: 'background.paper',
-          p: 4,
+          p: 3,
         }}
       >
         <RadioGroup
           legend="Have you permanently retired from work?"
-          legendSx={{ typography: 'h5', color: 'text.heading', fontWeight: 700, mb: 1 }}
+          legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 1 }}
           sublabel={
-            <Typography variant="body">
+            <Typography variant="small">
               This means you were in paid employment for at least 10 hours a week and{' '}
               <Box component="span" sx={{ fontWeight: 700 }}>
                 now you do not intend to work 10 or more hours in any given future week.
@@ -77,7 +73,7 @@ export function StepEligibility({
           <Box sx={{ pt: 1 }}>
           <RadioGroup
             legend="Have you left an employer on or after turning 60?"
-            legendSx={{ typography: 'h5', color: 'text.heading', fontWeight: 700, mb: 2 }}
+            legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 2 }}
             value={leftEmployerAfter60}
             options={YES_NO_OPTIONS}
             direction="row"

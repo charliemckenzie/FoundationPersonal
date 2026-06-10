@@ -98,8 +98,11 @@ export default function PaoloPage() {
           <Link href="/paolo/cards-responsive" underline="hover" sx={{ mt: 2, display: 'inline-block', color: 'primary.contrastText' }}>
             Open Paolo local card responsive demo
           </Link>
-          <Link href="/paolo/cardv2-kitchen-sink" underline="hover" sx={{ mt: 1, display: 'block', color: 'primary.contrastText' }}>
-            Open Paolo local CardV2 kitchen sink
+          <Link href="/paolo/card-kitchen-sink" underline="hover" sx={{ mt: 1, display: 'block', color: 'primary.contrastText' }}>
+            Open Paolo local Card kitchen sink
+          </Link>
+          <Link href="/paolo/card-cta-accessibility" underline="hover" sx={{ mt: 1, display: 'block', color: 'primary.contrastText' }}>
+            Open Paolo local card CTA accessibility lab
           </Link>
         </Container>
       </Box>
