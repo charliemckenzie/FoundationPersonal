@@ -45,17 +45,17 @@ export { Autocomplete } from './components/Autocomplete'
 export { Badge } from './components/Badge'
 export { Breadcrumb } from './components/Breadcrumb'
 export { Button } from './components/Button'
-export { Card } from './components/Card'
-export { CardV2, CardV2Grid } from './components/CardV2'
+export { Card, CardGrid } from './components/Card'
 export type {
-  CardV2Props,
-  CardV2GridProps,
-  CardV2Variant,
-  CardV2TopSectionPosition,
-  CardV2TopSectionMobileBehavior,
-  CardV2HeaderVariant,
-  CardV2BodyVariant,
-} from './components/CardV2'
+  CardProps,
+  CardGridProps,
+  CardVariant,
+  CardTopSectionPosition,
+  CardTopSectionMobileBehavior,
+  CardHeaderLevel,
+  CardHeaderVariant,
+  CardBodyVariant,
+} from './components/Card'
 export { Checkbox } from './components/Checkbox'
 export { CheckboxCardGroup } from './components/Checkbox/CheckboxCardGroup'
 export type { CheckboxCardGroupProps, CheckboxCardOption } from './components/Checkbox/CheckboxCardGroup'
