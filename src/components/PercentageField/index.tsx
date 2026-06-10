@@ -21,6 +21,7 @@ export interface PercentageFieldProps {
   onChange?: (value: number | null) => void;
   id?: string;
   name?: string;
+  'aria-label'?: string;
 }
 
 function sanitize(input: string): string {
@@ -51,6 +52,7 @@ export function PercentageField({
   onChange,
   id,
   name,
+  'aria-label': ariaLabel,
 }: PercentageFieldProps) {
   const [displayValue, setDisplayValue] = useState(() =>
     format(value !== undefined ? value : defaultValue)
@@ -92,8 +94,6 @@ export function PercentageField({
     setDisplayValue(format(num));
   };
 
-  const isComplete = parseFloat(displayValue) === 100;
-
   return (
     <TextField
       label={label}
@@ -103,7 +103,6 @@ export function PercentageField({
       condensed={condensed}
       helperText={helperText}
       error={error}
-      success={isComplete}
       required={required}
       disabled={disabled}
       fullWidth={fullWidth}
@@ -114,6 +113,7 @@ export function PercentageField({
       onBlur={handleBlur}
       id={id}
       name={name}
+      htmlInputProps={ariaLabel ? { 'aria-label': ariaLabel } : undefined}
     />
   );
 }

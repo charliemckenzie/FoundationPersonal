@@ -34,7 +34,7 @@ export default function QSuperMemberOnlineLayout({ children }: { children: React
         { id: 'tx-statements', label: 'Statements and letters', icon: 'copy', href: '#' },
       ],
     },
-    { id: 'investments', label: 'Investments', icon: 'chart-line', href: '#' },
+    { id: 'investments', label: 'Investments', icon: 'chart-line', href: '/qsuper/member-online/investments' },
     {
       id: 'put-money-in',
       label: 'Put money in',

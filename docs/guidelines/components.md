@@ -70,6 +70,7 @@ If this document is out of date, flag it to Moe immediately.
 | `PasswordField` | Password input with show/hide toggle |
 | `PercentageField` | Percentage input clamped 0–100 |
 | `QuickLinks` | Icon + label navigation strip; horizontal scroll on mobile |
+| `LinkRow` | Full-width navigation row with icon, label, optional description, and trailing arrow; renders as `<a>` or `<button>` |
 | `RadioGroup` | Set of radio buttons — default, boxed, or card layout |
 | `Select` | Dropdown select; adapts to drawer on mobile |
 | `Skeleton` | Placeholder loading state for content areas |
@@ -126,6 +127,10 @@ Key props: `label`, `tabs`, `size`, `tabStyle`, `defaultTab`, `reversed`, `onCha
 **QuickLinks** — `src/components/QuickLinks/`  
 Horizontal icon + label navigation strip. Scrolls horizontally on mobile.  
 Key props: `items`, `brand`, `iconSize`, `activeHref`
+
+**LinkRow** — `src/components/LinkRow/`  
+Full-width navigation row. Icon in a circular tinted container + label + optional description + trailing chevron. Renders as a native `<a>` when `href` is provided, `<button>` otherwise. Use for on-page navigation choices (e.g. "ready to act" vs "need guidance" decision rows).  
+Key props: `label`, `description`, `icon`, `iconStyle`, `href`, `onClick`, `sx`
 
 **PageTransition** — `src/components/PageTransition/`  
 Reusable, global content-area fade between page navigations. Place inside a persistent section `layout.tsx`, wrapping the page content (not the header/footer), so only the content cross-fades while chrome stays put. Keyed off `usePathname()` — consumers pass only `children`. Built on framer-motion (`AnimatePresence` + a frozen router segment) hidden behind the component. Respects `prefers-reduced-motion`. The fade fires on navigation, so it plays when you move *into* and *out of* a stepped form too — state-based step flows (single route, e.g. beneficiaries) keep their `StepTransition` between steps and need no exclusion. Opt out via `excludePaths` (central list in `src/app/pageTransition.config.ts`) only for flows that drive steps with real routes, or the per-instance `disabled` prop. Tune motion in `src/components/PageTransition/variants.ts`. This is for **page-level** route transitions — for between-step transitions inside a form, use `StepTransition`.  

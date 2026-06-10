@@ -35,7 +35,7 @@ export default function MemberOnlineLayoutRoute({ children }: { children: React.
         { id: 'tx-statements', label: 'Statements and letters', icon: 'copy', href: '#' },
       ],
     },
-    { id: 'investments', label: 'Investments', icon: 'chart-line', href: '#' },
+    { id: 'investments', label: 'Investments', icon: 'chart-line', href: '/member-online/investments' },
     {
       id: 'put-money-in',
       label: 'Put money in',
