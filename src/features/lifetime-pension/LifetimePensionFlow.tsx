@@ -153,8 +153,8 @@ export function LifetimePensionFlow() {
     if (activeStep === 0) return;
     if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
 
-    setIsSaving(true);
     saveDebounceRef.current = setTimeout(() => {
+      setIsSaving(true);
       saveDraft(state, activeStep).then(() => {
         setIsSaving(false);
         setLastSavedAt(new Date());
