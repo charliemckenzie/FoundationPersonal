@@ -1,4 +1,4 @@
-import { InvestmentMixIntro } from '../../../../../../../features/investment-mix/InvestmentMixIntro';
+import { InvestmentMixIntro } from '../../../../../../features/investment-mix/InvestmentMixIntro';
 
 export default function ChangeMixPage() {
   return (
