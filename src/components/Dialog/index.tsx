@@ -43,7 +43,7 @@ export interface DialogProps {
 const SIZE_MAP: Record<DialogSize, 'xs' | 'sm' | 'md'> = { small: 'xs', medium: 'sm', large: 'md' };
 const VARIANT_ICONS: Record<Exclude<DialogVariant, 'neutral' | 'alert'>, string> = { info: 'info_1', warning: 'alert_1', danger: 'alert_2' };
 const VARIANT_ICON_COLOR: Record<Exclude<DialogVariant, 'neutral' | 'alert'>, IconColor> = { info: 'info', warning: 'warning', danger: 'error' };
-const VARIANT_BUTTON_COLOR: Record<Exclude<DialogVariant, 'alert'>, 'primary' | 'info' | 'warning' | 'error'> = { neutral: 'primary', info: 'info', warning: 'warning', danger: 'error' };
+const VARIANT_BUTTON_COLOR: Record<Exclude<DialogVariant, 'alert'>, 'primary'> = { neutral: 'primary', info: 'primary', warning: 'primary', danger: 'primary' };
 
 const SlideUp = React.forwardRef<unknown, TransitionProps & { children: React.ReactElement }>(
   function SlideUp(props, ref) {

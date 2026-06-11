@@ -20,7 +20,7 @@ const meta = {
     variant:         { control: 'select', options: ['contained', 'outlined', 'ghost'] },
     size:            { control: 'select', options: ['small', 'medium', 'large'] },
     condensed:       { control: 'boolean', description: 'Reduces height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
-    color:           { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
+    color:           { control: 'select', options: ['primary', 'white'] },
     disabled:        { control: 'boolean' },
     loading:         { control: 'boolean' },
     hideLoadingText: { control: 'boolean' },

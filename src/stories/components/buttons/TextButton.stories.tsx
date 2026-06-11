@@ -24,7 +24,7 @@ const meta: Meta<typeof TextButton> = {
   argTypes: {
     label:         { control: 'text' },
     size:          { control: 'select', options: ['small', 'medium', 'large'] },
-    color:         { control: 'select', options: ['primary', 'secondary', 'error', 'warning', 'info', 'success'] },
+    color:         { control: 'select', options: ['primary'] },
     iconDirection: { control: 'select', options: ['left', 'right'] },
     startIcon:     { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Overrides the default arrow — set either start or end, not both' },
     endIcon:       { control: 'select', options: ['', ...BUTTON_ICON_OPTIONS], description: 'Overrides the default arrow — set either start or end, not both' },
@@ -93,7 +93,7 @@ export const CommonIcons: Story = {
       <TextButton label="Open external link" endIcon="arrow-up-right" />
       <TextButton label="Download file" startIcon="arrow-down-to-line" />
       <TextButton label="Add item" startIcon="plus" />
-      <TextButton label="Delete" startIcon="delete" color="error" />
+      <TextButton label="Delete" startIcon="delete" />
       <TextButton label="View details" startIcon="clone" />
     </Box>
   ),
@@ -104,7 +104,7 @@ export const Disabled: Story = {
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, alignItems: 'flex-start' }}>
       <TextButton label="Disabled primary" disabled />
       <TextButton label="Disabled with icon" disabled startIcon="plus" />
-      <TextButton label="Disabled error" disabled color="error" />
+      <TextButton label="Disabled" disabled />
     </Box>
   ),
 };

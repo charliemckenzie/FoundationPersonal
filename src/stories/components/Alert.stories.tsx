@@ -74,7 +74,7 @@ export const Default: Story = {
       ? <Icon icon={iconName !== '(default)' ? iconName : SEVERITY_ICONS[severity as AlertSeverity]} color="inherit" size="lg" />
       : undefined;
     const resolvedAction = actionType === 'custom'
-      ? <Button label={actionLabel || 'Refresh'} size="small" variant="outlined" color={severity} />
+      ? <Button label={actionLabel || 'Refresh'} size="small" variant="outlined" />
       : undefined;
     const resolvedOnClose = actionType === 'close' ? () => {} : undefined;
     return (
@@ -161,14 +161,14 @@ export const WithAction: Story = {
       <Alert
         severity="info"
         message="A new version of the app is available."
-        action={<Button label="Refresh" size="small" condensed variant="outlined" color="info" />}
+        action={<Button label="Refresh" size="small" condensed variant="outlined" />}
       />
       <Alert
         severity="info"
         title="Update available"
         message="A new version of the app is available with performance improvements and bug fixes. Refresh to apply the update."
         icon={<Icon icon={SEVERITY_ICONS.info} color="inherit" size="lg" />}
-        action={<Button label="Refresh" size="small" condensed variant="outlined" color="info" />}
+        action={<Button label="Refresh" size="small" condensed variant="outlined" />}
       />
     </div>
   ),

@@ -8,7 +8,7 @@ import { Spinner } from '../Spinner';
 import type React from 'react';
 
 export type TextButtonSize = 'small' | 'medium' | 'large';
-export type TextButtonColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+export type TextButtonColor = 'primary';
 
 export interface TextButtonProps {
   label: string;

@@ -2,11 +2,11 @@ import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
 import { TINT } from '../../app/themes/semantic';
 
-export type ButtonColorKey = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'white';
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost';
 
-/** Resolved color key — 'white' is always pre-mapped to 'primary' before calling the variant helpers. */
-export type ButtonColorKeyResolved = Exclude<ButtonColorKey, 'white'>;
+/** Only primary and white are permitted colors. white is pre-mapped to primary before calling variant helpers. */
+export type ButtonColorKey = 'primary' | 'white';
+export type ButtonColorKeyResolved = 'primary';
 
 export function buildContainedStyles(color: ButtonColorKeyResolved) {
   return {
