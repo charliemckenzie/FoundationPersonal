@@ -67,6 +67,7 @@ const FONT_AWESOME_ICONS = [
   'trash',
   'triangle-exclamation',
   'umbrella',
+  'user-question',
   'xmark',
   'youtube-brands',
   'no0',
@@ -137,6 +138,7 @@ const FONT_AWESOME_REGULAR_ICONS = [
   'trash',
   'triangle-exclamation',
   'umbrella',
+  'user-question',
   'xmark',
 ] as const;
 

@@ -74,7 +74,7 @@ export default function MemberOnlineLayoutRoute({ children }: { children: React.
       ],
     },
     { id: 'take-money-out', label: 'Take money out', icon: 'money-simple-from-bracket', href: '#' },
-    { id: 'future-planning', label: 'Future planning', icon: 'circle-question', href: '#' },
+    { id: 'future-planning', label: 'Future planning', icon: 'user-question', href: '#' },
     { id: 'insurance', label: 'Insurance', icon: 'umbrella', href: '#' },
   ], []);
 

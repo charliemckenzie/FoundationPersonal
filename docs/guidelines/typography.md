@@ -216,7 +216,25 @@ Override a heading to body font when needed: `sx={{ fontFamily: theme.typography
 
 `h1`–`h6` and all display variants automatically receive `text.heading` colour from the theme. Do not manually set `color` on heading variants unless intentionally overriding.
 
-Body variants (`lead`, `body`, `small`, `caption`) use `text.primary` by default. Use `color="text.muted"` for secondary/supporting text.
+Body variants (`lead`, `body`, `small`, `caption`) use `text.primary` by default. Do not override the colour unless explicitly directed.
+
+### Never apply colour overrides speculatively
+
+Do not reach for a colour token just because text is "supporting" or sits beneath a heading. If the text belongs on the page, it should read at full `text.primary` strength. Colour overrides must be explicitly requested.
+
+```tsx
+// ✗ Wrong — unsolicited colour override
+<Typography variant="lead" sx={{ color: 'text.secondary' }}>...</Typography>
+<Typography variant="body" sx={{ color: 'text.muted' }}>...</Typography>
+
+// ✓ Correct — no override; text.primary applies automatically
+<Typography variant="lead">...</Typography>
+<Typography variant="body">...</Typography>
+```
+
+**`text.secondary`** — never use. It is an MUI default that applies reduced opacity and is not a Foundation design token.
+
+**`text.muted`** — a valid Foundation token but apply it only when explicitly directed or when it is already part of an existing component's established pattern. Do not add it speculatively to supporting paragraphs.
 
 ---
 

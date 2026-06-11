@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { StepperActions } from '../../components/StepperActions';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
@@ -28,8 +28,22 @@ const BASE_STEPS = [
   { id: 'review', label: 'Review and confirm' },
 ];
 
+/** Steps used when the account is pre-selected from the landing page. */
+const BASE_STEPS_NO_ACCOUNT = [
+  { id: 'apply-to', label: 'What to change' },
+  { id: 'allocations', label: 'Investment options' },
+  { id: 'review', label: 'Review and confirm' },
+];
+
 const STEPS_WITH_PAYMENT = [
   { id: 'account', label: 'Select account' },
+  { id: 'apply-to', label: 'What to change' },
+  { id: 'allocations', label: 'Investment options' },
+  { id: 'payment', label: 'Future payments' },
+  { id: 'review', label: 'Review and confirm' },
+];
+
+const STEPS_WITH_PAYMENT_NO_ACCOUNT = [
   { id: 'apply-to', label: 'What to change' },
   { id: 'allocations', label: 'Investment options' },
   { id: 'payment', label: 'Future payments' },
@@ -40,14 +54,26 @@ interface InvestmentMixFlowProps {
   overviewPath: string;
   /** Brand name shown in the payment preference step, e.g. "ART" or "QSuper". */
   brandName?: string;
+  /** Filter which accounts are available in this journey. Defaults to 'all'. */
+  accountFilter?: 'all' | 'accum' | 'income';
 }
 
-export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: InvestmentMixFlowProps) {
+export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilter = 'all' }: InvestmentMixFlowProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { saveChange } = useInvestmentMix();
 
+  const accountFromUrl = searchParams.get('account');
+  const skipAccountStep = !!accountFromUrl;
+
+  const accounts = useMemo(() => {
+    if (accountFilter === 'accum') return MOCK_ACCOUNTS.filter((a) => !a.isIncomeAccount);
+    if (accountFilter === 'income') return MOCK_ACCOUNTS.filter((a) => !!a.isIncomeAccount);
+    return MOCK_ACCOUNTS;
+  }, [accountFilter]);
+
   const [activeStep, setActiveStep] = useState(0);
-  const [selectedAccountId, setSelectedAccountId] = useState(MOCK_ACCOUNTS[0].id);
+  const [selectedAccountId, setSelectedAccountId] = useState(() => accountFromUrl ?? accounts[0]?.id ?? '');
   const [applyTo, setApplyTo] = useState<ApplyTo | null>(null);
   const [allocations, setAllocations] = useState<Record<string, number>>({});
   const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(null);
@@ -59,8 +85,8 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
   const [submittedChange, setSubmittedChange] = useState<InvestmentMixChange | null>(null);
 
   const selectedAccount = useMemo(
-    () => MOCK_ACCOUNTS.find((a) => a.id === selectedAccountId),
-    [selectedAccountId],
+    () => accounts.find((a) => a.id === selectedAccountId),
+    [accounts, selectedAccountId],
   );
 
   const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
@@ -68,8 +94,12 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
   const showPaymentStep =
     isIncomeAccount && applyTo !== null && applyToIncludesPayments(applyTo);
 
-  const steps = showPaymentStep ? STEPS_WITH_PAYMENT : BASE_STEPS;
+  const steps = skipAccountStep
+    ? (showPaymentStep ? STEPS_WITH_PAYMENT_NO_ACCOUNT : BASE_STEPS_NO_ACCOUNT)
+    : (showPaymentStep ? STEPS_WITH_PAYMENT : BASE_STEPS);
   const reviewStepIndex = steps.length - 1;
+  /** Maps the visual activeStep to the content step (offset by 1 when skipping account selection). */
+  const contentStep = activeStep + (skipAccountStep ? 1 : 0);
 
   const allocatedOptions = useMemo(
     () => MOCK_INVESTMENT_OPTIONS.filter((o) => (allocations[o.id] ?? 0) > 0),
@@ -114,21 +144,21 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
   }
 
   function handleNext() {
-    if (activeStep === 0) {
+    if (contentStep === 0) {
       if (!validateStep1(selectedAccountId)) {
         setError('Please select an account to continue.');
         return;
       }
     }
 
-    if (activeStep === 1) {
+    if (contentStep === 1) {
       if (!validateStep2(applyTo)) {
         setError('Please select an option to continue.');
         return;
       }
     }
 
-    if (activeStep === 2) {
+    if (contentStep === 2) {
       const { valid } = validateStep3(allocations, MOCK_INVESTMENT_OPTIONS);
       if (!valid) {
         setShowStep3Validation(true);
@@ -136,7 +166,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
       }
     }
 
-    if (showPaymentStep && activeStep === 3) {
+    if (showPaymentStep && contentStep === 3) {
       if (!validatePaymentPreference(paymentPreference, allocatedOptions)) {
         setShowPaymentValidation(true);
         return;
@@ -150,7 +180,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
       }
       const change = buildChange(
         selectedAccountId,
-        MOCK_ACCOUNTS,
+        accounts,
         applyTo!,
         allocations,
         showPaymentStep ? (paymentPreference ?? undefined) : undefined,
@@ -166,6 +196,10 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
 
   function handleBack() {
     setError(null);
+    if (activeStep === 0 && skipAccountStep) {
+      router.push(overviewPath);
+      return;
+    }
     setActiveStep((prev) => Math.max(0, prev - 1));
   }
 
@@ -214,26 +248,26 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
           </div>
 
           <StepTransition step={activeStep}>
-            {activeStep === 0 ? (
+            {contentStep === 0 ? (
               <Step1Account
-                accounts={MOCK_ACCOUNTS}
+                accounts={accounts}
                 selectedAccountId={selectedAccountId}
                 onChange={handleAccountChange}
               />
-            ) : activeStep === 1 ? (
+            ) : contentStep === 1 ? (
               <Step2ApplyTo
                 applyTo={applyTo}
                 isIncomeAccount={isIncomeAccount}
                 onChange={handleApplyToChange}
               />
-            ) : activeStep === 2 ? (
+            ) : contentStep === 2 ? (
               <Step3Allocations
                 options={MOCK_INVESTMENT_OPTIONS}
                 allocations={allocations}
                 onChange={handleAllocationChange}
                 showValidation={showStep3Validation}
               />
-            ) : showPaymentStep && activeStep === 3 ? (
+            ) : showPaymentStep && contentStep === 3 ? (
               <Step4PaymentPreference
                 allocatedOptions={allocatedOptions}
                 preference={paymentPreference}
@@ -243,7 +277,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
               />
             ) : (
               <Step4Review
-                accounts={MOCK_ACCOUNTS}
+                accounts={accounts}
                 selectedAccountId={selectedAccountId}
                 applyTo={applyTo!}
                 options={MOCK_INVESTMENT_OPTIONS}
@@ -251,10 +285,10 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART' }: Investmen
                 paymentPreference={showPaymentStep ? paymentPreference : null}
                 declarationChecked={declarationChecked}
                 onDeclarationChange={handleDeclarationChange}
-                onEditAccount={() => advance(0)}
-                onEditApplyTo={() => advance(1)}
-                onEditAllocations={() => advance(2)}
-                onEditPaymentPreference={showPaymentStep ? () => advance(3) : undefined}
+                onEditAccount={skipAccountStep ? undefined : () => advance(0)}
+                onEditApplyTo={() => advance(skipAccountStep ? 0 : 1)}
+                onEditAllocations={() => advance(skipAccountStep ? 1 : 2)}
+                onEditPaymentPreference={showPaymentStep ? () => advance(skipAccountStep ? 2 : 3) : undefined}
                 error={error}
               />
             )}

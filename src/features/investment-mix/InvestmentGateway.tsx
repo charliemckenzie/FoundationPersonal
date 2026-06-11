@@ -7,9 +7,11 @@ import { ContentContainer } from '../../components/MemberOnline';
 
 interface InvestmentGatewayProps {
   basePath: string;
+  /** Override the "I'm ready" link target. Defaults to `${basePath}/change-mix`. */
+  introPath?: string;
 }
 
-export function InvestmentGateway({ basePath }: InvestmentGatewayProps) {
+export function InvestmentGateway({ basePath, introPath }: InvestmentGatewayProps) {
   return (
     <ContentContainer size="md">
       <Stack spacing={4} sx={{ py: 4 }}>
@@ -35,7 +37,7 @@ export function InvestmentGateway({ basePath }: InvestmentGatewayProps) {
             icon="arrow-pointer"
             label="I'm ready to change my investment mix"
             description="I know what I want and I'm ready to make the change."
-            href={`${basePath}/change-mix`}
+            href={introPath ?? `${basePath}/change-mix`}
           />
           <LinkRow
             icon="magnifying-glass"

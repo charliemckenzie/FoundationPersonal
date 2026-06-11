@@ -9,15 +9,27 @@ import NextLink from 'next/link';
 import { Card } from '../components/Card';
 import { Chip } from '../components/Chip';
 import { Divider } from '../components/Divider';
+import { ExpandableItem } from '../components/ExpandableItem';
 
 interface PageLink {
   label: string;
   href: string;
 }
 
+interface ExpandableGroup {
+  label: string;
+  links: PageLink[];
+}
+
+type PageEntry = PageLink | ExpandableGroup;
+
+function isExpandableGroup(entry: PageEntry): entry is ExpandableGroup {
+  return 'links' in entry;
+}
+
 interface Section {
   heading: string;
-  pages: PageLink[];
+  pages: PageEntry[];
 }
 
 interface Brand {
@@ -44,7 +56,14 @@ const ART: Brand = {
         { label: 'Portal', href: '/member-online' },
         { label: 'Stepped form', href: '/member-online/beneficiaries' },
         { label: 'Lifetime pension form', href: '/member-online/lifetime-pension' },
-        { label: 'Change investment mix', href: '/member-online/investments' },
+        {
+          label: 'Change investment mix',
+          links: [
+            { label: 'Change mix – Accum + TTR/RIA', href: '/member-online/investments/change-mix/accum-and-ttr' },
+            { label: 'Change mix – Accum only', href: '/member-online/investments/change-mix/accum' },
+            { label: 'Change mix – TTR/RIA only', href: '/member-online/investments/change-mix/ttr' },
+          ],
+        },
       ],
     },
     {
@@ -79,7 +98,14 @@ const QSUPER: Brand = {
         { label: 'Authentication', href: '/qsuper/member-online/login' },
         { label: 'Portal', href: '/qsuper/member-online' },
         { label: 'Stepped form', href: '/qsuper/member-online/beneficiaries' },
-        { label: 'Change investment mix', href: '/qsuper/member-online/investments' },
+        {
+          label: 'Change investment mix',
+          links: [
+            { label: 'Change mix – Accum + TTR/RIA', href: '/qsuper/member-online/investments/change-mix/accum-and-ttr' },
+            { label: 'Change mix – Accum only', href: '/qsuper/member-online/investments/change-mix/accum' },
+            { label: 'Change mix – TTR/RIA only', href: '/qsuper/member-online/investments/change-mix/ttr' },
+          ],
+        },
       ],
     },
     {
@@ -113,18 +139,45 @@ function SectionCard({ section }: SectionCardProps) {
           </Box>
         ) : (
           <Stack component="ul" spacing={0.75} sx={{ m: 0, p: 0, listStyle: 'none' }}>
-            {section.pages.map((page) => {
-              const isDisabled = page.href === '#';
+            {section.pages.map((entry) => {
+              if (isExpandableGroup(entry)) {
+                return (
+                  <Box component="li" key={entry.label}>
+                    <ExpandableItem label={entry.label}>
+                      <Stack component="ul" spacing={0.5} sx={{ m: 0, p: 0, listStyle: 'none', pt: 1 }}>
+                        {entry.links.map((link) => (
+                          <Box component="li" key={link.label}>
+                            <Typography
+                              component={NextLink}
+                              href={link.href}
+                              variant="body"
+                              sx={{
+                                color: 'primary.main',
+                                textDecoration: 'none',
+                                '&:hover': { textDecoration: 'underline' },
+                              }}
+                            >
+                              {link.label}
+                            </Typography>
+                          </Box>
+                        ))}
+                      </Stack>
+                    </ExpandableItem>
+                  </Box>
+                );
+              }
+
+              const isDisabled = entry.href === '#';
               return (
-                <Box component="li" key={page.label}>
+                <Box component="li" key={entry.label}>
                   {isDisabled ? (
                     <Typography variant="body" component="span" sx={{ color: 'text.disabled' }}>
-                      {page.label}
+                      {entry.label}
                     </Typography>
                   ) : (
                     <Typography
                       component={NextLink}
-                      href={page.href}
+                      href={entry.href}
                       variant="body"
                       sx={{
                         color: 'primary.main',
@@ -132,7 +185,7 @@ function SectionCard({ section }: SectionCardProps) {
                         '&:hover': { textDecoration: 'underline' },
                       }}
                     >
-                      {page.label}
+                      {entry.label}
                     </Typography>
                   )}
                 </Box>

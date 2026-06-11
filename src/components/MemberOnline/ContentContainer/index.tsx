@@ -19,7 +19,7 @@ const MAX_WIDTHS: Record<ContentContainerSize, string> = {
 
 export function ContentContainer({ size = 'lg', children }: ContentContainerProps) {
   return (
-    <Box sx={{ px: { xs: '1.25rem', sm: '1.75rem', lg: 5 }, py: 0 }}>
+    <Box sx={{ px: { xs: '1.25rem', sm: '1.75rem', lg: 5 }, py: 0, pb: '3.5rem' }}>
       <Box sx={{ maxWidth: MAX_WIDTHS[size], mx: 'auto' }}>
         {children}
       </Box>
