@@ -1,8 +1,22 @@
-import type { InvestmentAccount, InvestmentOption, ApplyTo, InvestmentMixChange } from './types';
-import { APPLY_TO_OPTIONS } from './types';
+import type { InvestmentAccount, InvestmentOption, ApplyTo, InvestmentMixChange, PaymentPreference } from './types';
+import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS } from './types';
 
 export function applyToLabel(applyTo: ApplyTo): string {
-  return APPLY_TO_OPTIONS.find((o) => o.value === applyTo)?.label ?? applyTo;
+  return (
+    [...APPLY_TO_OPTIONS, ...INCOME_APPLY_TO_OPTIONS].find((o) => o.value === applyTo)?.label ??
+    applyTo
+  );
+}
+
+export function paymentPreferenceLabel(pref: PaymentPreference, brandName?: string): string {
+  switch (pref.type) {
+    case 'brand-chooses':
+      return `Let ${brandName ?? 'the fund'} choose`;
+    case 'percentage':
+      return 'By percentage';
+    case 'priority':
+      return 'By order of priority';
+  }
 }
 
 export function formatCurrency(amount: number): string {
@@ -40,6 +54,23 @@ export function validateStep3(
 
 export function validateStep4(declared: boolean): boolean {
   return declared;
+}
+
+export function validatePaymentPreference(
+  pref: PaymentPreference | null,
+  allocatedOptions: InvestmentOption[],
+): boolean {
+  if (!pref) return false;
+  if (pref.type === 'brand-chooses') return true;
+  if (pref.type === 'percentage') {
+    if (!pref.percentages) return false;
+    const total = allocatedOptions.reduce((s, o) => s + (pref.percentages![o.id] ?? 0), 0);
+    return total === 100;
+  }
+  if (pref.type === 'priority') {
+    return (pref.priorityOrder?.length ?? 0) > 0;
+  }
+  return false;
 }
 
 const RISK_SCORES: Record<string, number> = {
@@ -103,6 +134,7 @@ export function buildChange(
   accounts: InvestmentAccount[],
   applyTo: ApplyTo,
   allocations: Record<string, number>,
+  paymentPreference?: PaymentPreference,
 ): InvestmentMixChange {
   const account = accounts.find((a) => a.id === accountId);
   return {
@@ -110,6 +142,7 @@ export function buildChange(
     accountName: account?.name ?? accountId,
     applyTo,
     allocations,
+    ...(paymentPreference ? { paymentPreference } : {}),
     referenceNumber: generateReference(),
     submittedAt: new Date().toISOString(),
   };

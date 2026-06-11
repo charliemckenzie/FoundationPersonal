@@ -10,9 +10,9 @@ import { DescriptionList } from '../../../components/DescriptionList';
 import { IconButton } from '../../../components/IconButton';
 import { Table } from '../../../components/Table';
 import type { TableColumn } from '../../../components/Table';
-import type { InvestmentAccount, InvestmentOption, ApplyTo } from '../types';
-import { applyToLabel, formatCurrency, formatDate, blendedProfile } from '../utils';
-import { APPLY_TO_OPTIONS } from '../types';
+import type { InvestmentAccount, InvestmentOption, ApplyTo, PaymentPreference } from '../types';
+import { applyToLabel, formatCurrency, formatDate, blendedProfile, paymentPreferenceLabel } from '../utils';
+import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS } from '../types';
 
 interface Step4ReviewProps {
   accounts: InvestmentAccount[];
@@ -20,11 +20,13 @@ interface Step4ReviewProps {
   applyTo: ApplyTo;
   options: InvestmentOption[];
   allocations: Record<string, number>;
+  paymentPreference?: PaymentPreference | null;
   declarationChecked: boolean;
   onDeclarationChange: (checked: boolean) => void;
   onEditAccount: () => void;
   onEditApplyTo: () => void;
   onEditAllocations: () => void;
+  onEditPaymentPreference?: () => void;
   error: string | null;
 }
 
@@ -34,11 +36,13 @@ export function Step4Review({
   applyTo,
   options,
   allocations,
+  paymentPreference,
   declarationChecked,
   onDeclarationChange,
   onEditAccount,
   onEditApplyTo,
   onEditAllocations,
+  onEditPaymentPreference,
   error,
 }: Step4ReviewProps) {
   const account = accounts.find((a) => a.id === selectedAccountId);
@@ -131,7 +135,7 @@ export function Step4Review({
             <Stack spacing={0}>
               <Typography variant="body" sx={{ fontWeight: 700 }}>{applyToLabel(applyTo)}</Typography>
               <Typography variant="small" sx={{ color: 'text.muted' }}>
-                {APPLY_TO_OPTIONS.find((o) => o.value === applyTo)?.description}
+                {[...APPLY_TO_OPTIONS, ...INCOME_APPLY_TO_OPTIONS].find((o) => o.value === applyTo)?.description}
               </Typography>
             </Stack>
           }
@@ -169,6 +173,57 @@ export function Step4Review({
             />
           }
         />
+        {paymentPreference && onEditPaymentPreference && (
+          <DescriptionList.Item
+            label="Future payments"
+            value={
+              <Stack spacing={0.5}>
+                <Typography variant="body" sx={{ fontWeight: 700 }}>
+                  {paymentPreferenceLabel(paymentPreference)}
+                </Typography>
+                {paymentPreference.type === 'percentage' &&
+                  paymentPreference.percentages &&
+                  options
+                    .filter((o) => (paymentPreference.percentages?.[o.id] ?? 0) > 0)
+                    .map((o) => (
+                      <Box
+                        key={o.id}
+                        sx={{ display: 'grid', gridTemplateColumns: '3rem 1fr', gap: 1, alignItems: 'baseline' }}
+                      >
+                        <Typography variant="body">{paymentPreference.percentages![o.id]}%</Typography>
+                        <Typography variant="body">{o.name}</Typography>
+                      </Box>
+                    ))}
+                {paymentPreference.type === 'priority' &&
+                  paymentPreference.priorityOrder &&
+                  paymentPreference.priorityOrder.map((id, index) => {
+                    const opt = options.find((o) => o.id === id);
+                    if (!opt) return null;
+                    return (
+                      <Box
+                        key={id}
+                        sx={{ display: 'grid', gridTemplateColumns: '3rem 1fr', gap: 1, alignItems: 'baseline' }}
+                      >
+                        <Typography variant="body" sx={{ color: 'text.muted' }}>
+                          {index + 1}.
+                        </Typography>
+                        <Typography variant="body">{opt.name}</Typography>
+                      </Box>
+                    );
+                  })}
+              </Stack>
+            }
+            action={
+              <IconButton
+                icon="pen"
+                label="Edit future payments"
+                variant="ghost"
+                size="small"
+                onClick={onEditPaymentPreference}
+              />
+            }
+          />
+        )}
       </DescriptionList>
       </div>
 

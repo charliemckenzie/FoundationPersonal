@@ -6,14 +6,15 @@ import Typography from '@mui/material/Typography';
 import { Button } from '../../components/Button';
 import { Icon } from '../../components/Icon';
 import type { InvestmentMixChange } from './types';
-import { formatDate } from './utils';
+import { formatDate, paymentPreferenceLabel } from './utils';
 
 interface SubmissionSuccessProps {
   change: InvestmentMixChange;
+  brandName?: string;
   onBackToOverview: () => void;
 }
 
-export function SubmissionSuccess({ change, onBackToOverview }: SubmissionSuccessProps) {
+export function SubmissionSuccess({ change, brandName, onBackToOverview }: SubmissionSuccessProps) {
   return (
     <Box
       sx={{
@@ -71,6 +72,16 @@ export function SubmissionSuccess({ change, onBackToOverview }: SubmissionSucces
               Submitted
             </Typography>
             <Typography variant="body">{formatDate(change.submittedAt)}</Typography>
+            {change.paymentPreference && (
+              <>
+                <Typography variant="small" sx={{ color: 'text.muted', mt: 0.5 }}>
+                  Future payments
+                </Typography>
+                <Typography variant="body">
+                  {paymentPreferenceLabel(change.paymentPreference, brandName)}
+                </Typography>
+              </>
+            )}
           </Stack>
         </Box>
 

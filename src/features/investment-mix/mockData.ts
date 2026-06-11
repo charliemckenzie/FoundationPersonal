@@ -9,9 +9,10 @@ export const MOCK_ACCOUNTS: InvestmentAccount[] = [
   },
   {
     id: 'acc-002',
-    name: 'Transition to retirement account',
+    name: 'Retirement Income account',
     accountNumber: '987 654 321',
-    balance: 42100.5,
+    balance: 880450.5,
+    isIncomeAccount: true,
   },
 ];
 

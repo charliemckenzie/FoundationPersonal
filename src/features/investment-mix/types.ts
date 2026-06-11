@@ -3,6 +3,8 @@ export interface InvestmentAccount {
   name: string;
   accountNumber: string;
   balance: number;
+  /** True for pension/retirement income accounts — they have a different set of change options. */
+  isIncomeAccount?: boolean;
 }
 
 export interface InvestmentOption {
@@ -16,13 +18,46 @@ export interface InvestmentOption {
   annualFee: number;
 }
 
-export type ApplyTo = 'all' | 'balance' | 'future';
+/** Accumulation account apply-to options */
+export type AccumulationApplyTo = 'all' | 'balance' | 'future';
+
+/**
+ * Retirement Income account apply-to options.
+ * - income-both: change both the current balance investment and the payment/withdrawal options
+ * - income-balance: change only where the current balance is invested
+ * - income-payments: change only which options future payments and withdrawals are taken from
+ */
+export type IncomeApplyTo = 'income-both' | 'income-balance' | 'income-payments';
+
+export type ApplyTo = AccumulationApplyTo | IncomeApplyTo;
+
+export function isIncomeApplyTo(v: ApplyTo): v is IncomeApplyTo {
+  return v === 'income-both' || v === 'income-balance' || v === 'income-payments';
+}
+
+/** Whether the chosen apply-to option involves changing payment/withdrawal options. */
+export function applyToIncludesPayments(v: ApplyTo): boolean {
+  return v === 'income-both' || v === 'income-payments';
+}
+
+/** Payment preference for retirement income accounts. */
+export type PaymentPreferenceType = 'brand-chooses' | 'percentage' | 'priority';
+
+export interface PaymentPreference {
+  type: PaymentPreferenceType;
+  /** Whole-number percentages per option (totalling 100). Only present when type === 'percentage'. */
+  percentages?: Record<string, number>;
+  /** Investment option IDs in priority order (draw from first = index 0). Only present when type === 'priority'. */
+  priorityOrder?: string[];
+}
 
 export interface InvestmentMixChange {
   accountId: string;
   accountName: string;
   applyTo: ApplyTo;
   allocations: Record<string, number>;
+  /** Only present for retirement income accounts when applyTo includes payments. */
+  paymentPreference?: PaymentPreference;
   referenceNumber: string;
   submittedAt: string;
 }
@@ -42,5 +77,26 @@ export const APPLY_TO_OPTIONS = [
     value: 'future' as ApplyTo,
     label: 'Future contributions only',
     description: 'Only apply to contributions I make from now on.',
+  },
+] as const;
+
+export const INCOME_APPLY_TO_OPTIONS = [
+  {
+    value: 'income-both' as ApplyTo,
+    label: 'Change both balance and payments',
+    description:
+      'Choose investment options for your current balance, and choose which options you receive payments and withdrawals from.',
+  },
+  {
+    value: 'income-balance' as ApplyTo,
+    label: 'Change current account balance only',
+    description:
+      "This is where your current balance is invested. It won't change which options you receive payments and withdrawals from.",
+  },
+  {
+    value: 'income-payments' as ApplyTo,
+    label: 'Change payment/withdrawal investment',
+    description:
+      "These are the options your future payments and withdrawals are taken from. It won't change how your current balance is invested.",
   },
 ] as const;
