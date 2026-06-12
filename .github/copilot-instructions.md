@@ -23,3 +23,6 @@ Never use `body1`, `body2`, `subtitle1`, `subtitle2`, `button`, or `overline` as
 - Never use `style={{}}` inline props — use `sx`
 - Layout/flex props (`alignItems`, `justifyContent` etc.) belong in `sx`, not as direct component props
 
+### Stepped forms — validation error placement
+When the user presses Next/Submit on a stepped form and the step is invalid, show the validation error in a single `Alert` **directly above `StepperActions`**, not only at the top of the step. On long steps a top-of-page error scrolls out of view, so the user gets no feedback next to the button they clicked. Field-level indicators (invalid inputs, a total turning red) stay in place; clear the error on advance/back. See `docs/guidelines/components.md` → "Stepped form validation" and `src/features/investment-mix/InvestmentMixFlow.tsx`.
+

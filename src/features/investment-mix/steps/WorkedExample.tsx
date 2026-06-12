@@ -5,15 +5,17 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-interface PaymentWorkedExampleProps {
+interface WorkedExampleProps {
   children: React.ReactNode;
+  /** Panel heading. Defaults to a generic, reassuring framing. */
+  title?: string;
 }
 
 /**
- * Tinted explanatory panel that turns the chosen payment method into a concrete,
- * member-specific example — the single biggest comprehension aid for this step.
+ * Tinted explanatory panel that turns an abstract choice into a concrete,
+ * member-specific example — the single biggest comprehension aid in this journey.
  */
-export function PaymentWorkedExample({ children }: PaymentWorkedExampleProps) {
+export function WorkedExample({ children, title = 'How this works for you' }: WorkedExampleProps) {
   return (
     <Box
       sx={{
@@ -27,7 +29,7 @@ export function PaymentWorkedExample({ children }: PaymentWorkedExampleProps) {
     >
       <Stack spacing={0.75}>
         <Typography variant="body" sx={{ fontWeight: 700 }}>
-          How this works for you
+          {title}
         </Typography>
         {children}
       </Stack>

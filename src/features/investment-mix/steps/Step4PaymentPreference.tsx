@@ -3,7 +3,6 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { Alert } from '../../../components/Alert';
 import { RadioGroup } from '../../../components/RadioGroup';
 import { PaymentDefaultOrder } from './PaymentDefaultOrder';
 import { PaymentPriorityList } from './PaymentPriorityList';
@@ -84,13 +83,8 @@ export function Step4PaymentPreference({
         </Typography>
       </div>
 
-      {showValidation && !preference && (
-        <Alert severity="error" message="Please choose how your payments will be drawn." />
-      )}
-
       <RadioGroup
         legend="How should withdrawals and payments be drawn from your options?"
-        legendSx={(t) => ({ ...t.typography.h6, color: 'text.heading' })}
         options={METHOD_OPTIONS}
         variant="boxed"
         value={method}

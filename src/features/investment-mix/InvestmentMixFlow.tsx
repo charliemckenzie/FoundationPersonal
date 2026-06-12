@@ -7,48 +7,32 @@ import Typography from '@mui/material/Typography';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { StepperActions } from '../../components/StepperActions';
+import { Alert } from '../../components/Alert';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { StepTransition } from '../../components/StepTransition';
 import { Step1Account } from './steps/Step1Account';
 import { Step2ApplyTo } from './steps/Step2ApplyTo';
 import { Step3Allocations } from './steps/Step3Allocations';
+import { Step3bRebalance } from './steps/Step3bRebalance';
 import { Step4PaymentPreference } from './steps/Step4PaymentPreference';
 import { Step4Review } from './steps/Step4Review';
 import { SubmissionSuccess } from './SubmissionSuccess';
 import { useInvestmentMix } from './InvestmentMixContext';
 import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS } from './mockData';
-import type { ApplyTo, InvestmentMixChange, PaymentPreference } from './types';
-import { applyToIncludesPayments } from './types';
-import { validateStep1, validateStep2, validateStep3, validatePaymentPreference, buildChange, formatCurrency, formatDate } from './utils';
+import type { ApplyTo, InvestmentMixChange, PaymentPreference, RebalanceSetting } from './types';
+import { applyToIncludesPayments, applyToIncludesBalance } from './types';
+import {
+  validateStep1,
+  validateStep2,
+  validateStep3,
+  validatePaymentPreference,
+  validateRebalance,
+  buildChange,
+  formatCurrency,
+  formatDate,
+} from './utils';
 
-const BASE_STEPS = [
-  { id: 'account', label: 'Select account' },
-  { id: 'apply-to', label: 'What to change' },
-  { id: 'allocations', label: 'Investment options' },
-  { id: 'review', label: 'Review and confirm' },
-];
-
-/** Steps used when the account is pre-selected from the landing page. */
-const BASE_STEPS_NO_ACCOUNT = [
-  { id: 'apply-to', label: 'What to change' },
-  { id: 'allocations', label: 'Investment options' },
-  { id: 'review', label: 'Review and confirm' },
-];
-
-const STEPS_WITH_PAYMENT = [
-  { id: 'account', label: 'Select account' },
-  { id: 'apply-to', label: 'What to change' },
-  { id: 'allocations', label: 'Investment options' },
-  { id: 'payment', label: 'Payment preferences' },
-  { id: 'review', label: 'Review and confirm' },
-];
-
-const STEPS_WITH_PAYMENT_NO_ACCOUNT = [
-  { id: 'apply-to', label: 'What to change' },
-  { id: 'allocations', label: 'Investment options' },
-  { id: 'payment', label: 'Payment preferences' },
-  { id: 'review', label: 'Review and confirm' },
-];
+const LIFECYCLE_ID = 'opt-lifecycle';
 
 interface InvestmentMixFlowProps {
   overviewPath: string;
@@ -77,6 +61,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   const [applyTo, setApplyTo] = useState<ApplyTo | null>(null);
   const [allocations, setAllocations] = useState<Record<string, number>>({});
   const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(null);
+  const [rebalance, setRebalance] = useState<RebalanceSetting | null>(null);
   const [showStep3Validation, setShowStep3Validation] = useState(false);
   const [showPaymentValidation, setShowPaymentValidation] = useState(false);
   const [declarationChecked, setDeclarationChecked] = useState(false);
@@ -96,29 +81,56 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   const availableOptions = useMemo(
     () =>
       isIncomeAccount || isTTRAccount
-        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== 'opt-lifecycle')
+        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== LIFECYCLE_ID)
         : MOCK_INVESTMENT_OPTIONS,
     [isIncomeAccount, isTTRAccount],
   );
-
-  const showPaymentStep =
-    isIncomeAccount && applyTo !== null && applyToIncludesPayments(applyTo);
-
-  const steps = skipAccountStep
-    ? (showPaymentStep ? STEPS_WITH_PAYMENT_NO_ACCOUNT : BASE_STEPS_NO_ACCOUNT)
-    : (showPaymentStep ? STEPS_WITH_PAYMENT : BASE_STEPS);
-  const reviewStepIndex = steps.length - 1;
-  /** Maps the visual activeStep to the content step (offset by 1 when skipping account selection). */
-  const contentStep = activeStep + (skipAccountStep ? 1 : 0);
 
   const allocatedOptions = useMemo(
     () => availableOptions.filter((o) => (allocations[o.id] ?? 0) > 0),
     [allocations, availableOptions],
   );
 
+  const showPaymentStep =
+    isIncomeAccount && applyTo !== null && applyToIncludesPayments(applyTo);
+
+  /**
+   * Rebalancing only applies when the current balance is being set to a target mix, and only
+   * when there are 2+ non-Lifecycle options to keep in balance. Lifecycle itself is excluded from
+   * the count (it self-adjusts by age); if other options are also held, a rebalance still restores
+   * the full target mix, keeping those options on target while Lifecycle holds its share.
+   */
+  const rebalanceEligible =
+    allocatedOptions.filter((o) => o.id !== LIFECYCLE_ID).length >= 2;
+  const showRebalanceStep =
+    applyTo !== null && applyToIncludesBalance(applyTo) && rebalanceEligible;
+
+  /** Steps are composed dynamically; two of them (rebalance, payment) are conditional. */
+  const steps = useMemo(() => {
+    const list: { id: string; label: string }[] = [];
+    if (!skipAccountStep) list.push({ id: 'account', label: 'Select account' });
+    list.push({ id: 'apply-to', label: 'What to change' });
+    list.push({ id: 'allocations', label: 'Investment options' });
+    if (showRebalanceStep) list.push({ id: 'rebalance', label: 'Keep on track' });
+    if (showPaymentStep) list.push({ id: 'payment', label: 'Payment preferences' });
+    list.push({ id: 'review', label: 'Review and confirm' });
+    return list;
+  }, [skipAccountStep, showRebalanceStep, showPaymentStep]);
+
+  // A conditional step can only disappear while the member is on an earlier step (apply-to or
+  // allocations), so activeStep never points past the list; review is always last. Stale rebalance
+  // state is harmless — it is gated out of both the review screen and the submission below.
+  const currentStepId = steps[activeStep]?.id ?? 'review';
+  const isReviewStep = currentStepId === 'review';
+
   function advance(next: number) {
     setActiveStep(next);
     setError(null);
+  }
+
+  function goToStep(id: string) {
+    const idx = steps.findIndex((s) => s.id === id);
+    if (idx >= 0) advance(idx);
   }
 
   function handleAccountChange(id: string) {
@@ -126,6 +138,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     // Reset downstream state when account changes
     setApplyTo(null);
     setPaymentPreference(null);
+    setRebalance(null);
     setActiveStep(0);
   }
 
@@ -154,36 +167,45 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   }
 
   function handleNext() {
-    if (contentStep === 0) {
-      if (!validateStep1(selectedAccountId)) {
-        setError('Please select an account to continue.');
-        return;
-      }
+    if (currentStepId === 'account' && !validateStep1(selectedAccountId)) {
+      setError('Please select an account to continue.');
+      return;
     }
 
-    if (contentStep === 1) {
-      if (!validateStep2(applyTo)) {
-        setError('Please select an option to continue.');
-        return;
-      }
+    if (currentStepId === 'apply-to' && !validateStep2(applyTo)) {
+      setError('Please select an option to continue.');
+      return;
     }
 
-    if (contentStep === 2) {
-      const { valid } = validateStep3(allocations, availableOptions);
+    if (currentStepId === 'allocations') {
+      const { valid, total } = validateStep3(allocations, availableOptions);
       if (!valid) {
         setShowStep3Validation(true);
+        setError(`Your investment options must add up to 100%. They currently total ${total.toFixed(2)}%.`);
         return;
       }
     }
 
-    if (showPaymentStep && contentStep === 3) {
-      if (!validatePaymentPreference(paymentPreference, allocatedOptions)) {
-        setShowPaymentValidation(true);
-        return;
-      }
+    if (currentStepId === 'rebalance' && !validateRebalance(rebalance)) {
+      setError(
+        rebalance?.enabled
+          ? 'Please choose how often we should rebalance.'
+          : 'Please choose whether you’d like us to keep your mix on track.',
+      );
+      return;
     }
 
-    if (activeStep === reviewStepIndex) {
+    if (currentStepId === 'payment' && !validatePaymentPreference(paymentPreference, allocatedOptions)) {
+      setShowPaymentValidation(true);
+      setError(
+        !paymentPreference
+          ? 'Please choose how your payments will be drawn.'
+          : 'Please make sure your payment percentages add up to 100%.',
+      );
+      return;
+    }
+
+    if (isReviewStep) {
       if (!declarationChecked) {
         setError('Please confirm the declaration before submitting.');
         return;
@@ -194,6 +216,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
         applyTo!,
         allocations,
         showPaymentStep ? (paymentPreference ?? undefined) : undefined,
+        showRebalanceStep ? (rebalance ?? undefined) : undefined,
       );
       saveChange(change);
       setSubmittedChange(change);
@@ -263,26 +286,33 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
           </div>
 
           <StepTransition step={activeStep}>
-            {contentStep === 0 ? (
+            {currentStepId === 'account' ? (
               <Step1Account
                 accounts={accounts}
                 selectedAccountId={selectedAccountId}
                 onChange={handleAccountChange}
               />
-            ) : contentStep === 1 ? (
+            ) : currentStepId === 'apply-to' ? (
               <Step2ApplyTo
                 applyTo={applyTo}
                 isIncomeAccount={isIncomeAccount}
                 onChange={handleApplyToChange}
               />
-            ) : contentStep === 2 ? (
+            ) : currentStepId === 'allocations' ? (
               <Step3Allocations
                 options={availableOptions}
                 allocations={allocations}
                 onChange={handleAllocationChange}
                 showValidation={showStep3Validation}
               />
-            ) : showPaymentStep && contentStep === 3 ? (
+            ) : currentStepId === 'rebalance' ? (
+              <Step3bRebalance
+                allocatedOptions={allocatedOptions}
+                allocations={allocations}
+                setting={rebalance}
+                onChange={setRebalance}
+              />
+            ) : currentStepId === 'payment' ? (
               <Step4PaymentPreference
                 allocatedOptions={allocatedOptions}
                 allocations={allocations}
@@ -299,21 +329,26 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
                 options={availableOptions}
                 allocations={allocations}
                 paymentPreference={showPaymentStep ? paymentPreference : null}
+                rebalance={showRebalanceStep ? rebalance : null}
                 declarationChecked={declarationChecked}
                 onDeclarationChange={handleDeclarationChange}
-                onEditAccount={skipAccountStep ? undefined : () => advance(0)}
-                onEditApplyTo={() => advance(skipAccountStep ? 0 : 1)}
-                onEditAllocations={() => advance(skipAccountStep ? 1 : 2)}
-                onEditPaymentPreference={showPaymentStep ? () => advance(skipAccountStep ? 2 : 3) : undefined}
-                error={error}
+                onEditAccount={skipAccountStep ? undefined : () => goToStep('account')}
+                onEditApplyTo={() => goToStep('apply-to')}
+                onEditAllocations={() => goToStep('allocations')}
+                onEditRebalance={showRebalanceStep ? () => goToStep('rebalance') : undefined}
+                onEditPaymentPreference={showPaymentStep ? () => goToStep('payment') : undefined}
               />
             )}
           </StepTransition>
 
+          {/* Validation errors surface here, beside the action the user just clicked — not at the
+              top of the page, where on a long step they would be scrolled out of view. */}
+          {error && <Alert severity="error" message={error} />}
+
           <StepperActions
             step={activeStep + 1}
-            isSubmitStep={activeStep === reviewStepIndex}
-            nextLabel={activeStep === reviewStepIndex ? 'Submit request' : 'Next'}
+            isSubmitStep={isReviewStep}
+            nextLabel={isReviewStep ? 'Submit request' : 'Next'}
             onNext={handleNext}
             onBack={handleBack}
             onExit={handleExit}

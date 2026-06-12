@@ -42,6 +42,38 @@ export function applyToIncludesPayments(v: ApplyTo): boolean {
   return v === 'income-both' || v === 'income-payments';
 }
 
+/**
+ * Whether the chosen apply-to option changes how the *current balance* is invested.
+ * Automatic rebalancing only makes sense when the balance is being set to a target mix —
+ * not for "future contributions only", which never touches the existing balance.
+ */
+export function applyToIncludesBalance(v: ApplyTo): boolean {
+  return v === 'all' || v === 'balance' || v === 'income-both' || v === 'income-balance';
+}
+
+/** How often we automatically switch the balance back to the member's chosen mix. */
+export type RebalanceFrequency = 'six-monthly' | 'yearly';
+
+export interface RebalanceSetting {
+  /** True if the member wants us to keep their mix on track automatically. */
+  enabled: boolean;
+  /** Present only when enabled. */
+  frequency?: RebalanceFrequency;
+}
+
+export const REBALANCE_FREQUENCY_OPTIONS = [
+  {
+    value: 'six-monthly' as RebalanceFrequency,
+    label: 'Every 6 months',
+    description: 'We switch your investments back to your chosen mix twice a year, around 31 March and 30 September.',
+  },
+  {
+    value: 'yearly' as RebalanceFrequency,
+    label: 'Every 12 months',
+    description: 'We switch your investments back to your chosen mix once a year, around 31 March.',
+  },
+] as const;
+
 /** Payment preference for retirement income accounts. */
 export type PaymentPreferenceType = 'brand-chooses' | 'percentage' | 'priority';
 
@@ -60,6 +92,8 @@ export interface InvestmentMixChange {
   allocations: Record<string, number>;
   /** Only present for retirement income accounts when applyTo includes payments. */
   paymentPreference?: PaymentPreference;
+  /** Only present when the rebalancing step was shown (balance change with 2+ non-Lifecycle options). */
+  rebalance?: RebalanceSetting;
   referenceNumber: string;
   submittedAt: string;
 }

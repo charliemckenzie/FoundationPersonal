@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { Alert } from '../../../components/Alert';
 import { PercentageField } from '../../../components/PercentageField';
-import { PaymentWorkedExample } from './PaymentWorkedExample';
+import { WorkedExample } from './WorkedExample';
 import { formatCurrency } from '../utils';
 import type { InvestmentOption } from '../types';
 
@@ -157,7 +157,7 @@ export function PaymentPercentageSplit({
       )}
 
       {splitRows.length > 0 && (
-        <PaymentWorkedExample>
+        <WorkedExample>
           <Typography variant="body">
             An example {formatCurrency(EXAMPLE_PAYMENT)} payment would be made up of:
           </Typography>
@@ -175,7 +175,7 @@ export function PaymentPercentageSplit({
             We&apos;ll split every payment this way while each option has money in it. If one runs
             out, we&apos;ll take its share from your remaining options.
           </Typography>
-        </PaymentWorkedExample>
+        </WorkedExample>
       )}
     </Stack>
   );

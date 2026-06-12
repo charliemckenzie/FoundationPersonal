@@ -4,14 +4,13 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Alert } from '../../../components/Alert';
 import { Checkbox } from '../../../components/Checkbox';
 import { DescriptionList } from '../../../components/DescriptionList';
 import { IconButton } from '../../../components/IconButton';
 import { Table } from '../../../components/Table';
 import type { TableColumn } from '../../../components/Table';
-import type { InvestmentAccount, InvestmentOption, ApplyTo, PaymentPreference } from '../types';
-import { applyToLabel, formatCurrency, formatDate, blendedProfile, paymentPreferenceLabel } from '../utils';
+import type { InvestmentAccount, InvestmentOption, ApplyTo, PaymentPreference, RebalanceSetting } from '../types';
+import { applyToLabel, formatCurrency, formatDate, blendedProfile, paymentPreferenceLabel, rebalanceLabel } from '../utils';
 import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS } from '../types';
 
 interface Step4ReviewProps {
@@ -21,13 +20,14 @@ interface Step4ReviewProps {
   options: InvestmentOption[];
   allocations: Record<string, number>;
   paymentPreference?: PaymentPreference | null;
+  rebalance?: RebalanceSetting | null;
   declarationChecked: boolean;
   onDeclarationChange: (checked: boolean) => void;
   onEditAccount?: () => void;
   onEditApplyTo: () => void;
   onEditAllocations: () => void;
+  onEditRebalance?: () => void;
   onEditPaymentPreference?: () => void;
-  error: string | null;
 }
 
 export function Step4Review({
@@ -37,13 +37,14 @@ export function Step4Review({
   options,
   allocations,
   paymentPreference,
+  rebalance,
   declarationChecked,
   onDeclarationChange,
   onEditAccount,
   onEditApplyTo,
   onEditAllocations,
+  onEditRebalance,
   onEditPaymentPreference,
-  error,
 }: Step4ReviewProps) {
   const account = accounts.find((a) => a.id === selectedAccountId);
   const allocatedOptions = options.filter((o) => (allocations[o.id] ?? 0) > 0);
@@ -103,8 +104,6 @@ export function Step4Review({
     <Stack spacing={5}>
       <div>
         <Typography variant="h5" sx={{ mb: 2 }}>Review your request</Typography>
-
-        {error && <Alert severity="error" message={error} />}
 
         <DescriptionList labelWidth="32%">
         <DescriptionList.Item
@@ -173,6 +172,32 @@ export function Step4Review({
             />
           }
         />
+        {rebalance && onEditRebalance && (
+          <DescriptionList.Item
+            label="Keeping on track"
+            value={
+              <Stack spacing={0}>
+                <Typography variant="body" sx={{ fontWeight: 700 }}>
+                  {rebalanceLabel(rebalance)}
+                </Typography>
+                <Typography variant="small" sx={{ color: 'text.muted' }}>
+                  {rebalance.enabled
+                    ? 'We’ll automatically switch your investments back to the mix above.'
+                    : 'Your mix won’t be adjusted automatically.'}
+                </Typography>
+              </Stack>
+            }
+            action={
+              <IconButton
+                icon="pen"
+                label="Edit rebalancing"
+                variant="ghost"
+                size="small"
+                onClick={onEditRebalance}
+              />
+            }
+          />
+        )}
         {paymentPreference && onEditPaymentPreference && (
           <DescriptionList.Item
             label="Payment preferences"
@@ -237,7 +262,7 @@ export function Step4Review({
           headerStyle="paper"
         />
         <Typography variant="small" sx={{ color: 'text.muted', mt: 1, display: 'block' }}>
-          Fee estimates are based on your selected account's current balance of {formatCurrency(balance)} as at {today}. Other fees may apply. See the relevant PDS for your account type.
+          Fee estimates are based on your selected account&apos;s current balance of {formatCurrency(balance)} as at {today}. Other fees may apply. See the relevant PDS for your account type.
         </Typography>
       </Box>
 
@@ -258,7 +283,7 @@ export function Step4Review({
         >
           <Typography variant="body">
             I confirm that I want to change my investment allocation as shown above, and I understand
-            this request will be processed using that business day's unit prices.
+            this request will be processed using that business day&apos;s unit prices.
           </Typography>
         </Box>
         <Checkbox

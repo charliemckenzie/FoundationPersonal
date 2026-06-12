@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { alpha } from '@mui/material/styles';
 import type { Theme } from '@mui/material/styles';
-import { Icon, type IconSize } from '../Icon';
+import { Icon, type IconSize, type IconStyle } from '../Icon';
 import { Spinner } from '../Spinner';
 import type React from 'react';
 
@@ -19,6 +19,8 @@ export interface TextButtonProps {
   reversed?: boolean;
   startIcon?: string;
   endIcon?: string;
+  /** Font Awesome style for the icon. Defaults to the Icon component's own default (solid). */
+  iconStyle?: IconStyle;
   iconDirection?: 'left' | 'right';
   hideIcon?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -34,6 +36,7 @@ export function TextButton({
   reversed = false,
   startIcon,
   endIcon,
+  iconStyle,
   iconDirection = 'right',
   hideIcon = false,
   onClick,
@@ -146,7 +149,7 @@ export function TextButton({
       ) : (
         !loading && effectiveStartIcon && (
           <Box className="text-button-icon" sx={(theme: Theme) => ({ ...iconBoxStyles(theme, isUsingDefaultIcon), width: iconContainerWidth[size], justifyContent: 'center' })}>
-            <Icon icon={effectiveStartIcon} size={iconSize} color="inherit" />
+            <Icon icon={effectiveStartIcon} style={iconStyle} size={iconSize} color="inherit" />
           </Box>
         )
       )}
@@ -168,7 +171,7 @@ export function TextButton({
       ) : (
         !loading && effectiveEndIcon && (
           <Box className="text-button-icon" sx={(theme: Theme) => ({ ...iconBoxStyles(theme, isUsingDefaultIcon), width: iconContainerWidth[size], justifyContent: 'center' })}>
-            <Icon icon={effectiveEndIcon} size={iconSize} color="inherit" />
+            <Icon icon={effectiveEndIcon} style={iconStyle} size={iconSize} color="inherit" />
           </Box>
         )
       )}

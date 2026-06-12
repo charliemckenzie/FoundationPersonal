@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { Alert } from '../../../components/Alert';
 import { PercentageField } from '../../../components/PercentageField';
 import { AllocationTotal } from '../../beneficiaries/AllocationTotal';
 import type { InvestmentOption } from '../types';
@@ -23,8 +22,7 @@ export function Step3Allocations({
   onChange,
   showValidation,
 }: Step3AllocationsProps) {
-  const { valid, total } = validateStep3(allocations, options);
-  const showError = showValidation && !valid;
+  const { total } = validateStep3(allocations, options);
   const barRef = useRef<HTMLDivElement>(null);
   const [isFloating, setIsFloating] = useState(false);
 
@@ -42,20 +40,43 @@ export function Step3Allocations({
     }
 
     const container = getScrollParent(el.parentElement);
+    // Matches the bar's `bottom: 1rem` sticky offset.
+    const STUCK_OFFSET = 16;
 
     const update = () => {
-      const remaining = container.scrollHeight - container.scrollTop - container.clientHeight;
-      // Start fading 80px before the bar lands so the transition completes by the time it settles
-      setIsFloating(remaining > 80);
+      const barBottom = el.getBoundingClientRect().bottom;
+      // The bar pins 1rem above the bottom of whatever actually scrolls. A detected scroll parent
+      // can report a bottom far below the fold when the real scroller is the window, so clamp to
+      // the viewport — otherwise the shadow only "catches up" once you start scrolling.
+      const containerBottom =
+        container === document.documentElement
+          ? window.innerHeight
+          : Math.min(container.getBoundingClientRect().bottom, window.innerHeight);
+      // While pinned, the bar's bottom sits exactly STUCK_OFFSET above that visible bottom. The
+      // moment it lands in normal flow it rises above that line — so the shadow drops the instant
+      // it stops floating, rather than after an arbitrary scroll threshold.
+      setIsFloating(barBottom >= containerBottom - STUCK_OFFSET - 0.5);
     };
 
     container.addEventListener('scroll', update, { passive: true });
     window.addEventListener('resize', update);
-    update();
+
+    // The step animates in via StepTransition, which briefly clips this content (overflow: hidden)
+    // and tweens its height — so the bar isn't at its real sticky position when the effect first
+    // runs, and nothing else re-measures once the shell settles. Re-measure each frame for the
+    // entrance window so the shadow is correct on load, without waiting for the user to scroll.
+    let rafId = 0;
+    const start = performance.now();
+    const settle = () => {
+      update();
+      if (performance.now() - start < 600) rafId = requestAnimationFrame(settle);
+    };
+    settle();
 
     return () => {
       container.removeEventListener('scroll', update);
       window.removeEventListener('resize', update);
+      cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -69,13 +90,6 @@ export function Step3Allocations({
           Allocate your investment across the options below. Your total must equal 100%.
         </Typography>
       </div>
-
-      {showError && (
-        <Alert
-          severity="error"
-          message={`Your allocations total ${total.toFixed(2)}%. Please adjust them to equal exactly 100%.`}
-        />
-      )}
 
       <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
         {Object.entries(

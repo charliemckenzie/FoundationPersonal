@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { IconButton } from '../../../components/IconButton';
 import { Icon } from '../../../components/Icon';
-import { PaymentWorkedExample } from './PaymentWorkedExample';
+import { WorkedExample } from './WorkedExample';
 import { ordinal } from '../utils';
 import type { InvestmentOption } from '../types';
 
@@ -176,13 +176,13 @@ export function PaymentPriorityList({ options, order, allocations, onReorder }: 
       </Box>
 
       {firstName && lastName && firstName !== lastName && (
-        <PaymentWorkedExample>
+        <WorkedExample>
           <Typography variant="body">
             We&apos;ll take each payment from {firstName} first. Once it&apos;s used up, we&apos;ll
             start taking it from {lastName}. Over time this draws down {firstName} and leaves your
             other options invested for longer.
           </Typography>
-        </PaymentWorkedExample>
+        </WorkedExample>
       )}
     </Stack>
   );

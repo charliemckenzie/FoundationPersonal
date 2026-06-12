@@ -67,7 +67,7 @@ const cardContainerSx = (args: {
   minWidth: args.variant === 'card' && args.cardDirection === 'column' ? '9rem' : undefined,
   px: 2,
   ...(args.variant === 'boxed' && { pr: '1.25rem' }),
-  py: args.variant === 'card' ? 2 : args.description ? 1.5 : 0,
+  py: args.variant === 'card' || args.description ? 2 : 0,
   cursor: args.isItemDisabled ? 'default' : 'pointer',
   transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
   backgroundColor: 'background.paper',

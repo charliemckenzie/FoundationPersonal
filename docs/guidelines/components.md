@@ -265,6 +265,19 @@ Key props: `step`, `isSubmitStep`, `onBack`, `onNext`, `onExit`, `onSave`, `supp
 Directional slide-and-fade transition between steps. Holds old content until the exit animation completes, then reveals new content, and animates its height so elements below (e.g. `StepperActions`) slide rather than jump. Drive it with `step` alone — direction is inferred from the change (a higher index slides forward). Respects `prefers-reduced-motion`. Pairs with `FormProgress` and `StepperActions` as the Foundation stepped form pattern.  
 Key props: `step`, `direction?` (`'forward' | 'backward'` — optional override for non-linear navigation; inferred by default), `children`
 
+#### Stepped form validation — error placement
+
+When the user presses **Next** (or **Submit**) on a stepped form and the step is invalid, render the validation error in a single `Alert` **directly above `StepperActions`** — never only at the top of the step or page.
+
+The reason: steps can be long and the action sits at the bottom. An error rendered at the top of the step is frequently scrolled out of view, so the user clicks Next, nothing visibly happens, and they're stuck. Placing the error beside the button they just pressed keeps cause and feedback together.
+
+Rules:
+- The flow owns the error message. Compute it in the `Next` handler and render `{error && <Alert severity="error" message={error} />}` immediately before `<StepperActions />`.
+- Field-level indicators (an invalid input's own error state, a running total turning red) stay in place — they're live feedback, not the click-Next summary. Don't duplicate the summary banner at the top of the step.
+- Clear the error when the user advances or goes back.
+
+See `src/features/investment-mix/InvestmentMixFlow.tsx` for the reference implementation.
+
 ---
 
 ### Buttons & Actions

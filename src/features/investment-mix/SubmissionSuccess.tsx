@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { Button } from '../../components/Button';
 import { Icon } from '../../components/Icon';
 import type { InvestmentMixChange } from './types';
-import { formatDate, paymentPreferenceLabel } from './utils';
+import { formatDate, paymentPreferenceLabel, rebalanceLabel } from './utils';
 
 interface SubmissionSuccessProps {
   change: InvestmentMixChange;
@@ -80,6 +80,14 @@ export function SubmissionSuccess({ change, brandName, onBackToOverview }: Submi
                 <Typography variant="body">
                   {paymentPreferenceLabel(change.paymentPreference, brandName)}
                 </Typography>
+              </>
+            )}
+            {change.rebalance && (
+              <>
+                <Typography variant="small" sx={{ color: 'text.muted', mt: 0.5 }}>
+                  Keeping on track
+                </Typography>
+                <Typography variant="body">{rebalanceLabel(change.rebalance)}</Typography>
               </>
             )}
           </Stack>

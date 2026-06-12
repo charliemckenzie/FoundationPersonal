@@ -1,4 +1,4 @@
-import type { InvestmentAccount, InvestmentOption, ApplyTo, InvestmentMixChange, PaymentPreference } from './types';
+import type { InvestmentAccount, InvestmentOption, ApplyTo, InvestmentMixChange, PaymentPreference, RebalanceSetting } from './types';
 import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS } from './types';
 
 export function applyToLabel(applyTo: ApplyTo): string {
@@ -17,6 +17,12 @@ export function paymentPreferenceLabel(pref: PaymentPreference, brandName?: stri
     case 'priority':
       return 'By order of priority';
   }
+}
+
+/** Short summary of the rebalancing choice for review and confirmation screens. */
+export function rebalanceLabel(setting?: RebalanceSetting | null): string {
+  if (!setting || !setting.enabled) return 'Not turned on';
+  return setting.frequency === 'six-monthly' ? 'Every 6 months' : 'Every 12 months';
 }
 
 export function formatCurrency(amount: number): string {
@@ -78,6 +84,16 @@ export function validatePaymentPreference(
     return (pref.priorityOrder?.length ?? 0) > 0;
   }
   return false;
+}
+
+/**
+ * The rebalancing step demands an explicit choice. "No" is valid on its own;
+ * "Yes" is only valid once a frequency is picked.
+ */
+export function validateRebalance(setting: RebalanceSetting | null): boolean {
+  if (!setting) return false;
+  if (!setting.enabled) return true;
+  return setting.frequency != null;
 }
 
 const RISK_SCORES: Record<string, number> = {
@@ -142,6 +158,7 @@ export function buildChange(
   applyTo: ApplyTo,
   allocations: Record<string, number>,
   paymentPreference?: PaymentPreference,
+  rebalance?: RebalanceSetting,
 ): InvestmentMixChange {
   const account = accounts.find((a) => a.id === accountId);
   return {
@@ -150,6 +167,7 @@ export function buildChange(
     applyTo,
     allocations,
     ...(paymentPreference ? { paymentPreference } : {}),
+    ...(rebalance ? { rebalance } : {}),
     referenceNumber: generateReference(),
     submittedAt: new Date().toISOString(),
   };

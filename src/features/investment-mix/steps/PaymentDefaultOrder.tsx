@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
-import { PaymentWorkedExample } from './PaymentWorkedExample';
+import { WorkedExample } from './WorkedExample';
 import { ordinal } from '../utils';
 import type { InvestmentOption } from '../types';
 
@@ -107,13 +107,13 @@ export function PaymentDefaultOrder({ options, allocations }: PaymentDefaultOrde
       </Box>
 
       {firstName && lastName && firstName !== lastName && (
-        <PaymentWorkedExample>
+        <WorkedExample>
           <Typography variant="body">
             Each withdrawal or payment will draw from {firstName} first, as it has the lowest risk.
             When it runs out, we move to the next, finishing with {lastName}, which has the highest
             risk.
           </Typography>
-        </PaymentWorkedExample>
+        </WorkedExample>
       )}
     </Stack>
   );
