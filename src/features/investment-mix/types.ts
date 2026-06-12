@@ -5,6 +5,8 @@ export interface InvestmentAccount {
   balance: number;
   /** True for pension/retirement income accounts — they have a different set of change options. */
   isIncomeAccount?: boolean;
+  /** True for Transition to Retirement (TTR) accounts. Lifecycle Investment Strategy is not available. */
+  isTTRAccount?: boolean;
 }
 
 export interface InvestmentOption {

@@ -10,7 +10,7 @@ export interface LinkRowProps {
   /** Primary label — rendered as a styled link. */
   label: string;
   /** Supporting description below the label. */
-  description?: string;
+  description?: React.ReactNode;
   /** FontAwesome icon name (e.g. 'chart-line', 'cursor'). */
   icon: string;
   /** FontAwesome icon style. Defaults to 'regular'. */

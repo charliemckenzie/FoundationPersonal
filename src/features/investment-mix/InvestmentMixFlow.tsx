@@ -19,7 +19,7 @@ import { useInvestmentMix } from './InvestmentMixContext';
 import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS } from './mockData';
 import type { ApplyTo, InvestmentMixChange, PaymentPreference } from './types';
 import { applyToIncludesPayments } from './types';
-import { validateStep1, validateStep2, validateStep3, validatePaymentPreference, buildChange } from './utils';
+import { validateStep1, validateStep2, validateStep3, validatePaymentPreference, buildChange, formatCurrency, formatDate } from './utils';
 
 const BASE_STEPS = [
   { id: 'account', label: 'Select account' },
@@ -39,14 +39,14 @@ const STEPS_WITH_PAYMENT = [
   { id: 'account', label: 'Select account' },
   { id: 'apply-to', label: 'What to change' },
   { id: 'allocations', label: 'Investment options' },
-  { id: 'payment', label: 'Future payments' },
+  { id: 'payment', label: 'Payment preferences' },
   { id: 'review', label: 'Review and confirm' },
 ];
 
 const STEPS_WITH_PAYMENT_NO_ACCOUNT = [
   { id: 'apply-to', label: 'What to change' },
   { id: 'allocations', label: 'Investment options' },
-  { id: 'payment', label: 'Future payments' },
+  { id: 'payment', label: 'Payment preferences' },
   { id: 'review', label: 'Review and confirm' },
 ];
 
@@ -90,6 +90,16 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   );
 
   const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
+  const isTTRAccount = selectedAccount?.isTTRAccount ?? false;
+
+  /** Lifecycle Investment Strategy is not available to income or TTR accounts. */
+  const availableOptions = useMemo(
+    () =>
+      isIncomeAccount || isTTRAccount
+        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== 'opt-lifecycle')
+        : MOCK_INVESTMENT_OPTIONS,
+    [isIncomeAccount, isTTRAccount],
+  );
 
   const showPaymentStep =
     isIncomeAccount && applyTo !== null && applyToIncludesPayments(applyTo);
@@ -102,8 +112,8 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   const contentStep = activeStep + (skipAccountStep ? 1 : 0);
 
   const allocatedOptions = useMemo(
-    () => MOCK_INVESTMENT_OPTIONS.filter((o) => (allocations[o.id] ?? 0) > 0),
-    [allocations],
+    () => availableOptions.filter((o) => (allocations[o.id] ?? 0) > 0),
+    [allocations, availableOptions],
   );
 
   function advance(next: number) {
@@ -159,7 +169,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     }
 
     if (contentStep === 2) {
-      const { valid } = validateStep3(allocations, MOCK_INVESTMENT_OPTIONS);
+      const { valid } = validateStep3(allocations, availableOptions);
       if (!valid) {
         setShowStep3Validation(true);
         return;
@@ -233,9 +243,14 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       <ContentContainer size="md">
         <Stack spacing={4} sx={{ py: 4 }}>
           <div>
-            <Typography variant="h3" component="h1" sx={{ mb: 3 }}>
+            <Typography variant="h3" component="h1" sx={{ mb: 0.5 }}>
               Change investment mix
             </Typography>
+            {selectedAccount && (
+              <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mb: 3 }}>
+                For {selectedAccount.name} ({formatCurrency(selectedAccount.balance)} as at {formatDate(new Date().toISOString())})
+              </Typography>
+            )}
             <FormProgress
               variant="simple"
               value={(activeStep / steps.length) * 100}
@@ -262,7 +277,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
               />
             ) : contentStep === 2 ? (
               <Step3Allocations
-                options={MOCK_INVESTMENT_OPTIONS}
+                options={availableOptions}
                 allocations={allocations}
                 onChange={handleAllocationChange}
                 showValidation={showStep3Validation}
@@ -270,6 +285,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
             ) : showPaymentStep && contentStep === 3 ? (
               <Step4PaymentPreference
                 allocatedOptions={allocatedOptions}
+                allocations={allocations}
                 preference={paymentPreference}
                 onChange={setPaymentPreference}
                 showValidation={showPaymentValidation}
@@ -280,7 +296,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
                 accounts={accounts}
                 selectedAccountId={selectedAccountId}
                 applyTo={applyTo!}
-                options={MOCK_INVESTMENT_OPTIONS}
+                options={availableOptions}
                 allocations={allocations}
                 paymentPreference={showPaymentStep ? paymentPreference : null}
                 declarationChecked={declarationChecked}

@@ -19,6 +19,7 @@ export function AllocationTotal({ total, attempted = false }: AllocationTotalPro
   const color = complete ? 'success.text' : isError ? 'error.text' : 'text.primary';
 
   const remaining = Math.round((100 - total) * 100) / 100;
+  const showRemaining = total > 0 && under && !isError;
   const hint = over
     ? 'You cannot allocate more than 100%'
     : under && attempted
@@ -48,11 +49,25 @@ export function AllocationTotal({ total, attempted = false }: AllocationTotalPro
         <Typography variant="body" sx={{ color }}>Total allocated</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 0.5 }}>
-        <Typography variant="body" sx={{ color }}>
+        <Typography component="p" variant="body" sx={{ color, m: 0, textAlign: 'right' }}>
           <Typography component="span" variant="body" sx={{ fontWeight: 700, color }}>
             {Math.round(total)}%
           </Typography>
           {' '}of 100%
+          <Typography
+            component="span"
+            variant="caption"
+            sx={{
+              display: 'block',
+              color: 'text.muted',
+              overflow: 'hidden',
+              maxHeight: showRemaining ? '1.5rem' : 0,
+              opacity: showRemaining ? 1 : 0,
+              transition: 'max-height 250ms ease, opacity 250ms ease',
+            }}
+          >
+            {remaining}% remaining
+          </Typography>
         </Typography>
         {hint && (
           <Typography variant="small" sx={{ color: 'error.text' }}>

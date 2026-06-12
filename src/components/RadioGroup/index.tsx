@@ -54,6 +54,7 @@ const cardContainerSx = (args: {
   isItemDisabled: boolean;
 }) => (theme: Theme) => ({
   ml: 0,
+  mr: 0,
   gap: args.variant === 'card' ? 0 : 1.25,
   position: 'relative' as const,
   alignItems: args.variant === 'card' ? 'center' : args.description ? 'flex-start' : 'center',

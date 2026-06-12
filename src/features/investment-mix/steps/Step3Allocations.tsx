@@ -1,10 +1,12 @@
 'use client';
 
+import { useRef, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Alert } from '../../../components/Alert';
 import { PercentageField } from '../../../components/PercentageField';
+import { AllocationTotal } from '../../beneficiaries/AllocationTotal';
 import type { InvestmentOption } from '../types';
 import { validateStep3 } from '../utils';
 
@@ -23,6 +25,39 @@ export function Step3Allocations({
 }: Step3AllocationsProps) {
   const { valid, total } = validateStep3(allocations, options);
   const showError = showValidation && !valid;
+  const barRef = useRef<HTMLDivElement>(null);
+  const [isFloating, setIsFloating] = useState(false);
+
+  useEffect(() => {
+    const el = barRef.current;
+    if (!el) return;
+
+    function getScrollParent(node: HTMLElement | null): HTMLElement {
+      while (node && node !== document.documentElement) {
+        const { overflowY } = getComputedStyle(node);
+        if (overflowY === 'auto' || overflowY === 'scroll') return node;
+        node = node.parentElement;
+      }
+      return document.documentElement;
+    }
+
+    const container = getScrollParent(el.parentElement);
+
+    const update = () => {
+      const remaining = container.scrollHeight - container.scrollTop - container.clientHeight;
+      // Start fading 80px before the bar lands so the transition completes by the time it settles
+      setIsFloating(remaining > 80);
+    };
+
+    container.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+
+    return () => {
+      container.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
 
   return (
     <Stack spacing={3}>
@@ -30,7 +65,7 @@ export function Step3Allocations({
         <Typography variant="h5" sx={{ mb: 0.5 }}>
           Investment options
         </Typography>
-        <Typography variant="body" sx={{ color: 'text.muted' }}>
+        <Typography variant="body">
           Allocate your investment across the options below. Your total must equal 100%.
         </Typography>
       </div>
@@ -52,17 +87,13 @@ export function Step3Allocations({
         ).map(([category, categoryOptions], index) => (
           <Box component="li" key={category}>
             <Typography
-              variant="small"
+              variant="h6"
               sx={{
                 display: 'block',
-                fontWeight: 700,
-                color: 'text.muted',
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
                 pt: index === 0 ? 1.5 : 4,
                 pb: 1.5,
-                borderBottom: '2px solid',
-                borderColor: 'border.subtle',
+                borderBottom: '1px solid',
+                borderColor: 'border.input',
               }}
             >
               {category}
@@ -135,27 +166,16 @@ export function Step3Allocations({
         ))}
       </Stack>
 
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'center',
-          gap: 1,
-          pt: 0.5,
-        }}
-      >
-        <Typography variant="body" sx={{ color: 'text.muted' }}>
-          Total:
-        </Typography>
-        <Typography
-          variant="body"
-          sx={{
-            fontWeight: 700,
-            color: showError ? 'error.main' : 'text.primary',
-          }}
-        >
-          {total.toFixed(2)}% / 100%
-        </Typography>
+      {/* Sticky total bar — floats with shadow while scroll room remains */}
+      <Box ref={barRef} sx={{
+          position: 'sticky',
+          bottom: '1rem',
+          zIndex: 1,
+          boxShadow: isFloating ? 16 : 0,
+          borderRadius: (t) => `${t.shape.sm}px`,
+          transition: 'box-shadow 300ms ease',
+        }}>
+        <AllocationTotal total={parseFloat(total.toFixed(2))} attempted={showValidation} />
       </Box>
     </Stack>
   );

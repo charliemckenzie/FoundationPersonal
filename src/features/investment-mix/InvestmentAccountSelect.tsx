@@ -17,6 +17,10 @@ interface InvestmentAccountSelectProps {
 
 export function InvestmentAccountSelect({ accounts, formPath }: InvestmentAccountSelectProps) {
   const router = useRouter();
+
+  const today = new Date();
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const asAt = `${today.getDate()} ${MONTHS[today.getMonth()]} ${today.getFullYear()}`;
   return (
     <ContentContainer size="md">
       <Box sx={{ py: 4 }}>
@@ -64,7 +68,7 @@ export function InvestmentAccountSelect({ accounts, formPath }: InvestmentAccoun
                 key={account.id}
                 icon={account.isIncomeAccount ? 'money-simple-from-bracket' : 'piggy-bank'}
                 label={account.name}
-                description={`${account.accountNumber} · ${formatCurrency(account.balance)}`}
+                description={<>Account balance: <Box component="span" sx={{ fontWeight: 700 }}>{formatCurrency(account.balance)}</Box> <Box component="span" sx={{ color: 'text.muted' }}>As at {asAt}</Box></>}
                 onClick={() => router.push(`${formPath}?account=${account.id}`)}
               />
             ))}

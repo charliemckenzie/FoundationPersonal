@@ -14,6 +14,13 @@ export const MOCK_ACCOUNTS: InvestmentAccount[] = [
     balance: 880450.5,
     isIncomeAccount: true,
   },
+  {
+    id: 'acc-003',
+    name: 'Transition to Retirement account',
+    accountNumber: '456 789 123',
+    balance: 215000.0,
+    isTTRAccount: true,
+  },
 ];
 
 export const MOCK_INVESTMENT_OPTIONS: InvestmentOption[] = [

@@ -175,7 +175,7 @@ export function Step4Review({
         />
         {paymentPreference && onEditPaymentPreference && (
           <DescriptionList.Item
-            label="Future payments"
+            label="Payment preferences"
             value={
               <Stack spacing={0.5}>
                 <Typography variant="body" sx={{ fontWeight: 700 }}>
@@ -216,7 +216,7 @@ export function Step4Review({
             action={
               <IconButton
                 icon="pen"
-                label="Edit future payments"
+                label="Edit payment preferences"
                 variant="ghost"
                 size="small"
                 onClick={onEditPaymentPreference}
