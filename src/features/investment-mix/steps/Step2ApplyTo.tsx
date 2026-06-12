@@ -1,6 +1,5 @@
 'use client';
 
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { RadioGroup } from '../../../components/RadioGroup';
@@ -78,8 +77,6 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
             />
           </Stack>
 
-          <Box sx={{ borderBottom: '1px solid', borderColor: 'border.subtle' }} />
-
           <Stack spacing={1.5}>
             <Stack spacing={0.5}>
               <Typography variant="h6">Other options</Typography>
@@ -122,8 +119,6 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
             onChange={(v) => onChange(v as ApplyTo)}
           />
         </Stack>
-
-        <Box sx={{ borderBottom: '1px solid', borderColor: 'border.subtle' }} />
 
         <Stack spacing={1.5}>
           <Stack spacing={0.5}>

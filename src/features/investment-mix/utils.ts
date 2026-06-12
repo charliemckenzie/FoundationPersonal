@@ -23,6 +23,13 @@ export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(amount);
 }
 
+const ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
+
+/** Human ordinal for a zero-based index: 0 → "1st", 1 → "2nd", … */
+export function ordinal(index: number): string {
+  return ORDINALS[index] ?? `${index + 1}th`;
+}
+
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export function formatDate(iso: string): string {

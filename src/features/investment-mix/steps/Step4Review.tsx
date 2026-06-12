@@ -23,7 +23,7 @@ interface Step4ReviewProps {
   paymentPreference?: PaymentPreference | null;
   declarationChecked: boolean;
   onDeclarationChange: (checked: boolean) => void;
-  onEditAccount: () => void;
+  onEditAccount?: () => void;
   onEditApplyTo: () => void;
   onEditAllocations: () => void;
   onEditPaymentPreference?: () => void;
