@@ -67,6 +67,7 @@ export function MobileHeader({
         gap: 1.5,
         px: 2,
         height: '4.25rem',
+        width: '100%',
         backgroundColor: 'background.paper',
         borderBottom: `1px solid ${t.palette.border.subtle}`,
       })}

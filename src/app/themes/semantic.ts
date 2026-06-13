@@ -160,6 +160,7 @@ export function buildLightPalette(brand: BrandConfig): PaletteOptions {
       default:        brand.neutral[50],
       paper:          white,
       elevated:       brand.neutral[100],
+      highContrast:   brand.neutral[800],
       brandPrimary:   brand.primary[600],
       brandSecondary: brand.secondary[800],
       brandTertiary:  brand.tertiary?.[500] ?? brand.primary[600],
@@ -312,6 +313,7 @@ export function buildDarkPalette(brand: BrandConfig): PaletteOptions {
       default:        brand.neutral[950],
       paper:          brand.neutral[900],
       elevated:       brand.neutral[800],
+      highContrast:   brand.neutral[300],
       brandPrimary:   brand.neutral[800],  // all brand surfaces unify at neutral[800] in dark mode
       brandSecondary: brand.neutral[800],
       brandTertiary:  brand.neutral[800],

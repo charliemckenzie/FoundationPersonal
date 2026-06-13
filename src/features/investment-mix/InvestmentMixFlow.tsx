@@ -18,6 +18,8 @@ import { Step4PaymentPreference } from './steps/Step4PaymentPreference';
 import { Step4Review } from './steps/Step4Review';
 import { SubmissionSuccess } from './SubmissionSuccess';
 import { useInvestmentMix } from './InvestmentMixContext';
+import { Dialog } from '../../components/Dialog';
+import { TextButton } from '../../components/TextButton';
 import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS } from './mockData';
 import type { ApplyTo, InvestmentMixChange, PaymentPreference, RebalanceSetting } from './types';
 import { applyToIncludesPayments, applyToIncludesBalance } from './types';
@@ -31,6 +33,7 @@ import {
   formatCurrency,
   formatDate,
 } from './utils';
+import { detectAllocationWarning, type AllocationWarning } from './allocationWarnings';
 
 const LIFECYCLE_ID = 'opt-lifecycle';
 
@@ -66,6 +69,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   const [showPaymentValidation, setShowPaymentValidation] = useState(false);
   const [declarationChecked, setDeclarationChecked] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [speedBumpWarning, setSpeedBumpWarning] = useState<AllocationWarning | null>(null);
   const [submitted, setSubmitted] = useState(false);
   const [submittedChange, setSubmittedChange] = useState<InvestmentMixChange | null>(null);
 
@@ -91,8 +95,13 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     [allocations, availableOptions],
   );
 
+  // Payment preferences decide which option withdrawals are drawn from (order, priority, or split).
+  // With only one allocated option everything is drawn from it by definition, so the step is moot.
   const showPaymentStep =
-    isIncomeAccount && applyTo !== null && applyToIncludesPayments(applyTo);
+    isIncomeAccount &&
+    applyTo !== null &&
+    applyToIncludesPayments(applyTo) &&
+    allocatedOptions.length >= 2;
 
   /**
    * Rebalancing only applies when the current balance is being set to a target mix, and only
@@ -110,7 +119,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     const list: { id: string; label: string }[] = [];
     if (!skipAccountStep) list.push({ id: 'account', label: 'Select account' });
     list.push({ id: 'apply-to', label: 'What to change' });
-    list.push({ id: 'allocations', label: 'Investment options' });
+    list.push({ id: 'allocations', label: 'Allocate new mix' });
     if (showRebalanceStep) list.push({ id: 'rebalance', label: 'Keep on track' });
     if (showPaymentStep) list.push({ id: 'payment', label: 'Payment preferences' });
     list.push({ id: 'review', label: 'Review and confirm' });
@@ -182,6 +191,11 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       if (!valid) {
         setShowStep3Validation(true);
         setError(`Your investment options must add up to 100%. They currently total ${total.toFixed(2)}%.`);
+        return;
+      }
+      const warning = detectAllocationWarning(allocations, availableOptions);
+      if (warning) {
+        setSpeedBumpWarning(warning);
         return;
       }
     }
@@ -355,6 +369,29 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
           />
         </Stack>
       </ContentContainer>
+
+      <Dialog
+        open={speedBumpWarning !== null}
+        onClose={() => setSpeedBumpWarning(null)}
+        title={speedBumpWarning?.title ?? ''}
+        description={speedBumpWarning?.message}
+        variant="neutral"
+        confirmLabel="Continue"
+        cancelLabel="Cancel"
+        onConfirm={() => {
+          setSpeedBumpWarning(null);
+          advance(activeStep + 1);
+        }}
+      >
+        <Box sx={{ mt: 1.5 }}>
+          <TextButton
+            label="Get personalised financial advice"
+            endIcon="arrow-up-right-from-square"
+            size="small"
+            onClick={() => window.open('/advice', '_blank', 'noopener,noreferrer')}
+          />
+        </Box>
+      </Dialog>
     </>
   );
 }

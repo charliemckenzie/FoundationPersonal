@@ -71,6 +71,8 @@ declare module '@mui/material/styles' {
 
   interface TypeBackground {
     elevated: string;
+    /** High-contrast neutral surface. Light: neutralART 800 (#2c2c2c). Dark: neutralART 300 (#dadada). Pair with text.inverse. */
+    highContrast: string;
     brandPrimary: string;
     brandSecondary: string;
     brandTertiary: string;

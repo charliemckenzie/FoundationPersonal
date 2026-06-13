@@ -483,6 +483,13 @@ function ColorsDoc() {
       lightSource: `${neutralName} 100`,
       darkSource: `${neutralName} 800`,
     },
+    {
+      label: 'background.highContrast',
+      lightValue: lightPalette.background!.highContrast!,
+      darkValue: darkPalette.background!.highContrast!,
+      lightSource: `${neutralName} 800 — pair with text.inverse`,
+      darkSource: `${neutralName} 300 — pair with text.inverse`,
+    },
   ]
 
   const backgroundBrandTokens: TokenDualMode[] = [

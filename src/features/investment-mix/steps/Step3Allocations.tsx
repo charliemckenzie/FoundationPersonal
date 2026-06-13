@@ -84,10 +84,10 @@ export function Step3Allocations({
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Investment options
+          Allocate your new investment mix
         </Typography>
         <Typography variant="body">
-          Allocate your investment across the options below. Your total must equal 100%.
+          Set the percentage for each option below. Your total must equal 100%.
         </Typography>
       </div>
 
@@ -121,7 +121,7 @@ export function Step3Allocations({
                     display: 'flex',
                     alignItems: 'center',
                     gap: 3,
-                    py: 2,
+                    py: 1.5,
                     borderBottom: '1px solid',
                     borderColor: 'border.subtle',
                   }}
@@ -130,30 +130,31 @@ export function Step3Allocations({
                     <Typography variant="body" sx={{ fontWeight: 700 }}>
                       {option.name}
                     </Typography>
+                    {option.currentAllocation > 0 && (
+                      <Typography variant="small" sx={{ mt: 0.25, display: { xs: 'block', sm: 'none' } }}>
+                        Current: <Box component="span" sx={{ fontWeight: 700 }}>{option.currentAllocation}%</Box>
+                      </Typography>
+                    )}
                   </Box>
-                  <Typography
-                    variant="small"
-                    sx={{
-                      color: option.currentAllocation > 0 ? 'text.primary' : 'text.muted',
-                      minWidth: '5rem',
-                      textAlign: 'right',
-                    }}
-                  >
-                    <Box component="span" sx={{ display: { xs: 'block', sm: 'inline' } }}>
-                      Current:
-                    </Box>{' '}
-                    <Box component="span" sx={{ fontWeight: option.currentAllocation > 0 ? 700 : 400 }}>
-                      {option.currentAllocation}%
-                    </Box>
-                  </Typography>
-                  <Box
-                    sx={{
-                      width: '1px',
-                      alignSelf: 'stretch',
-                      bgcolor: 'border.subtle',
-                      mx: -1,
-                    }}
-                  />
+                  {option.currentAllocation > 0 && (
+                    <>
+                      <Typography
+                        variant="small"
+                        sx={{ minWidth: '5rem', textAlign: 'right', display: { xs: 'none', sm: 'block' } }}
+                      >
+                        Current: <Box component="span" sx={{ fontWeight: 700 }}>{option.currentAllocation}%</Box>
+                      </Typography>
+                      <Box
+                        sx={{
+                          width: '1px',
+                          alignSelf: 'stretch',
+                          bgcolor: 'border.subtle',
+                          mx: -1,
+                          display: { xs: 'none', sm: 'block' },
+                        }}
+                      />
+                    </>
+                  )}
                   <Box sx={{ width: '9rem', flexShrink: 0 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography
@@ -168,7 +169,7 @@ export function Step3Allocations({
                         id={`alloc-${option.id}`}
                         aria-label={`Allocate ${option.name} percent`}
                         value={allocations[option.id] ?? null}
-                        size="small"
+                        size="medium"
                         onChange={(v) => onChange(option.id, v)}
                       />
                     </Box>

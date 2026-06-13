@@ -3,8 +3,10 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Divider from '@mui/material/Divider';
+import { DataGrid } from '../../../components/DataGrid';
+import type { DataGridColumn } from '../../../components/DataGrid';
 import { WorkedExample } from './WorkedExample';
+import { PaymentOrderCell, type PaymentOrderMeta } from './PaymentOrderCell';
 import { ordinal } from '../utils';
 import type { InvestmentOption } from '../types';
 
@@ -24,8 +26,6 @@ function riskRank(riskLevel: string): number {
   return RISK_ORDER[riskLevel] ?? 99;
 }
 
-const GRID_COLUMNS = '1fr 6rem 8rem';
-
 interface PaymentDefaultOrderProps {
   options: InvestmentOption[];
   allocations: Record<string, number>;
@@ -34,77 +34,48 @@ interface PaymentDefaultOrderProps {
 /** Read-only detail of the default payment order shown under "Choose for me". */
 export function PaymentDefaultOrder({ options, allocations }: PaymentDefaultOrderProps) {
   const optionsByRisk = [...options].sort((a, b) => riskRank(a.riskLevel) - riskRank(b.riskLevel));
+  const lastIndex = optionsByRisk.length - 1;
+  const orderMeta = new Map<string, PaymentOrderMeta>(
+    optionsByRisk.map((o, i) => [o.id, { ord: ordinal(i) }]),
+  );
   const firstName = optionsByRisk[0]?.name;
-  const lastName = optionsByRisk[optionsByRisk.length - 1]?.name;
+  const lastName = optionsByRisk[lastIndex]?.name;
+
+  const columns: DataGridColumn<InvestmentOption>[] = [
+    {
+      key: 'name',
+      label: 'Option',
+      width: '1fr',
+      renderCell: (row) => (
+        <Stack spacing={0}>
+          <Typography variant="body">{row.name}</Typography>
+          <Typography variant="small" sx={{ color: 'text.muted' }}>Risk: {row.riskLevel}</Typography>
+          <Typography variant="small" sx={{ color: 'text.muted' }}>
+            Invested: <Box component="span" sx={{ fontWeight: 700 }}>{allocations[row.id] ?? 0}%</Box>
+          </Typography>
+        </Stack>
+      ),
+    },
+    {
+      key: 'order',
+      label: 'Payment order',
+      header: (
+        <>
+          <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>Payment order</Box>
+          <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>Order</Box>
+        </>
+      ),
+      width: '8rem',
+      align: 'right',
+      renderCell: (row) => <PaymentOrderCell meta={orderMeta.get(row.id)} />,
+    },
+  ];
 
   return (
     <Stack spacing={2}>
       <Typography variant="h6">The order we&apos;ll use</Typography>
 
-      <Box
-        sx={{
-          border: '1px solid',
-          borderColor: 'border.subtle',
-          borderRadius: (t) => `${t.shape.sm}px`,
-          overflow: 'hidden',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: GRID_COLUMNS,
-            gap: 2,
-            px: 2.5,
-            py: 2,
-            bgcolor: 'background.default',
-          }}
-        >
-          <Typography variant="small" sx={{ fontWeight: 700, color: 'text.muted' }}>
-            Option
-          </Typography>
-          <Typography variant="small" sx={{ fontWeight: 700, color: 'text.muted', textAlign: 'right' }}>
-            Invested
-          </Typography>
-          <Typography variant="small" sx={{ fontWeight: 700, color: 'text.muted', textAlign: 'right' }}>
-            Payment order
-          </Typography>
-        </Box>
-        <Divider />
-        <Stack divider={<Divider />}>
-          {optionsByRisk.map((option, index) => {
-            const cue =
-              index === 0 ? 'Drawn first' : index === optionsByRisk.length - 1 ? 'Drawn last' : null;
-            return (
-              <Box
-                key={option.id}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: GRID_COLUMNS,
-                  gap: 2,
-                  alignItems: 'center',
-                  px: 2.5,
-                  py: 1.5,
-                }}
-              >
-                <Typography variant="body">{option.name}</Typography>
-                <Typography variant="body" sx={{ textAlign: 'right', color: 'text.muted' }}>
-                  {allocations[option.id] ?? 0}%
-                </Typography>
-                <Stack spacing={0} sx={{ alignItems: 'flex-end' }}>
-                  <Typography variant="small" sx={{ fontWeight: 700, color: 'text.muted' }}>
-                    {ordinal(index)}
-                  </Typography>
-                  {cue && (
-                    <Typography variant="caption" sx={{ color: 'text.muted' }}>
-                      {cue}
-                    </Typography>
-                  )}
-                </Stack>
-              </Box>
-            );
-          })}
-        </Stack>
-      </Box>
+      <DataGrid label="Default payment order" columns={columns} rows={optionsByRisk} />
 
       {firstName && lastName && firstName !== lastName && (
         <WorkedExample>

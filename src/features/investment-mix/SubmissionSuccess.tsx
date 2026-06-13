@@ -85,7 +85,7 @@ export function SubmissionSuccess({ change, brandName, onBackToOverview }: Submi
             {change.rebalance && (
               <>
                 <Typography variant="small" sx={{ color: 'text.muted', mt: 0.5 }}>
-                  Keeping on track
+                  Rebalancing
                 </Typography>
                 <Typography variant="body">{rebalanceLabel(change.rebalance)}</Typography>
               </>

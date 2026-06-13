@@ -16,7 +16,7 @@ export function AllocationTotal({ total, attempted = false }: AllocationTotalPro
   const under = total < 100;
   const isError = over || (under && attempted);
 
-  const color = complete ? 'success.text' : isError ? 'error.text' : 'text.primary';
+  const color = complete ? 'success.text' : isError ? 'error.text' : 'text.inverse';
 
   const remaining = Math.round((100 - total) * 100) / 100;
   const showRemaining = total > 0 && under && !isError;
@@ -37,7 +37,7 @@ export function AllocationTotal({ total, attempted = false }: AllocationTotalPro
         px: 3,
         py: 2,
         borderRadius: (t) => `${t.shape.sm}px`,
-        bgcolor: complete ? 'success.background' : isError ? 'error.background' : 'background.default',
+        bgcolor: complete ? 'success.background' : isError ? 'error.background' : 'background.highContrast',
         border: '1px solid',
         borderColor: complete ? 'success.main' : isError ? 'error.main' : 'border.subtle',
         transition: 'background-color 200ms ease, border-color 200ms ease',
@@ -59,7 +59,7 @@ export function AllocationTotal({ total, attempted = false }: AllocationTotalPro
             variant="caption"
             sx={{
               display: 'block',
-              color: 'text.muted',
+              color,
               overflow: 'hidden',
               maxHeight: showRemaining ? '1.5rem' : 0,
               opacity: showRemaining ? 1 : 0,

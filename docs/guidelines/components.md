@@ -39,6 +39,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Charts` | Data visualisation — bar, line, pie etc. |
 | `Checkbox` | Single checkbox input — default, boxed, or card layout |
 | `Chip` | Compact label, status badge, or dismissible tag |
+| `DataGrid` | Interactive, div-based grid (ARIA `role="table"`) for editable cells, row reordering, selection, sorting, pagination, and a summary footer. Use `Table` for static tabular data. |
 | `DateOfBirthField` | Date input optimised for date-of-birth capture |
 | `DatePicker` | Single-date form input with calendar popover |
 | `DateRangePicker` | Start + end date form input with calendar popover |
@@ -356,6 +357,11 @@ Key props: `items`, `listType`, `size`, `defaultIcon`, `iconColor`
 Data table with built-in loading, empty, and error states. Three densities: `condensed`, `default`, `spaced`.  
 Key props: `columns`, `rows`, `loading`, `stickyHeader`, `striped`, `density`
 
+**DataGrid** — `src/components/DataGrid/`  
+Interactive grid for when a static `Table` isn't enough. Renders `div`s with the ARIA table roles (`role="table"`/`row`/`columnheader`/`cell`) — **not** a native `<table>` — so cells can hold interactive controls (inputs, action buttons). Config-driven like `Table` (`columns` + `rows`), with `renderCell` for arbitrary/interactive cell content. Supports client-side sorting, controlled row selection, drag + keyboard row reordering, a pagination footer (shares Table's pagination toolbar), and a full-width `summaryRow` footer (e.g. a running total). Choose `Table` for read-only tabular data; choose `DataGrid` when cells are editable, rows reorder, or rows are selectable.  
+Used by the investment-mix payment-preference steps (`PaymentDefaultOrder`, `PaymentPriorityList`, `PaymentPercentageSplit`).  
+Key props: `columns`, `rows`, `label`, `density`, `loading`, `sortable`, `selectable`, `selectedIds`, `onSelectionChange`, `reorderable`, `onReorder`, `pagination`, `summaryRow`
+
 **Charts** — `src/components/Charts/`  
 Data visualisation components (bar, line, pie etc.). Check the Storybook stories for available chart types before building custom visualisations.
 
@@ -378,6 +384,7 @@ Understanding what composes what prevents accidental regressions.
 | Accordion | Button, Icon |
 | AddressField | Checkbox, internal address capture |
 | Card | Button (open/promo variants) |
+| DataGrid | Checkbox, Icon, IconButton, Spinner, Table (PaginationToolbar, useTableSort) |
 | Dialog | Button, Icon |
 | ExpandableCardList | Icon, Tooltip, Collapse (MUI) |
 | Footer | Logo, internal nav/contact sections |

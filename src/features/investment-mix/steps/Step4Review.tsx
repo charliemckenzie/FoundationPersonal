@@ -174,7 +174,7 @@ export function Step4Review({
         />
         {rebalance && onEditRebalance && (
           <DescriptionList.Item
-            label="Keeping on track"
+            label="Rebalancing"
             value={
               <Stack spacing={0}>
                 <Typography variant="body" sx={{ fontWeight: 700 }}>

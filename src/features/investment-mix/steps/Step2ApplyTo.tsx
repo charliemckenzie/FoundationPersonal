@@ -78,12 +78,7 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
           </Stack>
 
           <Stack spacing={1.5}>
-            <Stack spacing={0.5}>
-              <Typography variant="h6">Other options</Typography>
-              <Typography variant="body">
-                Use these options to change only part of your investment mix.
-              </Typography>
-            </Stack>
+            <Typography variant="h6">Other options</Typography>
             <RadioGroup
               options={INCOME_OTHER_OPTIONS}
               variant="boxed"
@@ -121,14 +116,9 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
         </Stack>
 
         <Stack spacing={1.5}>
-          <Stack spacing={0.5}>
-            <Typography variant="h6">
-              Other options
-            </Typography>
-            <Typography variant="body">
-              Use these options to change only part of your investment mix.
-            </Typography>
-          </Stack>
+          <Typography variant="h6">
+            Other options
+          </Typography>
           <RadioGroup
             options={ACCUM_OTHER_OPTIONS}
             variant="boxed"

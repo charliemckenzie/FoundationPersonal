@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { RadioGroup } from '../../../components/RadioGroup';
+import { Alert } from '../../../components/Alert';
 import { TextButton } from '../../../components/TextButton';
 import { Dialog } from '../../../components/Dialog';
 import { REBALANCE_FREQUENCY_OPTIONS } from '../types';
@@ -68,7 +69,7 @@ export function Step3bRebalance({
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Keep your investment mix on track
+          Keep your investment mix on track with rebalancing
         </Typography>
         <Typography variant="body" sx={{ lineHeight: 1.75 }}>
           Over time, your investments grow at different speeds, so your money slowly drifts away from
@@ -89,7 +90,7 @@ export function Step3bRebalance({
       </div>
 
       <RadioGroup
-        legend="Would you like us to keep your mix on track automatically?"
+        legend="Set up automatic rebalancing"
         options={KEEP_ON_TRACK_OPTIONS}
         variant="boxed"
         value={choice}
@@ -120,9 +121,10 @@ export function Step3bRebalance({
       )}
 
       {choice === 'no' && (
-        <Typography variant="caption" sx={{ color: 'text.muted' }}>
-          If you set up automatic rebalancing before, submitting this change will turn it off.
-        </Typography>
+        <Alert
+          severity="info"
+          message="If you set up automatic rebalancing before, submitting this change will turn it off."
+        />
       )}
     </Stack>
 
