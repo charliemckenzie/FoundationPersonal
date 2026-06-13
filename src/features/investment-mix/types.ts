@@ -98,6 +98,30 @@ export interface InvestmentMixChange {
   submittedAt: string;
 }
 
+/**
+ * Lifecycle status of an investment switch:
+ * - `processing` — submitted and still being applied (2–3 business days).
+ * - `active` — applied and currently in effect (the account's live mix).
+ * - `superseded` — replaced by a later switch; no longer in use.
+ */
+export type SwitchStatus = 'processing' | 'active' | 'superseded';
+
+/**
+ * A single past investment switch recorded against an account.
+ * Powers the per-account investment mix history list.
+ */
+export interface InvestmentSwitchRecord {
+  id: string;
+  accountId: string;
+  /** ISO timestamp the switch was submitted. */
+  submittedAt: string;
+  applyTo: ApplyTo;
+  /** Resulting target allocations: optionId → whole-number percentage. */
+  allocations: Record<string, number>;
+  status: SwitchStatus;
+  referenceNumber: string;
+}
+
 export const APPLY_TO_OPTIONS = [
   {
     value: 'all' as ApplyTo,

@@ -1,9 +1,9 @@
 import { InvestmentMixFlow } from '@/features/investment-mix/InvestmentMixFlow';
 
-export default function QSuperChangeMixAccumAndTTRNewPage() {
+export default function QSuperManageInvestmentsChangeMixPage() {
   return (
     <InvestmentMixFlow
-      overviewPath="/qsuper/member-online/investments/change-mix/accum-and-ttr"
+      overviewPath="/qsuper/member-online/investments/manage-investments"
       accountFilter="all"
       brandName="QSuper"
     />

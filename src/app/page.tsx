@@ -56,14 +56,7 @@ const ART: Brand = {
         { label: 'Portal', href: '/member-online' },
         { label: 'Stepped form', href: '/member-online/beneficiaries' },
         { label: 'Lifetime pension form', href: '/member-online/lifetime-pension' },
-        {
-          label: 'Change investment mix',
-          links: [
-            { label: 'Change mix – Accum + TTR/RIA', href: '/member-online/investments/change-mix/accum-and-ttr' },
-            { label: 'Change mix – Accum only', href: '/member-online/investments/change-mix/accum' },
-            { label: 'Change mix – TTR/RIA only', href: '/member-online/investments/change-mix/ttr' },
-          ],
-        },
+        { label: 'Manage investments', href: '/member-online/investments/manage-investments' },
       ],
     },
     {
@@ -98,14 +91,7 @@ const QSUPER: Brand = {
         { label: 'Authentication', href: '/qsuper/member-online/login' },
         { label: 'Portal', href: '/qsuper/member-online' },
         { label: 'Stepped form', href: '/qsuper/member-online/beneficiaries' },
-        {
-          label: 'Change investment mix',
-          links: [
-            { label: 'Change mix – Accum + TTR/RIA', href: '/qsuper/member-online/investments/change-mix/accum-and-ttr' },
-            { label: 'Change mix – Accum only', href: '/qsuper/member-online/investments/change-mix/accum' },
-            { label: 'Change mix – TTR/RIA only', href: '/qsuper/member-online/investments/change-mix/ttr' },
-          ],
-        },
+        { label: 'Manage investments', href: '/qsuper/member-online/investments/manage-investments' },
       ],
     },
     {

@@ -280,12 +280,18 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       <ContentContainer size="md">
         <Stack spacing={4} sx={{ py: 4 }}>
           <div>
-            <Typography variant="h3" component="h1" sx={{ mb: 0.5 }}>
+            <Typography variant="h2" component="h1" sx={{ mb: 0.5 }}>
               Change investment mix
             </Typography>
             {selectedAccount && (
-              <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mb: 3 }}>
-                For {selectedAccount.name} ({formatCurrency(selectedAccount.balance)} as at {formatDate(new Date().toISOString())})
+              <Typography variant="body" sx={{ mb: 3 }}>
+                For {selectedAccount.name}{' '}
+                <Box component="span" sx={{ fontWeight: 700 }}>
+                  {formatCurrency(selectedAccount.balance)}
+                </Box>{' '}
+                <Box component="span" sx={{ color: 'text.muted' }}>
+                  as at {formatDate(new Date().toISOString())}
+                </Box>
               </Typography>
             )}
             <FormProgress

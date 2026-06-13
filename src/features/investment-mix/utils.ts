@@ -29,6 +29,21 @@ export function formatCurrency(amount: number): string {
   return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(amount);
 }
 
+/**
+ * One-line summary of an allocation map for compact display (e.g. history rows).
+ * Lists each allocated option and its percentage in option order.
+ * → "High Growth 40%, Balanced 60%"
+ */
+export function summariseMix(
+  options: InvestmentOption[],
+  allocations: Record<string, number>,
+): string {
+  return options
+    .filter((o) => (allocations[o.id] ?? 0) > 0)
+    .map((o) => `${o.name} ${allocations[o.id]}%`)
+    .join(', ');
+}
+
 const ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
 
 /** Human ordinal for a zero-based index: 0 → "1st", 1 → "2nd", … */
