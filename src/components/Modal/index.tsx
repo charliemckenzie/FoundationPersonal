@@ -2,6 +2,7 @@ import MuiDialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
+import Typography from '@mui/material/Typography';
 import { CloseButton } from '../CloseButton';
 import type React from 'react';
 
@@ -46,12 +47,23 @@ export function Modal({
       aria-label={!title ? ariaLabel : undefined}
     >
       {title && (
-        <DialogTitle id="modal-title" sx={{ pr: 6 }}>
-          {title}
+        <DialogTitle
+          id="modal-title"
+          sx={(t) => ({
+            display: 'flex',
+            alignItems: 'center',
+            py: t.spacing(1),
+            pl: 3,
+            pr: t.spacing(1),
+          })}
+        >
+          <Typography variant="h4" component="span" sx={{ flex: 1 }}>
+            {title}
+          </Typography>
           <CloseButton
             onClick={onClose}
             label="Close"
-            sx={(t) => ({ position: 'absolute', top: t.spacing(1), right: t.spacing(1) })}
+            sx={{ ml: 1, flexShrink: 0 }}
           />
         </DialogTitle>
       )}

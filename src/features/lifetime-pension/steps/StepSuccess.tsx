@@ -1,12 +1,24 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
+import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
+import { Modal } from '../../../components/Modal';
 import { TextButton } from '../../../components/TextButton';
+import type { IDVState } from '../types';
+import { StepIDV } from './StepIDV';
 
-interface StepSuccessProps {
+export interface StepSuccessProps {
   onReturnDashboard: () => void;
+  idvState: IDVState;
+  onIdvChange: (next: IDVState) => void;
+  idvLoading: boolean;
+  idvError: string;
+  /** Returns true on success */
+  onIdvSubmit: () => Promise<boolean>;
+  idvAlreadyVerified: boolean;
 }
 
 interface ConfirmItemProps {
@@ -24,28 +36,52 @@ function ConfirmItem({ children }: ConfirmItemProps) {
   );
 }
 
-export function StepSuccess({ onReturnDashboard }: StepSuccessProps) {
+export function StepSuccess({
+  onReturnDashboard,
+  idvState,
+  onIdvChange,
+  idvLoading,
+  idvError,
+  onIdvSubmit,
+  idvAlreadyVerified,
+}: StepSuccessProps) {
+  const [idvModalOpen, setIdvModalOpen] = useState(false);
+  const [idvVerified, setIdvVerified] = useState(idvAlreadyVerified);
+
+  const verified = idvVerified;
+
+  async function handleIdvSubmit() {
+    const success = await onIdvSubmit();
+    if (success) {
+      setIdvVerified(true);
+      setIdvModalOpen(false);
+    }
+  }
+
   return (
     <Stack spacing={4} sx={{ alignItems: 'center', textAlign: 'center' }}>
 
-      {/* Green tick illustration */}
+      {/* Status icon */}
       <Box
         sx={{
           width: '5rem',
           height: '5rem',
           borderRadius: '50%',
           border: '2px solid',
-          borderColor: 'success.main',
-          bgcolor: 'success.50',
+          borderColor: verified ? 'success.main' : 'warning.main',
+          bgcolor: verified ? 'success.50' : 'warning.50',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}
       >
-        <Icon icon="check" size="2xl" color="success" />
+        <Icon
+          icon={verified ? 'check' : 'triangle-exclamation'}
+          size="2xl"
+          color={verified ? 'success' : 'warning'}
+        />
       </Box>
 
-      {/* Title — h4 size, Noto Sans (body font), deep blue */}
       <Typography
         component="h1"
         variant="h4"
@@ -55,7 +91,9 @@ export function StepSuccess({ onReturnDashboard }: StepSuccessProps) {
           maxWidth: '32rem',
         }}
       >
-        Your Lifetime Pension account request has been submitted.
+        {verified
+          ? 'Your application is complete.'
+          : 'Your application has been received — one more step to go.'}
       </Typography>
 
       {/* Confirmation card */}
@@ -72,34 +110,75 @@ export function StepSuccess({ onReturnDashboard }: StepSuccessProps) {
         }}
       >
         <Stack spacing={3}>
-          <Typography variant="h5">Confirmation details</Typography>
+          <Typography variant="h5">Application details</Typography>
 
           <Stack spacing={2}>
             <ConfirmItem>
-              Your transactions reference is{' '}
+              Your reference number is{' '}
               <Box component="a" href="#" sx={{ color: 'primary.main', textDecoration: 'none' }}>
                 QS20930331M
               </Box>
             </ConfirmItem>
             <ConfirmItem>
-              Submitted on 15.07/2025 4:019PM AEST (Queensland time)
+              Submitted on 15/07/2025 at 4:01 PM AEST
             </ConfirmItem>
             <ConfirmItem>
-              Confirmation has also been sent to{' '}
+              A confirmation has been sent to{' '}
               <Box component="span" sx={{ fontWeight: 700 }}>yourname@gmail.com</Box>
             </ConfirmItem>
           </Stack>
 
-          <Box>
-            <Typography variant="h5" sx={{ mb: 1 }}>What&apos;s next?</Typography>
-            <Typography variant="body" sx={{ color: 'text.primary' }}>
-              Your Lifetime Pension account request will generally be processed in 10 business days and you&apos;ll be notified by email when your account has been successfully set up.
-            </Typography>
-          </Box>
+          {/* Pending IDV notice */}
+          {!verified && (
+            <Box
+              sx={{
+                borderRadius: (t) => `${t.shape.md}px`,
+                p: 2.5,
+                backgroundColor: 'action.hover',
+              }}
+            >
+              <Stack spacing={1.5}>
+                <Typography variant="h6" sx={{ color: 'text.heading' }}>
+                  Identity verification required
+                </Typography>
+                <Typography variant="body" sx={{ color: 'text.primary' }}>
+                  To fully process your Lifetime Pension account, we need to verify your
+                  identity. This is a quick process — you&apos;ll need one of the following:
+                  an Australian drivers licence, Medicare card, or passport.
+                </Typography>
+                <Typography variant="small" sx={{ color: 'text.secondary' }}>
+                  Until your identity is verified, your application cannot be fully processed.
+                  You can complete this now or return later from your dashboard.
+                </Typography>
+                <Box sx={{ pt: 0.5 }}>
+                  <Button
+                    label="Verify your identity"
+                    onClick={() => setIdvModalOpen(true)}
+                  />
+                </Box>
+              </Stack>
+            </Box>
+          )}
+
+          {/* What happens next — only shown when fully verified */}
+          {verified && (
+            <Box
+              sx={{
+                backgroundColor: 'action.hover',
+                borderRadius: (t) => `${t.shape.md}px`,
+                p: 2.5,
+              }}
+            >
+              <Typography variant="h5" sx={{ mb: 1 }}>What happens next?</Typography>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                Your Lifetime Pension account will be set up within 10 business days. We&apos;ll email you once it&apos;s ready and your first payment will begin on your selected start date.
+              </Typography>
+            </Box>
+          )}
 
           <Stack spacing={1.5}>
             <Button
-              variant="contained"
+              variant={verified ? 'contained' : 'outlined'}
               label="Return to dashboard"
               fullWidth
               onClick={onReturnDashboard}
@@ -110,6 +189,23 @@ export function StepSuccess({ onReturnDashboard }: StepSuccessProps) {
           </Stack>
         </Stack>
       </Box>
+
+      {/* IDV modal */}
+      <Modal
+        open={idvModalOpen}
+        onClose={() => setIdvModalOpen(false)}
+        title="Verify your identity"
+        size="medium"
+      >
+        <StepIDV
+          state={idvState}
+          onChange={onIdvChange}
+          loading={idvLoading}
+          error={idvError}
+          onSubmit={handleIdvSubmit}
+          embedded
+        />
+      </Modal>
 
     </Stack>
   );
