@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { StepperActions } from '../../components/StepperActions';
@@ -11,6 +12,7 @@ import { Spinner } from '../../components/Spinner';
 import { Alert } from '../../components/Alert';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { StepTransition } from '../../components/StepTransition';
+import { Step0BeforeYouStart } from './steps/Step0BeforeYouStart';
 import { Step1Account } from './steps/Step1Account';
 import { Step2ApplyTo } from './steps/Step2ApplyTo';
 import { Step3Allocations } from './steps/Step3Allocations';
@@ -93,6 +95,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
     return valid.includes(raw) ? raw : null;
   }, [searchParams, initialAccount]);
 
+  const [showIntro, setShowIntro] = useState(true);
   const [activeStep, setActiveStep] = useState(0);
   const [selectedAccountId, setSelectedAccountId] = useState(() => accountFromUrl ?? accounts[0]?.id ?? '');
   const [applyTo, setApplyTo] = useState<ApplyTo | null>(applyToFromUrl);
@@ -110,29 +113,52 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   const isFirstStepRender = useRef(true);
   const skipHistoryPush = useRef(false);
 
-  // Mark the initial history entry with step 0 so browser back/forward works within the form.
-  // On each subsequent advance, push a new entry; on popstate, restore the step.
+  // Mark the initial history entry so browser back/forward works within the form.
+  // On each advance, push a new entry; on popstate, restore the step.
+  //
+  // The URL is updated with ?step=<step-id> on every navigation so GA4's Enhanced Measurement
+  // "History changes" fires a page_view for each step. Existing params (account, applyTo) are
+  // preserved so deep-link pre-population keeps working after the first step change.
+  //
+  // The intro screen is represented as historyStep -1 / ?step=before-you-start so it appears
+  // as a distinct GA event and browser back restores it correctly.
   useEffect(() => {
+    // steps is read from closure — intentionally not in deps. It only changes alongside
+    // activeStep in this flow (conditional steps appear/disappear based on user choices made
+    // before advancing), so the step ID is always correct when the effect fires.
+    const stepId = showIntro ? 'before-you-start' : (steps[activeStep]?.id ?? 'account');
+    const historyStepIndex = showIntro ? -1 : activeStep;
+    const params = new URLSearchParams(window.location.search);
+    params.set('step', stepId);
+    const url = `?${params.toString()}`;
+
     if (isFirstStepRender.current) {
       isFirstStepRender.current = false;
-      history.replaceState({ investmentMixStep: activeStep }, '');
+      history.replaceState({ investmentMixStep: historyStepIndex }, '', url);
       return;
     }
     if (skipHistoryPush.current) {
       skipHistoryPush.current = false;
+      // history.back() has already restored the URL for this entry — no push needed.
       return;
     }
-    history.pushState({ investmentMixStep: activeStep }, '');
-  // activeStep is the only dependency — this intentionally runs on every step change
+    history.pushState({ investmentMixStep: historyStepIndex }, '', url);
+  // showIntro and activeStep are the only dependencies — this intentionally runs on every change
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeStep]);
+  }, [showIntro, activeStep]);
 
   useEffect(() => {
     const handlePopState = (e: PopStateEvent) => {
       const step = (e.state as { investmentMixStep?: number } | null)?.investmentMixStep;
       if (typeof step === 'number') {
         skipHistoryPush.current = true;
-        setActiveStep(step);
+        if (step === -1) {
+          setShowIntro(true);
+          setActiveStep(0);
+        } else {
+          setShowIntro(false);
+          setActiveStep(step);
+        }
         setError(null);
       }
     };
@@ -240,6 +266,12 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   }
 
   function handleNext() {
+    if (showIntro) {
+      setShowIntro(false);
+      setError(null);
+      return;
+    }
+
     if (currentStepId === 'account' && !validateStep1(selectedAccountId)) {
       setError('Please select an account to continue.');
       return;
@@ -298,6 +330,11 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
       );
       saveChange(change);
       setSubmittedChange(change);
+      // Replace (not push) so the user cannot navigate back into a re-submit scenario.
+      // GA4 picks this up as a page_view for the success step.
+      const successParams = new URLSearchParams(window.location.search);
+      successParams.set('step', 'success');
+      history.replaceState({}, '', `?${successParams.toString()}`);
       window.scrollTo({ top: 0, behavior: 'instant' });
       setSubmitted(true);
       return;
@@ -308,10 +345,12 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
   function handleBack() {
     setError(null);
-    if (activeStep === 0 && skipAccountStep) {
+    if (showIntro) {
       router.push(overviewPath);
       return;
     }
+    // history.back() restores the intro entry (investmentMixStep: -1) when on the first
+    // form step, regardless of whether the account step was skipped via query param.
     history.back();
   }
 
@@ -349,7 +388,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
               Change investment mix
             </Typography>
             {selectedAccount && (
-              <Typography variant="body" sx={{ mb: 3 }}>
+              <Typography variant="body" sx={{ mb: 2 }}>
                 For {selectedAccount.name}{' '}
                 <Box component="span" sx={{ fontWeight: 700 }}>
                   {formatCurrency(selectedAccount.balance)}
@@ -359,19 +398,24 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
                 </Box>
               </Typography>
             )}
-            <FormProgress
-              variant="simple"
-              value={(activeStep / steps.length) * 100}
-              steps={steps}
-              activeStep={activeStep}
-              showStepIndicator
-              stepMenu
-              onStepClick={(i) => advance(i)}
-            />
+            {!showIntro && (
+              <FormProgress
+                variant="simple"
+                value={(activeStep / steps.length) * 100}
+                steps={steps}
+                activeStep={activeStep}
+                showStepIndicator
+                stepMenu
+                onStepClick={(i) => advance(i)}
+              />
+            )}
+            {showIntro && <Divider sx={{ mt: 0 }} />}
           </div>
 
-          <StepTransition step={activeStep}>
-            {currentStepId === 'account' ? (
+          <StepTransition step={showIntro ? -1 : activeStep}>
+            {showIntro ? (
+              <Step0BeforeYouStart />
+            ) : currentStepId === 'account' ? (
               <Step1Account
                 accounts={accounts}
                 selectedAccountId={selectedAccountId}
@@ -428,12 +472,13 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
           {/* Validation errors surface here, beside the action the user just clicked — not at the
               top of the page, where on a long step they would be scrolled out of view. */}
-          {error && <Alert severity="error" message={error} />}
+          {!showIntro && error && <Alert severity="error" message={error} />}
 
           <StepperActions
-            step={activeStep + 1}
-            isSubmitStep={isReviewStep}
-            nextLabel={isReviewStep ? 'Submit request' : 'Next'}
+            step={showIntro ? 1 : activeStep + 2}
+            isSubmitStep={!showIntro && isReviewStep}
+            nextLabel={showIntro ? 'Get started' : isReviewStep ? 'Submit request' : 'Next'}
+            skipExitDialog={showIntro}
             onNext={handleNext}
             onBack={handleBack}
             onExit={handleExit}

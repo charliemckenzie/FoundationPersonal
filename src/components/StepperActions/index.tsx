@@ -33,6 +33,8 @@ export interface StepperActionsProps {
   savedLabel?: string;
   /** Async save handler. Component transitions idle → saving → saved automatically. */
   onSave?: () => Promise<void>;
+  /** When true, the cancel/exit button calls onExit directly without showing the confirmation dialog. */
+  skipExitDialog?: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -54,6 +56,7 @@ export function StepperActions({
   savingLabel = 'Saving...',
   savedLabel = 'Progress saved',
   onSave,
+  skipExitDialog = false,
   sx,
 }: StepperActionsProps) {
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
@@ -61,6 +64,10 @@ export function StepperActions({
   const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   function handleExitClick() {
+    if (skipExitDialog) {
+      onExit?.();
+      return;
+    }
     setExitDialogOpen(true);
   }
 

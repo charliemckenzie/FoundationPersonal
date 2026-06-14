@@ -35,6 +35,8 @@ export interface DialogProps {
   loading?: boolean;
   disableCloseOnBackdrop?: boolean;
   hideCloseButton?: boolean;
+  hideCancel?: boolean;
+  titleVariant?: 'h4' | 'h5' | 'h6';
   alertButtonLayout?: AlertButtonLayout;
   extraActions?: ReadonlyArray<AlertAction>;
   mobileDisplay?: DialogMobileDisplay;
@@ -65,6 +67,8 @@ export function Dialog({
   loading = false,
   disableCloseOnBackdrop = false,
   hideCloseButton = false,
+  hideCancel = false,
+  titleVariant = 'h5',
   alertButtonLayout = 'row',
   extraActions,
   mobileDisplay = 'drawer',
@@ -165,7 +169,7 @@ export function Dialog({
             size="lg"
           />
         )}
-        <Typography id="dialog-title" variant="h5" component="h2" sx={{ color: 'text.heading' }}>
+        <Typography id="dialog-title" variant={titleVariant} component="h2" sx={{ color: 'text.heading' }}>
           {title}
         </Typography>
         {!hideCloseButton && (
@@ -177,7 +181,7 @@ export function Dialog({
         )}
       </DialogTitle>
       {hasBody && (
-        <DialogContent sx={{ px: 4 }}>
+        <DialogContent sx={{ px: 4, pt: 3 }}>
           {description && (
             <Typography id="dialog-description" variant="body" color="text.muted">
               {description}
@@ -187,13 +191,15 @@ export function Dialog({
         </DialogContent>
       )}
       <DialogActions sx={{ pl: 4, pr: 4, pb: 4, pt: 2 }}>
-        <Button
-          label={cancelLabel}
-          variant="ghost"
-          color="primary"
-          size="small"
-          onClick={onClose}
-        />
+        {!hideCancel && (
+          <Button
+            label={cancelLabel}
+            variant="ghost"
+            color="primary"
+            size="small"
+            onClick={onClose}
+          />
+        )}
         {onConfirm && (
           <Button
             label={confirmLabel}

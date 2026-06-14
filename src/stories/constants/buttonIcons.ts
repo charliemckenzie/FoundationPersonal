@@ -24,6 +24,7 @@ export const BUTTON_ICON_OPTIONS = [
   'plus',
   'minus',
   'copy',
+  'pen-to-square',
   'xmark',
   'check',
   'magnifying-glass',

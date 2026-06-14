@@ -55,8 +55,8 @@ export function DialItem({ dial, options }: DialItemProps) {
         </Box>
         {dial.onEdit && (
           <IconButton
-            icon="pen"
-            iconStyle="light"
+            icon="pen-to-square"
+            iconStyle="regular"
             label={dial.editLabel ?? 'Edit investment mix'}
             variant="ghost"
             size="small"

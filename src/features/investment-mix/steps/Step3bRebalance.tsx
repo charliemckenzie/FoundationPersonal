@@ -127,9 +127,12 @@ export function Step3bRebalance({
       open={explainerOpen}
       onClose={() => setExplainerOpen(false)}
       title="What this means for your mix"
-      variant="info"
+      variant="neutral"
       size="medium"
-      cancelLabel="Got it"
+      titleVariant="h4"
+      confirmLabel="Got it"
+      onConfirm={() => setExplainerOpen(false)}
+      hideCancel
     >
       <Stack spacing={2}>
         <Typography variant="body" sx={{ lineHeight: 1.75 }}>

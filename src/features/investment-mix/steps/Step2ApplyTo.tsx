@@ -1,8 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { RadioGroup } from '../../../components/RadioGroup';
+import { TextButton } from '../../../components/TextButton';
+import { Dialog } from '../../../components/Dialog';
+import { IconList } from '../../../components/IconList';
 import type { ApplyTo } from '../types';
 
 interface Step2ApplyToProps {
@@ -54,8 +59,11 @@ const ACCUM_OTHER_OPTIONS = [
 ];
 
 export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyToProps) {
+  const [explainerOpen, setExplainerOpen] = useState(false);
+
   if (isIncomeAccount) {
     return (
+      <>
       <Stack spacing={3}>
         <div>
           <Typography variant="h5" sx={{ mb: 0.5 }}>
@@ -64,6 +72,16 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
           <Typography variant="body">
             Choose whether to update your balance investment, your payment options, or both.
           </Typography>
+          <Box sx={{ mt: 1 }}>
+            <TextButton
+              label="What does this mean?"
+              startIcon="circle-info"
+              iconStyle="regular"
+              iconDirection="left"
+              size="medium"
+              onClick={() => setExplainerOpen(true)}
+            />
+          </Box>
         </div>
 
         <Stack spacing={3}>
@@ -88,10 +106,45 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
           </Stack>
         </Stack>
       </Stack>
+
+      <Dialog
+        open={explainerOpen}
+        onClose={() => setExplainerOpen(false)}
+        title="What does this mean?"
+        variant="neutral"
+        size="medium"
+        titleVariant="h4"
+        confirmLabel="Got it"
+        onConfirm={() => setExplainerOpen(false)}
+        hideCancel
+      >
+        <Stack spacing={2}>
+          <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+            Your account has two things you can change: where your <strong>current balance</strong> is
+            invested, and which options your <strong>future payments and withdrawals</strong> are drawn
+            from. These can be set independently.
+          </Typography>
+          <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+            <strong>Change current balance only</strong> — moves the money already in your account
+            into a new mix of options. It does not affect where your payments come from.
+          </Typography>
+          <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+            <strong>Change payment/withdrawal options only</strong> — updates which investment options
+            your regular payments and lump-sum withdrawals are drawn from. Your existing balance stays
+            invested as-is.
+          </Typography>
+          <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+            <strong>Change both</strong> — applies your new mix to both your current balance and your
+            payment and withdrawal options at the same time.
+          </Typography>
+        </Stack>
+      </Dialog>
+      </>
     );
   }
 
   return (
+    <>
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
@@ -100,6 +153,16 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
         <Typography variant="body">
           Choose whether this change applies to your current balance, future contributions, or both.
         </Typography>
+        <Box sx={{ mt: 1 }}>
+          <TextButton
+            label="What does this mean?"
+            startIcon="circle-info"
+            iconStyle="regular"
+            iconDirection="left"
+            size="medium"
+            onClick={() => setExplainerOpen(true)}
+          />
+        </Box>
       </div>
 
       <Stack spacing={3}>
@@ -128,6 +191,51 @@ export function Step2ApplyTo({ applyTo, isIncomeAccount, onChange }: Step2ApplyT
         </Stack>
       </Stack>
     </Stack>
+
+    <Dialog
+      open={explainerOpen}
+      onClose={() => setExplainerOpen(false)}
+      title="What does this mean?"
+      variant="neutral"
+      size="medium"
+      titleVariant="h4"
+      confirmLabel="Got it"
+      onConfirm={() => setExplainerOpen(false)}
+      hideCancel
+    >
+      <Stack spacing={2}>
+        <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+          Your account has two pools of money you can change: your <strong>current balance</strong>{' '}
+          (money already in your account) and your <strong>future contributions</strong> (new money
+          coming in from your employer or personal payments).
+        </Typography>
+        <IconList
+          size="md"
+          items={[
+            {
+              heading: 'Change both',
+              text: 'Applies your new mix to your existing balance and all future contributions at the same time. Choose this if you want a clean break — everything in one go.',
+            },
+            {
+              heading: 'Change current balance only',
+              text: 'Switches the money already invested into your new mix. Choose this if you\'re happy with where new contributions go but want to reposition your existing savings.',
+            },
+            {
+              heading: 'Change future contributions only',
+              text: 'New money coming in will follow your new mix. Choose this if you want to gradually shift your strategy without moving what\'s already invested.',
+            },
+          ]}
+        />
+        <Typography variant="small" sx={{ color: 'text.muted' }}>
+          Not sure which to pick? Our{' '}
+          <Box component="span" sx={{ color: 'primary.main', cursor: 'pointer', textDecoration: 'underline' }}>
+            online advice tool
+          </Box>{' '}
+          can help you decide based on your situation.
+        </Typography>
+      </Stack>
+    </Dialog>
+    </>
   );
 }
 
