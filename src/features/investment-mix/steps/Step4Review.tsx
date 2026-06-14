@@ -11,7 +11,7 @@ import { Table } from '../../../components/Table';
 import type { TableColumn } from '../../../components/Table';
 import type { InvestmentAccount, InvestmentOption, ApplyTo, PaymentPreference, RebalanceSetting } from '../types';
 import { applyToLabel, formatCurrency, formatDate, blendedProfile, paymentPreferenceLabel, rebalanceLabel } from '../utils';
-import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS } from '../types';
+import { APPLY_TO_OPTIONS, INCOME_APPLY_TO_OPTIONS, applyToIncludesBalance } from '../types';
 
 interface Step4ReviewProps {
   accounts: InvestmentAccount[];
@@ -24,7 +24,7 @@ interface Step4ReviewProps {
   declarationChecked: boolean;
   onDeclarationChange: (checked: boolean) => void;
   onEditAccount?: () => void;
-  onEditApplyTo: () => void;
+  onEditApplyTo?: () => void;
   onEditAllocations: () => void;
   onEditRebalance?: () => void;
   onEditPaymentPreference?: () => void;
@@ -139,13 +139,15 @@ export function Step4Review({
             </Stack>
           }
           action={
-            <IconButton
-              icon="pen"
-              label="Edit applies to"
-              variant="ghost"
-              size="small"
-              onClick={onEditApplyTo}
-            />
+            onEditApplyTo ? (
+              <IconButton
+                icon="pen"
+                label="Edit applies to"
+                variant="ghost"
+                size="small"
+                onClick={onEditApplyTo}
+              />
+            ) : undefined
           }
         />
         <DescriptionList.Item
@@ -219,23 +221,6 @@ export function Step4Review({
                         <Typography variant="body">{o.name}</Typography>
                       </Box>
                     ))}
-                {paymentPreference.type === 'priority' &&
-                  paymentPreference.priorityOrder &&
-                  paymentPreference.priorityOrder.map((id, index) => {
-                    const opt = options.find((o) => o.id === id);
-                    if (!opt) return null;
-                    return (
-                      <Box
-                        key={id}
-                        sx={{ display: 'grid', gridTemplateColumns: '3rem 1fr', gap: 1, alignItems: 'baseline' }}
-                      >
-                        <Typography variant="body" sx={{ color: 'text.muted' }}>
-                          {index + 1}.
-                        </Typography>
-                        <Typography variant="body">{opt.name}</Typography>
-                      </Box>
-                    );
-                  })}
               </Stack>
             }
             action={
@@ -285,6 +270,11 @@ export function Step4Review({
             I confirm that I want to change my investment allocation as shown above, and I understand
             this request will be processed using that business day&apos;s unit prices.
           </Typography>
+          {applyToIncludesBalance(applyTo) && (
+            <Typography variant="body" sx={{ mt: 1 }}>
+              I understand that this change will cancel any existing automatic rebalancing on this account.
+            </Typography>
+          )}
         </Box>
         <Checkbox
           label="I have reviewed the information above and confirm I want to make this change."

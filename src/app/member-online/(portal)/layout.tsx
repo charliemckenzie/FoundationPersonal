@@ -35,7 +35,15 @@ export default function MemberOnlineLayoutRoute({ children }: { children: React.
         { id: 'tx-statements', label: 'Statements and letters', icon: 'copy', href: '#' },
       ],
     },
-    { id: 'investments', label: 'Investments', icon: 'chart-line', href: '/member-online/investments' },
+    {
+      id: 'investments',
+      label: 'Investments',
+      icon: 'chart-line',
+      children: [
+        { id: 'investment-performance', label: 'Investment performance', icon: 'chart-column', href: '#' },
+        { id: 'manage-investments', label: 'Manage investments', icon: 'chart-pie-simple', href: '/member-online/investments/manage-investments' },
+      ],
+    },
     {
       id: 'put-money-in',
       label: 'Put money in',

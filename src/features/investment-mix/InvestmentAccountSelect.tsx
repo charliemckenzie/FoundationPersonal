@@ -1,90 +1,81 @@
 'use client';
 
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '../../components/MemberOnline';
-import { TextButton } from '../../components/TextButton';
-import { CurrentMixSummary } from './CurrentMixSummary';
-import { MOCK_INVESTMENT_OPTIONS, currentMixForAccount } from './mockData';
+import { InvestmentOverview, InvestmentOverviewSkeleton } from '../../components/InvestmentOverview';
+import type { InvestmentMixDial } from '../../components/InvestmentOverview';
+import { MOCK_INVESTMENT_OPTIONS, accountDials } from './mockData';
 import type { InvestmentAccount } from './types';
-import { formatCurrency, formatDate } from './utils';
 
 interface InvestmentAccountSelectProps {
   accounts: InvestmentAccount[];
-  /** Base path for the change-mix form — each card links to `${formPath}?account={id}`. */
   formPath: string;
-  /** Path to the investment mix history page — links as `${historyPath}?account={id}`. */
   historyPath: string;
 }
 
 export function InvestmentAccountSelect({ accounts, formPath, historyPath }: InvestmentAccountSelectProps) {
   const router = useRouter();
-  const asAt = formatDate(new Date().toISOString());
+  const balanceDate = new Date().toISOString();
+
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // The combined card has no per-card edit — the footer "Change mix" covers it.
+  const buildDials = (account: InvestmentAccount): InvestmentMixDial[] =>
+    accountDials(account).map((d) =>
+      d.id === 'combined'
+        ? { id: d.id, title: d.title, subtitle: d.subtitle, allocations: d.allocations, rebalancing: d.rebalancing }
+        : {
+            id: d.id,
+            title: d.title,
+            subtitle: d.subtitle,
+            allocations: d.allocations,
+            editLabel: d.editLabel,
+            onEdit: () => router.push(`${formPath}?account=${account.id}&applyTo=${d.applyTo}`),
+            rebalancing: d.rebalancing,
+          },
+    );
 
   return (
     <ContentContainer size="md">
-      <Box sx={{ py: 4 }}>
-        <Stack spacing={1.5} sx={{ mb: 4 }}>
-          <Typography variant="h1" component="h1" sx={{ pt: 2 }}>
-            Manage your investments
-          </Typography>
-          <Typography variant="lead">
-            Review how your super is currently invested, keep an eye on your mix, and make changes
-            whenever your goals or circumstances change.
-          </Typography>
-        </Stack>
+      <Stack spacing={1.5} sx={{ pb: 4 }}>
+        <Typography variant="h1" component="h1">
+          Manage your investments
+        </Typography>
+        <Typography variant="lead">
+          Review how your super is currently invested, keep an eye on your mix, and make changes
+          whenever your goals or circumstances change.
+        </Typography>
+      </Stack>
 
-        <Stack spacing={3}>
-          {accounts.map((account) => (
-            <Box
-              key={account.id}
-              component="section"
-              aria-labelledby={`mix-${account.id}`}
-              sx={{
-                border: '1px solid',
-                borderColor: 'border.default',
-                borderRadius: (t) => `${t.shape.xl}px`,
-                p: 4,
-              }}
-            >
-              <Stack spacing={2.5}>
-                <div>
-                  <Typography id={`mix-${account.id}`} variant="h5" component="h2">
-                    {account.name}
-                  </Typography>
-                  <Typography variant="body" sx={{ mt: 0.5 }}>
-                    Balance{' '}
-                    <Box component="span" sx={{ fontWeight: 700 }}>
-                      {formatCurrency(account.balance)}
-                    </Box>{' '}
-                    <Box component="span" sx={{ color: 'text.muted' }}>
-                      as at {asAt}
-                    </Box>
-                  </Typography>
-                </div>
-                <CurrentMixSummary
+      <Stack spacing={3}>
+        {loading
+          ? accounts.map((account) => <InvestmentOverviewSkeleton key={account.id} />)
+          : accounts.map((account) => {
+              const dials = buildDials(account);
+              const combined = dials.length === 1;
+              return (
+                <InvestmentOverview
+                  key={account.id}
+                  accountName={account.name}
+                  totalBalance={account.balance}
+                  balanceDate={balanceDate}
+                  isIncomeAccount={account.isIncomeAccount}
                   options={MOCK_INVESTMENT_OPTIONS}
-                  allocations={currentMixForAccount(account.id)}
+                  dials={dials}
+                  changeAllLabel={combined ? 'Change mix' : 'Change all'}
+                  onChangeAll={() => router.push(`${formPath}?account=${account.id}`)}
+                  onViewHistory={() => router.push(`${historyPath}?account=${account.id}`)}
                 />
-                <Stack direction="row" spacing={3} sx={{ flexWrap: 'wrap', rowGap: 1 }}>
-                  <TextButton
-                    label="Change investment mix"
-                    endIcon="arrow-right"
-                    onClick={() => router.push(`${formPath}?account=${account.id}`)}
-                  />
-                  <TextButton
-                    label="View history"
-                    endIcon="arrow-right"
-                    onClick={() => router.push(`${historyPath}?account=${account.id}`)}
-                  />
-                </Stack>
-              </Stack>
-            </Box>
-          ))}
-        </Stack>
-      </Box>
+              );
+            })}
+      </Stack>
     </ContentContainer>
   );
 }

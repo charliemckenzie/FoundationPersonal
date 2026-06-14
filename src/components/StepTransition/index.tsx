@@ -104,6 +104,8 @@ export function StepTransition({ step, direction, onEntered, children }: StepTra
   useEffect(() => {
     if (step === slot.step) return;
 
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     // Infer direction unless the caller overrides it. slot.step is the step
     // currently on screen, so this stale read is intentional and correct. The
     // setState here orchestrates the animation in response to a prop change —

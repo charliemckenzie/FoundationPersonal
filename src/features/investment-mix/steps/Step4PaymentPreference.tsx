@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import { RadioGroup } from '../../../components/RadioGroup';
 import { PaymentDefaultOrder } from './PaymentDefaultOrder';
-import { PaymentPriorityList } from './PaymentPriorityList';
 import { PaymentPercentageSplit } from './PaymentPercentageSplit';
 import type { InvestmentOption, PaymentPreference } from '../types';
 
@@ -17,29 +17,20 @@ interface Step4PaymentPreferenceProps {
   preference: PaymentPreference | null;
   onChange: (preference: PaymentPreference) => void;
   showValidation: boolean;
-  /** Brand name — kept for API compatibility. */
+  /** Brand name -- kept for API compatibility. */
   brandName: string;
 }
 
-/**
- * Three peer methods, each with the official FO42/PDS term and a "Best if…" cue.
- * `brand-chooses` is order-of-priority with the order set for the member (lowest→highest risk).
- */
 const METHOD_OPTIONS = [
   {
-    value: 'brand-chooses',
-    label: 'Automatically draw from lowest to highest risk',
-    description: 'Best if you’d rather we manage it for you.',
-  },
-  {
-    value: 'priority',
-    label: 'Draw in an order you choose',
-    description: 'Best if you want to keep some options invested for longer.',
+    value: 'proportional',
+    label: 'Proportionally across my balance',
+    description: 'Each payment is drawn from your options in the same proportion as your current balance at the time of payment.',
   },
   {
     value: 'percentage',
-    label: 'Take a set share from every option',
-    description: 'Best if you want to keep your investment mix about the same over time.',
+    label: 'From specific options by percentage',
+    description: 'Set what share of each payment comes from each option. If one runs out, we draw the rest proportionally.',
   },
 ];
 
@@ -51,23 +42,20 @@ export function Step4PaymentPreference({
   showValidation,
   brandName: _brandName,
 }: Step4PaymentPreferenceProps) {
-  // No default — the member must actively choose a method. Empty string = nothing selected.
-  const method: string = preference?.type ?? '';
+  // Proportional is the form default -- pre-select it on mount if no preference is saved yet.
+  useEffect(() => {
+    if (preference === null) {
+      onChange({ type: 'proportional' });
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // Reconcile the saved priority order against the current allocated options: keep the saved
-  // order for options still allocated, then append any newly-allocated options not yet ordered.
-  const allocatedIds = allocatedOptions.map((o) => o.id);
-  const savedOrder = preference?.priorityOrder ?? [];
-  const order = [
-    ...savedOrder.filter((id) => allocatedIds.includes(id)),
-    ...allocatedIds.filter((id) => !savedOrder.includes(id)),
-  ];
+  const method: string = preference?.type ?? 'proportional';
   const percentages = preference?.percentages ?? {};
 
   function handleMethodChange(value: string) {
-    if (value === 'priority') onChange({ type: 'priority', priorityOrder: order });
-    else if (value === 'percentage') onChange({ type: 'percentage', percentages });
-    else onChange({ type: 'brand-chooses' });
+    if (value === 'percentage') onChange({ type: 'percentage', percentages });
+    else onChange({ type: 'proportional' });
   }
 
   return (
@@ -91,19 +79,10 @@ export function Step4PaymentPreference({
         onChange={handleMethodChange}
       />
 
-      {method !== '' && <Divider sx={{ borderColor: 'border.subtle' }} />}
+      <Divider sx={{ borderColor: 'border.subtle' }} />
 
-      {method === 'brand-chooses' && (
+      {method === 'proportional' && (
         <PaymentDefaultOrder options={allocatedOptions} allocations={allocations} />
-      )}
-
-      {method === 'priority' && (
-        <PaymentPriorityList
-          options={allocatedOptions}
-          order={order}
-          allocations={allocations}
-          onReorder={(next) => onChange({ type: 'priority', priorityOrder: next })}
-        />
       )}
 
       {method === 'percentage' && (

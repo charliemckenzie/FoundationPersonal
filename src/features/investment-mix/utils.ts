@@ -8,14 +8,12 @@ export function applyToLabel(applyTo: ApplyTo): string {
   );
 }
 
-export function paymentPreferenceLabel(pref: PaymentPreference, brandName?: string): string {
+export function paymentPreferenceLabel(pref: PaymentPreference, _brandName?: string): string {
   switch (pref.type) {
-    case 'brand-chooses':
-      return `Let ${brandName ?? 'the fund'} choose`;
+    case 'proportional':
+      return 'Proportionally across balance';
     case 'percentage':
-      return 'By percentage';
-    case 'priority':
-      return 'By order of priority';
+      return 'By percentage from listed options';
   }
 }
 
@@ -44,6 +42,19 @@ export function summariseMix(
     .join(', ');
 }
 
+/**
+ * Whether two allocation maps describe the same mix (same options at the same
+ * percentages), ignoring zero/absent entries. Used to detect when an account's
+ * balance and future dials are aligned and can collapse to a single combined view.
+ */
+export function allocationsEqual(a: Record<string, number>, b: Record<string, number>): boolean {
+  const nonZero = (m: Record<string, number>) => Object.keys(m).filter((k) => (m[k] ?? 0) > 0);
+  const keysA = nonZero(a);
+  const keysB = nonZero(b);
+  if (keysA.length !== keysB.length) return false;
+  return keysA.every((k) => a[k] === b[k]);
+}
+
 const ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
 
 /** Human ordinal for a zero-based index: 0 → "1st", 1 → "2nd", … */
@@ -51,11 +62,24 @@ export function ordinal(index: number): string {
   return ORDINALS[index] ?? `${index + 1}th`;
 }
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 export function formatDate(iso: string): string {
   const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+  return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+export function formatDateDMY(iso: string): string {
+  const d = new Date(iso);
+  const dd = String(d.getDate()).padStart(2, '0');
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  return `${dd} / ${mm} / ${d.getFullYear()}`;
+}
+
+export function formatDateLong(iso: string): string {
+  const d = new Date(iso);
+  return `${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 export function validateStep1(accountId: string): boolean {
@@ -89,14 +113,11 @@ export function validatePaymentPreference(
   allocatedOptions: InvestmentOption[],
 ): boolean {
   if (!pref) return false;
-  if (pref.type === 'brand-chooses') return true;
+  if (pref.type === 'proportional') return true;
   if (pref.type === 'percentage') {
     if (!pref.percentages) return false;
     const total = allocatedOptions.reduce((s, o) => s + (pref.percentages![o.id] ?? 0), 0);
     return total === 100;
-  }
-  if (pref.type === 'priority') {
-    return (pref.priorityOrder?.length ?? 0) > 0;
   }
   return false;
 }

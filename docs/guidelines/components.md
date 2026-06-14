@@ -57,6 +57,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Icon` | Font Awesome SVG icon — all styles and sizes |
 | `IconButton` | Icon-only button with optional tooltip |
 | `IconList` | Icon-prefixed list (custom icons or numbered) |
+| `InvestmentOverview` | Account investment panel — header (account name + total balance) over a card per investment dial (current investments + future contributions / payments), each with an edit button and mix; footer with Change all and View history |
 | `LinearProgress` | Horizontal progress bar for loading or completion state |
 | `Logo` | Brand logo — primary, secondary, or mark; brand-aware |
 | `ManagedList` | Panel for user-managed item lists — header with icon/title, item rows with add/edit/delete, empty state, and optional bulk remove. Use for passkeys, beneficiaries, authorities, and similar. |
@@ -373,6 +374,12 @@ Panel for displaying and managing a user-controlled list of items. Header with a
 Use for: passkeys, authenticator apps, beneficiaries, third-party authorities, connected accounts.  
 Key props: `icon`, `title`, `description`, `href`, `items`, `emptyIcon`, `emptyMessage`, `addLabel`, `onAdd`, `onRemoveAll`, `loading`, `loadingItemCount`
 
+**InvestmentOverview** — `src/components/InvestmentOverview/`  
+Account investment panel for the member portal. Mirrors the `ManagedList` panel anatomy (paper header with circled icon, `background.default` body, split footer). The header shows the account name and **total balance** (the sum of all holdings). The body lists the account's **investment dials** — one card per dial. A super account has exactly two: how the existing balance is **currently invested** ("Current investments" — actual holdings, which drift as contributions pool into the future option), and where *future contributions* (accumulation) or *payments/withdrawals* (income) are directed. These can diverge when a member changes one dial alone; when they hold the same mix (an "apply to both" / never-diverged account — the common case) the feature layer collapses them into a single combined card ("Investment mix", no subtitle) rather than two identical ones. The combined card stays deliberately simple (no balance/future descriptor, since that distinction only matters to the split minority), omits its per-card edit button, and the footer action reads "Change mix" instead of "Change all". Each dial card has a title, a subtitle (short descriptor + when last changed — "last switched" for current investments since they drift, "set" for the standing direction), an edit `IconButton`, and the mix as a stacked bar + legend (`CurrentMixSummary`) — no per-card dollar figure, since the total balance lives in the header. The footer's primary action is **Change all** (edit both dials at once); secondary is **View history**. Set `loading` for a skeleton placeholder. The feature layer (`accountDials` in `src/features/investment-mix/mockData.ts`) builds the dials and wires each edit to the change flow with the matching apply-to preselected.  
+Each dial card optionally shows a rebalancing status line as the last item under the title/subtitle. Set `rebalancing: { nextDate: '<ISO>' }` on a balance or combined dial to show "Next rebalance dd month yyyy"; set `rebalancing: {}` (no `nextDate`) to show "No rebalancing on this mix". Omit `rebalancing` entirely on future-contributions and payments dials — rebalancing does not apply there.  
+Key props: `accountName`, `totalBalance`, `balanceDate`, `isIncomeAccount`, `loading`, `options`, `dials`, `changeAllLabel`, `onChangeAll`, `onViewHistory`  
+Dial prop: `rebalancing?: { nextDate?: string }` — present only on balance/combined dials.
+
 ---
 
 ## Composition Map
@@ -394,6 +401,7 @@ Understanding what composes what prevents accidental regressions.
 | QuickLinks | HeroIcon |
 | Select | Drawer (mobile) |
 | StepperActions | Button, TextButton, Dialog (exit confirm), Alert, Icon |
+| InvestmentOverview | Icon, IconButton, Skeleton, CurrentMixSummary (internal) |
 | ManagedList | Icon, Chip, IconButton, TextButton, Divider, Skeleton |
 | PageTransition | framer-motion (external), Next App Router (`usePathname`, `LayoutRouterContext`) |
 

@@ -150,10 +150,10 @@ const meta: Meta<typeof Icon> = {
   argTypes: {
     icon: { control: 'text', description: 'Local icon name without .svg extension.' },
     style: { control: 'select', options: ['solid', 'regular', 'light', 'thin', 'duotone', 'sharp'], description: 'Uses Font Awesome local icons. Solid and light map to distinct assets.' },
-    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', '2xl', '3xl'] },
+    size: { control: 'select', options: ['sm', 'md', 'lg', 'xl', 'xl+', '2xl', '3xl'] },
     color: {
       control: 'select',
-      options: ['inherit', 'primary', 'secondary', 'error', 'warning', 'info', 'success', 'text.primary', 'text.muted', 'text.disabled'],
+      options: ['inherit', 'primary', 'secondary', 'error', 'warning', 'info', 'success', 'text.primary', 'text.heading', 'text.muted', 'text.disabled'],
     },
   },
 };
@@ -183,6 +183,10 @@ export const Sizes: Story = {
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Icon icon="plus" size="xl" />
         <Typography variant="small">xl (24px)</Typography>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
+        <Icon icon="plus" size="xl+" />
+        <Typography variant="small">xl+ (28px)</Typography>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>
         <Icon icon="plus" size="2xl" />

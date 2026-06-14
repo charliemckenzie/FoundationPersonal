@@ -114,9 +114,10 @@ export function Chip({
     : isWhite
       ? variant === 'outlined' ? whiteSxOutlined : whiteSxFilled
       : undefined;
+  const labelNoClipSx = { '& .MuiChip-label': { overflow: 'visible' } };
   const chipSx: SxProps<Theme> = !isSeverity
-    ? [baseSx ?? false, size === 'small' && smallPaddingSx, size === 'x-small' && xsmallPaddingSx, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx, Boolean(icon) && iconLabelSx]
-    : [baseSx ?? false, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx];
+    ? [labelNoClipSx, baseSx ?? false, size === 'small' && smallPaddingSx, size === 'x-small' && xsmallPaddingSx, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx, Boolean(icon) && iconLabelSx]
+    : [labelNoClipSx, baseSx ?? false, size === 'small' && smallLabelSx, size === 'x-small' && xsmallLabelSx];
 
   const muiSize = size === 'x-small' ? 'small' : size;
 

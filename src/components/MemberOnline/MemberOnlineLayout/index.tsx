@@ -96,7 +96,7 @@ export function MemberOnlineLayout({
       {/* Main column — always the same React subtree */}
       <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', minWidth: 0, overflow: { lg: 'hidden' } }}>
         {/* Mobile header — hidden on desktop via CSS */}
-        <Box sx={{ display: { xs: 'flex', lg: 'none' } }}>
+        <Box sx={{ display: { xs: 'flex', lg: 'none' }, position: 'sticky', top: 0, zIndex: 'appBar' }}>
           <MobileHeader
             logo={drawerLogo ?? mobileLogo ?? logo}
             phoneLogo={mobileLogo}

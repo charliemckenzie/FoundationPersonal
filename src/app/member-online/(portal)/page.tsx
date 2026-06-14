@@ -4,9 +4,10 @@ import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ContentContainer } from '../../../components/MemberOnline';
+import { ContentContainer, MOBreadcrumb } from '../../../components/MemberOnline';
 import type { ContentContainerSize } from '../../../components/MemberOnline';
 import { Select } from '../../../components/Select';
+import { Switch } from '../../../components/Switch';
 
 const SIZE_OPTIONS = [
   { value: 'xs',  label: 'xs — 512px' },
@@ -19,33 +20,53 @@ const SIZE_OPTIONS = [
 
 export default function MemberOnlinePage() {
   const [containerSize, setContainerSize] = useState<ContentContainerSize>('lg');
+  const [showBreadcrumb, setShowBreadcrumb] = useState(true);
 
   return (
-    <ContentContainer size={containerSize}>
-      <Stack spacing={3}>
-        <Box sx={{ maxWidth: '12rem' }}>
-          <Select
-            label="Container size"
-            options={SIZE_OPTIONS}
-            value={containerSize}
-            onChange={(v) => setContainerSize(v as ContentContainerSize)}
+    <>
+      {showBreadcrumb && (
+        <Box sx={{ px: 3, pt: 2 }}>
+          <MOBreadcrumb
+            items={[
+              { label: 'Home', href: '#' },
+              { label: 'Dashboard' },
+            ]}
+            onBack={() => {}}
           />
         </Box>
-        <Box
-          sx={{
-            bgcolor: 'action.hover',
-            borderRadius: 2,
-            height: '24rem',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <Typography variant="body" color="text.secondary">
+      )}
+      <ContentContainer size={containerSize}>
+      <Box
+        sx={{
+          bgcolor: 'action.hover',
+          borderRadius: 2,
+          height: '24rem',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Stack spacing={2} sx={{ alignItems: 'center' }}>
+          <Box sx={{ width: '12rem' }}>
+            <Select
+              label="Container size"
+              options={SIZE_OPTIONS}
+              value={containerSize}
+              onChange={(v) => setContainerSize(v as ContentContainerSize)}
+            />
+          </Box>
+          <Typography variant="body" sx={{ color: 'text.muted' }}>
             Content area — {containerSize}
           </Typography>
-        </Box>
-      </Stack>
+          <Switch
+            label="Show breadcrumb"
+            checked={showBreadcrumb}
+            onChange={setShowBreadcrumb}
+          />
+        </Stack>
+      </Box>
     </ContentContainer>
+    </>
   );
 }

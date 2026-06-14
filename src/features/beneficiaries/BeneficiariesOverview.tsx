@@ -61,33 +61,30 @@ export function BeneficiariesOverview({ basePath }: BeneficiariesOverviewProps) 
 
   return (
     <ContentContainer size="md">
-      <Stack spacing={4} sx={{ py: 4 }}>
-        <Typography variant="h2" component="h1">Beneficiaries</Typography>
+      <Stack spacing={1.5} sx={{ pb: 4 }}>
+        <Typography variant="h1" component="h1">Beneficiaries</Typography>
+        <Typography variant="lead">
+          Nominate who receives your super if you pass away. Review your nominations regularly and
+          update them if your circumstances change.
+        </Typography>
+      </Stack>
 
-        <Stack spacing={2}>
-          <div>
-            <Typography variant="h5" component="h2" sx={{ mb: 0.5 }}>Binding nominations</Typography>
-            <Typography variant="body" sx={{ color: 'text.muted' }}>
-              Review your nomination regularly and update them if your circumstances change.
-            </Typography>
-          </div>
-
-          <ManagedList
-            icon="flower-tulip"
-            iconStyle="light"
-            title="Your binding nominations"
-            description={panelDescription}
-            items={items}
-            emptyMessage="No binding nominations on file"
-            addLabel={addLabel}
-            onAdd={handleUpdate}
-            onRemoveAll={nomination ? () => setConfirmOpen(true) : undefined}
-            itemVariant="list"
-            metadataVariant="column"
-            loading={loading}
-            loadingItemCount={2}
-          />
-        </Stack>
+      <Stack spacing={2}>
+        <ManagedList
+          icon="flower-tulip"
+          iconStyle="light"
+          title="Your binding nominations"
+          description={panelDescription}
+          items={items}
+          emptyMessage="No binding nominations on file"
+          addLabel={addLabel}
+          onAdd={handleUpdate}
+          onRemoveAll={nomination ? () => setConfirmOpen(true) : undefined}
+          itemVariant="list"
+          metadataVariant="column"
+          loading={loading}
+          loadingItemCount={2}
+        />
       </Stack>
 
       <Dialog

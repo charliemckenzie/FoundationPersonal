@@ -113,7 +113,7 @@ export function PercentageField({
       onBlur={handleBlur}
       id={id}
       name={name}
-      htmlInputProps={ariaLabel ? { 'aria-label': ariaLabel } : undefined}
+      htmlInputProps={{ inputMode: 'decimal', ...(ariaLabel ? { 'aria-label': ariaLabel } : {}) }}
     />
   );
 }

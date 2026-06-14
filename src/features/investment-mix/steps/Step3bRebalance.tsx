@@ -12,8 +12,6 @@ import { Dialog } from '../../../components/Dialog';
 import { REBALANCE_FREQUENCY_OPTIONS } from '../types';
 import type { InvestmentOption, RebalanceFrequency, RebalanceSetting } from '../types';
 
-const LIFECYCLE_ID = 'opt-lifecycle';
-
 interface Step3bRebalanceProps {
   /** Options the member has allocated to (non-zero), used to personalise the example. */
   allocatedOptions: InvestmentOption[];
@@ -49,10 +47,7 @@ export function Step3bRebalance({
   const chosenMix = allocatedOptions
     .map((o) => ({ id: o.id, name: o.name, pct: allocations[o.id] ?? 0 }))
     .sort((a, b) => b.pct - a.pct);
-  const hasLifecycle = chosenMix.some((row) => row.id === LIFECYCLE_ID);
-  // Drift narrative uses the largest non-Lifecycle holding. Lifecycle's own risk is age-based,
-  // so it isn't a meaningful "grows faster" example. Eligibility guarantees one exists.
-  const driftOption = chosenMix.find((row) => row.id !== LIFECYCLE_ID);
+  const driftOption = chosenMix[0];
 
   function handleChoiceChange(value: string) {
     // No default frequency — the member must actively pick one (kept if they'd chosen before).
@@ -155,13 +150,6 @@ export function Step3bRebalance({
           When you turn rebalancing on, we do this for you automatically on the schedule you pick, so
           your mix keeps matching the level of risk you&apos;re comfortable with.
         </Typography>
-        {hasLifecycle && (
-          <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-            <Box component="span" sx={{ fontWeight: 700 }}>Note: </Box>
-            Your Lifecycle Investment Strategy keeps managing itself by age. Rebalancing just keeps
-            your other options on target.
-          </Typography>
-        )}
       </Stack>
     </Dialog>
     </>

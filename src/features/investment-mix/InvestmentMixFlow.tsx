@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -37,6 +37,9 @@ import { detectAllocationWarning, type AllocationWarning } from './allocationWar
 
 const LIFECYCLE_ID = 'opt-lifecycle';
 
+const ACCUM_APPLY_TO: ApplyTo[] = ['all', 'balance', 'future'];
+const INCOME_APPLY_TO: ApplyTo[] = ['income-both', 'income-balance', 'income-payments'];
+
 interface InvestmentMixFlowProps {
   overviewPath: string;
   /** Brand name shown in the payment preference step, e.g. "ART" or "QSuper". */
@@ -59,9 +62,19 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     return MOCK_ACCOUNTS;
   }, [accountFilter]);
 
+  // A dial's edit link pre-selects one apply-to option on the "what to change" step — the step
+  // still shows, so the member can change the choice. Only honour a value valid for the account type.
+  const initialAccount = accounts.find((a) => a.id === (accountFromUrl ?? accounts[0]?.id));
+  const applyToFromUrl = useMemo(() => {
+    const raw = searchParams.get('applyTo') as ApplyTo | null;
+    if (!raw) return null;
+    const valid = initialAccount?.isIncomeAccount ? INCOME_APPLY_TO : ACCUM_APPLY_TO;
+    return valid.includes(raw) ? raw : null;
+  }, [searchParams, initialAccount]);
+
   const [activeStep, setActiveStep] = useState(0);
   const [selectedAccountId, setSelectedAccountId] = useState(() => accountFromUrl ?? accounts[0]?.id ?? '');
-  const [applyTo, setApplyTo] = useState<ApplyTo | null>(null);
+  const [applyTo, setApplyTo] = useState<ApplyTo | null>(applyToFromUrl);
   const [allocations, setAllocations] = useState<Record<string, number>>({});
   const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(null);
   const [rebalance, setRebalance] = useState<RebalanceSetting | null>(null);
@@ -73,21 +86,55 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
   const [submitted, setSubmitted] = useState(false);
   const [submittedChange, setSubmittedChange] = useState<InvestmentMixChange | null>(null);
 
+  const isFirstStepRender = useRef(true);
+  const skipHistoryPush = useRef(false);
+
+  // Mark the initial history entry with step 0 so browser back/forward works within the form.
+  // On each subsequent advance, push a new entry; on popstate, restore the step.
+  useEffect(() => {
+    if (isFirstStepRender.current) {
+      isFirstStepRender.current = false;
+      history.replaceState({ investmentMixStep: activeStep }, '');
+      return;
+    }
+    if (skipHistoryPush.current) {
+      skipHistoryPush.current = false;
+      return;
+    }
+    history.pushState({ investmentMixStep: activeStep }, '');
+  // activeStep is the only dependency — this intentionally runs on every step change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeStep]);
+
+  useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      const step = (e.state as { investmentMixStep?: number } | null)?.investmentMixStep;
+      if (typeof step === 'number') {
+        skipHistoryPush.current = true;
+        setActiveStep(step);
+        setError(null);
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  // setActiveStep and setError are stable useState setters — safe to omit from deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const selectedAccount = useMemo(
     () => accounts.find((a) => a.id === selectedAccountId),
     [accounts, selectedAccountId],
   );
 
   const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
-  const isTTRAccount = selectedAccount?.isTTRAccount ?? false;
 
-  /** Lifecycle Investment Strategy is not available to income or TTR accounts. */
+  /** Lifecycle Investment Strategy is not available to income accounts. */
   const availableOptions = useMemo(
     () =>
-      isIncomeAccount || isTTRAccount
+      isIncomeAccount
         ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== LIFECYCLE_ID)
         : MOCK_INVESTMENT_OPTIONS,
-    [isIncomeAccount, isTTRAccount],
+    [isIncomeAccount],
   );
 
   const allocatedOptions = useMemo(
@@ -103,14 +150,10 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
     applyToIncludesPayments(applyTo) &&
     allocatedOptions.length >= 2;
 
-  /**
-   * Rebalancing only applies when the current balance is being set to a target mix, and only
-   * when there are 2+ non-Lifecycle options to keep in balance. Lifecycle itself is excluded from
-   * the count (it self-adjusts by age); if other options are also held, a rebalance still restores
-   * the full target mix, keeping those options on target while Lifecycle holds its share.
-   */
-  const rebalanceEligible =
-    allocatedOptions.filter((o) => o.id !== LIFECYCLE_ID).length >= 2;
+  // Lifecycle cannot participate in rebalancing at all — the PDS explicitly excludes any mix that
+  // contains Lifecycle, not just Lifecycle-only mixes.
+  const hasLifecycleInMix = (allocations[LIFECYCLE_ID] ?? 0) > 0;
+  const rebalanceEligible = !hasLifecycleInMix && allocatedOptions.length >= 2;
   const showRebalanceStep =
     applyTo !== null && applyToIncludesBalance(applyTo) && rebalanceEligible;
 
@@ -234,6 +277,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       );
       saveChange(change);
       setSubmittedChange(change);
+      window.scrollTo({ top: 0, behavior: 'instant' });
       setSubmitted(true);
       return;
     }
@@ -247,7 +291,7 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       router.push(overviewPath);
       return;
     }
-    setActiveStep((prev) => Math.max(0, prev - 1));
+    history.back();
   }
 
   function handleExit() {
@@ -271,14 +315,14 @@ export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilt
       <Box sx={{ px: 3, pt: 2 }}>
         <MOBreadcrumb
           items={[
-            { label: 'Investments', href: overviewPath },
+            { label: 'Manage investments', href: overviewPath },
             { label: 'Change investment mix' },
           ]}
           onBack={() => router.push(overviewPath)}
         />
       </Box>
       <ContentContainer size="md">
-        <Stack spacing={4} sx={{ py: 4 }}>
+        <Stack spacing={4}>
           <div>
             <Typography variant="h2" component="h1" sx={{ mb: 0.5 }}>
               Change investment mix

@@ -116,9 +116,9 @@ export function NominationFlow({ overviewPath }: NominationFlowProps) {
         />
       </Box>
       <ContentContainer size="md">
-        <Stack spacing={4} sx={{ py: 4 }}>
+        <Stack spacing={4}>
           <div>
-            <Typography variant="h3" component="h1" sx={{ mb: 3 }}>New binding nomination</Typography>
+            <Typography variant="h2" component="h1" sx={{ mb: 3 }}>New binding nomination</Typography>
             <FormProgress
               variant="responsive"
               steps={STEPS}

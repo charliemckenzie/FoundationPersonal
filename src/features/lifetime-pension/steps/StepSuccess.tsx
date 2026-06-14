@@ -26,7 +26,7 @@ function ConfirmItem({ children }: ConfirmItemProps) {
 
 export function StepSuccess({ onReturnDashboard }: StepSuccessProps) {
   return (
-    <Stack spacing={4} sx={{ py: 4, alignItems: 'center', textAlign: 'center' }}>
+    <Stack spacing={4} sx={{ alignItems: 'center', textAlign: 'center' }}>
 
       {/* Green tick illustration */}
       <Box

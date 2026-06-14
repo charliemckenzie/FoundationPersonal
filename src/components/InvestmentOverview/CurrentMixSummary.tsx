@@ -4,52 +4,50 @@ import { useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import type { InvestmentOption } from './types';
-import { summariseMix } from './utils';
+import type { InvestmentOption } from './InvestmentOverview.types';
 
 interface CurrentMixSummaryProps {
   options: InvestmentOption[];
-  /** optionId → whole-number percentage. */
   allocations: Record<string, number>;
 }
 
-/**
- * Maps each investment option to its allocation-colour key in the theme brand
- * config (the colours documented under Design Tokens → Investment Allocations).
- */
-const OPTION_COLOR_REF: Record<string, { group: 'diversifiedOptions' | 'assetClassOptions'; key: string }> = {
-  'opt-high-growth':           { group: 'diversifiedOptions', key: 'highGrowth' },
-  'opt-balanced':              { group: 'diversifiedOptions', key: 'balanced' },
-  'opt-conservative-balanced': { group: 'diversifiedOptions', key: 'conservativeBalanced' },
-  'opt-conservative':          { group: 'diversifiedOptions', key: 'conservative' },
-  'opt-balanced-risk-adjusted':{ group: 'diversifiedOptions', key: 'balancedRiskAdjusted' },
-  'opt-socially-conscious':    { group: 'diversifiedOptions', key: 'sociallyConsciousBalanced' },
-  'opt-high-growth-index':     { group: 'diversifiedOptions', key: 'highGrowthIndex' },
-  'opt-balanced-index':        { group: 'diversifiedOptions', key: 'balancedIndex' },
-  'opt-aus-shares':            { group: 'assetClassOptions', key: 'australianSharesIndex' },
-  'opt-intl-shares-hedged':    { group: 'assetClassOptions', key: 'internationalSharesHedgedIndex' },
-  'opt-intl-shares-unhedged':  { group: 'assetClassOptions', key: 'internationalSharesUnhedgedIndex' },
-  'opt-listed-property':       { group: 'assetClassOptions', key: 'listedPropertyIndex' },
-  'opt-unlisted-assets':       { group: 'assetClassOptions', key: 'unlistedAssets' },
-  'opt-bonds':                 { group: 'assetClassOptions', key: 'bondsIndex' },
-  'opt-cash':                  { group: 'assetClassOptions', key: 'cash' },
+const OPTION_COLOR_REF: Record<string, { group: 'diversifiedOptions' | 'assetClassOptions' | 'artInvestmentOptions'; key: string }> = {
+  'opt-lifecycle':              { group: 'artInvestmentOptions', key: 'lifecycleBalancedPool' },
+  'opt-high-growth':            { group: 'diversifiedOptions',   key: 'highGrowth' },
+  'opt-balanced':               { group: 'diversifiedOptions',   key: 'balanced' },
+  'opt-conservative-balanced':  { group: 'diversifiedOptions',   key: 'conservativeBalanced' },
+  'opt-conservative':           { group: 'diversifiedOptions',   key: 'conservative' },
+  'opt-balanced-risk-adjusted': { group: 'diversifiedOptions',   key: 'balancedRiskAdjusted' },
+  'opt-socially-conscious':     { group: 'diversifiedOptions',   key: 'sociallyConsciousBalanced' },
+  'opt-high-growth-index':      { group: 'diversifiedOptions',   key: 'highGrowthIndex' },
+  'opt-balanced-index':         { group: 'diversifiedOptions',   key: 'balancedIndex' },
+  'opt-aus-shares':             { group: 'assetClassOptions',    key: 'australianSharesIndex' },
+  'opt-intl-shares-hedged':     { group: 'assetClassOptions',    key: 'internationalSharesHedgedIndex' },
+  'opt-intl-shares-unhedged':   { group: 'assetClassOptions',    key: 'internationalSharesUnhedgedIndex' },
+  'opt-listed-property':        { group: 'assetClassOptions',    key: 'listedPropertyIndex' },
+  'opt-unlisted-assets':        { group: 'assetClassOptions',    key: 'unlistedAssets' },
+  'opt-bonds':                  { group: 'assetClassOptions',    key: 'bondsIndex' },
+  'opt-cash':                   { group: 'assetClassOptions',    key: 'cash' },
 };
 
-/**
- * Visualises an account's current investment mix as a stacked allocation bar
- * with a text legend (options separated by subtle dividers). Segment colours
- * come from the brand's investment-allocation palette. The bar is decorative
- * (`role="img"`); the legend carries the accessible detail.
- */
+function summariseMix(options: InvestmentOption[], allocations: Record<string, number>): string {
+  return options
+    .filter((o) => (allocations[o.id] ?? 0) > 0)
+    .map((o) => `${o.name} ${allocations[o.id]}%`)
+    .join(', ');
+}
+
 export function CurrentMixSummary({ options, allocations }: CurrentMixSummaryProps) {
   const theme = useTheme();
 
   const allocationColor = (optionId: string): string => {
     const ref = OPTION_COLOR_REF[optionId];
     if (ref) {
-      const source = (ref.group === 'diversifiedOptions'
-        ? theme.brandConfig.diversifiedOptions
-        : theme.brandConfig.assetClassOptions) as Record<string, string> | undefined;
+      const source = (
+        ref.group === 'diversifiedOptions' ? theme.brandConfig.diversifiedOptions
+        : ref.group === 'assetClassOptions' ? theme.brandConfig.assetClassOptions
+        : theme.brandConfig.artInvestmentOptions
+      ) as Record<string, string> | undefined;
       const hex = source?.[ref.key];
       if (hex) return hex;
     }

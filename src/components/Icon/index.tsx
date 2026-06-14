@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 
-export type IconSize = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | 'inherit';
+export type IconSize = 'sm' | 'md' | 'lg' | 'xl' | 'xl+' | '2xl' | '3xl' | 'inherit';
 export type IconColor =
   | 'inherit'
   | 'primary'
@@ -11,6 +11,7 @@ export type IconColor =
   | 'info'
   | 'success'
   | 'text.primary'
+  | 'text.heading'
   | 'text.muted'
   | 'text.disabled';
 
@@ -29,6 +30,7 @@ const SIZE_MAP: Record<IconSize, string> = {
   md: '1rem',
   lg: '1.25rem',
   xl: '1.5rem',
+  'xl+': '1.75rem',
   '2xl': '2rem',
   '3xl': '2.5rem',
   // CSS keyword — lets a parent set fontSize on a wrapper and have the icon scale to it.
@@ -44,6 +46,7 @@ const COLOR_TO_SX: Record<IconColor, string> = {
   info: 'info.main',
   success: 'success.main',
   'text.primary': 'text.primary',
+  'text.heading': 'text.heading',
   'text.muted': 'text.muted',
   'text.disabled': 'text.disabled',
 };

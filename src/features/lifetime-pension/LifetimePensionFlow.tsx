@@ -212,7 +212,7 @@ export function LifetimePensionFlow() {
       </Box>
 
       <ContentContainer size="md">
-        <Stack spacing={4} sx={{ py: 4 }}>
+        <Stack spacing={4}>
           <div>
             <Typography
               variant="h2"

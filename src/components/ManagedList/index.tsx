@@ -121,14 +121,14 @@ export function ManagedList({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              width: t.spacing(5),
-              height: t.spacing(5),
+              width: t.spacing(6),
+              height: t.spacing(6),
               borderRadius: '50%',
               backgroundColor: 'background.default',
               flexShrink: 0,
             })}
           >
-            <Icon icon={icon} style={iconStyle} size="xl" color="primary" />
+            <Icon icon={icon} style="light" size="xl+" color="text.heading" />
           </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="h6">{title}</Typography>

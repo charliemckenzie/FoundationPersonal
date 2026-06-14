@@ -3,10 +3,10 @@ export interface InvestmentAccount {
   name: string;
   accountNumber: string;
   balance: number;
+  /** ISO date string for when the account was opened. */
+  openedAt?: string;
   /** True for pension/retirement income accounts — they have a different set of change options. */
   isIncomeAccount?: boolean;
-  /** True for Transition to Retirement (TTR) accounts. Lifecycle Investment Strategy is not available. */
-  isTTRAccount?: boolean;
 }
 
 export interface InvestmentOption {
@@ -75,14 +75,12 @@ export const REBALANCE_FREQUENCY_OPTIONS = [
 ] as const;
 
 /** Payment preference for retirement income accounts. */
-export type PaymentPreferenceType = 'brand-chooses' | 'percentage' | 'priority';
+export type PaymentPreferenceType = 'proportional' | 'percentage';
 
 export interface PaymentPreference {
   type: PaymentPreferenceType;
   /** Whole-number percentages per option (totalling 100). Only present when type === 'percentage'. */
   percentages?: Record<string, number>;
-  /** Investment option IDs in priority order (draw from first = index 0). Only present when type === 'priority'. */
-  priorityOrder?: string[];
 }
 
 export interface InvestmentMixChange {
