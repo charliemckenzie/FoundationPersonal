@@ -231,7 +231,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             color: theme.palette.text.link,
             textDecoration: 'underline',
             textUnderlineOffset: '0.2em',
-            textDecorationColor: alpha(theme.palette.text.link, 0.5),
+            textDecorationColor: alpha(theme.palette.text.link, 0.7),
             '&:hover': {
               color: brand.primary[700],
               textDecorationColor: brand.primary[700],
@@ -371,7 +371,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
             color: 'inherit',
             textDecoration: 'underline',
             textUnderlineOffset: '0.2em',
-            textDecorationColor: alpha(brand.primary[600], 0.5),
+            textDecorationColor: alpha(brand.primary[600], 0.7),
             '&:hover': {
               color: brand.primary[700],
               textDecorationColor: brand.primary[700],
@@ -387,7 +387,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
               '&:active': { color: brand.secondary[900], textDecorationColor: brand.secondary[900] },
             },
             ...t.applyStyles('dark', {
-              textDecorationColor: alpha(brand.primary[300], 0.5),
+              textDecorationColor: alpha(brand.primary[300], 0.7),
               '&:hover': {
                 color: brand.primary[200],
                 textDecorationColor: brand.primary[200],

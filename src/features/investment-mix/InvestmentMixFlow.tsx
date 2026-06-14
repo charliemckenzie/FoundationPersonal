@@ -96,6 +96,8 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   }, [searchParams, initialAccount]);
 
   const [showIntro, setShowIntro] = useState(true);
+  const [introReviewed, setIntroReviewed] = useState(false);
+  const [introReviewedError, setIntroReviewedError] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [selectedAccountId, setSelectedAccountId] = useState(() => accountFromUrl ?? accounts[0]?.id ?? '');
   const [applyTo, setApplyTo] = useState<ApplyTo | null>(applyToFromUrl);
@@ -267,6 +269,10 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
   function handleNext() {
     if (showIntro) {
+      if (!introReviewed) {
+        setIntroReviewedError(true);
+        return;
+      }
       setShowIntro(false);
       setError(null);
       return;
@@ -414,7 +420,11 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
           <StepTransition step={showIntro ? -1 : activeStep}>
             {showIntro ? (
-              <Step0BeforeYouStart />
+              <Step0BeforeYouStart
+                reviewed={introReviewed}
+                onReviewedChange={(c) => { setIntroReviewed(c); if (c) setIntroReviewedError(false); }}
+                reviewedError={introReviewedError}
+              />
             ) : currentStepId === 'account' ? (
               <Step1Account
                 accounts={accounts}
@@ -472,7 +482,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
           {/* Validation errors surface here, beside the action the user just clicked — not at the
               top of the page, where on a long step they would be scrolled out of view. */}
-          {!showIntro && error && <Alert severity="error" message={error} />}
+          {error && <Alert severity="error" message={error} />}
 
           <StepperActions
             step={showIntro ? 1 : activeStep + 2}
