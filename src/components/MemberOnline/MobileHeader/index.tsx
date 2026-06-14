@@ -77,7 +77,6 @@ export function MobileHeader({
         iconStyle="light"
         label={openMenuLabel}
         variant="ghost"
-        color="default"
         size="medium"
         condensed
         onClick={onMenuOpen}
@@ -88,7 +87,6 @@ export function MobileHeader({
           icon="magnifying-glass"
           label={searchLabel}
           variant="outlined"
-          color="primary"
           size="medium"
           condensed
           onClick={onSearchOpen}

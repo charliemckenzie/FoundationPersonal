@@ -57,7 +57,6 @@ export function PaginationToolbar({ pagination }: PaginationToolbarProps) {
         label="Previous page"
         variant="outlined"
         size="small"
-        color="primary"
         disabled={pagination.page === 0}
         onClick={() => pagination.onPageChange(pagination.page - 1)}
       />
@@ -66,7 +65,6 @@ export function PaginationToolbar({ pagination }: PaginationToolbarProps) {
         label="Next page"
         variant="outlined"
         size="small"
-        color="primary"
         disabled={pagination.page >= totalPages - 1}
         onClick={() => pagination.onPageChange(pagination.page + 1)}
       />

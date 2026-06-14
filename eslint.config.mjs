@@ -29,7 +29,10 @@ const eslintConfig = defineConfig([
         {
           // Bans MUI's default Typography variants that are disabled in src/types/mui.d.ts.
           // Valid scale: display-1 → display-5, h1–h6, lead, body, small, caption, inherit.
+          // Scoped to <Typography> so legitimate component variants that happen to share a
+          // banned name (e.g. <Checkbox variant="button">) are not falsely flagged.
           selector:
+            "JSXOpeningElement[name.name='Typography'] > " +
             "JSXAttribute[name.name='variant']" +
             "[value.type='Literal']" +
             "[value.value=/^(body1|body2|subtitle1|subtitle2|button|overline)$/]",
@@ -44,6 +47,11 @@ const eslintConfig = defineConfig([
       // AustralianAutocomplete debounce). Downgrading to warn until each is refactored
       // to the compare-in-render pattern — tracked in docs/Adam/quality-review.md.
       "react-hooks/set-state-in-effect": "warn",
+      // Same React 19 / Next 16 strictness: reading or writing ref.current during render.
+      // Legitimate cases here are the standard MUI anchorEl pattern (InputSelect) and
+      // StepTransition's documented previous-children snapshot. Warn rather than error so
+      // genuinely-new accidental ref-during-render bugs still surface in CI/IDE.
+      "react-hooks/refs": "warn",
     },
   },
   // Charter: never hardcode a font size in component code. Use a Typography
@@ -56,7 +64,9 @@ const eslintConfig = defineConfig([
       "no-restricted-syntax": [
         "error",
         {
+          // Scoped to <Typography> — see the matching rule in the src/** block above.
           selector:
+            "JSXOpeningElement[name.name='Typography'] > " +
             "JSXAttribute[name.name='variant']" +
             "[value.type='Literal']" +
             "[value.value=/^(body1|body2|subtitle1|subtitle2|button|overline)$/]",
@@ -66,7 +76,11 @@ const eslintConfig = defineConfig([
             "See src/types/mui.d.ts.",
         },
         {
-          selector: "Property[key.name='fontSize'][value.type='Literal']",
+          // CSS-wide keywords (inherit/initial/unset/revert) are not hardcoded sizes —
+          // they defer to the cascade — so they are excluded from the ban.
+          selector:
+            "Property[key.name='fontSize'][value.type='Literal']" +
+            "[value.value!=/^(inherit|initial|unset|revert|revert-layer)$/]",
           message:
             "Charter: don't hardcode font sizes. Use a Typography variant, the " +
             "`typography: '<variant>'` sx shorthand, or t.typography.<variant>.fontSize. " +

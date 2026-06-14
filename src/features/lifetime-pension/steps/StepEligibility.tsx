@@ -86,6 +86,7 @@ export function StepEligibility({
           <Alert
             severity="success"
             title="You are eligible for a Lifetime Pension account"
+            message="You can continue setting up your Lifetime Pension account."
             icon={<Icon icon={SEVERITY_ICONS.success} color="inherit" size="lg" />}
           />
         )}

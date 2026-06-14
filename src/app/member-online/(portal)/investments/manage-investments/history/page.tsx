@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -9,6 +10,7 @@ import type { ChipSeverity } from '@/components/Chip';
 import { ContentContainer, MOBreadcrumb } from '@/components/MemberOnline';
 import { Table } from '@/components/Table';
 import type { TableColumn } from '@/components/Table';
+import { Spinner } from '@/components/Spinner';
 import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS, historyForAccount } from '@/features/investment-mix/mockData';
 import type { InvestmentSwitchRecord, SwitchStatus } from '@/features/investment-mix/types';
 import { applyToLabel, formatCurrency, formatDate, formatDateDMY, formatDateLong } from '@/features/investment-mix/utils';
@@ -47,6 +49,22 @@ const columns: TableColumn<InvestmentSwitchRecord>[] = [
 ];
 
 export default function ManageInvestmentsHistoryPage() {
+  // useSearchParams must be suspended for static rendering — see Next's
+  // missing-suspense-with-csr-bailout guidance.
+  return (
+    <Suspense
+      fallback={
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+          <Spinner label="Loading investment mix history" />
+        </Box>
+      }
+    >
+      <HistoryView />
+    </Suspense>
+  );
+}
+
+function HistoryView() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const accountId = searchParams.get('account') ?? MOCK_ACCOUNTS[0].id;

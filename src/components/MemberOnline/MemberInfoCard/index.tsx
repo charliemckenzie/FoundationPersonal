@@ -93,7 +93,6 @@ export function MemberInfoCard({
           icon="copy"
           label={copied ? copiedLabel : copyLabel}
           variant="ghost"
-          color="primary"
           size="medium"
           condensed
           onClick={handleCopy}

@@ -4,7 +4,7 @@ import CardActions from '@mui/material/CardActions';
 import CardActionArea from '@mui/material/CardActionArea';
 import type { ReactNode } from 'react';
 import { Button } from '../Button';
-import type { CardAction } from './index';
+import type { CardCta } from './index';
 
 /** Pill badge overlaid on the top-left of a card image. */
 export function CardBadgeOverlay({ text }: { text: string }) {
@@ -69,8 +69,8 @@ export function CardTitleBlock({ title, subtitle, isCardInteractive, hasChildren
 }
 
 interface CardCtaPairProps {
-  primaryAction?: CardAction;
-  secondaryAction?: CardAction;
+  primaryAction?: CardCta;
+  secondaryAction?: CardCta;
   /** Used to build the per-button aria-label when a title is present. */
   title?: string;
 }

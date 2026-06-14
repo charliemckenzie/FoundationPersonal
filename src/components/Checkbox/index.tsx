@@ -130,7 +130,7 @@ export function Checkbox({
         ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
         '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
         '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
-        '& .MuiFormControlLabel-label': { fontSize: '1rem', lineHeight: 1 },
+        '& .MuiFormControlLabel-label': { typography: 'body', lineHeight: 1 },
       })
     : isBoxedOrCard
     ? (theme: Theme) => ({

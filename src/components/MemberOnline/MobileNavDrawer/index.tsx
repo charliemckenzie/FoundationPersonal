@@ -108,7 +108,6 @@ export function MobileNavDrawer({
             iconStyle="light"
             label={labels.closeMenuLabel}
             variant="ghost"
-            color="primary"
             size="medium"
             condensed
             onClick={onClose}

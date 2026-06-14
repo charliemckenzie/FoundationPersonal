@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useMemo, useEffect, useRef } from 'react';
+import { useState, useMemo, useEffect, useRef, Suspense } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { FormProgress } from '../../components/FormProgress';
 import { StepperActions } from '../../components/StepperActions';
+import { Spinner } from '../../components/Spinner';
 import { Alert } from '../../components/Alert';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { StepTransition } from '../../components/StepTransition';
@@ -48,7 +49,27 @@ interface InvestmentMixFlowProps {
   accountFilter?: 'all' | 'accum' | 'income';
 }
 
-export function InvestmentMixFlow({ overviewPath, brandName = 'ART', accountFilter = 'all' }: InvestmentMixFlowProps) {
+/**
+ * Public entry point. Wraps the flow in a Suspense boundary because the inner
+ * component reads `useSearchParams()`, which Next requires to be suspended for
+ * static rendering. Keeps every consumer (and future ones) safe without each
+ * page repeating the boundary.
+ */
+export function InvestmentMixFlow(props: InvestmentMixFlowProps) {
+  return (
+    <Suspense
+      fallback={
+        <Box sx={{ display: 'flex', justifyContent: 'center', py: 8 }}>
+          <Spinner label="Loading investment options" />
+        </Box>
+      }
+    >
+      <InvestmentMixFlowInner {...props} />
+    </Suspense>
+  );
+}
+
+function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all' }: InvestmentMixFlowProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { saveChange } = useInvestmentMix();

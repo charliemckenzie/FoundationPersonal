@@ -23,7 +23,7 @@ const SECTIONS: Section[] = [
     body: (
       <Stack spacing={2}>
         <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
-          SG is a compulsory contribution which all employers need to make on behalf of each of their eligible employees. Employer contributions are paid directly to each employee's nominated super fund, or a default fund on their behalf.
+          SG is a compulsory contribution which all employers need to make on behalf of each of their eligible employees. Employer contributions are paid directly to each employee&apos;s nominated super fund, or a default fund on their behalf.
         </Typography>
         <Link href="#" underline="hover">Learn more about the SG legislation</Link>
       </Stack>
@@ -65,7 +65,7 @@ const SECTIONS: Section[] = [
     heading: 'Claim a tax deduction',
     body: (
       <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
-        You can claim a tax deduction for super payments you make for employees in the financial year you make them. Contributions are considered paid when the super fund receives them; it's not enough that the money has left your bank account. We suggest that you pay before 17 June to allow sufficient time for the funds to be transferred.
+        You can claim a tax deduction for super payments you make for employees in the financial year you make them. Contributions are considered paid when the super fund receives them; it&apos;s not enough that the money has left your bank account. We suggest that you pay before 17 June to allow sufficient time for the funds to be transferred.
       </Typography>
     ),
   },
@@ -75,7 +75,7 @@ const SECTIONS: Section[] = [
     body: (
       <Stack spacing={2}>
         <Typography variant="body" component="p" sx={{ color: 'text.primary' }}>
-          SuperStream is the name of the Superannuation Data and Payment standards you need to be compliant with when paying super contributions for your employees. Under SuperStream, you need to pay your employees' super contributions online.
+          SuperStream is the name of the Superannuation Data and Payment standards you need to be compliant with when paying super contributions for your employees. Under SuperStream, you need to pay your employees&apos; super contributions online.
         </Typography>
         <Link href="#" underline="hover">Learn more about the SuperStream requirements</Link>
       </Stack>

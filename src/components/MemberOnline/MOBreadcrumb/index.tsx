@@ -29,7 +29,6 @@ export function MOBreadcrumb({ items, onBack }: MOBreadcrumbProps) {
             label="Go back"
             variant="outlined"
             size="small"
-            color="primary"
             showTooltip={false}
             onClick={onBack}
           />
