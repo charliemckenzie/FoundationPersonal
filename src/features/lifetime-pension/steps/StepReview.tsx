@@ -1,10 +1,14 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
+import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
+import { Modal } from '../../../components/Modal';
 import { TextButton } from '../../../components/TextButton';
-import type { LifetimePensionState, LifetimePensionStepId } from '../types';
+import { TextField } from '../../../components/TextField';
+import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
 import { formatCurrency, totalSelectedAmount } from '../utils';
 
 interface StepReviewProps {
@@ -12,6 +16,9 @@ interface StepReviewProps {
   onEditStep: (stepId: LifetimePensionStepId) => void;
   onDeclarationChange: (checked: boolean) => void;
   showValidation: boolean;
+  verifyDetailsState: VerifyDetailsState;
+  onVerifyDetailsChange: (next: VerifyDetailsState) => void;
+  profile: UserProfile;
 }
 
 function optionLabel(state: LifetimePensionState): string {
@@ -158,7 +165,25 @@ export function StepReview({
   onEditStep,
   onDeclarationChange,
   showValidation,
+  verifyDetailsState,
+  onVerifyDetailsChange,
+  profile,
 }: StepReviewProps) {
+  const [editDetailsOpen, setEditDetailsOpen] = useState(false);
+  const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
+
+  const displayDetails = verifyDetailsState.edited;
+
+  function handleOpenEdit() {
+    setDraftDetails({ ...verifyDetailsState.edited });
+    setEditDetailsOpen(true);
+  }
+
+  function handleSaveDetails() {
+    onVerifyDetailsChange({ confirmed: 'no', edited: draftDetails });
+    setEditDetailsOpen(false);
+  }
+
   const selectedAccounts = state.accounts.filter((a) => a.selected);
   const purchasePrice = totalSelectedAmount(state);
   const annualPayment = purchasePrice > 0 ? purchasePrice * 1.015 : 0;
@@ -167,6 +192,55 @@ export function StepReview({
   return (
     <Stack spacing={0}>
       <PrintCard />
+
+      {/* Personal details */}
+      <ReviewSection title="Personal details" sx={{ mt: 4 }} onEdit={handleOpenEdit}>
+        <ReviewRow label="Full name">
+          <ReviewValue>
+            {[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName]
+              .filter(Boolean)
+              .join(' ') || '—'}
+          </ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="Residential address">
+          <ReviewValue>{displayDetails.residentialAddress || '—'}</ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="Email address">
+          <ReviewValue>{displayDetails.email || '—'}</ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="Date of birth">
+          <ReviewValue>{displayDetails.dateOfBirth || '—'}</ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="Mobile phone">
+          <ReviewValue>{displayDetails.mobilePhone || '—'}</ReviewValue>
+        </ReviewRow>
+      </ReviewSection>
+
+      {/* Edit personal details modal */}
+      <Modal
+        open={editDetailsOpen}
+        onClose={() => setEditDetailsOpen(false)}
+        title="Edit personal details"
+        size="medium"
+        actions={
+          <>
+            <Button label="Cancel" variant="ghost" onClick={() => setEditDetailsOpen(false)} />
+            <Button label="Save" onClick={handleSaveDetails} />
+          </>
+        }
+      >
+        <Stack spacing={2}>
+          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
+            <TextField label="First name" value={draftDetails.firstName} onChange={(e) => setDraftDetails({ ...draftDetails, firstName: e.target.value })} />
+            <TextField label="Last name" value={draftDetails.lastName} onChange={(e) => setDraftDetails({ ...draftDetails, lastName: e.target.value })} />
+          </Box>
+          <TextField label="Middle name" value={draftDetails.middleName} onChange={(e) => setDraftDetails({ ...draftDetails, middleName: e.target.value })} />
+          <TextField label="Residential address" value={draftDetails.residentialAddress} onChange={(e) => setDraftDetails({ ...draftDetails, residentialAddress: e.target.value })} />
+          <TextField label="Email address" type="email" value={draftDetails.email} onChange={(e) => setDraftDetails({ ...draftDetails, email: e.target.value })} />
+          <TextField label="Date of birth" value={draftDetails.dateOfBirth} onChange={(e) => setDraftDetails({ ...draftDetails, dateOfBirth: e.target.value })} />
+          <TextField label="Mobile phone" type="tel" value={draftDetails.mobilePhone} onChange={(e) => setDraftDetails({ ...draftDetails, mobilePhone: e.target.value })} />
+        </Stack>
+      </Modal>
 
       {/* Option */}
       <ReviewSection title="Option" sx={{ mt: 4 }} onEdit={() => onEditStep('option')}>
