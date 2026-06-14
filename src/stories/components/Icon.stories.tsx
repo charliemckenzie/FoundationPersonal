@@ -3,8 +3,7 @@ import { Icon } from '../../components/Icon';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import MuiTextField from '@mui/material/TextField';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import { RadioGroup } from '@/components/RadioGroup';
 import { useState } from 'react';
 
 /** Icons available in both solid and light styles. */
@@ -225,19 +224,18 @@ function GalleryRender({ style }: { style: 'solid' | 'light' | 'regular' }) {
           sx={{ width: 280, maxWidth: '100%' }}
           slotProps={{ input: { 'aria-label': 'Search icons' } }}
         />
-        <ToggleButtonGroup
-          exclusive
+        <RadioGroup
+          legend="Icon style"
+          variant="button"
+          direction="row"
           value={iconStyle}
-          onChange={(_event, nextStyle: 'solid' | 'light' | 'regular' | null) => {
-            if (nextStyle) setIconStyle(nextStyle);
-          }}
-          aria-label="Icon style"
-          sx={{ ml: 'auto' }}
-        >
-          <ToggleButton value="solid" aria-label="Solid icons">Solid</ToggleButton>
-          <ToggleButton value="regular" aria-label="Regular icons">Regular</ToggleButton>
-          <ToggleButton value="light" aria-label="Light icons">Light</ToggleButton>
-        </ToggleButtonGroup>
+          options={[
+            { value: 'solid', label: 'Solid' },
+            { value: 'regular', label: 'Regular' },
+            { value: 'light', label: 'Light' },
+          ]}
+          onChange={(value) => setIconStyle(value as 'solid' | 'light' | 'regular')}
+        />
       </Box>
       <Typography variant="body" sx={{ mb: 3, color: 'text.secondary' }}>
         {filtered.length} of {iconList.length} icons

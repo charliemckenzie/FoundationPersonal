@@ -493,9 +493,12 @@ Headline: **the codebase no longer built.** Feature work landed after the 2026-0
 ### Outstanding recommendations (not actioned — need your call)
 
 1. **IconButton `color` support (MEDIUM).** Either (a) add a real `color` prop and expand the button variant system beyond `'primary'`, then update [components.md](docs/guidelines/components.md) — or (b) accept primary-only and **fix the docs** to drop `color` from IconButton's prop list. Right now docs and reality disagree. Moe's call.
-2. **Stale contrast-review scripts (LOW).** `scripts/button-contrast-review.ts`, `toggle-button-contrast-review.ts` (targets a non-existent ToggleButton), and `radio-group-contrast-review.ts` assume multi-colour buttons. Delete or rewrite for the single-colour reality.
-3. **ToggleButton gap (MEDIUM).** Documented in [components.md](docs/guidelines/components.md) and `index.mdx` but not implemented or exported. Needs the full pipeline (Moe → Lenny → … → you).
-4. **`MobileHeader` neutral icon button.** The stripped `color="default"` reveals latent intent: that hamburger button was meant to be neutral, not primary. If IconButton gains colour support, revisit.
+2. **Stale contrast-review scripts (LOW).** `scripts/button-contrast-review.ts` and `radio-group-contrast-review.ts` assume multi-colour buttons. Delete or rewrite for the single-colour reality. (`toggle-button-contrast-review.ts` already deleted — see note below.)
+3. **`MobileHeader` neutral icon button.** The stripped `color="default"` reveals latent intent: that hamburger button was meant to be neutral, not primary. If IconButton gains colour support, revisit.
+
+### ToggleButton fully removed (2026-06-14)
+
+ToggleButton was a discarded approach — superseded by the RadioGroup `button` variant. Per Adam's instruction, every reference was purged so it no longer surfaces (especially in Storybook): the catalogue entry + quick-reference row in [components.md](docs/guidelines/components.md), the status-table row in `src/stories/index.mdx`, the Changelog "Draft" list, the Roadmap bullet, the `toggle-button-contrast-review.ts` script (deleted), the npm-package export plan, and the Icon-gallery style switcher in [Icon.stories.tsx](src/stories/components/Icon.stories.tsx) (now a Foundation `RadioGroup variant="button"`). No `src/components/ToggleButton/` directory or `MuiToggleButton` theme override exists — older audit docs referencing a `factory.ts` ToggleButton override are stale. Remaining mentions live only in dated historical audit reports (`variant-consistency-audit.md`, Paolo's 2026-05-29 report, `accessibility-audit-todo.md`).
 
 ### Gate status (2026-06-14)
 

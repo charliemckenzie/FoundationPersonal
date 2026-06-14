@@ -60,7 +60,7 @@ Footer, FormProgress, Header, HeroIcon, Icon, IconButton,
 IconList, inputs/ (shared), Logo, Menu, Modal, MoneyField,
 PasswordField, PercentageField, QuickLinks, RadioGroup, Select,
 SkipLinks, Spinner, StepperActions, Switch, Table, Tabs,
-TextArea, TextButton, TextField, ToggleButton, Tooltip
+TextArea, TextButton, TextField, Tooltip
 ```
 
 Each component has its own folder under `src/components/` with an `index.tsx` entry point.

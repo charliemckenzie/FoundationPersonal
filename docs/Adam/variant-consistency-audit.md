@@ -25,7 +25,6 @@ The Storybook decorator was also compared against the app's provider stack.
 | Switch | color, size, disabled | No | None (MUI-native) | None | MUI-native | None | N | Full MUI delegation |
 | Chip | variant, color, size, severity, disabled | No | None (MUI-native) | None | MUI-native | `useTheme()` + palette object notation in `alertSx` | Y | Intentional deviation — see below |
 | Spinner | size, color | No | None | None | None | None | N | Clean |
-| ToggleButton | color, size, orientation, disabled | No | None (MUI-native via theme) | None | MUI-native | String shorthand | N | Focus/disabled handled by theme override in `factory.ts` |
 | Accordion | variant | No | `&:focus-within` on container (intentional) | None | None | `(t) =>` callback | Y→fixed | Focus outline colour changed from `primary.main` to `border.focus` |
 | Card | variant | No | None (CardActionArea MUI-native) | None | None | **FIXED** (was mixed on badge boxes) | Y→fixed | Two badge Box instances converted to `(t) =>` callbacks |
 | FormProgress | variant | No | `&:focus-visible` on Box buttons (intentional) | `alpha(primary.main, 0.18)` ×3 | None | `(t) =>` callback with object notation | Y | Intentional deviation — see below |
@@ -191,8 +190,6 @@ These components have patterns that look like drift but are deliberate. Do not c
 
 Form input components show their focus ring on ANY focus event, including mouse click. This is correct UX for typed fields: the user needs to see which field they're in after clicking it. `Mui-focusVisible` only fires on keyboard navigation. Changing inputs to `Mui-focusVisible` would break the visual affordance for mouse users. **This is not drift.**
 
-The MUI theme's own `ToggleButton` override in `src/app/themes/factory.ts` (line 575–576) also uses `alpha(background.default, 0.6)` for disabled background — confirming that this alpha-based disabled pattern is the intentional design for interactive form elements (not a button-family oversight).
-
 ### TextField / Autocomplete / Select — `alpha(background.default, 0.6)` for disabled state
 
 Same reasoning. Input disabled state uses semi-transparent background to communicate "read-only data visible through a dimmed field." `action.disabledBackground` is the correct token for button disabled states; the alpha approach is the correct pattern for input disabled states. Both are in the system by design.
@@ -312,4 +309,4 @@ The selected-state background in Checkbox and RadioGroup uses `alpha(theme.palet
 
 5. **Checkbox and RadioGroup selected-state alpha** — check lines ~150–160 in Checkbox and ~185–200 in RadioGroup. Assess mode-awareness of the 0.08 alpha.
 
-6. **Do not re-audit components that are already marked clean in the table.** Badge, Table, Tooltip, IconList, Switch, Spinner, ToggleButton, Alert, Icon, StepperActions, TextArea, MoneyField, PercentageField, DateOfBirthField, AddressField, AddressCapture, AustralianFields, InternationalFields, and all Footer components are confirmed clean.
+6. **Do not re-audit components that are already marked clean in the table.** Badge, Table, Tooltip, IconList, Switch, Spinner, Alert, Icon, StepperActions, TextArea, MoneyField, PercentageField, DateOfBirthField, AddressField, AddressCapture, AustralianFields, InternationalFields, and all Footer components are confirmed clean.

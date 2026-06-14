@@ -86,7 +86,6 @@ If this document is out of date, flag it to Moe immediately.
 | `TextArea` | Multi-line text input |
 | `TextButton` | Text-based action link/button with optional icons |
 | `TextField` | Single-line text input — text, email, password, number, tel, url, search, date |
-| `ToggleButton` | Toggle button group — exclusive or multi-select, horizontal or vertical |
 | `Tooltip` | Hover tooltip with 12 placement options |
 
 ---
@@ -296,10 +295,6 @@ Key props: `icon`, `label` (accessible name), `variant`, `size`, `color`, `loadi
 **TextButton** — `src/components/TextButton/`  
 Text-link style action. Use for secondary or inline actions.  
 Key props: `label`, `size`, `color`, `startIcon`, `endIcon`, `loading`
-
-**ToggleButton** — `src/components/ToggleButton/`  
-Toggle button group. Exclusive (single select) or multi-select. Horizontal or vertical.  
-Key props: `options`, `ariaLabel`, `value`, `exclusive`, `color`, `size`, `orientation`
 
 **ArtieAIButton** — `src/components/ArtieAIButton/`  
 Branded "Ask Artie" AI-assistant call-to-action. A gradient pill (primary → sky blue) with a `sparkles` icon and label; text stays AA-accessible across every gradient stop in both light and dark mode. This is **not** a Foundation `Button` — it is a standalone, purpose-built button for the AI assistant entry point. Use only for that entry point; for all other actions use `Button`.  

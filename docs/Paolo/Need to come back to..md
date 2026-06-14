@@ -10,7 +10,6 @@ Running list of bugs, gaps, and things that need a decision. Discovered during d
 - [ ] Header row colouring for table #themeA
 - [ ] Tooltip not working #themeA
 - [ ] Form Select — default state is collapsed left, needs placeholder text #themeA
-- [ ] ToggleButton Form — may need to match button border-radius and theme #themeA
 - [ ] Alert filled — icon not visible #themeA
 
 ---

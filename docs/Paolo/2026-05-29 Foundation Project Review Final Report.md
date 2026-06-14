@@ -55,7 +55,7 @@ Several documented components were available in the repo but missing from the pa
 
 Correction:
 - Added missing component and type exports to `src/index.ts`.
-- Included fields such as `AddressField`, `DateOfBirthField`, `MoneyField`, `PasswordField`, `PercentageField`, `QuickLinks`, `SkipLinks`, `TextArea`, `TextButton`, `ToggleButtonGroup`, `StepperActions`, `FormProgress`, and related types.
+- Included fields such as `AddressField`, `DateOfBirthField`, `MoneyField`, `PasswordField`, `PercentageField`, `QuickLinks`, `SkipLinks`, `TextArea`, `TextButton`, `StepperActions`, `FormProgress`, and related types.
 
 Key file:
 - `src/index.ts`
