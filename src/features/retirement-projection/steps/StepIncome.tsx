@@ -63,7 +63,7 @@ export function StepIncome({
         <Typography variant="h4" component="h2" sx={{ mb: 1 }}>
           Tell us about you and your income
         </Typography>
-        <Typography variant="body" color="text.secondary">
+        <Typography variant="body" color="text.muted">
           We&rsquo;ll use this to estimate your future super balance and retirement income.
         </Typography>
         <ThingsToConsider items={[

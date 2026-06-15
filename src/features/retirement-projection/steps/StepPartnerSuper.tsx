@@ -28,7 +28,7 @@ export function StepPartnerSuper({ partner, onPartnerChange }: StepPartnerSuperP
         <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
           Your partner&rsquo;s super
         </Typography>
-        <Typography variant="body" color="text.secondary">
+        <Typography variant="body" color="text.muted">
           Including your partner&rsquo;s super helps us show a combined household retirement picture.
         </Typography>
         <ThingsToConsider items={[

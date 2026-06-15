@@ -148,7 +148,7 @@ export function getLifestyleOptions(couple: boolean) {
       description: couple
         ? 'Covers essential living costs with basic leisure activities for a couple.'
         : 'Covers essential living costs with basic leisure activities.',
-      image: '/images/ASFA-modest.svg',
+      image: '/images/asfa-modest.svg',
     },
     {
       value: 'comfortable' as const,
@@ -157,7 +157,7 @@ export function getLifestyleOptions(couple: boolean) {
       description: couple
         ? 'Good standard of living including travel, leisure, and healthcare for a couple.'
         : 'Good standard of living including travel, leisure, and healthcare.',
-      image: '/images/ASFA-comfortable.svg',
+      image: '/images/asfa-comfortable.svg',
     },
   ];
 }

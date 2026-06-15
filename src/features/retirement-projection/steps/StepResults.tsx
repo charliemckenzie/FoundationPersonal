@@ -10,6 +10,8 @@ import { ResultsCharts } from '../ResultsCharts';
 import { WaysToImprove } from '../WaysToImprove';
 import { InvestmentStrategySummary } from '../InvestmentStrategySummary';
 import type { RetirementProjectionState } from '../types';
+import { formatCurrency } from '../format';
+import { RetirementScore, getScoreSeverity } from '../RetirementScore';
 
 interface StepResultsProps {
   state: RetirementProjectionState;
@@ -19,58 +21,11 @@ interface StepResultsProps {
   onExit: () => void;
 }
 
-function dollars(value: number): string {
-  return `$${value.toLocaleString('en-AU', { maximumFractionDigits: 0 })}`;
-}
-
-/** Returns the MUI palette key based on retirement score thresholds */
-function getScoreSeverity(score: number): 'success' | 'warning' | 'error' {
-  if (score >= 90) return 'success';
-  if (score >= 50) return 'warning';
-  return 'error';
-}
-
-/** Circular retirement score indicator */
-function RetirementScore({ score, severity }: { score: number; severity: 'success' | 'warning' | 'error' }) {
-  const size = 80;
-  const stroke = 6;
-  const radius = (size - stroke) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const dashOffset = circumference * (1 - score / 100);
-
-  return (
-    <Box sx={{ position: 'relative', width: size, height: size, flexShrink: 0 }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ overflow: 'visible' }}>
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={stroke}
-          opacity={0.12}
-        />
-        <circle
-          cx={size / 2} cy={size / 2} r={radius}
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={stroke}
-          strokeDasharray={circumference}
-          strokeDashoffset={dashOffset}
-          strokeLinecap="round"
-          transform={`rotate(-90 ${size / 2} ${size / 2})`}
-        />
-      </svg>
-      <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Typography variant="body" sx={{ fontWeight: 700, color: `${severity}.dark` }}>{score}%</Typography>
-      </Box>
-    </Box>
-  );
-}
-
 /** Label + value row for the breakdown tables */
 function BreakdownRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', py: 1.5, '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' } }}>
-      <Typography variant="small" color="text.secondary">{label}</Typography>
+      <Typography variant="small" color="text.muted">{label}</Typography>
       <Typography variant="small" sx={{ fontWeight: 600, ...(highlight === true && { color: 'success.main' }), ...(highlight === false && { color: 'error.main' }) }}>{value}</Typography>
     </Box>
   );
@@ -84,7 +39,7 @@ function AssumptionRow({ label, value, info }: { label: string; value: string; i
         <Typography variant="small" sx={{ fontWeight: 600 }}>{label}</Typography>
         <Typography variant="small" sx={{ fontWeight: 700, color: 'primary.main' }}>{value}</Typography>
       </Box>
-      <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1.6 }}>{info}</Typography>
+      <Typography variant="caption" color="text.muted" sx={{ lineHeight: 1.6 }}>{info}</Typography>
     </Box>
   );
 }
@@ -116,8 +71,10 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
         <Typography variant="h3" component="h1" sx={{ mb: 1.5 }}>
           Your retirement projection
         </Typography>
-        <Typography variant="body" color="text.secondary" sx={{ mb: 4, lineHeight: 1.75 }}>
-          Based on what you told us, we recommend changing how much you add to your super.
+        <Typography variant="body" color="text.muted" sx={{ mb: 4, lineHeight: 1.75 }}>
+          {onTrack
+            ? 'Based on what you told us, you’re on track to reach your retirement income goal. Explore the options below to see how small changes could improve it further.'
+            : 'Based on what you told us, you may fall short of your retirement income goal. Explore the options below to see how small changes could help close the gap.'}
         </Typography>
 
         {/* Breakdowns card */}
@@ -133,11 +90,11 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
           {/* Super balance breakdown */}
           <Box sx={{ p: 3 }}>
             <Typography variant="small" sx={{ color: 'secondary.main', fontWeight: 700, mb: 1.5 }}>Super balance</Typography>
-            <BreakdownRow label={`Super at ${state.retirementAge}`} value={dollars(projection.projectedBalance)} />
-            <BreakdownRow label="Your goal" value={dollars(projection.targetBalance)} />
+            <BreakdownRow label={`Super at ${state.retirementAge}`} value={formatCurrency(projection.projectedBalance)} />
+            <BreakdownRow label="Your goal" value={formatCurrency(projection.targetBalance)} />
             <BreakdownRow
               label="Variance"
-              value={`${superVariance >= 0 ? '+ ' : '- '}${dollars(Math.abs(superVariance))}`}
+              value={formatCurrency(superVariance, { signed: true })}
               highlight={superVariance >= 0}
             />
           </Box>
@@ -145,11 +102,11 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
           {/* Retirement income breakdown */}
           <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'divider' }}>
             <Typography variant="small" sx={{ color: 'secondary.main', fontWeight: 700, mb: 1.5 }}>Retirement income</Typography>
-            <BreakdownRow label="Projected retirement income" value={`${dollars(projection.projectedIncome)} /yr`} />
-            <BreakdownRow label="Your goal" value={`${dollars(projection.targetIncome)}/yr`} />
+            <BreakdownRow label="Projected retirement income" value={formatCurrency(projection.projectedIncome, { perYear: true })} />
+            <BreakdownRow label="Your goal" value={formatCurrency(projection.targetIncome, { perYear: true })} />
             <BreakdownRow
               label="Variance"
-              value={`${incomeVariance >= 0 ? '+' : '-'}${dollars(Math.abs(incomeVariance))}`}
+              value={formatCurrency(incomeVariance, { signed: true })}
               highlight={incomeVariance >= 0}
             />
           </Box>
@@ -160,13 +117,13 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
           sx={{
             p: 3,
             borderRadius: '0.75rem',
-            backgroundColor: '#F5F5F5',
+            backgroundColor: 'background.default',
           }}
         >
           <Typography variant="h6" component="h2" sx={{ mb: 1.5 }}>
             Assumptions
           </Typography>
-          <Typography variant="small" color="text.secondary" sx={{ lineHeight: 1.75 }}>
+          <Typography variant="small" color="text.muted" sx={{ lineHeight: 1.75 }}>
             This calculator works for accumulation funds only, not defined benefit. To understand the assumptions behind this projection, you can{' '}
             <Typography
               component="button"
@@ -208,7 +165,7 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
             <Typography variant="small" sx={{ color: `${severity}.dark`, lineHeight: 1.6 }}>
               {onTrack
                 ? 'This means your projected income meets or exceeds your goal. Adjust the inputs on the right to explore different scenarios.'
-                : `Your projected income falls short of your goal by ${dollars(projection.targetIncome - projection.projectedIncome)} a year. Explore the options below to improve your projection.`}
+                : `Your projected income falls short of your goal by ${formatCurrency(projection.targetIncome - projection.projectedIncome)} a year. Explore the options below to improve your projection.`}
             </Typography>
           </Box>
           <RetirementScore score={score} severity={severity} />
@@ -223,7 +180,7 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
         <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
           Ways to improve your projection
         </Typography>
-        <Typography variant="body" color="text.secondary" sx={{ mb: 3 }}>
+        <Typography variant="body" color="text.muted" sx={{ mb: 3 }}>
           Explore simple breakdowns on our website to learn how investing works.
         </Typography>
 
@@ -255,7 +212,7 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
 
       {/* Assumptions modal */}
       <Modal open={assumptionsOpen} onClose={() => setAssumptionsOpen(false)} title="Assumptions" size="large">
-        <Typography variant="body" color="text.secondary" sx={{ mb: 3, lineHeight: 1.75 }}>
+        <Typography variant="body" color="text.muted" sx={{ mb: 3, lineHeight: 1.75 }}>
           This projection uses the following assumptions. All results are shown in today&rsquo;s dollars (adjusted for inflation).
         </Typography>
 

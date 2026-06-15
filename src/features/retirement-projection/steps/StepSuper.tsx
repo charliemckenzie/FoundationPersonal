@@ -10,6 +10,7 @@ import type { SuperContributions, OtherFundDetails } from '../types';
 import { ThingsToConsider } from '../ThingsToConsider';
 import { AmountOrPercentField } from '../AmountOrPercentField';
 import { toAnnual } from '../projection';
+import { formatCurrency } from '../format';
 import { CONTRIBUTION_FREQUENCY_OPTIONS, FUND_FREQUENCY_OPTIONS, YEARLY_MONTHLY_OPTIONS } from '../constants';
 
 const CONCESSIONAL_CAP = 30000;
@@ -81,7 +82,7 @@ export function StepSuper({
         <Typography variant="h4" component="h2" sx={{ mb: 2 }}>
           What&rsquo;s currently going into your super?
         </Typography>
-        <Typography variant="body" color="text.secondary">
+        <Typography variant="body" color="text.muted">
           We&rsquo;ll use these details to understand what you&rsquo;re already contributing and how much room you may have within the relevant contribution caps.
         </Typography>
         <ThingsToConsider items={[
@@ -224,7 +225,7 @@ export function StepSuper({
                 p: 3,
               }}
             >
-              <Typography variant="small" color="text.secondary" sx={{ display: 'block', mb: 3 }}>
+              <Typography variant="small" color="text.muted" sx={{ display: 'block', mb: 3 }}>
                 Contribution caps apply across all your super funds, so including this helps us give you an accurate picture.
               </Typography>
 
@@ -282,11 +283,11 @@ export function StepSuper({
             </Typography>
             <Box sx={{ display: 'flex', alignItems: 'baseline', gap: 1, mb: 1.5 }}>
               <Typography variant="h5" color="primary.main">
-                ${concessionalTotal.toLocaleString('en-AU', { maximumFractionDigits: 0 })}
-                <Typography component="span" variant="small" color="text.secondary" sx={{ ml: 0.5 }}>/ year</Typography>
+                {formatCurrency(concessionalTotal)}
+                <Typography component="span" variant="small" color="text.muted" sx={{ ml: 0.5 }}>/ year</Typography>
               </Typography>
-              <Typography variant="small" color={capPercent >= 100 ? 'error.main' : 'text.secondary'}>
-                {capPercent}% of your ${CONCESSIONAL_CAP.toLocaleString('en-AU')} cap
+              <Typography variant="small" color={capPercent >= 100 ? 'error.main' : 'text.muted'}>
+                {capPercent}% of your {formatCurrency(CONCESSIONAL_CAP)} cap
               </Typography>
             </Box>
             <LinearProgress

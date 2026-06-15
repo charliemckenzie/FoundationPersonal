@@ -6,6 +6,8 @@ import type React from 'react';
 
 export interface MoneyFieldProps {
   label?: string;
+  /** Controlled value. When provided, the field reflects it (e.g. external resets). */
+  value?: number | null;
   defaultValue?: number;
   placeholder?: string;
   size?: TextFieldSize;
@@ -58,6 +60,7 @@ function nextCursor(rawInput: string, formatted: string, cursorInRaw: number): n
 
 export function MoneyField({
   label,
+  value,
   defaultValue,
   placeholder = '0',
   size,
@@ -72,11 +75,22 @@ export function MoneyField({
   id,
   name,
 }: MoneyFieldProps) {
-  const [displayValue, setDisplayValue] = useState(() =>
-    defaultValue != null
-      ? defaultValue.toLocaleString('en-US', { maximumFractionDigits: 2 })
-      : ''
-  );
+  const [displayValue, setDisplayValue] = useState(() => {
+    const initial = value ?? defaultValue;
+    return initial != null
+      ? initial.toLocaleString('en-US', { maximumFractionDigits: 2 })
+      : '';
+  });
+  const [focused, setFocused] = useState(false);
+  const [prevValue, setPrevValue] = useState(value);
+
+  // Reflect a controlled value that changed externally (e.g. a reset), but never
+  // while the user is editing. Adjusting state during render is the React-blessed
+  // alternative to a syncing effect.
+  if (value !== undefined && value !== prevValue && !focused) {
+    setPrevValue(value);
+    setDisplayValue(value === null ? '' : value.toLocaleString('en-US', { maximumFractionDigits: 2 }));
+  }
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const inputEl = e.target;
@@ -91,7 +105,10 @@ export function MoneyField({
     });
   };
 
+  const handleFocus: React.FocusEventHandler<HTMLInputElement> = () => setFocused(true);
+
   const handleBlur: React.FocusEventHandler<HTMLInputElement> = () => {
+    setFocused(false);
     const stripped = displayValue.replace(/,/g, '');
     if (!stripped || stripped === '.') {
       setDisplayValue('');
@@ -118,7 +135,9 @@ export function MoneyField({
       fullWidth={fullWidth}
       startAdornment="$"
       selectAdornment={selectAdornment}
+      htmlInputProps={{ inputMode: 'decimal' }}
       onChange={handleChange}
+      onFocus={handleFocus}
       onBlur={handleBlur}
       id={id}
       name={name}

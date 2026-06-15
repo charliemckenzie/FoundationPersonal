@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
 import { MoneyField } from '../../components/MoneyField';
 
 const meta: Meta<typeof MoneyField> = {
@@ -38,7 +39,6 @@ export default meta;
 type Story = StoryObj<typeof MoneyField>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: { docs: { description: { story: '' } } },
   args: {
     label: 'Amount',
@@ -66,6 +66,28 @@ export const WithDefaultValue: Story = {
   },
   args: { label: 'Balance', defaultValue: 1234567.89 },
   decorators: [(Story) => <div style={{ width: 280 }}><Story /></div>],
+};
+
+export const Controlled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pass `value` (numeric or `null`) to control the field — it reflects external changes such as a reset, without interrupting in-progress typing. Use `defaultValue` instead for uncontrolled fields.',
+      },
+    },
+  },
+  render: function ControlledStory() {
+    const [value, setValue] = useState<number | null>(50000);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 280 }}>
+        <MoneyField label="Amount" value={value} onChange={setValue} />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" onClick={() => setValue(95000)}>Set 95,000</button>
+          <button type="button" onClick={() => setValue(null)}>Reset</button>
+        </div>
+      </div>
+    );
+  },
 };
 
 export const Sizes: Story = {

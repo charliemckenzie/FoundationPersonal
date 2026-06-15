@@ -60,10 +60,10 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
             <Typography variant="h2" component="h1">
               See if you&rsquo;re on track for the retirement you want
             </Typography>
-            <Typography variant="body" color="text.secondary" sx={{ lineHeight: 1.75 }}>
+            <Typography variant="body" color="text.muted" sx={{ lineHeight: 1.75 }}>
               This tool gives you a retirement projection based on your income, super, assets, debts and planned retirement age.
             </Typography>
-            <Typography variant="body" color="text.secondary" sx={{ lineHeight: 1.75 }}>
+            <Typography variant="body" color="text.muted" sx={{ lineHeight: 1.75 }}>
               We&rsquo;ll ask a few questions, then show an estimate of your future super balance and yearly retirement income. You can also explore small changes that may improve your projection.
             </Typography>
           </Stack>
@@ -94,8 +94,8 @@ export function StepWelcome({ onStart }: StepWelcomeProps) {
               }}
             >
               <Box component="img" src={step.icon} alt="" sx={{ width: '2rem', height: '2rem' }} />
-              <Typography variant="body" sx={{ fontWeight: 700 }}>{step.label}</Typography>
-              <Typography variant="small" color="text.secondary">
+              <Typography variant="h6" component="p">{step.label}</Typography>
+              <Typography variant="small" color="text.muted">
                 {step.description}
               </Typography>
             </Box>

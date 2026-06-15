@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { useState } from 'react';
 import { PercentageField } from '../../components/PercentageField';
 
 const meta: Meta<typeof PercentageField> = {
@@ -16,7 +17,7 @@ Styling is inherited from TextField — visual changes to TextField apply here a
 
 **Behaviour:**
 - Accepts numeric input with up to two decimal places
-- Shows an inline error if the value exceeds 100 while typing
+- Clamps to 100 as you type if you enter a higher value
 - On blur, clamps to 0–100 and normalises to two decimal places (e.g. \`75\` → \`75.00\`)
 - Emits the numeric value via \`onChange\` (not the formatted string)
 - Emits \`null\` when the field is cleared
@@ -39,7 +40,6 @@ export default meta;
 type Story = StoryObj<typeof PercentageField>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: { docs: { description: { story: '' } } },
   args: {
     label: 'Rate',
@@ -55,7 +55,7 @@ export const Playground: Story = {
 
 export const Default: Story = {
   parameters: {
-    docs: { description: { story: 'Type a number and tab away — the field normalises to two decimal places on blur. Entering a value over 100 shows an inline error.' } },
+    docs: { description: { story: 'Type a number and tab away — the field normalises to two decimal places on blur. Values over 100 clamp to 100 as you type.' } },
   },
   args: { label: 'Rate', placeholder: '0.00' },
   decorators: [(Story) => <div style={{ width: 280 }}><Story /></div>],
@@ -67,6 +67,28 @@ export const WithDefaultValue: Story = {
   },
   args: { label: 'Allocation', defaultValue: 33.5 },
   decorators: [(Story) => <div style={{ width: 280 }}><Story /></div>],
+};
+
+export const Controlled: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Pass `value` (numeric 0–100, or `null`) to control the field — it reflects external changes such as a reset, without interrupting in-progress typing. Use `defaultValue` instead for uncontrolled fields.',
+      },
+    },
+  },
+  render: function ControlledStory() {
+    const [value, setValue] = useState<number | null>(25);
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, width: 280 }}>
+        <PercentageField label="Allocation" value={value} onChange={setValue} />
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button type="button" onClick={() => setValue(75)}>Set 75</button>
+          <button type="button" onClick={() => setValue(null)}>Reset</button>
+        </div>
+      </div>
+    );
+  },
 };
 
 export const Sizes: Story = {
