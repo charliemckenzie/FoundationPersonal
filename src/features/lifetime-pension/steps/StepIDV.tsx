@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
-import { CardV2 } from '../../../components/CardV2';
+import { Card } from '../../../components/Card';
 import { Checkbox } from '../../../components/Checkbox';
 import { Icon } from '../../../components/Icon';
 import { RadioGroup } from '../../../components/RadioGroup';
@@ -279,7 +279,7 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
       )}
 
       {/* Document selector card */}
-      <CardV2 variant={embedded ? 'open' : 'border'}>
+      <Card variant={embedded ? 'open' : 'border'}>
         <Stack spacing={3}>
           <div>
             <Typography variant="h5" sx={{ mb: 1.5 }}>
@@ -386,7 +386,7 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
             </Stack>
           )}
         </Stack>
-      </CardV2>
+      </Card>
     </Stack>
   );
 }
