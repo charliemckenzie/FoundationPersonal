@@ -11,7 +11,6 @@ import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { Icon } from '../../components/Icon';
-import { Snackbar } from '../../components/Snackbar';
 import { StepperActions } from '../../components/StepperActions';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialIDVState, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
@@ -62,11 +61,9 @@ export function LifetimePensionFlow() {
   const [showInsuranceModal, setShowInsuranceModal] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
-  const [snackbarOpen, setSnackbarOpen] = useState(false);
   const [resumeDraft, setResumeDraft] = useState<LifetimePensionDraft | null>(null);
   const isReadyToAutoSaveRef = useRef(false);
   const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const hasSavedOnceRef = useRef(false);
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
   const eligible = useMemo(() => isEligible(state), [state]);
@@ -103,6 +100,7 @@ export function LifetimePensionFlow() {
   }
 
   function advance(nextStep: number) {
+    if (nextStep > 0) setIsSaving(true);
     setActiveStep(nextStep);
     setShowValidation(false);
   }
@@ -166,10 +164,6 @@ export function LifetimePensionFlow() {
       saveDraft(state, activeStep).then(() => {
         setIsSaving(false);
         setLastSavedAt(new Date());
-        if (!hasSavedOnceRef.current) {
-          hasSavedOnceRef.current = true;
-          setSnackbarOpen(true);
-        }
       });
     }, 500);
 
@@ -278,7 +272,7 @@ export function LifetimePensionFlow() {
                     alignItems: 'center',
                     gap: 0.75,
                     flexShrink: 0,
-                    width: '11rem',
+                    width: '7rem',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
                     opacity: isSaving || lastSavedAt !== null ? 1 : 0,
@@ -292,11 +286,7 @@ export function LifetimePensionFlow() {
                     <Icon icon="circle-check" size="sm" color="success" />
                   )}
                   <Typography variant="caption" color="text.secondary" component="span">
-                    {isSaving
-                      ? 'Saving...'
-                      : lastSavedAt
-                      ? `Last saved at ${lastSavedAt.toLocaleTimeString('en-AU', { hour: 'numeric', minute: '2-digit' })}`
-                      : '\u00A0'}
+                    {isSaving ? 'Saving…' : lastSavedAt ? 'Auto-saved' : '\u00A0'}
                   </Typography>
                 </Box>
               </Box>
@@ -445,13 +435,6 @@ export function LifetimePensionFlow() {
         }}
       />
 
-      <Snackbar
-        open={snackbarOpen}
-        message="Progress saved"
-        severity="success"
-        duration={3000}
-        onClose={() => setSnackbarOpen(false)}
-      />
     </>
   );
 }
