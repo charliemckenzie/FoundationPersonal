@@ -76,12 +76,12 @@ export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
-  'Open a Lifetime Pension account',
-  'Eligibility check',
-  'Choose an option',
-  'Purchase price and funding',
-  'Payments',
-  'Review',
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
 ] as const;
 
 // ---------------------------------------------------------------------------

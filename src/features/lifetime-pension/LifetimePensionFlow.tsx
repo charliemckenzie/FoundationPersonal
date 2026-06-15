@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
@@ -10,7 +9,6 @@ import { FormProgress } from '../../components/FormProgress';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
-import { Icon } from '../../components/Icon';
 import { StepperActions } from '../../components/StepperActions';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialIDVState, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
@@ -228,10 +226,10 @@ export function LifetimePensionFlow() {
       <Box sx={{ px: 3, pt: 2 }}>
         <MOBreadcrumb
           items={[
-            { label: 'Investments', href: '#' },
+            { label: 'Set up income accounts', href: '/member-online/income-accounts' },
             { label: 'Lifetime Pension' },
           ]}
-          onBack={() => router.push('/member-online')}
+          onBack={() => router.push('/member-online/income-accounts')}
         />
       </Box>
 
@@ -263,32 +261,6 @@ export function LifetimePensionFlow() {
                   onStepClick={(i) => advance(i + 1)}
                   sx={{ flex: 1, minWidth: 0 }}
                 />
-                {/* Always rendered so FormProgress never resizes when save status appears */}
-                <Box
-                  aria-live="polite"
-                  aria-hidden={!(isSaving || lastSavedAt !== null)}
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 0.75,
-                    flexShrink: 0,
-                    width: '7rem',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    opacity: isSaving || lastSavedAt !== null ? 1 : 0,
-                    transition: 'opacity 0.2s ease',
-                    pointerEvents: isSaving || lastSavedAt !== null ? 'auto' : 'none',
-                  }}
-                >
-                  {isSaving ? (
-                    <CircularProgress size={12} color="primary" sx={{ display: 'block' }} />
-                  ) : (
-                    <Icon icon="circle-check" size="sm" color="success" />
-                  )}
-                  <Typography variant="caption" color="text.secondary" component="span">
-                    {isSaving ? 'Saving…' : lastSavedAt ? 'Auto-saved' : '\u00A0'}
-                  </Typography>
-                </Box>
               </Box>
             )}
           </div>

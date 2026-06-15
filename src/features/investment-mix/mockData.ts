@@ -204,7 +204,7 @@ export const FUTURE_OR_PAYMENT_MIX_BY_ACCOUNT: Record<string, Record<string, num
  */
 const DIAL_DATES_BY_ACCOUNT: Record<string, { balance: string; future: string }> = {
   'acc-001': { balance: '2025-11-03', future: '2025-11-03' },
-  'acc-002': { balance: '2026-05-02', future: '2025-12-09' },
+  'acc-002': { balance: '2026-05-02', future: '2026-05-15' },
 };
 
 /**
