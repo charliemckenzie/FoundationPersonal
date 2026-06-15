@@ -58,6 +58,7 @@ const ART: Brand = {
         { label: 'Set up income accounts', href: '/member-online/income-accounts' },
         { label: 'Manage income accounts', href: '/member-online/manage-income-accounts' },
         { label: 'Manage investments', href: '/member-online/investments/manage-investments' },
+        { label: 'Consolidate super', href: '/member-online/consolidate' },
       ],
     },
     {
@@ -70,6 +71,12 @@ const ART: Brand = {
     {
       heading: 'App',
       pages: [],
+    },
+    {
+      heading: 'Experiments',
+      pages: [
+        { label: 'Retirement projector', href: '/retirement-projection' },
+      ],
     },
   ],
 };
@@ -93,6 +100,7 @@ const QSUPER: Brand = {
         { label: 'Portal', href: '/qsuper/member-online' },
         { label: 'Beneficiaries', href: '/qsuper/member-online/beneficiaries' },
         { label: 'Manage investments', href: '/qsuper/member-online/investments/manage-investments' },
+        { label: 'Consolidate super', href: '/qsuper/member-online/consolidate' },
       ],
     },
     {

@@ -57,7 +57,16 @@ const cardContainerSx = (args: {
   mr: 0,
   gap: args.variant === 'card' ? 0 : 1.25,
   position: 'relative' as const,
-  alignItems: args.variant === 'card' ? 'center' : args.description ? 'flex-start' : 'center',
+  // Column cards top-align so a wrapping label in one card doesn't push its icon
+  // out of line with the others when cards stretch to equal height in a row.
+  alignItems:
+    args.variant === 'card'
+      ? args.cardDirection === 'column'
+        ? 'flex-start'
+        : 'center'
+      : args.description
+      ? 'flex-start'
+      : 'center',
   justifyContent: args.variant === 'card' && args.cardDirection === 'column' ? 'center' : undefined,
   '& .MuiFormControlLabel-label': args.variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
   border: '1px solid',
@@ -173,7 +182,9 @@ export function RadioGroup({
             {
               color: 'text.primary',
               typography: 'body',
-              fontWeight: legendBold ? 600 : 400,
+              // Match the TextField label weight (700) so a RadioGroup legend reads
+              // as the same field label across forms.
+              fontWeight: legendBold ? 700 : 400,
               mb: 1,
               '&.Mui-focused': { color: 'text.primary' },
               '&.Mui-error': { color: 'error.main' },

@@ -83,7 +83,7 @@ export function RadioCardLabel({ label, description, icon, variant, cardDirectio
     <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: '100%' }}>
       {iconCircle}
       <Box component="span" sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Box component="span" sx={{ fontWeight: 500 }}>{label}</Box>
+        <Box component="span" sx={{ fontWeight: 500, textAlign: 'center' }}>{label}</Box>
         {description && (
           <Box component="span" sx={{ ...descriptionSx(isItemDisabled, isSelected), textAlign: 'center' }}>{description}</Box>
         )}

@@ -30,6 +30,8 @@ export interface DialogProps {
   confirmLabel?: string;
   cancelLabel?: string;
   onConfirm?: () => void;
+  /** Disables the confirm button — e.g. while a form in the body is incomplete. */
+  confirmDisabled?: boolean;
   variant?: DialogVariant;
   size?: DialogSize;
   loading?: boolean;
@@ -62,6 +64,7 @@ export function Dialog({
   confirmLabel = 'Confirm',
   cancelLabel = 'Cancel',
   onConfirm,
+  confirmDisabled = false,
   variant = 'neutral',
   size = 'small',
   loading = false,
@@ -207,6 +210,7 @@ export function Dialog({
             color={VARIANT_BUTTON_COLOR[variant]}
             size="small"
             loading={loading}
+            disabled={confirmDisabled}
             onClick={onConfirm}
           />
         )}
