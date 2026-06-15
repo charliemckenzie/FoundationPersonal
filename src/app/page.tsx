@@ -57,6 +57,7 @@ const ART: Brand = {
         { label: 'Beneficiaries', href: '/member-online/beneficiaries' },
         { label: 'Lifetime pension form', href: '/member-online/lifetime-pension' },
         { label: 'Manage investments', href: '/member-online/investments/manage-investments' },
+        { label: 'Consolidate super', href: '/member-online/investments/consolidate' },
       ],
     },
     {
@@ -92,6 +93,7 @@ const QSUPER: Brand = {
         { label: 'Portal', href: '/qsuper/member-online' },
         { label: 'Beneficiaries', href: '/qsuper/member-online/beneficiaries' },
         { label: 'Manage investments', href: '/qsuper/member-online/investments/manage-investments' },
+        { label: 'Consolidate super', href: '/qsuper/member-online/investments/consolidate' },
       ],
     },
     {
