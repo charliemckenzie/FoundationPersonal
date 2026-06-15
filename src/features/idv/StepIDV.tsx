@@ -18,7 +18,7 @@ import type { IDVDocument, IDVState } from './types';
 
 const DOCUMENT_OPTIONS: RadioOption[] = [
   { value: 'drivers-licence', label: 'Drivers licence', icon: 'car' },
-  { value: 'medicare', label: 'Medicare card', icon: 'address-card' },
+  { value: 'medicare', label: 'Medicare card', icon: 'credit-card-front' },
   { value: 'passport', label: 'Passport', icon: 'passport' },
 ];
 
@@ -244,9 +244,6 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
       <Card variant={embedded ? 'open' : 'border'}>
         <Stack spacing={3}>
           <div>
-            <Typography variant="h5" sx={{ mb: 1.5 }}>
-              Select a document
-            </Typography>
             <Box
               sx={{
                 // Stretch the radio group to the full container width, then split it
@@ -260,6 +257,7 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
                 variant="card"
                 direction="row"
                 cardDirection="column"
+                legend="Select a document"
                 options={DOCUMENT_OPTIONS}
                 value={state.selectedDocument}
                 onChange={(value) =>
