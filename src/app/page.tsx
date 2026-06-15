@@ -71,6 +71,12 @@ const ART: Brand = {
       heading: 'App',
       pages: [],
     },
+    {
+      heading: 'Experiments',
+      pages: [
+        { label: 'Retirement projector', href: '/retirement-projection' },
+      ],
+    },
   ],
 };
 
