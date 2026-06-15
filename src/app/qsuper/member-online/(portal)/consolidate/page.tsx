@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { ContentContainer } from '../../../../../../components/MemberOnline';
+import { ContentContainer } from '../../../../../components/MemberOnline';
 
 export default function QSuperConsolidateSuperPage() {
   return (
