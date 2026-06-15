@@ -189,7 +189,7 @@ export function RetirementProjectionFlow() {
   const showFormProgress = phase === 'form' || phase === 'results' || phase === 'next-steps';
 
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'grey.100' }}>
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'background.default' }}>
       {/* Header — 80px tall, transparent, 1200px max */}
       <Box
         component="header"
@@ -435,7 +435,7 @@ export function RetirementProjectionFlow() {
               Disclaimer
             </Typography>
           </Box>
-          <Typography variant="caption" color="text.secondary">
+          <Typography variant="caption" color="text.muted">
             Australian Retirement Trust Pty Ltd ABN 88 010 720 840 AFSL No. 228975 Trustee of the Australian Retirement Trust Superannuation Fund ABN 60 905 115 063
           </Typography>
         </Box>

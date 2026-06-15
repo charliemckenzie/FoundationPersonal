@@ -206,8 +206,8 @@ Multi-line text input. Use instead of `TextField` with `multiline` when you need
 Password input with built-in show/hide toggle. Use instead of `TextField type="password"`.
 
 **MoneyField** — `src/components/MoneyField/`  
-Currency input. Formats with thousand separators; normalises value on blur.  
-Key props: `label`, `defaultValue`, `placeholder`, `size`, `helperText`, `onChange`
+Currency input. Formats with thousand separators; normalises value on blur. Controlled via `value` (reflects external resets) or uncontrolled via `defaultValue`.  
+Key props: `label`, `value`, `defaultValue`, `placeholder`, `size`, `helperText`, `onChange`
 
 **PercentageField** — `src/components/PercentageField/`  
 Percentage input. Validates and clamps to 0–100. Controlled via `value` (reflects external resets) or uncontrolled via `defaultValue`.  

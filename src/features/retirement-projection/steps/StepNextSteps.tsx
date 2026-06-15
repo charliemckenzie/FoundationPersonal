@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { Button } from '../../../components/Button';
 import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
-import { HeroIcon } from '../../../components/HeroIcon';
 
 interface StepNextStepsProps {
   onBack: () => void;
@@ -52,7 +51,7 @@ export function StepNextSteps({ onBack, onFinish }: StepNextStepsProps) {
           <Typography variant="h3" component="h1">
             What would you like to do next?
           </Typography>
-          <Typography variant="body" color="text.secondary">
+          <Typography variant="body" color="text.muted">
             Before you make any changes, read your Statement of Advice. It explains the recommendation, assumptions, risks and next steps.
           </Typography>
 
@@ -79,7 +78,20 @@ export function StepNextSteps({ onBack, onFinish }: StepNextStepsProps) {
                 tabIndex={0}
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                  <HeroIcon icon={action.icon} size="sm" background="circle" color={action.color} />
+                  <Box
+                    sx={{
+                      width: '2.5rem',
+                      height: '2.5rem',
+                      borderRadius: '50%',
+                      backgroundColor: 'background.elevated',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Icon icon={action.icon} color={action.color} />
+                  </Box>
                   <Typography variant="body" color="primary.main" sx={{ fontWeight: 500 }}>
                     {action.label}
                   </Typography>
@@ -87,14 +99,14 @@ export function StepNextSteps({ onBack, onFinish }: StepNextStepsProps) {
                 <Icon
                   icon={action.external ? 'arrow-up-right-from-square' : 'chevron-right'}
                   size="sm"
-                  color="default"
+                  color="text.muted"
                 />
               </Box>
             ))}
           </Stack>
 
           <Box sx={{ display: 'flex', gap: 2, mt: 3 }}>
-            <Button label="Back" variant="outlined" color="secondary" onClick={onBack} />
+            <Button label="Back" variant="outlined" onClick={onBack} />
             <Button label="Finish" onClick={() => setConfirmOpen(true)} />
           </Box>
 
@@ -122,7 +134,7 @@ export function StepNextSteps({ onBack, onFinish }: StepNextStepsProps) {
           borderRadius: '1rem',
           overflow: 'hidden',
           minHeight: 500,
-          backgroundColor: '#dbeafe',
+          backgroundColor: 'background.tintCool',
         }}
       />
     </Box>

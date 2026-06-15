@@ -86,10 +86,10 @@ export function StepLifestyle({
         <Typography variant="h4" component="h2" sx={{ mb: 1 }}>
           Choose the lifestyle you&rsquo;d like to plan for
         </Typography>
-        <Typography variant="body" color="text.secondary" sx={{ mb: 2, lineHeight: 1.75 }}>
+        <Typography variant="body" color="text.muted" sx={{ mb: 2, lineHeight: 1.75 }}>
           We&rsquo;ll use this as your target retirement income. You can choose one of these options or enter your own target.
         </Typography>
-        <Typography variant="body" color="text.secondary" sx={{ mb: 3 }}>
+        <Typography variant="body" color="text.muted" sx={{ mb: 3 }}>
           These options are estimates only and may not reflect your exact spending needs.
         </Typography>
         <Box sx={{ mt: 3 }}>
@@ -98,7 +98,7 @@ export function StepLifestyle({
           title="ASFA Retirement Standard"
           icon={<Icon icon="circle-info" color="inherit" size="lg" />}
           message={
-            <Typography variant="small" color="text.secondary">
+            <Typography variant="small" color="text.muted">
               The Association of Superannuation Funds of Australia publishes benchmarks for retirement income. &ldquo;Modest&rdquo; covers basic needs; &ldquo;Comfortable&rdquo; includes leisure, travel, and better healthcare.{' '}
               <Typography component="a" href="https://www.superannuation.asn.au/resources/retirement-standard/" target="_blank" rel="noopener noreferrer" variant="small" color="primary.main" sx={{ textDecoration: 'underline' }}>
                 Find out more here.
@@ -132,7 +132,7 @@ export function StepLifestyle({
                     <Typography variant="h4" component="span" color="primary.main" sx={{ my: 0.25, display: 'block' }}>
                       {option.yearlyAmount}
                     </Typography>
-                    <Typography variant="small" component="span" color="text.secondary" sx={{ display: 'block' }}>
+                    <Typography variant="small" component="span" color="text.muted" sx={{ display: 'block' }}>
                       {option.description}
                     </Typography>
                   </Box>
@@ -144,7 +144,7 @@ export function StepLifestyle({
           {/* Custom amount card — the field sits beside the radio's label, never inside it */}
           <Box sx={cardSx(lifestyle === 'custom')} onClick={() => onLifestyleChange('custom')}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 2 }}>
-              <Box component="img" src="/images/ASFA-custom.svg" alt="" sx={{ width: '2rem', height: '2rem', flexShrink: 0, mt: '2px' }} />
+              <Box component="img" src="/images/asfa-custom.svg" alt="" sx={{ width: '2rem', height: '2rem', flexShrink: 0, mt: '2px' }} />
               <Box sx={{ flex: 1 }}>
                 <FormControlLabel
                   value="custom"

@@ -68,7 +68,7 @@ export function StepAssetsDebts({
         <Typography variant="h4" component="h2" sx={{ mb: 1 }}>
           Tell us about your other assets and debts
         </Typography>
-        <Typography variant="body" color="text.secondary">
+        <Typography variant="body" color="text.muted">
           Investment properties, savings, managed funds, and debts can all affect your retirement projection.
         </Typography>
         <ThingsToConsider items={[

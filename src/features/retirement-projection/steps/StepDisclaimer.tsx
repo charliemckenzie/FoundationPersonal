@@ -38,7 +38,7 @@ export function StepDisclaimer({
           <Typography variant="h3" component="h1">
             Before you begin
           </Typography>
-          <Typography variant="body" color="text.secondary" sx={{ lineHeight: 1.75 }}>
+          <Typography variant="body" color="text.muted" sx={{ lineHeight: 1.75 }}>
             It&rsquo;s important to determine if this service is appropriate for you. Before you start, please review the information below.
           </Typography>
 
@@ -53,40 +53,40 @@ export function StepDisclaimer({
             <Typography variant="h6" sx={{ mb: 1.5 }}>
               About our advice
             </Typography>
-            <Typography variant="body" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography variant="body" color="text.muted" sx={{ mb: 2 }}>
               Our advice is limited to your ART accounts only. It doesn&rsquo;t include advice on:
             </Typography>
             <Box component="ul" sx={{ pl: 2.5, mb: 2 }}>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Certain accounts you may have with ART (e.g. QSuper accounts, defined benefit accounts, lifetime pension accounts)
               </Typography>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Other super you may have
               </Typography>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Non-super investments you may have (e.g. managed funds or shares)
               </Typography>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Your other financial commitments (e.g. debts).
               </Typography>
             </Box>
 
-            <Typography variant="body" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography variant="body" color="text.muted" sx={{ mb: 2 }}>
               Our investment advice doesn&rsquo;t consider the following ART investment options:
             </Typography>
             <Box component="ul" sx={{ pl: 2.5, mb: 2 }}>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Balanced Risk-Adjusted option
               </Typography>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Diversified Index options (e.g. Balanced Index)
               </Typography>
-              <Typography component="li" variant="body" color="text.secondary">
+              <Typography component="li" variant="body" color="text.muted">
                 Single Asset class options (excluding Cash option).
               </Typography>
             </Box>
 
-            <Typography variant="body" color="text.secondary">
+            <Typography variant="body" color="text.muted">
               For more details about our advice services, see our{' '}
               <Typography component="a" href="#" variant="body" color="primary.main" sx={{ textDecoration: 'underline' }}>
                 Financial Services Guide (FSG)
@@ -94,7 +94,7 @@ export function StepDisclaimer({
               .
             </Typography>
 
-            <Typography variant="body" color="text.secondary" sx={{ mt: 2 }}>
+            <Typography variant="body" color="text.muted" sx={{ mt: 2 }}>
               If you feel online advice may not suit your needs, select Exit.
             </Typography>
           </Box>

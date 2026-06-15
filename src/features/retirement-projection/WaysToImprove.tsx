@@ -5,24 +5,22 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Button } from '../../components/Button';
-import { Icon } from '../../components/Icon';
 import { RadioGroup } from '../../components/RadioGroup';
 import { TextField } from '../../components/TextField';
 import { MoneyField } from '../../components/MoneyField';
 import { ContributionsSummary } from './ContributionsSummary';
 import { TransitionToRetirementSummary } from './TransitionToRetirementSummary';
+import { JourneyTile } from './JourneyTile';
+import { SuccessSummaryCard, SummaryRow } from './SuccessSummaryCard';
 import { computeProjection } from './projection';
+import { formatCurrency } from './format';
 import type { LifestyleOption, RetirementProjectionState } from './types';
 import { LIFESTYLE_TARGETS } from './constants';
 
-function dollars(value: number): string {
-  return `$${value.toLocaleString('en-AU', { maximumFractionDigits: 0 })}`;
-}
-
-function getLifestyleLabel(lifestyle: LifestyleOption | null, couple: boolean, customTarget: string): string {
-  if (lifestyle === 'modest') return `Modest (${dollars(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} p.a.)`;
-  if (lifestyle === 'comfortable') return `Comfortable (${dollars(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} p.a.)`;
-  if (lifestyle === 'custom' && customTarget) return `Custom (${dollars(Number(customTarget))} p.a.)`;
+function getLifestyleLabel(lifestyle: LifestyleOption, couple: boolean, customTarget: string): string {
+  if (lifestyle === 'modest') return `Modest (${formatCurrency(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} p.a.)`;
+  if (lifestyle === 'comfortable') return `Comfortable (${formatCurrency(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} p.a.)`;
+  if (lifestyle === 'custom' && customTarget) return `Custom (${formatCurrency(Number(customTarget))} p.a.)`;
   return 'Not set';
 }
 
@@ -39,8 +37,11 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
   const [localAge, setLocalAge] = useState(state.retirementAge);
   const [incomeTarget, setIncomeTarget] = useState<string>(state.lifestyle ?? '');
   const [localCustom, setLocalCustom] = useState(state.customTarget);
-  const [savedAge, setSavedAge] = useState('');
-  const [savedLifestyle, setSavedLifestyle] = useState<string>('');
+  // Pre-change snapshot captured at save time so Undo can restore the originals.
+  const [original, setOriginal] = useState<Pick<
+    RetirementProjectionState,
+    'retirementAge' | 'lifestyle' | 'customTarget'
+  > | null>(null);
 
   const couple = state.includePartner === 'yes';
 
@@ -76,68 +77,46 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
     if (incomeTarget === 'custom' && localCustom) {
       updates.customTarget = localCustom;
     }
-    setSavedAge(localAge);
-    setSavedLifestyle(incomeTarget);
+    // Snapshot the values as they are *before* applying, so Undo can restore them.
+    setOriginal({
+      retirementAge: state.retirementAge,
+      lifestyle: state.lifestyle,
+      customTarget: state.customTarget,
+    });
     onStateChange(updates);
     setTileState('saved');
   }
 
   function handleUndo() {
-    // Revert to original values before this tile was used
-    onStateChange({
-      retirementAge: savedAge !== state.retirementAge ? state.retirementAge : undefined,
-      lifestyle: savedLifestyle !== state.lifestyle ? state.lifestyle : undefined,
-    });
+    if (original) {
+      onStateChange(original);
+    }
+    setOriginal(null);
     setTileState('default');
   }
 
-  // Default state — collapsed tile showing current values
   if (tileState === 'default') {
     return (
-      <Box
-        onClick={handleOpen}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          p: 2.5,
-          borderRadius: '0.75rem',
-          border: '1px dashed',
-          borderColor: 'border.default',
-          cursor: 'pointer',
-          '&:hover': { borderColor: 'primary.main', backgroundColor: 'grey.50' },
-        }}
-      >
-        <Box component="img" src="/images/profile.svg" alt="" sx={{ width: '2rem', height: '2rem', flexShrink: 0 }} />
-        <Box sx={{ flex: 1 }}>
-          <Typography variant="body" sx={{ fontWeight: 700, mb: 0.5 }}>Change your retirement age or target income</Typography>
-          <Typography variant="small" color="text.secondary">
-            Adjusting your retirement age or income goal can significantly change your projected outcome.
-          </Typography>
-        </Box>
-        <Icon icon="pen-to-square" size="lg" color="primary" />
-      </Box>
+      <JourneyTile
+        image="/images/profile.svg"
+        icon="pen-to-square"
+        title="Change your retirement age or target income"
+        description="Adjusting your retirement age or income goal can significantly change your projected outcome."
+        onActivate={handleOpen}
+      />
     );
   }
 
-  // Editing state — expanded form with live preview
   if (tileState === 'editing') {
     const scoreDiff = previewScore !== null ? previewScore - currentScore : 0;
 
     return (
-      <Box
-        sx={{
-          borderRadius: '0.75rem',
-          border: '1px solid',
-          borderColor: 'primary.main',
-          overflow: 'hidden',
-        }}
-      >
+      <Box sx={{ borderRadius: '0.75rem', border: '1px solid', borderColor: 'primary.main', overflow: 'hidden' }}>
         <Box sx={{ p: 2.5 }}>
-          <Typography variant="body" sx={{ fontWeight: 700, mb: 0.5 }}>
+          <Typography variant="h6" component="p" sx={{ mb: 0.5 }}>
             Change your retirement age or target income
           </Typography>
-          <Typography variant="small" color="text.secondary" sx={{ mb: 3, lineHeight: 1.6 }}>
+          <Typography variant="small" color="text.muted" sx={{ mb: 3, lineHeight: 1.6 }}>
             Adjust the values below to see how they affect your retirement score in real time.
           </Typography>
 
@@ -154,8 +133,8 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
               variant="boxed"
               direction="column"
               options={[
-                { value: 'modest', label: 'Modest', description: `${dollars(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} per year` },
-                { value: 'comfortable', label: 'Comfortable', description: `${dollars(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} per year` },
+                { value: 'modest', label: 'Modest', description: `${formatCurrency(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} per year` },
+                { value: 'comfortable', label: 'Comfortable', description: `${formatCurrency(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} per year` },
                 { value: 'custom', label: 'Custom amount', description: 'Set your own target income' },
               ]}
               value={incomeTarget}
@@ -200,64 +179,20 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
 
   // Saved state — success summary
   return (
-    <Box
-      sx={{
-        borderRadius: '0.75rem',
-        border: '1px solid',
-        borderColor: 'success.border',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Green header */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1.5,
-          px: 2.5,
-          py: 2,
-          backgroundColor: 'success.background',
-        }}
-      >
-        <Box
-          sx={{
-            width: '1.75rem',
-            height: '1.75rem',
-            borderRadius: '50%',
-            backgroundColor: 'success.main',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexShrink: 0,
-            color: 'common.white',
-          }}
-        >
-          <Icon icon="check" size="sm" color="inherit" />
-        </Box>
-        <Typography variant="body" sx={{ fontWeight: 700, color: 'success.dark' }}>
-          Retirement Goal updated
-        </Typography>
-      </Box>
-
-      {/* White body */}
-      <Box sx={{ px: 2.5, py: 2, backgroundColor: 'background.paper' }}>
-        <Stack spacing={0} sx={{ mb: 2 }}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1.5, borderBottom: '1px solid', borderColor: 'divider' }}>
-            <Typography variant="small" sx={{ fontWeight: 500 }}>Retirement age</Typography>
-            <Typography variant="small" sx={{ fontWeight: 700 }}>{state.retirementAge}</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', py: 1.5 }}>
-            <Typography variant="small" sx={{ fontWeight: 500 }}>Target income</Typography>
-            <Typography variant="small" sx={{ fontWeight: 700 }}>{getLifestyleLabel(state.lifestyle, couple, state.customTarget)}</Typography>
-          </Box>
-        </Stack>
-
-        <Box sx={{ display: 'flex', gap: 1.5 }}>
+    <SuccessSummaryCard
+      title="Retirement goal updated"
+      actions={
+        <>
           <Button label="Edit" size="small" variant="outlined" onClick={handleOpen} />
           <Button label="Undo" size="small" variant="ghost" onClick={handleUndo} />
-        </Box>
+        </>
+      }
+    >
+      <Box sx={{ mb: 2 }}>
+        <SummaryRow label="Retirement age" value={state.retirementAge} />
+        <SummaryRow label="Target income" value={getLifestyleLabel(state.lifestyle, couple, state.customTarget)} divider={false} />
       </Box>
-    </Box>
+    </SuccessSummaryCard>
   );
 }
 
@@ -271,12 +206,7 @@ interface WaysToImproveProps {
 export function WaysToImprove({ state, onStateChange, projectedBalance, currentScore }: WaysToImproveProps) {
   return (
     <Stack spacing={2}>
-      <RetirementGoalTile
-        state={state}
-        onStateChange={onStateChange}
-        currentScore={currentScore}
-      />
-
+      <RetirementGoalTile state={state} onStateChange={onStateChange} currentScore={currentScore} />
       <ContributionsSummary projectedBalance={projectedBalance} />
       <TransitionToRetirementSummary retirementAge={state.retirementAge} />
     </Stack>

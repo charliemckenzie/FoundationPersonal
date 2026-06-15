@@ -9,7 +9,6 @@ import {
   AreaChart,
   Bar,
   Area,
-  Line,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -21,6 +20,7 @@ import { Table } from '../../components/Table';
 import type { TableColumn } from '../../components/Table';
 import { ExpandableItem } from '../../components/ExpandableItem';
 import type { ProjectionYear } from './projection';
+import { formatCurrency } from './format';
 
 interface ResultsChartsProps {
   years: ProjectionYear[];
@@ -71,7 +71,7 @@ function Legend({ entries }: { entries: { label: string; color: string; line?: b
               backgroundColor: entry.color,
             }}
           />
-          <Typography variant="small" color="text.secondary">{entry.label}</Typography>
+          <Typography variant="small" color="text.muted">{entry.label}</Typography>
         </Box>
       ))}
     </Box>
@@ -80,22 +80,18 @@ function Legend({ entries }: { entries: { label: string; color: string; line?: b
 
 type YearRow = ProjectionYear & { id: number };
 
-function tableDollars(value: number): string {
-  return `$${value.toLocaleString('en-AU')}`;
-}
-
 const INCOME_COLUMNS: TableColumn<YearRow>[] = [
   { key: 'age', label: 'Age' },
-  { key: 'salary', label: 'Salary', align: 'right', render: (row) => tableDollars(row.salary) },
-  { key: 'investment', label: 'Investment & savings', align: 'right', render: (row) => tableDollars(row.investment) },
-  { key: 'superIncome', label: 'Income from super', align: 'right', render: (row) => tableDollars(row.superIncome) },
-  { key: 'agePension', label: 'Age pension', align: 'right', render: (row) => tableDollars(row.agePension) },
+  { key: 'salary', label: 'Salary', align: 'right', render: (row) => formatCurrency(row.salary) },
+  { key: 'investment', label: 'Investment & savings', align: 'right', render: (row) => formatCurrency(row.investment) },
+  { key: 'superIncome', label: 'Income from super', align: 'right', render: (row) => formatCurrency(row.superIncome) },
+  { key: 'agePension', label: 'Age pension', align: 'right', render: (row) => formatCurrency(row.agePension) },
 ];
 
 const CAPITAL_COLUMNS: TableColumn<YearRow>[] = [
   { key: 'age', label: 'Age' },
-  { key: 'superBalance', label: 'Super balance', align: 'right', render: (row) => tableDollars(row.superBalance) },
-  { key: 'savings', label: 'Savings & investments', align: 'right', render: (row) => tableDollars(row.savings) },
+  { key: 'superBalance', label: 'Super balance', align: 'right', render: (row) => formatCurrency(row.superBalance) },
+  { key: 'savings', label: 'Savings & investments', align: 'right', render: (row) => formatCurrency(row.savings) },
 ];
 
 export function ResultsCharts({ years, targetIncome }: ResultsChartsProps) {
@@ -103,7 +99,7 @@ export function ResultsCharts({ years, targetIncome }: ResultsChartsProps) {
   const [chartTab, setChartTab] = useState<'income' | 'capital'>('income');
   // Rem-based so chart text scales with browser zoom and font preferences.
   const chartFontSize = theme.typography.caption.fontSize;
-  const axisTick = { fontSize: chartFontSize, fill: theme.palette.text.secondary };
+  const axisTick = { fontSize: chartFontSize, fill: theme.palette.text.muted };
   const tooltipProps = {
     formatter: (value: unknown, name: unknown) =>
       [`$${Number(value ?? 0).toLocaleString()}`, String(name ?? '')] as [string, string],
