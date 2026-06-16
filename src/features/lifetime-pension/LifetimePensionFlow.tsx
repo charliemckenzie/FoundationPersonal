@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
@@ -10,11 +9,10 @@ import { FormProgress } from '../../components/FormProgress';
 import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
-import { Icon } from '../../components/Icon';
 import { StepperActions } from '../../components/StepperActions';
-import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialIDVState, initialVerifyDetailsState } from './constants';
+import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
-import { checkIDVCache, setIDVCache, submitIDV } from './idvService';
+import { useIdvGate } from '../../features/idv';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV } from './steps/StepIDV';
@@ -23,7 +21,7 @@ import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
-import type { IDVState, LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
+import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
   eligibilityStepValid,
   fundingStepValid,
@@ -48,11 +46,9 @@ const STEP_KEYS: LifetimePensionStepId[] = [
 export function LifetimePensionFlow() {
   const router = useRouter();
 
-  const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
+  const gate = useIdvGate();
 
-  const [idvState, setIdvState] = useState<IDVState>(initialIDVState);
-  const [idvLoading, setIdvLoading] = useState(false);
-  const [idvError, setIdvError] = useState('');
+  const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
 
   const [state, setState] = useState<LifetimePensionState>(INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
@@ -193,29 +189,15 @@ export function LifetimePensionFlow() {
     isReadyToAutoSaveRef.current = true;
   }
 
-  // Success screen — IDV is handled inside StepSuccess as a modal
+  // Success screen — IDV is handled inside StepSuccess as a modal.
+  // Always start unverified: this is a fresh submission so IDV must be completed
+  // regardless of any existing cache from a previous session.
   if (submitted) {
     return (
       <ContentContainer size="md">
         <StepSuccess
           onReturnDashboard={() => router.push('/member-online')}
-          idvState={idvState}
-          onIdvChange={setIdvState}
-          idvLoading={idvLoading}
-          idvError={idvError}
-          onIdvSubmit={async () => {
-            setIdvLoading(true);
-            setIdvError('');
-            const result = await submitIDV(idvState.selectedDocument, idvState);
-            setIdvLoading(false);
-            if (result.success) {
-              setIDVCache();
-            } else {
-              setIdvError(result.error ?? 'Verification failed. Please check your details and try again.');
-            }
-            return result.success;
-          }}
-          idvAlreadyVerified={false}
+          gate={{ ...gate, alreadyVerified: false }}
         />
       </ContentContainer>
     );
@@ -228,10 +210,10 @@ export function LifetimePensionFlow() {
       <Box sx={{ px: 3, pt: 2 }}>
         <MOBreadcrumb
           items={[
-            { label: 'Investments', href: '#' },
+            { label: 'Set up income accounts', href: '/member-online/income-accounts' },
             { label: 'Lifetime Pension' },
           ]}
-          onBack={() => router.push('/member-online')}
+          onBack={() => router.push('/member-online/income-accounts')}
         />
       </Box>
 
@@ -263,32 +245,6 @@ export function LifetimePensionFlow() {
                   onStepClick={(i) => advance(i + 1)}
                   sx={{ flex: 1, minWidth: 0 }}
                 />
-                {/* Always rendered so FormProgress never resizes when save status appears */}
-                <Box
-                  aria-live="polite"
-                  aria-hidden={!(isSaving || lastSavedAt !== null)}
-                  sx={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 0.75,
-                    flexShrink: 0,
-                    width: '7rem',
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    opacity: isSaving || lastSavedAt !== null ? 1 : 0,
-                    transition: 'opacity 0.2s ease',
-                    pointerEvents: isSaving || lastSavedAt !== null ? 'auto' : 'none',
-                  }}
-                >
-                  {isSaving ? (
-                    <CircularProgress size={12} color="primary" sx={{ display: 'block' }} />
-                  ) : (
-                    <Icon icon="circle-check" size="sm" color="success" />
-                  )}
-                  <Typography variant="caption" color="text.secondary" component="span">
-                    {isSaving ? 'Saving…' : lastSavedAt ? 'Auto-saved' : '\u00A0'}
-                  </Typography>
-                </Box>
               </Box>
             )}
           </div>

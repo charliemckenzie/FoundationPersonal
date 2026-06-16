@@ -5,20 +5,12 @@ import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
-import { Modal } from '../../../components/Modal';
 import { TextButton } from '../../../components/TextButton';
-import type { IDVState } from '../types';
-import { StepIDV } from './StepIDV';
+import { IdvModal, type UseIdvGate } from '../../../features/idv';
 
 export interface StepSuccessProps {
   onReturnDashboard: () => void;
-  idvState: IDVState;
-  onIdvChange: (next: IDVState) => void;
-  idvLoading: boolean;
-  idvError: string;
-  /** Returns true on success */
-  onIdvSubmit: () => Promise<boolean>;
-  idvAlreadyVerified: boolean;
+  gate: UseIdvGate;
 }
 
 interface ConfirmItemProps {
@@ -36,27 +28,11 @@ function ConfirmItem({ children }: ConfirmItemProps) {
   );
 }
 
-export function StepSuccess({
-  onReturnDashboard,
-  idvState,
-  onIdvChange,
-  idvLoading,
-  idvError,
-  onIdvSubmit,
-  idvAlreadyVerified,
-}: StepSuccessProps) {
+export function StepSuccess({ onReturnDashboard, gate }: StepSuccessProps) {
   const [idvModalOpen, setIdvModalOpen] = useState(false);
-  const [idvVerified, setIdvVerified] = useState(idvAlreadyVerified);
+  const [idvVerified, setIdvVerified] = useState(gate.alreadyVerified);
 
   const verified = idvVerified;
-
-  async function handleIdvSubmit() {
-    const success = await onIdvSubmit();
-    if (success) {
-      setIdvVerified(true);
-      setIdvModalOpen(false);
-    }
-  }
 
   return (
     <Stack spacing={4} sx={{ alignItems: 'center', textAlign: 'center' }}>
@@ -191,21 +167,12 @@ export function StepSuccess({
       </Box>
 
       {/* IDV modal */}
-      <Modal
+      <IdvModal
         open={idvModalOpen}
         onClose={() => setIdvModalOpen(false)}
-        title="Verify your identity"
-        size="medium"
-      >
-        <StepIDV
-          state={idvState}
-          onChange={onIdvChange}
-          loading={idvLoading}
-          error={idvError}
-          onSubmit={handleIdvSubmit}
-          embedded
-        />
-      </Modal>
+        gate={gate}
+        onVerified={() => setIdvVerified(true)}
+      />
 
     </Stack>
   );

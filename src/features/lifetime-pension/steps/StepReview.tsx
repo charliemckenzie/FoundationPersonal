@@ -3,9 +3,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
-import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
-import { Modal } from '../../../components/Modal';
+import { Dialog } from '../../../components/Dialog';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
 import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
@@ -216,18 +215,15 @@ export function StepReview({
         </ReviewRow>
       </ReviewSection>
 
-      {/* Edit personal details modal */}
-      <Modal
+      {/* Edit personal details dialog */}
+      <Dialog
         open={editDetailsOpen}
         onClose={() => setEditDetailsOpen(false)}
         title="Edit personal details"
         size="medium"
-        actions={
-          <>
-            <Button label="Cancel" variant="ghost" onClick={() => setEditDetailsOpen(false)} />
-            <Button label="Save" onClick={handleSaveDetails} />
-          </>
-        }
+        cancelLabel="Cancel"
+        confirmLabel="Save"
+        onConfirm={handleSaveDetails}
       >
         <Stack spacing={2}>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
@@ -240,7 +236,7 @@ export function StepReview({
           <TextField label="Date of birth" value={draftDetails.dateOfBirth} onChange={(e) => setDraftDetails({ ...draftDetails, dateOfBirth: e.target.value })} />
           <TextField label="Mobile phone" type="tel" value={draftDetails.mobilePhone} onChange={(e) => setDraftDetails({ ...draftDetails, mobilePhone: e.target.value })} />
         </Stack>
-      </Modal>
+      </Dialog>
 
       {/* Option */}
       <ReviewSection title="Option" sx={{ mt: 4 }} onEdit={() => onEditStep('option')}>
