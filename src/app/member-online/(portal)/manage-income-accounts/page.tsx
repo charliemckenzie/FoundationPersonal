@@ -40,6 +40,19 @@ interface Application {
 }
 
 const INCOME_ACCOUNT_DETAILS: Record<string, IncomeAccountDetail> = {
+  'acc-lp': {
+    paymentAmount: '$3,021.15',
+    frequency: 'Fortnightly',
+    nextPaymentDate: '30 Jun 2026',
+    payFromLabel: 'Pooled Lifetime Pension',
+    payFromPercent: '100%',
+    bankAccountName: 'Z O Oeter',
+    bank: 'ANZ-Merged',
+    bsb: '012-290',
+    accountNumber: '******210',
+    minimumPayment: '—',
+    paymentsToDate: '$3,021.15',
+  },
   'acc-002': {
     paymentAmount: '$1,509.24',
     frequency: 'Fortnightly',
@@ -59,22 +72,42 @@ const MOCK_APPLICATIONS: Application[] = [
   {
     id: 'app-001',
     accountType: 'Retirement Income Account',
-    status: 'Saved',
-    severity: 'warning',
+    status: 'In progress',
+    severity: 'info',
     startedAt: '10 Jun 2026',
     continuePath: '#',
   },
   {
     id: 'app-002',
+    accountType: 'Transition to Retirement account',
+    status: 'Submitted',
+    severity: 'success',
+    startedAt: '8 Jun 2026',
+    continuePath: '/member-online/lifetime-pension/view-application',
+  },
+  {
+    id: 'app-003',
     accountType: 'Lifetime Pension',
-    status: 'In progress',
-    severity: 'info',
+    status: 'Verification required',
+    severity: 'warning',
     startedAt: '12 Jun 2026',
-    continuePath: '/member-online/lifetime-pension',
+    continuePath: '/member-online/lifetime-pension/submitted',
   },
 ];
 
-const INCOME_ACCOUNTS = MOCK_ACCOUNTS.filter((a) => a.isIncomeAccount);
+const LIFETIME_PENSION_ACCOUNT: InvestmentAccount = {
+  id: 'acc-lp',
+  name: 'Lifetime Pension',
+  accountNumber: '555 123 456',
+  balance: 250000.0,
+  openedAt: '2026-06-01',
+  isIncomeAccount: true,
+};
+
+const INCOME_ACCOUNTS = [
+  ...MOCK_ACCOUNTS.filter((a) => a.isIncomeAccount),
+  LIFETIME_PENSION_ACCOUNT,
+];
 const FORM_PATH = '/member-online/investments/manage-investments/change-mix';
 const HISTORY_PATH = '/member-online/investments/manage-investments/history';
 
@@ -191,6 +224,7 @@ function IncomeAccountCard({
   onEditPayments: () => void;
   onViewHistory: () => void;
 }) {
+  const [expanded, setExpanded] = useState(true);
   const allDials = accountDials(account);
   const paymentsDial = allDials.find((d) => d.id === 'future') ?? allDials.find((d) => d.id === 'combined');
 
@@ -217,7 +251,25 @@ function IncomeAccountCard({
         overflow: 'hidden',
       })}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, px: 3, py: 2.5 }}>
+      <Box
+        component="button"
+        type="button"
+        onClick={() => setExpanded((prev) => !prev)}
+        aria-expanded={expanded}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 2,
+          px: 3,
+          py: 2.5,
+          width: '100%',
+          border: 'none',
+          bgcolor: 'transparent',
+          cursor: 'pointer',
+          textAlign: 'left',
+          '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: -2 },
+        }}
+      >
         <Box
           sx={(t: Theme) => ({
             display: 'flex',
@@ -243,9 +295,21 @@ function IncomeAccountCard({
             {formatDate(balanceDate)}
           </Typography>
         </Box>
+        <Box
+          sx={{
+            ml: 'auto',
+            flexShrink: 0,
+            display: 'flex',
+            color: 'text.muted',
+            transition: 'transform 200ms ease',
+            transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
+          }}
+        >
+          <Icon icon="chevron-down" style="regular" size="md" />
+        </Box>
       </Box>
 
-      {mappedDial && (
+      {expanded && mappedDial && (
         <Box
           sx={{
             borderTop: '1px solid',
@@ -303,7 +367,9 @@ function IncomeAccountCard({
               )}
             </Box>
 
-            <CurrentMixSummary options={MOCK_INVESTMENT_OPTIONS} allocations={mappedDial.allocations} />
+            {Object.values(mappedDial.allocations).some((v) => v > 0) && (
+              <CurrentMixSummary options={MOCK_INVESTMENT_OPTIONS} allocations={mappedDial.allocations} />
+            )}
 
             {detail && (
               <>
@@ -342,7 +408,7 @@ function IncomeAccountCard({
         </Box>
       )}
 
-      <Box
+      {expanded && <Box
         sx={(t: Theme) => ({
           borderTop: '1px solid',
           borderTopColor: 'border.subtle',
@@ -353,7 +419,7 @@ function IncomeAccountCard({
       >
         <FooterAction label="Edit payments" onClick={onEditPayments} position="left" />
         <FooterAction label="Withdraw" onClick={onViewHistory} position="right" />
-      </Box>
+      </Box>}
     </Box>
   );
 }
@@ -377,47 +443,69 @@ export default function ManageIncomeAccountsPage() {
         </Typography>
       </Stack>
 
-      {MOCK_APPLICATIONS.length > 0 && (
-        <Stack spacing={2} sx={{ mb: 5 }}>
-          <Typography variant="h4">Applications in progress</Typography>
-          <Stack spacing={1.5}>
-            {MOCK_APPLICATIONS.map((app) => (
-              <Box
-                key={app.id}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  gap: 2,
-                  px: 2.5,
-                  py: 2,
-                  border: '1px solid',
-                  borderColor: 'border.default',
-                  borderRadius: (t) => `${(t.shape as { sm: number }).sm}px`,
-                  bgcolor: 'background.paper',
-                }}
-              >
-                <Stack spacing={0.5}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                    <Typography variant="h6" sx={{ color: 'text.heading' }}>{app.accountType}</Typography>
-                    <Chip label={app.status} severity={app.severity} size="small" />
+      {MOCK_APPLICATIONS.length > 0 && (() => {
+        const pending = MOCK_APPLICATIONS.filter((a) => a.status !== 'Submitted');
+        const submitted = MOCK_APPLICATIONS.filter((a) => a.status === 'Submitted');
+        const ordered = [...pending, ...submitted];
+
+        return (
+          <Box
+            sx={(t: Theme) => ({
+              mb: 5,
+              border: '1px solid',
+              borderColor: 'border.default',
+              borderRadius: `${t.shape.lg}px`,
+              overflow: 'hidden',
+            })}
+          >
+            <Box sx={{ px: 3, py: 2, bgcolor: 'background.default', borderBottom: '1px solid', borderBottomColor: 'border.subtle' }}>
+              <Typography variant="h5">My applications</Typography>
+            </Box>
+            <Stack spacing={0} sx={{ bgcolor: 'background.paper' }}>
+              {ordered.map((app, i) => {
+                const isSubmitted = app.status === 'Submitted';
+                const isFirstSubmitted = isSubmitted && ordered[i - 1]?.status !== 'Submitted';
+                return (
+                  <Box
+                    key={app.id}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 2,
+                      px: 3,
+                      py: 2,
+                      bgcolor: isSubmitted ? 'background.default' : 'background.paper',
+                      borderTop: '1px solid',
+                      borderTopColor: isFirstSubmitted ? 'border.default' : 'border.subtle',
+                      ...(i === 0 && { borderTop: 'none' }),
+                    }}
+                  >
+                    <Stack spacing={0.5}>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                        <Typography variant="h6" sx={{ color: 'text.heading' }}>{app.accountType}</Typography>
+                        <Chip label={app.status} severity={app.severity} size="small" />
+                      </Box>
+                      <Typography variant="small" sx={{ color: 'text.muted' }}>
+                        {isSubmitted ? 'Submitted' : 'Started'} {app.startedAt}
+                      </Typography>
+                    </Stack>
+                    <TextButton
+                      label={isSubmitted ? 'View application' : 'Continue'}
+                      endIcon="arrow-right"
+                      onClick={() => router.push(app.continuePath)}
+                    />
                   </Box>
-                  <Typography variant="small" sx={{ color: 'text.muted' }}>Started {app.startedAt}</Typography>
-                </Stack>
-                <TextButton
-                  label="Continue"
-                  endIcon="arrow-right"
-                  onClick={() => router.push(app.continuePath)}
-                />
-              </Box>
-            ))}
-          </Stack>
-        </Stack>
-      )}
+                );
+              })}
+            </Stack>
+          </Box>
+        );
+      })()}
 
       {INCOME_ACCOUNTS.length > 0 && (
         <Stack spacing={2}>
-          <Typography variant="h4">Income accounts</Typography>
+          <Typography variant="h5">Income accounts</Typography>
           <Stack spacing={3}>
             {loading
               ? INCOME_ACCOUNTS.map((account) => <InvestmentOverviewSkeleton key={account.id} />)

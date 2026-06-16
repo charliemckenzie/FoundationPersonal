@@ -10,9 +10,9 @@ import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
-import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialIDVState, initialVerifyDetailsState } from './constants';
+import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
-import { checkIDVCache, setIDVCache, submitIDV } from './idvService';
+import { useIdvGate } from '../../features/idv';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV } from './steps/StepIDV';
@@ -21,7 +21,7 @@ import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
-import type { IDVState, LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
+import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
   eligibilityStepValid,
   fundingStepValid,
@@ -46,11 +46,9 @@ const STEP_KEYS: LifetimePensionStepId[] = [
 export function LifetimePensionFlow() {
   const router = useRouter();
 
-  const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
+  const gate = useIdvGate();
 
-  const [idvState, setIdvState] = useState<IDVState>(initialIDVState);
-  const [idvLoading, setIdvLoading] = useState(false);
-  const [idvError, setIdvError] = useState('');
+  const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
 
   const [state, setState] = useState<LifetimePensionState>(INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
@@ -191,29 +189,15 @@ export function LifetimePensionFlow() {
     isReadyToAutoSaveRef.current = true;
   }
 
-  // Success screen — IDV is handled inside StepSuccess as a modal
+  // Success screen — IDV is handled inside StepSuccess as a modal.
+  // Always start unverified: this is a fresh submission so IDV must be completed
+  // regardless of any existing cache from a previous session.
   if (submitted) {
     return (
       <ContentContainer size="md">
         <StepSuccess
           onReturnDashboard={() => router.push('/member-online')}
-          idvState={idvState}
-          onIdvChange={setIdvState}
-          idvLoading={idvLoading}
-          idvError={idvError}
-          onIdvSubmit={async () => {
-            setIdvLoading(true);
-            setIdvError('');
-            const result = await submitIDV(idvState.selectedDocument, idvState);
-            setIdvLoading(false);
-            if (result.success) {
-              setIDVCache();
-            } else {
-              setIdvError(result.error ?? 'Verification failed. Please check your details and try again.');
-            }
-            return result.success;
-          }}
-          idvAlreadyVerified={false}
+          gate={{ ...gate, alreadyVerified: false }}
         />
       </ContentContainer>
     );
