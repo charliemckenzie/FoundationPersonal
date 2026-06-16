@@ -19,6 +19,7 @@ export interface MoneyFieldProps {
   fullWidth?: boolean;
   selectAdornment?: SelectAdornmentConfig;
   onChange?: (value: number | null) => void;
+  max?: number;
   id?: string;
   name?: string;
 }
@@ -72,6 +73,7 @@ export function MoneyField({
   fullWidth,
   selectAdornment,
   onChange,
+  max,
   id,
   name,
 }: MoneyFieldProps) {
@@ -115,9 +117,12 @@ export function MoneyField({
       onChange?.(null);
       return;
     }
-    const normalized = formatMoney(stripped, true);
+    let num = parseFloat(stripped);
+    if (!isNaN(num) && max !== undefined && num > max) {
+      num = max;
+    }
+    const normalized = formatMoney(isNaN(num) ? stripped : String(num), true);
     setDisplayValue(normalized);
-    const num = parseFloat(stripped);
     onChange?.(isNaN(num) ? null : num);
   };
 

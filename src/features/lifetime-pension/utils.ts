@@ -56,9 +56,7 @@ export function formatCurrency(value: number): string {
 }
 
 export function totalSelectedAmount(state: LifetimePensionState): number {
-  return state.accounts.reduce((sum, account) => {
-    return account.selected ? sum + account.transferAmount : sum;
-  }, 0);
+  return state.accounts.reduce((sum, account) => sum + (account.transferAmount ?? 0), 0);
 }
 
 export function hasSelectedAccount(state: LifetimePensionState): boolean {
@@ -106,23 +104,18 @@ export function optionStepValid(state: LifetimePensionState): boolean {
 }
 
 export function fundingStepValid(state: LifetimePensionState): boolean {
-  if (!hasSelectedAccount(state)) {
+  if (state.purchaseAmount < MIN_PURCHASE_AMOUNT) {
     return false;
   }
 
-  const selected = state.accounts.filter((account) => account.selected);
-  const allSelectedPositive = selected.every((account) => account.transferAmount > 0);
+  const withAmount = state.accounts.filter((a) => a.transferAmount > 0);
 
-  if (!allSelectedPositive) {
+  const exceedsBalance = withAmount.some((a) => a.transferAmount > a.balance);
+  if (exceedsBalance) {
     return false;
   }
 
-  const belowBalance = selected.some((account) => account.transferAmount > account.balance);
-  if (belowBalance) {
-    return false;
-  }
-
-  return totalSelectedAmount(state) >= MIN_PURCHASE_AMOUNT;
+  return totalSelectedAmount(state) === state.purchaseAmount;
 }
 
 function bankDetailsValid(details: BankDetails): boolean {
