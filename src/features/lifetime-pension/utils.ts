@@ -1,5 +1,5 @@
-import { MIN_PURCHASE_AMOUNT } from './constants';
-import type { BankDetails, LifetimePensionState, SpouseDetails } from './types';
+import { FORTNIGHTS_PER_YEAR, LIFETIME_PENSION_RATES, MIN_PURCHASE_AMOUNT } from './constants';
+import type { BankDetails, LifetimePensionState, PensionOption, SpouseDetails } from './types';
 
 // ─── BSB utilities ───────────────────────────────────────────────────────────
 
@@ -55,6 +55,33 @@ export function formatCurrency(value: number): string {
   });
 }
 
+// ─── Lifetime Pension payment estimate ────────────────────────────────────────
+
+const RATE_PER = 100000;
+
+export interface PensionEstimate {
+  annual: number;
+  fortnightly: number;
+}
+
+/**
+ * Estimate Lifetime Pension payments for a given purchase price. Uses the
+ * published starting rate per $100,000 by age and option (QSuper PDS p.38);
+ * the spouse protection option pays at the younger person's rate. Returns null
+ * when no rate applies (age outside 60–80, or a non-positive purchase price).
+ */
+export function estimatePension(
+  purchasePrice: number,
+  age: number,
+  option: PensionOption
+): PensionEstimate | null {
+  const rate = LIFETIME_PENSION_RATES[age];
+  if (!rate || purchasePrice <= 0) return null;
+  const rateValue = option === 'spouse' ? rate.spouse : rate.single;
+  const annual = (purchasePrice / RATE_PER) * rateValue;
+  return { annual, fortnightly: annual / FORTNIGHTS_PER_YEAR };
+}
+
 export function totalSelectedAmount(state: LifetimePensionState): number {
   return state.accounts.reduce((sum, account) => sum + (account.transferAmount ?? 0), 0);
 }
@@ -104,10 +131,10 @@ export function optionStepValid(state: LifetimePensionState): boolean {
 }
 
 export function fundingStepValid(state: LifetimePensionState): boolean {
-  if (state.purchaseAmount < MIN_PURCHASE_AMOUNT) {
-    return false;
-  }
+  return state.purchaseAmount >= MIN_PURCHASE_AMOUNT;
+}
 
+export function allocateStepValid(state: LifetimePensionState): boolean {
   const withAmount = state.accounts.filter((a) => a.transferAmount > 0);
 
   const exceedsBalance = withAmount.some((a) => a.transferAmount > a.balance);

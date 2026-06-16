@@ -1,16 +1,15 @@
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
+import { Accordion } from '../../../components/Accordion';
 import { Alert } from '../../../components/Alert';
-import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
-import { TextButton } from '../../../components/TextButton';
-import { MIN_PURCHASE_AMOUNT } from '../constants';
-import type { FundingAccount } from '../types';
-import { formatCurrency } from '../utils';
+import { MIN_PURCHASE_AMOUNT, PENSION_ESTIMATE_AGE } from '../constants';
+import type { FundingAccount, PensionOption } from '../types';
+import { estimatePension, formatCurrency } from '../utils';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -19,93 +18,9 @@ import { formatCurrency } from '../utils';
 interface StepFundingProps {
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  pensionOption: PensionOption;
   accounts: FundingAccount[];
-  totalAllocated: number;
-  onTransferAmountChange: (id: string, amount: number) => void;
   showValidation: boolean;
-}
-
-// ---------------------------------------------------------------------------
-// Sticky allocation total bar
-// ---------------------------------------------------------------------------
-
-function AllocationBar({
-  allocated,
-  target,
-  attempted,
-  barRef,
-  isFloating,
-}: {
-  allocated: number;
-  target: number;
-  attempted: boolean;
-  barRef: React.RefObject<HTMLDivElement | null>;
-  isFloating: boolean;
-}) {
-  const remaining = target - allocated;
-  const over = allocated > target;
-  const exact = target > 0 && allocated === target;
-  const isError = over || (remaining > 0 && attempted);
-
-  const bgColor = exact ? 'success.background' : isError ? 'error.background' : 'background.highContrast';
-  const borderColor = exact ? 'success.main' : isError ? 'error.main' : 'border.subtle';
-  const textColor = exact ? 'success.text' : isError ? 'error.text' : 'text.inverse';
-
-  const hint = over
-    ? `Over by ${formatCurrency(allocated - target)} — reduce your allocations`
-    : remaining > 0 && attempted
-    ? `Allocate ${formatCurrency(remaining)} more to continue`
-    : null;
-
-  return (
-    <Box
-      ref={barRef}
-      sx={{
-        position: 'sticky',
-        bottom: '1rem',
-        zIndex: 1,
-        borderRadius: (t) => `${t.shape.sm}px`,
-        boxShadow: isFloating ? 16 : 0,
-        transition: 'box-shadow 300ms ease',
-      }}
-    >
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'wrap',
-          gap: 1,
-          px: 3,
-          py: 2,
-          borderRadius: (t) => `${t.shape.sm}px`,
-          bgcolor: bgColor,
-          border: '1px solid',
-          borderColor,
-          transition: 'background-color 200ms ease, border-color 200ms ease',
-        }}
-      >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {exact && <Icon icon="circle-check" color="success" size="lg" />}
-          {isError && <Icon icon="circle-exclamation" color="error" size="lg" />}
-          <Typography variant="body" sx={{ color: textColor }}>Total allocated</Typography>
-        </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 0.25 }}>
-          <Typography variant="body" sx={{ color: textColor, fontWeight: 700 }}>
-            {formatCurrency(allocated)}
-            {target > 0 && (
-              <Box component="span" sx={{ fontWeight: 400, opacity: 0.7 }}>
-                {' '}/ {formatCurrency(target)}
-              </Box>
-            )}
-          </Typography>
-          {hint && (
-            <Typography variant="small" sx={{ color: textColor, opacity: 0.85 }}>{hint}</Typography>
-          )}
-        </Box>
-      </Box>
-    </Box>
-  );
 }
 
 // ---------------------------------------------------------------------------
@@ -118,22 +33,35 @@ interface TransferPanelProps {
   totalAvailable: number;
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  pensionOption: PensionOption;
   showValidation: boolean;
 }
 
-function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, showValidation }: TransferPanelProps) {
+function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation }: TransferPanelProps) {
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
+  const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
 
-  // Keep liveAmount in sync if purchaseAmount is reset externally
-  if (purchaseAmount !== liveAmount && purchaseAmount === 0) {
-    setLiveAmount(0);
+  // Sync liveAmount only when purchaseAmount actually changes externally — a
+  // committed value on blur, a draft resume, or a reset. Never during typing,
+  // when purchaseAmount still lags at its old value behind the live keystrokes.
+  if (purchaseAmount !== prevPurchase) {
+    setPrevPurchase(purchaseAmount);
+    setLiveAmount(purchaseAmount);
   }
 
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
+  const estimate = estimatePension(displayAmount, PENSION_ESTIMATE_AGE, pensionOption);
   const remaining = totalAvailable - displayAmount;
-  const remainingColor =
-    remaining < 0 ? 'error.main' : remaining < MIN_PURCHASE_AMOUNT ? 'warning.main' : 'success.text';
+  const overFunds = hasValue && remaining < 0;
+  const lowBalance = hasValue && remaining >= 0 && remaining < MIN_PURCHASE_AMOUNT;
+  // Default colour when healthy; only shift to warning/error states.
+  const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
+  const optionLabel = pensionOption === 'spouse' ? 'spouse protection' : 'single';
+  const annualEstimate = estimate?.annual ?? 0;
+  const fortnightlyEstimate = estimate?.fortnightly ?? 0;
+  // Muted while the purchase price is $0; default heading colour once a value is entered.
+  const estimateColor = estimate ? undefined : 'text.muted';
 
   const fieldError = showValidation && (purchaseAmount === 0 || purchaseAmount < MIN_PURCHASE_AMOUNT);
   const helperText = fieldError
@@ -145,29 +73,34 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   return (
     <Box
       sx={{
-        p: 4,
         borderRadius: (t: Theme) => `${t.shape.lg}px`,
         border: '1px solid',
         borderColor: 'border.default',
         bgcolor: 'background.paper',
+        overflow: 'hidden',
       }}
     >
-      {/* Available funds — updates live as purchase price is entered */}
-      <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
-        Available funds As at {TODAY}
-      </Typography>
-      <Typography
-        variant="h4"
-        sx={{ color: hasValue ? remainingColor : 'text.primary', mb: 2.5, transition: 'color 200ms ease' }}
-      >
-        {formatCurrency(Math.max(0, hasValue ? remaining : totalAvailable))
-        }
-      </Typography>
+      {/* Grey header — available funds, updates live as purchase price is entered */}
+      <Box sx={{ px: 4, pt: 4, pb: 4, bgcolor: 'background.default' }}>
+        <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
+          Available funds as at {TODAY}
+        </Typography>
+        <Typography
+          variant="h4"
+          sx={{ ...(remainingColor && { color: remainingColor }), transition: 'color 200ms ease' }}
+        >
+          {formatCurrency(Math.max(0, hasValue ? remaining : totalAvailable))}
+        </Typography>
+      </Box>
 
-      {/* Divider with arrow on the left */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2.5 }}>
+      {/* White body — purchase price + estimate, with the arrow straddling the seam */}
+      <Box sx={{ position: 'relative', px: 4, pt: 4, pb: 4, borderTop: '1px solid', borderColor: 'border.subtle' }}>
         <Box
           sx={{
+            position: 'absolute',
+            top: 0,
+            left: (t) => t.spacing(4),
+            transform: 'translateY(-50%)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -176,27 +109,48 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
             borderRadius: '50%',
             border: '1px solid',
             borderColor: 'border.subtle',
-            flexShrink: 0,
+            bgcolor: 'background.paper',
           }}
         >
           <Icon icon="arrow-down" size="lg" color="primary" />
         </Box>
-        <Box sx={{ flex: 1, height: '1px', bgcolor: 'border.subtle' }} />
+
+        {/* Purchase price */}
+        <MoneyField
+          label="Lifetime Pension purchase price"
+          value={purchaseAmount || null}
+          fullWidth
+          error={fieldError}
+          helperText={helperText}
+          onInputChange={(v) => setLiveAmount(v ?? 0)}
+          onChange={(v) => onPurchaseAmountChange(v ?? 0)}
+        />
+
+      {/* Estimated payments — always visible, updates live as the purchase price is entered */}
+      <Box sx={{ mt: 2.5 }}>
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
+          <Box>
+            <Typography variant="h5" component="p" sx={{ ...(estimateColor && { color: estimateColor }), transition: 'color 200ms ease' }}>
+              {formatCurrency(annualEstimate)}
+            </Typography>
+            <Typography variant="small" sx={{ display: 'block' }}>Year 1 income</Typography>
+          </Box>
+          <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
+          <Box>
+            <Typography variant="h5" component="p" sx={{ ...(estimateColor && { color: estimateColor }), transition: 'color 200ms ease' }}>
+              {formatCurrency(fortnightlyEstimate)}
+            </Typography>
+            <Typography variant="small" sx={{ display: 'block' }}>Fortnightly payments</Typography>
+          </Box>
+        </Box>
+        <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
+          Income estimates for year 1 based on {optionLabel} option and a starting age of {PENSION_ESTIMATE_AGE},
+          payments are adjusted each 1 July each year.
+        </Typography>
       </Box>
 
-      {/* Purchase price */}
-      <MoneyField
-        label="Lifetime Pension purchase price"
-        value={purchaseAmount || null}
-        fullWidth
-        error={fieldError}
-        helperText={helperText}
-        onInputChange={(v) => setLiveAmount(v ?? 0)}
-        onChange={(v) => onPurchaseAmountChange(v ?? 0)}
-      />
-
       {/* Minimum balance warning — shown inline when remaining drops below threshold */}
-      {hasValue && remaining >= 0 && remaining < MIN_PURCHASE_AMOUNT && (
+      {lowBalance && (
         <Box sx={{ mt: 2, p: 2, borderRadius: (t: Theme) => `${t.shape.sm}px`, bgcolor: 'warning.background', border: '1px solid', borderColor: 'warning.main' }}>
           <Typography variant="small" sx={{ color: 'warning.text', fontWeight: 600, display: 'block', mb: 0.5 }}>
             Minimum balance warning
@@ -208,16 +162,58 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           </Typography>
         </Box>
       )}
-      {hasValue && remaining < 0 && (
+      {overFunds && (
         <Box sx={{ mt: 2, p: 2, borderRadius: (t: Theme) => `${t.shape.sm}px`, bgcolor: 'error.background', border: '1px solid', borderColor: 'error.main' }}>
           <Typography variant="small" sx={{ color: 'error.text' }}>
             Purchase price exceeds your available funds by {formatCurrency(Math.abs(remaining))}.
           </Typography>
         </Box>
       )}
+      </Box>
     </Box>
   );
 }
+
+// ---------------------------------------------------------------------------
+// Considerations
+// ---------------------------------------------------------------------------
+
+const ALLOCATION_CONSIDERATIONS = [
+  {
+    id: 'age-pension',
+    title: 'How it could affect the Age Pension',
+    content: (
+      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+        Only 60% of your purchase price counts under the Age Pension assets test until you reach life
+        expectancy, then 30% after that. Only 60% of your payments count under the income test. Because of
+        this, buying a Lifetime Pension may make you eligible for the Age Pension, or increase the amount you
+        receive.
+      </Typography>
+    ),
+  },
+  {
+    id: 'access',
+    title: 'Access to your money',
+    content: (
+      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+        A Lifetime Pension is a permanent purchase once the 6-month cooling-off period ends. You can&apos;t
+        make lump-sum withdrawals or take extra money out. The funds you use are committed for life. Consider
+        keeping enough in a flexible account, such as a Retirement Income account, for one-off expenses.
+      </Typography>
+    ),
+  },
+  {
+    id: 'investment-risk',
+    title: 'Investment risk',
+    content: (
+      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
+        Your money is pooled with other members and invested in the Balanced Risk-Adjusted option, and you
+        can&apos;t choose how it&apos;s invested. Payments are reviewed on 1 July each year and may go up or
+        down depending on the performance of the pool.
+      </Typography>
+    ),
+  },
+];
 
 // ---------------------------------------------------------------------------
 // Main component
@@ -226,54 +222,23 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 export function StepFunding({
   purchaseAmount,
   onPurchaseAmountChange,
+  pensionOption,
   accounts,
-  totalAllocated,
-  onTransferAmountChange,
   showValidation,
 }: StepFundingProps) {
-  const [estimatorOpen, setEstimatorOpen] = useState(false);
-  const barRef = useRef<HTMLDivElement | null>(null);
-  const [isFloating, setIsFloating] = useState(false);
-
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
-  const over = totalAllocated > purchaseAmount;
-  const shortfall = purchaseAmount - totalAllocated;
-  const accountsEnabled = purchaseAmount > 0;
-
-  useEffect(() => {
-    const el = barRef.current;
-    if (!el) return;
-    const STUCK_OFFSET = 16;
-    const update = () => {
-      setIsFloating(el.getBoundingClientRect().bottom >= window.innerHeight - STUCK_OFFSET - 0.5);
-    };
-    window.addEventListener('scroll', update, { passive: true });
-    window.addEventListener('resize', update);
-    let rafId = 0;
-    const start = performance.now();
-    const settle = () => { update(); if (performance.now() - start < 600) rafId = requestAnimationFrame(settle); };
-    settle();
-    return () => { window.removeEventListener('scroll', update); window.removeEventListener('resize', update); cancelAnimationFrame(rafId); };
-  }, []);
 
   return (
     <>
       <Stack spacing={4}>
-        {/* ── Section 1: Purchase price ── */}
+        {/* ── Purchase price ── */}
         <Stack spacing={1}>
           <Typography variant="h5">Purchase price</Typography>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>
-            Specify the purchase price for your new Lifetime Pension. Use our Lifetime Pension Income
-            Estimator to estimate your payment amounts.
+          <Typography variant="body" sx={{ color: 'text.primary', lineHeight: 1.75 }}>
+            The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
+            transferring money into an account you can draw on, this amount is pooled with other members to
+            fund your payments for life. A higher purchase price means higher payments.
           </Typography>
-          <Box>
-            <TextButton
-              label="Lifetime Pension Income Estimator"
-              startIcon="calculator"
-              iconDirection="left"
-              onClick={() => setEstimatorOpen(true)}
-            />
-          </Box>
         </Stack>
 
         {/* ── Transfer panel ── */}
@@ -281,6 +246,7 @@ export function StepFunding({
           totalAvailable={totalAvailable}
           purchaseAmount={purchaseAmount}
           onPurchaseAmountChange={onPurchaseAmountChange}
+          pensionOption={pensionOption}
           showValidation={showValidation}
         />
 
@@ -293,112 +259,18 @@ export function StepFunding({
           />
         )}
 
-        {/* ── Section 2: Account allocation ── */}
-        <Stack spacing={3}>
+        {/* ── Considerations ── */}
+        <Stack spacing={2}>
           <div>
-            <Typography variant="h5" sx={{ mb: 0.5 }}>Allocate from your accounts</Typography>
+            <Typography variant="h5" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
             <Typography variant="body" sx={{ color: 'text.primary' }}>
-              {accountsEnabled
-                ? `Select accounts to transfer from and enter the amount from each. Your total must equal ${formatCurrency(purchaseAmount)}.`
-                : 'Enter a purchase price above to allocate from your accounts.'}
+              A Lifetime Pension is a long-term commitment, so it&apos;s worth weighing up these points before
+              you decide how much to use.
             </Typography>
           </div>
-
-          <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
-            <Box component="li">
-              <Typography
-                variant="h6"
-                sx={{ display: 'block', pt: 1.5, pb: 1.5, borderBottom: '1px solid', borderColor: 'border.input' }}
-              >
-                Your accounts
-              </Typography>
-              <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none' }}>
-                {accounts.map((account) => (
-                  <Box
-                    component="li"
-                    key={account.id}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 3,
-                      py: 1.5,
-                      borderBottom: '1px solid',
-                      borderColor: 'border.subtle',
-                    }}
-                  >
-                    <Box sx={{ flex: 1, minWidth: 0 }}>
-                      <Typography variant="body" sx={{ fontWeight: 500, color: 'text.primary', display: 'block' }}>
-                        {account.label}
-                      </Typography>
-                      <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.25 }}>
-                        Available: {formatCurrency(account.balance)}
-                      </Typography>
-                    </Box>
-                    <Box sx={{ width: '12rem', flexShrink: 0 }}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography
-                          component="label"
-                          variant="small"
-                          sx={{ color: 'text.muted', whiteSpace: 'nowrap' }}
-                        >
-                          Amount:
-                        </Typography>
-                        <MoneyField
-                          value={account.transferAmount > 0 ? account.transferAmount : null}
-                          size="medium"
-                          max={account.balance}
-                          disabled={!accountsEnabled}
-                          onChange={(v) => { onTransferAmountChange(account.id, v ?? 0); }}
-                        />
-                      </Box>
-                      {account.transferAmount > account.balance && (
-                        <Typography variant="small" sx={{ color: 'error.main', mt: 0.5, display: 'block' }}>
-                          Exceeds available balance
-                        </Typography>
-                      )}
-                    </Box>
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Stack>
-
-          {showValidation && over && (
-            <Alert severity="error" message={`Your allocations exceed the purchase amount by ${formatCurrency(totalAllocated - purchaseAmount)}.`} />
-          )}
-          {showValidation && !over && shortfall > 0 && purchaseAmount > 0 && (
-            <Alert severity="error" message={`Allocate ${formatCurrency(shortfall)} more to reach your purchase amount.`} />
-          )}
-
-          {purchaseAmount > 0 && (
-            <AllocationBar
-              allocated={totalAllocated}
-              target={purchaseAmount}
-              attempted={showValidation}
-              barRef={barRef}
-              isFloating={isFloating}
-            />
-          )}
+          <Accordion items={ALLOCATION_CONSIDERATIONS} />
         </Stack>
       </Stack>
-
-      {/* ── Estimator dialog ── */}
-      <Dialog
-        open={estimatorOpen}
-        onClose={() => setEstimatorOpen(false)}
-        title="Lifetime Pension Income Estimator"
-        hideCancel
-        confirmLabel="Close"
-        onConfirm={() => setEstimatorOpen(false)}
-        variant="info"
-        size="medium"
-      >
-        <Typography variant="body">
-          Use the Lifetime Pension Income Estimator to explore how different purchase prices and options
-          affect your fortnightly payment amounts. This tool provides an estimate only — actual payments
-          may vary.
-        </Typography>
-      </Dialog>
     </>
   );
 }

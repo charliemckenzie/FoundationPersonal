@@ -14,6 +14,7 @@ import { StepperActions } from '../../components/StepperActions';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
+import { StepAllocate } from './steps/StepAllocate';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV } from './steps/StepIDV';
@@ -24,6 +25,7 @@ import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
 import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
+  allocateStepValid,
   eligibilityStepValid,
   fundingStepValid,
   hasSelectedAccount,
@@ -40,6 +42,7 @@ const STEP_KEYS: LifetimePensionStepId[] = [
   'eligibility',
   'option',
   'funding',
+  'allocate',
   'payments',
   'review',
 ];
@@ -85,6 +88,9 @@ export function LifetimePensionFlow() {
       return fundingStepValid(state);
     }
     if (step === 4) {
+      return allocateStepValid(state);
+    }
+    if (step === 5) {
       return paymentsStepValid(state);
     }
     return reviewStepValid(state);
@@ -107,7 +113,7 @@ export function LifetimePensionFlow() {
       return;
     }
 
-    if (activeStep === 3 && hasFullBalanceTransfer) {
+    if (activeStep === 4 && hasFullBalanceTransfer) {
       setShowInsuranceModal(true);
       return;
     }
@@ -284,6 +290,13 @@ export function LifetimePensionFlow() {
               <StepFunding
                 purchaseAmount={state.purchaseAmount}
                 onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
+                pensionOption={state.pensionOption}
+                accounts={state.accounts}
+                showValidation={showValidation}
+              />
+            ) : activeStep === 4 ? (
+              <StepAllocate
+                purchaseAmount={state.purchaseAmount}
                 accounts={state.accounts}
                 totalAllocated={purchaseTotal}
                 onTransferAmountChange={(id, amount) => {
@@ -296,7 +309,7 @@ export function LifetimePensionFlow() {
                 }}
                 showValidation={showValidation}
               />
-            ) : activeStep === 4 ? (
+            ) : activeStep === 5 ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
                 bankDetails={state.bankDetails}

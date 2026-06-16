@@ -47,6 +47,7 @@ export type LifetimePensionStepId =
   | 'eligibility'
   | 'option'
   | 'funding'
+  | 'allocate'
   | 'payments'
   | 'review';
 

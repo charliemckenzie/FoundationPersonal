@@ -281,11 +281,15 @@ export function StepReview({
         )}
       </ReviewSection>
 
-      {/* Purchase price and funding */}
-      <ReviewSection title="Purchase price and funding" onEdit={() => onEditStep('funding')}>
+      {/* Purchase price */}
+      <ReviewSection title="Purchase price" onEdit={() => onEditStep('funding')}>
         <ReviewRow label="Purchase price">
           <ReviewValue>{formatCurrency(purchasePrice)}</ReviewValue>
         </ReviewRow>
+      </ReviewSection>
+
+      {/* Funding */}
+      <ReviewSection title="Funding" onEdit={() => onEditStep('allocate')}>
         <ReviewRow label="Funding preferences">
           <Stack spacing={1.5}>
             {selectedAccounts.length > 0 ? selectedAccounts.map((account) => (
