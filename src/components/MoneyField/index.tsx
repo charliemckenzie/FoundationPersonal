@@ -19,6 +19,8 @@ export interface MoneyFieldProps {
   fullWidth?: boolean;
   selectAdornment?: SelectAdornmentConfig;
   onChange?: (value: number | null) => void;
+  /** Fires on every keystroke with the current parsed value. Use for live UI updates; `onChange` still fires the committed value on blur. */
+  onInputChange?: (value: number | null) => void;
   max?: number;
   id?: string;
   name?: string;
@@ -73,6 +75,7 @@ export function MoneyField({
   fullWidth,
   selectAdornment,
   onChange,
+  onInputChange,
   max,
   id,
   name,
@@ -102,6 +105,10 @@ export function MoneyField({
     const formatted = formatMoney(sanitized);
     const cursor = nextCursor(rawInput, formatted, cursorPos);
     setDisplayValue(formatted);
+    if (onInputChange) {
+      const num = parseFloat(sanitized);
+      onInputChange(sanitized === '' ? null : isNaN(num) ? null : num);
+    }
     requestAnimationFrame(() => {
       inputEl.setSelectionRange(cursor, cursor);
     });
