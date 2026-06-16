@@ -44,9 +44,9 @@ export function TextButton({
 }: TextButtonProps) {
   // Map TextButton size to Icon size
   const iconSizeMap: Record<TextButtonSize, IconSize> = {
-    small: 'sm',
-    medium: 'md',
-    large: 'lg',
+    small: 'md',
+    medium: 'lg',
+    large: 'xl',
   };
   const iconSize = iconSizeMap[size];
   

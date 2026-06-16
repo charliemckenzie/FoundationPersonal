@@ -56,6 +56,7 @@ If this document is out of date, flag it to Moe immediately.
 | `HeroIcon` | Large branded illustration icon with background options |
 | `Icon` | Font Awesome SVG icon — all styles and sizes |
 | `IconButton` | Icon-only button with optional tooltip |
+| `InfoButton` | Inline info/help icon that opens a tooltip or dialog — sits alongside label text |
 | `IconList` | Icon-prefixed list (custom icons or numbered) |
 | `InvestmentOverview` | Account investment panel — header (account name + total balance) over a card per investment dial (current investments + future contributions / payments), each with an edit button and mix; footer with Change all and View history |
 | `LinearProgress` | Horizontal progress bar for loading or completion state |
@@ -295,6 +296,19 @@ Key props: `icon`, `label` (accessible name), `variant`, `size`, `color`, `loadi
 **TextButton** — `src/components/TextButton/`  
 Text-link style action. Use for secondary or inline actions.  
 Key props: `label`, `size`, `color`, `startIcon`, `endIcon`, `loading`
+
+**InfoButton** — `src/components/InfoButton/`  
+Inline icon button that triggers either a `Tooltip` or a `Dialog`. Designed to sit alongside label text — `display: inline-flex; vertical-align: middle` keeps it flush with the text baseline. Two mutually exclusive modes: pass `tooltip` (string or ReactNode) for a hover tooltip; pass `dialogTitle` + `dialogContent` (ReactNode) for a click-to-open dialog. Use dialog mode on mobile and for any content longer than a sentence.  
+**Size rule:** match `size` to the line height of the surrounding text. `sm` is the minimum.
+
+| Typography | Line height | `size` |
+|---|---|---|
+| `caption`, `small`, `h6`, `h5`, `body` | ≤ 24px | `sm` |
+| `h4` | ~29px | `md` |
+| `lead`, `h3` | ~32–34px | `lg` |
+| `h2`/`h1` (larger) | 38px+ | `xl` |
+
+Key props: `tooltip` OR `dialogTitle` + `dialogContent`, `label` (accessible name), `size`, `icon`, `placement`
 
 **ArtieAIButton** — `src/components/ArtieAIButton/`  
 Branded "Ask Artie" AI-assistant call-to-action. A gradient pill (primary → sky blue) with a `sparkles` icon and label; text stays AA-accessible across every gradient stop in both light and dark mode. This is **not** a Foundation `Button` — it is a standalone, purpose-built button for the AI assistant entry point. Use only for that entry point; for all other actions use `Button`.  
