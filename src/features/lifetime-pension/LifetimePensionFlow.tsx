@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/navigation';
@@ -63,12 +64,6 @@ export function LifetimePensionFlow() {
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
   const eligible = useMemo(() => isEligible(state), [state]);
-
-  const hasInvalidTransferAmounts = useMemo(() => {
-    return state.accounts.some(
-      (account) => account.selected && (account.transferAmount <= 0 || account.transferAmount > account.balance)
-    );
-  }, [state.accounts]);
 
   const hasFullBalanceTransfer = useMemo(() => {
     return state.accounts.some(
@@ -228,10 +223,13 @@ export function LifetimePensionFlow() {
               {STEP_TITLES[activeStep]}
             </Typography>
             {activeStep === 0 && (
-              <Typography variant="body" sx={{ color: 'text.primary' }}>
-                A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
-                It combines your contribution with others in a shared investment pool.
-              </Typography>
+              <>
+                <Typography variant="body" sx={{ color: 'text.primary' }}>
+                  A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
+                  It combines your contribution with others in a shared investment pool.
+                </Typography>
+                <Divider sx={{ mt: 2 }} />
+              </>
             )}
             {activeStep > 0 && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -249,17 +247,13 @@ export function LifetimePensionFlow() {
             )}
           </div>
 
-          <Box sx={{ mt: activeStep === 0 ? '16px !important' : '32px !important' }}>
+          <Box>
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
               <StepIntro
-                ageScenario={state.ageScenario}
                 declarationRead={state.introDeclarationRead}
                 declarationPermanent={state.introDeclarationPermanent}
                 showValidation={showValidation}
-                onAgeScenarioChange={(scenario) =>
-                  updateState({ ...state, ageScenario: scenario })
-                }
                 onDeclarationReadChange={(checked) =>
                   updateState({ ...state, introDeclarationRead: checked })
                 }
@@ -288,29 +282,10 @@ export function LifetimePensionFlow() {
               />
             ) : activeStep === 3 ? (
               <StepFunding
+                purchaseAmount={state.purchaseAmount}
+                onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
                 accounts={state.accounts}
-                totalAmount={purchaseTotal}
-                hasSelectedAccount={hasSelectedAccount(state)}
-                hasEnoughFunds={purchaseTotal >= 10000}
-                hasInvalidTransferAmounts={hasInvalidTransferAmounts}
-                onToggleAccount={(id, checked) => {
-                  updateState({
-                    ...state,
-                    accounts: state.accounts.map((account) =>
-                      account.id === id
-                        ? {
-                            ...account,
-                            selected: checked,
-                            transferAmount: checked && account.transferAmount <= 0
-                              ? Number(account.balance.toFixed(2))
-                              : checked
-                                ? account.transferAmount
-                                : 0,
-                          }
-                        : account
-                    ),
-                  });
-                }}
+                totalAllocated={purchaseTotal}
                 onTransferAmountChange={(id, amount) => {
                   updateState({
                     ...state,

@@ -6,7 +6,7 @@ import { Alert } from '../../../components/Alert';
 import { Checkbox } from '../../../components/Checkbox';
 import { DateOfBirthField } from '../../../components/DateOfBirthField';
 import { Icon } from '../../../components/Icon';
-import { RadioGroup } from '../../../components/RadioGroup';
+import { RadioCardGroup } from '../../../components/RadioGroup/RadioCardGroup';
 import { TextField } from '../../../components/TextField';
 import { Tooltip } from '../../../components/Tooltip';
 import type { PensionOption, SpouseDetails } from '../types';
@@ -24,11 +24,13 @@ const OPTION_CHOICES = [
     value: 'single',
     label: 'Single option',
     description: 'Payments will end upon your death.',
+    icon: 'user',
   },
   {
     value: 'spouse',
     label: 'Spouse protection option',
-    description: 'Upon your death, payments continue to your spouse for the rest of their life.',
+    description: 'Payments continue to your spouse for life.',
+    icon: 'user-group',
   },
 ];
 
@@ -61,12 +63,20 @@ export function StepOption({
           </Typography>
         </div>
 
-      <RadioGroup
-        variant="boxed"
-        value={pensionOption}
-        options={OPTION_CHOICES}
-        onChange={(value) => onPensionOptionChange(value as PensionOption)}
-      />
+      <Box
+        sx={{
+          '& .MuiFormControl-root': { width: '100%' },
+          '& .MuiFormGroup-root': { flexWrap: 'nowrap', width: '100%' },
+          '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
+        }}
+      >
+        <RadioCardGroup
+          options={OPTION_CHOICES}
+          value={pensionOption}
+          onChange={(value) => onPensionOptionChange(value as PensionOption)}
+          direction="row"
+        />
+      </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
         <Typography variant="small" sx={{ color: 'text.muted' }}>

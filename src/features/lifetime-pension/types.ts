@@ -36,6 +36,7 @@ export interface LifetimePensionState {
   leftEmployerAfter60: EligibilityAnswer;
   pensionOption: PensionOption;
   spouseDetails: SpouseDetails;
+  purchaseAmount: number;
   accounts: FundingAccount[];
   bankDetails: BankDetails;
   reviewDeclarationChecked: boolean;

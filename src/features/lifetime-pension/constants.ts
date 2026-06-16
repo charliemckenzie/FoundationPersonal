@@ -60,6 +60,7 @@ export const INITIAL_STATE: LifetimePensionState = {
   leftEmployerAfter60: '',
   pensionOption: '',
   spouseDetails: EMPTY_SPOUSE_DETAILS,
+  purchaseAmount: 0,
   accounts: BASE_ACCOUNTS,
   bankDetails: {
     bsb: '',
