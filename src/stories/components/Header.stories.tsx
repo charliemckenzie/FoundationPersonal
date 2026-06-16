@@ -602,7 +602,7 @@ const sampleCtaSecondary: CtaAction = {
 const sampleUtilityLinks: UtilityLink[] = [
   { label: 'Rewards', href: '/rewards', icon: 'gift' },
   { label: 'Learn', href: '/learn', icon: 'book-open' },
-  { label: 'Contact', href: '/contact', icon: 'phone-sharp' },
+  { label: 'Contact', href: '/contact', icon: 'phone' },
 ]
 
 const qsuperAudienceLinks: AudienceLink[] = [

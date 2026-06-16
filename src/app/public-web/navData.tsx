@@ -561,5 +561,5 @@ export const SECONDARY_CTA: CtaAction = {
 export const UTILITY_LINKS: UtilityLink[] = [
   { label: 'Rewards', href: '/rewards', icon: 'gift' },
   { label: 'Learn', href: '/learn', icon: 'book-open' },
-  { label: 'Contact', href: '/contact', icon: 'phone-sharp' },
+  { label: 'Contact', href: '/contact', icon: 'phone' },
 ];
