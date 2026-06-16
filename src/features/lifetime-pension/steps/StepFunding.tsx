@@ -1,15 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Accordion } from '../../../components/Accordion';
 import { Alert } from '../../../components/Alert';
+import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
-import { MIN_PURCHASE_AMOUNT, PENSION_ESTIMATE_AGE } from '../constants';
+import { MIN_PURCHASE_AMOUNT, MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
-import { estimatePension, formatCurrency } from '../utils';
+import { estimatePension, estimateRetirementBonus, formatCurrency } from '../utils';
 
 // ---------------------------------------------------------------------------
 // Props
@@ -38,23 +40,24 @@ interface TransferPanelProps {
 }
 
 function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation }: TransferPanelProps) {
+  // Live value as the member types — drives the live estimate panel only. Synced
+  // when purchaseAmount changes externally (commit on blur, draft resume, reset).
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
   const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
-
-  // Sync liveAmount only when purchaseAmount actually changes externally — a
-  // committed value on blur, a draft resume, or a reset. Never during typing,
-  // when purchaseAmount still lags at its old value behind the live keystrokes.
   if (purchaseAmount !== prevPurchase) {
     setPrevPurchase(purchaseAmount);
     setLiveAmount(purchaseAmount);
   }
+
+  // Whether the field has been blurred at least once — drives blur-time validation.
+  const [touched, setTouched] = useState(false);
 
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
   const estimate = estimatePension(displayAmount, PENSION_ESTIMATE_AGE, pensionOption);
   const remaining = totalAvailable - displayAmount;
   const overFunds = hasValue && remaining < 0;
-  const lowBalance = hasValue && remaining >= 0 && remaining < MIN_PURCHASE_AMOUNT;
+  const lowBalance = hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
   // Default colour when healthy; only shift to warning/error states.
   const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
   const optionLabel = pensionOption === 'spouse' ? 'spouse protection' : 'single';
@@ -63,9 +66,15 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   // Muted while the purchase price is $0; default heading colour once a value is entered.
   const estimateColor = estimate ? undefined : 'text.muted';
 
-  const fieldError = showValidation && (purchaseAmount === 0 || purchaseAmount < MIN_PURCHASE_AMOUNT);
+  // Validation runs on the committed value, so the error only appears/clears on
+  // blur — never mid-keystroke. The below-minimum error shows once the field has
+  // been blurred (touched); pressing Next (showValidation) additionally flags an
+  // empty field.
+  const isEmpty = purchaseAmount === 0;
+  const belowMin = purchaseAmount > 0 && purchaseAmount < MIN_PURCHASE_AMOUNT;
+  const fieldError = showValidation ? (isEmpty || belowMin) : (touched && belowMin);
   const helperText = fieldError
-    ? purchaseAmount === 0
+    ? isEmpty
       ? 'Enter a purchase price to continue.'
       : `Minimum purchase price is ${formatCurrency(MIN_PURCHASE_AMOUNT)}.`
     : `Minimum ${formatCurrency(MIN_PURCHASE_AMOUNT)}`;
@@ -81,7 +90,7 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
       }}
     >
       {/* Grey header — available funds, updates live as purchase price is entered */}
-      <Box sx={{ px: 4, pt: 4, pb: 4, bgcolor: 'background.default' }}>
+      <Box sx={{ px: { xs: 3, sm: 4 }, pt: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 }, bgcolor: 'background.default' }}>
         <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
           Available funds as at {TODAY}
         </Typography>
@@ -94,12 +103,12 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
       </Box>
 
       {/* White body — purchase price + estimate, with the arrow straddling the seam */}
-      <Box sx={{ position: 'relative', px: 4, pt: 4, pb: 4, borderTop: '1px solid', borderColor: 'border.subtle' }}>
+      <Box sx={{ position: 'relative', px: { xs: 3, sm: 4 }, pt: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 }, borderTop: '1px solid', borderColor: 'border.subtle' }}>
         <Box
           sx={{
             position: 'absolute',
             top: 0,
-            left: (t) => t.spacing(4),
+            left: { xs: (t: Theme) => t.spacing(3), sm: (t: Theme) => t.spacing(4) },
             transform: 'translateY(-50%)',
             display: 'flex',
             alignItems: 'center',
@@ -123,7 +132,10 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           error={fieldError}
           helperText={helperText}
           onInputChange={(v) => setLiveAmount(v ?? 0)}
-          onChange={(v) => onPurchaseAmountChange(v ?? 0)}
+          onChange={(v) => {
+            onPurchaseAmountChange(v ?? 0);
+            setTouched(true);
+          }}
         />
 
       {/* Estimated payments — always visible, updates live as the purchase price is entered */}
@@ -144,29 +156,27 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           </Box>
         </Box>
         <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-          Income estimates for year 1 based on {optionLabel} option and a starting age of {PENSION_ESTIMATE_AGE},
-          payments are adjusted each 1 July each year.
+          Estimated year 1 income based on the {optionLabel} option, starting at age {PENSION_ESTIMATE_AGE}.
+          Payments are reviewed and adjusted each 1 July.
         </Typography>
       </Box>
 
       {/* Minimum balance warning — shown inline when remaining drops below threshold */}
       {lowBalance && (
-        <Box sx={{ mt: 2, p: 2, borderRadius: (t: Theme) => `${t.shape.sm}px`, bgcolor: 'warning.background', border: '1px solid', borderColor: 'warning.main' }}>
-          <Typography variant="small" sx={{ color: 'warning.text', fontWeight: 600, display: 'block', mb: 0.5 }}>
-            Minimum balance warning
-          </Typography>
-          <Typography variant="small" sx={{ color: 'warning.text' }}>
-            Your remaining balance will be below $10,000. You need to leave at least $10,000 in your
-            Accumulation account to keep it open. If all accounts are closed, any insurance you hold
-            will be cancelled.
-          </Typography>
+        <Box sx={{ mt: 3 }}>
+          <Alert
+            severity="warning"
+            title="Minimum balance warning"
+            message={`Please be aware that leaving less than ${formatCurrency(MIN_REMAINING_BALANCE)} in your Accumulation account will close it. If all your accounts close, any insurance you hold will also be cancelled.`}
+          />
         </Box>
       )}
       {overFunds && (
-        <Box sx={{ mt: 2, p: 2, borderRadius: (t: Theme) => `${t.shape.sm}px`, bgcolor: 'error.background', border: '1px solid', borderColor: 'error.main' }}>
-          <Typography variant="small" sx={{ color: 'error.text' }}>
-            Purchase price exceeds your available funds by {formatCurrency(Math.abs(remaining))}.
-          </Typography>
+        <Box sx={{ mt: 3 }}>
+          <Alert
+            severity="error"
+            message={`Purchase price exceeds your available funds by ${formatCurrency(Math.abs(remaining))}.`}
+          />
         </Box>
       )}
       </Box>
@@ -181,39 +191,146 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 const ALLOCATION_CONSIDERATIONS = [
   {
     id: 'age-pension',
-    title: 'How it could affect the Age Pension',
+    title: 'It could boost your Age Pension',
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        Only 60% of your purchase price counts under the Age Pension assets test until you reach life
-        expectancy, then 30% after that. Only 60% of your payments count under the income test. Because of
-        this, buying a Lifetime Pension may make you eligible for the Age Pension, or increase the amount you
-        receive.
+        A Lifetime Pension is one of the few retirement products that receives favourable treatment under
+        government means tests. Only 60% of your purchase price counts under the Age Pension assets test,
+        dropping to just 30% once you reach life expectancy. Only 60% of your payments count under the income
+        test. For many people, this means becoming eligible for the Age Pension for the first time, or
+        receiving a higher payment than they&apos;d otherwise qualify for.
       </Typography>
     ),
   },
   {
     id: 'access',
-    title: 'Access to your money',
+    title: "It's designed to be a lifelong commitment",
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        A Lifetime Pension is a permanent purchase once the 6-month cooling-off period ends. You can&apos;t
-        make lump-sum withdrawals or take extra money out. The funds you use are committed for life. Consider
-        keeping enough in a flexible account, such as a Retirement Income account, for one-off expenses.
+        You have a 6-month cooling-off period after purchase, so there&apos;s no need to rush this decision.
+        After that, a Lifetime Pension is permanent. You won&apos;t be able to make lump-sum withdrawals, and
+        that&apos;s intentional: the certainty of income for life comes from committing the funds for the long
+        term. Many members pair their Lifetime Pension with a Retirement Income account to keep some money
+        accessible for one-off expenses.
       </Typography>
     ),
   },
   {
     id: 'investment-risk',
-    title: 'Investment risk',
+    title: 'Your money is managed by experts',
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        Your money is pooled with other members and invested in the Balanced Risk-Adjusted option, and you
-        can&apos;t choose how it&apos;s invested. Payments are reviewed on 1 July each year and may go up or
-        down depending on the performance of the pool.
+        Your funds are pooled with other Lifetime Pension members and invested in QSuper&apos;s Balanced
+        Risk-Adjusted option, a diversified, professionally managed portfolio. This shared approach is what
+        makes it possible to guarantee income for life, no matter how long you live. Payments are reviewed
+        each 1 July and adjusted to reflect how the pool performed. Over the long term, they&apos;re designed
+        to grow.
       </Typography>
     ),
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Retirement bonus — celebratory good-news callout (intentionally not an Alert)
+// ---------------------------------------------------------------------------
+
+interface RetirementBonusProps {
+  /** The calculated bonus, or null before the member has calculated it. */
+  amount: number | null;
+  /** True while the (mock) calculation is processing. */
+  loading: boolean;
+  onCalculate: () => void;
+}
+
+function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps) {
+  const reduceMotion = useReducedMotion();
+  // Old copy slides down + fades out; new copy slides up + fades in. Under
+  // reduced-motion we drop the translate and let it cross-fade only.
+  const y = reduceMotion ? 0 : 8;
+  const calculated = amount !== null;
+
+  return (
+    <Box
+      role="status"
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: { xs: 'stretch', sm: 'center' },
+        gap: { xs: 2, sm: 2.5 },
+        p: { xs: 2.5, sm: 3 },
+        borderRadius: (t: Theme) => `${t.shape.lg}px`,
+        border: '1px solid',
+        borderColor: 'success.border',
+        bgcolor: 'success.background',
+      }}
+    >
+      <Box
+        sx={{
+          flexShrink: 0,
+          alignSelf: { xs: 'flex-start', sm: 'auto' },
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          width: '3rem',
+          height: '3rem',
+          borderRadius: '50%',
+          bgcolor: 'success.main',
+          color: 'success.contrastText',
+        }}
+      >
+        <Icon icon="gift" size="xl" color="inherit" />
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <AnimatePresence mode="wait" initial={false}>
+          {calculated ? (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0, y }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+            >
+              <Typography variant="h5" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
+                Your estimated bonus is {formatCurrency(amount)}
+              </Typography>
+              <Typography variant="body" sx={{ color: 'success.text' }}>
+                We&apos;ll add it to your balance when your Lifetime Pension is set up.
+              </Typography>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="prompt"
+              exit={{ opacity: 0, y }}
+              transition={{ duration: 0.18, ease: 'easeIn' }}
+            >
+              <Typography variant="h5" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
+                You&apos;re eligible for a Retirement bonus!
+              </Typography>
+              <Typography variant="body" sx={{ color: 'success.text' }}>
+                Calculate your estimated bonus to see how much you could receive.
+              </Typography>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </Box>
+      <AnimatePresence initial={false}>
+        {!calculated && (
+          <motion.div key="cta" exit={{ opacity: 0 }} transition={{ duration: 0.15 }}>
+            <Button
+              label="Calculate"
+              variant="outlined"
+              color="success"
+              size="small"
+              condensed
+              loading={loading}
+              onClick={onCalculate}
+              sx={{ width: { xs: '100%', sm: 'auto' } }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </Box>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // Main component
@@ -228,20 +345,48 @@ export function StepFunding({
 }: StepFundingProps) {
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
 
-  return (
-    <>
-      <Stack spacing={4}>
-        {/* ── Purchase price ── */}
-        <Stack spacing={1}>
-          <Typography variant="h5">Purchase price</Typography>
-          <Typography variant="body" sx={{ color: 'text.primary', lineHeight: 1.75 }}>
-            The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
-            transferring money into an account you can draw on, this amount is pooled with other members to
-            fund your payments for life. A higher purchase price means higher payments.
-          </Typography>
-        </Stack>
+  // The bonus is calculated on demand — the real calculation is expensive, so we
+  // only run it when the member asks. We cache it against the purchase price it
+  // was computed for, so changing the amount resets to the "Calculate" prompt
+  // rather than showing a stale figure.
+  const [bonus, setBonus] = useState<{ forAmount: number; value: number } | null>(null);
+  const [calculating, setCalculating] = useState(false);
+  const calcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Retirement Bonus eligibility: assume eligible whenever the member is
+  // transferring money into the Lifetime Pension (conditions 2 & 3 of the ART
+  // rules). The >12-month membership condition can't be checked — there's no
+  // such field in the mock data yet. Gated on the committed purchaseAmount so the
+  // tile appears on blur, not mid-keystroke.
+  const eligibleForBonus = purchaseAmount > 0;
+  const bonusValue = bonus?.forAmount === purchaseAmount ? bonus.value : null;
 
-        {/* ── Transfer panel ── */}
+  // Clear any pending mock-calculation timer on unmount.
+  useEffect(() => () => {
+    if (calcTimer.current) clearTimeout(calcTimer.current);
+  }, []);
+
+  function handleCalculateBonus() {
+    setCalculating(true);
+    calcTimer.current = setTimeout(() => {
+      setBonus({ forAmount: purchaseAmount, value: estimateRetirementBonus(purchaseAmount) });
+      setCalculating(false);
+    }, 1200);
+  }
+
+  return (
+    <Stack spacing={4}>
+      {/* ── Purchase price ── */}
+      <Stack spacing={1}>
+        <Typography variant="h5" component="h2">Purchase price</Typography>
+        <Typography variant="body" sx={{ color: 'text.primary' }}>
+          The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
+          transferring money into an account you can draw on, this amount is pooled with other members to
+          fund your payments for life.
+        </Typography>
+      </Stack>
+
+      {/* ── Transfer panel + bonus (kept tight together) ── */}
+      <Stack spacing={2}>
         <TransferPanel
           totalAvailable={totalAvailable}
           purchaseAmount={purchaseAmount}
@@ -250,27 +395,26 @@ export function StepFunding({
           showValidation={showValidation}
         />
 
-        {/* ── Retirement bonus ── */}
-        {purchaseAmount >= MIN_PURCHASE_AMOUNT && (
-          <Alert
-            severity="info"
-            title="You're eligible for a Retirement bonus!"
-            message="Your estimated bonus will be shown in the next step."
+        {eligibleForBonus && (
+          <RetirementBonus
+            amount={bonusValue}
+            loading={calculating}
+            onCalculate={handleCalculateBonus}
           />
         )}
-
-        {/* ── Considerations ── */}
-        <Stack spacing={2}>
-          <div>
-            <Typography variant="h5" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
-            <Typography variant="body" sx={{ color: 'text.primary' }}>
-              A Lifetime Pension is a long-term commitment, so it&apos;s worth weighing up these points before
-              you decide how much to use.
-            </Typography>
-          </div>
-          <Accordion items={ALLOCATION_CONSIDERATIONS} />
-        </Stack>
       </Stack>
-    </>
+
+      {/* ── Considerations ── */}
+      <Stack spacing={2}>
+        <div>
+          <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            A Lifetime Pension is a long-term commitment, so it&apos;s worth weighing up these points before
+            you decide how much to use.
+          </Typography>
+        </div>
+        <Accordion items={ALLOCATION_CONSIDERATIONS} />
+      </Stack>
+    </Stack>
   );
 }

@@ -72,6 +72,10 @@ export const INITIAL_STATE: LifetimePensionState = {
 };
 
 export const MIN_PURCHASE_AMOUNT = 10000;
+// Minimum balance a member must leave in their Accumulation account to keep it
+// open (and any attached insurance active). Distinct rule from the minimum
+// purchase price — they share a value today but are not the same constraint.
+export const MIN_REMAINING_BALANCE = 10000;
 export const TARGET_PERCENT = [20, 30, 50, 65, 85, 100] as const;
 
 // ---------------------------------------------------------------------------

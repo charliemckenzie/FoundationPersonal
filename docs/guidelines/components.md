@@ -285,7 +285,7 @@ See `src/features/investment-mix/InvestmentMixFlow.tsx` for the reference implem
 ### Buttons & Actions
 
 **Button** — `src/components/Button/`  
-The primary action button. Three variants: `contained`, `outlined`, `ghost`. Supports loading state, start/end icons, reversed (on dark backgrounds).  
+The primary action button. Three variants: `contained`, `outlined`, `ghost`. Supports loading state, start/end icons, reversed (on dark backgrounds). `color` is restricted to `primary` (default) and `success` (positive/confirmation actions, typically inside a success surface) — other semantic colours are intentionally unsupported. (`white` is a reversed-on-brand alias of primary.)  
 Key props: `label`, `variant`, `size`, `color`, `loading`, `startIcon`, `endIcon`, `reversed`
 
 

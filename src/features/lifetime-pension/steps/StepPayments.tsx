@@ -5,7 +5,7 @@ import { DescriptionList } from '../../../components/DescriptionList';
 import { Alert } from '../../../components/Alert';
 import { TextField } from '../../../components/TextField';
 import type { BankDetails } from '../types';
-import { formatCurrency, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
+import { formatCurrency, estimateRetirementBonus, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
 
 interface StepPaymentsProps {
   purchasePrice: number;
@@ -44,7 +44,7 @@ export function StepPayments({
 
       <DescriptionList title="Payment amounts" titleVariant="h6" valueAlign="right" density="condensed">
         <DescriptionList.Item label="Purchase price" value={formatCurrency(purchasePrice)} />
-        <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(982.25)} />
+        <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
         <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />
         <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
         <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />

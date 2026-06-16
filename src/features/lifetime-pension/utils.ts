@@ -82,6 +82,25 @@ export function estimatePension(
   return { annual, fortnightly: annual / FORTNIGHTS_PER_YEAR };
 }
 
+// ─── Retirement bonus estimate ────────────────────────────────────────────────
+
+// Australian Retirement Trust Retirement Bonus: 0.5% of the eligible money first
+// transferred into the income product, capped at $10,000.
+// https://www.australianretirementtrust.com.au/retirement/income-accounts/retirement/bonus
+// NOTE: the cap ($10,000) is unrelated to MIN_PURCHASE_AMOUNT, which also happens
+// to be $10,000 — keep them as separate constants so they can diverge.
+// Simplification: strictly, only money from an accumulation/TTR account is
+// "eligible"; this prototype applies the rate to the whole purchase price.
+const RETIREMENT_BONUS_RATE = 0.005;
+export const RETIREMENT_BONUS_MAX = 10000;
+
+/** Estimate the retirement bonus for a given purchase price: 0.5% of the amount,
+ *  capped at $10,000. Returns 0 for a non-positive purchase price. */
+export function estimateRetirementBonus(purchasePrice: number): number {
+  if (purchasePrice <= 0) return 0;
+  return Math.min(purchasePrice * RETIREMENT_BONUS_RATE, RETIREMENT_BONUS_MAX);
+}
+
 export function totalSelectedAmount(state: LifetimePensionState): number {
   return state.accounts.reduce((sum, account) => sum + (account.transferAmount ?? 0), 0);
 }

@@ -20,7 +20,7 @@ const meta = {
     variant:         { control: 'select', options: ['contained', 'outlined', 'ghost'] },
     size:            { control: 'select', options: ['small', 'medium', 'large'] },
     condensed:       { control: 'boolean', description: 'Reduces height by 4px across all sizes. Use in dense layouts where vertical space is limited.' },
-    color:           { control: 'select', options: ['primary', 'white'] },
+    color:           { control: 'select', options: ['primary', 'white', 'success'] },
     disabled:        { control: 'boolean' },
     loading:         { control: 'boolean' },
     hideLoadingText: { control: 'boolean' },
@@ -190,6 +190,44 @@ export const WithIcons: Story = {
         </Box>
       </Box>
 
+    </Box>
+  ),
+};
+
+export const Colors: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: [
+          'Button ships two colors. Semantic colors are deliberately restricted — most actions are brand-primary.',
+          '',
+          '**Primary** (default) — the brand color. Use for almost every action.',
+          '',
+          '**Success** — reserved for positive/confirmation actions, typically inside a success surface (e.g. a "Calculate" affordance within a success-tinted callout). Do not use it as a generic alternative to primary.',
+          '',
+          'No other semantic colors (error, warning, info) are supported — destructive and cautionary intent is communicated through copy and surrounding context, not button color.',
+        ].join('\n'),
+      },
+    },
+  },
+  render: () => (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Primary</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Button label="Contained" variant="contained" color="primary" />
+          <Button label="Outlined" variant="outlined" color="primary" />
+          <Button label="Ghost" variant="ghost" color="primary" />
+        </Box>
+      </Box>
+      <Box>
+        <Box sx={{ mb: 1.5, typography: 'overline', color: 'text.secondary', letterSpacing: 1 }}>Success</Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <Button label="Contained" variant="contained" color="success" />
+          <Button label="Outlined" variant="outlined" color="success" />
+          <Button label="Ghost" variant="ghost" color="success" />
+        </Box>
+      </Box>
     </Box>
   ),
 };

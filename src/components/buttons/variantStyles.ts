@@ -4,9 +4,14 @@ import { TINT } from '../../app/themes/semantic';
 
 export type ButtonVariantKey = 'contained' | 'outlined' | 'ghost';
 
-/** Only primary and white are permitted colors. white is pre-mapped to primary before calling variant helpers. */
-export type ButtonColorKey = 'primary' | 'white';
-export type ButtonColorKeyResolved = 'primary';
+/**
+ * Permitted button colors. `white` is pre-mapped to primary before calling the
+ * variant helpers, so it never reaches them. `success` is a semantic color for
+ * positive/confirmation actions (e.g. a "Calculate" affordance inside a success
+ * surface) — all other semantic colors remain intentionally unsupported.
+ */
+export type ButtonColorKey = 'primary' | 'white' | 'success';
+export type ButtonColorKeyResolved = 'primary' | 'success';
 
 export function buildContainedStyles(color: ButtonColorKeyResolved) {
   return {
