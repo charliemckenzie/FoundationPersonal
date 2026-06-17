@@ -26,6 +26,7 @@ If this document is out of date, flag it to Moe immediately.
 |---|---|
 | `Accordion` | Expandable content panels — one open at a time or multi-open |
 | `ActionBar` | Promo/CTA banner — title, description, action button, and optional icon or decorative image |
+| `AnnouncementBanner` | Dismissible page-level announcement — title, description, optional CTA, optional illustration, session-persist dismiss |
 | `AddressField` | Dual residential + postal address capture with autocomplete |
 | `Alert` | Inline status message — error, warning, info, success |
 | `ArtieAIButton` | Gradient "Ask Artie" AI-assistant call-to-action button |
@@ -152,6 +153,10 @@ Key props: `variant`, `topSection`, `header`, `body`, `actions`, `children`, `sx
 **ActionBar** — `src/components/ActionBar/`  
 Promotional CTA banner. A horizontal surface with a title, description, and a single `contained` action button, plus an optional left-hand icon (small circular container, or any node such as a `HeroIcon`) or a `decorative` bleed image. Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). Stacks vertically on mobile.  
 Key props: `title`, `description`, `action`, `image`, `variant`, `sx`
+
+**AnnouncementBanner** — `src/components/AnnouncementBanner/`  
+Dismissible page-level announcement banner. A horizontal surface with a title, optional description, optional CTA button, and an optional right-side decorative illustration (hidden on mobile). Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). A close button is always rendered at the top-right corner. Provide `storageKey` to persist the dismissed state in `sessionStorage` for the browser session — the banner will not reappear until the session ends. Without `storageKey`, visibility is fully controlled by the caller. Use `onClose` to react to dismissal regardless of persistence strategy.  
+Key props: `title`, `description`, `action`, `image`, `storageKey`, `onClose`, `variant`, `sx`
 
 **Dialog** — `src/components/Dialog/`  
 Modal dialog with confirm/cancel. Five semantic variants: `neutral`, `info`, `warning`, `danger`, `alert`. Adapts to a bottom drawer on mobile. Prefer over Modal when you need a confirm pattern.  

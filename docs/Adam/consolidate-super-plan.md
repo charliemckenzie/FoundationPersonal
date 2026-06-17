@@ -5,7 +5,8 @@
 **Target model:** Sonnet, fresh session
 **Feature area:** `src/features/consolidate/` + routes under both brand trees
 **Reference feature (read first):** `src/features/investment-mix/`
-**Prerequisite:** `docs/Adam/idv-shared-module-plan.md` must be executed first — this plan consumes `src/features/idv/`.
+**Prerequisite:** `src/features/idv/` is **already built and merged** — no need to run `idv-shared-module-plan.md` first. Confirm it compiles clean before starting (see §11 step 1).
+**Starting point (app route):** `/member-online/consolidate` — this is the hub and the start of every user journey in this feature. The placeholder is already live; the first task is replacing it with `<ConsolidateHub />`.
 
 ---
 
@@ -28,9 +29,9 @@ You are a fresh agent with no prior context. This document contains everything y
 
 ## 1. What we are building
 
-A **Consolidate your super** experience for the authenticated Member Online portal. The member is logged in, so we already hold their personal details (name, DOB, address, contact, client number). The placeholder route exists today and renders only a heading + lead:
+A **Consolidate your super** experience for the authenticated Member Online portal. The member is logged in, so we already hold their personal details (name, DOB, address, contact, client number). The placeholder route **already exists at `/member-online/consolidate`** — currently renders only a heading + lead. This route is the hub and the start of every user journey in this feature.
 
-- `src/app/member-online/(portal)/consolidate/page.tsx`
+- `src/app/member-online/(portal)/consolidate/page.tsx` ← **replace this with `<ConsolidateHub basePath="/member-online/consolidate" />`**
 - `src/app/qsuper/member-online/(portal)/consolidate/page.tsx`
 
 Turn `/consolidate` into a **hub** offering three ways to bring external super into the member's Accumulation account, each launching its own stepped sub-flow:
@@ -64,7 +65,7 @@ Turn `/consolidate` into a **hub** offering three ways to bring external super i
 | Mock data | `src/features/investment-mix/mockData.ts` | Mock account/option shapes. |
 | Validation/format utils | `src/features/investment-mix/utils.ts` | `validateStepN`, `buildChange`, `formatCurrency`, `formatDate`. |
 | Success screen | `src/features/investment-mix/SubmissionSuccess.tsx` | Reference number + summary + back-to-overview CTA. |
-| **Shared IDV module** | `src/features/idv/` (from the IDV plan) | `useIdvGate()`, `StepIDV` (`embedded`), `IdvModal`, `checkIDVCache/setIDVCache`, `VerifyDetailsContent`, types. **Import from the barrel only.** |
+| **Shared IDV module** | `src/features/idv/` (**already built**) | Confirmed barrel exports: `useIdvGate`, `StepIDV`, `canSubmitIDV`, `IdvModal`, `VerifyDetailsContent`, `requiredFieldsFilled`, `verifyDetailsCanContinue`, `checkIDVCache`, `setIDVCache`, `clearIDVCache`, `submitIDV`, `initialIDVState`, `initialVerifyDetailsState`, `AUSTRALIAN_STATES`, `MOCK_USER_PROFILE`, types (`IDVDocument`, `IDVState`, `UserProfile`, `VerifyDetailsState`). **Import from `@/features/idv` barrel only — never reach into internal files.** |
 
 Catalogue: `docs/guidelines/components.md`. Typography: `docs/guidelines/typography.md`.
 
@@ -272,20 +273,38 @@ Copy `BeneficiariesContext.tsx` in shape: `STORAGE_KEY = 'consolidate_submission
 
 ---
 
-## 10. IDV integration contract (depends on `src/features/idv/`)
+## 10. IDV integration contract (`src/features/idv/` — already built)
 Import only from the `idv` barrel:
 ```ts
-import { useIdvGate, StepIDV, VerifyDetailsContent, checkIDVCache } from '@/features/idv';
+import {
+  useIdvGate,
+  StepIDV,
+  canSubmitIDV,
+  VerifyDetailsContent,
+  checkIDVCache,
+  setIDVCache,
+} from '@/features/idv';
 ```
-- The ATO flow's `identity` step is **conditional** on `!checkIDVCache()` at mount (build it into the dynamic `steps` array; skip when already verified — same pattern as investment-mix conditional steps).
-- Submission of IDV is handled by `useIdvGate().submit()` (caches on success). The consolidate flow does **not** touch `localStorage` directly.
-- If the IDV plan changed any export names, reconcile here. Do not re-implement IDV.
+**Confirmed `useIdvGate()` return shape:**
+```ts
+{
+  status: 'verified' | 'unverified' | 'submitting' | 'error';
+  idvState: IDVState;
+  setIdvState: (next: IDVState) => void;
+  error: string;
+  submit: () => Promise<boolean>;   // runs mock Equifax submit; caches on success
+  alreadyVerified: boolean;          // true when checkIDVCache() hit on mount
+}
+```
+- The ATO flow's `identity` step is **conditional** on `!checkIDVCache()` at mount — build it into the dynamic `steps` array; skip when `gate.alreadyVerified` is true (same pattern as investment-mix conditional steps).
+- Submission of IDV is handled by `gate.submit()` (calls `setIDVCache()` internally on success). The consolidate flow does **not** touch `localStorage` directly.
+- Do not re-implement IDV. Export names are confirmed above — no reconciliation needed.
 
 ---
 
 ## 11. Build sequence
 
-1. **Confirm prerequisite:** `src/features/idv/` exists with the API in `idv-shared-module-plan.md` §3. If not, stop and run that plan first.
+1. **Confirm prerequisite:** `src/features/idv/` exists and compiles clean — it is already built. Run a quick `tsc --noEmit` or check for errors on `src/features/idv/index.ts` before proceeding. Do not run `idv-shared-module-plan.md`.
 2. **Scaffold** `types.ts`, `mockData.ts`, `utils.ts`, `ConsolidateContext.tsx`. Compile clean.
 3. **Brand routes + layout + hub** (both brands): `layout.tsx` (provider), replace `page.tsx` with `<ConsolidateHub basePath=… />`, build `ConsolidateHub.tsx`. Verify navigation (sub-flow pages can be stubs first).
 4. **Shared blocks:** `components/FundDetailFields.tsx`, `AmountChoice.tsx`, `FoundFundRow.tsx`, `SubmissionSuccess.tsx`.
@@ -317,7 +336,7 @@ import { useIdvGate, StepIDV, VerifyDetailsContent, checkIDVCache } from '@/feat
 ---
 
 ## 13. Assumptions & open questions (surface to designer)
-1. **IDV prerequisite** — this plan assumes `src/features/idv/` is built and merged first.
+1. **IDV prerequisite** — `src/features/idv/` is already built and merged. Confirm it compiles clean at the start of the session (§11 step 1).
 2. **External link targets** (ATO resources, `/advice`) — confirm before finalising copy.
 3. **Insurance/benefit warnings** — wording reviewed; factual, never advice.
 4. **Destination account** — assumed single Accumulation account; add a selector only if a member can have several (out of scope unless confirmed).
