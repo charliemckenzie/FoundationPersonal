@@ -19,7 +19,6 @@ import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV } from './steps/StepIDV';
 import { StepIntro } from './steps/StepIntro';
-import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
@@ -31,7 +30,6 @@ import {
   hasSelectedAccount,
   introStepValid,
   isEligible,
-  optionStepValid,
   paymentsStepValid,
   reviewStepValid,
   totalSelectedAmount,
@@ -40,7 +38,6 @@ import {
 const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'intro',
   'eligibility',
-  'option',
   'funding',
   'allocate',
   'payments',
@@ -82,15 +79,12 @@ export function RetirementIncomeAccountFlow() {
       return eligibilityStepValid(state);
     }
     if (step === 2) {
-      return optionStepValid(state);
-    }
-    if (step === 3) {
       return fundingStepValid(state);
     }
-    if (step === 4) {
+    if (step === 3) {
       return allocateStepValid(state);
     }
-    if (step === 5) {
+    if (step === 4) {
       return paymentsStepValid(state);
     }
     return reviewStepValid(state);
@@ -113,7 +107,7 @@ export function RetirementIncomeAccountFlow() {
       return;
     }
 
-    if (activeStep === 4 && hasFullBalanceTransfer) {
+    if (activeStep === 3 && hasFullBalanceTransfer) {
       setShowInsuranceModal(true);
       return;
     }
@@ -232,7 +226,16 @@ export function RetirementIncomeAccountFlow() {
               <>
                 <Typography variant="body" sx={{ color: 'text.primary' }}>
                   A Retirement Income account allows people to receive regular tax free income from your super during
-                  retirement. To learn more about this account you can download the Product Disclosure Statement.
+                  retirement. To learn more about this account you can download the{' '}
+                  <Typography
+                    component="a"
+                    variant="body"
+                    href="#"
+                    sx={{ color: 'primary.main', textDecoration: 'underline', '&:hover': { textDecoration: 'none' } }}
+                  >
+                    Product Disclosure Statement
+                  </Typography>
+                  .
                 </Typography>
                 <Divider sx={{ mt: 2 }} />
               </>
@@ -277,24 +280,14 @@ export function RetirementIncomeAccountFlow() {
                 showValidation={showValidation}
               />
             ) : activeStep === 2 ? (
-              <StepOption
-                pensionOption={state.pensionOption}
-                spouseDetails={state.spouseDetails}
-                onPensionOptionChange={(option) => updateState({ ...state, pensionOption: option })}
-                onSpouseDetailsChange={(nextSpouseDetails) =>
-                  updateState({ ...state, spouseDetails: nextSpouseDetails })
-                }
-                showValidation={showValidation}
-              />
-            ) : activeStep === 3 ? (
               <StepFunding
                 purchaseAmount={state.purchaseAmount}
                 onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
-                pensionOption={state.pensionOption}
+                pensionOption="single"
                 accounts={state.accounts}
                 showValidation={showValidation}
               />
-            ) : activeStep === 4 ? (
+            ) : activeStep === 3 ? (
               <StepAllocate
                 purchaseAmount={state.purchaseAmount}
                 accounts={state.accounts}
@@ -309,7 +302,7 @@ export function RetirementIncomeAccountFlow() {
                 }}
                 showValidation={showValidation}
               />
-            ) : activeStep === 5 ? (
+            ) : activeStep === 4 ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
                 bankDetails={state.bankDetails}

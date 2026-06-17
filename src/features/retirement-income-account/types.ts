@@ -45,7 +45,6 @@ export interface RetirementIncomeAccountState {
 export type RetirementIncomeAccountStepId =
   | 'intro'
   | 'eligibility'
-  | 'option'
   | 'funding'
   | 'allocate'
   | 'payments'

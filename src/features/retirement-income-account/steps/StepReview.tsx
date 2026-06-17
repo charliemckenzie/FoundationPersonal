@@ -238,49 +238,6 @@ export function StepReview({
         </Stack>
       </Dialog>
 
-      {/* Option */}
-      <ReviewSection title="Option" sx={{ mt: 4 }} onEdit={() => onEditStep('option')}>
-        <ReviewRow label="Pension option">
-          <ReviewValue>{optionLabel(state)}</ReviewValue>
-        </ReviewRow>
-        {state.pensionOption === 'spouse' && (
-          <ReviewRow label="Spouse details">
-            <Stack spacing={1.5}>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Full name</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  {[state.spouseDetails.firstName, state.spouseDetails.middleName, state.spouseDetails.lastName]
-                    .filter(Boolean)
-                    .join(' ') || '—'}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Date of birth</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.dateOfBirth || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Residential address</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.residentialAddress || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Email address</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.emailAddress || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Mobile phone</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.mobilePhone || '—'}</Typography>
-              </Box>
-              {state.spouseDetails.homePhone && (
-                <Box>
-                  <Typography variant="small" sx={{ color: 'text.muted' }}>Home phone</Typography>
-                  <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.homePhone}</Typography>
-                </Box>
-              )}
-            </Stack>
-          </ReviewRow>
-        )}
-      </ReviewSection>
-
       {/* Purchase price */}
       <ReviewSection title="Purchase price" onEdit={() => onEditStep('funding')}>
         <ReviewRow label="Purchase price">

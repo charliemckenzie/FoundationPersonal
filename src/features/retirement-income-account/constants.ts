@@ -3,7 +3,6 @@ import type { FundingAccount, IDVState, RetirementIncomeAccountState, SpouseDeta
 
 export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
-  { id: 'option', label: 'Choose option' },
   { id: 'funding', label: 'Purchase price' },
   { id: 'allocate', label: 'Allocate funds' },
   { id: 'payments', label: 'Payments' },
@@ -76,7 +75,7 @@ export const MIN_PURCHASE_AMOUNT = 10000;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [20, 30, 50, 65, 85, 100] as const;
+export const TARGET_PERCENT = [20, 40, 60, 80, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Retirement Income Account payment estimate
@@ -117,7 +116,6 @@ export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
-  'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
