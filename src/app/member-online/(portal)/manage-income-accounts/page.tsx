@@ -1,7 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
+import FormControl from '@mui/material/FormControl';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import MuiSelect from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
@@ -9,25 +13,24 @@ import { useRouter } from 'next/navigation';
 import { Chip } from '../../../../components/Chip';
 import type { ChipSeverity } from '../../../../components/Chip';
 import { Icon } from '../../../../components/Icon';
+import { Tabs } from '../../../../components/Tabs';
 import { TextButton } from '../../../../components/TextButton';
-import { InvestmentOverviewSkeleton } from '../../../../components/InvestmentOverview';
-import { CurrentMixSummary } from '../../../../components/InvestmentOverview/CurrentMixSummary';
+import { buildInputStyles } from '../../../../components/inputs/variantStyles';
 import { ContentContainer } from '../../../../components/MemberOnline';
-import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS, accountDials } from '../../../../features/investment-mix/mockData';
-import type { InvestmentAccount } from '../../../../features/investment-mix/types';
 
-interface IncomeAccountDetail {
-  paymentAmount: string;
-  frequency: string;
+// ─── Types ────────────────────────────────────────────────────────────────────
+
+type AccountStatus = 'active' | 'closed';
+
+interface IncomeAccount {
+  id: string;
+  name: string;
+  memberNumber: string;
+  balance: number;
+  status: AccountStatus;
+  nextPaymentAmount: string;
   nextPaymentDate: string;
-  payFromLabel: string;
-  payFromPercent: string;
-  bankAccountName: string;
-  bank: string;
-  bsb: string;
-  accountNumber: string;
-  minimumPayment: string;
-  paymentsToDate: string;
+  icon: string;
 }
 
 interface Application {
@@ -39,34 +42,70 @@ interface Application {
   continuePath: string;
 }
 
-const INCOME_ACCOUNT_DETAILS: Record<string, IncomeAccountDetail> = {
-  'acc-lp': {
-    paymentAmount: '$3,021.15',
-    frequency: 'Fortnightly',
-    nextPaymentDate: '30 Jun 2026',
-    payFromLabel: 'Pooled Lifetime Pension',
-    payFromPercent: '100%',
-    bankAccountName: 'Z O Oeter',
-    bank: 'ANZ-Merged',
-    bsb: '012-290',
-    accountNumber: '******210',
-    minimumPayment: '—',
-    paymentsToDate: '$3,021.15',
+// ─── Mock data ────────────────────────────────────────────────────────────────
+
+const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
+  {
+    id: 'acc-ria',
+    name: 'Retirement Income Account',
+    memberNumber: '235896',
+    balance: 1289130.55,
+    status: 'active',
+    nextPaymentAmount: '$2,847.65',
+    nextPaymentDate: '15 Oct 2025',
+    icon: 'money-simple-from-bracket',
   },
-  'acc-002': {
-    paymentAmount: '$1,509.24',
-    frequency: 'Fortnightly',
-    nextPaymentDate: '30 Jun 2026',
-    payFromLabel: 'Cash',
-    payFromPercent: '100%',
-    bankAccountName: 'Z O Oeter',
-    bank: 'ANZ-Merged',
-    bsb: '012-290',
-    accountNumber: '******210',
-    minimumPayment: '$39,240.00',
-    paymentsToDate: '$34,712.52',
+  {
+    id: 'acc-ria-2',
+    name: 'Retirement Income Account',
+    memberNumber: '235897',
+    balance: 89130.55,
+    status: 'active',
+    nextPaymentAmount: '$2,847.65',
+    nextPaymentDate: '15 Oct 2025',
+    icon: 'money-simple-from-bracket',
   },
-};
+  {
+    id: 'acc-lp',
+    name: 'Lifetime Pension',
+    memberNumber: '235898',
+    balance: 180.99,
+    status: 'active',
+    nextPaymentAmount: '$3,021.15',
+    nextPaymentDate: '30 Jun 2026',
+    icon: 'money-check-dollar',
+  },
+  {
+    id: 'acc-ttr',
+    name: 'Retirement Income Account',
+    memberNumber: '235899',
+    balance: 0.77,
+    status: 'active',
+    nextPaymentAmount: '$500.00',
+    nextPaymentDate: '1 Nov 2025',
+    icon: 'money-simple-from-bracket',
+  },
+  {
+    id: 'acc-closed-1',
+    name: 'Retirement Income Account',
+    memberNumber: '235900',
+    balance: 0,
+    status: 'closed',
+    nextPaymentAmount: '—',
+    nextPaymentDate: '—',
+    icon: 'money-simple-from-bracket',
+  },
+  {
+    id: 'acc-closed-2',
+    name: 'Retirement Income Account',
+    memberNumber: '235901',
+    balance: 0,
+    status: 'closed',
+    nextPaymentAmount: '—',
+    nextPaymentDate: '—',
+    icon: 'money-simple-from-bracket',
+  },
+];
 
 const MOCK_APPLICATIONS: Application[] = [
   {
@@ -79,100 +118,155 @@ const MOCK_APPLICATIONS: Application[] = [
   },
   {
     id: 'app-002',
-    accountType: 'Transition to Retirement account',
-    status: 'Submitted',
-    severity: 'success',
-    startedAt: '8 Jun 2026',
-    continuePath: '/member-online/lifetime-pension/view-application',
-  },
-  {
-    id: 'app-003',
     accountType: 'Lifetime Pension',
     status: 'Verification required',
     severity: 'warning',
     startedAt: '12 Jun 2026',
     continuePath: '/member-online/lifetime-pension/submitted',
   },
+  {
+    id: 'app-003',
+    accountType: 'Transition to Retirement account',
+    status: 'Submitted',
+    severity: 'success',
+    startedAt: '8 Jun 2026',
+    continuePath: '/member-online/lifetime-pension/view-application',
+  },
 ];
 
-const LIFETIME_PENSION_ACCOUNT: InvestmentAccount = {
-  id: 'acc-lp',
-  name: 'Lifetime Pension',
-  accountNumber: '555 123 456',
-  balance: 250000.0,
-  openedAt: '2026-06-01',
-  isIncomeAccount: true,
-};
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
-const INCOME_ACCOUNTS = [
-  ...MOCK_ACCOUNTS.filter((a) => a.isIncomeAccount),
-  LIFETIME_PENSION_ACCOUNT,
-];
-const FORM_PATH = '/member-online/investments/manage-investments/change-mix';
-const HISTORY_PATH = '/member-online/investments/manage-investments/history';
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-function formatDate(iso: string) {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
 function formatCurrency(n: number) {
   return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(n);
 }
 
-// A label/value row used inside the inline white cards
-function DetailRow({ label, children }: { label: string; children: React.ReactNode }) {
+// ─── Account list row ─────────────────────────────────────────────────────────
+
+function AccountListRow({ account, onClick }: { account: IncomeAccount; onClick: () => void }) {
   return (
     <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-        columnGap: 2,
-        rowGap: { xs: 0.5, sm: 0 },
-        alignItems: 'center',
-        py: 1.5,
-        borderTop: '1px solid',
-        borderTopColor: 'border.subtle',
-      }}
+      component="button"
+      type="button"
+      onClick={onClick}
+      sx={(t: Theme) => ({
+        display: 'flex', alignItems: 'center', gap: 2,
+        width: '100%', px: 2.5, py: 2,
+        border: 'none',
+        borderRadius: `${t.shape.sm}px`,
+        bgcolor: 'background.paper', cursor: 'pointer', textAlign: 'left',
+        transition: 'background-color 150ms ease',
+        '&:hover': { bgcolor: t.palette.action.hover },
+        '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: -2, zIndex: 1, position: 'relative' },
+      })}
     >
-      <Typography variant="body" component="dt" sx={{ color: 'text.primary' }}>
-        {label}
-      </Typography>
-      <Typography variant="body" component="dd" sx={{ m: 0, color: 'text.primary' }}>
-        {children}
-      </Typography>
+      <Box sx={(t: Theme) => ({
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        width: '2.5rem', height: '2.5rem',
+        borderRadius: '50%', bgcolor: 'primary.softMain', flexShrink: 0,
+      })}>
+        <Icon icon={account.icon} style="light" size="lg" color="primary" />
+      </Box>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography variant="body" sx={{ fontWeight: 700, color: 'text.heading', display: 'block' }}>
+          {account.name}
+        </Typography>
+        <Typography variant="small" sx={{ color: 'text.muted', display: 'block' }}>
+          Member number: {account.memberNumber}
+        </Typography>
+      </Box>
+      <Box sx={{ textAlign: 'right', flexShrink: 0 }}>
+        <Typography variant="body" sx={{ fontWeight: 700, color: 'text.heading', display: 'block' }}>
+          {account.nextPaymentAmount}
+        </Typography>
+        <Typography variant="small" sx={{ color: 'text.muted', display: 'block' }}>
+          {account.nextPaymentDate}
+        </Typography>
+      </Box>
+      <Icon icon="chevron-right" style="regular" size="sm" color="text.muted" />
     </Box>
   );
 }
 
-// White card styled like a DialItem, used for Bank account & Payment limits
-function InlineCard({ title, footnote, children }: { title: string; footnote?: string; children: React.ReactNode }) {
+// ─── Account selector ────────────────────────────────────────────────────────
+
+function AccountSelect({
+  value,
+  accounts,
+  onChange,
+}: {
+  value: string;
+  accounts: IncomeAccount[];
+  onChange: (id: string) => void;
+}) {
   return (
-    <Stack spacing={1}>
-      <Box
-        sx={(t: Theme) => ({
-          backgroundColor: 'background.paper',
-          border: '1px solid',
-          borderColor: 'border.default',
-          borderRadius: `${t.shape.sm}px`,
-          p: 2.5,
-        })}
-      >
-        <Typography variant="h6" sx={{ mb: 0.5, color: 'text.heading' }}>{title}</Typography>
-        <Box component="dl" sx={{ m: 0 }}>
-          {children}
-        </Box>
-      </Box>
-      {footnote && (
-        <Typography variant="small" sx={{ color: 'text.muted', px: 0.5 }}>
-          {footnote}
-        </Typography>
-      )}
-    </Stack>
+    <FormControl fullWidth>
+      <MuiSelect
+        value={value}
+        onChange={(e) => onChange(e.target.value as string)}
+        displayEmpty
+        renderValue={(selected) => {
+          if (!selected) return <Box component="span" sx={{ color: 'text.disabled' }}>Select an account</Box>;
+          if (selected === 'all') return 'All accounts';
+          const acct = accounts.find((a) => a.id === selected);
+          return acct ? `${acct.name} · Member no: ${acct.memberNumber}` : '';
+        }}
+          sx={(t: Theme) => ({
+            ...buildInputStyles(t),
+            minHeight: '3rem',
+            fontSize: t.typography.body.fontSize,
+            '& div.MuiSelect-select': { lineHeight: 1.5, py: '0.6875rem' },
+          })}
+          MenuProps={{
+            slotProps: {
+              list: { sx: { py: '4px' } },
+              paper: { sx: (t: Theme) => ({ borderRadius: `${t.shape.sm}px`, mt: 0.5 }) },
+            },
+          }}
+        >
+          <MenuItem
+            value="all"
+            disableRipple
+            sx={(t: Theme) => ({ mx: '4px', borderRadius: `${t.shape.xs}px`, width: 'calc(100% - 8px)' })}
+          >
+            <ListItemText
+              primary="All accounts"
+              slotProps={{ primary: { sx: { typography: 'body', fontWeight: 700 } } }}
+            />
+          </MenuItem>
+          {accounts.map((acct) => (
+            <MenuItem
+              key={acct.id}
+              value={acct.id}
+              disableRipple
+              sx={(t: Theme) => ({
+                mx: '4px',
+                borderRadius: `${t.shape.xs}px`,
+                width: 'calc(100% - 8px)',
+                alignItems: 'flex-start',
+                py: 1.25,
+              })}
+            >
+              <ListItemText
+                primary={acct.name}
+                secondary={acct.status === 'closed'
+                  ? `Member no: ${acct.memberNumber} · Closed`
+                  : `Member no: ${acct.memberNumber} · Next: ${acct.nextPaymentAmount} on ${acct.nextPaymentDate}`}
+                slotProps={{
+                  primary: { sx: { typography: 'body', fontWeight: 700, lineHeight: 1.4, mb: 0.25 } },
+                  secondary: { sx: { typography: 'small', color: 'text.muted', lineHeight: 1.4 } },
+                }}
+              />
+            </MenuItem>
+          ))}
+        </MuiSelect>
+    </FormControl>
   );
 }
 
-function FooterAction({ label, onClick, position }: { label: string; onClick: () => void; position: 'left' | 'right' }) {
+// ─── Application row (sidebar) ────────────────────────────────────────────────
+
+function ApplicationRow({ app, onClick }: { app: Application; onClick: () => void }) {
+  const isSubmitted = app.status === 'Submitted';
   return (
     <Box
       component="button"
@@ -180,348 +274,353 @@ function FooterAction({ label, onClick, position }: { label: string; onClick: ()
       onClick={onClick}
       sx={(t: Theme) => ({
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100%',
-        border: 'none',
-        backgroundColor: 'transparent',
+        alignItems: 'flex-start',
+        gap: 1.5,
+        px: 2,
+        py: 1.75,
+        width: '100%',
+        border: '1px solid',
+        borderColor: 'border.default',
+        borderRadius: `${t.shape.sm}px`,
+        bgcolor: 'background.paper',
         cursor: 'pointer',
-        fontFamily: 'inherit',
-        color: 'primary.main',
-        outline: 'none',
-        transition: 'background-color 200ms ease',
-        ...(position === 'right' && {
-          borderLeftWidth: '1px',
-          borderLeftStyle: 'solid',
-          borderLeftColor: 'border.subtle',
-        }),
-        borderRadius: position === 'left' ? `0 0 0 ${t.shape.lg}px` : `0 0 ${t.shape.lg}px 0`,
-        '&:hover': { backgroundColor: t.palette.action.hover },
-        '&:focus-visible': {
-          outline: '2px solid',
-          outlineColor: 'border.focus',
-          outlineOffset: 2,
-          position: 'relative',
-          zIndex: 1,
-        },
+        textAlign: 'left',
+        transition: 'background-color 150ms ease',
+        '&:hover': { bgcolor: t.palette.action.hover },
+        '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: -2, zIndex: 1, position: 'relative' },
       })}
     >
-      <Typography variant="body" sx={{ fontWeight: 700 }}>{label}</Typography>
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography variant="body" sx={{ fontWeight: 700, color: 'text.heading', display: 'block', mb: 0.5 }}>
+          {app.accountType}
+        </Typography>
+        <Chip label={app.status} severity={app.severity} size="small" />
+        <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.75 }}>
+          {isSubmitted ? `Submitted ${app.startedAt}` : `Started ${app.startedAt}`}
+        </Typography>
+      </Box>
+      <Box sx={{ color: 'text.muted', flexShrink: 0, mt: 0.25 }}>
+        <Icon icon="arrow-right" style="regular" size="sm" />
+      </Box>
     </Box>
   );
 }
 
-function IncomeAccountCard({
-  account,
-  detail,
-  balanceDate,
-  onEditPayments,
-  onViewHistory,
-}: {
-  account: InvestmentAccount;
-  detail: IncomeAccountDetail | undefined;
-  balanceDate: string;
-  onEditPayments: () => void;
-  onViewHistory: () => void;
-}) {
-  const [expanded, setExpanded] = useState(true);
-  const allDials = accountDials(account);
-  const paymentsDial = allDials.find((d) => d.id === 'future') ?? allDials.find((d) => d.id === 'combined');
+// ─── Account detail section ───────────────────────────────────────────────────
 
-  const mappedDial = paymentsDial
-    ? {
-        id: paymentsDial.id as 'future' | 'combined',
-        title: paymentsDial.id === 'combined' ? 'Payments' : paymentsDial.title,
-        subtitle: paymentsDial.subtitle,
-        allocations: paymentsDial.allocations,
-        editLabel: paymentsDial.editLabel,
-        onEdit: onEditPayments,
-      }
-    : null;
+interface DetailRowProps {
+  label: string;
+  value: React.ReactNode;
+  note?: string;
+}
 
+function DetailRow({ label, value, note }: DetailRowProps) {
+  return (
+    <Box sx={{ display: 'flex', py: 1.5, borderBottom: '1px solid', borderBottomColor: 'border.subtle' }}>
+      <Typography variant="body" sx={{ color: 'text.muted', width: '40%', flexShrink: 0 }}>
+        {label}
+      </Typography>
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>
+          {value}
+        </Typography>
+        {note && (
+          <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.5 }}>
+            {note}
+          </Typography>
+        )}
+      </Box>
+    </Box>
+  );
+}
+
+interface SectionProps {
+  title: string;
+  children: React.ReactNode;
+  action?: { label: string; href: string; icon?: string };
+}
+
+function Section({ title, children, action }: SectionProps) {
+  const router = useRouter();
   return (
     <Box
-      component="section"
-      aria-label={`${account.name} summary`}
       sx={(t: Theme) => ({
-        borderRadius: `${t.shape.lg}px`,
-        backgroundColor: 'background.paper',
         border: '1px solid',
         borderColor: 'border.default',
+        borderRadius: `${t.shape.lg}px`,
+        bgcolor: 'background.paper',
         overflow: 'hidden',
       })}
     >
-      <Box
-        component="button"
-        type="button"
-        onClick={() => setExpanded((prev) => !prev)}
-        aria-expanded={expanded}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 2,
-          px: 3,
-          py: 2.5,
-          width: '100%',
-          border: 'none',
-          bgcolor: 'transparent',
-          cursor: 'pointer',
-          textAlign: 'left',
-          '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: -2 },
-        }}
-      >
-        <Box
-          sx={(t: Theme) => ({
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            width: t.spacing(6),
-            height: t.spacing(6),
-            borderRadius: '50%',
-            backgroundColor: 'background.default',
-            flexShrink: 0,
-          })}
-        >
-          <Icon icon="money-simple-from-bracket" style="light" size="xl+" color="text.heading" />
-        </Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <Typography variant="h6">{account.name}</Typography>
-          <Typography variant="small" sx={{ color: 'text.muted' }}>
-            {'Total balance '}
-            <Box component="span" sx={{ fontWeight: 700, color: 'text.primary' }}>
-              {formatCurrency(account.balance)}
-            </Box>
-            {' · as at '}
-            {formatDate(balanceDate)}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            ml: 'auto',
-            flexShrink: 0,
-            display: 'flex',
-            color: 'text.muted',
-            transition: 'transform 200ms ease',
-            transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)',
-          }}
-        >
-          <Icon icon="chevron-down" style="regular" size="md" />
-        </Box>
+      <Box sx={{ p: 4 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>{title}</Typography>
+        {children}
       </Box>
-
-      {expanded && mappedDial && (
+      {action && (
         <Box
           sx={{
-            borderTop: '1px solid',
-            borderTopColor: 'border.subtle',
-            backgroundColor: 'background.default',
-            p: 1.5,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.5,
+            px: 4, py: 1.5,
+            borderTop: '1px solid', borderTopColor: 'border.subtle',
+            bgcolor: 'background.paper',
           }}
         >
-          {/* Payments card — dial + payment details combined */}
-          <Box
-            sx={(t: Theme) => ({
-              backgroundColor: 'background.paper',
-              border: '1px solid',
-              borderColor: 'border.default',
-              borderRadius: `${t.shape.sm}px`,
-              p: 2.5,
-            })}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5, mb: 2 }}>
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="h6">{mappedDial.title}</Typography>
-                {mappedDial.subtitle && (
-                  <Typography variant="small" sx={{ color: 'text.muted' }}>
-                    {mappedDial.subtitle}
-                  </Typography>
-                )}
-              </Box>
-              {mappedDial.onEdit && (
-                <Box
-                  component="button"
-                  type="button"
-                  onClick={mappedDial.onEdit}
-                  aria-label={mappedDial.editLabel ?? 'Edit payments'}
-                  sx={(t: Theme) => ({
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: t.spacing(4),
-                    height: t.spacing(4),
-                    border: 'none',
-                    bgcolor: 'transparent',
-                    cursor: 'pointer',
-                    color: 'primary.main',
-                    borderRadius: `${t.shape.sm}px`,
-                    flexShrink: 0,
-                    '&:hover': { bgcolor: 'action.hover' },
-                    '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: 2 },
-                  })}
-                >
-                  <Icon icon="pen-to-square" style="regular" size="md" color="primary.main" />
-                </Box>
-              )}
-            </Box>
-
-            {Object.values(mappedDial.allocations).some((v) => v > 0) && (
-              <CurrentMixSummary options={MOCK_INVESTMENT_OPTIONS} allocations={mappedDial.allocations} />
-            )}
-
-            {detail && (
-              <>
-                <Box component="dl" sx={{ m: 0, mt: 2 }}>
-                  <DetailRow label="Payment Amount">{detail.paymentAmount}</DetailRow>
-                  <DetailRow label="Frequency">{detail.frequency}</DetailRow>
-                  <DetailRow label="Next Payment Date">{detail.nextPaymentDate}</DetailRow>
-                </Box>
-              </>
-            )}
-          </Box>
-
-          {detail && (
-            <>
-              <InlineCard title="Bank account">
-                <DetailRow label="Account Name">{detail.bankAccountName}</DetailRow>
-                <DetailRow label="Bank">{detail.bank}</DetailRow>
-                <DetailRow label="BSB">{detail.bsb}</DetailRow>
-                <DetailRow label="Account Number">{detail.accountNumber}</DetailRow>
-              </InlineCard>
-
-              <InlineCard
-                title="Payment limits"
-                footnote="* Note lump sum withdrawals don't count towards your minimum and maximum payment limits."
-              >
-                <DetailRow label="Minimum payment">{detail.minimumPayment}</DetailRow>
-                <DetailRow label="Payments to date">
-                  <Box component="a" href="#" sx={{ color: 'primary.main', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}>
-                    {detail.paymentsToDate}
-                  </Box>
-                </DetailRow>
-              </InlineCard>
-            </>
-          )}
-
+          <TextButton
+            label={action.label}
+            onClick={() => router.push(action.href)}
+            {...(action.icon ? { startIcon: action.icon } : {})}
+          />
         </Box>
       )}
-
-      {expanded && <Box
-        sx={(t: Theme) => ({
-          borderTop: '1px solid',
-          borderTopColor: 'border.subtle',
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          height: t.spacing(7),
-        })}
-      >
-        <FooterAction label="Edit payments" onClick={onEditPayments} position="left" />
-        <FooterAction label="Withdraw" onClick={onViewHistory} position="right" />
-      </Box>}
     </Box>
   );
 }
 
+function AccountDetailView({ account }: { account: IncomeAccount }) {
+  const isLifetimePension = account.name === 'Lifetime Pension';
+
+  return (
+    <Stack spacing={3}>
+      {/* Overview section - styled like purchase price card */}
+      <Box
+        sx={(t: Theme) => ({
+          borderRadius: `${t.shape.lg}px`,
+          border: '1px solid',
+          borderColor: 'border.default',
+          bgcolor: 'background.paper',
+          overflow: 'hidden',
+        })}
+      >
+        {/* Grey header — balance */}
+        <Box sx={{ p: 4, bgcolor: 'background.default' }}>
+          <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
+            Account balance as at 17 June 2026
+          </Typography>
+          <Typography variant="h4" sx={{ color: 'text.heading', fontFamily: '"Noto Sans", sans-serif' }}>
+            {formatCurrency(account.balance)}
+          </Typography>
+        </Box>
+
+        {/* White body — details, with the arrow straddling the seam */}
+        <Box sx={{ position: 'relative', px: 4, pt: 5, pb: 4, borderTop: '1px solid', borderColor: 'border.subtle' }}>
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 0,
+              left: (t: Theme) => t.spacing(4),
+              transform: 'translateY(-50%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '2.5rem',
+              height: '2.5rem',
+              borderRadius: '50%',
+              border: '1px solid',
+              borderColor: 'border.subtle',
+              bgcolor: 'background.paper',
+            }}
+          >
+            <Icon icon="arrow-down" size="lg" color="primary" />
+          </Box>
+
+          <Typography variant="h6" sx={{ mb: 2 }}>Overview</Typography>
+          <DetailRow label="Next payment:" value={`${account.nextPaymentAmount}, ${account.nextPaymentDate}`} />
+          <DetailRow label="Payment frequency:" value="Fortnightly" />
+          <DetailRow label="Financial year to date:" value="$0.00" />
+          <DetailRow
+            label="Annual payment amount:"
+            value="$55,444.87"
+            note="For the complete 2025 to 2026 financial year. Your actual payment will be based on the portion of the year your account is open."
+          />
+          <DetailRow label="Start date" value="8 Sep 2020" />
+          <DetailRow label="Original purchase price:" value="$682,704.35" />
+          <DetailRow label="Total to date:" value="$0.00" />
+          <DetailRow
+            label="Money Back Protection:"
+            value="$682,704.35"
+            note="May be subject to legislative maximums and adjusted for negative returns. More information"
+          />
+          <DetailRow
+            label="Cooling-off period:"
+            value="Expired"
+            note="Your 14 day and 6 month cooling-off periods have expired and are no longer active"
+          />
+          <DetailRow label="Product holder" value="H Rialto A Nse" />
+        </Box>
+      </Box>
+
+      {/* Bank details section */}
+      <Section title="Bank details" action={{ label: 'Edit bank details', href: '#' }}>
+        <DetailRow label="Bank:" value="Commonwealth Bank of Australia" />
+        <DetailRow label="BSB:" value="062-000" />
+        <DetailRow label="Account number:" value="1234 5678" />
+        <Box sx={{ display: 'flex', py: 1.5 }}>
+          <Typography variant="body" sx={{ color: 'text.muted', width: '40%', flexShrink: 0 }}>
+            Account name:
+          </Typography>
+          <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>
+            H Rialto A Nse
+          </Typography>
+        </Box>
+      </Section>
+
+      {/* Centrelink schedule section */}
+      <Section title="Centrelink schedule" action={{ label: 'Download Centrelink schedule', href: '#', icon: 'arrow-down-to-line' }}>
+        <Typography variant="body" sx={{ color: 'text.primary', mb: 2 }}>
+          Your eligibility for income support or an Age Pension from the government may be affected if you are receiving payments from a QSuper income account.
+        </Typography>
+        <Typography variant="body" sx={{ color: 'text.primary' }}>
+          For a Lifetime Pension, Centrelink will send you a letter at the beginning of each financial year requesting you to provide details of your new annual adjusted pension payment. You can get this information either from the Lifetime Pension Member Benefit Statement that we will send you in July, or you can download a current version below.
+        </Typography>
+      </Section>
+
+      {/* Beneficiary section */}
+      <Section title="Beneficiaries" action={{ label: 'Manage beneficiaries', href: '/member-online/beneficiaries' }}>
+        <DetailRow label="Option:" value="Spouse Protection" />
+        <DetailRow label="Spouse:" value="Jane Rialto" />
+        <DetailRow label="Phone:" value="0412 345 678" />
+        <Box sx={{ display: 'flex', py: 1.5 }}>
+          <Typography variant="body" sx={{ color: 'text.muted', width: '40%', flexShrink: 0 }}>
+            Email:
+          </Typography>
+          <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>
+            jane.rialto@email.com.au
+          </Typography>
+        </Box>
+      </Section>
+    </Stack>
+  );
+}
+
+// ─── Page ─────────────────────────────────────────────────────────────────────
+
 export default function ManageIncomeAccountsPage() {
   const router = useRouter();
-  const balanceDate = new Date().toISOString();
 
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  const [accountTypeFilter, setAccountTypeFilter] = useState('all');
+  const [accountStatusTab, setAccountStatusTab] = useState(0); // 0=active, 1=closed
+
+  const selectedAccount = accountTypeFilter !== 'all'
+    ? MOCK_INCOME_ACCOUNTS.find((a) => a.id === accountTypeFilter)
+    : null;
+
+  const activeAccounts = MOCK_INCOME_ACCOUNTS.filter((a) => a.status === 'active');
+  const closedAccounts = MOCK_INCOME_ACCOUNTS.filter((a) => a.status === 'closed');
+  const displayedAccounts = accountStatusTab === 0 ? activeAccounts : closedAccounts;
+  const pendingApps = MOCK_APPLICATIONS.filter((a) => a.status !== 'Submitted');
 
   return (
     <ContentContainer size="md">
-      <Stack spacing={1.5} sx={{ pb: 4 }}>
-        <Typography variant="h1" component="h1">Manage income accounts</Typography>
-        <Typography variant="lead">
-          View and manage your active income accounts and any applications currently in progress.
+      {/* Page heading */}
+      <Stack spacing={0.75} sx={{ mb: 4 }}>
+        <Typography variant="h1">Manage income accounts</Typography>
+        <Typography variant="lead" sx={{ color: 'text.muted' }}>
+          Select an account to view details and manage your payments.
         </Typography>
       </Stack>
 
-      {MOCK_APPLICATIONS.length > 0 && (() => {
-        const pending = MOCK_APPLICATIONS.filter((a) => a.status !== 'Submitted');
-        const submitted = MOCK_APPLICATIONS.filter((a) => a.status === 'Submitted');
-        const ordered = [...pending, ...submitted];
+      {/* Account selector */}
+      <Box sx={{ mb: 4, width: { xs: '100%', sm: '66.666%' } }}>
+        <AccountSelect
+          value={accountTypeFilter}
+          accounts={MOCK_INCOME_ACCOUNTS}
+          onChange={setAccountTypeFilter}
+        />
+      </Box>
 
-        return (
+      {/* Content - Account Detail (specific) or All-accounts overview */}
+      {selectedAccount ? (
+        <AccountDetailView account={selectedAccount} />
+      ) : (
+        <Stack spacing={4}>
+          {/* ── Your accounts ── */}
           <Box
             sx={(t: Theme) => ({
-              mb: 5,
-              border: '1px solid',
-              borderColor: 'border.default',
-              borderRadius: `${t.shape.lg}px`,
-              overflow: 'hidden',
+              border: '1px solid', borderColor: 'border.default',
+              borderRadius: `${t.shape.lg}px`, overflow: 'hidden', bgcolor: 'background.paper',
             })}
           >
-            <Box sx={{ px: 3, py: 2, bgcolor: 'background.default', borderBottom: '1px solid', borderBottomColor: 'border.subtle' }}>
-              <Typography variant="h5">My applications</Typography>
+            <Box sx={{ px: 2.5, pt: 2, pb: 1.5, borderBottom: '1px solid', borderBottomColor: 'border.subtle' }}>
+              <Typography variant="h6" sx={{ mb: 1.5 }}>Your accounts</Typography>
+              <Tabs
+                label="Filter accounts by status"
+                tabStyle="default"
+                size="small"
+                onChange={setAccountStatusTab}
+                tabs={[
+                  { label: `Active (${activeAccounts.length})` },
+                  { label: `Closed (${closedAccounts.length})` },
+                ]}
+              />
             </Box>
-            <Stack spacing={0} sx={{ bgcolor: 'background.paper' }}>
-              {ordered.map((app, i) => {
-                const isSubmitted = app.status === 'Submitted';
-                const isFirstSubmitted = isSubmitted && ordered[i - 1]?.status !== 'Submitted';
-                return (
-                  <Box
-                    key={app.id}
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      gap: 2,
-                      px: 3,
-                      py: 2,
-                      bgcolor: isSubmitted ? 'background.default' : 'background.paper',
-                      borderTop: '1px solid',
-                      borderTopColor: isFirstSubmitted ? 'border.default' : 'border.subtle',
-                      ...(i === 0 && { borderTop: 'none' }),
-                    }}
-                  >
-                    <Stack spacing={0.5}>
-                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
-                        <Typography variant="h6" sx={{ color: 'text.heading' }}>{app.accountType}</Typography>
-                        <Chip label={app.status} severity={app.severity} size="small" />
-                      </Box>
-                      <Typography variant="small" sx={{ color: 'text.muted' }}>
-                        {isSubmitted ? 'Submitted' : 'Started'} {app.startedAt}
-                      </Typography>
-                    </Stack>
-                    <TextButton
-                      label={isSubmitted ? 'View application' : 'Continue'}
-                      endIcon="arrow-right"
-                      onClick={() => router.push(app.continuePath)}
-                    />
-                  </Box>
-                );
-              })}
-            </Stack>
-          </Box>
-        );
-      })()}
-
-      {INCOME_ACCOUNTS.length > 0 && (
-        <Stack spacing={2}>
-          <Typography variant="h5">Income accounts</Typography>
-          <Stack spacing={3}>
-            {loading
-              ? INCOME_ACCOUNTS.map((account) => <InvestmentOverviewSkeleton key={account.id} />)
-              : INCOME_ACCOUNTS.map((account) => (
-                  <IncomeAccountCard
+            <Box sx={{ bgcolor: 'background.default', p: 1.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              {displayedAccounts.length === 0 ? (
+                <Box sx={{ py: 3, textAlign: 'center' }}>
+                  <Typography variant="body" sx={{ color: 'text.muted' }}>No accounts.</Typography>
+                </Box>
+              ) : (
+                displayedAccounts.map((account) => (
+                  <AccountListRow
                     key={account.id}
                     account={account}
-                    detail={INCOME_ACCOUNT_DETAILS[account.id]}
-                    balanceDate={balanceDate}
-                    onEditPayments={() => router.push(`${FORM_PATH}?account=${account.id}&applyTo=income-future`)}
-                    onViewHistory={() => router.push(`${HISTORY_PATH}?account=${account.id}`)}
+                    onClick={() => setAccountTypeFilter(account.id)}
                   />
-                ))}
-          </Stack>
+                ))
+              )}
+            </Box>
+          </Box>
+
+          {/* ── Applications ── */}
+          <Box
+            sx={(t: Theme) => ({
+              border: '1px solid', borderColor: 'border.default',
+              borderRadius: `${t.shape.lg}px`, overflow: 'hidden', bgcolor: 'background.paper',
+            })}
+          >
+            <Box sx={{ px: 2.5, py: 2, borderBottom: '1px solid', borderBottomColor: 'border.subtle', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Typography variant="h6">Applications</Typography>
+              {pendingApps.length > 0 && (
+                <Box sx={(t: Theme) => ({
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  minWidth: '1.375rem', height: '1.375rem', px: 0.5,
+                  borderRadius: '999px', bgcolor: 'warning.main',
+                  fontSize: '0.6875rem', fontWeight: 700, color: 'warning.contrastText',
+                })}>
+                  {pendingApps.length}
+                </Box>
+              )}
+            </Box>
+            <Box sx={{ bgcolor: 'background.default', p: 1.5, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+              {MOCK_APPLICATIONS.length === 0 ? (
+                <Box sx={{ py: 3, textAlign: 'center' }}>
+                  <Typography variant="body" sx={{ color: 'text.muted' }}>No applications in progress.</Typography>
+                </Box>
+              ) : (
+                MOCK_APPLICATIONS.map((app) => (
+                  <ApplicationRow key={app.id} app={app} onClick={() => router.push(app.continuePath)} />
+                ))
+              )}
+            </Box>
+            <Box
+              component="button" type="button"
+              onClick={() => router.push('/member-online/income-accounts')}
+              sx={(t: Theme) => ({
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '100%', height: t.spacing(7),
+                border: 'none', borderTop: '1px solid', borderTopColor: 'border.subtle',
+                borderRadius: `0 0 ${t.shape.lg}px ${t.shape.lg}px`,
+                bgcolor: 'transparent', cursor: 'pointer', fontFamily: 'inherit',
+                transition: 'background-color 200ms ease',
+                '&:hover': { bgcolor: t.palette.action.hover },
+                '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: 2, position: 'relative', zIndex: 1 },
+              })}
+            >
+              <Typography variant="body" sx={{ fontWeight: 700, color: 'primary.main' }}>Open a new account</Typography>
+            </Box>
+          </Box>
+
         </Stack>
       )}
     </ContentContainer>
   );
 }
+
