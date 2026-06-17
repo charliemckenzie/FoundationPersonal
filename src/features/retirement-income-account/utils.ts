@@ -1,4 +1,4 @@
-import { FORTNIGHTS_PER_YEAR, RETIREMENT_INCOME_ACCOUNT_RATES, MIN_PURCHASE_AMOUNT } from './constants';
+import { FORTNIGHTS_PER_YEAR, RETIREMENT_INCOME_ACCOUNT_RATES } from './constants';
 import type { BankDetails, RetirementIncomeAccountState, PensionOption, SpouseDetails } from './types';
 
 // ─── BSB utilities ───────────────────────────────────────────────────────────
@@ -150,7 +150,7 @@ export function optionStepValid(state: RetirementIncomeAccountState): boolean {
 }
 
 export function fundingStepValid(state: RetirementIncomeAccountState): boolean {
-  return state.purchaseAmount >= MIN_PURCHASE_AMOUNT;
+  return state.purchaseAmount > 0;
 }
 
 export function allocateStepValid(state: RetirementIncomeAccountState): boolean {
@@ -166,6 +166,13 @@ export function allocateStepValid(state: RetirementIncomeAccountState): boolean 
 
 function bankDetailsValid(details: BankDetails): boolean {
   return Boolean(details.bsb.trim() && details.accountNumber.trim() && details.accountName.trim());
+}
+
+export function paymentScheduleStepValid(state: RetirementIncomeAccountState): boolean {
+  const s = state.paymentSchedule;
+  if (!s.frequency || !s.firstPaymentMonth || !s.amountType) return false;
+  if (s.amountType === 'specific') return s.specificAmount > 0;
+  return true;
 }
 
 export function paymentsStepValid(state: RetirementIncomeAccountState): boolean {

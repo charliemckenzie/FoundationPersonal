@@ -50,7 +50,6 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   }
 
   // Whether the field has been blurred at least once — drives blur-time validation.
-  const [touched, setTouched] = useState(false);
 
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
@@ -60,7 +59,6 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   const lowBalance = hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
   // Default colour when healthy; only shift to warning/error states.
   const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
-  const optionLabel = pensionOption === 'spouse' ? 'spouse protection' : 'single';
   const annualEstimate = estimate?.annual ?? 0;
   const fortnightlyEstimate = estimate?.fortnightly ?? 0;
   // Muted while the purchase price is $0; default heading colour once a value is entered.
@@ -71,13 +69,8 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   // been blurred (touched); pressing Next (showValidation) additionally flags an
   // empty field.
   const isEmpty = purchaseAmount === 0;
-  const belowMin = purchaseAmount > 0 && purchaseAmount < MIN_PURCHASE_AMOUNT;
-  const fieldError = showValidation ? (isEmpty || belowMin) : (touched && belowMin);
-  const helperText = fieldError
-    ? isEmpty
-      ? 'Enter a purchase price to continue.'
-      : `Minimum purchase price is ${formatCurrency(MIN_PURCHASE_AMOUNT)}.`
-    : `Minimum ${formatCurrency(MIN_PURCHASE_AMOUNT)}`;
+  const fieldError = showValidation ? isEmpty : false;
+  const helperText = 'Enter a purchase price to continue.';
 
   return (
     <Box
@@ -126,15 +119,14 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 
         {/* Purchase price */}
         <MoneyField
-          label="Lifetime Pension purchase price"
+          label="Amount to transfer into your account"
           value={purchaseAmount || null}
           fullWidth
           error={fieldError}
-          helperText={helperText}
+          helperText={fieldError ? helperText : ''}
           onInputChange={(v) => setLiveAmount(v ?? 0)}
           onChange={(v) => {
             onPurchaseAmountChange(v ?? 0);
-            setTouched(true);
           }}
         />
 
@@ -156,8 +148,8 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           </Box>
         </Box>
         <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-          Estimated year 1 income based on the {optionLabel} option, starting at age {PENSION_ESTIMATE_AGE}.
-          Payments are reviewed and adjusted each 1 July.
+          Estimates are based on the government minimum drawdown rate for age {PENSION_ESTIMATE_AGE} (5% per year).
+          Your actual payments may be higher. Minimum rates are set by the ATO and reviewed periodically.
         </Typography>
       </Box>
 
@@ -190,41 +182,38 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 
 const ALLOCATION_CONSIDERATIONS = [
   {
-    id: 'age-pension',
-    title: 'It could boost your Age Pension',
+    id: 'tax-free',
+    title: 'Tax-free payments and investments',
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        A Lifetime Pension is one of the few retirement products that receives favourable treatment under
-        government means tests. Only 60% of your purchase price counts under the Age Pension assets test,
-        dropping to just 30% once you reach life expectancy. Only 60% of your payments count under the income
-        test. For many people, this means becoming eligible for the Age Pension for the first time, or
-        receiving a higher payment than they&apos;d otherwise qualify for.
+        If you&apos;re over 60, your income payments and investment earnings from a Retirement Income account
+        are tax-free. That means the full amount you receive goes to you — with no tax taken out. The more
+        you transfer into your account, the more you can earn in tax-free investment returns before each
+        payment.
       </Typography>
     ),
   },
   {
     id: 'access',
-    title: "It's designed to be a lifelong commitment",
+    title: 'Withdraw money when you need it',
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        You have a 6-month cooling-off period after purchase, so there&apos;s no need to rush this decision.
-        After that, a Lifetime Pension is permanent. You won&apos;t be able to make lump-sum withdrawals, and
-        that&apos;s intentional: the certainty of income for life comes from committing the funds for the long
-        term. Many members pair their Lifetime Pension with a Retirement Income account to keep some money
-        accessible for one-off expenses.
+        You can take out one-off lump-sum payments from your balance whenever you need — on top of your
+        regular income payments. You also choose how much you receive and how often, subject to the
+        government minimum drawdown amount. This flexibility makes it easy to handle unexpected expenses
+        without disrupting your regular income.
       </Typography>
     ),
   },
   {
-    id: 'investment-risk',
-    title: 'Your money is managed by experts',
+    id: 'investment',
+    title: 'You choose how your money is invested',
     content: (
       <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        Your funds are pooled with other Lifetime Pension members and invested in QSuper&apos;s Balanced
-        Risk-Adjusted option, a diversified, professionally managed portfolio. This shared approach is what
-        makes it possible to guarantee income for life, no matter how long you live. Payments are reviewed
-        each 1 July and adjusted to reflect how the pool performed. Over the long term, they&apos;re designed
-        to grow.
+        Your Retirement Income account balance stays invested while you&apos;re drawing from it, so it can
+        keep growing. You choose which investment options your balance is held in, and you can also specify
+        which options your payments come from. If you&apos;re not sure where to start, our default Lifecycle
+        strategy automatically adjusts your mix as you age.
       </Typography>
     ),
   },
@@ -293,7 +282,7 @@ function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps)
                 Your estimated bonus is {formatCurrency(amount)}
               </Typography>
               <Typography variant="body" sx={{ color: 'success.text' }}>
-                We&apos;ll add it to your balance when your Lifetime Pension is set up.
+                We&apos;ll add it to your balance when your Retirement Income account is set up.
               </Typography>
             </motion.div>
           ) : (
@@ -353,7 +342,7 @@ export function StepFunding({
   const [calculating, setCalculating] = useState(false);
   const calcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Retirement Bonus eligibility: assume eligible whenever the member is
-  // transferring money into the Lifetime Pension (conditions 2 & 3 of the ART
+  // transferring money into the Retirement Income account (conditions 2 & 3 of the ART
   // rules). The >12-month membership condition can't be checked — there's no
   // such field in the mock data yet. Gated on the committed purchaseAmount so the
   // tile appears on blur, not mid-keystroke.
@@ -377,11 +366,9 @@ export function StepFunding({
     <Stack spacing={4}>
       {/* ── Purchase price ── */}
       <Stack spacing={1}>
-        <Typography variant="h5" component="h2">Purchase price</Typography>
+        <Typography variant="h5" component="h2">Funding your income account</Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
-          The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
-          transferring money into an account you can draw on, this amount is pooled with other members to
-          fund your payments for life.
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
         </Typography>
       </Stack>
 
@@ -409,7 +396,7 @@ export function StepFunding({
         <div>
           <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
-            A Lifetime Pension is a long-term commitment, so it&apos;s worth weighing up these points before
+            A Retirement Income account is a long-term commitment, so it&apos;s worth weighing up these points before
             you decide how much to use.
           </Typography>
         </div>

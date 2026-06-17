@@ -28,6 +28,17 @@ export interface BankDetails {
   accountName: string;
 }
 
+export type PaymentFrequency = 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+export type PaymentAmountType = 'minimum' | 'specific';
+
+export interface PaymentSchedule {
+  frequency: PaymentFrequency | '';
+  firstPaymentMonth: string;
+  amountType: PaymentAmountType | '';
+  specificAmount: number;
+  adjustForCPI: boolean;
+}
+
 export interface RetirementIncomeAccountState {
   ageScenario: AgeScenario;
   introDeclarationRead: boolean;
@@ -38,6 +49,7 @@ export interface RetirementIncomeAccountState {
   spouseDetails: SpouseDetails;
   purchaseAmount: number;
   accounts: FundingAccount[];
+  paymentSchedule: PaymentSchedule;
   bankDetails: BankDetails;
   reviewDeclarationChecked: boolean;
 }
@@ -47,6 +59,7 @@ export type RetirementIncomeAccountStepId =
   | 'eligibility'
   | 'funding'
   | 'allocate'
+  | 'payment-schedule'
   | 'payments'
   | 'review';
 

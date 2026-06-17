@@ -185,8 +185,6 @@ export function StepReview({
 
   const selectedAccounts = state.accounts.filter((a) => a.selected);
   const purchasePrice = totalSelectedAmount(state);
-  const annualPayment = purchasePrice > 0 ? purchasePrice * 1.015 : 0;
-  const fortnightlyPayment = annualPayment > 0 ? annualPayment / 26 : 0;
 
   return (
     <Stack spacing={0}>
@@ -265,17 +263,38 @@ export function StepReview({
         </ReviewRow>
       </ReviewSection>
 
-      {/* Payment details */}
-      <ReviewSection title="Payment details" onEdit={() => onEditStep('payments')}>
-        <ReviewRow label="Annual payment amount">
-          <ReviewValue>{formatCurrency(annualPayment)}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Estimated payment">
-          <ReviewValue>{formatCurrency(fortnightlyPayment)} / fortnight</ReviewValue>
+      {/* Your payments */}
+      <ReviewSection title="Your payments" onEdit={() => onEditStep('payment-schedule')}>
+        <ReviewRow label="Payment frequency">
+          <ReviewValue>
+            {state.paymentSchedule.frequency
+              ? state.paymentSchedule.frequency.charAt(0).toUpperCase() + state.paymentSchedule.frequency.slice(1)
+              : '—'}
+          </ReviewValue>
         </ReviewRow>
         <ReviewRow label="First payment date">
-          <ReviewValue>Tue, 03 Feb 2026</ReviewValue>
+          <ReviewValue>
+            {state.paymentSchedule.firstPaymentMonth
+              ? new Date(state.paymentSchedule.firstPaymentMonth + '-01').toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })
+              : '—'}
+          </ReviewValue>
         </ReviewRow>
+        <ReviewRow label="Payment amount">
+          <ReviewValue>
+            {state.paymentSchedule.amountType === 'minimum'
+              ? 'Minimum'
+              : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0
+                ? `${formatCurrency(state.paymentSchedule.specificAmount)} per year`
+                : '—'}
+          </ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="Adjust for cost of living">
+          <ReviewValue>{state.paymentSchedule.adjustForCPI ? 'Yes' : 'No'}</ReviewValue>
+        </ReviewRow>
+      </ReviewSection>
+
+      {/* Bank details */}
+      <ReviewSection title="Bank details" onEdit={() => onEditStep('payments')}>
         <ReviewRow label="Bank account">
           <Stack spacing={1.5}>
             <Box>
@@ -300,7 +319,7 @@ export function StepReview({
         <Checkbox
           checked={state.reviewDeclarationChecked}
           onChange={onDeclarationChange}
-          label="I accept these declarations and understand purchasing a Lifetime Pension account is a permanent purchase after the cooling-off period."
+          label="I accept these declarations and understand I can change my payment preferences anytime in Member Online."
         />
       </Stack>
 

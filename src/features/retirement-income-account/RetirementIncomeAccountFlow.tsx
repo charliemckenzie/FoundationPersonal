@@ -19,6 +19,7 @@ import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV } from './steps/StepIDV';
 import { StepIntro } from './steps/StepIntro';
+import { StepPaymentSchedule } from './steps/StepPaymentSchedule';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
@@ -30,6 +31,7 @@ import {
   hasSelectedAccount,
   introStepValid,
   isEligible,
+  paymentScheduleStepValid,
   paymentsStepValid,
   reviewStepValid,
   totalSelectedAmount,
@@ -40,6 +42,7 @@ const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'eligibility',
   'funding',
   'allocate',
+  'payment-schedule',
   'payments',
   'review',
 ];
@@ -85,6 +88,9 @@ export function RetirementIncomeAccountFlow() {
       return allocateStepValid(state);
     }
     if (step === 4) {
+      return paymentScheduleStepValid(state);
+    }
+    if (step === 5) {
       return paymentsStepValid(state);
     }
     return reviewStepValid(state);
@@ -170,7 +176,9 @@ export function RetirementIncomeAccountFlow() {
 
   function handleResumeConfirm() {
     if (resumeDraft) {
-      setState(resumeDraft.state);
+      // Merge with INITIAL_STATE so any fields added after the draft was saved
+      // always have a valid default (e.g. paymentSchedule added in a later version).
+      setState({ ...INITIAL_STATE, ...resumeDraft.state });
       setActiveStep(resumeDraft.activeStep);
       setLastSavedAt(new Date(resumeDraft.savedAt));
     }
@@ -303,6 +311,13 @@ export function RetirementIncomeAccountFlow() {
                 showValidation={showValidation}
               />
             ) : activeStep === 4 ? (
+              <StepPaymentSchedule
+                purchaseAmount={purchaseTotal}
+                paymentSchedule={state.paymentSchedule}
+                onPaymentScheduleChange={(next) => updateState({ ...state, paymentSchedule: next })}
+                showValidation={showValidation}
+              />
+            ) : activeStep === 5 ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
                 bankDetails={state.bankDetails}

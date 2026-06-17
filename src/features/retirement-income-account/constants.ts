@@ -5,7 +5,8 @@ export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
   { id: 'funding', label: 'Purchase price' },
   { id: 'allocate', label: 'Allocate funds' },
-  { id: 'payments', label: 'Payments' },
+  { id: 'payment-schedule', label: 'Your payments' },
+  { id: 'payments', label: 'Bank details' },
   { id: 'review', label: 'Review' },
 ];
 
@@ -62,6 +63,13 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
   spouseDetails: EMPTY_SPOUSE_DETAILS,
   purchaseAmount: 0,
   accounts: BASE_ACCOUNTS,
+  paymentSchedule: {
+    frequency: '',
+    firstPaymentMonth: '',
+    amountType: '',
+    specificAmount: 0,
+    adjustForCPI: false,
+  },
   bankDetails: {
     bsb: '',
     accountNumber: '',
@@ -70,12 +78,12 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
   reviewDeclarationChecked: false,
 };
 
-export const MIN_PURCHASE_AMOUNT = 10000;
+export const MIN_PURCHASE_AMOUNT = 0;
 // Minimum balance a member must leave in their Accumulation account to keep it
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [20, 40, 60, 80, 100] as const;
+export const TARGET_PERCENT = [17, 33, 50, 67, 83, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Retirement Income Account payment estimate
@@ -116,6 +124,7 @@ export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
+  'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
