@@ -231,8 +231,8 @@ export function RetirementIncomeAccountFlow() {
             {activeStep === 0 && (
               <>
                 <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  A Retirement Income Account provides guaranteed, fortnightly tax-free income for life.
-                  It combines your contribution with others in a shared investment pool.
+                  A Retirement Income account allows people to receive regular tax free income from your super during
+                  retirement. To learn more about this account you can download the Product Disclosure Statement.
                 </Typography>
                 <Divider sx={{ mt: 2 }} />
               </>

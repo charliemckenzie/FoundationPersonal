@@ -23,36 +23,36 @@ export function StepIntro({
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Before you start
+          Eligibility Criteria
         </Typography>
         <Typography variant="body">
-          Use this form to open a Lifetime Pension account. Here&rsquo;s what to expect.
+          You must meet the following criteria before opening a Retirement Income account.
         </Typography>
       </div>
 
       <IconList
         items={[
-          { text: 'Takes around 10 minutes to complete' },
-          { text: 'Minimum purchase amount of $10,000' },
-          { text: 'You may need to confirm your identity before your application is processed' },
-          { text: 'Your payments will start from the next business day after processing' },
+          {
+            text: 'Aged 60+. If you are aged 60-64, you must meet at least one access condition. If you are aged 65 or over, you automatically qualify to open an account.',
+          },
+          { text: 'You must open your account with a balance greater than $0.' },
+          {
+            text: 'Be able to verify identity. We may require a Driver\'s licence, Passport, or Medicare card. If online verification fails, certified documents must be posted.',
+          },
         ]}
       />
 
       <Divider sx={{ borderColor: 'border.subtle' }} />
 
       <Stack spacing={1.5}>
-        <Typography variant="h6">Important information</Typography>
+        <Typography variant="h6">Important to note</Typography>
         <Stack
           component="ul"
           spacing={1}
           sx={{ m: 0, pl: 2.5 }}
         >
           <Typography component="li" variant="small">
-            This is a <strong>permanent purchase</strong> after a 6-month cooling-off period. Funds cannot be withdrawn after this point, except in the case of a terminal medical condition if money-back protection is payable.
-          </Typography>
-          <Typography component="li" variant="small">
-            Leave at least <strong>$10,000</strong> in your accumulation account to maintain any insurance cover you may hold. Falling below this balance may cause your insurance to be cancelled.
+            Leave at least <strong>$10,000</strong> in your accumulation account if you wish to keep it open.
           </Typography>
           <Typography component="li" variant="small">
             <strong>Tax contributions:</strong> If you claimed a tax deduction on voluntary contributions in the current or last financial year, you must have confirmation. Without it, we cannot process your notice of deduction.
@@ -70,7 +70,7 @@ export function StepIntro({
             ? 'Please confirm you have reviewed the information and PDS.'
             : undefined
         }
-        label="I have read and reviewed the information and I am ready to complete the application. I also confirm that I have received, read and understood the accompanying Super Savings Product Disclosure Statement for Income Account and Lifetime Pension (PDS) which summarises the significant information about the product."
+        label="I have enough money in my accumulation account/s to transfer an amount greater than $0 to start a Retirement Income account and leave at least $10,000 in my accumulation account if I want my insurance cover to continue."
       />
       <Checkbox
         variant="default"
@@ -79,10 +79,10 @@ export function StepIntro({
         error={showValidation && !declarationPermanent}
         errorMessage={
           showValidation && !declarationPermanent
-            ? 'Please confirm you understand the permanent purchase terms.'
+            ? 'Please confirm you have reviewed the identity and PDS requirements.'
             : undefined
         }
-        label="I understand Lifetime Pension is a permanent purchase after a 6-month cooling-off period and funds cannot be withdrawn after this point, except in the case of a terminal medical condition if money-back protection is payable."
+        label="I have read and reviewed the information and have all the listed ID documents ready to complete the application. I also confirm that I have received, read and understood the accompanying Super Savings Product Disclosure Statement for Income Account and Lifetime Pension (PDS) which summarises the significant information about the product."
       />
     </Stack>
   );
