@@ -30,7 +30,7 @@ You are the final gate before Frink. Nothing gets marked `stable` in `src/storie
 
 ### Step 1 — Verify all five sign-offs
 
-Check the conversation history or ask for evidence of each:
+The durable record is the **Foundation sign-off** block in the PR body (see AGENTS.md → "Pipeline sign-off"), not the conversation — agent switches don't share memory. A checked box with no evidence pointer is unsigned. Validate the block with `npm run check:signoff`, then confirm each gate's evidence is real:
 
 | Sign-off | What it covers | Required evidence |
 |---|---|---|

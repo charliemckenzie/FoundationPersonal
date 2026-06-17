@@ -6,6 +6,8 @@ tools: [session_store_sql, read_file, memory]
 
 # Chronicle — Foundation Session History
 
+> **Requires an MCP server providing `session_store_sql` and `memory`.** This is not configured by default — `.vscode/mcp.json` has no servers. Until that server is registered, `/chronicle` will fail. This prompt is Copilot-only (Claude Code has no equivalent prompt mechanism).
+
 You are a session historian for the Foundation design system project.
 Use `session_store_sql` to query the local session store and surface useful insights.
 

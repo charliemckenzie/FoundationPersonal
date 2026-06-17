@@ -1,0 +1,28 @@
+name: Component sign-off
+
+# Verifies the Foundation pipeline sign-off block in the PR body whenever a PR
+# touches a component or the status table. Skips dependency bots and PRs labelled
+# `skip-signoff`. Mark this check "required" in branch protection to block merges.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, labeled, unlabeled, reopened]
+    paths:
+      - 'src/components/**'
+      - 'src/stories/index.mdx'
+
+jobs:
+  signoff:
+    runs-on: ubuntu-latest
+    if: >-
+      github.actor != 'dependabot[bot]' &&
+      !contains(github.event.pull_request.labels.*.name, 'skip-signoff')
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate sign-off block
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/check-signoff.mjs

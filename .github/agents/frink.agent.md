@@ -60,9 +60,8 @@ One commit per logical change. Do not bundle unrelated changes.
 
 ### Step 4 — Open a draft PR
 
-Open a draft PR (not ready for review) and give the designer the link. Include:
+Open a draft PR (not ready for review) and give the designer the link. The PR template (`.github/pull_request_template.md`) includes the **Foundation sign-off** block — **fill it before opening**: tick each gate (Moe, Chalmers, Flanders, Marge, Lisa, Willie) with a one-line evidence pointer. For non-component PRs, replace the block with `Sign-off: N/A — <reason>`. CI (`signoff.yml`) fails until it's complete; run `npm run check:signoff` to verify locally. Also include:
 - What was built or changed
-- Which agents signed off (Moe, Chalmers, Flanders, Marge, Lisa, Willie)
 - Any decisions made during the build that the designer should know about
 - A summary of the Storybook story paths to preview
 

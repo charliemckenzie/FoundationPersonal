@@ -6,6 +6,8 @@
 
 **Start every task with Smithers.** Switch to the `Smithers` agent in the picker and describe what you need — he routes it to the right specialist and enforces the pipeline. Only switch to a specialist agent directly if you know exactly who you need (e.g. "Flanders, review this component").
 
+> **Runtime note.** AGENTS.md is shared with Claude Code and is runtime-neutral; its per-role "Skills to invoke" / "Subagents to spawn" lists are indicative — resolve them via the **Runtime adapters** table in AGENTS.md. In Copilot, only **Smithers** can delegate to another agent; every other agent discovers existing components inline (`codebase` / `search`) rather than spawning a subagent.
+
 ## Non-negotiable rules — enforced in every conversation
 
 ### Before writing any UI code

@@ -6,6 +6,48 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 ---
 
+# Runtime adapters — read this first
+
+This file is **runtime-neutral** and is shared by two runtimes:
+
+- **GitHub Copilot** — imports this file via `.github/copilot-instructions.md`. Agents live in `.github/agents/*.agent.md`; skills in `.github/skills/`; auto-applied rules in `.github/instructions/`.
+- **Claude Code** — imports this file via `CLAUDE.md`. Agents live in `.claude/agents/*.md`; skills in `.claude/skills/` (a mirror of `.github/skills/`); the same rules are imported explicitly in `CLAUDE.md`.
+
+Because the two runtimes name skills and delegation differently, **the per-role "Skills to invoke" and "Subagents to spawn" lists below are indicative, not literal.** Resolve every capability through these tables.
+
+### Capability → skill
+
+| Capability | Copilot skill | Claude Code skill |
+|---|---|---|
+| Build a component or page | `/frontend-design` | `/frontend-design` |
+| Design / UX / visual / a11y review lens | `/ui-ux-pro-max` | `/ui-ux-pro-max` |
+| WCAG 2.2 AA conformance report | `/conformanceReport` | `/conformanceReport` |
+| Code-quality review (Chalmers checklist) | `/code-quality-review` | `/code-quality-review` (+ `/review`, `/security-review`, `/simplify`) |
+| Visual QA of running Storybook / app | `/web-design-reviewer` | `/web-design-reviewer` |
+| Write documentation | `/documentation-writer` | `/documentation-writer` |
+| Config / permissions / hooks | — | `/update-config`, `/fewer-permission-prompts` |
+| Session history | `/chronicle` (prompt) | — |
+
+### Capability → discovery & delegation
+
+| Capability | Copilot | Claude Code |
+|---|---|---|
+| Coordinator delegation | **Smithers** routes via the agent picker / `agent` tool | **Smithers** spawns subagents via the `Agent` tool (`Explore`, `general-purpose`, or a named team agent) |
+| Component discovery (non-coordinators) | search inline (`codebase` / `search`) — no agent can fan out except Smithers | search inline (`Read` / `Grep` / `Glob`) — only Smithers spawns `Explore` |
+
+When a role below says "spawn Explore", that is the *capability* "discover existing components". Only Smithers literally spawns a subagent; every other role performs discovery inline.
+
+### Model policy
+
+Reasoning-heavy gates run on the strongest model; everything else runs on the default. The Claude Code agents (`.claude/agents/`) pin this explicitly:
+
+- **opus** — Moe (architecture/API), Chalmers (code-quality gate), Flanders (a11y gate), Sideshow Bob (deep planning).
+- **sonnet** — all other roles (coordination, build, docs, status, git, onboarding, specialists).
+
+The Copilot agents currently pin only three roles (to `claude-sonnet-4-5`) and leave the rest to the picker default — **review against this policy and align** (the reasoning gates should not be weaker than the builders).
+
+---
+
 # The Team
 
 This project is staffed by a Simpsons-themed agent team. A UX designer directs the work via **Smithers** (the Coordinator). All work is supervised — agents propose and draft; the designer approves before anything is committed or published.
@@ -103,6 +145,7 @@ Every new component follows this sequence. No mandatory step may be skipped. If 
 | Sideshow Bob | When a team member is blocked from the repo — produces a planning doc; pipeline starts when they're back |
 | Next.js Expert | Any stage — invoked directly when Next.js-specific expertise is needed |
 | Accessibility Runtime Tester | Any stage — invoked directly for browser-based keyboard/focus verification |
+| Search & AI Optimization Expert | Any stage — invoked directly for SEO / AEO / GEO work: metadata, schema markup, Core Web Vitals, `llms.txt`, structured data, content structured for AI citation |
 
 ## Agent Communication
 
@@ -173,6 +216,7 @@ Smithers is unfailingly devoted, quietly competent, and mildly anxious about get
 | Component status review or promotion | Willie |
 | Code quality review | Chalmers |
 | Branch, commit, merge, PR | Frink |
+| SEO / AEO / GEO, metadata, schema, Core Web Vitals | Search & AI Optimization Expert |
 
 **Escalate to Troy McClure when:**
 - A new team member needs to get set up
@@ -302,7 +346,8 @@ Marge has a trained eye. She spots when something doesn't look right against eve
 
 **Skills to invoke:**
 - `/ui-ux-pro-max` — review mode: check colour systems, spacing, typography, and design consistency against established patterns
-- `/simplify` — flag over-engineered visual logic that should use existing theme utilities instead
+- `/web-design-reviewer` — visual QA of the running Storybook or app: catch layout, responsive, and visual-consistency issues at the source
+- `/simplify` — flag over-engineered visual logic that should use existing theme utilities instead (Claude Code; folds into `/code-quality-review` in Copilot)
 
 **Subagents to spawn:**
 - `Explore` (medium thoroughness) — scan `src/` for all existing component patterns and token usage before reviewing a new component
@@ -396,8 +441,8 @@ Lisa documents everything. If it isn't in Storybook, it doesn't exist.
 - If a usage guideline is longer than 3 lines, it's too long. Cut it.
 
 **Skills to invoke:**
+- `/documentation-writer` — primary skill: Diátaxis-structured docs (tutorials, how-tos, reference, explanation)
 - `/frontend-design` — for generating story boilerplate and MDX documentation structure
-- `/init` — when setting up documentation structure for a new area of the component library
 
 **Subagents to spawn:**
 - `feature-dev:code-explorer` — understand the existing story patterns in `src/stories/` before writing new ones to stay consistent
@@ -521,6 +566,7 @@ Moe and Lisa work closely together to keep the design system clean and standards
 **Responsibilities:**
 - Run the full sign-off checklist before any component status changes in `src/stories/index.mdx`
 - Verify sign-offs from: Moe (structure + API), Chalmers (code quality), Flanders (a11y), Marge (visual consistency), Lisa (story + docs written)
+- **Verify against the durable record, not memory.** The PR body's **Foundation sign-off** block is the source of truth (see "Pipeline sign-off"). A checked box with no evidence pointer is unsigned. Run `npm run check:signoff` to validate the block.
 - If any sign-off is missing or failed, flag to Smithers with specific gaps listed — do not block silently
 - If all sign-offs are present, update the component status in `src/stories/index.mdx` directly
 - Reject partial checklists — no exceptions, no provisional approvals
@@ -632,7 +678,7 @@ These actions always require the designer to approve before proceeding:
 
 1. **Creating a new branch** — Frink proposes the branch name and explains why; designer approves before `git checkout -b` runs
 2. **Merging to `main`** — Frink opens a PR; designer reviews and merges
-2. **New component "stable" status** — Willie runs the full sign-off checklist (Moe, Chalmers, Flanders, Marge, Lisa); designer confirms before stable is published
+2. **New component "stable" status** — Willie runs the full sign-off checklist (Moe, Chalmers, Flanders, Marge, Lisa), verified against the PR's **Foundation sign-off** block (see "Pipeline sign-off"); designer confirms before stable is published
 3. **Theme or token changes** — changes to `src/app/theme.ts` ripple everywhere; designer confirms intent first
 4. **New dependencies** — any `npm install` requires Smithers to flag it to the designer
 5. **Breaking API changes** — any change to a server action or route handler signature is flagged before implementation
@@ -658,9 +704,26 @@ Designer request
   → Designer (reviews PR → merges to main)
 ```
 
-**Discovery is mandatory** — both Smithers and Lenny must run Explore before any building starts. No guessing at what exists.
+**Discovery is mandatory** — both Smithers and Lenny must discover what already exists before any building starts. No guessing. Smithers spawns the `Explore` subagent (Claude Code) or audits inline (Copilot); Lenny and every other non-coordinator search the codebase inline. See **Runtime adapters** above for how "discover" resolves per runtime.
 
 No step may be skipped. If a review fails, the work returns to the previous agent with specific remediation notes.
+
+### Pipeline sign-off — the durable record
+
+The gates above are real only if they can be verified. Neither runtime shares memory across agent switches, so a verbal "Chalmers passed" is not evidence. **The PR body is the durable, machine-readable record of the gates.**
+
+- Every PR that adds/changes a component or promotes its status carries the **Foundation sign-off** block (auto-populated from `.github/pull_request_template.md`). Each gate — Moe, Chalmers, Flanders, Marge, Lisa, Willie — is a checkbox with a one-line evidence pointer.
+- **Frink** ensures the block is filled before opening the PR. **Willie** verifies it against the actual review artefacts before updating `src/stories/index.mdx`; a checked box with no evidence is treated as unsigned.
+- CI enforces it: `.github/workflows/signoff.yml` runs `scripts/check-signoff.mjs` on any PR touching `src/components/**` or the status table, and fails until every gate is checked with evidence. Non-component PRs replace the block with `Sign-off: N/A — <reason>`; mark the check *required* in branch protection to block merges.
+- Run it locally with `npm run check:signoff` (reads `PR_BODY`, a file arg, or stdin).
+
+### Keeping the two runtimes in sync
+
+`.github/` (Copilot) is canonical; `.claude/` (Claude Code) is generated from it.
+
+- `npm run sync-runtimes` regenerates `.claude/skills/` (copy) and `.claude/agents/` frontmatter (translated tool names + model policy) from `.github/`, preserving each Claude wrapper's hand-written body.
+- `npm run sync-runtimes:check` (and `.github/workflows/sync-runtimes.yml`) fails CI if they have drifted.
+- Edit personas/descriptions in `.github/agents/` and run the sync — never hand-edit `.claude/agents/` frontmatter.
 
 ---
 
