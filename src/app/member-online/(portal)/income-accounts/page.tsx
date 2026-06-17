@@ -34,7 +34,7 @@ export default function IncomeAccountsPage() {
               label="Open a Retirement Income Account"
               description="A flexible account that lets you draw down your super as regular income."
               icon="money-simple-from-bracket"
-              href="#"
+              href="/member-online/retirement-income-account"
             />
             <LinkRow
               label="Open a Lifetime Pension"
