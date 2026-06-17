@@ -23,22 +23,17 @@ export function StepIntro({
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Eligibility Criteria
+          Before you start
         </Typography>
         <Typography variant="body">
-          You must meet the following criteria before opening a Retirement Income account.
+          Use this form to open a Retirement Income account. Here&rsquo;s what to expect.
         </Typography>
       </div>
 
       <IconList
         items={[
-          {
-            text: 'Aged 60+. If you are aged 60-64, you must meet at least one access condition. If you are aged 65 or over, you automatically qualify to open an account.',
-          },
           { text: 'You must open your account with a balance greater than $0.' },
-          {
-            text: 'Be able to verify identity. We may require a Driver\'s licence, Passport, or Medicare card. If online verification fails, certified documents must be posted.',
-          },
+          { text: 'You may need to confirm your identity before your application is processed' },
         ]}
       />
 
