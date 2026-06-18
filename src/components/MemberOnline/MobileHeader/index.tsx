@@ -1,8 +1,11 @@
 'use client';
 
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { IconButton } from '../../IconButton';
+import { Icon } from '../../Icon';
 import { Button } from '../../Button';
+import { buildGhostStyles } from '../../buttons/variantStyles';
 import { DEFAULT_MEMBER_ONLINE_COPY, type LogoSlot } from '../types';
 
 export interface MobileHeaderProps {
@@ -84,19 +87,42 @@ export function MobileHeader({
         '&:focus': { outline: 'none' },
       })}
     >
-      <IconButton
-        icon="bars"
-        iconStyle="light"
-        label={openMenuLabel}
-        variant="ghost"
-        size="medium"
-        condensed
-        onClick={onMenuOpen}
-        showTooltip={false}
+      <Box
+        component="button"
+        type="button"
+        aria-label={openMenuLabel}
         aria-haspopup="menu"
         aria-expanded={menuOpen}
         aria-controls={menuOpen ? menuId : undefined}
-      />
+        onClick={onMenuOpen}
+        sx={[
+          {
+            display: 'inline-flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 0.5,
+            px: 1.5,
+            ml: -1,
+            py: 0.75,
+            border: 'none',
+            cursor: 'pointer',
+            borderRadius: '9999px',
+            minHeight: '2.75rem',
+            lineHeight: 1,
+            flexShrink: 0,
+            '&:focus-visible': {
+              outline: (t) => `2px solid ${t.palette.primary.main}`,
+              outlineOffset: '2px',
+            },
+          },
+          buildGhostStyles('primary'),
+        ]}
+      >
+        <Icon icon="bars" style="regular" size="xl" color="inherit" />
+        <Typography variant="caption" component="span" aria-hidden="true" sx={{ m: 0, color: 'inherit', fontWeight: 500, lineHeight: 1 }}>
+          Menu
+        </Typography>
+      </Box>
       {onSearchOpen !== undefined && (
         <IconButton
           icon="magnifying-glass"

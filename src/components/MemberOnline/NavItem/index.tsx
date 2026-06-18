@@ -13,6 +13,8 @@ export type NavItemVariant = 'primary' | 'secondary';
 
 export interface NavItemProps {
   label: string;
+  /** Optional secondary text shown below the label. */
+  description?: string;
   icon?: string;
   /** Highlights the item as the current page: filled background + solid icon. */
   active?: boolean;
@@ -72,16 +74,17 @@ function rootSx(
     transition: t.transitions.create(['background-color', 'color'], {
       duration: t.transitions.duration.shortest,
     }),
+    '&:visited': { color: isHighlighted ? t.palette.primary.main : t.palette.text.primary },
     '&:hover': {
       backgroundColor: 'background.paper',
       color: 'text.link',
       textDecoration: 'none',
     },
+    '&:visited:hover': { color: 'text.link' },
     '&:active': {
       backgroundColor: 'background.default',
       color: t.palette.text.link,
     },
-    '&:visited': { color: isHighlighted ? t.palette.primary.main : t.palette.text.primary },
     '&.Mui-focusVisible': {
       outline: `2px solid ${t.palette.border.focus}`,
       outlineOffset: '-2px',
@@ -106,6 +109,7 @@ function rootSx(
 export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
   {
     label,
+    description,
     icon,
     active = false,
     parentActive = false,
@@ -156,6 +160,7 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
       )}
       <ListItemText
         primary={label}
+        secondary={description}
         sx={{ my: 0 }}
         slotProps={{
           primary: {
@@ -164,6 +169,10 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
               fontWeight: 500,
               lineHeight: variant === 'primary' ? 28 / 18 : 1.5,
             },
+          },
+          secondary: {
+            variant: 'small' as const,
+            sx: { color: 'text.muted', lineHeight: 20 / 14, mt: 0.25, mb: 0 },
           },
         }}
       />

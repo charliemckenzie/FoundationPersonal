@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import MuiDrawer from '@mui/material/Drawer';
-import { IconButton } from '../../IconButton';
+import { CloseButton } from '../../CloseButton';
 import { TextButton } from '../../TextButton';
 import { Button } from '../../Button';
 import { NavItem } from '../NavItem';
@@ -126,15 +126,10 @@ export function MobileNavDrawer({
         minHeight="4.25rem"
         containerSx={{ px: 2, py: 1.5, justifyContent: 'space-between' }}
         trailing={
-          <IconButton
-            icon="xmark"
-            iconStyle="light"
+          <CloseButton
+            onClick={onClose}
             label={labels.closeMenuLabel}
             variant="ghost"
-            size="medium"
-            condensed
-            onClick={onClose}
-            showTooltip={false}
           />
         }
       />
@@ -260,6 +255,7 @@ export function MobileNavDrawer({
                   <Box component="li" key={child.id}>
                     <NavItem
                       label={child.label}
+                      description={child.description}
                       icon={child.icon}
                       href={child.href}
                       active={activeItemId === child.id}

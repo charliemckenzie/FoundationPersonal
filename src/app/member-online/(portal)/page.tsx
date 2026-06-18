@@ -8,6 +8,9 @@ import { ContentContainer, MOBreadcrumb } from '../../../components/MemberOnline
 import type { ContentContainerSize } from '../../../components/MemberOnline';
 import { Select } from '../../../components/Select';
 import { Switch } from '../../../components/Switch';
+import { useNavConfig } from './NavConfigContext';
+import { NAV_CONFIG_OPTIONS } from './navConfigs';
+import type { NavConfigKey } from './navConfigs';
 
 const SIZE_OPTIONS = [
   { value: 'xs',  label: 'xs — 512px' },
@@ -21,6 +24,7 @@ const SIZE_OPTIONS = [
 export default function MemberOnlinePage() {
   const [containerSize, setContainerSize] = useState<ContentContainerSize>('lg');
   const [showBreadcrumb, setShowBreadcrumb] = useState(true);
+  const { navConfig, setNavConfig } = useNavConfig();
 
   return (
     <>
@@ -48,6 +52,14 @@ export default function MemberOnlinePage() {
         }}
       >
         <Stack spacing={2} sx={{ alignItems: 'center' }}>
+          <Box sx={{ width: '12rem' }}>
+            <Select
+              label="Navigation config"
+              options={NAV_CONFIG_OPTIONS}
+              value={navConfig}
+              onChange={(v) => setNavConfig(v as NavConfigKey)}
+            />
+          </Box>
           <Box sx={{ width: '12rem' }}>
             <Select
               label="Container size"
