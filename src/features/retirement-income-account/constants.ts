@@ -3,10 +3,15 @@ import type { FundingAccount, IDVState, RetirementIncomeAccountState, SpouseDeta
 
 export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
-  { id: 'funding', label: 'Purchase price' },
+  { id: 'setup-mode', label: 'Account setup' },
+  { id: 'funding', label: 'Funding your income account' },
   { id: 'allocate', label: 'Allocate funds' },
   { id: 'payment-schedule', label: 'Your payments' },
   { id: 'payments', label: 'Bank details' },
+  { id: 'investment-strategy', label: 'Investment strategy' },
+  { id: 'investment-mix', label: 'Investment mix' },
+  { id: 'investment-drawdown', label: 'Drawdown order' },
+  { id: 'beneficiary', label: 'Reversionary beneficiary' },
   { id: 'review', label: 'Review' },
 ];
 
@@ -63,6 +68,8 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
   spouseDetails: EMPTY_SPOUSE_DETAILS,
   purchaseAmount: 0,
   accounts: BASE_ACCOUNTS,
+  setupMode: null,
+  investmentStrategy: null,
   paymentSchedule: {
     frequency: '',
     firstPaymentMonth: '',
@@ -75,6 +82,26 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
     accountNumber: '',
     accountName: '',
   },
+  investmentMix: { mode: '', allocations: {} },
+  drawdown: {
+    mode: '',
+    customMethod: '',
+    orderAllocations: {},
+    percentageAllocations: {},
+    autoRebalance: false,
+  },
+  beneficiaryState: {
+    nominate: '',
+    beneficiary: {
+      relationship: '',
+      firstName: '',
+      lastName: '',
+      middleName: '',
+      dateOfBirth: '',
+      phone: '',
+      email: '',
+    },
+  },
   reviewDeclarationChecked: false,
 };
 
@@ -83,7 +110,6 @@ export const MIN_PURCHASE_AMOUNT = 0;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [17, 33, 50, 67, 83, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Retirement Income Account payment estimate
@@ -122,8 +148,14 @@ export const FORTNIGHTS_PER_YEAR = 26;
 
 export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
+export const TARGET_PERCENT = [9, 18, 27, 36, 45, 55, 64, 73, 82, 91, 100] as const;
 
 export const STEP_TITLES = [
+  'Open a Retirement Income Account',
+  'Open a Retirement Income Account',
+  'Open a Retirement Income Account',
+  'Open a Retirement Income Account',
+  'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
@@ -143,7 +175,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
   middleName: '',
   residentialAddress: '52 Mountain View Rd, Montmorency, VIC 3094',
   email: 'jane.smith@gmail.com',
-  dateOfBirth: '31/03/1969',
+  dateOfBirth: '31/03/1959',
   mobilePhone: '0412 345 678',
 };
 

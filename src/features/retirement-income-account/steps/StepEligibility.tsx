@@ -54,7 +54,7 @@ export function StepEligibility({
       >
         <RadioGroup
           legend="Have you permanently retired from work?"
-          legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 1 }}
+          legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 1, '&.Mui-focused': { color: 'text.heading' } }}
           sublabel={
             <Typography variant="small">
               This means you were in paid employment for at least 10 hours a week and{' '}
@@ -73,7 +73,7 @@ export function StepEligibility({
           <Box sx={{ pt: 1 }}>
           <RadioGroup
             legend="Have you left an employer on or after turning 60?"
-            legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 2 }}
+            legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 2, '&.Mui-focused': { color: 'text.heading' } }}
             value={leftEmployerAfter60}
             options={YES_NO_OPTIONS}
             direction="row"

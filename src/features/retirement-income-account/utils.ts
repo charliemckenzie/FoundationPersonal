@@ -1,5 +1,6 @@
 import { FORTNIGHTS_PER_YEAR, RETIREMENT_INCOME_ACCOUNT_RATES } from './constants';
 import type { BankDetails, RetirementIncomeAccountState, PensionOption, SpouseDetails } from './types';
+import { MOCK_INVESTMENT_OPTIONS } from './steps/StepInvestmentMix';
 
 // ─── BSB utilities ───────────────────────────────────────────────────────────
 
@@ -177,6 +178,51 @@ export function paymentScheduleStepValid(state: RetirementIncomeAccountState): b
 
 export function paymentsStepValid(state: RetirementIncomeAccountState): boolean {
   return bankDetailsValid(state.bankDetails);
+}
+
+export function investmentMixStepValid(state: RetirementIncomeAccountState): boolean {
+  const mix = state.investmentMix;
+  if (!mix?.mode) return false;
+  if (mix.mode === 'default') return true;
+  const total = MOCK_INVESTMENT_OPTIONS.reduce(
+    (sum, opt) => sum + ((mix.allocations ?? {})[opt.id] ?? 0),
+    0,
+  );
+  return Math.abs(total - 100) <= 0.001;
+}
+
+export function drawdownStepValid(state: RetirementIncomeAccountState): boolean {
+  const d = state.drawdown;
+  if (!d?.mode) return false;
+  if (d.mode === 'default') return true;
+  if (!d.customMethod) return false;
+  if (d.customMethod === 'order') {
+    return ['opt-high-growth', 'opt-balanced', 'opt-conservative-balanced'].every(
+      (id) => (d.orderAllocations?.[id] ?? 0) > 0,
+    );
+  }
+  const total = ['opt-high-growth', 'opt-balanced', 'opt-conservative-balanced'].reduce(
+    (sum, id) => sum + ((d.percentageAllocations ?? {})[id] ?? 0),
+    0,
+  );
+  return Math.abs(total - 100) <= 0.001;
+}
+
+export function setupModeStepValid(state: RetirementIncomeAccountState): boolean {
+  return state.setupMode !== null;
+}
+
+export function investmentStrategyStepValid(state: RetirementIncomeAccountState): boolean {
+  return state.investmentStrategy !== null;
+}
+
+export function beneficiaryStepValid(state: RetirementIncomeAccountState): boolean {
+  const bs = state.beneficiaryState;
+  if (!bs) return true;
+  const { nominate, beneficiary: b } = bs;
+  if (nominate === 'no') return true;
+  if (nominate !== 'yes') return false;
+  return !!b.relationship && !!b.firstName && !!b.lastName && !!b.dateOfBirth;
 }
 
 export function reviewStepValid(state: RetirementIncomeAccountState): boolean {

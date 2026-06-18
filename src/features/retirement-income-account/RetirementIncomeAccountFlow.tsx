@@ -21,7 +21,12 @@ import { StepIDV } from './steps/StepIDV';
 import { StepIntro } from './steps/StepIntro';
 import { StepPaymentSchedule } from './steps/StepPaymentSchedule';
 import { StepPayments } from './steps/StepPayments';
+import { StepInvestmentMix } from './steps/StepInvestmentMix';
+import { StepInvestmentDrawdown } from './steps/StepInvestmentDrawdown';
+import { StepBeneficiary } from './steps/StepBeneficiary';
 import { StepReview } from './steps/StepReview';
+import { StepSetupMode } from './steps/StepSetupMode';
+import { StepInvestmentStrategy } from './steps/StepInvestmentStrategy';
 import { StepSuccess } from './steps/StepSuccess';
 import type { RetirementIncomeAccountDraft, RetirementIncomeAccountState, RetirementIncomeAccountStepId, VerifyDetailsState } from './types';
 import {
@@ -31,19 +36,29 @@ import {
   hasSelectedAccount,
   introStepValid,
   isEligible,
+  investmentMixStepValid,
+  investmentStrategyStepValid,
+  drawdownStepValid,
+  beneficiaryStepValid,
   paymentScheduleStepValid,
   paymentsStepValid,
   reviewStepValid,
+  setupModeStepValid,
   totalSelectedAmount,
 } from './utils';
 
 const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'intro',
   'eligibility',
+  'setup-mode',
   'funding',
   'allocate',
   'payment-schedule',
   'payments',
+  'investment-strategy',
+  'investment-mix',
+  'investment-drawdown',
+  'beneficiary',
   'review',
 ];
 
@@ -74,26 +89,64 @@ export function RetirementIncomeAccountFlow() {
     );
   }, [state.accounts]);
 
+  // Steps that are conditionally hidden when user selects "simple" setup mode
+  const CONDITIONAL_STEPS: RetirementIncomeAccountStepId[] = [
+    'funding',
+    'allocate',
+    'payment-schedule',
+    'payments',
+    'investment-strategy',
+    'investment-mix',
+    'investment-drawdown',
+  ];
+
+  // Steps skipped when custom path user picks "use recommended" investment strategy
+  const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix', 'investment-drawdown'];
+
+  // Filter visible steps based on setup mode and investment strategy
+  const visibleStepKeys = useMemo(() => {
+    if (state.setupMode === 'simple') {
+      return STEP_KEYS.filter((id) => !CONDITIONAL_STEPS.includes(id));
+    }
+    if (state.investmentStrategy === 'default') {
+      return STEP_KEYS.filter((id) => !INVESTMENT_STEPS.includes(id));
+    }
+    return STEP_KEYS;
+  }, [state.setupMode, state.investmentStrategy]);
+
+  // Get current step ID from the visible steps
+  const currentStepId = visibleStepKeys[activeStep];
+
   function stepIsValid(step: number): boolean {
-    if (step === 0) {
-      return introStepValid(state);
+    const stepId = visibleStepKeys[step];
+    switch (stepId) {
+      case 'intro':
+        return introStepValid(state);
+      case 'eligibility':
+        return eligibilityStepValid(state);
+      case 'funding':
+        return fundingStepValid(state);
+      case 'allocate':
+        return allocateStepValid(state);
+      case 'setup-mode':
+        return setupModeStepValid(state);
+      case 'payment-schedule':
+        return paymentScheduleStepValid(state);
+      case 'payments':
+        return paymentsStepValid(state);
+      case 'investment-strategy':
+        return investmentStrategyStepValid(state);
+      case 'investment-mix':
+        return investmentMixStepValid(state);
+      case 'investment-drawdown':
+        return drawdownStepValid(state);
+      case 'beneficiary':
+        return beneficiaryStepValid(state);
+      case 'review':
+        return reviewStepValid(state);
+      default:
+        return false;
     }
-    if (step === 1) {
-      return eligibilityStepValid(state);
-    }
-    if (step === 2) {
-      return fundingStepValid(state);
-    }
-    if (step === 3) {
-      return allocateStepValid(state);
-    }
-    if (step === 4) {
-      return paymentScheduleStepValid(state);
-    }
-    if (step === 5) {
-      return paymentsStepValid(state);
-    }
-    return reviewStepValid(state);
   }
 
   function advance(nextStep: number) {
@@ -113,12 +166,12 @@ export function RetirementIncomeAccountFlow() {
       return;
     }
 
-    if (activeStep === 3 && hasFullBalanceTransfer) {
+    if (currentStepId === 'allocate' && hasFullBalanceTransfer) {
       setShowInsuranceModal(true);
       return;
     }
 
-    if (activeStep === STEP_KEYS.length - 1) {
+    if (activeStep === visibleStepKeys.length - 1) {
       setSubmitted(true);
       return;
     }
@@ -131,7 +184,7 @@ export function RetirementIncomeAccountFlow() {
   }
 
   function updateStepFromReview(stepId: RetirementIncomeAccountStepId) {
-    const stepIndex = STEP_KEYS.indexOf(stepId);
+    const stepIndex = visibleStepKeys.indexOf(stepId);
     if (stepIndex >= 0) {
       setSubmitted(false);
       setActiveStep(stepIndex);
@@ -253,7 +306,12 @@ export function RetirementIncomeAccountFlow() {
                 <FormProgress
                   variant="simple"
                   value={TARGET_PERCENT[activeStep - 1]}
-                  steps={RETIREMENT_INCOME_ACCOUNT_STEPS}
+                  steps={RETIREMENT_INCOME_ACCOUNT_STEPS.filter((s) => {
+                    const id = s.id as RetirementIncomeAccountStepId;
+                    if (state.setupMode === 'simple') return !CONDITIONAL_STEPS.includes(id);
+                    if (state.investmentStrategy === 'default') return !INVESTMENT_STEPS.includes(id);
+                    return true;
+                  })}
                   activeStep={activeStep - 1}
                   showStepIndicator
                   stepMenu
@@ -266,7 +324,7 @@ export function RetirementIncomeAccountFlow() {
 
           <Box>
           <StepTransition step={activeStep}>
-            {activeStep === 0 ? (
+            {currentStepId === 'intro' ? (
               <StepIntro
                 declarationRead={state.introDeclarationRead}
                 declarationPermanent={state.introDeclarationPermanent}
@@ -278,7 +336,7 @@ export function RetirementIncomeAccountFlow() {
                   updateState({ ...state, introDeclarationPermanent: checked })
                 }
               />
-            ) : activeStep === 1 ? (
+            ) : currentStepId === 'eligibility' ? (
               <StepEligibility
                 retiredFromWork={state.retiredFromWork}
                 leftEmployerAfter60={state.leftEmployerAfter60}
@@ -287,7 +345,7 @@ export function RetirementIncomeAccountFlow() {
                 eligible={eligible}
                 showValidation={showValidation}
               />
-            ) : activeStep === 2 ? (
+            ) : currentStepId === 'funding' ? (
               <StepFunding
                 purchaseAmount={state.purchaseAmount}
                 onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
@@ -295,7 +353,7 @@ export function RetirementIncomeAccountFlow() {
                 accounts={state.accounts}
                 showValidation={showValidation}
               />
-            ) : activeStep === 3 ? (
+            ) : currentStepId === 'allocate' ? (
               <StepAllocate
                 purchaseAmount={state.purchaseAmount}
                 accounts={state.accounts}
@@ -310,20 +368,61 @@ export function RetirementIncomeAccountFlow() {
                 }}
                 showValidation={showValidation}
               />
-            ) : activeStep === 4 ? (
+            ) : currentStepId === 'setup-mode' ? (
+              <StepSetupMode
+                setupMode={state.setupMode}
+                onSetupModeChange={(value) => updateState({ ...state, setupMode: value })}
+                accounts={state.accounts}
+                showValidation={showValidation}
+              />
+            ) : currentStepId === 'payment-schedule' ? (
               <StepPaymentSchedule
                 purchaseAmount={purchaseTotal}
                 paymentSchedule={state.paymentSchedule}
                 onPaymentScheduleChange={(next) => updateState({ ...state, paymentSchedule: next })}
                 showValidation={showValidation}
               />
-            ) : activeStep === 5 ? (
+            ) : currentStepId === 'payments' ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
                 bankDetails={state.bankDetails}
                 onBankDetailsChange={(nextBankDetails) =>
                   updateState({ ...state, bankDetails: nextBankDetails })
                 }
+                showValidation={showValidation}
+              />
+            ) : currentStepId === 'investment-strategy' ? (
+              <StepInvestmentStrategy
+                investmentStrategy={state.investmentStrategy}
+                onInvestmentStrategyChange={(value) => {
+                  const isDefault = value === 'default';
+                  updateState({
+                    ...state,
+                    investmentStrategy: value,
+                    ...(isDefault && {
+                      investmentMix: { mode: 'default', allocations: { 'opt-balanced-risk-adjusted': 100 } },
+                      drawdown: { ...state.drawdown, mode: 'default' },
+                    }),
+                  });
+                }}
+                showValidation={showValidation}
+              />
+            ) : currentStepId === 'investment-mix' ? (
+              <StepInvestmentMix
+                investmentMix={{ mode: (state.investmentMix?.mode ?? '') as import('./steps/StepInvestmentMix').InvestmentMode | '', allocations: state.investmentMix?.allocations ?? {} }}
+                onInvestmentMixChange={(next) => updateState({ ...state, investmentMix: next })}
+                showValidation={showValidation}
+              />
+            ) : currentStepId === 'investment-drawdown' ? (
+              <StepInvestmentDrawdown
+                drawdown={state.drawdown}
+                onDrawdownChange={(next) => updateState({ ...state, drawdown: next })}
+                showValidation={showValidation}
+              />
+            ) : currentStepId === 'beneficiary' ? (
+              <StepBeneficiary
+                beneficiaryState={state.beneficiaryState ?? INITIAL_STATE.beneficiaryState}
+                onBeneficiaryStateChange={(next) => updateState({ ...state, beneficiaryState: next })}
                 showValidation={showValidation}
               />
             ) : (
@@ -344,8 +443,8 @@ export function RetirementIncomeAccountFlow() {
 
           <StepperActions
             step={activeStep + 1}
-            isSubmitStep={activeStep === STEP_KEYS.length - 1}
-            nextLabel={activeStep === STEP_KEYS.length - 1 ? 'Continue' : 'Next'}
+            isSubmitStep={activeStep === visibleStepKeys.length - 1}
+            nextLabel={activeStep === visibleStepKeys.length - 1 ? 'Continue' : 'Next'}
             onNext={handleNext}
             onBack={handleBack}
             onExit={() => router.push('/member-online')}

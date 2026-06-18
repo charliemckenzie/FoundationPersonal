@@ -28,7 +28,7 @@ export interface BankDetails {
   accountName: string;
 }
 
-export type PaymentFrequency = 'fortnightly' | 'monthly' | 'quarterly' | 'yearly';
+export type PaymentFrequency = 'fortnightly' | 'monthly' | 'quarterly' | 'half-yearly' | 'annually';
 export type PaymentAmountType = 'minimum' | 'specific';
 
 export interface PaymentSchedule {
@@ -49,18 +49,57 @@ export interface RetirementIncomeAccountState {
   spouseDetails: SpouseDetails;
   purchaseAmount: number;
   accounts: FundingAccount[];
+  setupMode: SetupMode;
+  investmentStrategy: InvestmentStrategy;
   paymentSchedule: PaymentSchedule;
   bankDetails: BankDetails;
+  investmentMix: { mode: string; allocations: Record<string, number> };
+  drawdown: DrawdownState;
+  beneficiaryState: BeneficiaryState;
   reviewDeclarationChecked: boolean;
 }
+
+export type DrawdownMode = 'default' | 'custom';
+export type DrawdownCustomMethod = 'order' | 'percentage';
+
+export interface DrawdownState {
+  mode: DrawdownMode | '';
+  customMethod: DrawdownCustomMethod | '';
+  orderAllocations: Record<string, number>;
+  percentageAllocations: Record<string, number>;
+  autoRebalance: boolean;
+}
+
+export interface ReverseionaryBeneficiaryDraft {
+  relationship: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  dateOfBirth: string;
+  phone: string;
+  email: string;
+}
+
+export interface BeneficiaryState {
+  nominate: 'yes' | 'no' | '';
+  beneficiary: ReverseionaryBeneficiaryDraft;
+}
+
+export type SetupMode = 'simple' | 'custom' | null;
+export type InvestmentStrategy = 'default' | 'custom' | null;
 
 export type RetirementIncomeAccountStepId =
   | 'intro'
   | 'eligibility'
   | 'funding'
   | 'allocate'
+  | 'setup-mode'
   | 'payment-schedule'
   | 'payments'
+  | 'investment-strategy'
+  | 'investment-mix'
+  | 'investment-drawdown'
+  | 'beneficiary'
   | 'review';
 
 export interface RetirementIncomeAccountDraft {
