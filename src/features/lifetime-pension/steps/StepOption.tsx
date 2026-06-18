@@ -1,14 +1,21 @@
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
+import { AddressCapture } from '../../../components/AddressField/AddressCapture';
 import { Checkbox } from '../../../components/Checkbox';
 import { DateOfBirthField } from '../../../components/DateOfBirthField';
-import { Icon } from '../../../components/Icon';
+import { InfoButton } from '../../../components/InfoButton';
 import { RadioCardGroup } from '../../../components/RadioGroup/RadioCardGroup';
+import { RadioButtonGroup } from '../../../components/RadioGroup/RadioButtonGroup';
 import { TextField } from '../../../components/TextField';
-import { Tooltip } from '../../../components/Tooltip';
+import { mockAddressProvider } from '../../../components/AddressField/mockAddressProvider';
+import type { Address } from '../../../components/AddressField/types';
 import type { PensionOption, SpouseDetails } from '../types';
 
 interface StepOptionProps {
@@ -34,6 +41,29 @@ const OPTION_CHOICES = [
   },
 ];
 
+const ADDRESS_OPTIONS = [
+  { value: 'same', label: 'Same as this account' },
+  { value: 'different', label: 'Different address' },
+];
+
+const MOCK_ACCOUNT_ADDRESS = {
+  line1: '88 Pitt Street',
+  suburb: 'Sydney',
+  state: 'NSW',
+  postcode: '2000',
+};
+
+const MOCK_AU_ADDRESS: Address = {
+  type: 'australian',
+  line1: '',
+  line2: '',
+  suburb: '',
+  state: '',
+  postcode: '',
+};
+
+const ADDRESS_LOOKUP = { provider: mockAddressProvider };
+
 export function StepOption({
   pensionOption,
   spouseDetails,
@@ -42,7 +72,9 @@ export function StepOption({
   showValidation,
 }: StepOptionProps) {
   const spouseMode = pensionOption === 'spouse';
-
+  const [spouseAddress, setSpouseAddress] = useState<Address>(MOCK_AU_ADDRESS);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   function updateField<K extends keyof SpouseDetails>(key: K, value: SpouseDetails[K]) {
     onSpouseDetailsChange({ ...spouseDetails, [key]: value });
   }
@@ -61,6 +93,15 @@ export function StepOption({
           <Typography variant="body" sx={{ color: 'text.primary' }}>
             Your decision affects payment rates and cannot be changed once your Lifetime Pension starts.
           </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
+            <Typography variant="body" sx={{ color: 'text.primary' }}>
+              Both options offer money-back protection.
+            </Typography>
+            <InfoButton
+              size="sm"
+              tooltip="If you pass away before receiving payments equal to your purchase price, the remaining balance is paid to your beneficiaries or estate."
+            />
+          </Box>
         </div>
 
       <Box
@@ -74,19 +115,9 @@ export function StepOption({
           options={OPTION_CHOICES}
           value={pensionOption}
           onChange={(value) => onPensionOptionChange(value as PensionOption)}
-          direction="row"
+          direction={isMobile ? 'column' : 'row'}
+          cardDirection={isMobile ? 'row' : 'column'}
         />
-      </Box>
-
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
-        <Typography variant="small" sx={{ color: 'text.muted' }}>
-          Both options offer money-back protection.
-        </Typography>
-        <Tooltip title="If you pass away before receiving payments equal to your purchase price, the remaining balance is paid to your beneficiaries or estate." placement="top">
-          <Box component="span" sx={{ display: 'inline-flex', color: 'info.main', cursor: 'help' }}>
-            <Icon icon="circle-info" size="sm" color="info" />
-          </Box>
-        </Tooltip>
       </Box>
 
       {showValidation && !pensionOption && (
@@ -94,124 +125,158 @@ export function StepOption({
       )}
 
       {spouseMode && (
-        <Box
-          sx={{
-            border: '1px solid',
-            borderColor: 'border.default',
-            borderRadius: (t) => `${t.shape.md}px`,
-            backgroundColor: 'background.paper',
-            p: 3,
-          }}
-        >
-          <Stack spacing={2.5}>
-            <Typography variant="h6">Spouse details</Typography>
-            <Alert
-              severity="warning"
-              message="The spouse you nominate for this option is permanent and cannot be changed once selected."
-            />
+        <>
+          <Box
+            sx={{
+              border: '1px solid',
+              borderColor: 'border.default',
+              borderRadius: '16px',
+              backgroundColor: 'background.paper',
+              p: { xs: 3, sm: 4 },
+            }}
+          >
+            <Stack spacing={2.5}>
+              <Typography variant="h6">Spouse details</Typography>
 
-            <Grid container spacing={2}>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  label="First name"
-                  fullWidth
-                  value={spouseDetails.firstName}
-                  onChange={(event) => updateField('firstName', event.target.value)}
-                  error={fieldError(spouseDetails.firstName)}
-                  errorMessage={fieldError(spouseDetails.firstName) ? 'First name is required' : undefined}
-                />
+              <Grid container spacing={2}>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="First name"
+                    fullWidth
+                    value={spouseDetails.firstName}
+                    onChange={(event) => updateField('firstName', event.target.value)}
+                    error={fieldError(spouseDetails.firstName)}
+                    errorMessage={fieldError(spouseDetails.firstName) ? 'First name is required' : undefined}
+                  />
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <TextField
+                    label="Last name"
+                    fullWidth
+                    value={spouseDetails.lastName}
+                    onChange={(event) => updateField('lastName', event.target.value)}
+                    error={fieldError(spouseDetails.lastName)}
+                    errorMessage={fieldError(spouseDetails.lastName) ? 'Last name is required' : undefined}
+                  />
+                </Grid>
+                <Grid size={12}>
+                  <TextField
+                    label="Mobile phone"
+                    fullWidth
+                    value={spouseDetails.mobilePhone}
+                    onChange={(event) => {
+                      const numeric = event.target.value.replace(/\D/g, '');
+                      updateField('mobilePhone', numeric);
+                    }}
+                    error={fieldError(spouseDetails.mobilePhone)}
+                    errorMessage={fieldError(spouseDetails.mobilePhone) ? 'Mobile phone is required' : undefined}
+                    htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
+                  />
+                </Grid>
+                <Grid size={12}>
+                  <TextField
+                    label="Email address"
+                    fullWidth
+                    type="email"
+                    value={spouseDetails.emailAddress}
+                    onChange={(event) => updateField('emailAddress', event.target.value)}
+                    error={fieldError(spouseDetails.emailAddress)}
+                    errorMessage={fieldError(spouseDetails.emailAddress) ? 'Email address is required' : undefined}
+                  />
+                </Grid>
+                <Grid size={12}>
+                  <DateOfBirthField
+                    fullWidth
+                    value={spouseDetails.dateOfBirth}
+                    onChange={(event) => updateField('dateOfBirth', event.target.value)}
+                    error={fieldError(spouseDetails.dateOfBirth)}
+                    errorMessage={fieldError(spouseDetails.dateOfBirth) ? 'Date of birth is required' : undefined}
+                  />
+                </Grid>
               </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  label="Last name"
-                  fullWidth
-                  value={spouseDetails.lastName}
-                  onChange={(event) => updateField('lastName', event.target.value)}
-                  error={fieldError(spouseDetails.lastName)}
-                  errorMessage={fieldError(spouseDetails.lastName) ? 'Last name is required' : undefined}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  label="Middle name"
-                  fullWidth
-                  value={spouseDetails.middleName}
-                  onChange={(event) => updateField('middleName', event.target.value)}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  label="Residential address"
-                  fullWidth
-                  value={spouseDetails.residentialAddress}
-                  onChange={(event) => updateField('residentialAddress', event.target.value)}
-                  error={fieldError(spouseDetails.residentialAddress)}
-                  errorMessage={fieldError(spouseDetails.residentialAddress) ? 'Residential address is required' : undefined}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  label="Email address"
-                  fullWidth
-                  type="email"
-                  value={spouseDetails.emailAddress}
-                  onChange={(event) => updateField('emailAddress', event.target.value)}
-                  error={fieldError(spouseDetails.emailAddress)}
-                  errorMessage={fieldError(spouseDetails.emailAddress) ? 'Email address is required' : undefined}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <DateOfBirthField
-                  fullWidth
-                  value={spouseDetails.dateOfBirth}
-                  onChange={(event) => updateField('dateOfBirth', event.target.value)}
-                  error={fieldError(spouseDetails.dateOfBirth)}
-                  errorMessage={fieldError(spouseDetails.dateOfBirth) ? 'Date of birth is required' : undefined}
-                />
-              </Grid>
-              <Grid size={{ xs: 12, md: 6 }}>
-                <TextField
-                  label="Mobile phone"
-                  fullWidth
-                  value={spouseDetails.mobilePhone}
-                  onChange={(event) => {
-                    const numeric = event.target.value.replace(/\D/g, '');
-                    updateField('mobilePhone', numeric);
-                  }}
-                  error={fieldError(spouseDetails.mobilePhone)}
-                  errorMessage={fieldError(spouseDetails.mobilePhone) ? 'Mobile phone is required' : undefined}
-                  htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
-                />
-              </Grid>
-              <Grid size={12}>
-                <TextField
-                  label="Home phone"
-                  fullWidth
-                  value={spouseDetails.homePhone}
-                  onChange={(event) => {
-                    const numeric = event.target.value.replace(/\D/g, '');
-                    updateField('homePhone', numeric);
-                  }}
-                  helperText="Optional field"
-                  htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9]*', maxLength: 10 }}
-                />
-              </Grid>
-            </Grid>
 
-            <Box sx={{ pt: 1 }}>
-              <Checkbox
-                checked={spouseDetails.consentChecked}
-                onChange={(checked) => updateField('consentChecked', checked)}
-                label="I understand this nomination is permanent and give permission for ART to contact my spouse for this application."
-              />
-              {showValidation && spouseMode && !spouseDetails.consentChecked && (
-                <Typography variant="caption" sx={{ color: 'error.main', mt: 0.5, display: 'block' }}>
-                  Consent confirmation is required
+              <Stack spacing={1.5}>
+                <Typography variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>
+                  Address
                 </Typography>
-              )}
-            </Box>
-          </Stack>
-        </Box>
+                <RadioButtonGroup
+                  options={ADDRESS_OPTIONS}
+                  value={spouseDetails.addressOption}
+                  onChange={(value) => updateField('addressOption', value as SpouseDetails['addressOption'])}
+                  direction="row"
+                />
+
+                {spouseDetails.addressOption === 'same' && (
+                  <Box
+                    sx={{
+                      backgroundColor: 'background.elevated',
+                      borderRadius: '8px',
+                      px: 2,
+                      py: 1.5,
+                    }}
+                  >
+                    <Typography variant="body" sx={{ color: 'text.primary' }}>
+                      {MOCK_ACCOUNT_ADDRESS.line1}
+                    </Typography>
+                    <Typography variant="body" sx={{ color: 'text.primary' }}>
+                      {MOCK_ACCOUNT_ADDRESS.suburb} {MOCK_ACCOUNT_ADDRESS.state} {MOCK_ACCOUNT_ADDRESS.postcode}
+                    </Typography>
+                  </Box>
+                )}
+
+                {spouseDetails.addressOption === 'different' && (
+                  <Box sx={{ pt: 2 }}>
+                    <AddressCapture
+                      value={spouseAddress}
+                      onChange={setSpouseAddress}
+                      section="spouse"
+                      lookup={ADDRESS_LOOKUP}
+                    />
+                  </Box>
+                )}
+              </Stack>
+
+              <Divider sx={{ borderColor: 'border.subtle', mt: 3, mb: 1 }} />
+
+              <Stack spacing={1.5} sx={{ mt: 3 }}>
+                <Typography variant="h6">
+                  Verify your spouse&rsquo;s identity
+                </Typography>
+                <Typography variant="body" sx={{ color: 'text.default' }}>
+                  During the application processing we will call{' '}
+                  {spouseDetails.firstName ? (
+                    <Box component="span" sx={{ fontWeight: 700 }}>
+                      {[spouseDetails.firstName, spouseDetails.lastName].filter(Boolean).join(' ')}
+                    </Box>
+                  ) : (
+                    'your spouse'
+                  )}{' '}
+                  {spouseDetails.mobilePhone ? (
+                    <>
+                      on{' '}
+                      <Box component="span" sx={{ fontWeight: 700 }}>
+                        {spouseDetails.mobilePhone}
+                      </Box>
+                    </>
+                  ) : null}{' '}
+                  to confirm the information provided is true and accurate.
+                </Typography>
+                <Checkbox
+                  checked={spouseDetails.identityConsentChecked}
+                  onChange={(checked) => updateField('identityConsentChecked', checked)}
+                  label={`I give Australian Retirement Trust permission to contact ${[spouseDetails.firstName, spouseDetails.lastName].filter(Boolean).join(' ') || 'my spouse'} regarding this application.`}
+                />
+                {showValidation && spouseMode && !spouseDetails.identityConsentChecked && (
+                  <Typography variant="caption" sx={{ color: 'error.main', display: 'block' }}>
+                    Permission to contact spouse is required
+                  </Typography>
+                )}
+              </Stack>
+
+            </Stack>
+          </Box>
+
+        </>
       )}
       </Stack>
     </Stack>

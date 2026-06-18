@@ -5,13 +5,12 @@ export type AgeScenario = '60-64' | '65-plus';
 export interface SpouseDetails {
   firstName: string;
   lastName: string;
-  middleName: string;
-  residentialAddress: string;
   emailAddress: string;
   dateOfBirth: string;
   mobilePhone: string;
-  homePhone: string;
+  addressOption: 'same' | 'different';
   consentChecked: boolean;
+  identityConsentChecked: boolean;
 }
 
 export interface FundingAccount {

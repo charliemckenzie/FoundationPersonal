@@ -182,9 +182,9 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         lineHeight: 1.2,
       },
       h6: {
-        fontSize: '1rem',      // 16px
+        fontSize: '1.125rem',  // 18px
         fontWeight: 700,
-        lineHeight: 1.2,
+        lineHeight: 1.333,     // 24px
       },
       // Body text variants - Bootstrap scale
       lead: {

@@ -18,6 +18,10 @@ export interface ManagedListItemProps {
   onEdit?: () => void;
   /** Delete icon button is shown when provided. Hidden in `list` variant. */
   onDelete?: () => void;
+  /** When provided, renders the item as a navigable anchor link with a right chevron. */
+  href?: string;
+  /** When provided (and no href), renders the item as a button-style nav row with a right chevron. */
+  onClick?: () => void;
   /** Overrides the parent's `metadataVariant` for this row only. */
   metadataVariant?: 'row' | 'column';
   /** Displays a right-aligned label + bold value (e.g. 'Allocation 100%'). Use for the beneficiary variant. */
@@ -36,11 +40,11 @@ export interface ManagedListProps {
   items: ManagedListItemProps[];
   /** Text for the empty state. Defaults to 'No items added'. */
   emptyMessage?: string;
-  /** Label for the add action button (e.g. 'Add passkey'). */
-  addLabel: string;
+  /** Label for the add action button (e.g. 'Add passkey'). Omit to suppress the footer entirely. */
+  addLabel?: string;
   /** Font Awesome icon for the add action button. Defaults to 'plus'. */
   addIcon?: string;
-  onAdd: () => void;
+  onAdd?: () => void;
   /** If provided, a secondary footer button is rendered alongside the add button. */
   onRemoveAll?: () => void;
   /** Label for the secondary footer button. Defaults to 'Remove all'. */

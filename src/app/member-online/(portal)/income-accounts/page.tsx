@@ -1,12 +1,17 @@
 'use client';
 
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { ContentContainer } from '../../../../components/MemberOnline';
 import { LinkRow } from '../../../../components/LinkRow';
+import { ManagedList } from '../../../../components/ManagedList';
+import { Dialog } from '../../../../components/Dialog';
 
 export default function IncomeAccountsPage() {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   return (
     <ContentContainer size="md">
       <Stack spacing={1.5} sx={{ pb: 4 }}>
@@ -36,11 +41,26 @@ export default function IncomeAccountsPage() {
               icon="money-simple-from-bracket"
               href="#"
             />
-            <LinkRow
-              label="Open a Lifetime Pension"
-              description="Receive guaranteed, fortnightly tax-free income for life."
+            <ManagedList
               icon="money-check-dollar"
-              href="/member-online/lifetime-pension"
+              iconStyle="light"
+              title="Open a Lifetime Pension"
+              description="Receive guaranteed, fortnightly tax-free income for life."
+              items={[
+                {
+                  id: 'continue',
+                  name: 'Continue where you left off',
+                  metadata: ['Last modified 12 May 2024'],
+                  href: '/member-online/lifetime-pension',
+                },
+                {
+                  id: 'new-application',
+                  name: 'Start a new application',
+                  metadata: ['Important: This will override your incomplete application above'],
+                  onClick: () => setConfirmOpen(true),
+                },
+              ]}
+              itemVariant="card"
             />
           </Stack>
         </Stack>
@@ -60,6 +80,20 @@ export default function IncomeAccountsPage() {
           />
         </Stack>
       </Stack>
+
+      <Dialog
+        open={confirmOpen}
+        onClose={() => setConfirmOpen(false)}
+        variant="danger"
+        title="Start a new application?"
+        description="This will override your incomplete application. This action cannot be undone."
+        confirmLabel="Start new application"
+        cancelLabel="Cancel"
+        onConfirm={() => {
+          setConfirmOpen(false);
+          window.location.href = '/member-online/lifetime-pension/new';
+        }}
+      />
     </ContentContainer>
   );
 }

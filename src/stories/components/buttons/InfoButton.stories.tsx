@@ -51,7 +51,7 @@ export const SizeByLineHeight: Story = {
 |---|---|---|
 | \`caption\` 12px × 1.5 | 18px | \`sm\` |
 | \`small\` 14px × 1.5 | 21px | \`sm\` |
-| \`h6\` 16px × 1.2 | 19px | \`sm\` |
+| \`h6\` 18px × 1.333 | 24px | \`sm\` |
 | \`h5\` 20px × 1.2 | 24px | \`sm\` |
 | \`body\` 16px × 1.5 | 24px | \`sm\` |
 | \`h4\` 24px × 1.2 | 29px | \`md\` |

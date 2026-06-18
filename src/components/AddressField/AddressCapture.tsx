@@ -1,4 +1,5 @@
 import Stack from '@mui/material/Stack';
+import type { SxProps, Theme } from '@mui/material/styles';
 import { RadioGroup } from '../RadioGroup';
 import { AustralianFields } from './AustralianFields';
 import { AustralianAutocomplete } from './AustralianAutocomplete';
@@ -25,9 +26,10 @@ export interface AddressCaptureProps {
   disabled?: boolean;
   lookup?: AddressLookupConfig;
   onAutocompleteSearching?: (searching: boolean) => void;
+  sx?: SxProps<Theme>;
 }
 
-export function AddressCapture({ value, onChange, section, disabled, lookup, onAutocompleteSearching }: AddressCaptureProps) {
+export function AddressCapture({ value, onChange, section, disabled, lookup, onAutocompleteSearching, sx }: AddressCaptureProps) {
   function handleTypeChange(type: string) {
     if (type === 'australian') {
       onChange({ type: 'australian', ...AU_RESET });
@@ -37,7 +39,7 @@ export function AddressCapture({ value, onChange, section, disabled, lookup, onA
   }
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={3} sx={sx}>
       <RadioGroup
         options={LOCATION_OPTIONS}
         value={value.type}

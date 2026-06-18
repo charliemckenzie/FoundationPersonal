@@ -37,7 +37,7 @@ Responsive `h1`–`h2`. Fixed size for `h3`–`h6`. Font: heading font for `h1`�
 | `h3` | 1.75rem / 28px | 700 | 1.2 | Heading (serif) |
 | `h4` | 1.5rem / 24px | 700 | 1.2 | Body (sans-serif) |
 | `h5` | 1.25rem / 20px | 700 | 1.2 | Body (sans-serif) |
-| `h6` | 1rem / 16px | 700 | 1.2 | Body (sans-serif) |
+| `h6` | 1.125rem / 18px | 700 | 1.333 | Body (sans-serif) |
 
 ### Body variants
 

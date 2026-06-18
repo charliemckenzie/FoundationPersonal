@@ -131,11 +131,10 @@ function hasRequiredSpouseFields(details: SpouseDetails): boolean {
   return Boolean(
     details.firstName.trim() &&
       details.lastName.trim() &&
-      details.residentialAddress.trim() &&
       details.emailAddress.trim() &&
       details.dateOfBirth.trim() &&
       details.mobilePhone.trim() &&
-      details.consentChecked
+      details.identityConsentChecked
   );
 }
 

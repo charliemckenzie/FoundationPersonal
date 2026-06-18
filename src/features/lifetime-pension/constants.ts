@@ -3,7 +3,7 @@ import type { FundingAccount, IDVState, LifetimePensionState, SpouseDetails, Use
 
 export const LIFETIME_PENSION_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
-  { id: 'option', label: 'Choose option' },
+  { id: 'option', label: 'Spouse protection' },
   { id: 'funding', label: 'Purchase price' },
   { id: 'allocate', label: 'Allocate funds' },
   { id: 'payments', label: 'Payments' },
@@ -44,13 +44,12 @@ const BASE_ACCOUNTS: FundingAccount[] = [
 const EMPTY_SPOUSE_DETAILS: SpouseDetails = {
   firstName: '',
   lastName: '',
-  middleName: '',
-  residentialAddress: '',
   emailAddress: '',
   dateOfBirth: '',
   mobilePhone: '',
-  homePhone: '',
+  addressOption: 'same',
   consentChecked: false,
+  identityConsentChecked: false,
 };
 
 export const INITIAL_STATE: LifetimePensionState = {

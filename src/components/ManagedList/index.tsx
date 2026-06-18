@@ -88,6 +88,7 @@ export function ManagedList({
   loading = false,
   loadingItemCount = 3,
 }: ManagedListProps) {
+  const hasFooter = onAdd !== undefined;
   const contextValue = useMemo<ManagedListContextValue>(
     () => ({ itemVariant, metadataVariant }),
     [itemVariant, metadataVariant],
@@ -132,7 +133,7 @@ export function ManagedList({
           </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="h6">{title}</Typography>
-            <Typography variant="small" sx={{ color: 'text.muted' }}>
+            <Typography variant="small" sx={{ color: 'text.primary' }}>
               {description}
             </Typography>
           </Box>
@@ -140,15 +141,19 @@ export function ManagedList({
         </Box>
 
         <Box
-          sx={{
+          sx={(t: Theme) => ({
             borderTop: '1px solid',
             borderTopColor: 'border.subtle',
             backgroundColor: 'background.default',
             p: 1.5,
-          }}
+            ...(!hasFooter && {
+              borderRadius: `0 0 ${t.shape.lg}px ${t.shape.lg}px`,
+              overflow: 'hidden',
+            }),
+          })}
         >
           {items.length === 0 ? (
-            <EmptyState message={emptyMessage} onClick={onAdd} />
+            onAdd ? <EmptyState message={emptyMessage} onClick={onAdd} /> : null
           ) : itemVariant === 'list' ? (
             <Box
               component="ul"
@@ -175,10 +180,12 @@ export function ManagedList({
           )}
         </Box>
 
-        <PanelFooter
-          primary={{ icon: addIcon, label: addLabel, onClick: onAdd }}
-          secondary={onRemoveAll ? { icon: 'trash', label: removeAllLabel, onClick: onRemoveAll } : undefined}
-        />
+        {hasFooter && addLabel && (
+          <PanelFooter
+            primary={{ icon: addIcon, label: addLabel, onClick: onAdd! }}
+            secondary={onRemoveAll ? { icon: 'trash', label: removeAllLabel, onClick: onRemoveAll } : undefined}
+          />
+        )}
       </Box>
     </ManagedListContext.Provider>
   );

@@ -369,7 +369,7 @@ const typography: TokenGroup = {
     small:   str('0.875rem', 'theme.typography.small.fontSize',   '14px'),
     body:    str('1rem',     'theme.typography.body.fontSize',    '16px'),
     lead:    str('1.25rem',  'theme.typography.lead.fontSize',    '20px'),
-    h6:      str('1rem',     'theme.typography.h6.fontSize',      '16px'),
+    h6:      str('1.125rem', 'theme.typography.h6.fontSize',      '18px'),
     h5:      str('1.25rem',  'theme.typography.h5.fontSize',      '20px'),
     h4:      str('1.5rem',   'theme.typography.h4.fontSize',      '24px'),
     h3:      str('1.75rem',  'theme.typography.h3.fontSize',      '28px'),

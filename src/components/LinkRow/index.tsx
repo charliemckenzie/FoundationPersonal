@@ -49,11 +49,11 @@ export function LinkRow({
           width: '100%',
           textAlign: 'left',
           textDecoration: 'none',
-          px: 2.5,
-          py: 2,
+          px: 3,
+          py: 2.5,
           border: '1px solid',
           borderColor: 'border.default',
-          borderRadius: (t) => `${(t.shape as { sm: number }).sm}px`,
+          borderRadius: (t) => `${(t.shape as { lg: number }).lg}px`,
           bgcolor: 'background.paper',
           transition: (t) =>
             t.transitions.create(['background-color', 'border-color'], {
@@ -104,7 +104,7 @@ export function LinkRow({
           sx={{
             display: 'block',
             color: 'primary.main',
-            fontWeight: 600,
+            fontWeight: 700,
             transition: (t) => t.transitions.create(['color'], { duration: t.transitions.duration.short }),
           }}
         >
