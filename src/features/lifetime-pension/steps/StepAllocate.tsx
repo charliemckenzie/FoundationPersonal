@@ -8,6 +8,13 @@ import { MoneyField } from '../../../components/MoneyField';
 import type { FundingAccount } from '../types';
 import { formatCurrency } from '../utils';
 
+const TODAY = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+
+function parseAccountLabel(label: string): { name: string; accNo: string } {
+  const parts = label.split(' - ');
+  return { name: parts[0] ?? label, accNo: parts[1] ?? '' };
+}
+
 // ---------------------------------------------------------------------------
 // Props
 // ---------------------------------------------------------------------------
@@ -141,10 +148,26 @@ export function StepAllocate({
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>Allocate from your accounts</Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
-          Select accounts to transfer from and enter the amount from each. Your total must equal{' '}
-          {formatCurrency(purchaseAmount)}.
+          As you have multiple accounts we need you to tell us which accounts you would like us to take the money from for your purchase.
         </Typography>
       </div>
+
+      {/* Purchase price summary */}
+      <Box
+        sx={{
+          bgcolor: 'background.elevated',
+          borderRadius: (t) => `${t.shape.md}px`,
+          px: 2.5,
+          py: 2,
+        }}
+      >
+        <Typography variant="small" sx={{ color: 'text.default', display: 'block', mb: 0.5 }}>
+          Your Lifetime Pension purchase price
+        </Typography>
+        <Typography variant="h4" sx={{ color: 'text.heading' }}>
+          {formatCurrency(purchaseAmount)}
+        </Typography>
+      </Box>
 
       <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
         <Box component="li">
@@ -155,7 +178,13 @@ export function StepAllocate({
             Your accounts
           </Typography>
           <Box component="ul" sx={{ m: 0, p: 0, listStyle: 'none' }}>
-            {accounts.map((account) => (
+            {accounts.map((account) => {
+              const { name, accNo } = parseAccountLabel(account.label);
+              const isIncomeAccount = account.id === 'retirement-income';
+              const displayName = isIncomeAccount
+                ? `Retirement income account (as at ${TODAY})`
+                : `${name} (as at ${TODAY})`;
+              return (
               <Box
                 component="li"
                 key={account.id}
@@ -170,13 +199,18 @@ export function StepAllocate({
               >
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography variant="body" sx={{ fontWeight: 500, color: 'text.primary', display: 'block' }}>
-                    {account.label}
+                    {displayName}
                   </Typography>
-                  <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.25 }}>
-                    Available: {formatCurrency(account.balance)}
+                  {accNo && (
+                    <Typography variant="small" sx={{ color: 'text.default', display: 'block', mt: 0.25 }}>
+                      Acc No. {accNo}
+                    </Typography>
+                  )}
+                  <Typography variant="small" sx={{ color: 'text.default', display: 'block', mt: 0.25 }}>
+                    Balance: {formatCurrency(account.balance)}
                   </Typography>
                 </Box>
-                <Box sx={{ width: '12rem', flexShrink: 0 }}>
+                <Box sx={{ width: '16rem', flexShrink: 0 }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     <Typography
                       component="label"
@@ -199,7 +233,8 @@ export function StepAllocate({
                   )}
                 </Box>
               </Box>
-            ))}
+              );
+            })}
           </Box>
         </Box>
       </Stack>

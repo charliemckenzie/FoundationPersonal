@@ -48,7 +48,9 @@ export type LifetimePensionStepId =
   | 'funding'
   | 'allocate'
   | 'payments'
-  | 'review';
+  | 'details'
+  | 'review'
+  | 'idv';
 
 export interface LifetimePensionDraft {
   state: LifetimePensionState;

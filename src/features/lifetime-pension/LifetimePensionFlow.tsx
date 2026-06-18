@@ -11,13 +11,18 @@ import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
+import { Alert } from '../../components/Alert';
+import { RadioGroup } from '../../components/RadioGroup';
+import { Checkbox } from '../../components/Checkbox';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
+import { StepDetails } from './steps/StepDetails';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
-import { StepIDV } from './steps/StepIDV';
+import { StepIDV, canSubmitIDV, initialIDVState as idvInitialState } from '../../features/idv';
+import type { IDVState as IdvModuleState } from '../../features/idv';
 import { StepIntro } from './steps/StepIntro';
 import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
@@ -44,6 +49,8 @@ const STEP_KEYS: LifetimePensionStepId[] = [
   'funding',
   'allocate',
   'payments',
+  'details',
+  'idv',
   'review',
 ];
 
@@ -53,6 +60,12 @@ export function LifetimePensionFlow() {
   const gate = useIdvGate();
 
   const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
+  const [detailsProfile, setDetailsProfile] = useState(MOCK_USER_PROFILE);
+  const [idvState, setIdvState] = useState<IdvModuleState>(idvInitialState);
+  const [idvLoading, setIdvLoading] = useState(false);
+  const [idvError, setIdvError] = useState('');
+  const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
+  const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
 
   const [state, setState] = useState<LifetimePensionState>(INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
@@ -92,6 +105,14 @@ export function LifetimePensionFlow() {
     }
     if (step === 5) {
       return paymentsStepValid(state);
+    }
+    if (step === 6) {
+      return true;
+    }
+    // IDV step (7) — document selected and form complete (online), or checkbox confirmed (other)
+    if (step === 7) {
+      if (verifyMethod === 'other') return otherOptionsConfirmed;
+      return canSubmitIDV(idvState);
     }
     return reviewStepValid(state);
   }
@@ -318,6 +339,79 @@ export function LifetimePensionFlow() {
                 }
                 showValidation={showValidation}
               />
+            ) : activeStep === 6 ? (
+              <StepDetails
+                profile={detailsProfile}
+                onProfileUpdate={setDetailsProfile}
+              />
+            ) : activeStep === 7 ? (
+              <Stack spacing={3}>
+                <div>
+                  <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+                    Verify your identity
+                  </Typography>
+                  <Typography variant="body" sx={{ color: 'text.primary' }}>
+                    To process your application, we need to verify your identity. Select one of the documents below to get started.
+                  </Typography>
+                </div>
+
+                <RadioGroup
+                  legend="How would you like to verify?"
+                  value={verifyMethod}
+                  options={[
+                    { value: 'online', label: 'Online' },
+                    { value: 'other', label: 'Other options' },
+                  ]}
+                  direction="column"
+                  onChange={(value) => setVerifyMethod(value as 'online' | 'other')}
+                />
+
+                {verifyMethod === 'online' ? (
+                  <Box
+                    sx={(theme) => ({
+                      borderRadius: `${theme.shape.lg}px`,
+                      backgroundColor: 'background.paper',
+                      border: '1px solid',
+                      borderColor: 'border.default',
+                      px: { xs: 3, sm: 4 },
+                      pt: { xs: 3, sm: 4 },
+                      pb: { xs: 3, sm: 4 },
+                    })}
+                  >
+                    <StepIDV
+                      state={idvState}
+                      onChange={setIdvState}
+                      onSubmit={handleNext}
+                      loading={idvLoading}
+                      error={idvError}
+                      embedded
+                    />
+                  </Box>
+                ) : (
+                  <Box
+                    sx={(theme) => ({
+                      borderRadius: `${theme.shape.lg}px`,
+                      backgroundColor: 'background.paper',
+                      border: '1px solid',
+                      borderColor: 'border.default',
+                      px: { xs: 3, sm: 4 },
+                      pt: { xs: 3, sm: 4 },
+                      pb: { xs: 3, sm: 4 },
+                    })}
+                  >
+                    <Stack spacing={2}>
+                      <Typography variant="body" sx={{ color: 'text.primary' }}>
+                        Please refer to the Proof of Identity factsheet for other options to prove your identity.
+                      </Typography>
+                      <Checkbox
+                        label="I confirm that I will provide identity documents as described in the Proof of Identity factsheet."
+                        checked={otherOptionsConfirmed}
+                        onChange={setOtherOptionsConfirmed}
+                      />
+                    </Stack>
+                  </Box>
+                )}
+              </Stack>
             ) : (
               <StepReview
                 state={state}
@@ -328,11 +422,19 @@ export function LifetimePensionFlow() {
                 showValidation={showValidation}
                 verifyDetailsState={verifyDetailsState}
                 onVerifyDetailsChange={setVerifyDetailsState}
-                profile={MOCK_USER_PROFILE}
+                profile={detailsProfile}
+                verifyMethod={verifyMethod}
               />
             )}
           </StepTransition>
           </Box>
+
+          {showValidation && activeStep === 7 && !stepIsValid(7) && (
+            <Alert
+              severity="error"
+              message="To continue, please complete the online identity check or confirm you'll provide identity documents using another method."
+            />
+          )}
 
           <StepperActions
             step={activeStep + 1}

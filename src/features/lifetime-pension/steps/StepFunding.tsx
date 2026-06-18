@@ -37,9 +37,10 @@ interface TransferPanelProps {
   onPurchaseAmountChange: (amount: number) => void;
   pensionOption: PensionOption;
   showValidation: boolean;
+  showPriceError?: boolean;
 }
 
-function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation }: TransferPanelProps) {
+function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation, showPriceError = false }: TransferPanelProps) {
   // Live value as the member types — drives the live estimate panel only. Synced
   // when purchaseAmount changes externally (commit on blur, draft resume, reset).
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
@@ -72,7 +73,7 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   // empty field.
   const isEmpty = purchaseAmount === 0;
   const belowMin = purchaseAmount > 0 && purchaseAmount < MIN_PURCHASE_AMOUNT;
-  const fieldError = showValidation ? (isEmpty || belowMin) : (touched && belowMin);
+  const fieldError = showValidation ? (isEmpty || belowMin) : (showPriceError && isEmpty) || (touched && belowMin);
   const helperText = fieldError
     ? isEmpty
       ? 'Enter a purchase price to continue.'
@@ -289,7 +290,7 @@ function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps)
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.22, ease: 'easeOut' }}
             >
-              <Typography variant="h5" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
+              <Typography variant="h6" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
                 Your estimated bonus is {formatCurrency(amount)}
               </Typography>
               <Typography variant="body" sx={{ color: 'success.text' }}>
@@ -302,7 +303,7 @@ function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps)
               exit={{ opacity: 0, y }}
               transition={{ duration: 0.18, ease: 'easeIn' }}
             >
-              <Typography variant="h5" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
+              <Typography variant="h6" component="p" sx={{ color: 'success.text', mb: 0.25 }}>
                 You&apos;re eligible for a Retirement bonus!
               </Typography>
               <Typography variant="body" sx={{ color: 'success.text' }}>
@@ -352,6 +353,11 @@ export function StepFunding({
   const [bonus, setBonus] = useState<{ forAmount: number; value: number } | null>(null);
   const [calculating, setCalculating] = useState(false);
   const calcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showPriceError, setShowPriceError] = useState(false);
+
+  useEffect(() => {
+    if (purchaseAmount > 0) setShowPriceError(false);
+  }, [purchaseAmount]);
   // Retirement Bonus eligibility: assume eligible whenever the member is
   // transferring money into the Lifetime Pension (conditions 2 & 3 of the ART
   // rules). The >12-month membership condition can't be checked — there's no
@@ -366,6 +372,10 @@ export function StepFunding({
   }, []);
 
   function handleCalculateBonus() {
+    if (purchaseAmount === 0) {
+      setShowPriceError(true);
+      return;
+    }
     setCalculating(true);
     calcTimer.current = setTimeout(() => {
       setBonus({ forAmount: purchaseAmount, value: estimateRetirementBonus(purchaseAmount) });
@@ -393,15 +403,14 @@ export function StepFunding({
           onPurchaseAmountChange={onPurchaseAmountChange}
           pensionOption={pensionOption}
           showValidation={showValidation}
+          showPriceError={showPriceError}
         />
 
-        {eligibleForBonus && (
-          <RetirementBonus
-            amount={bonusValue}
-            loading={calculating}
-            onCalculate={handleCalculateBonus}
-          />
-        )}
+        <RetirementBonus
+          amount={bonusValue}
+          loading={calculating}
+          onCalculate={handleCalculateBonus}
+        />
       </Stack>
 
       {/* ── Considerations ── */}

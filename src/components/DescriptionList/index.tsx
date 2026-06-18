@@ -51,6 +51,8 @@ export interface DescriptionListProps {
   loading?: boolean;
   /** Number of skeleton rows to render while `loading`. Defaults to 3. */
   loadingRowCount?: number;
+  /** Optional action (e.g. Edit button) rendered on the right side of the title row. Requires `title`. */
+  titleAction?: React.ReactNode;
   children: React.ReactNode;
   sx?: SxProps<Theme>;
 }
@@ -154,7 +156,7 @@ function DescriptionListItem({ label, description, value, valueDescription, acti
 
 DescriptionListItem.displayName = 'DescriptionListItem';
 
-function DescriptionList({ title, titleVariant = 'h5', valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, loading = false, loadingRowCount = 3, children, sx }: DescriptionListProps) {
+function DescriptionList({ title, titleVariant = 'h5', titleAction, valueAlign = 'left', density = 'default', labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive = true, loading = false, loadingRowCount = 3, children, sx }: DescriptionListProps) {
   const contextValue = React.useMemo<DescriptionListContextValue>(
     () => ({ valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive }),
     [valueAlign, density, labelWidth, valueWidth, labelFontWeight, valueFontWeight, responsive],
@@ -189,9 +191,12 @@ function DescriptionList({ title, titleVariant = 'h5', valueAlign = 'left', dens
         ]}
       >
         {title && (
-          <Typography variant={titleVariant} sx={{ fontWeight: 700, mb: 2 }}>
-            {title}
-          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+            <Typography variant={titleVariant} sx={{ fontWeight: 700 }}>
+              {title}
+            </Typography>
+            {titleAction}
+          </Box>
         )}
         <Box
           component="dl"

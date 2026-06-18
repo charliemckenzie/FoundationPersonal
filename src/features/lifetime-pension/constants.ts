@@ -7,6 +7,8 @@ export const LIFETIME_PENSION_STEPS: FormProgressStep[] = [
   { id: 'funding', label: 'Purchase price' },
   { id: 'allocate', label: 'Allocate funds' },
   { id: 'payments', label: 'Payments' },
+  { id: 'details', label: 'Details' },
+  { id: 'idv', label: 'Verify identity' },
   { id: 'review', label: 'Review' },
 ];
 
@@ -75,7 +77,7 @@ export const MIN_PURCHASE_AMOUNT = 10000;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [20, 30, 50, 65, 85, 100] as const;
+export const TARGET_PERCENT = [20, 30, 50, 65, 80, 90, 95, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Lifetime Pension payment estimate
@@ -116,6 +118,8 @@ export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
+  'Open a Lifetime Pension',
+  'Open a Lifetime Pension',
   'Open a Lifetime Pension',
   'Open a Lifetime Pension',
   'Open a Lifetime Pension',

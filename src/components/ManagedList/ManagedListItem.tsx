@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import ButtonBase from '@mui/material/ButtonBase';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Chip } from '../Chip';
@@ -125,11 +126,11 @@ export function ManagedListItem({
       })}
     >
       {isNavLink ? (
-        <Box
+        <ButtonBase
           component={onClick ? 'button' : 'a'}
-          type={onClick ? 'button' : undefined}
           href={onClick ? undefined : href}
           onClick={onClick}
+          disableRipple
           sx={(t) => ({
             display: 'flex',
             alignItems: 'center',
@@ -137,8 +138,10 @@ export function ManagedListItem({
             px: 2.5,
             py: 1.5,
             flex: 1,
-            textDecoration: 'none',
+            width: '100%',
+            textAlign: 'left',
             color: 'inherit',
+            textDecoration: 'none',
             transition: t.transitions.create(['background-color'], { duration: t.transitions.duration.short }),
             '&:hover': {
               backgroundColor: 'action.hover',
@@ -148,7 +151,7 @@ export function ManagedListItem({
           })}
         >
           {rowContent}
-        </Box>
+        </ButtonBase>
       ) : (
         rowContent
       )}

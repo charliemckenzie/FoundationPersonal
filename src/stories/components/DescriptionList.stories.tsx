@@ -58,6 +58,7 @@ const meta: Meta<StoryArgs> = {
     },
     labelWidth:  { table: { disable: true } },
     valueWidth:  { table: { disable: true } },
+    titleAction: { table: { disable: true } },
     children:    { table: { disable: true } },
     sx:          { table: { disable: true } },
   },
@@ -339,6 +340,40 @@ export const WithActions: Story = {
         />
         <DescriptionList.Item label="Tax file number" value="XXX XXX XXX" />
         <DescriptionList.Item label="Member since" value="January 2010" />
+      </DescriptionList>
+    </Box>
+  ),
+};
+
+/** Title action — an action (e.g. Edit button) rendered in the header row alongside the title. */
+export const WithTitleAction: Story = {
+  args: { title: 'Personal details' },
+  parameters: {
+    docs: {
+      source: {
+        code: `<DescriptionList
+  title="Personal details"
+  titleAction={<TextButton label="Edit" hideIcon aria-label="Edit personal details" />}
+>
+  <DescriptionList.Item label="Full name" value="Alex Nguyen" />
+  <DescriptionList.Item label="Date of birth" value="12 March 1975" />
+  <DescriptionList.Item label="Email address" value="alex.nguyen@email.com" />
+  <DescriptionList.Item label="Mobile phone" value="0412 345 678" />
+</DescriptionList>`,
+      },
+    },
+  },
+  render: ({ widthMode, widthValue, ...args }) => (
+    <Box sx={{ maxWidth: 768 }}>
+      <DescriptionList
+        {...args}
+        {...resolveWidthProps({ widthMode, widthValue })}
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit personal details" />}
+      >
+        <DescriptionList.Item label="Full name" value="Alex Nguyen" />
+        <DescriptionList.Item label="Date of birth" value="12 March 1975" />
+        <DescriptionList.Item label="Email address" value="alex.nguyen@email.com" />
+        <DescriptionList.Item label="Mobile phone" value="0412 345 678" />
       </DescriptionList>
     </Box>
   ),

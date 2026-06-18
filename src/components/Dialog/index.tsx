@@ -38,6 +38,8 @@ export interface DialogProps {
   disableCloseOnBackdrop?: boolean;
   hideCloseButton?: boolean;
   hideCancel?: boolean;
+  /** Suppresses the variant icon next to the dialog title. */
+  hideIcon?: boolean;
   titleVariant?: 'h4' | 'h5' | 'h6';
   alertButtonLayout?: AlertButtonLayout;
   extraActions?: ReadonlyArray<AlertAction>;
@@ -71,6 +73,7 @@ export function Dialog({
   disableCloseOnBackdrop = false,
   hideCloseButton = false,
   hideCancel = false,
+  hideIcon = false,
   titleVariant = 'h5',
   alertButtonLayout = 'row',
   extraActions,
@@ -165,7 +168,7 @@ export function Dialog({
         component="div"
         sx={{ display: 'flex', alignItems: 'center', gap: 1.5, pt: 4, pl: 4, pr: 4, pb: 1 }}
       >
-        {variant !== 'neutral' && (
+        {variant !== 'neutral' && !hideIcon && (
           <Icon
             icon={VARIANT_ICONS[variant]}
             color={VARIANT_ICON_COLOR[variant]}

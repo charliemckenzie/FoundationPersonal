@@ -3,7 +3,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
+import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
+import { DescriptionList } from '../../../components/DescriptionList';
 import { Dialog } from '../../../components/Dialog';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
@@ -18,6 +20,7 @@ interface StepReviewProps {
   verifyDetailsState: VerifyDetailsState;
   onVerifyDetailsChange: (next: VerifyDetailsState) => void;
   profile: UserProfile;
+  verifyMethod: 'online' | 'other';
 }
 
 function optionLabel(state: LifetimePensionState): string {
@@ -26,94 +29,6 @@ function optionLabel(state: LifetimePensionState): string {
   return 'Not selected';
 }
 
-function ReviewRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-        alignItems: 'flex-start',
-        columnGap: 2,
-        rowGap: { xs: 0.5, sm: 0 },
-        py: 1.5,
-        borderTop: '1px solid',
-        borderTopColor: 'border.subtle',
-        '&:last-child': {
-          borderBottom: '1px solid',
-          borderBottomColor: 'border.subtle',
-        },
-      }}
-    >
-      <Typography component="dt" variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>
-        {label}
-      </Typography>
-      <Box component="dd" sx={{ m: 0 }}>{children}</Box>
-    </Box>
-  );
-}
-
-function ReviewValue({ children }: { children: React.ReactNode }) {
-  if (typeof children === 'string' || typeof children === 'number') {
-    return (
-      <Typography variant="body" sx={{ color: 'text.primary' }}>
-        {children}
-      </Typography>
-    );
-  }
-  return <>{children}</>;
-}
-
-interface SectionProps {
-  title: string;
-  onEdit: () => void;
-  children: React.ReactNode;
-  sx?: object;
-}
-
-function ReviewSection({ title, onEdit, children, sx }: SectionProps) {
-  return (
-    <Stack spacing={3} sx={{ mt: 5, ...sx }}>
-      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">{title}</Typography>
-        <TextButton label="Edit" hideIcon onClick={onEdit} />
-      </Stack>
-      <Box component="dl" sx={{ m: 0 }}>
-        {children}
-      </Box>
-    </Stack>
-  );
-}
-
-function PrintCard() {
-  return (
-    <Box
-      sx={{
-        backgroundColor: 'action.hover',
-        borderRadius: (t) => `${t.shape.lg}px`,
-        p: 3,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 2,
-      }}
-    >
-      <Stack spacing={0.5}>
-        <Typography variant="h6" sx={{ color: 'text.heading' }}>
-          Lifetime Pension application
-        </Typography>
-        <Typography variant="small" sx={{ color: 'text.primary' }}>
-          This is a permanent purchase after the cooling-off period
-        </Typography>
-      </Stack>
-      <TextButton
-        label="Print"
-        startIcon="print"
-        onClick={() => window.print()}
-      />
-    </Box>
-  );
-}
 
 function DeclLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -167,6 +82,7 @@ export function StepReview({
   verifyDetailsState,
   onVerifyDetailsChange,
   profile,
+  verifyMethod,
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
@@ -189,31 +105,124 @@ export function StepReview({
   const fortnightlyPayment = annualPayment > 0 ? annualPayment / 26 : 0;
 
   return (
-    <Stack spacing={0}>
-      <PrintCard />
+    <Stack spacing={4}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Stack spacing={0.5}>
+          <Typography variant="h5" component="h2">
+            Review your Lifetime Pension application
+          </Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            This is a permanent purchase after the cooling-off period
+          </Typography>
+        </Stack>
+        <Button
+          label="Print"
+          variant="outlined"
+          size="small"
+          startIcon="print"
+          onClick={() => window.print()}
+        />
+      </Stack>
+
+      {/* Product details */}
+      <DescriptionList title="Product details">
+          <DescriptionList.Item
+            label="Spouse option"
+            value={
+              <Box sx={{ fontWeight: 700 }}>{optionLabel(state)}</Box>
+            }
+            action={<TextButton label="Edit" hideIcon aria-label="Edit option" onClick={() => onEditStep('option')} />}
+          />
+          {state.pensionOption === 'spouse' && (
+            <>
+              <DescriptionList.Item
+                label="Spouse full name"
+                value={[state.spouseDetails.firstName, state.spouseDetails.middleName, state.spouseDetails.lastName].filter(Boolean).join(' ') || '—'}
+              />
+              <DescriptionList.Item label="Spouse date of birth" value={state.spouseDetails.dateOfBirth || '—'} />
+              <DescriptionList.Item label="Spouse residential address" value={state.spouseDetails.residentialAddress || '—'} />
+              <DescriptionList.Item label="Spouse email address" value={state.spouseDetails.emailAddress || '—'} />
+              <DescriptionList.Item label="Spouse mobile phone" value={state.spouseDetails.mobilePhone || '—'} />
+              {state.spouseDetails.homePhone && (
+                <DescriptionList.Item label="Spouse home phone" value={state.spouseDetails.homePhone} />
+              )}
+            </>
+          )}
+          <DescriptionList.Item
+            label="Purchase price"
+            value={
+              <Box sx={{ fontWeight: 700 }}>{formatCurrency(purchasePrice)}</Box>
+            }
+            action={<TextButton label="Edit" hideIcon aria-label="Edit purchase price" onClick={() => onEditStep('funding')} />}
+          />
+          {selectedAccounts.length > 0 ? selectedAccounts.map((account, index) => (
+            <DescriptionList.Item
+              key={account.id}
+              label={account.label}
+              value={
+                <Box sx={{ fontWeight: 700 }}>{formatCurrency(account.transferAmount)}</Box>
+              }
+              action={index === 0 ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} /> : undefined}
+            />
+          )) : (
+            <DescriptionList.Item
+              label="Funding preferences"
+              value="—"
+              action={<TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} />}
+            />
+          )}
+      </DescriptionList>
+
+      {/* Payment details */}
+      <DescriptionList
+        title="Payment details"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit payment details" onClick={() => onEditStep('payments')} />}
+      >
+          <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />
+          <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
+          <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
+          <DescriptionList.Item
+            label="Bank account"
+            value={
+              <Stack spacing={0.5}>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc No. {state.bankDetails.accountNumber || '—'}</Typography>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
+              </Stack>
+            }
+          />
+      </DescriptionList>
 
       {/* Personal details */}
-      <ReviewSection title="Personal details" sx={{ mt: 4 }} onEdit={handleOpenEdit}>
-        <ReviewRow label="Full name">
-          <ReviewValue>
-            {[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName]
-              .filter(Boolean)
-              .join(' ') || '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Residential address">
-          <ReviewValue>{displayDetails.residentialAddress || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Email address">
-          <ReviewValue>{displayDetails.email || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Date of birth">
-          <ReviewValue>{displayDetails.dateOfBirth || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Mobile phone">
-          <ReviewValue>{displayDetails.mobilePhone || '—'}</ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
+      <DescriptionList
+        title="Personal details"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit personal details" onClick={handleOpenEdit} />}
+      >
+          <DescriptionList.Item
+            label="Full name"
+            value={[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName].filter(Boolean).join(' ') || '—'}
+          />
+          <DescriptionList.Item label="Date of birth" value={displayDetails.dateOfBirth || '—'} />
+          <DescriptionList.Item label="Mobile phone" value={displayDetails.mobilePhone || '—'} />
+          <DescriptionList.Item label="Email address" value={displayDetails.email || '—'} />
+          <DescriptionList.Item
+            label="Residential address"
+            value={
+              (() => {
+                const addr = displayDetails.residentialAddress || '—';
+                const commaIdx = addr.indexOf(',');
+                const line1 = commaIdx > -1 ? addr.slice(0, commaIdx) : addr;
+                const line2 = commaIdx > -1 ? addr.slice(commaIdx + 1).trim() : null;
+                return (
+                  <Stack spacing={0}>
+                    <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{line1}</Typography>
+                    {line2 && <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{line2}</Typography>}
+                  </Stack>
+                );
+              })()
+            }
+          />
+      </DescriptionList>
 
       {/* Edit personal details dialog */}
       <Dialog
@@ -238,107 +247,25 @@ export function StepReview({
         </Stack>
       </Dialog>
 
-      {/* Option */}
-      <ReviewSection title="Option" sx={{ mt: 4 }} onEdit={() => onEditStep('option')}>
-        <ReviewRow label="Pension option">
-          <ReviewValue>{optionLabel(state)}</ReviewValue>
-        </ReviewRow>
-        {state.pensionOption === 'spouse' && (
-          <ReviewRow label="Spouse details">
-            <Stack spacing={1.5}>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Full name</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  {[state.spouseDetails.firstName, state.spouseDetails.middleName, state.spouseDetails.lastName]
-                    .filter(Boolean)
-                    .join(' ') || '—'}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Date of birth</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.dateOfBirth || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Residential address</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.residentialAddress || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Email address</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.emailAddress || '—'}</Typography>
-              </Box>
-              <Box>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>Mobile phone</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.mobilePhone || '—'}</Typography>
-              </Box>
-              {state.spouseDetails.homePhone && (
-                <Box>
-                  <Typography variant="small" sx={{ color: 'text.muted' }}>Home phone</Typography>
-                  <Typography variant="body" sx={{ color: 'text.primary' }}>{state.spouseDetails.homePhone}</Typography>
-                </Box>
-              )}
-            </Stack>
-          </ReviewRow>
-        )}
-      </ReviewSection>
-
-      {/* Purchase price */}
-      <ReviewSection title="Purchase price" onEdit={() => onEditStep('funding')}>
-        <ReviewRow label="Purchase price">
-          <ReviewValue>{formatCurrency(purchasePrice)}</ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Funding */}
-      <ReviewSection title="Funding" onEdit={() => onEditStep('allocate')}>
-        <ReviewRow label="Funding preferences">
-          <Stack spacing={1.5}>
-            {selectedAccounts.length > 0 ? selectedAccounts.map((account) => (
-              <Box key={account.id}>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  Transferring {formatCurrency(account.transferAmount)} from
-                </Typography>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>
-                  {account.label}
-                </Typography>
-              </Box>
-            )) : (
-              <Typography variant="body" sx={{ color: 'text.muted' }}>—</Typography>
-            )}
-          </Stack>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Payment details */}
-      <ReviewSection title="Payment details" onEdit={() => onEditStep('payments')}>
-        <ReviewRow label="Annual payment amount">
-          <ReviewValue>{formatCurrency(annualPayment)}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Estimated payment">
-          <ReviewValue>{formatCurrency(fortnightlyPayment)} / fortnight</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="First payment date">
-          <ReviewValue>Tue, 03 Feb 2026</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Bank account">
-          <Stack spacing={1.5}>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>BSB</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.bsb || '—'}</Typography>
+      {/* Identity verification */}
+      <DescriptionList
+        title="Identity verification"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit identity verification" onClick={() => onEditStep('idv')} />}
+      >
+        <DescriptionList.Item
+          label="Status"
+          value={
+            <Box sx={{ fontWeight: 700 }}>
+              {verifyMethod === 'other'
+                ? 'Member will supply documents as per our Identity Factsheet'
+                : 'Digital verification complete'}
             </Box>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>Account number</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.accountNumber || '—'}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>Account name</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.accountName || '—'}</Typography>
-            </Box>
-          </Stack>
-        </ReviewRow>
-      </ReviewSection>
+          }
+        />
+      </DescriptionList>
 
       {/* Declaration */}
-      <Stack spacing={3} sx={{ mt: 5 }}>
+      <Stack spacing={3}>
         <DeclarationBox />
         <Checkbox
           checked={state.reviewDeclarationChecked}

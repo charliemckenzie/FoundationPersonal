@@ -23,10 +23,9 @@ export default function IncomeAccountsPage() {
       </Stack>
 
       <Stack spacing={4}>
-        <Stack spacing={1.5}>
+        <Stack spacing={2}>
           <Stack spacing={0.5}>
-            <Typography variant="h5">In retirement</Typography>
-            <Typography variant="body">You've retired and are ready to start drawing on your super as regular income.</Typography>
+            <Typography variant="h5">In retirement options</Typography>
           </Stack>
           <Stack spacing={1.5}>
             <LinkRow
@@ -85,6 +84,7 @@ export default function IncomeAccountsPage() {
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}
         variant="danger"
+        hideIcon
         title="Start a new application?"
         description="This will override your incomplete application. This action cannot be undone."
         confirmLabel="Start new application"

@@ -227,6 +227,122 @@ export interface StepIDVProps {
 export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = false, hideSubmit = false }: StepIDVProps) {
   const canSubmit = canSubmitIDV(state);
 
+  const formContent = (
+    <Stack spacing={3}>
+      <Box
+        sx={{
+          // Stretch the radio group to the full container width, then split it
+          // into equal-width document cards (each flexes to a third of the row).
+          '& .MuiFormControl-root': { width: '100%' },
+          '& .MuiRadioGroup-root': { width: '100%', flexWrap: 'nowrap' },
+          '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
+        }}
+      >
+        <RadioGroup
+          variant="card"
+          direction="row"
+          cardDirection="column"
+          legend="Select a document"
+          options={DOCUMENT_OPTIONS}
+          value={state.selectedDocument}
+          onChange={(value) =>
+            onChange({ ...state, selectedDocument: value as IDVDocument })
+          }
+        />
+      </Box>
+      <Typography variant="small" sx={{ color: 'text.primary', mt: 2, display: 'block' }}>
+        If you don&apos;t have any of the above please{' '}
+        <Box component="a" href="#" sx={{ color: 'primary.main' }}>
+          contact us
+        </Box>{' '}
+        so we can help.
+      </Typography>
+
+      {/* Document sub-form — grey box, 32px below tiles */}
+      {state.selectedDocument !== '' && (
+        <Box
+          sx={{
+            mt: 4,
+            backgroundColor: 'action.hover',
+            borderRadius: (t) => `${t.shape.md}px`,
+            p: 3,
+          }}
+        >
+          <Stack spacing={3}>
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Typography variant="h5">
+                {DOCUMENT_HEADINGS[state.selectedDocument]}
+              </Typography>
+              <TextButton label="Need help?" startIcon="circle-info" hideIcon={false} onClick={() => {}} />
+            </Box>
+
+            {state.selectedDocument === 'drivers-licence' && (
+              <DriversLicenceForm
+                fields={state.driversLicence}
+                onChange={(next) => onChange({ ...state, driversLicence: next })}
+              />
+            )}
+            {state.selectedDocument === 'medicare' && (
+              <MedicareForm
+                fields={state.medicare}
+                onChange={(next) => onChange({ ...state, medicare: next })}
+              />
+            )}
+            {state.selectedDocument === 'passport' && (
+              <PassportForm
+                fields={state.passport}
+                onChange={(next) => onChange({ ...state, passport: next })}
+              />
+            )}
+          </Stack>
+        </Box>
+      )}
+
+      {/* Declaration */}
+      {state.selectedDocument !== '' && (
+        <Stack spacing={2}>
+          <Typography variant="h5">Declaration</Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            With your consent, Australian Retirement Trust can use the Equifax IDMatrix to
+            verify your identity electronically. This program uses data held in places such
+            as the electoral role, White Pages, The Passport office and Equifax credit
+            information files to verify your details.
+          </Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            As part of the electronic verification process, your document details (for
+            example your driver&apos;s license number) will be submitted to the Australian
+            Government&apos;s Document Verification Service (DVS). The DVS is a national
+            online system that allows organisations to verify the authenticity of
+            Australian identity documents.
+          </Typography>
+          <Box
+            sx={{
+              backgroundColor: 'action.hover',
+              borderRadius: (t) => `${t.shape.md}px`,
+              p: 2,
+            }}
+          >
+            <Typography variant="small" sx={{ color: 'text.primary' }}>
+              By clicking submit, you consent to the above declaration.
+            </Typography>
+          </Box>
+
+          {error && <Alert severity="error" message={error} />}
+
+          {!hideSubmit && (
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
+              <Button
+                label="Run ID check"
+                loading={loading}
+                onClick={onSubmit}
+              />
+            </Box>
+          )}
+        </Stack>
+      )}
+    </Stack>
+  );
+
   return (
     <Stack spacing={3}>
       {!embedded && (
@@ -240,125 +356,8 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
         </div>
       )}
 
-      {/* Document selector card */}
-      <Card variant={embedded ? 'open' : 'border'}>
-        <Stack spacing={3}>
-          <div>
-            <Box
-              sx={{
-                // Stretch the radio group to the full container width, then split it
-                // into equal-width document cards (each flexes to a third of the row).
-                '& .MuiFormControl-root': { width: '100%' },
-                '& .MuiRadioGroup-root': { width: '100%', flexWrap: 'nowrap' },
-                '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
-              }}
-            >
-              <RadioGroup
-                variant="card"
-                direction="row"
-                cardDirection="column"
-                legend="Select a document"
-                options={DOCUMENT_OPTIONS}
-                value={state.selectedDocument}
-                onChange={(value) =>
-                  onChange({ ...state, selectedDocument: value as IDVDocument })
-                }
-              />
-            </Box>
-            <Typography variant="small" sx={{ color: 'text.primary', mt: 2, display: 'block' }}>
-              If you don&apos;t have any of the above please{' '}
-              <Box component="a" href="#" sx={{ color: 'primary.main' }}>
-                contact us
-              </Box>{' '}
-              so we can help.
-            </Typography>
-
-            {/* Document sub-form — grey box, 32px below tiles */}
-            {state.selectedDocument !== '' && (
-              <Box
-                sx={{
-                  mt: 4,
-                  backgroundColor: 'action.hover',
-                  borderRadius: (t) => `${t.shape.md}px`,
-                  p: 3,
-                }}
-              >
-                <Stack spacing={3}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Typography variant="h5">
-                      {DOCUMENT_HEADINGS[state.selectedDocument]}
-                    </Typography>
-                    <TextButton label="Need help?" startIcon="circle-info" hideIcon={false} onClick={() => {}} />
-                  </Box>
-
-                  {state.selectedDocument === 'drivers-licence' && (
-                    <DriversLicenceForm
-                      fields={state.driversLicence}
-                      onChange={(next) => onChange({ ...state, driversLicence: next })}
-                    />
-                  )}
-                  {state.selectedDocument === 'medicare' && (
-                    <MedicareForm
-                      fields={state.medicare}
-                      onChange={(next) => onChange({ ...state, medicare: next })}
-                    />
-                  )}
-                  {state.selectedDocument === 'passport' && (
-                    <PassportForm
-                      fields={state.passport}
-                      onChange={(next) => onChange({ ...state, passport: next })}
-                    />
-                  )}
-                </Stack>
-              </Box>
-            )}
-          </div>
-
-          {/* Declaration */}
-          {state.selectedDocument !== '' && (
-            <Stack spacing={2}>
-              <Typography variant="h5">Declaration</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>
-                With your consent, Australian Retirement Trust can use the Equifax IDMatrix to
-                verify your identity electronically. This program uses data held in places such
-                as the electoral role, White Pages, The Passport office and Equifax credit
-                information files to verify your details.
-              </Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>
-                As part of the electronic verification process, your document details (for
-                example your driver&apos;s license number) will be submitted to the Australian
-                Government&apos;s Document Verification Service (DVS). The DVS is a national
-                online system that allows organisations to verify the authenticity of
-                Australian identity documents.
-              </Typography>
-              <Box
-                sx={{
-                  backgroundColor: 'action.hover',
-                  borderRadius: (t) => `${t.shape.md}px`,
-                  p: 2,
-                }}
-              >
-                <Typography variant="small" sx={{ color: 'text.primary' }}>
-                  By clicking submit, you consent to the above declaration.
-                </Typography>
-              </Box>
-
-              {error && <Alert severity="error" message={error} />}
-
-              {!hideSubmit && (
-                <Box sx={{ display: 'flex', justifyContent: embedded ? 'flex-end' : 'flex-start' }}>
-                  <Button
-                    label="Submit"
-                    disabled={!canSubmit}
-                    loading={loading}
-                    onClick={onSubmit}
-                  />
-                </Box>
-              )}
-            </Stack>
-          )}
-        </Stack>
-      </Card>
+      {/* Wrap in a card on the standalone page; render flat when embedded in a flow step */}
+      {embedded ? formContent : <Card variant="border">{formContent}</Card>}
     </Stack>
   );
 }

@@ -27,7 +27,7 @@ export function LinkRow({
   label,
   description,
   icon,
-  iconStyle = 'regular',
+  iconStyle = 'light',
   href,
   onClick,
   sx: sxProp,
@@ -98,13 +98,12 @@ export function LinkRow({
       {/* Text content — accessible name is derived from this text */}
       <Box sx={{ flex: 1, minWidth: 0 }}>
         <Typography
-          variant="body"
+          variant="h6"
           component="span"
           className="link-row-label"
           sx={{
             display: 'block',
             color: 'primary.main',
-            fontWeight: 700,
             transition: (t) => t.transitions.create(['color'], { duration: t.transitions.duration.short }),
           }}
         >
