@@ -14,6 +14,12 @@ export interface MobileHeaderProps {
   /** Accessible label for the logo link. Defaults to `'Home'`. */
   homeLabel?: string;
   onMenuOpen: () => void;
+  /** Id applied to the header so a skip link can target the mobile nav region. When set, the header becomes a focus target. */
+  navLandmarkId?: string;
+  /** Whether the nav drawer this header opens is currently open. Drives `aria-expanded`. */
+  menuOpen?: boolean;
+  /** Id of the nav drawer this header controls. Used for `aria-controls` while open. */
+  menuId?: string;
   onSearchOpen?: () => void;
   onLogout?: () => void;
   openMenuLabel?: string;
@@ -27,6 +33,9 @@ export function MobileHeader({
   homeHref,
   homeLabel = 'Home',
   onMenuOpen,
+  navLandmarkId,
+  menuOpen = false,
+  menuId,
   onSearchOpen,
   onLogout,
   openMenuLabel = DEFAULT_MEMBER_ONLINE_COPY.openMenuLabel,
@@ -61,6 +70,8 @@ export function MobileHeader({
   return (
     <Box
       component="header"
+      id={navLandmarkId}
+      tabIndex={navLandmarkId !== undefined ? -1 : undefined}
       sx={(t) => ({
         display: 'flex',
         alignItems: 'center',
@@ -70,6 +81,7 @@ export function MobileHeader({
         width: '100%',
         backgroundColor: 'background.paper',
         borderBottom: `1px solid ${t.palette.border.subtle}`,
+        '&:focus': { outline: 'none' },
       })}
     >
       <IconButton
@@ -81,6 +93,9 @@ export function MobileHeader({
         condensed
         onClick={onMenuOpen}
         showTooltip={false}
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
+        aria-controls={menuOpen ? menuId : undefined}
       />
       {onSearchOpen !== undefined && (
         <IconButton

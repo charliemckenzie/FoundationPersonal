@@ -30,6 +30,12 @@ export interface IconButtonProps {
   showTooltip?: boolean;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: 'button' | 'submit' | 'reset';
+  /** Disclosure state for buttons that toggle a menu/drawer/dialog. */
+  'aria-expanded'?: boolean;
+  /** Id of the element this button controls (e.g. the drawer it opens). */
+  'aria-controls'?: string;
+  /** Signals the type of popup the button opens. */
+  'aria-haspopup'?: boolean | 'menu' | 'dialog';
   sx?: SxProps<Theme>;
 }
 
@@ -69,6 +75,7 @@ export function IconButton({
   onClick,
   type = 'button',
   sx,
+  ...aria
 }: IconButtonProps) {
   const variantStyles =
     variant === 'contained' ? buildContainedStyles('primary')
@@ -88,6 +95,9 @@ export function IconButton({
     <MuiIconButton
       aria-label={label}
       aria-busy={loading || undefined}
+      aria-expanded={aria['aria-expanded']}
+      aria-controls={aria['aria-controls']}
+      aria-haspopup={aria['aria-haspopup']}
       size={size}
       disabled={disabled}
       disableRipple

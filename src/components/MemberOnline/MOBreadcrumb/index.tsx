@@ -71,19 +71,19 @@ export function MOBreadcrumb({ items, onBack }: MOBreadcrumbProps) {
                   <Icon icon="chevron-right" style="solid" size="sm" color="text.muted" />
                 </Box>
               )}
-              {isLast ? (
+              {isLast || item.href === undefined ? (
                 <Typography
                   variant="small"
                   component="span"
                   sx={{ color: 'text.muted' }}
-                  aria-current="page"
+                  aria-current={isLast ? 'page' : undefined}
                 >
                   {item.label}
                 </Typography>
               ) : (
                 <Box
                   component="a"
-                  href={item.href ?? '#'}
+                  href={item.href}
                   sx={{
                     typography: 'small',
                     fontWeight: 500,

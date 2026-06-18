@@ -36,6 +36,7 @@ export function NavFlyout({
   id,
 }: NavFlyoutProps) {
   const firstItemRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     if (!open) return;
@@ -43,14 +44,53 @@ export function NavFlyout({
     return () => window.clearTimeout(t);
   }, [open]);
 
-  useEffect(() => {
-    if (!open) return;
-    function onKey(e: KeyboardEvent) {
-      if (e.key === 'Escape') onClose();
+  // Menu keyboard model (ARIA APG): Escape returns focus to the trigger;
+  // Tab/Shift+Tab close the menu and move focus in the sidebar;
+  // Arrow/Home/End roving moves focus between the menu items.
+  function handleMenuKeyDown(e: React.KeyboardEvent<HTMLElement>) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      anchorEl?.focus();
+      onClose();
+      return;
     }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [open, onClose]);
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      onClose();
+      if (e.shiftKey) {
+        anchorEl?.focus();
+      } else {
+        // Move to the next focusable element in the sidebar after the trigger.
+        // The Popper is portalled outside `aside`, so this query is safe.
+        const sidebar = anchorEl?.closest('aside') ?? document.body;
+        const focusable = Array.from(
+          sidebar.querySelectorAll<HTMLElement>(
+            'a[href]:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+          ),
+        );
+        const triggerIdx = focusable.indexOf(anchorEl as HTMLElement);
+        (focusable[triggerIdx + 1] ?? anchorEl)?.focus();
+      }
+      return;
+    }
+    if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return;
+    const menuItems = Array.from(
+      menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [],
+    );
+    if (menuItems.length === 0) return;
+    e.preventDefault();
+    const currentIndex = menuItems.indexOf(document.activeElement as HTMLElement);
+    const lastIndex = menuItems.length - 1;
+    let nextIndex: number;
+    switch (e.key) {
+      case 'ArrowDown': nextIndex = currentIndex < lastIndex ? currentIndex + 1 : 0; break;
+      case 'ArrowUp': nextIndex = currentIndex > 0 ? currentIndex - 1 : lastIndex; break;
+      case 'Home': nextIndex = 0; break;
+      case 'End': nextIndex = lastIndex; break;
+      default: return;
+    }
+    menuItems[nextIndex]?.focus();
+  }
 
   return (
     <Popper
@@ -71,8 +111,6 @@ export function NavFlyout({
             <ClickAwayListener onClickAway={onClose}>
               <Paper
                 id={id}
-                role="menu"
-                aria-label={title}
                 elevation={16}
                 sx={(t) => ({
                   width: '362px',
@@ -84,67 +122,76 @@ export function NavFlyout({
                   backgroundImage: 'none',
                 })}
               >
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                <Box
+                  ref={menuRef}
+                  component="ul"
+                  role="menu"
+                  aria-label={title}
+                  onKeyDown={handleMenuKeyDown}
+                  sx={{ display: 'flex', flexDirection: 'column', listStyle: 'none', m: 0, p: 0 }}
+                >
                   {items.map((item, index) => (
-                    <Box
-                      key={item.id}
-                      ref={index === 0 ? firstItemRef : undefined}
-                      component="button"
-                      role="menuitem"
-                      type="button"
-                      onClick={() => {
-                        item.onClick?.();
-                        onItemSelect?.(item);
-                        onClose();
-                      }}
-                      sx={(t) => ({
-                        display: 'flex',
-                        alignItems: 'flex-start',
-                        gap: 1.5,
-                        width: '100%',
-                        px: 1.5,
-                        py: 1.25,
-                        textAlign: 'left',
-                        cursor: 'pointer',
-                        border: 0,
-                        background: 'transparent',
-                        color: 'text.primary',
-                        borderRadius: `${t.shape.sm}px`,
-                        font: 'inherit',
-                        '&:hover': { backgroundColor: 'action.hover' },
-                        '&:focus-visible': {
-                          outline: `2px solid ${t.palette.border.focus}`,
-                          outlineOffset: '-2px',
-                          backgroundColor: 'transparent',
-                        },
-                      })}
-                    >
-                      {item.icon !== undefined && (
-                        <Box
-                          sx={{
-                            display: 'inline-flex',
-                            color: 'inherit',
-                            mt: '0.125rem',
-                          }}
-                        >
-                          <Icon icon={item.icon} style="light" size="lg" color="inherit" />
-                        </Box>
-                      )}
-                      <Box sx={{ flex: 1 }}>
-                        <Typography
-                          variant="small"
-                          sx={{ color: 'inherit', typography: 'body', fontWeight: 500, m: 0 }}
-                        >
-                          {item.label}
-                        </Typography>
-                        {item.description !== undefined && (
+                    <Box component="li" key={item.id} role="none">
+                      <Box
+                        ref={index === 0 ? firstItemRef : undefined}
+                        component="button"
+                        role="menuitem"
+                        type="button"
+                        tabIndex={-1}
+                        onClick={() => {
+                          item.onClick?.();
+                          onItemSelect?.(item);
+                          onClose();
+                        }}
+                        sx={(t) => ({
+                          display: 'flex',
+                          alignItems: 'flex-start',
+                          gap: 1.5,
+                          width: '100%',
+                          px: 1.5,
+                          py: 1.25,
+                          textAlign: 'left',
+                          cursor: 'pointer',
+                          border: 0,
+                          background: 'transparent',
+                          color: 'text.primary',
+                          borderRadius: `${t.shape.sm}px`,
+                          font: 'inherit',
+                          '&:hover': { backgroundColor: 'action.hover' },
+                          '&:focus-visible': {
+                            outline: `2px solid ${t.palette.border.focus}`,
+                            outlineOffset: '-2px',
+                            backgroundColor: 'transparent',
+                          },
+                        })}
+                      >
+                        {item.icon !== undefined && (
+                          <Box
+                            sx={{
+                              display: 'inline-flex',
+                              color: 'inherit',
+                              mt: '0.125rem',
+                            }}
+                          >
+                            <Icon icon={item.icon} style="light" size="lg" color="inherit" />
+                          </Box>
+                        )}
+                        <Box sx={{ flex: 1 }}>
                           <Typography
                             variant="small"
-                            sx={{ color: 'text.muted', lineHeight: 20 / 14, m: 0, mt: 0.25 }}
+                            sx={{ color: 'inherit', typography: 'body', fontWeight: 500, m: 0 }}
                           >
-                            {item.description}
+                            {item.label}
                           </Typography>
-                        )}
+                          {item.description !== undefined && (
+                            <Typography
+                              variant="small"
+                              sx={{ color: 'text.muted', lineHeight: 20 / 14, m: 0, mt: 0.25 }}
+                            >
+                              {item.description}
+                            </Typography>
+                          )}
+                        </Box>
                       </Box>
                     </Box>
                   ))}

@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import { SideNav } from '../SideNav';
 import { MemberHeader } from '../MemberHeader';
 import { MobileHeader } from '../MobileHeader';
@@ -15,6 +17,8 @@ import type {
   MemberNavItem,
   MemberUser,
 } from '../types';
+
+const MOBILE_NAV_DRAWER_ID = 'member-nav-drawer';
 
 export interface MemberOnlineLayoutProps {
   user: MemberUser;
@@ -66,6 +70,12 @@ export function MemberOnlineLayout({
 }: MemberOnlineLayoutProps) {
   const { mode, setMode } = useThemeMode();
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const theme = useTheme();
+  // Only one element may own the `main-nav` skip-link target at a time. The desktop SideNav
+  // and mobile header are both mounted (CSS `display` toggle), so assign the id to whichever
+  // is actually visible at the current breakpoint to avoid a duplicate / hidden target.
+  const isDesktopNav = useMediaQuery(theme.breakpoints.up('lg'));
+  const navLandmarkId = 'main-nav';
 
   return (
     <Box
@@ -82,6 +92,7 @@ export function MemberOnlineLayout({
       <Box sx={{ display: { xs: 'none', lg: 'flex' } }}>
         <SideNav
           logo={logo}
+          navLandmarkId={isDesktopNav ? navLandmarkId : undefined}
           homeHref={homeHref}
           homeLabel={homeLabel}
           primaryItems={primaryItems}
@@ -103,12 +114,16 @@ export function MemberOnlineLayout({
             homeHref={homeHref}
             homeLabel={homeLabel}
             onMenuOpen={() => setDrawerOpen(true)}
+            navLandmarkId={isDesktopNav ? undefined : navLandmarkId}
+            menuOpen={drawerOpen}
+            menuId={MOBILE_NAV_DRAWER_ID}
             onLogout={onLogout}
           />
         </Box>
 
         {/* Mobile nav drawer — always mounted, portal-based, invisible when closed */}
         <MobileNavDrawer
+          id={MOBILE_NAV_DRAWER_ID}
           open={drawerOpen}
           onClose={() => setDrawerOpen(false)}
           logo={drawerLogo ?? logo}
@@ -142,7 +157,9 @@ export function MemberOnlineLayout({
         {/* Page content — stable tree position on every viewport */}
         <Box
           component="main"
-          sx={{ flex: 1, minHeight: 0, overflowY: { lg: 'auto' } }}
+          id="main-content"
+          tabIndex={-1}
+          sx={{ flex: 1, minHeight: 0, overflowY: { lg: 'auto' }, '&:focus': { outline: 'none' } }}
         >
           <Box sx={{ minHeight: '100%', display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ flex: 1 }}>

@@ -14,8 +14,12 @@ export type NavItemVariant = 'primary' | 'secondary';
 export interface NavItemProps {
   label: string;
   icon?: string;
-  /** Highlights the item with the active treatment (filled background + accent bar on `primary`). */
+  /** Highlights the item as the current page: filled background + solid icon. */
   active?: boolean;
+  /** Marks a top-level parent item whose child is the current page: accent bar + solid icon, no background fill. */
+  parentActive?: boolean;
+  /** Set to false to suppress the left accent bar (e.g. drill-down child items). Defaults to true. */
+  showAccentBar?: boolean;
   /** Renders a trailing chevron — use for parent items that open a flyout / drill-down. */
   hasChildren?: boolean;
   /** Visual weight. `primary` is for top-level navigation, `secondary` is for compact lists (e.g. quick links). */
@@ -44,8 +48,11 @@ function rootSx(
   variant: NavItemVariant,
   size: NavItemSize,
   active: boolean,
+  parentActive: boolean,
+  showAccentBar: boolean,
 ) {
   const isPrimary = variant === 'primary';
+  const isHighlighted = active || parentActive;
   return {
     position: 'relative',
     width: '100%',
@@ -56,7 +63,9 @@ function rootSx(
     px: 1.5,
     ...(isPrimary && { py: 1.5 }),
     borderRadius: `${t.shape.sm}px`,
-    color: active ? t.palette.primary.main : t.palette.text.primary,
+    color: isHighlighted ? t.palette.primary.main : t.palette.text.primary,
+    // active (current page) gets a filled background; parentActive gets only the accent bar
+    ...(active && { backgroundColor: t.palette.primary.softMain }),
     fontWeight: 500,
     '& .MuiListItemText-primary': { fontWeight: 500 },
     textDecoration: 'none',
@@ -68,7 +77,11 @@ function rootSx(
       color: 'text.link',
       textDecoration: 'none',
     },
-    '&:visited': { color: active ? t.palette.primary.main : t.palette.text.primary },
+    '&:active': {
+      backgroundColor: 'background.default',
+      color: t.palette.text.link,
+    },
+    '&:visited': { color: isHighlighted ? t.palette.primary.main : t.palette.text.primary },
     '&.Mui-focusVisible': {
       outline: `2px solid ${t.palette.border.focus}`,
       outlineOffset: '-2px',
@@ -84,7 +97,7 @@ function rootSx(
         width: '0.25rem',
         borderTopRightRadius: `${t.shape.xs}px`,
         borderBottomRightRadius: `${t.shape.xs}px`,
-        backgroundColor: active ? t.palette.primary.main : 'transparent',
+        backgroundColor: isHighlighted && showAccentBar ? t.palette.primary.main : 'transparent',
       },
     }),
   };
@@ -95,6 +108,8 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
     label,
     icon,
     active = false,
+    parentActive = false,
+    showAccentBar = true,
     hasChildren = false,
     variant = 'primary',
     size = 'medium',
@@ -107,6 +122,7 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
   },
   ref,
 ) {
+  const isHighlighted = active || parentActive;
   return (
     <ListItemButton
       ref={ref as React.Ref<HTMLDivElement>}
@@ -121,7 +137,7 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
       aria-controls={aria['aria-controls']}
       disableRipple
       className="link-no-underline"
-      sx={(t) => rootSx(t, variant, size, active)}
+      sx={(t) => rootSx(t, variant, size, active, parentActive, showAccentBar)}
     >
       {icon !== undefined && (
         <ListItemIcon
@@ -132,7 +148,7 @@ export const NavItem = forwardRef<HTMLElement, NavItemProps>(function NavItem(
         >
           <Icon
             icon={icon}
-            style={active ? 'solid' : 'light'}
+            style={isHighlighted ? 'solid' : 'light'}
             size={variant === 'primary' ? 'xl' : 'lg'}
             color="inherit"
           />

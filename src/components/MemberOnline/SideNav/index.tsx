@@ -17,6 +17,8 @@ import {
 
 export interface SideNavProps {
   logo: LogoSlot;
+  /** Id applied to the primary `<nav>` so a skip link can target it. When set, the nav becomes a focus target. */
+  navLandmarkId?: string;
   /** When set, the logo becomes a link to this href (typically `'/'`). */
   homeHref?: string;
   /** Accessible label for the logo link. Defaults to `'Home'`. */
@@ -41,6 +43,7 @@ const FLYOUT_ID_PREFIX = 'member-online-flyout';
 
 export function SideNav({
   logo,
+  navLandmarkId,
   homeHref,
   homeLabel = 'Home',
   primaryItems,
@@ -123,7 +126,13 @@ export function SideNav({
           </Box>
         )}
 
-        <Box component="nav" aria-label="Primary" sx={{ px: 1.5 }}>
+        <Box
+          component="nav"
+          id={navLandmarkId}
+          aria-label="Primary"
+          tabIndex={navLandmarkId !== undefined ? -1 : undefined}
+          sx={{ px: 1.5, '&:focus': { outline: 'none' } }}
+        >
           <MemberNavList
             items={primaryItems}
             activeItemId={activeItemId}

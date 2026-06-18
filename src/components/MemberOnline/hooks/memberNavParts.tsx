@@ -113,37 +113,40 @@ export function MemberNavList({
   size,
 }: MemberNavListProps) {
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: variant === 'primary' ? 0.25 : 0 }}>
+    <Box
+      component="ul"
+      role="list"
+      sx={{ display: 'flex', flexDirection: 'column', gap: variant === 'primary' ? 0.25 : 0, listStyle: 'none', m: 0, p: 0 }}
+    >
       {items.map((item) => {
         const hasChildren = (item.children?.length ?? 0) > 0;
         const refSetter = itemRef ? itemRef(item.id) : undefined;
+        // Only emit popup/menu ARIA when the flyout is actually wired up (desktop SideNav).
+        // Mobile drill-down is a push navigation, not a popup menu — no aria-haspopup.
+        const isFlyoutTrigger = variant === 'primary' && hasChildren && flyoutIdPrefix !== undefined;
         return (
-          <NavItem
-            key={item.id}
-            ref={refSetter}
-            label={item.label}
-            icon={item.icon}
-            active={activeItemId === item.id}
-            hasChildren={variant === 'primary' ? hasChildren : false}
-            href={variant === 'secondary' ? item.href : hasChildren ? undefined : item.href}
-            variant={variant}
-            size={size}
-            onClick={(event) => onItemClick(item, event)}
-            onMouseEnter={
-              variant === 'primary' && hasChildren && onParentHover
-                ? (event) => onParentHover(item, event)
-                : undefined
-            }
-            aria-haspopup={variant === 'primary' && hasChildren ? 'menu' : undefined}
-            aria-expanded={
-              variant === 'primary' && hasChildren ? openFlyoutId === item.id : undefined
-            }
-            aria-controls={
-              variant === 'primary' && hasChildren && flyoutIdPrefix
-                ? `${flyoutIdPrefix}-${item.id}`
-                : undefined
-            }
-          />
+          <Box component="li" key={item.id}>
+            <NavItem
+              ref={refSetter}
+              label={item.label}
+              icon={item.icon}
+              active={activeItemId === item.id}
+              parentActive={item.children?.some((c) => c.id === activeItemId) ?? false}
+              hasChildren={variant === 'primary' ? hasChildren : false}
+              href={variant === 'secondary' ? item.href : hasChildren ? undefined : item.href}
+              variant={variant}
+              size={size}
+              onClick={(event) => onItemClick(item, event)}
+              onMouseEnter={
+                variant === 'primary' && hasChildren && onParentHover
+                  ? (event) => onParentHover(item, event)
+                  : undefined
+              }
+              aria-haspopup={isFlyoutTrigger ? 'menu' : undefined}
+              aria-expanded={isFlyoutTrigger ? openFlyoutId === item.id : undefined}
+              aria-controls={isFlyoutTrigger ? `${flyoutIdPrefix}-${item.id}` : undefined}
+            />
+          </Box>
         );
       })}
     </Box>

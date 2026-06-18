@@ -1,6 +1,7 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
+import type { MouseEvent } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
@@ -22,6 +23,8 @@ import {
 import type { ThemeMode } from '../../../app/themes/ThemeModeContext';
 
 export interface MobileNavDrawerProps {
+  /** Id applied to the drawer paper — used by the trigger's `aria-controls`. */
+  id?: string;
   open: boolean;
   onClose: () => void;
   logo: LogoSlot;
@@ -44,6 +47,7 @@ export interface MobileNavDrawerProps {
 }
 
 export function MobileNavDrawer({
+  id,
   open,
   onClose,
   logo,
@@ -63,15 +67,33 @@ export function MobileNavDrawer({
   copy = {},
 }: MobileNavDrawerProps) {
   const labels = { ...DEFAULT_MEMBER_ONLINE_COPY, ...copy };
+  const drillHeadingId = useId();
   const [drillItem, setDrillItem] = useState<MemberNavItem | null>(null);
+  /** The parent NavItem element that opened the drill view — focus returns here on Back. */
+  const drillTriggerRef = useRef<HTMLElement | null>(null);
+  /** Drill-view heading — focused on entry so the new context is announced. */
+  const drillHeadingRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     if (!open) setDrillItem(null);
   }, [open]);
 
+  // Move focus into the drill view on entry; restore it to the trigger on Back.
+  // preventScroll prevents iOS Safari from triggering scroll-into-view during the
+  // translateX transition, which would cancel the animation and show a white panel.
+  useEffect(() => {
+    if (drillItem !== null) {
+      drillHeadingRef.current?.focus({ preventScroll: true });
+    } else if (drillTriggerRef.current) {
+      drillTriggerRef.current.focus({ preventScroll: true });
+      drillTriggerRef.current = null;
+    }
+  }, [drillItem]);
+
   const handleItemClick = useCallback(
-    (item: MemberNavItem) => {
+    (item: MemberNavItem, event?: MouseEvent<HTMLElement>) => {
       if (item.children !== undefined && item.children.length > 0) {
+        drillTriggerRef.current = event?.currentTarget ?? null;
         setDrillItem(item);
         return;
       }
@@ -90,6 +112,7 @@ export function MobileNavDrawer({
       anchor="left"
       slotProps={{
         paper: {
+          id,
           'aria-label': 'Member navigation',
           sx: { width, maxWidth: '24rem', overflow: 'hidden', backgroundColor: 'background.paper', backgroundImage: 'none' },
         },
@@ -124,10 +147,11 @@ export function MobileNavDrawer({
             height: '100%',
             transform: drillItem !== null ? 'translateX(-50%)' : 'translateX(0)',
             transition: 'transform 280ms cubic-bezier(0.4, 0, 0.2, 1)',
+            '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
           }}
         >
           <Box
-            aria-hidden={drillItem !== null}
+            inert={drillItem !== null || undefined}
             sx={{
               flex: '0 0 50%',
               minWidth: 0,
@@ -148,7 +172,7 @@ export function MobileNavDrawer({
               copyLabel={labels.copyLabel}
               copiedLabel={labels.copiedLabel}
             />
-            <Box component="nav" aria-label="Primary">
+            <Box component="nav" aria-label="Primary" sx={{ mx: -0.5 }}>
               <MemberNavList
                 items={primaryItems}
                 activeItemId={activeItemId}
@@ -194,7 +218,7 @@ export function MobileNavDrawer({
           </Box>
 
           <Box
-            aria-hidden={drillItem === null}
+            inert={drillItem === null || undefined}
             sx={{
               flex: '0 0 50%',
               minWidth: 0,
@@ -216,27 +240,39 @@ export function MobileNavDrawer({
               </Box>
               <Divider sx={{ borderColor: 'border.subtle' }} />
             </Box>
-            <Typography variant="h5" sx={(t) => ({ color: 'text.heading', m: 0, mt: 1, fontSize: t.typography.body.fontSize, lineHeight: 1.5 })}>
+            <Typography
+              id={drillHeadingId}
+              ref={drillHeadingRef}
+              variant="h5"
+              component="h2"
+              tabIndex={-1}
+              sx={(t) => ({ color: 'text.heading', m: 0, mt: 1, fontSize: t.typography.body.fontSize, lineHeight: 1.5, outline: 'none' })}
+            >
               {drillItem?.label}
             </Typography>
-            <Box
-              component="nav"
-              aria-label={drillItem?.label}
-              sx={{ display: 'flex', flexDirection: 'column' }}
-            >
-              {drillItem?.children?.map((child) => (
-                <NavItem
-                  key={child.id}
-                  label={child.label}
-                  icon={child.icon}
-                  href={child.href}
-                  onClick={() => {
-                    child.onClick?.();
-                    onItemClick?.(child);
-                    onClose();
-                  }}
-                />
-              ))}
+            <Box component="nav" aria-labelledby={drillHeadingId} sx={{ mx: -0.5 }}>
+              <Box
+                component="ul"
+                role="list"
+                sx={{ display: 'flex', flexDirection: 'column', listStyle: 'none', m: 0, p: 0 }}
+              >
+                {drillItem?.children?.map((child) => (
+                  <Box component="li" key={child.id}>
+                    <NavItem
+                      label={child.label}
+                      icon={child.icon}
+                      href={child.href}
+                      active={activeItemId === child.id}
+                      showAccentBar={false}
+                      onClick={() => {
+                        child.onClick?.();
+                        onItemClick?.(child);
+                        onClose();
+                      }}
+                    />
+                  </Box>
+                ))}
+              </Box>
             </Box>
           </Box>
         </Box>

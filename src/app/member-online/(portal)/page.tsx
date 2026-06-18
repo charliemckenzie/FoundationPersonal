@@ -28,14 +28,14 @@ export default function MemberOnlinePage() {
         <Box sx={{ px: 3, pt: 2 }}>
           <MOBreadcrumb
             items={[
-              { label: 'Home', href: '#' },
+              { label: 'Home', href: '/' },
               { label: 'Dashboard' },
             ]}
-            onBack={() => {}}
           />
         </Box>
       )}
       <ContentContainer size={containerSize}>
+      <Typography variant="h1" sx={{ mb: 1.5 }}>Dashboard</Typography>
       <Box
         sx={{
           bgcolor: 'action.hover',

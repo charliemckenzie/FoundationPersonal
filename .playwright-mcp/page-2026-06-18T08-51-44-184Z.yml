@@ -1,0 +1,133 @@
+- generic [ref=e1]:
+  - navigation "Skip links":
+    - link "Skip to main content":
+      - /url: "#main-content"
+      - generic: Skip to main content
+      - generic:
+        - generic: ↩
+        - generic: ENTER
+    - link "Skip to navigation":
+      - /url: "#main-nav"
+      - generic: Skip to navigation
+      - generic:
+        - generic: ↩
+        - generic: ENTER
+    - link "Skip to footer":
+      - /url: "#footer"
+      - generic: Skip to footer
+      - generic:
+        - generic: ↩
+        - generic: ENTER
+  - generic [ref=e2]:
+    - complementary "Member navigation" [ref=e4]:
+      - link "Home" [ref=e6] [cursor=pointer]:
+        - /url: /
+        - img "ART" [ref=e8]
+      - generic [ref=e10]:
+        - generic [ref=e12]:
+          - paragraph [ref=e13]: "Total Balance: $112,200.00"
+          - paragraph [ref=e14]: As at 24 May 2026
+        - navigation "Primary" [ref=e15]:
+          - generic [ref=e16]:
+            - link "Home" [ref=e17] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e22]: Home
+            - button "Transactions" [expanded] [ref=e23] [cursor=pointer]:
+              - generic [ref=e28]: Transactions
+            - button "Investments" [ref=e32] [cursor=pointer]:
+              - generic [ref=e37]: Investments
+            - button "Put money in" [ref=e41] [cursor=pointer]:
+              - generic [ref=e46]: Put money in
+            - link "Take money out" [ref=e50] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e55]: Take money out
+            - link "Future planning" [ref=e56] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e61]: Future planning
+            - link "Insurance" [ref=e62] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e67]: Insurance
+          - separator [ref=e68]
+          - navigation "Secondary" [ref=e69]:
+            - generic [ref=e70]:
+              - link "Rewards" [ref=e71] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e73]: Rewards
+              - link "Beneficiaries" [ref=e74] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e76]: Beneficiaries
+              - link "Profile" [ref=e77] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e79]: Profile
+              - link "Security and login" [ref=e80] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e82]: Security and login
+              - link "Messages" [ref=e83] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e85]: Messages
+              - link "Help & contact" [ref=e86] [cursor=pointer]:
+                - /url: "#"
+                - generic [ref=e88]: Help & contact
+          - separator [ref=e89]
+          - paragraph [ref=e91]: Last logged in 24 May 2026
+    - generic [ref=e92]:
+      - banner [ref=e94]:
+        - button "Ask Artie" [ref=e95] [cursor=pointer]: Ask Artie
+        - generic [ref=e98]:
+          - generic [ref=e99]: AF
+          - generic [ref=e100]:
+            - paragraph [ref=e101]: Adam Finden
+            - paragraph [ref=e102]: Member No. 900000031
+        - tablist "Colour mode" [ref=e106]:
+          - tab "Light" [selected] [ref=e107] [cursor=pointer]
+          - tab "Dark" [ref=e111] [cursor=pointer]
+        - button "Log out" [ref=e114] [cursor=pointer]:
+          - generic [ref=e115]: Log out
+      - main [ref=e116]:
+        - generic [ref=e117]:
+          - generic [ref=e119]:
+            - navigation "breadcrumb" [ref=e121]:
+              - button "Go back" [ref=e122] [cursor=pointer]
+              - list [ref=e126]:
+                - listitem [ref=e127]:
+                  - link "Home" [ref=e128] [cursor=pointer]:
+                    - /url: "#"
+                - listitem [ref=e129]:
+                  - generic [ref=e133]: Dashboard
+            - generic [ref=e137]:
+              - generic [ref=e139]:
+                - generic [ref=e140]: Container size
+                - generic [ref=e142]:
+                  - combobox "Container size" [ref=e143] [cursor=pointer]: lg — 960px
+                  - textbox: lg
+                  - img
+                  - group
+              - paragraph [ref=e144]: Content area — lg
+              - generic [ref=e146] [cursor=pointer]:
+                - checkbox "Show breadcrumb" [checked] [ref=e149]
+                - generic [ref=e152]: Show breadcrumb
+          - generic [ref=e153]:
+            - navigation "Legal" [ref=e154]:
+              - link "Terms and conditions" [ref=e155] [cursor=pointer]:
+                - /url: "#"
+              - link "Privacy policy" [ref=e156] [cursor=pointer]:
+                - /url: "#"
+              - link "Disclaimer" [ref=e157] [cursor=pointer]:
+                - /url: "#"
+              - link "MySuper product dashboard" [ref=e158] [cursor=pointer]:
+                - /url: "#"
+              - link "Contact us" [ref=e159] [cursor=pointer]:
+                - /url: "#"
+            - paragraph [ref=e160]: Australian Retirement Trust Pty Ltd ABN 88 010 720 840 AFSL No. 228975. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sit amet lorem leo.
+  - alert [ref=e162]
+  - tooltip [ref=e187]:
+    - menu "Transactions" [ref=e189]:
+      - generic [ref=e190]:
+        - menuitem "Transaction history" [active] [ref=e191] [cursor=pointer]:
+          - paragraph [ref=e196]: Transaction history
+        - menuitem "Transaction summary" [ref=e197] [cursor=pointer]:
+          - paragraph [ref=e202]: Transaction summary
+        - menuitem "Concessional contributions" [ref=e203] [cursor=pointer]:
+          - paragraph [ref=e208]: Concessional contributions
+        - menuitem "Statements and letters" [ref=e209] [cursor=pointer]:
+          - paragraph [ref=e214]: Statements and letters
