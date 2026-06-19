@@ -5,7 +5,7 @@
     { "id": "home", "label": "Home", "icon": "house", "href": "/member-online" },
     {
       "id": "transactions",
-      "label": "Transactions",
+      "label": "Transaction",
       "icon": "arrow-left-arrow-right",
       "children": [
         { "id": "tx-history", "label": "Transaction history", "icon": "arrow-left-arrow-right", "href": "#" },
@@ -20,40 +20,22 @@
       "icon": "chart-line",
       "children": [
         { "id": "investment-performance", "label": "Investment performance", "icon": "chart-column", "href": "#" },
-        { "id": "manage-investments", "label": "Manage investments", "icon": "chart-pie-simple", "href": "/member-online/investments/manage-investments" }
+        { "id": "manage-investments", "label": "Manage investment", "icon": "chart-pie-simple", "description": "Review or change your investment mix", "href": "/member-online/investments/manage-investments" }
       ]
     },
-    {
-      "id": "put-money-in",
-      "label": "Put money in",
-      "icon": "plus",
-      "children": [
-        { "id": "voluntary", "label": "Make a voluntary contribution", "icon": "circle-dollar", "description": "BPAY or Direct Debit" },
-        { "id": "tax-deduction", "label": "Claim a tax deduction", "icon": "copy", "description": "Submit a Notice of Intent to your fund" },
-        { "id": "find-combine", "label": "Find or combine super", "icon": "magnifying-glass", "description": "Roll-in money from another fund" },
-        { "id": "fund-details", "label": "Fund and account details", "icon": "circle-info", "description": "ABN, USI, Letter of compliance" },
-        { "id": "spouse", "label": "Make a spouse contribution", "icon": "gift", "description": "After-tax contribution to your partner's super" }
-      ]
-    },
-    {
-      "id": "payments",
-      "label": "Your Payments",
-      "icon": "money-check-dollar",
-      "children": [
-        { "id": "pay-details", "label": "Payment details", "icon": "circle-info", "href": "#" },
-        { "id": "pay-summary", "label": "Payment summary", "icon": "file-invoice-dollar", "href": "#" },
-        { "id": "pay-change", "label": "Change payment amount", "icon": "pen-to-square", "href": "#" }
-      ]
-    },
+    { "id": "payments", "label": "Your payments", "icon": "money-check-dollar", "href": "#" },
     {
       "id": "take-money-out",
       "label": "Take money out",
       "icon": "money-simple-from-bracket",
       "children": [
-        { "id": "pay-lump-sum", "label": "Lump sum withdrawal", "icon": "money-simple-from-bracket", "href": "#" }
+        { "id": "setup-income-stream", "label": "Setup a new income stream", "icon": "circle-dollar-to-slot", "href": "#" },
+        { "id": "make-withdrawal", "label": "Make a withdrawal", "icon": "money-simple-from-bracket", "href": "#" }
       ]
     },
-    { "id": "future-planning", "label": "Future planning", "icon": "user-question", "href": "#" }
+    { "id": "put-money-in", "label": "Put money in", "icon": "plus", "href": "#" },
+    { "id": "future-planning", "label": "Future Planning", "icon": "user-question", "href": "#" },
+    { "id": "insurance", "label": "Insurance", "icon": "umbrella", "href": "#" }
   ],
   "secondary": [
     { "id": "rewards", "label": "Rewards", "href": "#" },
@@ -61,6 +43,6 @@
     { "id": "profile", "label": "Profile", "href": "#" },
     { "id": "security", "label": "Security and login", "href": "#" },
     { "id": "messages", "label": "Messages", "href": "#" },
-    { "id": "help", "label": "Help & contact", "href": "#" }
+    { "id": "help", "label": "Help and contact", "href": "#" }
   ]
 }

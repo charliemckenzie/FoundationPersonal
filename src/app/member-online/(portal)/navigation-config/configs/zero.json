@@ -9,7 +9,7 @@
       "icon": "chart-line",
       "children": [
         { "id": "investment-performance", "label": "Investment performance", "icon": "chart-column", "href": "#" },
-        { "id": "manage-investments", "label": "Manage investments", "icon": "chart-pie-simple", "href": "/member-online/investments/manage-investments" }
+        { "id": "manage-investments", "label": "Manage investment", "icon": "chart-pie-simple", "description": "Review or change your investment mix", "href": "/member-online/investments/manage-investments" }
       ]
     },
     {
@@ -17,12 +17,13 @@
       "label": "Put money in",
       "icon": "plus",
       "children": [
-        { "id": "voluntary", "label": "Make a voluntary contribution", "icon": "circle-dollar", "description": "BPAY or Direct Debit" },
         { "id": "find-combine", "label": "Find or combine super", "icon": "magnifying-glass", "description": "Roll-in money from another fund" },
-        { "id": "fund-details", "label": "Fund and account details", "icon": "circle-info", "description": "ABN, USI, Letter of compliance" }
+        { "id": "fund-details", "label": "Fund and account details", "icon": "circle-info", "description": "ABN, USI, Letter of compliance" },
+        { "id": "voluntary", "label": "Make a voluntary contribution", "icon": "circle-dollar", "description": "BPAY or Direct Debit" },
+        { "id": "spouse", "label": "Make a spouse contribution", "icon": "gift", "description": "After-tax contribution to your partner's super" }
       ]
     },
-    { "id": "future-planning", "label": "Future planning", "icon": "user-question", "href": "#" },
+    { "id": "future-planning", "label": "Future Planning", "icon": "user-question", "href": "#" },
     { "id": "insurance", "label": "Insurance", "icon": "umbrella", "href": "#" }
   ],
   "secondary": [
@@ -31,6 +32,6 @@
     { "id": "profile", "label": "Profile", "href": "#" },
     { "id": "security", "label": "Security and login", "href": "#" },
     { "id": "messages", "label": "Messages", "href": "#" },
-    { "id": "help", "label": "Help & contact", "href": "#" }
+    { "id": "help", "label": "Help and contact", "href": "#" }
   ]
 }
