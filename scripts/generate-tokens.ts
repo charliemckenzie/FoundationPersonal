@@ -21,7 +21,7 @@
 import { writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { primitiveScales } from '../src/app/themes/primitives/colors';
+import { primitiveScales, white, black, artInvestmentOptions, artAssetMix, sharedDiversifiedOptions } from '../src/app/themes/primitives/colors';
 import { foundation } from '../src/app/themes/brands/foundation';
 import { themeB } from '../src/app/themes/brands/theme-b';
 import { OPACITY } from '../src/app/themes/semantic';
@@ -118,6 +118,37 @@ for (const [name, scale] of Object.entries(primitiveScales)) {
   );
 }
 
+// white and black are fixed primitives (not scale objects) — exported from
+// primitives/colors.ts but not in primitiveScales. Add them here so semantic
+// tokens that need pure white/black can alias a primitive rather than hardcode.
+primitives['white'] = { value: { value: white, type: 'color', description: 'Pure white (#ffffff). Use semantic tokens in code.', codeSyntax: { web: '#ffffff' } } as Token };
+primitives['black'] = { value: { value: black, type: 'color', description: 'Pure black (#000000). Use semantic tokens in code.', codeSyntax: { web: '#000000' } } as Token };
+
+// ── ART Investment colours ────────────────────────────────────────────────────
+// Fixed single-value colours used for data visualisation only. Not scales.
+// Organised into three groups matching the source constants.
+
+primitives['investment/options'] = Object.fromEntries(
+  Object.entries(artInvestmentOptions).map(([name, hex]) => [
+    name,
+    { value: hex, type: 'color', description: 'ART investment option. Data visualisation only.', codeSyntax: { web: hex } } as Token,
+  ])
+);
+
+primitives['investment/assetMix'] = Object.fromEntries(
+  Object.entries(artAssetMix).map(([name, hex]) => [
+    name,
+    { value: hex, type: 'color', description: 'ART asset mix. Data visualisation only.', codeSyntax: { web: hex } } as Token,
+  ])
+);
+
+primitives['investment/diversified'] = Object.fromEntries(
+  Object.entries(sharedDiversifiedOptions).map(([name, hex]) => [
+    name,
+    { value: hex, type: 'color', description: 'Shared diversified investment option. Data visualisation only.', codeSyntax: { web: hex } } as Token,
+  ])
+);
+
 // ── Semantic builder — runs once per brand × mode ─────────────────────────────
 
 type Mode = 'light' | 'dark';
@@ -175,7 +206,7 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
       light:        colorAlias(primary, steps.primary.light, 'primary.light'),
       main:         colorAlias(primary, steps.primary.main,  'primary.main'),
       dark:         colorAlias(primary, steps.primary.dark,  'primary.dark'),
-      contrastText: mode === 'light' ? rawColor('#ffffff', 'primary.contrastText') : colorAlias(primary, 950, 'primary.contrastText'),
+      contrastText: mode === 'light' ? { value: '{primitives.white.value}', type: 'color', description: '#ffffff → white', codeSyntax: { web: 'theme.palette.primary.contrastText' } } as Token : colorAlias(primary, 950, 'primary.contrastText'),
       text:         colorAlias(primary, steps.primary.text, 'primary.text', TEXT_FILL),
       icon:         colorAlias(primary, steps.primary.icon, 'primary.icon'),
       background:   colorAlias(primary, steps.primary.background, 'primary.background', BG_FILL),
@@ -185,7 +216,7 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
       light:        colorAlias(secondary, steps.secondary.light, 'secondary.light'),
       main:         colorAlias(secondary, steps.secondary.main,  'secondary.main'),
       dark:         colorAlias(secondary, steps.secondary.dark,  'secondary.dark'),
-      contrastText: rawColor('#ffffff', 'secondary.contrastText'),
+      contrastText: { value: '{primitives.white.value}', type: 'color', description: '#ffffff → white', codeSyntax: { web: 'theme.palette.secondary.contrastText' } } as Token,
       text:         colorAlias(secondary, steps.secondary.text, 'secondary.text', TEXT_FILL),
       icon:         colorAlias(secondary, steps.secondary.icon, 'secondary.icon'),
       background:   colorAlias(secondary, steps.secondary.background, 'secondary.background', BG_FILL),
@@ -232,7 +263,7 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
         light:        colorAlias(tertiary, mode === 'light' ? 400 : 300, 'tertiary.light'),
         main:         colorAlias(tertiary, mode === 'light' ? 500 : 400, 'tertiary.main'),
         dark:         colorAlias(tertiary, mode === 'light' ? 700 : 600, 'tertiary.dark'),
-        contrastText: mode === 'light' ? colorAlias(tertiary, 950, 'tertiary.contrastText') : rawColor('#000000', 'tertiary.contrastText'),
+        contrastText: mode === 'light' ? colorAlias(tertiary, 950, 'tertiary.contrastText') : { value: '{primitives.black.value}', type: 'color', description: '#000000 → black', codeSyntax: { web: 'theme.palette.tertiary.contrastText' } } as Token,
         text:         colorAlias(tertiary, mode === 'light' ? 800 : 200, 'tertiary.text', TEXT_FILL),
         icon:         colorAlias(tertiary, mode === 'light' ? 500 : 400, 'tertiary.icon'),
         background:   colorAlias(tertiary, mode === 'light' ? 50  : 400, 'tertiary.background', BG_FILL),
@@ -244,7 +275,7 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
         light:        colorAlias(quaternary, mode === 'light' ? 100 : 200, 'quaternary.light'),
         main:         colorAlias(quaternary, 300, 'quaternary.main'),
         dark:         colorAlias(quaternary, 500, 'quaternary.dark'),
-        contrastText: mode === 'light' ? colorAlias(quaternary, 950, 'quaternary.contrastText') : rawColor('#000000', 'quaternary.contrastText'),
+        contrastText: mode === 'light' ? colorAlias(quaternary, 950, 'quaternary.contrastText') : { value: '{primitives.black.value}', type: 'color', description: '#000000 → black', codeSyntax: { web: 'theme.palette.quaternary.contrastText' } } as Token,
         text:         colorAlias(quaternary, mode === 'light' ? 800 : 100, 'quaternary.text', TEXT_FILL),
         icon:         colorAlias(quaternary, mode === 'light' ? 500 : 300, 'quaternary.icon'),
         background:   colorAlias(quaternary, mode === 'light' ? 50  : 400, 'quaternary.background', BG_FILL),
@@ -254,7 +285,7 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
     background: {
       default:        colorAlias(neutral, steps.bg.default, 'background.default', BG_FILL),
       paper:          steps.bg.paper === null
-        ? rawColor('#ffffff', 'background.paper', BG_FILL)
+        ? { value: '{primitives.white.value}', type: 'color', description: '#ffffff → white', codeSyntax: { web: 'theme.palette.background.paper' }, scopes: BG_FILL } as Token
         : colorAlias(neutral, steps.bg.paper, 'background.paper', BG_FILL),
       elevated:       colorAlias(neutral, steps.bg.elevated, 'background.elevated', BG_FILL),
       brandPrimary:   colorAlias(primary, mode === 'light' ? 600 : steps.bg.elevated, 'background.brandPrimary', BG_FILL),
@@ -272,11 +303,11 @@ function buildSemantic(brand: BrandConfig, mode: Mode): TokenGroup {
       muted:       hexToAlias(sem.text.muted,   'text.muted',   TEXT_FILL),
       disabled:    colorAlias(neutral, 500, 'text.disabled', TEXT_FILL),
       inverse:     mode === 'light'
-        ? rawColor('#ffffff', 'text.inverse', TEXT_FILL)
+        ? { value: '{primitives.white.value}', type: 'color', description: '#ffffff → white', codeSyntax: { web: 'theme.palette.text.inverse' }, scopes: TEXT_FILL } as Token
         : colorAlias(neutral, 900, 'text.inverse', TEXT_FILL),
       heading:     mode === 'light'
         ? colorAlias(secondary, 800, 'text.heading', TEXT_FILL)
-        : rawColor('#ffffff', 'text.heading', TEXT_FILL),
+        : { value: '{primitives.white.value}', type: 'color', description: '#ffffff → white', codeSyntax: { web: 'theme.palette.text.heading' }, scopes: TEXT_FILL } as Token,
       link:        colorAlias(primary, mode === 'light' ? 600 : 300, 'text.link', TEXT_FILL),
       linkInverse: hexToAlias(sem.text.linkInverse, 'text.linkInverse', TEXT_FILL),
     },

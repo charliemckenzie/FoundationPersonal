@@ -19,9 +19,11 @@ function formatSize(fontSize: unknown): string {
   const str = String(fontSize)
   const clampMatch = str.match(/^clamp\(\s*([\d.]+rem),.*,\s*([\d.]+rem)\s*\)$/)
   if (clampMatch) {
-    const minPx = Math.round(parseFloat(clampMatch[1]) * 16)
-    const maxPx = Math.round(parseFloat(clampMatch[2]) * 16)
-    return `${clampMatch[1]} → ${clampMatch[2]} (${minPx}–${maxPx}px)`
+    const minRem = clampMatch[1]
+    const maxRem = clampMatch[2]
+    const minPx = Math.round(parseFloat(minRem) * 16)
+    const maxPx = Math.round(parseFloat(maxRem) * 16)
+    return `${minRem} \u2192 ${maxRem} (${minPx}px \u2192 ${maxPx}px)`
   }
   const px = remToPx(fontSize)
   return `${str} (${px}px)`
@@ -81,11 +83,13 @@ interface VariantMetaProps {
   fontSize: unknown
   fontWeight: unknown
   lineHeight: unknown
+  letterSpacing: unknown
   fontFamily: string
   baseFontFamily: string
 }
 
-function VariantMeta({ label, fontSize, fontWeight, lineHeight, fontFamily, baseFontFamily }: VariantMetaProps) {
+function VariantMeta({ label, fontSize, fontWeight, lineHeight, letterSpacing, fontFamily, baseFontFamily }: VariantMetaProps) {
+  const ls = letterSpacing !== undefined && String(letterSpacing) !== '0' ? String(letterSpacing) : null
   return (
     <Box>
       <Box
@@ -95,9 +99,10 @@ function VariantMeta({ label, fontSize, fontWeight, lineHeight, fontFamily, base
         {label}
       </Box>
       <Box sx={{ fontSize: 12, color: 'text.primary', lineHeight: 1.7, opacity: 0.6 }}>
+        <Box component="span" sx={{ display: 'block' }}>{formatSize(fontSize)}</Box>
         <Box component="span" sx={{ display: 'flex', gap: 2 }}>
-          <span>{formatSize(fontSize)}</span>
           <span>LH {formatLineHeight(lineHeight, fontSize)}</span>
+          {ls && <span>LS {ls}</span>}
         </Box>
         <Box component="span" sx={{ display: 'block' }}>{formatWeight(fontWeight)}</Box>
       </Box>
@@ -220,6 +225,7 @@ function TypographyDoc() {
                   fontSize={style?.fontSize}
                   fontWeight={style?.fontWeight}
                   lineHeight={style?.lineHeight}
+                  letterSpacing={style?.letterSpacing}
                   fontFamily={variantFontFamily(variant)}
                   baseFontFamily={bodyFontFamily}
                 />
@@ -254,6 +260,7 @@ function TypographyDoc() {
                   fontSize={style?.fontSize}
                   fontWeight={style?.fontWeight}
                   lineHeight={style?.lineHeight}
+                  letterSpacing={style?.letterSpacing}
                   fontFamily={variantFontFamily(variant)}
                   baseFontFamily={bodyFontFamily}
                 />
@@ -261,6 +268,66 @@ function TypographyDoc() {
               </Box>
             )
           })}
+        </Box>
+
+        {/* Responsive heading scale */}
+        <Box>
+          <MuiTypography variant="h6" sx={{ mb: 1, color: 'primary.main' }}>
+            Responsive Heading Scale
+          </MuiTypography>
+          <MuiTypography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+            h1–h5 use CSS clamp(). Hierarchy is preserved at every viewport width. h6 is fixed at 16px.
+          </MuiTypography>
+          <Box sx={{ overflowX: 'auto' }}>
+            {/* Header */}
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '90px repeat(6, 1fr)',
+                borderBottom: '2px solid',
+                borderColor: 'divider',
+                minWidth: 400,
+              }}
+            >
+              {['Viewport', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'].map((h) => (
+                <Box
+                  key={h}
+                  sx={{
+                    px: 1.5, py: 1,
+                    fontSize: 12, fontFamily: 'monospace', fontWeight: 700,
+                    color: h === 'Viewport' ? 'text.muted' : 'primary.main',
+                  }}
+                >
+                  {h}
+                </Box>
+              ))}
+            </Box>
+            {/* Rows */}
+            {([
+              { vp: '360px',  values: ['28px', '24px', '22px', '19px', '17px',   '16px'] },
+              { vp: '768px',  values: ['34px', '28px', '25px', '21px', '18.5px', '16px'] },
+              { vp: '1200px', values: ['40px', '32px', '28px', '24px', '20px',   '16px'] },
+            ] as const).map(({ vp, values }, ri) => (
+              <Box
+                key={vp}
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '90px repeat(6, 1fr)',
+                  bgcolor: ri % 2 === 0 ? 'action.hover' : 'transparent',
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 400,
+                }}
+              >
+                <Box sx={{ px: 1.5, py: 1.25, fontSize: 12, fontFamily: 'monospace', fontWeight: 600, color: 'text.muted' }}>
+                  {vp}
+                </Box>
+                {values.map((v) => (
+                  <Box key={v} sx={{ px: 1.5, py: 1.25, fontSize: 12, fontFamily: 'monospace' }}>{v}</Box>
+                ))}
+              </Box>
+            ))}
+          </Box>
         </Box>
 
         {/* Link Text */}
@@ -332,6 +399,7 @@ function TypographyDoc() {
                   fontSize={style?.fontSize}
                   fontWeight={style?.fontWeight}
                   lineHeight={style?.lineHeight}
+                  letterSpacing={style?.letterSpacing}
                   fontFamily={variantFontFamily(variant)}
                   baseFontFamily={bodyFontFamily}
                 />
@@ -341,6 +409,95 @@ function TypographyDoc() {
               </Box>
             )
           })}
+        </Box>
+
+        {/* Letter Spacing & Accessibility */}
+        <Box>
+          <MuiTypography variant="h6" sx={{ mb: 1, color: 'primary.main' }}>
+            Letter Spacing &amp; Accessibility
+          </MuiTypography>
+          <MuiTypography variant="small" color="text.muted" sx={{ display: 'block', mb: 2 }}>
+            All variants have explicit letterSpacing set in the theme.
+          </MuiTypography>
+
+          {/* WCAG callout */}
+          <Box
+            sx={{
+              borderLeft: '3px solid',
+              borderColor: 'info.main',
+              bgcolor: 'action.hover',
+              px: 2, py: 1.5, mb: 2, borderRadius: '0 4px 4px 0',
+            }}
+          >
+            <MuiTypography variant="small" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+              WCAG 2.1 SC 1.4.12 — Text Spacing (AA)
+            </MuiTypography>
+            <MuiTypography variant="small" color="text.muted">
+              Users must be able to set letter-spacing to ≥ 0.12em without loss of content.
+              This criterion applies to user overrides — not author values.
+              None of the values below approach that threshold, so all variants are compliant.
+            </MuiTypography>
+          </Box>
+
+          {/* Practical impact table */}
+          <Box sx={{ overflowX: 'auto', mb: 2 }}>
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: '200px 100px 1fr',
+                borderBottom: '2px solid',
+                borderColor: 'divider',
+                minWidth: 460,
+              }}
+            >
+              {['Variants', 'Value', 'Risk / rationale'].map((h) => (
+                <Box key={h} sx={{ px: 1.5, py: 1, fontSize: 12, fontFamily: 'monospace', fontWeight: 700, color: 'text.muted' }}>{h}</Box>
+              ))}
+            </Box>
+            {([
+              { variants: 'display-1 – display-3', value: '-0.03em', note: 'Low — large text, single-line, never constrained' },
+              { variants: 'display-4 – display-5, h1, h2', value: '-0.02em', note: 'Low — same reasoning; fluid layout prevents clipping' },
+              { variants: 'h3, h4', value: '-0.01em', note: 'None — barely perceptible tightening' },
+              { variants: 'h5, h6, lead, body, small', value: '0', note: 'None — neutral; body text should not be artificially tracked' },
+              { variants: 'caption', value: '+0.02em', note: 'None — opens spacing; improves legibility at 12px' },
+            ] as const).map(({ variants, value, note }, ri) => (
+              <Box
+                key={variants}
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '200px 100px 1fr',
+                  bgcolor: ri % 2 === 0 ? 'action.hover' : 'transparent',
+                  borderBottom: '1px solid',
+                  borderColor: 'divider',
+                  minWidth: 460,
+                }}
+              >
+                <Box sx={{ px: 1.5, py: 1.25, fontSize: 12, fontFamily: 'monospace' }}>{variants}</Box>
+                <Box sx={{ px: 1.5, py: 1.25, fontSize: 12, fontFamily: 'monospace', fontWeight: 600, color: 'primary.main' }}>{value}</Box>
+                <Box sx={{ px: 1.5, py: 1.25, fontSize: 12, color: 'text.muted' }}>{note}</Box>
+              </Box>
+            ))}
+          </Box>
+
+          {/* Legibility note */}
+          <Box
+            sx={{
+              borderLeft: '3px solid',
+              borderColor: 'success.main',
+              bgcolor: 'action.hover',
+              px: 2, py: 1.5, borderRadius: '0 4px 4px 0',
+            }}
+          >
+            <MuiTypography variant="small" sx={{ fontWeight: 700, display: 'block', mb: 0.5 }}>
+              Legibility note
+            </MuiTypography>
+            <MuiTypography variant="small" color="text.muted">
+              Negative tracking at display sizes (−0.02em to −0.03em) improves readability.
+              Default letterSpacing was designed for body text — at 48–80px it reads as artificially loose.
+              Tightening large text is standard typographic practice (see: NYT, Apple, Google’s Material 3).
+              Caption’s +0.02em is equally conventional — slightly open tracking aids legibility at small sizes.
+            </MuiTypography>
+          </Box>
         </Box>
 
       </Box>

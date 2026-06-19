@@ -27,6 +27,7 @@ If this document is out of date, flag it to Moe immediately.
 | `Accordion` | Expandable content panels — one open at a time or multi-open |
 | `ActionBar` | Promo/CTA banner — title, description, action button, and optional icon or decorative image |
 | `AnnouncementBanner` | Dismissible page-level announcement — title, description, optional CTA, optional illustration, session-persist dismiss |
+| `PosterPanel` | Full-width panel with a background image, optional gradient overlay, and a text content column (left or right). Supports rich-text body, optional primary and secondary CTAs, and configurable mobile stacking order. |
 | `AddressField` | Dual residential + postal address capture with autocomplete |
 | `Alert` | Inline status message — error, warning, info, success |
 | `ArtieAIButton` | Gradient "Ask Artie" AI-assistant call-to-action button |
@@ -149,6 +150,10 @@ Key props: `variant`, `topSection`, `heroIcon`, `title`, `subtitle`, `imageSrc`,
 **Card** — `src/components/Card/`  
 Baseline card primitive with three visual styles: `contained` (surface background + 32px contained padding), `border` (transparent background + border + 32px contained padding), and `open` (borderless + no contained padding). Supports optional top section, middle content section, and bottom actions section.  
 Key props: `variant`, `topSection`, `header`, `body`, `actions`, `children`, `sx`
+
+**PosterPanel** — `src/components/PosterPanel/`  
+Full-width panel with a background image and an optional gradient overlay to ensure text legibility. The text content column (heading, rich-text body, and optional CTAs) occupies ~50% of the width on desktop, pinned left or right. On mobile the panel stacks vertically — the image and content block are separate elements whose order is configurable via `mobileOrder`. Gradient direction and colour are fully configurable. Designed for QSuper-branded hero/promo placements.  
+Key props: `imageSrc`, `imageAlt`, `contentPosition`, `headingText`, `headingVariant`, `headingComponent`, `children`, `bodyVariant`, `textColor`, `showGradient`, `gradientDirection`, `gradientColor`, `mobileOrder`, `mobileBgColor`, `primaryCta`, `secondaryCta`, `sx`
 
 **ActionBar** — `src/components/ActionBar/`  
 Promotional CTA banner. A horizontal surface with a title, description, and a single `contained` action button, plus an optional left-hand icon (small circular container, or any node such as a `HeroIcon`) or a `decorative` bleed image. Three colour variants: `light` (tinted surface, standard text + primary button), `dark` and `primary` (brand surfaces with inverse text and a reversed button). Stacks vertically on mobile.  

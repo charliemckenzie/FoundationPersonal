@@ -127,30 +127,35 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         fontSize: 'clamp(2.5rem, 4.76vw + 1.43rem, 5rem)',    // 40px → 80px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.03em',
       },
       'display-2': {
         fontFamily: brand.headingFontFamily,
         fontSize: 'clamp(2.25rem, 4.29vw + 1.29rem, 4.5rem)', // 36px → 72px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.03em',
       },
       'display-3': {
         fontFamily: brand.headingFontFamily,
         fontSize: 'clamp(2rem, 3.81vw + 1.14rem, 4rem)',      // 32px → 64px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.03em',
       },
       'display-4': {
         fontFamily: brand.headingFontFamily,
         fontSize: 'clamp(1.875rem, 3.10vw + 1.18rem, 3.5rem)', // 30px → 56px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.02em',
       },
       'display-5': {
         fontFamily: brand.headingFontFamily,
         fontSize: 'clamp(1.75rem, 2.38vw + 1.21rem, 3rem)',   // 28px → 48px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.02em',
       },
       // Standard heading hierarchy - Bootstrap scale
       h1: {
@@ -158,28 +163,33 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         fontSize: 'clamp(1.75rem, 1.43vw + 1.43rem, 2.5rem)', // 28px → 40px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.02em',
       },
       h2: {
         fontFamily: brand.headingFontFamily,
         fontSize: 'clamp(1.5rem, 0.95vw + 1.29rem, 2rem)',    // 24px → 32px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.02em',
       },
       h3: {
         fontFamily: brand.headingFontFamily,
-        fontSize: '1.75rem',   // 28px
+        fontSize: 'clamp(1.375rem, 0.71vw + 1.21rem, 1.75rem)', // 22px → 28px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.01em',
       },
       h4: {
-        fontSize: '1.5rem',    // 24px
+        fontSize: 'clamp(1.1875rem, 0.60vw + 1.05rem, 1.5rem)', // 19px → 24px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '-0.01em',
       },
       h5: {
-        fontSize: '1.25rem',   // 20px
+        fontSize: 'clamp(1.0625rem, 0.36vw + 0.98rem, 1.25rem)', // 17px → 20px
         fontWeight: 700,
         lineHeight: 1.2,
+        letterSpacing: '0',
       },
       h6: {
         fontSize: '1.125rem',  // 18px
@@ -190,20 +200,23 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
       lead: {
         fontFamily: brand.fontFamily,
         fontSize: '1.25rem',   // 20px
-        fontWeight: 300,       // Light on desktop; bumped to 400 on mobile via MuiTypography styleOverrides
+        fontWeight: 400,
         lineHeight: 1.6,
+        letterSpacing: '0',
       },
       body: {
         fontFamily: brand.fontFamily,
         fontSize: '1rem',      // 16px
         fontWeight: 400,
         lineHeight: 1.5,
+        letterSpacing: '0',
       },
       small: {
         fontFamily: brand.fontFamily,
         fontSize: '0.875rem',  // 14px
         fontWeight: 400,
         lineHeight: 1.5,
+        letterSpacing: '0',
       },
       // Caption — 12px metadata, footer notes, form helper text. Same role as MUI's
       // legacy `caption` variant but defined under our own scale so the design system
@@ -213,6 +226,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
         fontSize: '0.75rem',   // 12px
         fontWeight: 400,
         lineHeight: 1.5,
+        letterSpacing: '0.02em',
       },
     },
     components: {
@@ -666,12 +680,7 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
                 ].includes(ownerState.variant as string) && {
               color: theme.palette.text.heading,
             }),
-            // lead: Light (300) on desktop, Normal (400) on mobile for legibility
-            ...(ownerState.variant === 'lead' && {
-              [theme.breakpoints.down('md')]: {
-                fontWeight: 400,
-              },
-            }),
+
           }),
         },
       },

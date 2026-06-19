@@ -22,5 +22,9 @@ export default defineConfig({
     '@emotion/react',
     '@emotion/styled',
     '@tabler/icons-react',
+    '@dnd-kit/core',
+    '@dnd-kit/modifiers',
+    '@dnd-kit/sortable',
+    '@dnd-kit/utilities',
   ],
 })

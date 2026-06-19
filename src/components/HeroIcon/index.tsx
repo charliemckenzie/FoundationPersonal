@@ -104,6 +104,8 @@ export function HeroIcon({
         height: iconSize,
         display: 'block',
         flexShrink: 0,
+        borderRadius: 0,
+        overflow: 'visible',
         bgcolor: 'quaternary.main',
         maskImage: `url(${iconSrc})`,
         WebkitMaskImage: `url(${iconSrc})`,
@@ -121,12 +123,18 @@ export function HeroIcon({
       src={iconSrc}
       alt={ariaLabel ?? ''}
       aria-hidden={ariaLabel ? undefined : true}
-      sx={{ width: iconSize, height: iconSize, objectFit: 'contain', display: 'block',
+      sx={{ width: iconSize, height: iconSize, objectFit: 'contain', display: 'block', borderRadius: 0, overflow: 'visible',
         filter: iconColor === 'white' ? 'brightness(0) invert(1)' : undefined }}
     />
   );
 
-  if (!bgColor) return img;
+  if (!bgColor) {
+    return (
+      <Box sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', borderRadius: 0, overflow: 'visible', flexShrink: 0 }}>
+        {img}
+      </Box>
+    );
+  }
 
   return (
     <Box
