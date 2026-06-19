@@ -175,6 +175,9 @@ export function StepSetupMode({ setupMode, onSetupModeChange, accounts, showVali
                 Payments are made fortnightly on a Wednesday. These are estimates. Your actual payments
                 may vary slightly as unit prices change each day.
               </Typography>
+              <Typography variant="small" sx={{ color: 'text.primary' }}>
+                You may also be eligible for a one-off retirement bonus. We&rsquo;ll show you the estimated amount on the next screen.
+              </Typography>
             </Stack>
           </Box>
         </Box>

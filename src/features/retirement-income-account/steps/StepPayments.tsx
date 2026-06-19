@@ -4,11 +4,13 @@ import Typography from '@mui/material/Typography';
 import { DescriptionList } from '../../../components/DescriptionList';
 import { Alert } from '../../../components/Alert';
 import { TextField } from '../../../components/TextField';
-import type { BankDetails } from '../types';
-import { formatCurrency, estimateRetirementBonus, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
+import type { BankDetails, PaymentSchedule } from '../types';
+import { formatCurrency, estimateRetirementBonus, estimatePension, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
+import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL } from '../constants';
 
 interface StepPaymentsProps {
   purchasePrice: number;
+  paymentSchedule: PaymentSchedule;
   bankDetails: BankDetails;
   onBankDetailsChange: (next: BankDetails) => void;
   showValidation: boolean;
@@ -16,12 +18,26 @@ interface StepPaymentsProps {
 
 export function StepPayments({
   purchasePrice,
+  paymentSchedule,
   bankDetails,
   onBankDetailsChange,
   showValidation,
 }: StepPaymentsProps) {
-  const annualPayment = purchasePrice > 0 ? purchasePrice * 1.015 : 0;
-  const fortnightlyPayment = annualPayment > 0 ? annualPayment / 26 : 0;
+  // Use the product rate estimate (same as the setup mode card) as the base annual amount.
+  // If the user chose a specific amount on the payment schedule step, use that instead.
+  const freq = paymentSchedule.frequency || 'fortnightly';
+  const divisor = PAYMENT_FREQUENCY_DIVISORS[freq] ?? 26;
+  const periodLabel = PAYMENT_PERIOD_LABEL[freq] ?? 'fortnight';
+
+  const productEstimate = estimatePension(purchasePrice, PENSION_ESTIMATE_AGE, 'single');
+  const baseAnnual = productEstimate?.annual ?? 0;
+
+  const effectiveAnnual =
+    paymentSchedule.amountType === 'specific' && paymentSchedule.specificAmount > 0
+      ? paymentSchedule.specificAmount
+      : baseAnnual;
+
+  const perPeriod = effectiveAnnual > 0 ? effectiveAnnual / divisor : 0;
 
   function updateField<K extends keyof BankDetails>(key: K, value: BankDetails[K]) {
     onBankDetailsChange({ ...bankDetails, [key]: value });
@@ -43,10 +59,9 @@ export function StepPayments({
         </div>
 
       <DescriptionList title="Payment summary" titleVariant="h6" valueAlign="right" density="condensed">
-        <DescriptionList.Item label="Purchase price" value={formatCurrency(purchasePrice)} />
         <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
-        <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />
-        <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
+        <DescriptionList.Item label="Estimated annual amount" value={formatCurrency(effectiveAnnual)} />
+        <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(perPeriod)} / ${periodLabel}`} />
         <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
       </DescriptionList>
 

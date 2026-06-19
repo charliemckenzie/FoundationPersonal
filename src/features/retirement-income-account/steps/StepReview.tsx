@@ -11,7 +11,8 @@ import { TextField } from '../../../components/TextField';
 import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
 import { DRAWDOWN_OPTIONS } from './StepInvestmentDrawdown';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
-import { formatCurrency, totalSelectedAmount } from '../utils';
+import { formatCurrency, totalSelectedAmount, estimatePension } from '../utils';
+import { PENSION_ESTIMATE_AGE, FORTNIGHTS_PER_YEAR } from '../constants';
 
 interface StepReviewProps {
   state: RetirementIncomeAccountState;
@@ -377,7 +378,10 @@ export function StepReview({
 
   const isSimple = state.setupMode === 'simple';
   const selectedAccounts = state.accounts.filter((a) => a.transferAmount > 0);
-  const purchasePrice = totalSelectedAmount(state);
+  // In simple mode the funding step is skipped, so transferAmount is 0 — use full balances instead.
+  const purchasePrice = isSimple
+    ? state.accounts.reduce((sum, a) => sum + a.balance, 0)
+    : totalSelectedAmount(state);
 
   return (
     <Stack spacing={0}>
@@ -478,7 +482,10 @@ export function StepReview({
         <ReviewRow label="Payment amount">
           <ReviewValue>
             {state.setupMode === 'simple'
-              ? 'Government-set minimum'
+              ? (() => {
+                  const est = estimatePension(purchasePrice, PENSION_ESTIMATE_AGE, 'single');
+                  return est ? formatCurrency(est.fortnightly) + ' / fortnight' : '—';
+                })()
               : state.paymentSchedule.amountType === 'minimum'
                 ? 'Minimum'
                 : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0
