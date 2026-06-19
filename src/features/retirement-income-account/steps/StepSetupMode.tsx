@@ -63,12 +63,12 @@ interface StepSetupModeProps {
 const SETUP_OPTIONS = [
   {
     value: 'simple',
-    label: 'Yes, set it up for me',
+    label: 'Set it up for me',
     description: "We'll handle everything. You can always change it later.",
   },
   {
     value: 'custom',
-    label: "No, I'd like to customise",
+    label: "I'd like to customise it",
     description: 'Choose your own funding amount, payment schedule, investment mix, and drawdown order.',
   },
 ];
@@ -89,7 +89,7 @@ export function StepSetupMode({ setupMode, onSetupModeChange, accounts, showVali
         </Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
           You can customise your Retirement Income account yourself, or we can set it up using our
-          recommended settings. Either way, you can make changes anytime once your account is open.
+          recommended settings.
         </Typography>
       </div>
 
@@ -174,6 +174,9 @@ export function StepSetupMode({ setupMode, onSetupModeChange, accounts, showVali
               <Typography variant="small" sx={{ color: 'text.primary' }}>
                 Payments are made fortnightly on a Wednesday. These are estimates. Your actual payments
                 may vary slightly as unit prices change each day.
+              </Typography>
+              <Typography variant="small" sx={{ color: 'text.primary' }}>
+                You may also be eligible for a one-off retirement bonus. We&rsquo;ll show you the estimated amount on the next screen.
               </Typography>
             </Stack>
           </Box>

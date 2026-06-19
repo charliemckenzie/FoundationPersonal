@@ -1,6 +1,4 @@
-import { FORTNIGHTS_PER_YEAR, MIN_DRAWDOWN_RATES, RETIREMENT_INCOME_ACCOUNT_RATES } from './constants';
-import type { BankDetails, RetirementIncomeAccountState, PensionOption, SpouseDetails } from './types';
-import { MOCK_INVESTMENT_OPTIONS } from './steps/StepInvestmentMix';
+import { FORTNIGHTS_PER_YEAR, MIN_DRAWDOWN_RATES, RETIREMENT_INCOME_ACCOUNT_RATES, RIA_INVESTMENT_OPTIONS } from './constants';
 
 // ─── BSB utilities ───────────────────────────────────────────────────────────
 
@@ -187,9 +185,9 @@ export function paymentsStepValid(state: RetirementIncomeAccountState): boolean 
 
 export function investmentMixStepValid(state: RetirementIncomeAccountState): boolean {
   const mix = state.investmentMix;
-  if (!mix?.mode) return false;
+  if (!mix) return false;
   if (mix.mode === 'default') return true;
-  const total = MOCK_INVESTMENT_OPTIONS.reduce(
+  const total = RIA_INVESTMENT_OPTIONS.reduce(
     (sum, opt) => sum + ((mix.allocations ?? {})[opt.id] ?? 0),
     0,
   );
@@ -201,12 +199,15 @@ export function drawdownStepValid(state: RetirementIncomeAccountState): boolean 
   if (!d?.mode) return false;
   if (d.mode === 'default') return true;
   if (!d.customMethod) return false;
+  // Use the option IDs the user actually allocated to in the investment mix step.
+  const allocatedIds = Object.keys(state.investmentMix?.allocations ?? {}).filter(
+    (id) => (state.investmentMix?.allocations?.[id] ?? 0) > 0,
+  );
+  if (allocatedIds.length === 0) return false;
   if (d.customMethod === 'order') {
-    return ['opt-high-growth', 'opt-balanced', 'opt-conservative-balanced'].every(
-      (id) => (d.orderAllocations?.[id] ?? 0) > 0,
-    );
+    return allocatedIds.every((id) => (d.orderAllocations?.[id] ?? 0) > 0);
   }
-  const total = ['opt-high-growth', 'opt-balanced', 'opt-conservative-balanced'].reduce(
+  const total = allocatedIds.reduce(
     (sum, id) => sum + ((d.percentageAllocations ?? {})[id] ?? 0),
     0,
   );

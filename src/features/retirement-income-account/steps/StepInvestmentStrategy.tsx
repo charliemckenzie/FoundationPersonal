@@ -35,7 +35,7 @@ export function StepInvestmentStrategy({
 }: StepInvestmentStrategyProps) {
   return (
     <Box>
-      <Typography variant="h4" sx={{ mb: 1 }}>
+      <Typography variant="h5" sx={{ mb: 1 }}>
         How would you like to manage your investments?
       </Typography>
       <Typography variant="body" sx={{ mb: 3, display: 'block' }}>

@@ -1,6 +1,11 @@
 import type { FormProgressStep } from '../../components/FormProgress';
 import type { FundingAccount, IDVState, RetirementIncomeAccountState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
 
+import { MOCK_INVESTMENT_OPTIONS } from '../investment-mix/mockData';
+
+// Lifecycle Investment Strategy is accumulation-only — not available to income accounts.
+export const RIA_INVESTMENT_OPTIONS = MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== 'opt-lifecycle');
+
 export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
   { id: 'setup-mode', label: 'Account setup' },
@@ -148,6 +153,30 @@ export const MIN_DRAWDOWN_RATES: { minAge: number; maxAge: number; rate: number 
 
 export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft_v2';
 export const DRAFT_EXPIRY_DAYS = 30;
+
+// Minimum and maximum drawdown rates used across payment steps.
+// The 5% minimum is the ATO rule for the 65–74 age bracket; used as the
+// prototype default. The 10% maximum is a common industry convention.
+export const DEFAULT_MIN_DRAWDOWN_RATE = 0.05;
+export const DEFAULT_MAX_DRAWDOWN_RATE = 0.10;
+
+// How many payments per year for each frequency option.
+export const PAYMENT_FREQUENCY_DIVISORS: Record<string, number> = {
+  fortnightly: 26,
+  monthly: 12,
+  quarterly: 4,
+  'half-yearly': 2,
+  annually: 1,
+};
+
+// Short singular period labels used in payment summary displays, e.g. "/ fortnight".
+export const PAYMENT_PERIOD_LABEL: Record<string, string> = {
+  fortnightly: 'fortnight',
+  monthly: 'month',
+  quarterly: 'quarter',
+  'half-yearly': '6 months',
+  annually: 'year',
+};
 export const TARGET_PERCENT = [9, 18, 27, 36, 45, 55, 64, 73, 82, 91, 100] as const;
 
 export const STEP_TITLES = [

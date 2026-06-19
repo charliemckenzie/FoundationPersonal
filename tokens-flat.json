@@ -1,0 +1,2914 @@
+[
+  {
+    "coll": "Primitives",
+    "name": "neutral/50",
+    "type": "COLOR",
+    "value": "#F3F5F6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/100",
+    "type": "COLOR",
+    "value": "#F0F2F4",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/200",
+    "type": "COLOR",
+    "value": "#E1E5EA",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/300",
+    "type": "COLOR",
+    "value": "#C5CDD8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/400",
+    "type": "COLOR",
+    "value": "#A0A7B2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/500",
+    "type": "COLOR",
+    "value": "#7B818C",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/600",
+    "type": "COLOR",
+    "value": "#565B66",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/700",
+    "type": "COLOR",
+    "value": "#303741",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/800",
+    "type": "COLOR",
+    "value": "#20262E",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/900",
+    "type": "COLOR",
+    "value": "#14191E",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutral/950",
+    "type": "COLOR",
+    "value": "#0C1013",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/50",
+    "type": "COLOR",
+    "value": "#f5f5f5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/100",
+    "type": "COLOR",
+    "value": "#f2f2f2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/200",
+    "type": "COLOR",
+    "value": "#e8e8e8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/300",
+    "type": "COLOR",
+    "value": "#dadada",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/400",
+    "type": "COLOR",
+    "value": "#b8b8b8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/500",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/600",
+    "type": "COLOR",
+    "value": "#6e6e6e",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/700",
+    "type": "COLOR",
+    "value": "#4a4a4a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/800",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/900",
+    "type": "COLOR",
+    "value": "#1f1f1f",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "neutralART/950",
+    "type": "COLOR",
+    "value": "#121212",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/50",
+    "type": "COLOR",
+    "value": "#eff6ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/100",
+    "type": "COLOR",
+    "value": "#dbeafe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/200",
+    "type": "COLOR",
+    "value": "#bfdbfe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/300",
+    "type": "COLOR",
+    "value": "#93c5fd",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/400",
+    "type": "COLOR",
+    "value": "#60a5fa",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/500",
+    "type": "COLOR",
+    "value": "#3b82f6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/600",
+    "type": "COLOR",
+    "value": "#2563eb",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/700",
+    "type": "COLOR",
+    "value": "#1d4ed8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/800",
+    "type": "COLOR",
+    "value": "#1e40af",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/900",
+    "type": "COLOR",
+    "value": "#1e3a8a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "blue/950",
+    "type": "COLOR",
+    "value": "#172554",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/50",
+    "type": "COLOR",
+    "value": "#e5eeff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/100",
+    "type": "COLOR",
+    "value": "#c2d7ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/200",
+    "type": "COLOR",
+    "value": "#8fb6ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/300",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/400",
+    "type": "COLOR",
+    "value": "#5c8fff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/500",
+    "type": "COLOR",
+    "value": "#427eff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/600",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/700",
+    "type": "COLOR",
+    "value": "#003cbd",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/800",
+    "type": "COLOR",
+    "value": "#002f94",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/900",
+    "type": "COLOR",
+    "value": "#06256a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "trueBlue/950",
+    "type": "COLOR",
+    "value": "#030917",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/50",
+    "type": "COLOR",
+    "value": "#e8f4fb",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/100",
+    "type": "COLOR",
+    "value": "#d1e9f7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/200",
+    "type": "COLOR",
+    "value": "#a3d3ef",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/300",
+    "type": "COLOR",
+    "value": "#75bde7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/400",
+    "type": "COLOR",
+    "value": "#47a7df",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/500",
+    "type": "COLOR",
+    "value": "#1991d7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/600",
+    "type": "COLOR",
+    "value": "#0079d0",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/700",
+    "type": "COLOR",
+    "value": "#0061a6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/800",
+    "type": "COLOR",
+    "value": "#00497d",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/900",
+    "type": "COLOR",
+    "value": "#003154",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qBlue/950",
+    "type": "COLOR",
+    "value": "#00182a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/50",
+    "type": "COLOR",
+    "value": "#eaecf5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/100",
+    "type": "COLOR",
+    "value": "#c6cbea",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/200",
+    "type": "COLOR",
+    "value": "#9da6d8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/300",
+    "type": "COLOR",
+    "value": "#7381c6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/400",
+    "type": "COLOR",
+    "value": "#4f60b4",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/500",
+    "type": "COLOR",
+    "value": "#3347a2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/600",
+    "type": "COLOR",
+    "value": "#243490",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/700",
+    "type": "COLOR",
+    "value": "#1a267e",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/800",
+    "type": "COLOR",
+    "value": "#151F6D",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/900",
+    "type": "COLOR",
+    "value": "#0e1550",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qNavy/950",
+    "type": "COLOR",
+    "value": "#070b33",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/50",
+    "type": "COLOR",
+    "value": "#edf8fd",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/100",
+    "type": "COLOR",
+    "value": "#d0eefb",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/200",
+    "type": "COLOR",
+    "value": "#a9def7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/300",
+    "type": "COLOR",
+    "value": "#8CDDFF",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/400",
+    "type": "COLOR",
+    "value": "#59caef",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/500",
+    "type": "COLOR",
+    "value": "#30B3EE",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/600",
+    "type": "COLOR",
+    "value": "#1595cc",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/700",
+    "type": "COLOR",
+    "value": "#1077a3",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/800",
+    "type": "COLOR",
+    "value": "#0c587a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/900",
+    "type": "COLOR",
+    "value": "#073a51",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "qSkyBlue/950",
+    "type": "COLOR",
+    "value": "#031d28",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/50",
+    "type": "COLOR",
+    "value": "#eef4fb",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/100",
+    "type": "COLOR",
+    "value": "#d4e5f5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/200",
+    "type": "COLOR",
+    "value": "#a9cbed",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/300",
+    "type": "COLOR",
+    "value": "#7eb1e5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/400",
+    "type": "COLOR",
+    "value": "#5397da",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/500",
+    "type": "COLOR",
+    "value": "#2e7dcc",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/600",
+    "type": "COLOR",
+    "value": "#2464a8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/700",
+    "type": "COLOR",
+    "value": "#1c4d85",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/800",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/900",
+    "type": "COLOR",
+    "value": "#13243e",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "deepBlue/950",
+    "type": "COLOR",
+    "value": "#0b1527",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/50",
+    "type": "COLOR",
+    "value": "#fff2f2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/100",
+    "type": "COLOR",
+    "value": "#ffe3e2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/200",
+    "type": "COLOR",
+    "value": "#fdc7c5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/300",
+    "type": "COLOR",
+    "value": "#fca8a5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/400",
+    "type": "COLOR",
+    "value": "#f97b77",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/500",
+    "type": "COLOR",
+    "value": "#f24e49",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/600",
+    "type": "COLOR",
+    "value": "#d93937",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/700",
+    "type": "COLOR",
+    "value": "#b52d2a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/800",
+    "type": "COLOR",
+    "value": "#8f2220",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/900",
+    "type": "COLOR",
+    "value": "#681917",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "livingCoral/950",
+    "type": "COLOR",
+    "value": "#420f0e",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/50",
+    "type": "COLOR",
+    "value": "#f5f3ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/100",
+    "type": "COLOR",
+    "value": "#ede9fe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/200",
+    "type": "COLOR",
+    "value": "#ddd6fe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/300",
+    "type": "COLOR",
+    "value": "#c4b5fd",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/400",
+    "type": "COLOR",
+    "value": "#a78bfa",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/500",
+    "type": "COLOR",
+    "value": "#8b5cf6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/600",
+    "type": "COLOR",
+    "value": "#7c3aed",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/700",
+    "type": "COLOR",
+    "value": "#6d28d9",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/800",
+    "type": "COLOR",
+    "value": "#5b21b6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/900",
+    "type": "COLOR",
+    "value": "#4c1d95",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "violet/950",
+    "type": "COLOR",
+    "value": "#2e1065",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/50",
+    "type": "COLOR",
+    "value": "#faf5ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/100",
+    "type": "COLOR",
+    "value": "#f3e8ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/200",
+    "type": "COLOR",
+    "value": "#e9d5ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/300",
+    "type": "COLOR",
+    "value": "#d8b4fe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/400",
+    "type": "COLOR",
+    "value": "#c084fc",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/500",
+    "type": "COLOR",
+    "value": "#a855f7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/600",
+    "type": "COLOR",
+    "value": "#9333ea",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/700",
+    "type": "COLOR",
+    "value": "#7e22ce",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/800",
+    "type": "COLOR",
+    "value": "#6b21a8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/900",
+    "type": "COLOR",
+    "value": "#581c87",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "purple/950",
+    "type": "COLOR",
+    "value": "#3b0764",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/50",
+    "type": "COLOR",
+    "value": "#fdf2f8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/100",
+    "type": "COLOR",
+    "value": "#fce7f3",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/200",
+    "type": "COLOR",
+    "value": "#fbcfe8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/300",
+    "type": "COLOR",
+    "value": "#f9a8d4",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/400",
+    "type": "COLOR",
+    "value": "#f472b6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/500",
+    "type": "COLOR",
+    "value": "#ec4899",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/600",
+    "type": "COLOR",
+    "value": "#db2777",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/700",
+    "type": "COLOR",
+    "value": "#be185d",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/800",
+    "type": "COLOR",
+    "value": "#9d174d",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/900",
+    "type": "COLOR",
+    "value": "#831843",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "pink/950",
+    "type": "COLOR",
+    "value": "#500724",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/50",
+    "type": "COLOR",
+    "value": "#f0f8fe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/100",
+    "type": "COLOR",
+    "value": "#daedfb",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/200",
+    "type": "COLOR",
+    "value": "#B9DCFB",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/300",
+    "type": "COLOR",
+    "value": "#8dc5f8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/400",
+    "type": "COLOR",
+    "value": "#58a9f3",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/500",
+    "type": "COLOR",
+    "value": "#2b8fe8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/600",
+    "type": "COLOR",
+    "value": "#1a74cc",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/700",
+    "type": "COLOR",
+    "value": "#135ba8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/800",
+    "type": "COLOR",
+    "value": "#0d4485",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/900",
+    "type": "COLOR",
+    "value": "#082e5c",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "skyBlue/950",
+    "type": "COLOR",
+    "value": "#041730",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/50",
+    "type": "COLOR",
+    "value": "#f4fbff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/100",
+    "type": "COLOR",
+    "value": "#DDF5FF",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/200",
+    "type": "COLOR",
+    "value": "#b8eaff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/300",
+    "type": "COLOR",
+    "value": "#85d6ff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/400",
+    "type": "COLOR",
+    "value": "#4dbeff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/500",
+    "type": "COLOR",
+    "value": "#1aa4f5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/600",
+    "type": "COLOR",
+    "value": "#0086d6",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/700",
+    "type": "COLOR",
+    "value": "#006aad",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/800",
+    "type": "COLOR",
+    "value": "#004e82",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/900",
+    "type": "COLOR",
+    "value": "#003457",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "clearBlue/950",
+    "type": "COLOR",
+    "value": "#001a2c",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/50",
+    "type": "COLOR",
+    "value": "#F8EBE5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/100",
+    "type": "COLOR",
+    "value": "#f2d4c7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/200",
+    "type": "COLOR",
+    "value": "#e8b5a0",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/300",
+    "type": "COLOR",
+    "value": "#dc9278",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/400",
+    "type": "COLOR",
+    "value": "#cc7055",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/500",
+    "type": "COLOR",
+    "value": "#b85238",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/600",
+    "type": "COLOR",
+    "value": "#9a3d28",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/700",
+    "type": "COLOR",
+    "value": "#7c2c1c",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/800",
+    "type": "COLOR",
+    "value": "#5e1e12",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/900",
+    "type": "COLOR",
+    "value": "#3e120b",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "salmon/950",
+    "type": "COLOR",
+    "value": "#200706",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/50",
+    "type": "COLOR",
+    "value": "#FDF4E8",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/100",
+    "type": "COLOR",
+    "value": "#fae3c5",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/200",
+    "type": "COLOR",
+    "value": "#f5cc97",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/300",
+    "type": "COLOR",
+    "value": "#edaf62",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/400",
+    "type": "COLOR",
+    "value": "#e09035",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/500",
+    "type": "COLOR",
+    "value": "#ca741a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/600",
+    "type": "COLOR",
+    "value": "#a85c10",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/700",
+    "type": "COLOR",
+    "value": "#85450a",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/800",
+    "type": "COLOR",
+    "value": "#623106",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/900",
+    "type": "COLOR",
+    "value": "#3e1e03",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "sand/950",
+    "type": "COLOR",
+    "value": "#1e0f01",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/50",
+    "type": "COLOR",
+    "value": "#EDF6F2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/100",
+    "type": "COLOR",
+    "value": "#DAECE3",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/200",
+    "type": "COLOR",
+    "value": "#AFDBC2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/300",
+    "type": "COLOR",
+    "value": "#5EBD90",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/400",
+    "type": "COLOR",
+    "value": "#19A061",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/500",
+    "type": "COLOR",
+    "value": "#199357",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/600",
+    "type": "COLOR",
+    "value": "#198754",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/700",
+    "type": "COLOR",
+    "value": "#177A4B",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/800",
+    "type": "COLOR",
+    "value": "#146C43",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/900",
+    "type": "COLOR",
+    "value": "#0F3524",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "green/950",
+    "type": "COLOR",
+    "value": "#0C241A",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/50",
+    "type": "COLOR",
+    "value": "#FCEBED",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/100",
+    "type": "COLOR",
+    "value": "#F9DEE1",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/200",
+    "type": "COLOR",
+    "value": "#F9B3BA",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/300",
+    "type": "COLOR",
+    "value": "#F98994",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/400",
+    "type": "COLOR",
+    "value": "#F53B4D",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/500",
+    "type": "COLOR",
+    "value": "#E83849",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/600",
+    "type": "COLOR",
+    "value": "#DC3545",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/700",
+    "type": "COLOR",
+    "value": "#9A2531",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/800",
+    "type": "COLOR",
+    "value": "#58151C",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/900",
+    "type": "COLOR",
+    "value": "#3E1419",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "red/950",
+    "type": "COLOR",
+    "value": "#2A1013",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/50",
+    "type": "COLOR",
+    "value": "#FFF9E7",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/100",
+    "type": "COLOR",
+    "value": "#FFEFC1",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/200",
+    "type": "COLOR",
+    "value": "#FFEAA0",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/300",
+    "type": "COLOR",
+    "value": "#FFE186",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/400",
+    "type": "COLOR",
+    "value": "#FFD968",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/500",
+    "type": "COLOR",
+    "value": "#FFCA40",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/600",
+    "type": "COLOR",
+    "value": "#FFC107",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/700",
+    "type": "COLOR",
+    "value": "#997003",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/800",
+    "type": "COLOR",
+    "value": "#664D03",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/900",
+    "type": "COLOR",
+    "value": "#40361A",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "amber/950",
+    "type": "COLOR",
+    "value": "#262110",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/50",
+    "type": "COLOR",
+    "value": "#ecfeff",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/100",
+    "type": "COLOR",
+    "value": "#cffafe",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/200",
+    "type": "COLOR",
+    "value": "#a5f3fc",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/300",
+    "type": "COLOR",
+    "value": "#67e8f9",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/400",
+    "type": "COLOR",
+    "value": "#22d3ee",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/500",
+    "type": "COLOR",
+    "value": "#06b6d4",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/600",
+    "type": "COLOR",
+    "value": "#0891b2",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/700",
+    "type": "COLOR",
+    "value": "#0e7490",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/800",
+    "type": "COLOR",
+    "value": "#155e75",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/900",
+    "type": "COLOR",
+    "value": "#164e63",
+    "mode": "Value"
+  },
+  {
+    "coll": "Primitives",
+    "name": "cyan/950",
+    "type": "COLOR",
+    "value": "#083344",
+    "mode": "Value"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/light",
+    "type": "COLOR",
+    "value": "#5c8fff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/main",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/dark",
+    "type": "COLOR",
+    "value": "#003cbd",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/contrastText",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/text",
+    "type": "COLOR",
+    "value": "#002f94",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/icon",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/background",
+    "type": "COLOR",
+    "value": "#e5eeff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/border",
+    "type": "COLOR",
+    "value": "#c2d7ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/light",
+    "type": "COLOR",
+    "value": "#2464a8",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/main",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/dark",
+    "type": "COLOR",
+    "value": "#13243e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/contrastText",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/text",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/icon",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/background",
+    "type": "COLOR",
+    "value": "#eef4fb",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/border",
+    "type": "COLOR",
+    "value": "#d4e5f5",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/light",
+    "type": "COLOR",
+    "value": "#F53B4D",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/main",
+    "type": "COLOR",
+    "value": "#DC3545",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/dark",
+    "type": "COLOR",
+    "value": "#9A2531",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/text",
+    "type": "COLOR",
+    "value": "#58151C",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/icon",
+    "type": "COLOR",
+    "value": "#DC3545",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/background",
+    "type": "COLOR",
+    "value": "#FCEBED",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/border",
+    "type": "COLOR",
+    "value": "#F9DEE1",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/light",
+    "type": "COLOR",
+    "value": "#FFD968",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/main",
+    "type": "COLOR",
+    "value": "#FFC107",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/dark",
+    "type": "COLOR",
+    "value": "#997003",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/text",
+    "type": "COLOR",
+    "value": "#664D03",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/icon",
+    "type": "COLOR",
+    "value": "#FFC107",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/background",
+    "type": "COLOR",
+    "value": "#FFF9E7",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/border",
+    "type": "COLOR",
+    "value": "#FFEFC1",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/light",
+    "type": "COLOR",
+    "value": "#60a5fa",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/main",
+    "type": "COLOR",
+    "value": "#2563eb",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/dark",
+    "type": "COLOR",
+    "value": "#1d4ed8",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/text",
+    "type": "COLOR",
+    "value": "#1e40af",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/icon",
+    "type": "COLOR",
+    "value": "#2563eb",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/background",
+    "type": "COLOR",
+    "value": "#eff6ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/border",
+    "type": "COLOR",
+    "value": "#dbeafe",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/light",
+    "type": "COLOR",
+    "value": "#19A061",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/main",
+    "type": "COLOR",
+    "value": "#198754",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/dark",
+    "type": "COLOR",
+    "value": "#177A4B",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/text",
+    "type": "COLOR",
+    "value": "#146C43",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/icon",
+    "type": "COLOR",
+    "value": "#198754",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/background",
+    "type": "COLOR",
+    "value": "#EDF6F2",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/border",
+    "type": "COLOR",
+    "value": "#DAECE3",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/light",
+    "type": "COLOR",
+    "value": "#f97b77",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/main",
+    "type": "COLOR",
+    "value": "#f24e49",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/dark",
+    "type": "COLOR",
+    "value": "#b52d2a",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/contrastText",
+    "type": "COLOR",
+    "value": "#420f0e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/text",
+    "type": "COLOR",
+    "value": "#8f2220",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/icon",
+    "type": "COLOR",
+    "value": "#f24e49",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/background",
+    "type": "COLOR",
+    "value": "#fff2f2",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/border",
+    "type": "COLOR",
+    "value": "#ffe3e2",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/default",
+    "type": "COLOR",
+    "value": "#f5f5f5",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/paper",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/elevated",
+    "type": "COLOR",
+    "value": "#f2f2f2",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandPrimary",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandSecondary",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandTertiary",
+    "type": "COLOR",
+    "value": "#f24e49",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintCool",
+    "type": "COLOR",
+    "value": "#B9DCFB",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintNeutralCool",
+    "type": "COLOR",
+    "value": "#DDF5FF",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintWarm",
+    "type": "COLOR",
+    "value": "#F8EBE5",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintNeutral",
+    "type": "COLOR",
+    "value": "#f2f2f2",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/primary",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/muted",
+    "type": "COLOR",
+    "value": "#6e6e6e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/disabled",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/inverse",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/heading",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/link",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/linkInverse",
+    "type": "COLOR",
+    "value": "#DDF5FF",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "divider",
+    "type": "COLOR",
+    "value": "#dadada",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/subtle",
+    "type": "COLOR",
+    "value": "#e8e8e8",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/default",
+    "type": "COLOR",
+    "value": "#dadada",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/input",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/focus",
+    "type": "COLOR",
+    "value": "#0051ff",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/active",
+    "type": "COLOR",
+    "value": "#6e6e6e",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/disabled",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/disabledBackground",
+    "type": "COLOR",
+    "value": "#e8e8e8",
+    "mode": "Light"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/light",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/main",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/dark",
+    "type": "COLOR",
+    "value": "#5c8fff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/contrastText",
+    "type": "COLOR",
+    "value": "#030917",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/text",
+    "type": "COLOR",
+    "value": "#8fb6ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/icon",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/background",
+    "type": "COLOR",
+    "value": "#5c8fff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "primary/border",
+    "type": "COLOR",
+    "value": "#003cbd",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/light",
+    "type": "COLOR",
+    "value": "#5397da",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/main",
+    "type": "COLOR",
+    "value": "#2464a8",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/dark",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/contrastText",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/text",
+    "type": "COLOR",
+    "value": "#a9cbed",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/icon",
+    "type": "COLOR",
+    "value": "#5397da",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/background",
+    "type": "COLOR",
+    "value": "#5397da",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "secondary/border",
+    "type": "COLOR",
+    "value": "#1c4d85",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/light",
+    "type": "COLOR",
+    "value": "#F98994",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/main",
+    "type": "COLOR",
+    "value": "#F53B4D",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/dark",
+    "type": "COLOR",
+    "value": "#DC3545",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/text",
+    "type": "COLOR",
+    "value": "#F98994",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/icon",
+    "type": "COLOR",
+    "value": "#F53B4D",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/background",
+    "type": "COLOR",
+    "value": "#2A1013",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "error/border",
+    "type": "COLOR",
+    "value": "#3E1419",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/light",
+    "type": "COLOR",
+    "value": "#FFE186",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/main",
+    "type": "COLOR",
+    "value": "#FFD968",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/dark",
+    "type": "COLOR",
+    "value": "#FFC107",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/text",
+    "type": "COLOR",
+    "value": "#FFE186",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/icon",
+    "type": "COLOR",
+    "value": "#FFD968",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/background",
+    "type": "COLOR",
+    "value": "#262110",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "warning/border",
+    "type": "COLOR",
+    "value": "#40361A",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/light",
+    "type": "COLOR",
+    "value": "#93c5fd",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/main",
+    "type": "COLOR",
+    "value": "#60a5fa",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/dark",
+    "type": "COLOR",
+    "value": "#2563eb",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/text",
+    "type": "COLOR",
+    "value": "#93c5fd",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/icon",
+    "type": "COLOR",
+    "value": "#60a5fa",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/background",
+    "type": "COLOR",
+    "value": "#172554",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "info/border",
+    "type": "COLOR",
+    "value": "#1e3a8a",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/light",
+    "type": "COLOR",
+    "value": "#5EBD90",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/main",
+    "type": "COLOR",
+    "value": "#19A061",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/dark",
+    "type": "COLOR",
+    "value": "#198754",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/text",
+    "type": "COLOR",
+    "value": "#5EBD90",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/icon",
+    "type": "COLOR",
+    "value": "#19A061",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/background",
+    "type": "COLOR",
+    "value": "#0C241A",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "success/border",
+    "type": "COLOR",
+    "value": "#0F3524",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/light",
+    "type": "COLOR",
+    "value": "#fca8a5",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/main",
+    "type": "COLOR",
+    "value": "#f97b77",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/dark",
+    "type": "COLOR",
+    "value": "#d93937",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/contrastText",
+    "type": "COLOR",
+    "value": "#000000",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/text",
+    "type": "COLOR",
+    "value": "#fdc7c5",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/icon",
+    "type": "COLOR",
+    "value": "#f97b77",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/background",
+    "type": "COLOR",
+    "value": "#f97b77",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "tertiary/border",
+    "type": "COLOR",
+    "value": "#b52d2a",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/default",
+    "type": "COLOR",
+    "value": "#121212",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/paper",
+    "type": "COLOR",
+    "value": "#1f1f1f",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/elevated",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandPrimary",
+    "type": "COLOR",
+    "value": "#002f94",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandSecondary",
+    "type": "COLOR",
+    "value": "#1c355e",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/brandTertiary",
+    "type": "COLOR",
+    "value": "#8f2220",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintCool",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintNeutralCool",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintWarm",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "background/tintNeutral",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/primary",
+    "type": "COLOR",
+    "value": "#dadada",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/muted",
+    "type": "COLOR",
+    "value": "#b8b8b8",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/disabled",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/inverse",
+    "type": "COLOR",
+    "value": "#1f1f1f",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/heading",
+    "type": "COLOR",
+    "value": "#ffffff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/link",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "text/linkInverse",
+    "type": "COLOR",
+    "value": "#DDF5FF",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "divider",
+    "type": "COLOR",
+    "value": "#4a4a4a",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/subtle",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/default",
+    "type": "COLOR",
+    "value": "#4a4a4a",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/input",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "border/focus",
+    "type": "COLOR",
+    "value": "#7ca7ff",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/active",
+    "type": "COLOR",
+    "value": "#dadada",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/disabled",
+    "type": "COLOR",
+    "value": "#8C8C8C",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Semantic — ART",
+    "name": "action/disabledBackground",
+    "type": "COLOR",
+    "value": "#2c2c2c",
+    "mode": "Dark"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "hover",
+    "type": "FLOAT",
+    "value": 0.04,
+    "mode": "Light"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "selected",
+    "type": "FLOAT",
+    "value": 0.08,
+    "mode": "Light"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "focus",
+    "type": "FLOAT",
+    "value": 0.12,
+    "mode": "Light"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "activated",
+    "type": "FLOAT",
+    "value": 0.12,
+    "mode": "Light"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "disabled",
+    "type": "FLOAT",
+    "value": 0.38,
+    "mode": "Light"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "hover",
+    "type": "FLOAT",
+    "value": 0.08,
+    "mode": "Dark"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "selected",
+    "type": "FLOAT",
+    "value": 0.16,
+    "mode": "Dark"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "focus",
+    "type": "FLOAT",
+    "value": 0.12,
+    "mode": "Dark"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "activated",
+    "type": "FLOAT",
+    "value": 0.12,
+    "mode": "Dark"
+  },
+  {
+    "coll": "Action Opacity",
+    "name": "disabled",
+    "type": "FLOAT",
+    "value": 0.38,
+    "mode": "Dark"
+  },
+  {
+    "coll": "Radius",
+    "name": "none",
+    "type": "FLOAT",
+    "value": 0,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "xs",
+    "type": "FLOAT",
+    "value": 4,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "sm",
+    "type": "FLOAT",
+    "value": 8,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "md",
+    "type": "FLOAT",
+    "value": 12,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "lg",
+    "type": "FLOAT",
+    "value": 16,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "xl",
+    "type": "FLOAT",
+    "value": 24,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "2xl",
+    "type": "FLOAT",
+    "value": 32,
+    "mode": "Value"
+  },
+  {
+    "coll": "Radius",
+    "name": "full",
+    "type": "FLOAT",
+    "value": 9999,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontFamily/art/body",
+    "type": "STRING",
+    "value": "var(--font-noto-sans), \"Noto Sans\", system-ui, sans-serif",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontFamily/art/heading",
+    "type": "STRING",
+    "value": "var(--font-merriweather), Merriweather, serif",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/caption",
+    "type": "STRING",
+    "value": "0.75rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/small",
+    "type": "STRING",
+    "value": "0.875rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/body",
+    "type": "STRING",
+    "value": "1rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/lead",
+    "type": "STRING",
+    "value": "1.25rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h6",
+    "type": "STRING",
+    "value": "1rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h5",
+    "type": "STRING",
+    "value": "1.25rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h4",
+    "type": "STRING",
+    "value": "1.5rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h3",
+    "type": "STRING",
+    "value": "1.75rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h2",
+    "type": "STRING",
+    "value": "2rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/h1",
+    "type": "STRING",
+    "value": "2.5rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/display-5",
+    "type": "STRING",
+    "value": "3rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/display-4",
+    "type": "STRING",
+    "value": "3.5rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/display-3",
+    "type": "STRING",
+    "value": "4rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/display-2",
+    "type": "STRING",
+    "value": "4.5rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontSize/display-1",
+    "type": "STRING",
+    "value": "5rem",
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontWeight/regular",
+    "type": "FLOAT",
+    "value": 400,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontWeight/medium",
+    "type": "FLOAT",
+    "value": 500,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontWeight/semibold",
+    "type": "FLOAT",
+    "value": 600,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "fontWeight/bold",
+    "type": "FLOAT",
+    "value": 700,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "lineHeight/tight",
+    "type": "FLOAT",
+    "value": 1.2,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "lineHeight/normal",
+    "type": "FLOAT",
+    "value": 1.5,
+    "mode": "Value"
+  },
+  {
+    "coll": "Typography",
+    "name": "lineHeight/relaxed",
+    "type": "FLOAT",
+    "value": 1.6,
+    "mode": "Value"
+  }
+]

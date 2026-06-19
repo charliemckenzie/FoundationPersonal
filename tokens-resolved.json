@@ -1799,231 +1799,13 @@
           "web": "#083344"
         }
       }
-    },
-    "white": {
-      "value": {
-        "value": "#ffffff",
-        "type": "color",
-        "description": "Pure white (#ffffff). Use semantic tokens in code.",
-        "codeSyntax": {
-          "web": "#ffffff"
-        }
-      }
-    },
-    "black": {
-      "value": {
-        "value": "#000000",
-        "type": "color",
-        "description": "Pure black (#000000). Use semantic tokens in code.",
-        "codeSyntax": {
-          "web": "#000000"
-        }
-      }
-    },
-    "investment/options": {
-      "lifecycleHighGrowthPool": {
-        "value": "#A1D0F9",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#A1D0F9"
-        }
-      },
-      "lifecycleBalancedPool": {
-        "value": "#0051FF",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#0051FF"
-        }
-      },
-      "lifecycleCashPool": {
-        "value": "#1C355E",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#1C355E"
-        }
-      },
-      "highGrowth": {
-        "value": "#B42026",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#B42026"
-        }
-      },
-      "balanced": {
-        "value": "#E69927",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#E69927"
-        }
-      },
-      "sociallyConsciousBalanced": {
-        "value": "#1AB257",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#1AB257"
-        }
-      },
-      "highGrowthIndex": {
-        "value": "#EE147D",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#EE147D"
-        }
-      },
-      "balancedIndex": {
-        "value": "#964298",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#964298"
-        }
-      },
-      "conservativeBalanced": {
-        "value": "#28AAEE",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#28AAEE"
-        }
-      },
-      "balancedRiskAdjusted": {
-        "value": "#224F24",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#224F24"
-        }
-      },
-      "conservative": {
-        "value": "#3B4CA4",
-        "type": "color",
-        "description": "ART investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#3B4CA4"
-        }
-      }
-    },
-    "investment/assetMix": {
-      "australianShares": {
-        "value": "#69259B",
-        "type": "color",
-        "description": "ART asset mix. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#69259B"
-        }
-      },
-      "internationalShares": {
-        "value": "#FFBF2F",
-        "type": "color",
-        "description": "ART asset mix. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#FFBF2F"
-        }
-      },
-      "unlistedAssetsAndAlternatives": {
-        "value": "#CF4A9B",
-        "type": "color",
-        "description": "ART asset mix. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#CF4A9B"
-        }
-      },
-      "fixedIncome": {
-        "value": "#89C86B",
-        "type": "color",
-        "description": "ART asset mix. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#89C86B"
-        }
-      },
-      "cash": {
-        "value": "#1C355E",
-        "type": "color",
-        "description": "ART asset mix. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#1C355E"
-        }
-      }
-    },
-    "investment/diversified": {
-      "highGrowthIndex": {
-        "value": "#EE147D",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#EE147D"
-        }
-      },
-      "highGrowth": {
-        "value": "#B42026",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#B42026"
-        }
-      },
-      "balancedIndex": {
-        "value": "#964298",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#964298"
-        }
-      },
-      "balanced": {
-        "value": "#E69927",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#E69927"
-        }
-      },
-      "sociallyConsciousBalanced": {
-        "value": "#1AB257",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#1AB257"
-        }
-      },
-      "balancedRiskAdjusted": {
-        "value": "#224F24",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#224F24"
-        }
-      },
-      "conservativeBalanced": {
-        "value": "#28AAEE",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#28AAEE"
-        }
-      },
-      "conservative": {
-        "value": "#3B4CA4",
-        "type": "color",
-        "description": "Shared diversified investment option. Data visualisation only.",
-        "codeSyntax": {
-          "web": "#3B4CA4"
-        }
-      }
     }
   },
   "semantic-art": {
     "light": {
       "primary": {
         "light": {
-          "value": "{primitives.trueBlue.400}",
+          "value": "#5c8fff",
           "type": "color",
           "description": "trueBlue.400 → #5c8fff",
           "codeSyntax": {
@@ -2031,7 +1813,7 @@
           }
         },
         "main": {
-          "value": "{primitives.trueBlue.600}",
+          "value": "#0051ff",
           "type": "color",
           "description": "trueBlue.600 → #0051ff",
           "codeSyntax": {
@@ -2039,7 +1821,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.trueBlue.700}",
+          "value": "#003cbd",
           "type": "color",
           "description": "trueBlue.700 → #003cbd",
           "codeSyntax": {
@@ -2047,15 +1829,15 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.primary.contrastText"
           }
         },
         "text": {
-          "value": "{primitives.trueBlue.800}",
+          "value": "#002f94",
           "type": "color",
           "description": "trueBlue.800 → #002f94",
           "codeSyntax": {
@@ -2066,7 +1848,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.trueBlue.600}",
+          "value": "#0051ff",
           "type": "color",
           "description": "trueBlue.600 → #0051ff",
           "codeSyntax": {
@@ -2074,7 +1856,7 @@
           }
         },
         "background": {
-          "value": "{primitives.trueBlue.50}",
+          "value": "#e5eeff",
           "type": "color",
           "description": "trueBlue.50 → #e5eeff",
           "codeSyntax": {
@@ -2086,7 +1868,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.trueBlue.100}",
+          "value": "#c2d7ff",
           "type": "color",
           "description": "trueBlue.100 → #c2d7ff",
           "codeSyntax": {
@@ -2099,7 +1881,7 @@
       },
       "secondary": {
         "light": {
-          "value": "{primitives.deepBlue.600}",
+          "value": "#2464a8",
           "type": "color",
           "description": "deepBlue.600 → #2464a8",
           "codeSyntax": {
@@ -2107,7 +1889,7 @@
           }
         },
         "main": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2115,7 +1897,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.deepBlue.900}",
+          "value": "#13243e",
           "type": "color",
           "description": "deepBlue.900 → #13243e",
           "codeSyntax": {
@@ -2123,15 +1905,15 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.secondary.contrastText"
           }
         },
         "text": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2142,7 +1924,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2150,7 +1932,7 @@
           }
         },
         "background": {
-          "value": "{primitives.deepBlue.50}",
+          "value": "#eef4fb",
           "type": "color",
           "description": "deepBlue.50 → #eef4fb",
           "codeSyntax": {
@@ -2162,7 +1944,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.deepBlue.100}",
+          "value": "#d4e5f5",
           "type": "color",
           "description": "deepBlue.100 → #d4e5f5",
           "codeSyntax": {
@@ -2175,7 +1957,7 @@
       },
       "error": {
         "light": {
-          "value": "{primitives.red.400}",
+          "value": "#F53B4D",
           "type": "color",
           "description": "red.400 → #F53B4D",
           "codeSyntax": {
@@ -2183,7 +1965,7 @@
           }
         },
         "main": {
-          "value": "{primitives.red.600}",
+          "value": "#DC3545",
           "type": "color",
           "description": "red.600 → #DC3545",
           "codeSyntax": {
@@ -2191,7 +1973,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.red.700}",
+          "value": "#9A2531",
           "type": "color",
           "description": "red.700 → #9A2531",
           "codeSyntax": {
@@ -2199,7 +1981,7 @@
           }
         },
         "text": {
-          "value": "{primitives.red.800}",
+          "value": "#58151C",
           "type": "color",
           "description": "red.800 → #58151C",
           "codeSyntax": {
@@ -2210,7 +1992,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.red.600}",
+          "value": "#DC3545",
           "type": "color",
           "description": "red.600 → #DC3545",
           "codeSyntax": {
@@ -2218,7 +2000,7 @@
           }
         },
         "background": {
-          "value": "{primitives.red.50}",
+          "value": "#FCEBED",
           "type": "color",
           "description": "red.50 → #FCEBED",
           "codeSyntax": {
@@ -2230,7 +2012,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.red.100}",
+          "value": "#F9DEE1",
           "type": "color",
           "description": "red.100 → #F9DEE1",
           "codeSyntax": {
@@ -2243,7 +2025,7 @@
       },
       "warning": {
         "light": {
-          "value": "{primitives.amber.400}",
+          "value": "#FFD968",
           "type": "color",
           "description": "amber.400 → #FFD968",
           "codeSyntax": {
@@ -2251,7 +2033,7 @@
           }
         },
         "main": {
-          "value": "{primitives.amber.600}",
+          "value": "#FFC107",
           "type": "color",
           "description": "amber.600 → #FFC107",
           "codeSyntax": {
@@ -2259,7 +2041,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.amber.700}",
+          "value": "#997003",
           "type": "color",
           "description": "amber.700 → #997003",
           "codeSyntax": {
@@ -2267,7 +2049,7 @@
           }
         },
         "text": {
-          "value": "{primitives.amber.800}",
+          "value": "#664D03",
           "type": "color",
           "description": "amber.800 → #664D03",
           "codeSyntax": {
@@ -2278,7 +2060,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.amber.600}",
+          "value": "#FFC107",
           "type": "color",
           "description": "amber.600 → #FFC107",
           "codeSyntax": {
@@ -2286,7 +2068,7 @@
           }
         },
         "background": {
-          "value": "{primitives.amber.50}",
+          "value": "#FFF9E7",
           "type": "color",
           "description": "amber.50 → #FFF9E7",
           "codeSyntax": {
@@ -2298,7 +2080,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.amber.100}",
+          "value": "#FFEFC1",
           "type": "color",
           "description": "amber.100 → #FFEFC1",
           "codeSyntax": {
@@ -2311,7 +2093,7 @@
       },
       "info": {
         "light": {
-          "value": "{primitives.blue.400}",
+          "value": "#60a5fa",
           "type": "color",
           "description": "blue.400 → #60a5fa",
           "codeSyntax": {
@@ -2319,7 +2101,7 @@
           }
         },
         "main": {
-          "value": "{primitives.blue.600}",
+          "value": "#2563eb",
           "type": "color",
           "description": "blue.600 → #2563eb",
           "codeSyntax": {
@@ -2327,7 +2109,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.blue.700}",
+          "value": "#1d4ed8",
           "type": "color",
           "description": "blue.700 → #1d4ed8",
           "codeSyntax": {
@@ -2335,7 +2117,7 @@
           }
         },
         "text": {
-          "value": "{primitives.blue.800}",
+          "value": "#1e40af",
           "type": "color",
           "description": "blue.800 → #1e40af",
           "codeSyntax": {
@@ -2346,7 +2128,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.blue.600}",
+          "value": "#2563eb",
           "type": "color",
           "description": "blue.600 → #2563eb",
           "codeSyntax": {
@@ -2354,7 +2136,7 @@
           }
         },
         "background": {
-          "value": "{primitives.blue.50}",
+          "value": "#eff6ff",
           "type": "color",
           "description": "blue.50 → #eff6ff",
           "codeSyntax": {
@@ -2366,7 +2148,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.blue.100}",
+          "value": "#dbeafe",
           "type": "color",
           "description": "blue.100 → #dbeafe",
           "codeSyntax": {
@@ -2379,7 +2161,7 @@
       },
       "success": {
         "light": {
-          "value": "{primitives.green.400}",
+          "value": "#19A061",
           "type": "color",
           "description": "green.400 → #19A061",
           "codeSyntax": {
@@ -2387,7 +2169,7 @@
           }
         },
         "main": {
-          "value": "{primitives.green.600}",
+          "value": "#198754",
           "type": "color",
           "description": "green.600 → #198754",
           "codeSyntax": {
@@ -2395,7 +2177,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.green.700}",
+          "value": "#177A4B",
           "type": "color",
           "description": "green.700 → #177A4B",
           "codeSyntax": {
@@ -2403,7 +2185,7 @@
           }
         },
         "text": {
-          "value": "{primitives.green.800}",
+          "value": "#146C43",
           "type": "color",
           "description": "green.800 → #146C43",
           "codeSyntax": {
@@ -2414,7 +2196,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.green.600}",
+          "value": "#198754",
           "type": "color",
           "description": "green.600 → #198754",
           "codeSyntax": {
@@ -2422,7 +2204,7 @@
           }
         },
         "background": {
-          "value": "{primitives.green.50}",
+          "value": "#EDF6F2",
           "type": "color",
           "description": "green.50 → #EDF6F2",
           "codeSyntax": {
@@ -2434,7 +2216,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.green.100}",
+          "value": "#DAECE3",
           "type": "color",
           "description": "green.100 → #DAECE3",
           "codeSyntax": {
@@ -2447,7 +2229,7 @@
       },
       "tertiary": {
         "light": {
-          "value": "{primitives.livingCoral.400}",
+          "value": "#f97b77",
           "type": "color",
           "description": "livingCoral.400 → #f97b77",
           "codeSyntax": {
@@ -2455,7 +2237,7 @@
           }
         },
         "main": {
-          "value": "{primitives.livingCoral.500}",
+          "value": "#f24e49",
           "type": "color",
           "description": "livingCoral.500 → #f24e49",
           "codeSyntax": {
@@ -2463,7 +2245,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.livingCoral.700}",
+          "value": "#b52d2a",
           "type": "color",
           "description": "livingCoral.700 → #b52d2a",
           "codeSyntax": {
@@ -2471,7 +2253,7 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.livingCoral.950}",
+          "value": "#420f0e",
           "type": "color",
           "description": "livingCoral.950 → #420f0e",
           "codeSyntax": {
@@ -2479,7 +2261,7 @@
           }
         },
         "text": {
-          "value": "{primitives.livingCoral.800}",
+          "value": "#8f2220",
           "type": "color",
           "description": "livingCoral.800 → #8f2220",
           "codeSyntax": {
@@ -2490,7 +2272,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.livingCoral.500}",
+          "value": "#f24e49",
           "type": "color",
           "description": "livingCoral.500 → #f24e49",
           "codeSyntax": {
@@ -2498,7 +2280,7 @@
           }
         },
         "background": {
-          "value": "{primitives.livingCoral.50}",
+          "value": "#fff2f2",
           "type": "color",
           "description": "livingCoral.50 → #fff2f2",
           "codeSyntax": {
@@ -2510,7 +2292,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.livingCoral.100}",
+          "value": "#ffe3e2",
           "type": "color",
           "description": "livingCoral.100 → #ffe3e2",
           "codeSyntax": {
@@ -2523,7 +2305,7 @@
       },
       "background": {
         "default": {
-          "value": "{primitives.neutralART.50}",
+          "value": "#f5f5f5",
           "type": "color",
           "description": "neutralART.50 → #f5f5f5",
           "codeSyntax": {
@@ -2535,9 +2317,9 @@
           ]
         },
         "paper": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.background.paper"
           },
@@ -2547,7 +2329,7 @@
           ]
         },
         "elevated": {
-          "value": "{primitives.neutralART.100}",
+          "value": "#f2f2f2",
           "type": "color",
           "description": "neutralART.100 → #f2f2f2",
           "codeSyntax": {
@@ -2559,7 +2341,7 @@
           ]
         },
         "brandPrimary": {
-          "value": "{primitives.trueBlue.600}",
+          "value": "#0051ff",
           "type": "color",
           "description": "trueBlue.600 → #0051ff",
           "codeSyntax": {
@@ -2571,7 +2353,7 @@
           ]
         },
         "brandSecondary": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2583,7 +2365,7 @@
           ]
         },
         "brandTertiary": {
-          "value": "{primitives.livingCoral.500}",
+          "value": "#f24e49",
           "type": "color",
           "description": "livingCoral.500 → #f24e49",
           "codeSyntax": {
@@ -2595,7 +2377,7 @@
           ]
         },
         "tintCool": {
-          "value": "{primitives.skyBlue.200}",
+          "value": "#B9DCFB",
           "type": "color",
           "description": "skyBlue.200 → #B9DCFB",
           "codeSyntax": {
@@ -2607,7 +2389,7 @@
           ]
         },
         "tintNeutralCool": {
-          "value": "{primitives.clearBlue.100}",
+          "value": "#DDF5FF",
           "type": "color",
           "description": "clearBlue.100 → #DDF5FF",
           "codeSyntax": {
@@ -2619,7 +2401,7 @@
           ]
         },
         "tintWarm": {
-          "value": "{primitives.salmon.50}",
+          "value": "#F8EBE5",
           "type": "color",
           "description": "salmon.50 → #F8EBE5",
           "codeSyntax": {
@@ -2631,7 +2413,7 @@
           ]
         },
         "tintNeutral": {
-          "value": "{primitives.neutralART.100}",
+          "value": "#f2f2f2",
           "type": "color",
           "description": "neutralART.100 → #f2f2f2",
           "codeSyntax": {
@@ -2645,7 +2427,7 @@
       },
       "text": {
         "primary": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -2656,7 +2438,7 @@
           ]
         },
         "muted": {
-          "value": "{primitives.neutralART.600}",
+          "value": "#6e6e6e",
           "type": "color",
           "description": "neutralART.600 → #6e6e6e",
           "codeSyntax": {
@@ -2667,7 +2449,7 @@
           ]
         },
         "disabled": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -2678,9 +2460,9 @@
           ]
         },
         "inverse": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.text.inverse"
           },
@@ -2689,7 +2471,7 @@
           ]
         },
         "heading": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2700,7 +2482,7 @@
           ]
         },
         "link": {
-          "value": "{primitives.trueBlue.600}",
+          "value": "#0051ff",
           "type": "color",
           "description": "trueBlue.600 → #0051ff",
           "codeSyntax": {
@@ -2711,7 +2493,7 @@
           ]
         },
         "linkInverse": {
-          "value": "{primitives.clearBlue.100}",
+          "value": "#DDF5FF",
           "type": "color",
           "description": "clearBlue.100 → #DDF5FF",
           "codeSyntax": {
@@ -2723,7 +2505,7 @@
         }
       },
       "divider": {
-        "value": "{primitives.neutralART.300}",
+        "value": "#dadada",
         "type": "color",
         "description": "neutralART.300 → #dadada",
         "codeSyntax": {
@@ -2735,7 +2517,7 @@
       },
       "border": {
         "subtle": {
-          "value": "{primitives.neutralART.200}",
+          "value": "#e8e8e8",
           "type": "color",
           "description": "neutralART.200 → #e8e8e8",
           "codeSyntax": {
@@ -2746,7 +2528,7 @@
           ]
         },
         "default": {
-          "value": "{primitives.neutralART.300}",
+          "value": "#dadada",
           "type": "color",
           "description": "neutralART.300 → #dadada",
           "codeSyntax": {
@@ -2757,7 +2539,7 @@
           ]
         },
         "input": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -2768,7 +2550,7 @@
           ]
         },
         "focus": {
-          "value": "{primitives.trueBlue.600}",
+          "value": "#0051ff",
           "type": "color",
           "description": "trueBlue.600 → #0051ff",
           "codeSyntax": {
@@ -2781,7 +2563,7 @@
       },
       "action": {
         "active": {
-          "value": "{primitives.neutralART.600}",
+          "value": "#6e6e6e",
           "type": "color",
           "description": "neutralART.600 → #6e6e6e",
           "codeSyntax": {
@@ -2789,7 +2571,7 @@
           }
         },
         "disabled": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -2797,7 +2579,7 @@
           }
         },
         "disabledBackground": {
-          "value": "{primitives.neutralART.200}",
+          "value": "#e8e8e8",
           "type": "color",
           "description": "neutralART.200 → #e8e8e8",
           "codeSyntax": {
@@ -2813,7 +2595,7 @@
     "dark": {
       "primary": {
         "light": {
-          "value": "{primitives.trueBlue.300}",
+          "value": "#7ca7ff",
           "type": "color",
           "description": "trueBlue.300 → #7ca7ff",
           "codeSyntax": {
@@ -2821,7 +2603,7 @@
           }
         },
         "main": {
-          "value": "{primitives.trueBlue.300}",
+          "value": "#7ca7ff",
           "type": "color",
           "description": "trueBlue.300 → #7ca7ff",
           "codeSyntax": {
@@ -2829,7 +2611,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.trueBlue.400}",
+          "value": "#5c8fff",
           "type": "color",
           "description": "trueBlue.400 → #5c8fff",
           "codeSyntax": {
@@ -2837,7 +2619,7 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.trueBlue.950}",
+          "value": "#030917",
           "type": "color",
           "description": "trueBlue.950 → #030917",
           "codeSyntax": {
@@ -2845,7 +2627,7 @@
           }
         },
         "text": {
-          "value": "{primitives.trueBlue.200}",
+          "value": "#8fb6ff",
           "type": "color",
           "description": "trueBlue.200 → #8fb6ff",
           "codeSyntax": {
@@ -2856,7 +2638,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.trueBlue.300}",
+          "value": "#7ca7ff",
           "type": "color",
           "description": "trueBlue.300 → #7ca7ff",
           "codeSyntax": {
@@ -2864,7 +2646,7 @@
           }
         },
         "background": {
-          "value": "{primitives.trueBlue.400}",
+          "value": "#5c8fff",
           "type": "color",
           "description": "trueBlue.400 → #5c8fff",
           "codeSyntax": {
@@ -2876,7 +2658,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.trueBlue.700}",
+          "value": "#003cbd",
           "type": "color",
           "description": "trueBlue.700 → #003cbd",
           "codeSyntax": {
@@ -2889,7 +2671,7 @@
       },
       "secondary": {
         "light": {
-          "value": "{primitives.deepBlue.400}",
+          "value": "#5397da",
           "type": "color",
           "description": "deepBlue.400 → #5397da",
           "codeSyntax": {
@@ -2897,7 +2679,7 @@
           }
         },
         "main": {
-          "value": "{primitives.deepBlue.600}",
+          "value": "#2464a8",
           "type": "color",
           "description": "deepBlue.600 → #2464a8",
           "codeSyntax": {
@@ -2905,7 +2687,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -2913,15 +2695,15 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.secondary.contrastText"
           }
         },
         "text": {
-          "value": "{primitives.deepBlue.200}",
+          "value": "#a9cbed",
           "type": "color",
           "description": "deepBlue.200 → #a9cbed",
           "codeSyntax": {
@@ -2932,7 +2714,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.deepBlue.400}",
+          "value": "#5397da",
           "type": "color",
           "description": "deepBlue.400 → #5397da",
           "codeSyntax": {
@@ -2940,7 +2722,7 @@
           }
         },
         "background": {
-          "value": "{primitives.deepBlue.400}",
+          "value": "#5397da",
           "type": "color",
           "description": "deepBlue.400 → #5397da",
           "codeSyntax": {
@@ -2952,7 +2734,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.deepBlue.700}",
+          "value": "#1c4d85",
           "type": "color",
           "description": "deepBlue.700 → #1c4d85",
           "codeSyntax": {
@@ -2965,7 +2747,7 @@
       },
       "error": {
         "light": {
-          "value": "{primitives.red.300}",
+          "value": "#F98994",
           "type": "color",
           "description": "red.300 → #F98994",
           "codeSyntax": {
@@ -2973,7 +2755,7 @@
           }
         },
         "main": {
-          "value": "{primitives.red.400}",
+          "value": "#F53B4D",
           "type": "color",
           "description": "red.400 → #F53B4D",
           "codeSyntax": {
@@ -2981,7 +2763,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.red.600}",
+          "value": "#DC3545",
           "type": "color",
           "description": "red.600 → #DC3545",
           "codeSyntax": {
@@ -2989,7 +2771,7 @@
           }
         },
         "text": {
-          "value": "{primitives.red.300}",
+          "value": "#F98994",
           "type": "color",
           "description": "red.300 → #F98994",
           "codeSyntax": {
@@ -3000,7 +2782,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.red.400}",
+          "value": "#F53B4D",
           "type": "color",
           "description": "red.400 → #F53B4D",
           "codeSyntax": {
@@ -3008,7 +2790,7 @@
           }
         },
         "background": {
-          "value": "{primitives.red.950}",
+          "value": "#2A1013",
           "type": "color",
           "description": "red.950 → #2A1013",
           "codeSyntax": {
@@ -3020,7 +2802,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.red.900}",
+          "value": "#3E1419",
           "type": "color",
           "description": "red.900 → #3E1419",
           "codeSyntax": {
@@ -3033,7 +2815,7 @@
       },
       "warning": {
         "light": {
-          "value": "{primitives.amber.300}",
+          "value": "#FFE186",
           "type": "color",
           "description": "amber.300 → #FFE186",
           "codeSyntax": {
@@ -3041,7 +2823,7 @@
           }
         },
         "main": {
-          "value": "{primitives.amber.400}",
+          "value": "#FFD968",
           "type": "color",
           "description": "amber.400 → #FFD968",
           "codeSyntax": {
@@ -3049,7 +2831,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.amber.600}",
+          "value": "#FFC107",
           "type": "color",
           "description": "amber.600 → #FFC107",
           "codeSyntax": {
@@ -3057,7 +2839,7 @@
           }
         },
         "text": {
-          "value": "{primitives.amber.300}",
+          "value": "#FFE186",
           "type": "color",
           "description": "amber.300 → #FFE186",
           "codeSyntax": {
@@ -3068,7 +2850,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.amber.400}",
+          "value": "#FFD968",
           "type": "color",
           "description": "amber.400 → #FFD968",
           "codeSyntax": {
@@ -3076,7 +2858,7 @@
           }
         },
         "background": {
-          "value": "{primitives.amber.950}",
+          "value": "#262110",
           "type": "color",
           "description": "amber.950 → #262110",
           "codeSyntax": {
@@ -3088,7 +2870,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.amber.900}",
+          "value": "#40361A",
           "type": "color",
           "description": "amber.900 → #40361A",
           "codeSyntax": {
@@ -3101,7 +2883,7 @@
       },
       "info": {
         "light": {
-          "value": "{primitives.blue.300}",
+          "value": "#93c5fd",
           "type": "color",
           "description": "blue.300 → #93c5fd",
           "codeSyntax": {
@@ -3109,7 +2891,7 @@
           }
         },
         "main": {
-          "value": "{primitives.blue.400}",
+          "value": "#60a5fa",
           "type": "color",
           "description": "blue.400 → #60a5fa",
           "codeSyntax": {
@@ -3117,7 +2899,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.blue.600}",
+          "value": "#2563eb",
           "type": "color",
           "description": "blue.600 → #2563eb",
           "codeSyntax": {
@@ -3125,7 +2907,7 @@
           }
         },
         "text": {
-          "value": "{primitives.blue.300}",
+          "value": "#93c5fd",
           "type": "color",
           "description": "blue.300 → #93c5fd",
           "codeSyntax": {
@@ -3136,7 +2918,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.blue.400}",
+          "value": "#60a5fa",
           "type": "color",
           "description": "blue.400 → #60a5fa",
           "codeSyntax": {
@@ -3144,7 +2926,7 @@
           }
         },
         "background": {
-          "value": "{primitives.blue.950}",
+          "value": "#172554",
           "type": "color",
           "description": "blue.950 → #172554",
           "codeSyntax": {
@@ -3156,7 +2938,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.blue.900}",
+          "value": "#1e3a8a",
           "type": "color",
           "description": "blue.900 → #1e3a8a",
           "codeSyntax": {
@@ -3169,7 +2951,7 @@
       },
       "success": {
         "light": {
-          "value": "{primitives.green.300}",
+          "value": "#5EBD90",
           "type": "color",
           "description": "green.300 → #5EBD90",
           "codeSyntax": {
@@ -3177,7 +2959,7 @@
           }
         },
         "main": {
-          "value": "{primitives.green.400}",
+          "value": "#19A061",
           "type": "color",
           "description": "green.400 → #19A061",
           "codeSyntax": {
@@ -3185,7 +2967,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.green.600}",
+          "value": "#198754",
           "type": "color",
           "description": "green.600 → #198754",
           "codeSyntax": {
@@ -3193,7 +2975,7 @@
           }
         },
         "text": {
-          "value": "{primitives.green.300}",
+          "value": "#5EBD90",
           "type": "color",
           "description": "green.300 → #5EBD90",
           "codeSyntax": {
@@ -3204,7 +2986,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.green.400}",
+          "value": "#19A061",
           "type": "color",
           "description": "green.400 → #19A061",
           "codeSyntax": {
@@ -3212,7 +2994,7 @@
           }
         },
         "background": {
-          "value": "{primitives.green.950}",
+          "value": "#0C241A",
           "type": "color",
           "description": "green.950 → #0C241A",
           "codeSyntax": {
@@ -3224,7 +3006,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.green.900}",
+          "value": "#0F3524",
           "type": "color",
           "description": "green.900 → #0F3524",
           "codeSyntax": {
@@ -3237,7 +3019,7 @@
       },
       "tertiary": {
         "light": {
-          "value": "{primitives.livingCoral.300}",
+          "value": "#fca8a5",
           "type": "color",
           "description": "livingCoral.300 → #fca8a5",
           "codeSyntax": {
@@ -3245,7 +3027,7 @@
           }
         },
         "main": {
-          "value": "{primitives.livingCoral.400}",
+          "value": "#f97b77",
           "type": "color",
           "description": "livingCoral.400 → #f97b77",
           "codeSyntax": {
@@ -3253,7 +3035,7 @@
           }
         },
         "dark": {
-          "value": "{primitives.livingCoral.600}",
+          "value": "#d93937",
           "type": "color",
           "description": "livingCoral.600 → #d93937",
           "codeSyntax": {
@@ -3261,15 +3043,15 @@
           }
         },
         "contrastText": {
-          "value": "{primitives.black.value}",
+          "value": "#000000",
           "type": "color",
-          "description": "#000000 → black",
+          "description": "#000000 (literal)",
           "codeSyntax": {
             "web": "theme.palette.tertiary.contrastText"
           }
         },
         "text": {
-          "value": "{primitives.livingCoral.200}",
+          "value": "#fdc7c5",
           "type": "color",
           "description": "livingCoral.200 → #fdc7c5",
           "codeSyntax": {
@@ -3280,7 +3062,7 @@
           ]
         },
         "icon": {
-          "value": "{primitives.livingCoral.400}",
+          "value": "#f97b77",
           "type": "color",
           "description": "livingCoral.400 → #f97b77",
           "codeSyntax": {
@@ -3288,7 +3070,7 @@
           }
         },
         "background": {
-          "value": "{primitives.livingCoral.400}",
+          "value": "#f97b77",
           "type": "color",
           "description": "livingCoral.400 → #f97b77",
           "codeSyntax": {
@@ -3300,7 +3082,7 @@
           ]
         },
         "border": {
-          "value": "{primitives.livingCoral.700}",
+          "value": "#b52d2a",
           "type": "color",
           "description": "livingCoral.700 → #b52d2a",
           "codeSyntax": {
@@ -3313,7 +3095,7 @@
       },
       "background": {
         "default": {
-          "value": "{primitives.neutralART.950}",
+          "value": "#121212",
           "type": "color",
           "description": "neutralART.950 → #121212",
           "codeSyntax": {
@@ -3325,7 +3107,7 @@
           ]
         },
         "paper": {
-          "value": "{primitives.neutralART.900}",
+          "value": "#1f1f1f",
           "type": "color",
           "description": "neutralART.900 → #1f1f1f",
           "codeSyntax": {
@@ -3337,7 +3119,7 @@
           ]
         },
         "elevated": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3349,7 +3131,7 @@
           ]
         },
         "brandPrimary": {
-          "value": "{primitives.trueBlue.800}",
+          "value": "#002f94",
           "type": "color",
           "description": "trueBlue.800 → #002f94",
           "codeSyntax": {
@@ -3361,7 +3143,7 @@
           ]
         },
         "brandSecondary": {
-          "value": "{primitives.deepBlue.800}",
+          "value": "#1c355e",
           "type": "color",
           "description": "deepBlue.800 → #1c355e",
           "codeSyntax": {
@@ -3373,7 +3155,7 @@
           ]
         },
         "brandTertiary": {
-          "value": "{primitives.livingCoral.800}",
+          "value": "#8f2220",
           "type": "color",
           "description": "livingCoral.800 → #8f2220",
           "codeSyntax": {
@@ -3385,7 +3167,7 @@
           ]
         },
         "tintCool": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3397,7 +3179,7 @@
           ]
         },
         "tintNeutralCool": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3409,7 +3191,7 @@
           ]
         },
         "tintWarm": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3421,7 +3203,7 @@
           ]
         },
         "tintNeutral": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3435,7 +3217,7 @@
       },
       "text": {
         "primary": {
-          "value": "{primitives.neutralART.300}",
+          "value": "#dadada",
           "type": "color",
           "description": "neutralART.300 → #dadada",
           "codeSyntax": {
@@ -3446,7 +3228,7 @@
           ]
         },
         "muted": {
-          "value": "{primitives.neutralART.400}",
+          "value": "#b8b8b8",
           "type": "color",
           "description": "neutralART.400 → #b8b8b8",
           "codeSyntax": {
@@ -3457,7 +3239,7 @@
           ]
         },
         "disabled": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -3468,7 +3250,7 @@
           ]
         },
         "inverse": {
-          "value": "{primitives.neutralART.900}",
+          "value": "#1f1f1f",
           "type": "color",
           "description": "neutralART.900 → #1f1f1f",
           "codeSyntax": {
@@ -3479,9 +3261,9 @@
           ]
         },
         "heading": {
-          "value": "{primitives.white.value}",
+          "value": "#ffffff",
           "type": "color",
-          "description": "#ffffff → white",
+          "description": "#ffffff (literal)",
           "codeSyntax": {
             "web": "theme.palette.text.heading"
           },
@@ -3490,7 +3272,7 @@
           ]
         },
         "link": {
-          "value": "{primitives.trueBlue.300}",
+          "value": "#7ca7ff",
           "type": "color",
           "description": "trueBlue.300 → #7ca7ff",
           "codeSyntax": {
@@ -3501,7 +3283,7 @@
           ]
         },
         "linkInverse": {
-          "value": "{primitives.clearBlue.100}",
+          "value": "#DDF5FF",
           "type": "color",
           "description": "clearBlue.100 → #DDF5FF",
           "codeSyntax": {
@@ -3513,7 +3295,7 @@
         }
       },
       "divider": {
-        "value": "{primitives.neutralART.700}",
+        "value": "#4a4a4a",
         "type": "color",
         "description": "neutralART.700 → #4a4a4a",
         "codeSyntax": {
@@ -3525,7 +3307,7 @@
       },
       "border": {
         "subtle": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
           "codeSyntax": {
@@ -3536,7 +3318,7 @@
           ]
         },
         "default": {
-          "value": "{primitives.neutralART.700}",
+          "value": "#4a4a4a",
           "type": "color",
           "description": "neutralART.700 → #4a4a4a",
           "codeSyntax": {
@@ -3547,7 +3329,7 @@
           ]
         },
         "input": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -3558,7 +3340,7 @@
           ]
         },
         "focus": {
-          "value": "{primitives.trueBlue.300}",
+          "value": "#7ca7ff",
           "type": "color",
           "description": "trueBlue.300 → #7ca7ff",
           "codeSyntax": {
@@ -3571,7 +3353,7 @@
       },
       "action": {
         "active": {
-          "value": "{primitives.neutralART.300}",
+          "value": "#dadada",
           "type": "color",
           "description": "neutralART.300 → #dadada",
           "codeSyntax": {
@@ -3579,7 +3361,7 @@
           }
         },
         "disabled": {
-          "value": "{primitives.neutralART.500}",
+          "value": "#8C8C8C",
           "type": "color",
           "description": "neutralART.500 → #8C8C8C",
           "codeSyntax": {
@@ -3587,1743 +3369,9 @@
           }
         },
         "disabledBackground": {
-          "value": "{primitives.neutralART.800}",
+          "value": "#2c2c2c",
           "type": "color",
           "description": "neutralART.800 → #2c2c2c",
-          "codeSyntax": {
-            "web": "theme.palette.action.disabledBackground"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        }
-      }
-    }
-  },
-  "semantic-qsuper": {
-    "light": {
-      "primary": {
-        "light": {
-          "value": "{primitives.qBlue.400}",
-          "type": "color",
-          "description": "qBlue.400 → #47a7df",
-          "codeSyntax": {
-            "web": "theme.palette.primary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qBlue.600}",
-          "type": "color",
-          "description": "qBlue.600 → #0079d0",
-          "codeSyntax": {
-            "web": "theme.palette.primary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qBlue.700}",
-          "type": "color",
-          "description": "qBlue.700 → #0061a6",
-          "codeSyntax": {
-            "web": "theme.palette.primary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.primary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qBlue.800}",
-          "type": "color",
-          "description": "qBlue.800 → #00497d",
-          "codeSyntax": {
-            "web": "theme.palette.primary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qBlue.600}",
-          "type": "color",
-          "description": "qBlue.600 → #0079d0",
-          "codeSyntax": {
-            "web": "theme.palette.primary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qBlue.50}",
-          "type": "color",
-          "description": "qBlue.50 → #e8f4fb",
-          "codeSyntax": {
-            "web": "theme.palette.primary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qBlue.100}",
-          "type": "color",
-          "description": "qBlue.100 → #d1e9f7",
-          "codeSyntax": {
-            "web": "theme.palette.primary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "secondary": {
-        "light": {
-          "value": "{primitives.qNavy.600}",
-          "type": "color",
-          "description": "qNavy.600 → #243490",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qNavy.900}",
-          "type": "color",
-          "description": "qNavy.900 → #0e1550",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qNavy.50}",
-          "type": "color",
-          "description": "qNavy.50 → #eaecf5",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qNavy.100}",
-          "type": "color",
-          "description": "qNavy.100 → #c6cbea",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "error": {
-        "light": {
-          "value": "{primitives.red.400}",
-          "type": "color",
-          "description": "red.400 → #F53B4D",
-          "codeSyntax": {
-            "web": "theme.palette.error.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.red.600}",
-          "type": "color",
-          "description": "red.600 → #DC3545",
-          "codeSyntax": {
-            "web": "theme.palette.error.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.red.700}",
-          "type": "color",
-          "description": "red.700 → #9A2531",
-          "codeSyntax": {
-            "web": "theme.palette.error.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.red.800}",
-          "type": "color",
-          "description": "red.800 → #58151C",
-          "codeSyntax": {
-            "web": "theme.palette.error.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.red.600}",
-          "type": "color",
-          "description": "red.600 → #DC3545",
-          "codeSyntax": {
-            "web": "theme.palette.error.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.red.50}",
-          "type": "color",
-          "description": "red.50 → #FCEBED",
-          "codeSyntax": {
-            "web": "theme.palette.error.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.red.100}",
-          "type": "color",
-          "description": "red.100 → #F9DEE1",
-          "codeSyntax": {
-            "web": "theme.palette.error.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "warning": {
-        "light": {
-          "value": "{primitives.amber.400}",
-          "type": "color",
-          "description": "amber.400 → #FFD968",
-          "codeSyntax": {
-            "web": "theme.palette.warning.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.amber.600}",
-          "type": "color",
-          "description": "amber.600 → #FFC107",
-          "codeSyntax": {
-            "web": "theme.palette.warning.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.amber.700}",
-          "type": "color",
-          "description": "amber.700 → #997003",
-          "codeSyntax": {
-            "web": "theme.palette.warning.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.amber.800}",
-          "type": "color",
-          "description": "amber.800 → #664D03",
-          "codeSyntax": {
-            "web": "theme.palette.warning.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.amber.600}",
-          "type": "color",
-          "description": "amber.600 → #FFC107",
-          "codeSyntax": {
-            "web": "theme.palette.warning.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.amber.50}",
-          "type": "color",
-          "description": "amber.50 → #FFF9E7",
-          "codeSyntax": {
-            "web": "theme.palette.warning.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.amber.100}",
-          "type": "color",
-          "description": "amber.100 → #FFEFC1",
-          "codeSyntax": {
-            "web": "theme.palette.warning.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "info": {
-        "light": {
-          "value": "{primitives.blue.400}",
-          "type": "color",
-          "description": "blue.400 → #60a5fa",
-          "codeSyntax": {
-            "web": "theme.palette.info.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.blue.600}",
-          "type": "color",
-          "description": "blue.600 → #2563eb",
-          "codeSyntax": {
-            "web": "theme.palette.info.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.blue.700}",
-          "type": "color",
-          "description": "blue.700 → #1d4ed8",
-          "codeSyntax": {
-            "web": "theme.palette.info.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.blue.800}",
-          "type": "color",
-          "description": "blue.800 → #1e40af",
-          "codeSyntax": {
-            "web": "theme.palette.info.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.blue.600}",
-          "type": "color",
-          "description": "blue.600 → #2563eb",
-          "codeSyntax": {
-            "web": "theme.palette.info.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.blue.50}",
-          "type": "color",
-          "description": "blue.50 → #eff6ff",
-          "codeSyntax": {
-            "web": "theme.palette.info.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.blue.100}",
-          "type": "color",
-          "description": "blue.100 → #dbeafe",
-          "codeSyntax": {
-            "web": "theme.palette.info.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "success": {
-        "light": {
-          "value": "{primitives.green.400}",
-          "type": "color",
-          "description": "green.400 → #19A061",
-          "codeSyntax": {
-            "web": "theme.palette.success.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.green.600}",
-          "type": "color",
-          "description": "green.600 → #198754",
-          "codeSyntax": {
-            "web": "theme.palette.success.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.green.700}",
-          "type": "color",
-          "description": "green.700 → #177A4B",
-          "codeSyntax": {
-            "web": "theme.palette.success.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.green.800}",
-          "type": "color",
-          "description": "green.800 → #146C43",
-          "codeSyntax": {
-            "web": "theme.palette.success.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.green.600}",
-          "type": "color",
-          "description": "green.600 → #198754",
-          "codeSyntax": {
-            "web": "theme.palette.success.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.green.50}",
-          "type": "color",
-          "description": "green.50 → #EDF6F2",
-          "codeSyntax": {
-            "web": "theme.palette.success.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.green.100}",
-          "type": "color",
-          "description": "green.100 → #DAECE3",
-          "codeSyntax": {
-            "web": "theme.palette.success.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "tertiary": {
-        "light": {
-          "value": "{primitives.qSkyBlue.400}",
-          "type": "color",
-          "description": "qSkyBlue.400 → #59caef",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qSkyBlue.700}",
-          "type": "color",
-          "description": "qSkyBlue.700 → #1077a3",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.qSkyBlue.950}",
-          "type": "color",
-          "description": "qSkyBlue.950 → #031d28",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qSkyBlue.800}",
-          "type": "color",
-          "description": "qSkyBlue.800 → #0c587a",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qSkyBlue.50}",
-          "type": "color",
-          "description": "qSkyBlue.50 → #edf8fd",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qSkyBlue.100}",
-          "type": "color",
-          "description": "qSkyBlue.100 → #d0eefb",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "quaternary": {
-        "light": {
-          "value": "{primitives.qSkyBlue.100}",
-          "type": "color",
-          "description": "qSkyBlue.100 → #d0eefb",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qSkyBlue.300}",
-          "type": "color",
-          "description": "qSkyBlue.300 → #8CDDFF",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.qSkyBlue.950}",
-          "type": "color",
-          "description": "qSkyBlue.950 → #031d28",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qSkyBlue.800}",
-          "type": "color",
-          "description": "qSkyBlue.800 → #0c587a",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qSkyBlue.50}",
-          "type": "color",
-          "description": "qSkyBlue.50 → #edf8fd",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qSkyBlue.100}",
-          "type": "color",
-          "description": "qSkyBlue.100 → #d0eefb",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "background": {
-        "default": {
-          "value": "{primitives.neutral.50}",
-          "type": "color",
-          "description": "neutral.50 → #F3F5F6",
-          "codeSyntax": {
-            "web": "theme.palette.background.default"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "paper": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.background.paper"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "elevated": {
-          "value": "{primitives.neutral.100}",
-          "type": "color",
-          "description": "neutral.100 → #F0F2F4",
-          "codeSyntax": {
-            "web": "theme.palette.background.elevated"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandPrimary": {
-          "value": "{primitives.qBlue.600}",
-          "type": "color",
-          "description": "qBlue.600 → #0079d0",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandPrimary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandSecondary": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandSecondary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandTertiary": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandTertiary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintCool": {
-          "value": "{primitives.qSkyBlue.100}",
-          "type": "color",
-          "description": "qSkyBlue.100 → #d0eefb",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintCool"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintNeutralCool": {
-          "value": "{primitives.qSkyBlue.50}",
-          "type": "color",
-          "description": "qSkyBlue.50 → #edf8fd",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintNeutralCool"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintWarm": {
-          "value": "{primitives.neutral.100}",
-          "type": "color",
-          "description": "neutral.100 → #F0F2F4",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintWarm"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintNeutral": {
-          "value": "{primitives.neutral.100}",
-          "type": "color",
-          "description": "neutral.100 → #F0F2F4",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintNeutral"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        }
-      },
-      "text": {
-        "primary": {
-          "value": "{primitives.neutral.700}",
-          "type": "color",
-          "description": "neutral.700 → #303741",
-          "codeSyntax": {
-            "web": "theme.palette.text.primary"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "muted": {
-          "value": "{primitives.neutral.600}",
-          "type": "color",
-          "description": "neutral.600 → #565B66",
-          "codeSyntax": {
-            "web": "theme.palette.text.muted"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "disabled": {
-          "value": "{primitives.neutral.500}",
-          "type": "color",
-          "description": "neutral.500 → #7B818C",
-          "codeSyntax": {
-            "web": "theme.palette.text.disabled"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "inverse": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.text.inverse"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "heading": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.text.heading"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "link": {
-          "value": "{primitives.qBlue.600}",
-          "type": "color",
-          "description": "qBlue.600 → #0079d0",
-          "codeSyntax": {
-            "web": "theme.palette.text.link"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "linkInverse": {
-          "value": "#ffffff",
-          "type": "color",
-          "description": "#ffffff (literal)",
-          "codeSyntax": {
-            "web": "theme.palette.text.linkInverse"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        }
-      },
-      "divider": {
-        "value": "{primitives.neutral.300}",
-        "type": "color",
-        "description": "neutral.300 → #C5CDD8",
-        "codeSyntax": {
-          "web": "theme.palette.divider"
-        },
-        "scopes": [
-          "STROKE_COLOR"
-        ]
-      },
-      "border": {
-        "subtle": {
-          "value": "{primitives.neutral.200}",
-          "type": "color",
-          "description": "neutral.200 → #E1E5EA",
-          "codeSyntax": {
-            "web": "theme.palette.border.subtle"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "default": {
-          "value": "{primitives.neutral.300}",
-          "type": "color",
-          "description": "neutral.300 → #C5CDD8",
-          "codeSyntax": {
-            "web": "theme.palette.border.default"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "input": {
-          "value": "{primitives.neutral.500}",
-          "type": "color",
-          "description": "neutral.500 → #7B818C",
-          "codeSyntax": {
-            "web": "theme.palette.border.input"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "focus": {
-          "value": "{primitives.qBlue.600}",
-          "type": "color",
-          "description": "qBlue.600 → #0079d0",
-          "codeSyntax": {
-            "web": "theme.palette.border.focus"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "action": {
-        "active": {
-          "value": "{primitives.neutral.600}",
-          "type": "color",
-          "description": "neutral.600 → #565B66",
-          "codeSyntax": {
-            "web": "theme.palette.action.active"
-          }
-        },
-        "disabled": {
-          "value": "{primitives.neutral.500}",
-          "type": "color",
-          "description": "neutral.500 → #7B818C",
-          "codeSyntax": {
-            "web": "theme.palette.action.disabled"
-          }
-        },
-        "disabledBackground": {
-          "value": "{primitives.neutral.200}",
-          "type": "color",
-          "description": "neutral.200 → #E1E5EA",
-          "codeSyntax": {
-            "web": "theme.palette.action.disabledBackground"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        }
-      }
-    },
-    "dark": {
-      "primary": {
-        "light": {
-          "value": "{primitives.qBlue.300}",
-          "type": "color",
-          "description": "qBlue.300 → #75bde7",
-          "codeSyntax": {
-            "web": "theme.palette.primary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qBlue.300}",
-          "type": "color",
-          "description": "qBlue.300 → #75bde7",
-          "codeSyntax": {
-            "web": "theme.palette.primary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qBlue.400}",
-          "type": "color",
-          "description": "qBlue.400 → #47a7df",
-          "codeSyntax": {
-            "web": "theme.palette.primary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.qBlue.950}",
-          "type": "color",
-          "description": "qBlue.950 → #00182a",
-          "codeSyntax": {
-            "web": "theme.palette.primary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qBlue.200}",
-          "type": "color",
-          "description": "qBlue.200 → #a3d3ef",
-          "codeSyntax": {
-            "web": "theme.palette.primary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qBlue.300}",
-          "type": "color",
-          "description": "qBlue.300 → #75bde7",
-          "codeSyntax": {
-            "web": "theme.palette.primary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qBlue.400}",
-          "type": "color",
-          "description": "qBlue.400 → #47a7df",
-          "codeSyntax": {
-            "web": "theme.palette.primary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qBlue.700}",
-          "type": "color",
-          "description": "qBlue.700 → #0061a6",
-          "codeSyntax": {
-            "web": "theme.palette.primary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "secondary": {
-        "light": {
-          "value": "{primitives.qNavy.400}",
-          "type": "color",
-          "description": "qNavy.400 → #4f60b4",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qNavy.600}",
-          "type": "color",
-          "description": "qNavy.600 → #243490",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qNavy.200}",
-          "type": "color",
-          "description": "qNavy.200 → #9da6d8",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qNavy.400}",
-          "type": "color",
-          "description": "qNavy.400 → #4f60b4",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qNavy.400}",
-          "type": "color",
-          "description": "qNavy.400 → #4f60b4",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qNavy.700}",
-          "type": "color",
-          "description": "qNavy.700 → #1a267e",
-          "codeSyntax": {
-            "web": "theme.palette.secondary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "error": {
-        "light": {
-          "value": "{primitives.red.300}",
-          "type": "color",
-          "description": "red.300 → #F98994",
-          "codeSyntax": {
-            "web": "theme.palette.error.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.red.400}",
-          "type": "color",
-          "description": "red.400 → #F53B4D",
-          "codeSyntax": {
-            "web": "theme.palette.error.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.red.600}",
-          "type": "color",
-          "description": "red.600 → #DC3545",
-          "codeSyntax": {
-            "web": "theme.palette.error.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.red.300}",
-          "type": "color",
-          "description": "red.300 → #F98994",
-          "codeSyntax": {
-            "web": "theme.palette.error.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.red.400}",
-          "type": "color",
-          "description": "red.400 → #F53B4D",
-          "codeSyntax": {
-            "web": "theme.palette.error.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.red.950}",
-          "type": "color",
-          "description": "red.950 → #2A1013",
-          "codeSyntax": {
-            "web": "theme.palette.error.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.red.900}",
-          "type": "color",
-          "description": "red.900 → #3E1419",
-          "codeSyntax": {
-            "web": "theme.palette.error.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "warning": {
-        "light": {
-          "value": "{primitives.amber.300}",
-          "type": "color",
-          "description": "amber.300 → #FFE186",
-          "codeSyntax": {
-            "web": "theme.palette.warning.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.amber.400}",
-          "type": "color",
-          "description": "amber.400 → #FFD968",
-          "codeSyntax": {
-            "web": "theme.palette.warning.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.amber.600}",
-          "type": "color",
-          "description": "amber.600 → #FFC107",
-          "codeSyntax": {
-            "web": "theme.palette.warning.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.amber.300}",
-          "type": "color",
-          "description": "amber.300 → #FFE186",
-          "codeSyntax": {
-            "web": "theme.palette.warning.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.amber.400}",
-          "type": "color",
-          "description": "amber.400 → #FFD968",
-          "codeSyntax": {
-            "web": "theme.palette.warning.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.amber.950}",
-          "type": "color",
-          "description": "amber.950 → #262110",
-          "codeSyntax": {
-            "web": "theme.palette.warning.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.amber.900}",
-          "type": "color",
-          "description": "amber.900 → #40361A",
-          "codeSyntax": {
-            "web": "theme.palette.warning.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "info": {
-        "light": {
-          "value": "{primitives.blue.300}",
-          "type": "color",
-          "description": "blue.300 → #93c5fd",
-          "codeSyntax": {
-            "web": "theme.palette.info.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.blue.400}",
-          "type": "color",
-          "description": "blue.400 → #60a5fa",
-          "codeSyntax": {
-            "web": "theme.palette.info.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.blue.600}",
-          "type": "color",
-          "description": "blue.600 → #2563eb",
-          "codeSyntax": {
-            "web": "theme.palette.info.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.blue.300}",
-          "type": "color",
-          "description": "blue.300 → #93c5fd",
-          "codeSyntax": {
-            "web": "theme.palette.info.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.blue.400}",
-          "type": "color",
-          "description": "blue.400 → #60a5fa",
-          "codeSyntax": {
-            "web": "theme.palette.info.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.blue.950}",
-          "type": "color",
-          "description": "blue.950 → #172554",
-          "codeSyntax": {
-            "web": "theme.palette.info.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.blue.900}",
-          "type": "color",
-          "description": "blue.900 → #1e3a8a",
-          "codeSyntax": {
-            "web": "theme.palette.info.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "success": {
-        "light": {
-          "value": "{primitives.green.300}",
-          "type": "color",
-          "description": "green.300 → #5EBD90",
-          "codeSyntax": {
-            "web": "theme.palette.success.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.green.400}",
-          "type": "color",
-          "description": "green.400 → #19A061",
-          "codeSyntax": {
-            "web": "theme.palette.success.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.green.600}",
-          "type": "color",
-          "description": "green.600 → #198754",
-          "codeSyntax": {
-            "web": "theme.palette.success.dark"
-          }
-        },
-        "text": {
-          "value": "{primitives.green.300}",
-          "type": "color",
-          "description": "green.300 → #5EBD90",
-          "codeSyntax": {
-            "web": "theme.palette.success.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.green.400}",
-          "type": "color",
-          "description": "green.400 → #19A061",
-          "codeSyntax": {
-            "web": "theme.palette.success.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.green.950}",
-          "type": "color",
-          "description": "green.950 → #0C241A",
-          "codeSyntax": {
-            "web": "theme.palette.success.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.green.900}",
-          "type": "color",
-          "description": "green.900 → #0F3524",
-          "codeSyntax": {
-            "web": "theme.palette.success.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "tertiary": {
-        "light": {
-          "value": "{primitives.qSkyBlue.300}",
-          "type": "color",
-          "description": "qSkyBlue.300 → #8CDDFF",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qSkyBlue.400}",
-          "type": "color",
-          "description": "qSkyBlue.400 → #59caef",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qSkyBlue.600}",
-          "type": "color",
-          "description": "qSkyBlue.600 → #1595cc",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.black.value}",
-          "type": "color",
-          "description": "#000000 → black",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qSkyBlue.200}",
-          "type": "color",
-          "description": "qSkyBlue.200 → #a9def7",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qSkyBlue.400}",
-          "type": "color",
-          "description": "qSkyBlue.400 → #59caef",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qSkyBlue.400}",
-          "type": "color",
-          "description": "qSkyBlue.400 → #59caef",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qSkyBlue.700}",
-          "type": "color",
-          "description": "qSkyBlue.700 → #1077a3",
-          "codeSyntax": {
-            "web": "theme.palette.tertiary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "quaternary": {
-        "light": {
-          "value": "{primitives.qSkyBlue.200}",
-          "type": "color",
-          "description": "qSkyBlue.200 → #a9def7",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.light"
-          }
-        },
-        "main": {
-          "value": "{primitives.qSkyBlue.300}",
-          "type": "color",
-          "description": "qSkyBlue.300 → #8CDDFF",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.main"
-          }
-        },
-        "dark": {
-          "value": "{primitives.qSkyBlue.500}",
-          "type": "color",
-          "description": "qSkyBlue.500 → #30B3EE",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.dark"
-          }
-        },
-        "contrastText": {
-          "value": "{primitives.black.value}",
-          "type": "color",
-          "description": "#000000 → black",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.contrastText"
-          }
-        },
-        "text": {
-          "value": "{primitives.qSkyBlue.100}",
-          "type": "color",
-          "description": "qSkyBlue.100 → #d0eefb",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.text"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "icon": {
-          "value": "{primitives.qSkyBlue.300}",
-          "type": "color",
-          "description": "qSkyBlue.300 → #8CDDFF",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.icon"
-          }
-        },
-        "background": {
-          "value": "{primitives.qSkyBlue.400}",
-          "type": "color",
-          "description": "qSkyBlue.400 → #59caef",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.background"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "border": {
-          "value": "{primitives.qSkyBlue.700}",
-          "type": "color",
-          "description": "qSkyBlue.700 → #1077a3",
-          "codeSyntax": {
-            "web": "theme.palette.quaternary.border"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "background": {
-        "default": {
-          "value": "{primitives.neutral.950}",
-          "type": "color",
-          "description": "neutral.950 → #0C1013",
-          "codeSyntax": {
-            "web": "theme.palette.background.default"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "paper": {
-          "value": "{primitives.neutral.900}",
-          "type": "color",
-          "description": "neutral.900 → #14191E",
-          "codeSyntax": {
-            "web": "theme.palette.background.paper"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "elevated": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.background.elevated"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandPrimary": {
-          "value": "{primitives.qBlue.800}",
-          "type": "color",
-          "description": "qBlue.800 → #00497d",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandPrimary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandSecondary": {
-          "value": "{primitives.qNavy.800}",
-          "type": "color",
-          "description": "qNavy.800 → #151F6D",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandSecondary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "brandTertiary": {
-          "value": "{primitives.qSkyBlue.800}",
-          "type": "color",
-          "description": "qSkyBlue.800 → #0c587a",
-          "codeSyntax": {
-            "web": "theme.palette.background.brandTertiary"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintCool": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintCool"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintNeutralCool": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintNeutralCool"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintWarm": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintWarm"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        },
-        "tintNeutral": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.background.tintNeutral"
-          },
-          "scopes": [
-            "FRAME_FILL",
-            "SHAPE_FILL"
-          ]
-        }
-      },
-      "text": {
-        "primary": {
-          "value": "{primitives.neutral.50}",
-          "type": "color",
-          "description": "neutral.50 → #F3F5F6",
-          "codeSyntax": {
-            "web": "theme.palette.text.primary"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "muted": {
-          "value": "{primitives.neutral.300}",
-          "type": "color",
-          "description": "neutral.300 → #C5CDD8",
-          "codeSyntax": {
-            "web": "theme.palette.text.muted"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "disabled": {
-          "value": "{primitives.neutral.500}",
-          "type": "color",
-          "description": "neutral.500 → #7B818C",
-          "codeSyntax": {
-            "web": "theme.palette.text.disabled"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "inverse": {
-          "value": "{primitives.neutral.900}",
-          "type": "color",
-          "description": "neutral.900 → #14191E",
-          "codeSyntax": {
-            "web": "theme.palette.text.inverse"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "heading": {
-          "value": "{primitives.white.value}",
-          "type": "color",
-          "description": "#ffffff → white",
-          "codeSyntax": {
-            "web": "theme.palette.text.heading"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "link": {
-          "value": "{primitives.qBlue.300}",
-          "type": "color",
-          "description": "qBlue.300 → #75bde7",
-          "codeSyntax": {
-            "web": "theme.palette.text.link"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        },
-        "linkInverse": {
-          "value": "#ffffff",
-          "type": "color",
-          "description": "#ffffff (literal)",
-          "codeSyntax": {
-            "web": "theme.palette.text.linkInverse"
-          },
-          "scopes": [
-            "TEXT_FILL"
-          ]
-        }
-      },
-      "divider": {
-        "value": "{primitives.neutral.700}",
-        "type": "color",
-        "description": "neutral.700 → #303741",
-        "codeSyntax": {
-          "web": "theme.palette.divider"
-        },
-        "scopes": [
-          "STROKE_COLOR"
-        ]
-      },
-      "border": {
-        "subtle": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
-          "codeSyntax": {
-            "web": "theme.palette.border.subtle"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "default": {
-          "value": "{primitives.neutral.700}",
-          "type": "color",
-          "description": "neutral.700 → #303741",
-          "codeSyntax": {
-            "web": "theme.palette.border.default"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "input": {
-          "value": "{primitives.neutral.400}",
-          "type": "color",
-          "description": "neutral.400 → #A0A7B2",
-          "codeSyntax": {
-            "web": "theme.palette.border.input"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        },
-        "focus": {
-          "value": "{primitives.qBlue.300}",
-          "type": "color",
-          "description": "qBlue.300 → #75bde7",
-          "codeSyntax": {
-            "web": "theme.palette.border.focus"
-          },
-          "scopes": [
-            "STROKE_COLOR"
-          ]
-        }
-      },
-      "action": {
-        "active": {
-          "value": "{primitives.neutral.300}",
-          "type": "color",
-          "description": "neutral.300 → #C5CDD8",
-          "codeSyntax": {
-            "web": "theme.palette.action.active"
-          }
-        },
-        "disabled": {
-          "value": "{primitives.neutral.500}",
-          "type": "color",
-          "description": "neutral.500 → #7B818C",
-          "codeSyntax": {
-            "web": "theme.palette.action.disabled"
-          }
-        },
-        "disabledBackground": {
-          "value": "{primitives.neutral.800}",
-          "type": "color",
-          "description": "neutral.800 → #20262E",
           "codeSyntax": {
             "web": "theme.palette.action.disabledBackground"
           },
@@ -5408,96 +3456,6 @@
         "codeSyntax": {
           "web": "theme.palette.action.disabledOpacity"
         }
-      }
-    }
-  },
-  "spacing": {
-    "0": {
-      "value": 0,
-      "type": "number",
-      "description": "0px",
-      "codeSyntax": {
-        "web": "theme.spacing(0)"
-      }
-    },
-    "1": {
-      "value": 4,
-      "type": "number",
-      "description": "4px",
-      "codeSyntax": {
-        "web": "theme.spacing(0.5)"
-      }
-    },
-    "2": {
-      "value": 8,
-      "type": "number",
-      "description": "8px",
-      "codeSyntax": {
-        "web": "theme.spacing(1)"
-      }
-    },
-    "3": {
-      "value": 12,
-      "type": "number",
-      "description": "12px",
-      "codeSyntax": {
-        "web": "theme.spacing(1.5)"
-      }
-    },
-    "4": {
-      "value": 16,
-      "type": "number",
-      "description": "16px",
-      "codeSyntax": {
-        "web": "theme.spacing(2)"
-      }
-    },
-    "5": {
-      "value": 24,
-      "type": "number",
-      "description": "24px",
-      "codeSyntax": {
-        "web": "theme.spacing(3)"
-      }
-    },
-    "6": {
-      "value": 32,
-      "type": "number",
-      "description": "32px",
-      "codeSyntax": {
-        "web": "theme.spacing(4)"
-      }
-    },
-    "7": {
-      "value": 48,
-      "type": "number",
-      "description": "48px",
-      "codeSyntax": {
-        "web": "theme.spacing(6)"
-      }
-    },
-    "8": {
-      "value": 64,
-      "type": "number",
-      "description": "64px",
-      "codeSyntax": {
-        "web": "theme.spacing(8)"
-      }
-    },
-    "9": {
-      "value": 96,
-      "type": "number",
-      "description": "96px",
-      "codeSyntax": {
-        "web": "theme.spacing(12)"
-      }
-    },
-    "10": {
-      "value": 128,
-      "type": "number",
-      "description": "128px",
-      "codeSyntax": {
-        "web": "theme.spacing(16)"
       }
     }
   },

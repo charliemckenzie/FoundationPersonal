@@ -12,20 +12,7 @@ import { RadioCardGroup } from '../../../components/RadioGroup/RadioCardGroup';
 import { Select } from '../../../components/Select';
 import type { PaymentSchedule } from '../types';
 import { formatCurrency } from '../utils';
-import { PENSION_ESTIMATE_AGE } from '../constants';
-
-// ATO minimum drawdown rate for age 65–74 bracket (2023–24 onwards)
-const MIN_DRAWDOWN_RATE = 0.05;
-// Mock upper bound: 2× minimum (common industry convention for prototypes)
-const MAX_DRAWDOWN_RATE = 0.10;
-
-const FREQUENCY_DIVISORS: Record<string, number> = {
-  fortnightly: 26,
-  monthly: 12,
-  quarterly: 4,
-  'half-yearly': 2,
-  annually: 1,
-};
+import { PENSION_ESTIMATE_AGE, DEFAULT_MIN_DRAWDOWN_RATE as MIN_DRAWDOWN_RATE, DEFAULT_MAX_DRAWDOWN_RATE as MAX_DRAWDOWN_RATE, PAYMENT_FREQUENCY_DIVISORS as FREQUENCY_DIVISORS } from '../constants';
 
 const FREQUENCY_PERIOD_LABEL: Record<string, string> = {
   fortnightly: 'Fortnightly',
@@ -301,6 +288,7 @@ export function StepPaymentSchedule({
             <Select
               label="First payment date"
               fullWidth
+              native
               placeholder="Please select"
               options={dateOptions}
               value={paymentSchedule.firstPaymentMonth}

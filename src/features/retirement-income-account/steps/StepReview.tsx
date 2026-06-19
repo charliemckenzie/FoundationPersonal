@@ -9,9 +9,9 @@ import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
 import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
-import { DRAWDOWN_OPTIONS } from './StepInvestmentDrawdown';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
-import { formatCurrency, totalSelectedAmount } from '../utils';
+import { formatCurrency, totalSelectedAmount, estimatePension } from '../utils';
+import { PENSION_ESTIMATE_AGE, FORTNIGHTS_PER_YEAR } from '../constants';
 
 interface StepReviewProps {
   state: RetirementIncomeAccountState;
@@ -192,12 +192,21 @@ function AllocationTable({ allocations, label }: { allocations: Record<string, n
 }
 
 function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['drawdown'] }) {
+  // Derive the options from what the user actually allocated — keyed by id in the drawdown state.
+  const allocMap = drawdown.customMethod === 'order' ? drawdown.orderAllocations : drawdown.percentageAllocations;
+  const optionIds = Object.keys(allocMap).filter((id) => (allocMap[id] ?? 0) > 0);
+  const options = optionIds
+    .map((id) => MOCK_INVESTMENT_OPTIONS.find((o) => o.id === id))
+    .filter((o): o is NonNullable<typeof o> => o != null);
+
+  if (options.length === 0) return null;
+
   if (drawdown.customMethod === 'order') {
+    const sorted = [...options].sort((a, b) => (drawdown.orderAllocations[a.id] ?? 0) - (drawdown.orderAllocations[b.id] ?? 0));
     return (
       <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
-        {DRAWDOWN_OPTIONS.map((o) => {
+        {sorted.map((o) => {
           const pos = drawdown.orderAllocations[o.id];
-          if (!pos) return null;
           return (
             <Box
               key={o.id}
@@ -219,9 +228,8 @@ function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['d
   }
   return (
     <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
-      {DRAWDOWN_OPTIONS.map((o) => {
+      {options.map((o) => {
         const pct = drawdown.percentageAllocations[o.id];
-        if (!pct) return null;
         return (
           <Box
             key={o.id}
@@ -377,7 +385,10 @@ export function StepReview({
 
   const isSimple = state.setupMode === 'simple';
   const selectedAccounts = state.accounts.filter((a) => a.transferAmount > 0);
-  const purchasePrice = totalSelectedAmount(state);
+  // In simple mode the funding step is skipped, so transferAmount is 0 — use full balances instead.
+  const purchasePrice = isSimple
+    ? state.accounts.reduce((sum, a) => sum + a.balance, 0)
+    : totalSelectedAmount(state);
 
   return (
     <Stack spacing={0}>
@@ -478,7 +489,10 @@ export function StepReview({
         <ReviewRow label="Payment amount">
           <ReviewValue>
             {state.setupMode === 'simple'
-              ? 'Government-set minimum'
+              ? (() => {
+                  const est = estimatePension(purchasePrice, PENSION_ESTIMATE_AGE, 'single');
+                  return est ? formatCurrency(est.fortnightly) + ' / fortnight' : '—';
+                })()
               : state.paymentSchedule.amountType === 'minimum'
                 ? 'Minimum'
                 : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0

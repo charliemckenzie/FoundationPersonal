@@ -49,7 +49,7 @@ export function StepIntro({
         <Typography variant="h6" sx={{ mb: 1.5 }}>Important to note</Typography>
         <Stack component="ul" spacing={1} sx={{ m: 0, pl: 2.5 }}>
           <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>
-            Leave at least <strong>$10,000</strong> in your accumulation account if you wish to keep it open.
+            Leave at least <strong>$6,000</strong> in your accumulation account if you wish to keep it open.
           </Typography>
           <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>
             <strong>Tax contributions:</strong> If you claimed a tax deduction on voluntary contributions in the current or last financial year, you must have confirmation. Without it, we cannot process your notice of deduction.
@@ -69,10 +69,10 @@ export function StepIntro({
           error={showValidation && !declarationRead}
           errorMessage={
             showValidation && !declarationRead
-              ? 'Please confirm you have reviewed the information and PDS.'
+              ? 'Please confirm you understand the insurance cover requirement.'
               : undefined
           }
-          label="I have enough money in my accumulation account/s to transfer an amount greater than $0 to start a Retirement Income account and leave at least $10,000 in my accumulation account if I want my insurance cover to continue."
+          label="I understand that if I have insurance cover on my accumulation account, I need to leave at least $6,000 in that account for my cover to continue."
         />
         <Checkbox
           variant="default"

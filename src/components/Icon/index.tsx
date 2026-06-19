@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 
@@ -127,7 +129,7 @@ export function Icon({
       component="span"
       aria-label={ariaLabel}
       aria-hidden={ariaLabel ? undefined : true}
-      sx={{ display: 'inline-flex', color: COLOR_TO_SX[color], lineHeight: 0, fontSize: SIZE_MAP[size] }}
+      sx={{ display: 'inline-flex', color: COLOR_TO_SX[color], lineHeight: 0, fontSize: SIZE_MAP[size], borderRadius: 0, overflow: 'visible' }}
     >
       <Box
         component="span"
@@ -137,6 +139,8 @@ export function Icon({
           width: '1em',
           height: '1em',
           display: 'block',
+          borderRadius: 0,
+          overflow: 'visible',
           bgcolor: 'currentColor',
           maskImage: `url(${iconSrc})`,
           WebkitMaskImage: `url(${iconSrc})`,

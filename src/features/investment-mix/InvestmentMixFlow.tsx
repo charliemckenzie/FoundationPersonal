@@ -43,12 +43,25 @@ const LIFECYCLE_ID = 'opt-lifecycle';
 const ACCUM_APPLY_TO: ApplyTo[] = ['all', 'balance', 'future'];
 const INCOME_APPLY_TO: ApplyTo[] = ['income-both', 'income-balance', 'income-payments'];
 
+/** Renders children inside ContentContainer unless `skip` is true (embedded mode). */
+function ConditionalContentContainer({ skip, children }: { skip: boolean; children: React.ReactNode }) {
+  return skip ? <>{children}</> : <ContentContainer size="md">{children}</ContentContainer>;
+}
+
 interface InvestmentMixFlowProps {
   overviewPath: string;
   /** Brand name shown in the payment preference step, e.g. "ART" or "QSuper". */
   brandName?: string;
   /** Filter which accounts are available in this journey. Defaults to 'all'. */
   accountFilter?: 'all' | 'accum' | 'income';
+  /** When provided, called on successful submission instead of showing the success screen. */
+  onComplete?: (change: InvestmentMixChange) => void;
+  /** When true, suppresses breadcrumb, page title and internal stepper — for embedding inside another form. */
+  embedded?: boolean;
+  /** When true, skips the 'Before you start' intro page and goes straight to step 1. */
+  skipIntro?: boolean;
+  /** When embedded and the user presses Back on the first step, this is called so the parent can navigate back. */
+  onBack?: () => void;
 }
 
 /**
@@ -71,13 +84,14 @@ export function InvestmentMixFlow(props: InvestmentMixFlowProps) {
   );
 }
 
-function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all' }: InvestmentMixFlowProps) {
+function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all', onComplete, embedded = false, skipIntro = false, onBack }: InvestmentMixFlowProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { saveChange } = useInvestmentMix();
 
   const accountFromUrl = searchParams.get('account');
-  const skipAccountStep = !!accountFromUrl;
+  // Skip account selection when embedded (account is already known) or pre-selected via URL param.
+  const skipAccountStep = embedded || !!accountFromUrl;
 
   const accounts = useMemo(() => {
     if (accountFilter === 'accum') return MOCK_ACCOUNTS.filter((a) => !a.isIncomeAccount);
@@ -95,12 +109,14 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
     return valid.includes(raw) ? raw : null;
   }, [searchParams, initialAccount]);
 
-  const [showIntro, setShowIntro] = useState(true);
+  const [showIntro, setShowIntro] = useState(!skipIntro);
   const [introReviewed, setIntroReviewed] = useState(false);
   const [introReviewedError, setIntroReviewedError] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
   const [selectedAccountId, setSelectedAccountId] = useState(() => accountFromUrl ?? accounts[0]?.id ?? '');
-  const [applyTo, setApplyTo] = useState<ApplyTo | null>(applyToFromUrl);
+  // When embedded in a new account form, default to 'income-both' — the member isn't
+  // changing an existing mix, so the choice is always "set up both balance and payments".
+  const [applyTo, setApplyTo] = useState<ApplyTo | null>(embedded ? 'income-both' : applyToFromUrl);
   const [allocations, setAllocations] = useState<Record<string, number>>({});
   const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(null);
   const [rebalance, setRebalance] = useState<RebalanceSetting | null>(null);
@@ -210,13 +226,13 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   const steps = useMemo(() => {
     const list: { id: string; label: string }[] = [];
     if (!skipAccountStep) list.push({ id: 'account', label: 'Select account' });
-    list.push({ id: 'apply-to', label: 'What to change' });
+    if (!embedded) list.push({ id: 'apply-to', label: 'What to change' });
     list.push({ id: 'allocations', label: 'Allocate new mix' });
     if (showRebalanceStep) list.push({ id: 'rebalance', label: 'Keep on track' });
     if (showPaymentStep) list.push({ id: 'payment', label: 'Payment preferences' });
-    list.push({ id: 'review', label: 'Review and confirm' });
+    if (!embedded) list.push({ id: 'review', label: 'Review and confirm' });
     return list;
-  }, [skipAccountStep, showRebalanceStep, showPaymentStep]);
+  }, [skipAccountStep, embedded, showRebalanceStep, showPaymentStep]);
 
   // A conditional step can only disappear while the member is on an earlier step (apply-to or
   // allocations), so activeStep never points past the list; review is always last. Stale rebalance
@@ -321,8 +337,8 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
       return;
     }
 
-    if (isReviewStep) {
-      if (!declarationChecked) {
+    if (isReviewStep || (embedded && activeStep === steps.length - 1)) {
+      if (!embedded && !declarationChecked) {
         setError('Please confirm the declaration before submitting.');
         return;
       }
@@ -336,6 +352,10 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
       );
       saveChange(change);
       setSubmittedChange(change);
+      if (onComplete) {
+        onComplete(change);
+        return;
+      }
       // Replace (not push) so the user cannot navigate back into a re-submit scenario.
       // GA4 picks this up as a page_view for the success step.
       const successParams = new URLSearchParams(window.location.search);
@@ -351,6 +371,15 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
   function handleBack() {
     setError(null);
+    if (embedded) {
+      // Embedded: navigate within the flow, or hand off to the parent when on the first step.
+      if (activeStep > 0) {
+        advance(activeStep - 1);
+      } else {
+        onBack?.();
+      }
+      return;
+    }
     if (showIntro) {
       router.push(overviewPath);
       return;
@@ -364,7 +393,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
     router.push(overviewPath);
   }
 
-  if (submitted && submittedChange) {
+  if (submitted && submittedChange && !onComplete) {
     return (
       <ContentContainer size="md">
         <SubmissionSuccess
@@ -378,45 +407,51 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
   return (
     <>
-      <Box sx={{ px: 3, pt: 2 }}>
-        <MOBreadcrumb
-          items={[
-            { label: 'Manage investments', href: overviewPath },
-            { label: 'Change investment mix' },
-          ]}
-          onBack={() => router.push(overviewPath)}
-        />
-      </Box>
-      <ContentContainer size="md">
+      {!embedded && (
+        <Box sx={{ px: 3, pt: 2 }}>
+          <MOBreadcrumb
+            items={[
+              { label: 'Manage investments', href: overviewPath },
+              { label: 'Change investment mix' },
+            ]}
+            onBack={() => router.push(overviewPath)}
+          />
+        </Box>
+      )}
+      {/* When embedded, skip ContentContainer so the step content sits flush inside the
+          parent form's layout without double-padding (pt/px). */}
+      <ConditionalContentContainer skip={embedded}>
         <Stack spacing={4}>
-          <div>
-            <Typography variant="h2" component="h1" sx={{ mb: 0.5 }}>
-              Change investment mix
-            </Typography>
-            {selectedAccount && (
-              <Typography variant="body" sx={{ mb: 2 }}>
-                For {selectedAccount.name}{' '}
-                <Box component="span" sx={{ fontWeight: 700 }}>
-                  {formatCurrency(selectedAccount.balance)}
-                </Box>{' '}
-                <Box component="span" sx={{ color: 'text.muted' }}>
-                  as at {formatDate(new Date().toISOString())}
-                </Box>
+          {!embedded && (
+            <div>
+              <Typography variant="h2" component="h1" sx={{ mb: 0.5 }}>
+                Change investment mix
               </Typography>
-            )}
-            {!showIntro && (
-              <FormProgress
-                variant="simple"
-                value={(activeStep / steps.length) * 100}
-                steps={steps}
-                activeStep={activeStep}
-                showStepIndicator
-                stepMenu
-                onStepClick={(i) => advance(i)}
-              />
-            )}
-            {showIntro && <Divider sx={{ mt: 0 }} />}
-          </div>
+              {selectedAccount && (
+                <Typography variant="body" sx={{ mb: 2 }}>
+                  For {selectedAccount.name}{' '}
+                  <Box component="span" sx={{ fontWeight: 700 }}>
+                    {formatCurrency(selectedAccount.balance)}
+                  </Box>{' '}
+                  <Box component="span" sx={{ color: 'text.muted' }}>
+                    as at {formatDate(new Date().toISOString())}
+                  </Box>
+                </Typography>
+              )}
+              {!showIntro && (
+                <FormProgress
+                  variant="simple"
+                  value={(activeStep / steps.length) * 100}
+                  steps={steps}
+                  activeStep={activeStep}
+                  showStepIndicator
+                  stepMenu
+                  onStepClick={(i) => advance(i)}
+                />
+              )}
+              {showIntro && <Divider sx={{ mt: 0 }} />}
+            </div>
+          )}
 
           <StepTransition step={showIntro ? -1 : activeStep}>
             {showIntro ? (
@@ -450,6 +485,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
                 allocations={allocations}
                 setting={rebalance}
                 onChange={setRebalance}
+                hideExistingWarning={embedded}
               />
             ) : currentStepId === 'payment' ? (
               <Step4PaymentPreference
@@ -471,6 +507,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
                 rebalance={showRebalanceStep ? rebalance : null}
                 declarationChecked={declarationChecked}
                 onDeclarationChange={handleDeclarationChange}
+                hideDeclaration={embedded}
                 onEditAccount={skipAccountStep ? undefined : () => goToStep('account')}
                 onEditApplyTo={() => goToStep('apply-to')}
                 onEditAllocations={() => goToStep('allocations')}
@@ -486,15 +523,15 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
 
           <StepperActions
             step={showIntro ? 1 : activeStep + 2}
-            isSubmitStep={!showIntro && isReviewStep}
-            nextLabel={showIntro ? 'Get started' : isReviewStep ? 'Submit request' : 'Next'}
+            isSubmitStep={!embedded && !showIntro && isReviewStep}
+            nextLabel={showIntro ? 'Get started' : (!embedded && isReviewStep) ? 'Submit request' : 'Next'}
             skipExitDialog={showIntro}
             onNext={handleNext}
             onBack={handleBack}
             onExit={handleExit}
           />
         </Stack>
-      </ContentContainer>
+      </ConditionalContentContainer>
 
       <Dialog
         open={speedBumpWarning !== null}

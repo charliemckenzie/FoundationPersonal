@@ -168,10 +168,13 @@ function walkTokens(group, path, visit) {
 // 1. Primitives — CREATE first so other collections can alias them
 const primitivesColl = addCollection('primitives', 'Primitives', ['Value']);
 walkTokens(tokens.primitives, ['primitives'], (path, token) => {
-  // path = ['primitives', 'trueBlue', '500']
+  // path = ['primitives', 'trueBlue', '500'] or ['primitives', 'white', 'value']
   const [, scale, step] = path;
   const varKey = `primitives.${scale}.${step}`;
-  const varName = `${scale}/${step}`;
+  // white/black are single-value primitives — name them without the '/value' suffix
+  const varName = (step === 'value' && (scale === 'white' || scale === 'black'))
+    ? scale
+    : `${scale}/${step}`;
   const varId = addVariable(varKey, varName, 'COLOR', primitivesColl);
   setColorValue(varId, modeId('primitives', 'Value'), token.value);
 });
