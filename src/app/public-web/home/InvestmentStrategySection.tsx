@@ -122,13 +122,25 @@ function LifecycleStrategy() {
       <Typography variant="h2" component="h2" sx={{ mb: 2, mt: 4 }}>
         See how we invest your money as you age
       </Typography>
-      <Typography variant="body" sx={{ color: 'text.muted', maxWidth: 1000, mx: 'auto', mb: 10, lineHeight: 1.75 }}>
+      <Typography variant="body" sx={{ color: 'text.primary', maxWidth: 1000, mx: 'auto', mb: 10, lineHeight: 1.75 }}>
         Our award-winning{' '}
-        <Box component="a" href="/investments/lifecycle" sx={{ color: 'text.link', textDecoration: 'none' }}>
+        <Box
+          component="a"
+          href="/investments/lifecycle"
+          sx={{
+            color: 'text.link',
+            textDecoration: 'none !important',
+            textDecorationLine: 'none !important',
+            '&:hover, &:focus-visible, &:active': {
+              textDecoration: 'none !important',
+              textDecorationLine: 'none !important',
+            },
+          }}
+        >
           Lifecycle Investment Strategy
         </Box>{' '}
         is our default option for new members and a true &lsquo;
-        <Box component="span" sx={{ fontStyle: 'italic', fontWeight: 700 }}>
+        <Box component="span" sx={{ fontStyle: 'italic', fontWeight: 400 }}>
           set and forget
         </Box>
         &rsquo; approach. It invests your super across the High Growth, Balanced and Cash pools, and the percentages
@@ -357,7 +369,7 @@ function FeeChooser() {
       <Typography variant="h2" component="h3" sx={{ textAlign: 'center', mb: 2 }}>
         Choose from our wide array of options
       </Typography>
-      <Typography variant="body" sx={{ color: 'text.muted', textAlign: 'center', maxWidth: '58rem', mx: 'auto', mb: 6, lineHeight: 1.75 }}>
+      <Typography variant="body" sx={{ color: 'text.primary', textAlign: 'center', maxWidth: '58rem', mx: 'auto', mb: 6, lineHeight: 1.75 }}>
         We have 15+ investment options that are set at different risk levels. By choosing one or
         more of these, you have more control over an investment strategy that suits your stage of life.
       </Typography>
@@ -389,7 +401,7 @@ function FeeChooser() {
                   width: '3rem',
                   height: '3rem',
                   borderRadius: '50%',
-                  bgcolor: 'background.default',
+                  bgcolor: '#EDEFF2',
                   display: 'inline-flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -474,7 +486,7 @@ export function InvestmentStrategySection() {
           Where your money works harder
         </Typography>
         <Typography
-          variant="body"
+          variant="lead"
           sx={{ textAlign: 'center', color: 'text.muted', mb: 7 }}
         >
           We&apos;re backed by $375.7 billion under management and 2.44 million members*
@@ -507,7 +519,7 @@ export function InvestmentStrategySection() {
 
         <Typography
           variant="small"
-          sx={{ color: 'text.muted', display: 'block', textAlign: 'center', mt: 4.5, maxWidth: 900, mx: 'auto' }}
+          sx={{ color: 'text.muted', display: 'block', textAlign: 'center', mt: 4.5, width: '100%' }}
         >
           *calculated number of years of negative annual returns in any 20 years. To find this our 7.5% PA is based on the Sunsuper AAI Balanced (60) Returns shown are after investment fees and costs, transaction costs and tax; however net of admin fees and other fees and costs and investment delta between.
         </Typography>

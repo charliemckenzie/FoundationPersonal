@@ -9,28 +9,42 @@ const AWARDS = [
   {
     src: '/images/homepage/award-money-magazine-2026.png',
     alt: 'Money Magazine Lifecycle product by MoneyMagazine',
-    label: 'Best mysuper lifecycle product by\nMoneyMagazine',
+    label: 'Best mysuper lifecycle product by MoneyMagazine',
+    mobileImageWidth: '6.5rem',
+    imageWidth: '8.75rem',
   },
   {
     src: '/images/homepage/award-finder-2023.png',
     alt: '#1 for customer satisfaction by Canstar',
-    label: '#1 for customer satisfaction by\nFinder',
+    label: '#1 for customer satisfaction by Finder',
+    mobileImageWidth: '6rem',
+    imageWidth: '8rem',
   },
   {
     src: '/images/homepage/award-super-review-2025.png',
     alt: 'Super fund of the year by Super Review',
-    label: 'Super fund of the year by Super\nReview',
+    label: 'Super fund of the year by Super Review',
+    mobileImageWidth: '6.25rem',
+    imageWidth: '8.25rem',
   },
   {
     src: '/images/homepage/award-canstar-2025.png',
     alt: 'Outstanding value by Canstar',
     label: 'Outstanding value by Canstar',
+    mobileImageWidth: '5.75rem',
+    imageWidth: '7.5rem',
   },
 ];
 
 export function AwardsSection() {
   return (
-    <Box sx={{ py: { xs: 6, md: 8 }, bgcolor: 'background.paper' }}>
+    <Box
+      sx={{
+        py: '3.5rem',
+        bgcolor: 'background.paper',
+        borderBottom: '1px solid #DADEE5',
+      }}
+    >
       <Container maxWidth={false} sx={HOMEPAGE_CONTAINER_SX}>
         <Box
           sx={{
@@ -43,12 +57,36 @@ export function AwardsSection() {
           {AWARDS.map((award) => (
             <Box key={award.alt} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
               <Box
-                component="img"
-                src={award.src}
-                alt={award.alt}
-                sx={{ width: '100%', maxWidth: '7rem', height: 'auto', objectFit: 'contain' }}
-              />
-              <Typography variant="caption" sx={{ color: 'text.muted', whiteSpace: 'pre-line' }}>
+                sx={{
+                  width: '100%',
+                  minHeight: { xs: '4.75rem', md: '5.5rem' },
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box
+                  component="img"
+                  src={award.src}
+                  alt={award.alt}
+                  sx={{
+                    width: '100%',
+                    maxWidth: { xs: award.mobileImageWidth, md: award.imageWidth },
+                    height: 'auto',
+                    objectFit: 'contain',
+                  }}
+                />
+              </Box>
+              <Typography
+                component="p"
+                variant="body"
+                sx={{
+                  color: 'text.muted',
+                  fontSize: { xs: '0.875rem', md: '1rem' },
+                  maxWidth: '17.5rem',
+                  mx: 'auto',
+                }}
+              >
                 {award.label}
               </Typography>
             </Box>
