@@ -13,7 +13,7 @@ export function FeesSection() {
     <Box sx={{ bgcolor: '#145EFF' }}>
       <Box
         sx={{
-          py: { xs: 6, md: 8, lg: 9 },
+          py: { xs: 8, md: 11, lg: 13 },
           bgcolor: 'background.paper',
           borderTopLeftRadius: { xs: '1.25rem', md: '3rem', xl: '5rem' },
           borderTopRightRadius: { xs: '1.25rem', md: '3rem', xl: '5rem' },
@@ -24,18 +24,22 @@ export function FeesSection() {
             sx={{
               width: '100%',
               display: 'grid',
-              gridTemplateColumns: { xs: '1fr', md: 'minmax(0, 1fr) 34.5rem' },
-              columnGap: { xs: 0, md: '5rem' },
+              gridTemplateColumns: {
+                xs: '1fr',
+                md: 'minmax(0, 1fr) minmax(0, 1fr)',
+                xl: 'minmax(0, 1fr) minmax(0, 0.94fr)',
+              },
+              columnGap: { xs: 0, md: '2.5rem', lg: '3rem', xl: '9.375rem' },
               rowGap: { xs: 5, md: 0 },
               alignItems: { xs: 'start', md: 'center' },
             }}
           >
-            <Box sx={{ maxWidth: { md: '42rem' }, pt: { xs: 0, md: 0 } }}>
+            <Box sx={{ width: '100%', pt: { xs: 0, md: 0 } }}>
               <Typography variant="display-5" component="h2" sx={{ mb: 3, color: 'text.heading' }}>
                 Fees lower than the industry
               </Typography>
 
-              <Typography variant="lead" sx={{ color: 'text.heading', mb: 5, maxWidth: '29rem' }}>
+              <Typography variant="lead" sx={{ color: 'text.heading', mb: 5 }}>
                 Our fees are below industry average, so you keep more of your savings invested for your future. They&apos;re
                 made up of admin, investment and transactional fees and costs.
               </Typography>
@@ -52,7 +56,7 @@ export function FeesSection() {
                 <Typography
                   variant="caption"
                   sx={{
-                    color: 'text.heading',
+                    color: 'text.muted',
                     display: 'block',
                     mb: 1,
                     fontSize: '0.875rem',
@@ -78,10 +82,13 @@ export function FeesSection() {
                   $100,000
                 </Typography>
 
-                <Typography variant="body" component="p" sx={{ color: 'text.heading', fontWeight: 700 }}>
-                  more super for a typical full time worker.
+                <Typography variant="body" component="p" sx={{ color: 'text.heading' }}>
+                  <Box component="span" sx={{ fontWeight: 700 }}>
+                    more super
+                  </Box>{' '}
+                  at age 67
                 </Typography>
-                <Typography variant="small" component="p" sx={{ color: 'text.heading', mt: 1 }}>
+                <Typography variant="small" component="p" sx={{ color: 'text.heading', mt: { xs: 1, md: '1.5rem' } }}>
                   Figures from the Productivity Commission.{' '}
                   <Box
                     component="a"
@@ -99,10 +106,10 @@ export function FeesSection() {
                 </Typography>
               </Box>
 
-              <Button label="Calculate your fees" variant="outlined" href="/fees/calculator" />
+              <Button label="Calculate your fees" variant="outlined" size="large" href="/fees/calculator" sx={{ width: { xs: '100%', md: 'auto' } }} />
             </Box>
 
-            <Box sx={{ width: '100%', maxWidth: '34.5rem', justifySelf: { md: 'end' } }}>
+            <Box sx={{ width: '100%', justifySelf: { xl: 'end' }, display: { xs: 'none', md: 'block' } }}>
             <Typography
               variant="h5"
               component="h2"
@@ -120,8 +127,7 @@ export function FeesSection() {
                 color: 'text.muted',
                 textAlign: 'center',
                 mb: { xs: 4, md: 3.5 },
-                maxWidth: '28rem',
-                mx: 'auto',
+                width: '100%',
               }}
             >
               These returns are to 31 December 2025.{' '}
@@ -192,7 +198,8 @@ export function FeesSection() {
                   <Box
                     key={bar.label}
                     sx={{
-                      width: { xs: '8.5rem', sm: '10rem', md: '16.25rem' },
+                        width: { xs: '8.5rem', sm: '10rem' },
+                        maxWidth: '10rem',
                       display: 'flex',
                       flexDirection: 'column',
                       alignItems: 'center',
@@ -269,6 +276,8 @@ export function FeesSection() {
                 }}
               />
             </Box>
+
+
             </Box>
           </Box>
         </Container>

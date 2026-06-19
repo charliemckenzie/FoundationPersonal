@@ -666,6 +666,14 @@ export function createBrandTheme(brand: BrandConfig, mode: 'light' | 'dark' = 'l
                 ].includes(ownerState.variant as string) && {
               color: theme.palette.text.heading,
             }),
+            ...(ownerState.variant === 'display-5' && {
+              [theme.breakpoints.down('xl')]: {
+                fontFamily: theme.typography.h1.fontFamily,
+                fontSize: theme.typography.h1.fontSize,
+                fontWeight: theme.typography.h1.fontWeight,
+                lineHeight: theme.typography.h1.lineHeight,
+              },
+            }),
             // lead: Light (300) on desktop, Normal (400) on mobile for legibility
             ...(ownerState.variant === 'lead' && {
               [theme.breakpoints.down('md')]: {
