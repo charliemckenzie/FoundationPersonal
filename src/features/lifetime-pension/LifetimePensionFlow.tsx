@@ -250,13 +250,7 @@ export function LifetimePensionFlow() {
               {STEP_TITLES[activeStep]}
             </Typography>
             {activeStep === 0 && (
-              <>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  A Lifetime Pension account provides guaranteed, fortnightly tax-free income for life.
-                  It combines your contribution with others in a shared investment pool.
-                </Typography>
-                <Divider sx={{ mt: 2 }} />
-              </>
+              <Divider sx={{ mt: 2 }} />
             )}
             {activeStep > 0 && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -277,17 +271,7 @@ export function LifetimePensionFlow() {
           <Box>
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
-              <StepIntro
-                declarationRead={state.introDeclarationRead}
-                declarationPermanent={state.introDeclarationPermanent}
-                showValidation={showValidation}
-                onDeclarationReadChange={(checked) =>
-                  updateState({ ...state, introDeclarationRead: checked })
-                }
-                onDeclarationPermanentChange={(checked) =>
-                  updateState({ ...state, introDeclarationPermanent: checked })
-                }
-              />
+              <StepIntro />
             ) : activeStep === 1 ? (
               <StepEligibility
                 retiredFromWork={state.retiredFromWork}
@@ -314,6 +298,10 @@ export function LifetimePensionFlow() {
                 pensionOption={state.pensionOption}
                 accounts={state.accounts}
                 showValidation={showValidation}
+                declarationPermanent={state.introDeclarationPermanent}
+                onDeclarationPermanentChange={(checked) =>
+                  updateState({ ...state, introDeclarationPermanent: checked })
+                }
               />
             ) : activeStep === 4 ? (
               <StepAllocate

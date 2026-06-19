@@ -4,11 +4,13 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
-import { Accordion } from '../../../components/Accordion';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
+import { Checkbox } from '../../../components/Checkbox';
+import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
+import { TextButton } from '../../../components/TextButton';
 import { MIN_PURCHASE_AMOUNT, MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
 import { estimatePension, estimateRetirementBonus, formatCurrency } from '../utils';
@@ -23,6 +25,8 @@ interface StepFundingProps {
   pensionOption: PensionOption;
   accounts: FundingAccount[];
   showValidation: boolean;
+  declarationPermanent: boolean;
+  onDeclarationPermanentChange: (checked: boolean) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -186,52 +190,6 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 }
 
 // ---------------------------------------------------------------------------
-// Considerations
-// ---------------------------------------------------------------------------
-
-const ALLOCATION_CONSIDERATIONS = [
-  {
-    id: 'age-pension',
-    title: 'It could boost your Age Pension',
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        A Lifetime Pension is one of the few retirement products that receives favourable treatment under
-        government means tests. Only 60% of your purchase price counts under the Age Pension assets test,
-        dropping to just 30% once you reach life expectancy. Only 60% of your payments count under the income
-        test. For many people, this means becoming eligible for the Age Pension for the first time, or
-        receiving a higher payment than they&apos;d otherwise qualify for.
-      </Typography>
-    ),
-  },
-  {
-    id: 'access',
-    title: "It's designed to be a lifelong commitment",
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        You have a 6-month cooling-off period after purchase, so there&apos;s no need to rush this decision.
-        After that, a Lifetime Pension is permanent. You won&apos;t be able to make lump-sum withdrawals, and
-        that&apos;s intentional: the certainty of income for life comes from committing the funds for the long
-        term. Many members pair their Lifetime Pension with a Retirement Income account to keep some money
-        accessible for one-off expenses.
-      </Typography>
-    ),
-  },
-  {
-    id: 'investment-risk',
-    title: 'Your money is managed by experts',
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        Your funds are pooled with other Lifetime Pension members and invested in QSuper&apos;s Balanced
-        Risk-Adjusted option, a diversified, professionally managed portfolio. This shared approach is what
-        makes it possible to guarantee income for life, no matter how long you live. Payments are reviewed
-        each 1 July and adjusted to reflect how the pool performed. Over the long term, they&apos;re designed
-        to grow.
-      </Typography>
-    ),
-  },
-];
-
-// ---------------------------------------------------------------------------
 // Retirement bonus — celebratory good-news callout (intentionally not an Alert)
 // ---------------------------------------------------------------------------
 
@@ -343,8 +301,11 @@ export function StepFunding({
   pensionOption,
   accounts,
   showValidation,
+  declarationPermanent,
+  onDeclarationPermanentChange,
 }: StepFundingProps) {
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
+  const [considerationsOpen, setConsiderationsOpen] = useState(false);
 
   // The bonus is calculated on demand — the real calculation is expensive, so we
   // only run it when the member asks. We cache it against the purchase price it
@@ -413,16 +374,86 @@ export function StepFunding({
         />
       </Stack>
 
-      {/* ── Considerations ── */}
-      <Stack spacing={2}>
-        <div>
-          <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
+      {/* ── Considerations info button + dialog ── */}
+      <Box>
+        <TextButton
+          label="Considerations when allocating funds"
+          startIcon="circle-info"
+          iconDirection="left"
+          onClick={() => setConsiderationsOpen(true)}
+        />
+      </Box>
+
+      <Dialog
+        open={considerationsOpen}
+        onClose={() => setConsiderationsOpen(false)}
+        title="Considerations when allocating funds"
+        size="medium"
+        confirmLabel="Close"
+        onConfirm={() => setConsiderationsOpen(false)}
+      >
+        <Stack spacing={0.5} sx={{ mb: 3 }}>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
             A Lifetime Pension is a long-term commitment, so it&apos;s worth weighing up these points before
             you decide how much to use.
           </Typography>
+        </Stack>
+        <Stack spacing={3}>
+          <div>
+            <Typography variant="h6" sx={{ mb: 0.75 }}>It could boost your Age Pension</Typography>
+            <Typography variant="body" sx={{ color: 'text.primary', lineHeight: 1.75 }}>
+              A Lifetime Pension is one of the few retirement products that receives favourable treatment under
+              government means tests. Only 60% of your purchase price counts under the Age Pension assets test,
+              dropping to just 30% once you reach life expectancy. Only 60% of your payments count under the
+              income test. For many people, this means becoming eligible for the Age Pension for the first time,
+              or receiving a higher payment than they&apos;d otherwise qualify for.
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="h6" sx={{ mb: 0.75 }}>It&apos;s designed to be a lifelong commitment</Typography>
+            <Typography variant="body" sx={{ color: 'text.primary', lineHeight: 1.75 }}>
+              You have a 6-month cooling-off period after purchase, so there&apos;s no need to rush this
+              decision. After that, a Lifetime Pension is permanent. You won&apos;t be able to make lump-sum
+              withdrawals, and that&apos;s intentional: the certainty of income for life comes from committing
+              the funds for the long term. Many members pair their Lifetime Pension with a Retirement Income
+              account to keep some money accessible for one-off expenses.
+            </Typography>
+          </div>
+          <div>
+            <Typography variant="h6" sx={{ mb: 0.75 }}>Your money is managed by experts</Typography>
+            <Typography variant="body" sx={{ color: 'text.primary', lineHeight: 1.75 }}>
+              Your funds are pooled with other Lifetime Pension members and invested in QSuper&apos;s Balanced
+              Risk-Adjusted option, a diversified, professionally managed portfolio. This shared approach is
+              what makes it possible to guarantee income for life, no matter how long you live. Payments are
+              reviewed each 1 July and adjusted to reflect how the pool performed. Over the long term,
+              they&apos;re designed to grow.
+            </Typography>
+          </div>
+        </Stack>
+      </Dialog>
+
+      {/* ── Designed to be a lifelong commitment ── */}
+      <Stack spacing={2}>
+        <div>
+          <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Designed to be a lifelong commitment</Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            You have 6 months from your Lifetime Pension start date to decide if it&apos;s right for you.
+            After this cooling-off period, the purchase is permanent and funds cannot be withdrawn, except
+            in the case of a terminal medical condition if money-back protection is payable.
+          </Typography>
         </div>
-        <Accordion items={ALLOCATION_CONSIDERATIONS} />
+        <Checkbox
+          variant="default"
+          checked={declarationPermanent}
+          onChange={onDeclarationPermanentChange}
+          error={showValidation && !declarationPermanent}
+          errorMessage={
+            showValidation && !declarationPermanent
+              ? 'Please confirm you understand the permanent purchase terms.'
+              : undefined
+          }
+          label="I understand that after the 6-month cooling-off period my purchase is permanent, and I will not be able to withdraw these funds, except in the case of a terminal medical condition if money-back protection is payable."
+        />
       </Stack>
     </Stack>
   );

@@ -151,7 +151,12 @@ export function StepReview({
           <DescriptionList.Item
             label="Purchase price"
             value={
-              <Box sx={{ fontWeight: 700 }}>{formatCurrency(purchasePrice)}</Box>
+              <Box>
+                <Box sx={{ fontWeight: 700 }}>{formatCurrency(purchasePrice)}</Box>
+                <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.25 }}>
+                  Cooling-off period agreed to
+                </Typography>
+              </Box>
             }
             action={<TextButton label="Edit" hideIcon aria-label="Edit purchase price" onClick={() => onEditStep('funding')} />}
           />
