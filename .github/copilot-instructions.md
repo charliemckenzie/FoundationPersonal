@@ -35,6 +35,9 @@ This project runs **React 19**, **MUI v9**, **Next.js 16**, and **Storybook 10**
 - **MUI v9**: Grid v2 is the default `Grid` — the v1 API is gone. Some deprecated props removed. Theme `sx` shorthand strings (`'primary.main'`) are preferred over callback access for static tokens.
 - **Storybook 10**: `@storybook/nextjs-vite` replaces `@storybook/nextjs`. Story format is CSF3 with `satisfies Meta<typeof Component>`. Addon APIs differ from v7/v8.
 
+### Member Online navigation
+Before changing the Member Online side nav (items, children, icons, order, secondary links, or which config shows), **read `src/app/member-online/(portal)/navigation-config/README.md` first.** The nav is driven by per-config JSON files in that folder — edit the JSON, not the components. The README explains the file shape, how to add/exclude items and children, the icon and `href`/placeholder conventions, and how to add a new config.
+
 ### Stepped forms — validation error placement
 When the user presses Next/Submit on a stepped form and the step is invalid, show the validation error in a single `Alert` **directly above `StepperActions`**, not only at the top of the step. On long steps a top-of-page error scrolls out of view, so the user gets no feedback next to the button they clicked. Field-level indicators (invalid inputs, a total turning red) stay in place; clear the error on advance/back. See `docs/guidelines/components.md` → "Stepped form validation" and `src/features/investment-mix/InvestmentMixFlow.tsx`.
 

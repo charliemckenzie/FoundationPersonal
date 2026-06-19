@@ -10,6 +10,10 @@ Copilot auto-applies these via `.github/instructions/*` (`applyTo` globs). Claud
 
 When writing or reviewing Playwright tests (`**/*.spec.ts`), follow `.github/instructions/playwright-typescript.instructions.md` — role-based locators, web-first assertions, `test.step()` grouping, files in `tests/` as `<feature>.spec.ts`.
 
+## Member Online navigation
+
+Before changing the Member Online side nav (items, children, icons, order, secondary links, or which config shows), **read `src/app/member-online/(portal)/navigation-config/README.md` first.** The nav is driven by per-config JSON files in that folder — edit the JSON, not the components. The README explains the file shape, how to add/exclude items and children, the icon and `href`/placeholder conventions, and how to add a new config.
+
 # The team in Claude Code
 
 The Simpsons-themed team is defined in `AGENTS.md` (canonical, runtime-neutral). In Claude Code the agents are instantiable subagents under `.claude/agents/` — invoke one with the `Agent` tool using its `subagent_type` (`smithers`, `moe`, `lenny`, `carl`, `chalmers`, `flanders`, `marge`, `lisa`, `willie`, `frink`, `milhouse`, `troy-mcclure`, `sideshow-bob`, `nextjs-expert`, `accessibility-runtime-tester`, `search-ai-optimization-expert`).

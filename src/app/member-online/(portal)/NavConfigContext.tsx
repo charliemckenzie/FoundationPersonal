@@ -2,7 +2,8 @@
 
 import { createContext, useContext, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { NavConfigKey } from './navConfigs';
+import type { NavConfigKey } from './navigation-config';
+import { DEFAULT_NAV_CONFIG } from './navigation-config';
 
 interface NavConfigContextValue {
   navConfig: NavConfigKey;
@@ -16,7 +17,7 @@ const NavConfigContext = createContext<NavConfigContextValue | null>(null);
  * (which renders the nav) and the dashboard page (which renders the control).
  */
 export function NavConfigProvider({ children }: { children: ReactNode }) {
-  const [navConfig, setNavConfig] = useState<NavConfigKey>('accumulation');
+  const [navConfig, setNavConfig] = useState<NavConfigKey>(DEFAULT_NAV_CONFIG);
   const value = useMemo(() => ({ navConfig, setNavConfig }), [navConfig]);
   return <NavConfigContext.Provider value={value}>{children}</NavConfigContext.Provider>;
 }

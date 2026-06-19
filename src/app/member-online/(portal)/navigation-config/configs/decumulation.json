@@ -1,0 +1,52 @@
+{
+  "label": "Decumulation only",
+  "balance": { "amount": "$340,000.00", "asAt": "As at 24 May 2026" },
+  "primary": [
+    { "id": "home", "label": "Home", "icon": "house", "href": "/member-online" },
+    {
+      "id": "transactions",
+      "label": "Transactions",
+      "icon": "arrow-left-arrow-right",
+      "children": [
+        { "id": "tx-history", "label": "Transaction history", "icon": "arrow-left-arrow-right", "href": "#" },
+        { "id": "tx-summary", "label": "Transaction summary", "icon": "chart-line", "href": "#" },
+        { "id": "tx-concessional", "label": "Concessional contributions", "icon": "piggy-bank", "href": "#" },
+        { "id": "tx-statements", "label": "Statements and letters", "icon": "copy", "href": "#" }
+      ]
+    },
+    {
+      "id": "investments",
+      "label": "Investments",
+      "icon": "chart-line",
+      "children": [
+        { "id": "investment-performance", "label": "Investment performance", "icon": "chart-column", "href": "#" },
+        { "id": "manage-investments", "label": "Manage investments", "icon": "chart-pie-simple", "href": "/member-online/investments/manage-investments" }
+      ]
+    },
+    {
+      "id": "payments",
+      "label": "Your Payments",
+      "icon": "money-check-dollar",
+      "children": [
+        { "id": "pay-details", "label": "Payment details", "icon": "circle-info", "href": "#" },
+        { "id": "pay-new-stream", "label": "Start a new income stream", "icon": "circle-plus", "href": "#" }
+      ]
+    },
+    {
+      "id": "take-money-out",
+      "label": "Take money out",
+      "icon": "money-simple-from-bracket",
+      "children": [
+        { "id": "pay-lump-sum", "label": "Lump sum withdrawal", "icon": "money-simple-from-bracket", "href": "#" }
+      ]
+    },
+    { "id": "future-planning", "label": "Future planning", "icon": "user-question", "href": "#" }
+  ],
+  "secondary": [
+    { "id": "beneficiaries", "label": "Beneficiaries", "href": "#" },
+    { "id": "profile", "label": "Profile", "href": "#" },
+    { "id": "security", "label": "Security and login", "href": "#" },
+    { "id": "messages", "label": "Messages", "href": "#" },
+    { "id": "help", "label": "Help & contact", "href": "#" }
+  ]
+}

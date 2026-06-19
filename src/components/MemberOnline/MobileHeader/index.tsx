@@ -87,54 +87,56 @@ export function MobileHeader({
         '&:focus': { outline: 'none' },
       })}
     >
-      <Box
-        component="button"
-        type="button"
-        aria-label={openMenuLabel}
-        aria-haspopup="menu"
-        aria-expanded={menuOpen}
-        aria-controls={menuOpen ? menuId : undefined}
-        onClick={onMenuOpen}
-        sx={[
-          {
-            display: 'inline-flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 0.5,
-            px: 1.5,
-            ml: -1,
-            py: 0.75,
-            border: 'none',
-            cursor: 'pointer',
-            borderRadius: '9999px',
-            minHeight: '2.75rem',
-            lineHeight: 1,
-            flexShrink: 0,
-            '&:focus-visible': {
-              outline: (t) => `2px solid ${t.palette.primary.main}`,
-              outlineOffset: '2px',
+      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-start', gap: 1.5, minWidth: 0 }}>
+        <Box
+          component="button"
+          type="button"
+          aria-label={openMenuLabel}
+          aria-haspopup="menu"
+          aria-expanded={menuOpen}
+          aria-controls={menuOpen ? menuId : undefined}
+          onClick={onMenuOpen}
+          sx={[
+            {
+              display: 'inline-flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: 0.5,
+              px: 1.5,
+              ml: -1,
+              py: 0.75,
+              border: 'none',
+              cursor: 'pointer',
+              borderRadius: '9999px',
+              minHeight: '2.75rem',
+              lineHeight: 1,
+              flexShrink: 0,
+              '&:focus-visible': {
+                outline: (t) => `2px solid ${t.palette.primary.main}`,
+                outlineOffset: '2px',
+              },
             },
-          },
-          buildGhostStyles('primary'),
-        ]}
-      >
-        <Icon icon="bars" style="regular" size="xl" color="inherit" />
-        <Typography variant="caption" component="span" aria-hidden="true" sx={{ m: 0, color: 'inherit', fontWeight: 500, lineHeight: 1 }}>
-          Menu
-        </Typography>
+            buildGhostStyles('primary'),
+          ]}
+        >
+          <Icon icon="bars" style="regular" size="xl" color="inherit" />
+          <Typography variant="caption" component="span" aria-hidden="true" sx={{ m: 0, color: 'inherit', fontWeight: 500, lineHeight: 1 }}>
+            Menu
+          </Typography>
+        </Box>
+        {onSearchOpen !== undefined && (
+          <IconButton
+            icon="magnifying-glass"
+            label={searchLabel}
+            variant="outlined"
+            size="medium"
+            condensed
+            onClick={onSearchOpen}
+            showTooltip={false}
+          />
+        )}
       </Box>
-      {onSearchOpen !== undefined && (
-        <IconButton
-          icon="magnifying-glass"
-          label={searchLabel}
-          variant="outlined"
-          size="medium"
-          condensed
-          onClick={onSearchOpen}
-          showTooltip={false}
-        />
-      )}
-      <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
+      <Box sx={{ flexShrink: 0, display: 'flex', justifyContent: 'center' }}>
         {phoneLogoNode !== null ? (
           <>
             <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>{logoNode}</Box>
@@ -142,13 +144,15 @@ export function MobileHeader({
           </>
         ) : logoNode}
       </Box>
-      <Button
-        label={logoutLabel}
-        variant="outlined"
-        size="medium"
-        condensed
-        onClick={onLogout}
-      />
+      <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', minWidth: 0 }}>
+        <Button
+          label={logoutLabel}
+          variant="outlined"
+          size="small"
+          condensed
+          onClick={onLogout}
+        />
+      </Box>
     </Box>
   );
 }

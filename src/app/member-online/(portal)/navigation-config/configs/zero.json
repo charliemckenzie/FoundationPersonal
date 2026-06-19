@@ -1,0 +1,36 @@
+{
+  "label": "$0 state",
+  "balance": { "amount": "$0.00", "asAt": "As at 24 May 2026" },
+  "primary": [
+    { "id": "home", "label": "Home", "icon": "house", "href": "/member-online" },
+    {
+      "id": "investments",
+      "label": "Investments",
+      "icon": "chart-line",
+      "children": [
+        { "id": "investment-performance", "label": "Investment performance", "icon": "chart-column", "href": "#" },
+        { "id": "manage-investments", "label": "Manage investments", "icon": "chart-pie-simple", "href": "/member-online/investments/manage-investments" }
+      ]
+    },
+    {
+      "id": "put-money-in",
+      "label": "Put money in",
+      "icon": "plus",
+      "children": [
+        { "id": "voluntary", "label": "Make a voluntary contribution", "icon": "circle-dollar", "description": "BPAY or Direct Debit" },
+        { "id": "find-combine", "label": "Find or combine super", "icon": "magnifying-glass", "description": "Roll-in money from another fund" },
+        { "id": "fund-details", "label": "Fund and account details", "icon": "circle-info", "description": "ABN, USI, Letter of compliance" }
+      ]
+    },
+    { "id": "future-planning", "label": "Future planning", "icon": "user-question", "href": "#" },
+    { "id": "insurance", "label": "Insurance", "icon": "umbrella", "href": "#" }
+  ],
+  "secondary": [
+    { "id": "rewards", "label": "Rewards", "href": "#" },
+    { "id": "beneficiaries", "label": "Beneficiaries", "href": "#" },
+    { "id": "profile", "label": "Profile", "href": "#" },
+    { "id": "security", "label": "Security and login", "href": "#" },
+    { "id": "messages", "label": "Messages", "href": "#" },
+    { "id": "help", "label": "Help & contact", "href": "#" }
+  ]
+}

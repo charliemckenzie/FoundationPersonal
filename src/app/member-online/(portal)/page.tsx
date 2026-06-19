@@ -9,8 +9,8 @@ import type { ContentContainerSize } from '../../../components/MemberOnline';
 import { Select } from '../../../components/Select';
 import { Switch } from '../../../components/Switch';
 import { useNavConfig } from './NavConfigContext';
-import { NAV_CONFIG_OPTIONS } from './navConfigs';
-import type { NavConfigKey } from './navConfigs';
+import { NAV_CONFIG_OPTIONS } from './navigation-config';
+import type { NavConfigKey } from './navigation-config';
 
 const SIZE_OPTIONS = [
   { value: 'xs',  label: 'xs — 512px' },
@@ -39,7 +39,6 @@ export default function MemberOnlinePage() {
         </Box>
       )}
       <ContentContainer size={containerSize}>
-      <Typography variant="h1" sx={{ mb: 1.5 }}>Dashboard</Typography>
       <Box
         sx={{
           bgcolor: 'action.hover',
