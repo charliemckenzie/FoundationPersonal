@@ -12,29 +12,16 @@ export function HeroSection() {
       sx={{
         position: 'relative',
         bgcolor: '#0051FF',
-        backgroundImage: 'linear-gradient(180deg, #1A62FF 0%, #0051FF 100%)',
+        backgroundImage: 'linear-gradient(180deg, #0051FF 0%, #1A62FF 100%)',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         overflow: 'hidden',
         pt: { xs: 4, md: 0 },
         pb: 0,
-        minHeight: { xs: 'auto', sm: '41rem', md: '37.5rem' },
-        height: { md: '37.5rem' },
-        maxHeight: { md: '37.5rem' },
-        '&::after': {
-          content: '""',
-          display: { xs: 'none', md: 'block' },
-          position: 'absolute',
-          inset: 0,
-          left: { md: '50%', lg: '52%' },
-          bgcolor: 'primary.main',
-          clipPath: 'polygon(12% 0, 100% 0, 100% 100%, 0 100%)',
-          opacity: 0.98,
-          zIndex: 0,
-          '@media (min-width: 56.25rem) and (max-width: 87.49rem)': {
-            left: '60%',
-          },
-        },
+        minHeight: { xs: 'auto', sm: 'auto', md: '32rem', lg: '32rem', xl: '37.5rem' },
+        height: { md: '32rem', lg: '32rem', xl: '37.5rem' },
+        maxHeight: { md: '32rem', lg: '32rem', xl: '37.5rem' },
+
       }}
     >
       <Container
@@ -120,7 +107,7 @@ export function HeroSection() {
             maxWidth: { xs: '40rem', md: '41rem' },
             minWidth: { md: '34rem' },
             pr: { md: 3 },
-            py: { md: 4 },
+            py: { xl: 4 },
             mx: { xs: 'auto', md: 0 },
             textAlign: { xs: 'center', md: 'left' },
           }}
@@ -128,7 +115,7 @@ export function HeroSection() {
           <Typography
             variant="display-5"
             component="h1"
-            sx={{ color: 'text.inverse', mb: 2, lineHeight: 1.1 }}
+            sx={{ color: 'text.inverse', mb: 2 }}
           >
             With over 10% returns across 10 years, your future is{' '}
             <Box component="em" sx={{ fontStyle: 'italic' }}>
@@ -139,7 +126,7 @@ export function HeroSection() {
 
           <Typography
             variant="lead"
-            sx={{ color: 'text.inverse', mb: 3, opacity: 0.92, maxWidth: '30rem', mx: { xs: 'auto', md: 0 } }}
+            sx={{ color: 'text.inverse', mb: 3, opacity: 0.92, mx: { xs: 'auto', md: 0 } }}
           >
             Awaken your super with one of the top performers.
           </Typography>

@@ -45,6 +45,8 @@ export function QuickLinksSection() {
       sx={{
         py: { xs: 5, md: 6 },
         bgcolor: '#145EFF',
+        borderTop: '1px solid rgba(255,255,255,0.2)',
+        boxShadow: '0 -12px 32px rgba(0,0,0,0.12)',
         position: 'relative',
         zIndex: 2,
       }}
