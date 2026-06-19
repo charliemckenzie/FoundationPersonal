@@ -10,9 +10,10 @@ import { NavDrawer } from './NavDrawer'
 import { NavItemButton } from './NavItemButton'
 import { UtilityBar } from './UtilityBar'
 import { CondensedBar } from './CondensedBar'
+import { HOMEPAGE_HEADER_CONTAINER_SX } from './headerUtils'
 import type { HeaderProps, NavItem } from './types'
 
-export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCta, utilityLinks, onSearch, searchPlaceholder, condensed }: HeaderProps) {
+export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCta, utilityLinks, onSearch, searchPlaceholder, condensed, homepageBlend = false }: HeaderProps) {
   const [activePanel, setActivePanel] = useState<string | null>(null)
   const [headerBottom, setHeaderBottom] = useState(0)
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -92,6 +93,8 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
     secondaryNavItems?.find((item) => item.label === activePanel) ?? null
 
   const isCondensed = condensed ?? (scrolled && !isMobile)
+  // Homepage blend applies only to the expanded hero state.
+  const blended = homepageBlend && !isCondensed
 
   return (
     <>
@@ -104,7 +107,12 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
         sx={{
           top: 0,
           borderBottom: 1,
-          borderColor: 'border.subtle',
+          borderColor: blended ? 'transparent' : 'border.subtle',
+          bgcolor: blended ? 'transparent !important' : 'background.default',
+          backgroundColor: blended ? 'transparent !important' : undefined,
+          backgroundImage: blended ? 'none' : undefined,
+          backdropFilter: blended ? 'none' : undefined,
+          color: blended ? 'text.inverse' : 'text.primary',
           zIndex: (t) => t.zIndex.stickyHeader,
           boxShadow: isCondensed ? 2 : 0,
           transition: 'box-shadow 0.2s ease',
@@ -120,6 +128,8 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                   utilityLinks={utilityLinks}
                   primaryCta={primaryCta}
                   secondaryCta={secondaryCta}
+                  inverted={blended}
+                  wide={homepageBlend}
                   onSearch={onSearch}
                   searchPlaceholder={searchPlaceholder}
                   activePanel={activePanel}
@@ -136,6 +146,8 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                   utilityLinks={utilityLinks}
                   primaryCta={primaryCta}
                   secondaryCta={secondaryCta}
+                  inverted={blended}
+                  wide={blended}
                   onSearch={onSearch}
                   onMenuOpen={() => setDrawerOpen(true)}
                   isMobile={false}
@@ -143,7 +155,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                   searchPlaceholder={searchPlaceholder}
                 />
               <Box>
-                <Container maxWidth="lg">
+                <Container maxWidth={blended ? false : 'lg'} sx={blended ? HOMEPAGE_HEADER_CONTAINER_SX : undefined}>
                   <Box
                     component="nav"
                     id="main-nav"
@@ -155,6 +167,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                         key={item.label}
                         item={item}
                         active={activePanel === item.label}
+                        inverted={blended}
                         onClick={handleNavClick}
                         onHover={handleNavHover}
                         onHoverEnd={scheduleClose}
@@ -168,6 +181,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                             key={item.label}
                             item={item}
                             active={activePanel === item.label}
+                            inverted={blended}
                             secondary
                             onClick={handleNavClick}
                             onHover={handleNavHover}
@@ -190,6 +204,8 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
             utilityLinks={utilityLinks}
             primaryCta={primaryCta}
             secondaryCta={secondaryCta}
+            inverted={blended}
+            wide={blended}
             onSearch={onSearch}
             onMenuOpen={() => setDrawerOpen(true)}
             isMobile={true}

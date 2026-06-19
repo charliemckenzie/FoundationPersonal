@@ -6,6 +6,7 @@ import type { NavItem } from './types'
 interface NavItemButtonProps {
   item: NavItem
   active: boolean
+  inverted?: boolean
   secondary?: boolean
   fontSize?: string
   sx?: SxProps<Theme>
@@ -14,7 +15,7 @@ interface NavItemButtonProps {
   onHoverEnd?: () => void
 }
 
-export function NavItemButton({ item, active, secondary = false, fontSize, sx, onClick, onHover, onHoverEnd }: NavItemButtonProps) {
+export function NavItemButton({ item, active, inverted = false, secondary = false, fontSize, sx, onClick, onHover, onHoverEnd }: NavItemButtonProps) {
   const hasPanel = item.type !== 'link'
 
   return (
@@ -37,14 +38,14 @@ export function NavItemButton({ item, active, secondary = false, fontSize, sx, o
         gap: 0.5,
         borderRadius: 0,
         fontFamily: 'inherit',
-        color: active ? 'primary.main' : 'inherit',
+        color: active ? (inverted ? 'common.white' : 'primary.main') : 'inherit',
         '&:hover': {
-          color: 'primary.main',
-          '& .nav-indicator': { borderColor: 'primary.main' },
+          color: inverted ? 'common.white' : 'primary.main',
+          '& .nav-indicator': { borderColor: inverted ? 'common.white' : 'primary.main' },
         },
         '&:focus-visible': {
           outline: '2px solid',
-          outlineColor: 'border.focus',
+          outlineColor: inverted ? 'common.white' : 'border.focus',
           outlineOffset: '2px',
         },
         '&:focus': {
@@ -54,7 +55,7 @@ export function NavItemButton({ item, active, secondary = false, fontSize, sx, o
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
     >
-      <Typography variant="body" component="span" className="nav-indicator" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: 1.5, fontWeight: secondary ? 400 : 600, borderBottom: '2px solid', borderColor: active ? 'primary.main' : 'transparent', pb: '15px' }}>
+      <Typography variant="body" component="span" className="nav-indicator" sx={{ fontSize: fontSize ?? '1.125rem', lineHeight: 1.5, fontWeight: secondary ? 400 : 600, borderBottom: '2px solid', borderColor: active ? (inverted ? 'common.white' : 'primary.main') : 'transparent', pb: '15px' }}>
         {item.label}
       </Typography>
     </ButtonBase>

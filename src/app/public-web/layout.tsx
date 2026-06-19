@@ -2,6 +2,7 @@
 
 import type React from 'react';
 import Box from '@mui/material/Box';
+import { usePathname } from 'next/navigation';
 import { Header } from '../../components/Header';
 import { Footer } from '../../components/Footer';
 import { PageTransition } from '../../components/PageTransition';
@@ -15,6 +16,9 @@ import {
 } from './navData';
 
 export default function PublicWebLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isHomePage = pathname === '/public-web';
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Header
@@ -23,6 +27,7 @@ export default function PublicWebLayout({ children }: { children: React.ReactNod
         primaryCta={PRIMARY_CTA}
         secondaryCta={SECONDARY_CTA}
         utilityLinks={UTILITY_LINKS}
+        homepageBlend={isHomePage}
         onSearch={(query) => console.log('search:', query)}
       />
       <Box component="main" sx={{ flex: 1 }}>

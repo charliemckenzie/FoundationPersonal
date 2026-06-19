@@ -87,4 +87,6 @@ export interface HeaderProps {
   resourceLinks?: ResourceLink[]
   /** QSuper: href of the currently active audience link — renders with an underline indicator. */
   activeAudienceHref?: string
+  /** Public-web homepage-only visual treatment that blends header into hero background. */
+  homepageBlend?: boolean
 }
