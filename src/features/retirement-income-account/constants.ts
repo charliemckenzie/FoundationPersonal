@@ -1,6 +1,11 @@
 import type { FormProgressStep } from '../../components/FormProgress';
 import type { FundingAccount, IDVState, RetirementIncomeAccountState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
 
+import { MOCK_INVESTMENT_OPTIONS } from '../investment-mix/mockData';
+
+// Lifecycle Investment Strategy is accumulation-only — not available to income accounts.
+export const RIA_INVESTMENT_OPTIONS = MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== 'opt-lifecycle');
+
 export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'eligibility', label: 'Eligibility check' },
   { id: 'setup-mode', label: 'Account setup' },

@@ -84,7 +84,7 @@ export function Step3Allocations({
     <Stack spacing={3}>
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>
-          Allocate your new investment mix
+          Allocate your investment mix
         </Typography>
         <Typography variant="body">
           Set the percentage for each option below. Your total must equal 100%.
@@ -163,7 +163,7 @@ export function Step3Allocations({
                         variant="small"
                         sx={{ color: 'text.muted', whiteSpace: 'nowrap', cursor: 'default' }}
                       >
-                        New:
+                        Allocate:
                       </Typography>
                       <PercentageField
                         id={`alloc-${option.id}`}

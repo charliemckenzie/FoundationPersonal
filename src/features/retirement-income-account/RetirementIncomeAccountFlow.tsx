@@ -21,12 +21,12 @@ import { StepIDV } from './steps/StepIDV';
 import { StepIntro } from './steps/StepIntro';
 import { StepPaymentSchedule } from './steps/StepPaymentSchedule';
 import { StepPayments } from './steps/StepPayments';
-import { StepInvestmentMix } from './steps/StepInvestmentMix';
-import { StepInvestmentDrawdown } from './steps/StepInvestmentDrawdown';
+import { StepInvestmentStrategy } from './steps/StepInvestmentStrategy';
+import { InvestmentMixFlow } from '../../features/investment-mix/InvestmentMixFlow';
+import { InvestmentMixProvider } from '../../features/investment-mix/InvestmentMixContext';
 import { StepBeneficiary } from './steps/StepBeneficiary';
 import { StepReview } from './steps/StepReview';
 import { StepSetupMode } from './steps/StepSetupMode';
-import { StepInvestmentStrategy } from './steps/StepInvestmentStrategy';
 import { StepSuccess } from './steps/StepSuccess';
 import type { RetirementIncomeAccountDraft, RetirementIncomeAccountState, RetirementIncomeAccountStepId, VerifyDetailsState } from './types';
 import {
@@ -57,7 +57,6 @@ const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'payments',
   'investment-strategy',
   'investment-mix',
-  'investment-drawdown',
   'beneficiary',
   'review',
 ];
@@ -107,7 +106,7 @@ export function RetirementIncomeAccountFlow() {
   ];
 
   // Steps skipped when custom path user picks "use recommended" investment strategy
-  const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix', 'investment-drawdown'];
+  const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix'];
 
   // Filter visible steps based on setup mode and investment strategy
   const visibleStepKeys = useMemo(() => {
@@ -143,9 +142,8 @@ export function RetirementIncomeAccountFlow() {
       case 'investment-strategy':
         return investmentStrategyStepValid(state);
       case 'investment-mix':
-        return investmentMixStepValid(state);
-      case 'investment-drawdown':
-        return drawdownStepValid(state);
+        // Handled internally by InvestmentMixFlow — completion calls advance() directly.
+        return true;
       case 'beneficiary':
         return beneficiaryStepValid(state);
       case 'review':
@@ -422,17 +420,16 @@ export function RetirementIncomeAccountFlow() {
                 showValidation={showValidation}
               />
             ) : currentStepId === 'investment-mix' ? (
-              <StepInvestmentMix
-                investmentMix={{ mode: (state.investmentMix?.mode ?? '') as import('./steps/StepInvestmentMix').InvestmentMode | '', allocations: state.investmentMix?.allocations ?? {} }}
-                onInvestmentMixChange={(next) => updateState({ ...state, investmentMix: next })}
-                showValidation={showValidation}
-              />
-            ) : currentStepId === 'investment-drawdown' ? (
-              <StepInvestmentDrawdown
-                drawdown={state.drawdown}
-                onDrawdownChange={(next) => updateState({ ...state, drawdown: next })}
-                showValidation={showValidation}
-              />
+              <InvestmentMixProvider>
+                <InvestmentMixFlow
+                  overviewPath="/member-online/retirement-income-account"
+                  accountFilter="income"
+                  embedded
+                  skipIntro
+                  onComplete={() => advance(activeStep + 1)}
+                  onBack={handleBack}
+                />
+              </InvestmentMixProvider>
             ) : currentStepId === 'beneficiary' ? (
               <StepBeneficiary
                 beneficiaryState={state.beneficiaryState ?? INITIAL_STATE.beneficiaryState}
@@ -455,6 +452,7 @@ export function RetirementIncomeAccountFlow() {
           </StepTransition>
           </Box>
 
+          {currentStepId !== 'investment-mix' && (
           <StepperActions
             step={activeStep + 1}
             isSubmitStep={activeStep === visibleStepKeys.length - 1}
@@ -468,6 +466,7 @@ export function RetirementIncomeAccountFlow() {
                 : undefined
             }
           />
+          )}
         </Stack>
       </ContentContainer>
 

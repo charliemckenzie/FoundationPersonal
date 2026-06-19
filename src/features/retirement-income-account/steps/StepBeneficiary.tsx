@@ -15,20 +15,19 @@ import type { BeneficiaryState } from '../types';
 
 const RELATIONSHIP_OPTIONS = [
   { value: 'spouse', label: 'Spouse' },
-  { value: 'child', label: 'Child' },
+  { value: 'de-facto', label: 'De facto' },
 ];
 
 const RELATIONSHIP_INFO = [
   {
     value: 'spouse',
     label: 'Spouse',
-    description: 'Your legally married spouse or de facto partner at the time of your death.',
+    description: "A person you're legally married to.",
   },
   {
-    value: 'child',
-    label: 'Child',
-    description:
-      'This includes your child, your adopted child, your stepchild, a child of your spouse, or your child within the meaning of the Family Law Act 1975.',
+    value: 'de-facto',
+    label: 'De facto',
+    description: 'A person who, you live with on a genuine domestic basis in a relationship as a couple.',
   },
 ];
 

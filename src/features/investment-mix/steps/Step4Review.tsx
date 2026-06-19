@@ -23,6 +23,8 @@ interface Step4ReviewProps {
   rebalance?: RebalanceSetting | null;
   declarationChecked: boolean;
   onDeclarationChange: (checked: boolean) => void;
+  /** When true, the declaration section is hidden (e.g. when embedded in a parent form that has its own declaration). */
+  hideDeclaration?: boolean;
   onEditAccount?: () => void;
   onEditApplyTo?: () => void;
   onEditAllocations: () => void;
@@ -40,6 +42,7 @@ export function Step4Review({
   rebalance,
   declarationChecked,
   onDeclarationChange,
+  hideDeclaration = false,
   onEditAccount,
   onEditApplyTo,
   onEditAllocations,
@@ -251,7 +254,7 @@ export function Step4Review({
         </Typography>
       </Box>
 
-      <div>
+      {!hideDeclaration && <div>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Declaration
         </Typography>
@@ -281,7 +284,7 @@ export function Step4Review({
           checked={declarationChecked}
           onChange={onDeclarationChange}
         />
-      </div>
+      </div>}
     </Stack>
   );
 }
