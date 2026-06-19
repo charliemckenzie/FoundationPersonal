@@ -396,6 +396,7 @@ export function RetirementIncomeAccountFlow() {
             ) : currentStepId === 'payments' ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
+                paymentSchedule={state.paymentSchedule}
                 bankDetails={state.bankDetails}
                 onBankDetailsChange={(nextBankDetails) =>
                   updateState({ ...state, bankDetails: nextBankDetails })
