@@ -288,6 +288,7 @@ export function StepPaymentSchedule({
             <Select
               label="First payment date"
               fullWidth
+              native
               placeholder="Please select"
               options={dateOptions}
               value={paymentSchedule.firstPaymentMonth}

@@ -23,22 +23,7 @@ export const DRAWDOWN_OPTIONS = [
   { id: 'opt-conservative-balanced', name: 'Conservative Balanced' },
 ];
 
-const DEFAULT_PROPORTIONS: Record<string, number> = {
-  'opt-high-growth': 12.5,
-  'opt-balanced': 27.5,
-  'opt-conservative-balanced': 60.0,
-};
-
-// Fake InvestmentOption shape needed by validateStep3
-const DRAWDOWN_AS_INVESTMENT_OPTIONS = DRAWDOWN_OPTIONS.map((o) => ({
-  id: o.id,
-  name: o.name,
-  category: 'Drawdown',
-  riskLevel: '',
-  returnProfile: '',
-  currentAllocation: 0,
-  annualFee: 0,
-}));
+export type DrawdownOption = { id: string; name: string };
 
 const CUSTOM_METHOD_OPTIONS = [
   {
@@ -53,33 +38,41 @@ const CUSTOM_METHOD_OPTIONS = [
 
 export interface StepInvestmentDrawdownProps {
   drawdown: DrawdownState;
+  allocatedOptions: DrawdownOption[];
   onDrawdownChange: (next: DrawdownState) => void;
   showValidation: boolean;
 }
 
-export function drawdownStepValid(drawdown: DrawdownState): boolean {
+export function drawdownStepValid(drawdown: DrawdownState, allocatedOptions: DrawdownOption[]): boolean {
   if (!drawdown.customMethod) return false;
   if (drawdown.customMethod === 'order') {
-    // every option must have a non-zero position assigned
-    return DRAWDOWN_OPTIONS.every((o) => (drawdown.orderAllocations[o.id] ?? 0) > 0);
+    return allocatedOptions.every((o) => (drawdown.orderAllocations[o.id] ?? 0) > 0);
   }
   // percentage — must sum to 100
-  const { valid } = validateStep3(drawdown.percentageAllocations, DRAWDOWN_AS_INVESTMENT_OPTIONS);
+  const asInvestmentOptions = allocatedOptions.map((o) => ({
+    id: o.id, name: o.name, category: 'Drawdown', riskLevel: '', returnProfile: '', currentAllocation: 0, annualFee: 0,
+  }));
+  const { valid } = validateStep3(drawdown.percentageAllocations, asInvestmentOptions);
   return valid;
 }
 
 export function StepInvestmentDrawdown({
   drawdown,
+  allocatedOptions,
   onDrawdownChange,
   showValidation,
 }: StepInvestmentDrawdownProps) {
+  const options = allocatedOptions.length > 0 ? allocatedOptions : DRAWDOWN_OPTIONS;
+  const asInvestmentOptions = options.map((o) => ({
+    id: o.id, name: o.name, category: 'Drawdown', riskLevel: '', returnProfile: '', currentAllocation: 0, annualFee: 0,
+  }));
   const { customMethod, orderAllocations, percentageAllocations, autoRebalance } = drawdown;
   const [rebalanceInfoOpen, setRebalanceInfoOpen] = useState(false);
 
   const methodError = showValidation && !customMethod;
   const orderError = showValidation && customMethod === 'order' &&
-    !DRAWDOWN_OPTIONS.every((o) => (orderAllocations[o.id] ?? 0) > 0);
-  const { total: pctTotal } = validateStep3(percentageAllocations, DRAWDOWN_AS_INVESTMENT_OPTIONS);
+    !options.every((o) => (orderAllocations[o.id] ?? 0) > 0);
+  const { total: pctTotal } = validateStep3(percentageAllocations, asInvestmentOptions);
   const percentageError = showValidation && customMethod === 'percentage' &&
     Math.abs(pctTotal - 100) > 0.01;
 
@@ -101,7 +94,7 @@ export function StepInvestmentDrawdown({
     });
   }
 
-  const positionOptions = DRAWDOWN_OPTIONS.map((_, i) => ({
+  const positionOptions = options.map((_, i) => ({
     value: String(i + 1),
     label: String(i + 1),
   }));
@@ -199,7 +192,7 @@ export function StepInvestmentDrawdown({
                     )}
 
                     <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
-                      {DRAWDOWN_OPTIONS.map((option) => (
+                      {options.map((option) => (
                         <Box
                           component="li"
                           key={option.id}

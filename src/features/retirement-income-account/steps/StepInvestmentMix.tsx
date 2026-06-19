@@ -11,8 +11,9 @@ import type { InvestmentOption } from '../../investment-mix/types';
 import { validateStep3 } from '../../investment-mix/utils';
 import { detectAllocationWarning } from '../../investment-mix/allocationWarnings';
 import { MOCK_INVESTMENT_OPTIONS } from '../../investment-mix/mockData';
+import { RIA_INVESTMENT_OPTIONS } from '../constants';
 
-export { MOCK_INVESTMENT_OPTIONS };
+export { MOCK_INVESTMENT_OPTIONS, RIA_INVESTMENT_OPTIONS };
 
 export type InvestmentMode = 'default' | 'custom';
 
@@ -27,7 +28,7 @@ export const INITIAL_INVESTMENT_MIX: InvestmentMixState = {
 };
 
 export function investmentMixStepValid(mix: InvestmentMixState): boolean {
-  const { valid } = validateStep3(mix.allocations ?? {}, MOCK_INVESTMENT_OPTIONS);
+  const { valid } = validateStep3(mix.allocations ?? {}, RIA_INVESTMENT_OPTIONS);
   return valid;
 }
 
@@ -42,11 +43,11 @@ export function StepInvestmentMix({
   onInvestmentMixChange,
   showValidation,
 }: StepInvestmentMixProps) {
-  const options: InvestmentOption[] = MOCK_INVESTMENT_OPTIONS;
+  const options: InvestmentOption[] = RIA_INVESTMENT_OPTIONS;
   const { allocations } = investmentMix;
   const safeAllocations = allocations ?? {};
-  const { total } = validateStep3(safeAllocations, options);
-  const warning = detectAllocationWarning(safeAllocations, options);
+  const { total } = validateStep3(safeAllocations, RIA_INVESTMENT_OPTIONS);
+  const warning = detectAllocationWarning(safeAllocations, RIA_INVESTMENT_OPTIONS);
 
   const barRef = useRef<HTMLDivElement>(null);
   const [isFloating, setIsFloating] = useState(false);

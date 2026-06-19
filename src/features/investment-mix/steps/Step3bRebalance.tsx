@@ -19,6 +19,8 @@ interface Step3bRebalanceProps {
   allocations: Record<string, number>;
   setting: RebalanceSetting | null;
   onChange: (setting: RebalanceSetting) => void;
+  /** Hide the "you had rebalancing before" warning — not relevant when setting up a new account. */
+  hideExistingWarning?: boolean;
 }
 
 const KEEP_ON_TRACK_OPTIONS = [
@@ -39,6 +41,7 @@ export function Step3bRebalance({
   allocations,
   setting,
   onChange,
+  hideExistingWarning = false,
 }: Step3bRebalanceProps) {
   const [explainerOpen, setExplainerOpen] = useState(false);
   const choice = setting == null ? '' : setting.enabled ? 'yes' : 'no';
@@ -115,7 +118,7 @@ export function Step3bRebalance({
         </>
       )}
 
-      {choice === 'no' && (
+      {choice === 'no' && !hideExistingWarning && (
         <Alert
           severity="info"
           message="If you set up automatic rebalancing before, submitting this change will turn it off."
