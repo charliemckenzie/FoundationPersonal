@@ -21,9 +21,10 @@ export interface StepCounterProps {
   steps: FormProgressStep[];
   showMenu: boolean;
   onStepClick?: (stepIndex: number) => void;
+  disabledSteps?: number[];
 }
 
-export function StepCounter({ activeStep, maxStep, steps, showMenu, onStepClick }: StepCounterProps) {
+export function StepCounter({ activeStep, maxStep, steps, showMenu, onStepClick, disabledSteps = [] }: StepCounterProps) {
   const label = `${activeStep + 1} of ${steps.length}`;
 
   if (showMenu && onStepClick) {
@@ -43,7 +44,7 @@ export function StepCounter({ activeStep, maxStep, steps, showMenu, onStepClick 
           const state = resolveState(i, activeStep, maxStep);
           return {
             label: step.label ?? `Step ${i + 1}`,
-            disabled: i === activeStep,
+            disabled: i === activeStep || disabledSteps.includes(i),
             onClick: () => onStepClick(i),
             icon: stepMenuIcon(state),
           };
