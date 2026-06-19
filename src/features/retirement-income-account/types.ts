@@ -17,6 +17,8 @@ export interface SpouseDetails {
 export interface FundingAccount {
   id: string;
   label: string;
+  /** Short display label for the account type, e.g. "Accumulation" or "Defined Benefit" */
+  accountType?: string;
   balance: number;
   selected: boolean;
   transferAmount: number;

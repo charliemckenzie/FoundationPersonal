@@ -19,28 +19,16 @@ const BASE_ACCOUNTS: FundingAccount[] = [
   {
     id: 'super-savings',
     label: 'Super Savings - 123456789',
+    accountType: 'Accumulation',
     balance: 295253.82,
-    selected: false,
-    transferAmount: 0,
-  },
-  {
-    id: 'corporate',
-    label: 'Corporate - 123456789',
-    balance: 6253.82,
     selected: false,
     transferAmount: 0,
   },
   {
     id: 'defined-benefit',
     label: 'Defined Benefit - 123456789',
+    accountType: 'Defined Benefit',
     balance: 8593.82,
-    selected: false,
-    transferAmount: 0,
-  },
-  {
-    id: 'retirement-income',
-    label: 'Retirement Income - 123456789',
-    balance: 2593.82,
     selected: false,
     transferAmount: 0,
   },
@@ -146,7 +134,19 @@ export const RETIREMENT_INCOME_ACCOUNT_RATES: Record<number, { single: number; s
 export const PENSION_ESTIMATE_AGE = 67;
 export const FORTNIGHTS_PER_YEAR = 26;
 
-export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft';
+// ATO minimum annual drawdown rates for account-based pensions (effective 2023–24 onwards).
+// Source: https://www.ato.gov.au/individuals-and-families/super-for-individuals-and-families/super/withdrawing-and-using-your-super/income-from-a-super-fund/minimum-annual-payments-for-super-income-streams
+export const MIN_DRAWDOWN_RATES: { minAge: number; maxAge: number; rate: number }[] = [
+  { minAge: 0,  maxAge: 64, rate: 4 },
+  { minAge: 65, maxAge: 74, rate: 5 },
+  { minAge: 75, maxAge: 79, rate: 6 },
+  { minAge: 80, maxAge: 84, rate: 7 },
+  { minAge: 85, maxAge: 89, rate: 9 },
+  { minAge: 90, maxAge: 94, rate: 11 },
+  { minAge: 95, maxAge: Infinity, rate: 14 },
+];
+
+export const DRAFT_STORAGE_KEY = 'qsuper_retirement_income_account_draft_v2';
 export const DRAFT_EXPIRY_DAYS = 30;
 export const TARGET_PERCENT = [9, 18, 27, 36, 45, 55, 64, 73, 82, 91, 100] as const;
 

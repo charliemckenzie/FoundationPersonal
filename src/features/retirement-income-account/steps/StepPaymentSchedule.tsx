@@ -51,14 +51,51 @@ const FREQUENCY_HELPER: Record<string, string> = {
   annually: 'Payments will begin on the 11th of your chosen month and annually thereafter.',
 };
 
-function buildMonthOptions() {
-  const options = [];
+// Returns the next Wednesday on or after `from`
+function nextWednesday(from: Date): Date {
+  const d = new Date(from);
+  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
+  return d;
+}
+
+function toDateString(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+function buildDateOptions(frequency: string | null): { value: string; label: string }[] {
   const now = new Date();
-  for (let i = 1; i <= 12; i++) {
-    const d = new Date(now.getFullYear(), now.getMonth() + i, 1);
-    const value = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-    const label = d.toLocaleDateString('en-AU', { month: 'long', year: 'numeric' });
-    options.push({ value, label });
+  const minDate = new Date(now);
+  minDate.setDate(minDate.getDate() + 14);
+
+  if (frequency === 'fortnightly') {
+    const options = [];
+    let d = nextWednesday(minDate);
+    for (let i = 0; i < 13; i++) {
+      options.push({
+        value: toDateString(d),
+        label: d.toLocaleDateString('en-AU', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' }),
+      });
+      d = new Date(d);
+      d.setDate(d.getDate() + 14);
+    }
+    return options;
+  }
+
+  const monthCount = frequency === 'quarterly' ? 4 : frequency === 'half-yearly' ? 3 : frequency === 'annually' ? 3 : 12;
+  const stepMonths = frequency === 'quarterly' ? 3 : frequency === 'half-yearly' ? 6 : frequency === 'annually' ? 12 : 1;
+  const dayOfMonth = 11;
+  const options = [];
+  let year = minDate.getFullYear();
+  let month = minDate.getMonth() + (minDate.getDate() > dayOfMonth ? 1 : 0);
+
+  for (let i = 0; i < monthCount; i++) {
+    const d = new Date(year, month, dayOfMonth);
+    options.push({
+      value: toDateString(d),
+      label: d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' }),
+    });
+    month += stepMonths;
+    if (month >= 12) { year += Math.floor(month / 12); month = month % 12; }
   }
   return options;
 }
@@ -76,7 +113,7 @@ export function StepPaymentSchedule({
   onPaymentScheduleChange,
   showValidation,
 }: StepPaymentScheduleProps) {
-  const monthOptions = useMemo(() => buildMonthOptions(), []);
+  const dateOptions = useMemo(() => buildDateOptions(paymentSchedule.frequency ?? null), [paymentSchedule.frequency]);
 
   const isMobile = useMediaQuery((t: Theme) => t.breakpoints.down('sm'));
 
@@ -248,7 +285,9 @@ export function StepPaymentSchedule({
                 placeholder="Please select"
                 options={FREQUENCY_OPTIONS}
                 value={paymentSchedule.frequency}
-                onChange={(v) => update('frequency', v as PaymentSchedule['frequency'])}
+                onChange={(v) => {
+                  onPaymentScheduleChange({ ...paymentSchedule, frequency: v as PaymentSchedule['frequency'], firstPaymentMonth: '' });
+                }}
                 error={freqError}
                 errorMessage={freqError ? 'Select a payment frequency to continue.' : undefined}
               />
@@ -263,11 +302,12 @@ export function StepPaymentSchedule({
               label="First payment date"
               fullWidth
               placeholder="Please select"
-              options={monthOptions}
+              options={dateOptions}
               value={paymentSchedule.firstPaymentMonth}
               onChange={(v) => update('firstPaymentMonth', v)}
               error={monthError}
               errorMessage={monthError ? 'Select a first payment date to continue.' : undefined}
+              disabled={!paymentSchedule.frequency}
             />
 
             <Checkbox

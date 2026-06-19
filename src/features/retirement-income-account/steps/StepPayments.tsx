@@ -35,14 +35,14 @@ export function StepPayments({
       <Stack spacing={2}>
         <div>
           <Typography variant="h5" sx={{ mb: 0.5 }}>
-            Estimated payments
+            Bank details
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
             Your actual payment may vary. These estimates are based on your selected purchase amount.
           </Typography>
         </div>
 
-      <DescriptionList title="Payment amounts" titleVariant="h6" valueAlign="right" density="condensed">
+      <DescriptionList title="Payment summary" titleVariant="h6" valueAlign="right" density="condensed">
         <DescriptionList.Item label="Purchase price" value={formatCurrency(purchasePrice)} />
         <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
         <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />

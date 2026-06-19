@@ -80,7 +80,14 @@ export function RetirementIncomeAccountFlow() {
   const isReadyToAutoSaveRef = useRef(false);
   const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
+  const purchaseTotal = useMemo(() => {
+    // In simple (autopilot) mode the funding step is skipped, so transferAmount
+    // is never set. Fall back to the full account balances, matching the review screen.
+    if (state.setupMode === 'simple') {
+      return state.accounts.reduce((sum, account) => sum + account.balance, 0);
+    }
+    return totalSelectedAmount(state);
+  }, [state]);
   const eligible = useMemo(() => isEligible(state), [state]);
 
   const hasFullBalanceTransfer = useMemo(() => {
@@ -94,7 +101,6 @@ export function RetirementIncomeAccountFlow() {
     'funding',
     'allocate',
     'payment-schedule',
-    'payments',
     'investment-strategy',
     'investment-mix',
     'investment-drawdown',
@@ -315,7 +321,12 @@ export function RetirementIncomeAccountFlow() {
                   activeStep={activeStep - 1}
                   showStepIndicator
                   stepMenu
-                  onStepClick={(i) => advance(i + 1)}
+                  onStepClick={(i) => {
+                    const targetStepId = visibleStepKeys[i + 1];
+                    if (targetStepId === 'review') return;
+                    advance(i + 1);
+                  }}
+                  disabledSteps={[visibleStepKeys.indexOf('review') - 1].filter((i) => i >= 0)}
                   sx={{ flex: 1, minWidth: 0 }}
                 />
               </Box>
@@ -399,10 +410,12 @@ export function RetirementIncomeAccountFlow() {
                   updateState({
                     ...state,
                     investmentStrategy: value,
-                    ...(isDefault && {
-                      investmentMix: { mode: 'default', allocations: { 'opt-balanced-risk-adjusted': 100 } },
-                      drawdown: { ...state.drawdown, mode: 'default' },
-                    }),
+                    investmentMix: isDefault
+                      ? { mode: 'default', allocations: { 'opt-balanced-risk-adjusted': 100 } }
+                      : { mode: 'custom', allocations: {} },
+                    drawdown: isDefault
+                      ? { ...state.drawdown, mode: 'default' }
+                      : { ...state.drawdown, mode: 'custom' },
                   });
                 }}
                 showValidation={showValidation}

@@ -68,7 +68,7 @@ function ReviewValue({ children }: { children: React.ReactNode }) {
 
 interface SectionProps {
   title: string;
-  onEdit: () => void;
+  onEdit?: () => void;
   children: React.ReactNode;
   sx?: object;
 }
@@ -78,7 +78,7 @@ function ReviewSection({ title, onEdit, children, sx }: SectionProps) {
     <Stack spacing={3} sx={{ mt: 5, ...sx }}>
       <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Typography variant="h5">{title}</Typography>
-        <TextButton label="Edit" hideIcon onClick={onEdit} />
+        {onEdit && <TextButton label="Edit" hideIcon onClick={onEdit} />}
       </Stack>
       <Box component="dl" sx={{ m: 0 }}>
         {children}
@@ -160,15 +160,15 @@ function AllocationTable({ allocations, label }: { allocations: Record<string, n
 
   return (
     <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
-      {Object.entries(grouped).map(([category, opts]) => (
-        <Box key={category}>
-          <Typography variant="body" sx={{ fontWeight: 700, display: 'block', pt: 1.5, pb: 0.75 }}>
-            {category}
-          </Typography>
-          {opts.map((o) => {
-            const pct = allocations[o.id];
-            if (!pct) return null;
-            return (
+      {Object.entries(grouped).map(([category, opts]) => {
+        const allocated = opts.filter((o) => (allocations[o.id] ?? 0) > 0);
+        if (allocated.length === 0) return null;
+        return (
+          <Box key={category}>
+            <Typography variant="body" sx={{ fontWeight: 700, display: 'block', pt: 1.5, pb: 0.75 }}>
+              {category}
+            </Typography>
+            {allocated.map((o) => (
               <Box
                 key={o.id}
                 sx={{
@@ -180,12 +180,12 @@ function AllocationTable({ allocations, label }: { allocations: Record<string, n
                 }}
               >
                 <Typography component="dt" variant="body" sx={{ color: 'text.primary' }}>{o.name}</Typography>
-                <Typography component="dd" variant="body" sx={{ m: 0, color: 'text.primary' }}>{pct}%</Typography>
+                <Typography component="dd" variant="body" sx={{ m: 0, color: 'text.primary' }}>{allocations[o.id]}%</Typography>
               </Box>
-            );
-          })}
-        </Box>
-      ))}
+            ))}
+          </Box>
+        );
+      })}
     </Stack>
   );
   void label;
@@ -267,19 +267,25 @@ function ExpandToggle({ expanded, onToggle, expandLabel, collapseLabel }: { expa
   );
 }
 
-function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeAccountState; onEdit: () => void }) {
+function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeAccountState; onEdit?: () => void }) {
   const [showAllocation, setShowAllocation] = useState(false);
   const [showDrawdown, setShowDrawdown] = useState(false);
 
   const mixMode = state.investmentMix.mode;
-  const mixLabel = mixMode === 'default' ? 'Default' : mixMode === 'custom' ? 'Choose your own' : '—';
+  const isSimple = state.setupMode === 'simple';
+  const mixLabel = isSimple
+    ? '100% Balanced Risk-Adjusted'
+    : mixMode === 'default' ? 'Default' : mixMode === 'custom' ? 'Choose your own' : '—';
 
   const drawdownMode = state.drawdown.mode;
   const drawdownMethod = state.drawdown.customMethod;
-  let drawdownLabel = '—';
-  if (drawdownMode === 'default') drawdownLabel = 'Default';
-  else if (drawdownMode === 'custom' && drawdownMethod === 'order') drawdownLabel = 'Choose your own (order based)';
-  else if (drawdownMode === 'custom' && drawdownMethod === 'percentage') drawdownLabel = 'Choose your own (percentage based)';
+  const defaultDrawdownDescription = 'Proportional — drawn from each investment based on your current allocation';
+  let drawdownLabel = isSimple ? defaultDrawdownDescription : '—';
+  if (!isSimple) {
+    if (drawdownMode === 'default') drawdownLabel = defaultDrawdownDescription;
+    else if (drawdownMode === 'custom' && drawdownMethod === 'order') drawdownLabel = 'Choose your own (order based)';
+    else if (drawdownMode === 'custom' && drawdownMethod === 'percentage') drawdownLabel = 'Choose your own (percentage based)';
+  }
 
   return (
     <ReviewSection title="Investment strategy" onEdit={onEdit}>
@@ -369,6 +375,7 @@ export function StepReview({
     setEditDetailsOpen(false);
   }
 
+  const isSimple = state.setupMode === 'simple';
   const selectedAccounts = state.accounts.filter((a) => a.transferAmount > 0);
   const purchasePrice = totalSelectedAmount(state);
 
@@ -422,95 +429,71 @@ export function StepReview({
         </Stack>
       </Dialog>
 
-      {/* Purchase price + Funding - only shown when custom mode (user set their own amount) */}
-      {state.setupMode !== 'simple' && (
-        <ReviewSection title="Purchase price" onEdit={() => onEditStep('funding')}>
-          <ReviewRow label="Purchase price">
-            <ReviewValue>{formatCurrency(purchasePrice)}</ReviewValue>
-          </ReviewRow>
-        </ReviewSection>
-      )}
+      {/* Account setup — visible for both modes */}
+      <ReviewSection title="Account setup" onEdit={() => onEditStep('setup-mode')}>
+        <ReviewRow label="Setup preference">
+          <ReviewValue>
+            {state.setupMode === 'simple' ? 'Set it up for me' : "I'll customise it myself"}
+          </ReviewValue>
+        </ReviewRow>
+      </ReviewSection>
 
-      {/* Funding - only shown when custom mode */}
-      {state.setupMode !== 'simple' && (
-        <ReviewSection title="Funding" onEdit={() => onEditStep('allocate')}>
-          <ReviewRow label="Funding preferences">
-            <Stack spacing={1.5}>
-              {selectedAccounts.length > 0 ? selectedAccounts.map((account) => (
-                <Box key={account.id}>
-                  <Typography variant="body" sx={{ color: 'text.primary' }}>
-                    Transferring {formatCurrency(account.transferAmount)} from
-                  </Typography>
-                  <Typography variant="small" sx={{ color: 'text.muted' }}>
-                    {account.label}
-                  </Typography>
-                </Box>
-              )) : (
-                <Typography variant="body" sx={{ color: 'text.muted' }}>—</Typography>
-              )}
-            </Stack>
-          </ReviewRow>
-          <ReviewRow label="Opening balance">
-            <ReviewValue>{purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}</ReviewValue>
-          </ReviewRow>
-        </ReviewSection>
-      )}
+      {/* Funding */}
+      <ReviewSection title="Funding" onEdit={isSimple ? undefined : () => onEditStep('allocate')}>
+        <ReviewRow label="Opening balance">
+          <ReviewValue>
+            {isSimple
+              ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
+              : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}
+          </ReviewValue>
+        </ReviewRow>
+      </ReviewSection>
 
-      {/* Account setup - only shown when simple mode selected */}
-      {state.setupMode === 'simple' && (
-        <ReviewSection title="Account setup" onEdit={() => onEditStep('setup-mode')}>
-          <ReviewRow label="Setup preference">
-            <ReviewValue>Set it up for me (recommended settings)</ReviewValue>
-          </ReviewRow>
-          <ReviewRow label="Investment option">
-            <ReviewValue>Balanced Risk-Adjusted</ReviewValue>
-          </ReviewRow>
-          <ReviewRow label="Payment frequency">
-            <ReviewValue>Fortnightly (Wednesdays)</ReviewValue>
-          </ReviewRow>
-          <ReviewRow label="Payment amount">
-            <ReviewValue>Government-set minimum</ReviewValue>
-          </ReviewRow>
-          <ReviewRow label="Drawdown order">
-            <ReviewValue>Default</ReviewValue>
-          </ReviewRow>
-        </ReviewSection>
-      )}
-
-      {/* Your payments - only shown when custom mode selected */}
-      {state.setupMode !== 'simple' && (
-        <ReviewSection title="Your payments" onEdit={() => onEditStep('payment-schedule')}>
+      {/* Your payments */}
+      <ReviewSection title="Your payments" onEdit={isSimple ? undefined : () => onEditStep('payment-schedule')}>
         <ReviewRow label="Payment frequency">
           <ReviewValue>
-            {state.paymentSchedule.frequency
-              ? state.paymentSchedule.frequency.charAt(0).toUpperCase() + state.paymentSchedule.frequency.slice(1)
-              : '—'}
+            {state.setupMode === 'simple'
+              ? 'Fortnightly (Wednesdays)'
+              : state.paymentSchedule.frequency
+                ? state.paymentSchedule.frequency.charAt(0).toUpperCase() + state.paymentSchedule.frequency.slice(1)
+                : '—'}
           </ReviewValue>
         </ReviewRow>
         <ReviewRow label="First payment date">
           <ReviewValue>
-            {state.paymentSchedule.firstPaymentMonth
-              ? new Date(state.paymentSchedule.firstPaymentMonth + '-01').toLocaleDateString('en-AU', { month: 'long', year: 'numeric' })
-              : '—'}
+            {state.setupMode === 'simple'
+              ? (() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + 14);
+                  // Advance to next Wednesday (day 3)
+                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
+                  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+                })()
+              : state.paymentSchedule.firstPaymentMonth
+                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
+                : '—'}
           </ReviewValue>
         </ReviewRow>
         <ReviewRow label="Payment amount">
           <ReviewValue>
-            {state.paymentSchedule.amountType === 'minimum'
-              ? 'Minimum'
-              : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0
-                ? `${formatCurrency(state.paymentSchedule.specificAmount)} per year`
-                : '—'}
+            {state.setupMode === 'simple'
+              ? 'Government-set minimum'
+              : state.paymentSchedule.amountType === 'minimum'
+                ? 'Minimum'
+                : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0
+                  ? `${formatCurrency(state.paymentSchedule.specificAmount)} per year`
+                  : '—'}
           </ReviewValue>
         </ReviewRow>
         <ReviewRow label="Adjust for cost of living">
-          <ReviewValue>{state.paymentSchedule.adjustForCPI ? 'Yes' : 'No'}</ReviewValue>
+          <ReviewValue>
+            {state.setupMode === 'simple' ? 'No' : state.paymentSchedule.adjustForCPI ? 'Yes' : 'No'}
+          </ReviewValue>
         </ReviewRow>
       </ReviewSection>
-      )}
 
-      {/* Bank details - only shown when custom mode selected */}
-      {state.setupMode !== 'simple' && (
+      {/* Bank details */}
       <ReviewSection title="Bank details" onEdit={() => onEditStep('payments')}>
         <ReviewRow label="Bank account">
           <Stack spacing={1.5}>
@@ -529,12 +512,9 @@ export function StepReview({
           </Stack>
         </ReviewRow>
       </ReviewSection>
-      )}
 
-      {/* Investment strategy - only shown when custom mode selected */}
-      {state.setupMode !== 'simple' && (
-        <InvestmentStrategySection state={state} onEdit={() => onEditStep('investment-strategy')} />
-      )}
+      {/* Investment strategy */}
+      <InvestmentStrategySection state={state} onEdit={isSimple ? undefined : () => onEditStep('investment-strategy')} />
 
       {/* Reversionary beneficiary */}
       <ReviewSection title="Reversionary beneficiary" onEdit={() => onEditStep('beneficiary')}>
@@ -573,7 +553,7 @@ export function StepReview({
           </>
         ) : (
           <ReviewRow label="Nomination">
-            <ReviewValue>None nominated</ReviewValue>
+            <ReviewValue>No beneficiary nominated</ReviewValue>
           </ReviewRow>
         )}
       </ReviewSection>

@@ -1,16 +1,20 @@
 'use client';
 
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Alert } from '../../../components/Alert';
 import { Checkbox } from '../../../components/Checkbox';
+import { Dialog } from '../../../components/Dialog';
+import { Icon } from '../../../components/Icon';
 import { PercentageField } from '../../../components/PercentageField';
 import { RadioCardGroup } from '../../../components/RadioGroup/RadioCardGroup';
 import { Select } from '../../../components/Select';
+import { AllocationTotal } from '../../beneficiaries/AllocationTotal';
 import { validateStep3 } from '../../investment-mix/utils';
-import type { DrawdownState, DrawdownMode, DrawdownCustomMethod } from '../types';
+import type { DrawdownState, DrawdownCustomMethod } from '../types';
 
 // ── Mock proportional snapshot of the user's current investment allocation ──
 export const DRAWDOWN_OPTIONS = [
@@ -36,11 +40,6 @@ const DRAWDOWN_AS_INVESTMENT_OPTIONS = DRAWDOWN_OPTIONS.map((o) => ({
   annualFee: 0,
 }));
 
-const MODE_OPTIONS = [
-  { value: 'default', label: 'Default', icon: 'chart-bar' },
-  { value: 'custom', label: 'Choose your own', icon: 'pen' },
-];
-
 const CUSTOM_METHOD_OPTIONS = [
   {
     value: 'order',
@@ -59,8 +58,6 @@ export interface StepInvestmentDrawdownProps {
 }
 
 export function drawdownStepValid(drawdown: DrawdownState): boolean {
-  if (!drawdown.mode) return false;
-  if (drawdown.mode === 'default') return true;
   if (!drawdown.customMethod) return false;
   if (drawdown.customMethod === 'order') {
     // every option must have a non-zero position assigned
@@ -76,19 +73,15 @@ export function StepInvestmentDrawdown({
   onDrawdownChange,
   showValidation,
 }: StepInvestmentDrawdownProps) {
-  const { mode, customMethod, orderAllocations, percentageAllocations, autoRebalance } = drawdown;
+  const { customMethod, orderAllocations, percentageAllocations, autoRebalance } = drawdown;
+  const [rebalanceInfoOpen, setRebalanceInfoOpen] = useState(false);
 
-  const modeError = showValidation && !mode;
-  const methodError = showValidation && mode === 'custom' && !customMethod;
-  const orderError = showValidation && mode === 'custom' && customMethod === 'order' &&
+  const methodError = showValidation && !customMethod;
+  const orderError = showValidation && customMethod === 'order' &&
     !DRAWDOWN_OPTIONS.every((o) => (orderAllocations[o.id] ?? 0) > 0);
   const { total: pctTotal } = validateStep3(percentageAllocations, DRAWDOWN_AS_INVESTMENT_OPTIONS);
-  const percentageError = showValidation && mode === 'custom' && customMethod === 'percentage' &&
+  const percentageError = showValidation && customMethod === 'percentage' &&
     Math.abs(pctTotal - 100) > 0.01;
-
-  function handleModeChange(next: string) {
-    onDrawdownChange({ ...drawdown, mode: next as DrawdownMode });
-  }
 
   function handleMethodChange(next: string) {
     onDrawdownChange({ ...drawdown, customMethod: next as DrawdownCustomMethod });
@@ -125,91 +118,19 @@ export function StepInvestmentDrawdown({
         </Typography>
       </div>
 
-      {/* ── Mode selector ── */}
       <Stack spacing={2}>
-        <Box
-          sx={{
-            '& .MuiFormControl-root': { width: '100%' },
-            '& .MuiFormGroup-root': { flexWrap: 'nowrap', width: '100%' },
-            '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
-          }}
-        >
+        <Stack spacing={1.5}>
           <RadioCardGroup
-            legend="Select drawdown option"
+            legend="Choose drawdown method"
             legendBold
-            options={MODE_OPTIONS}
-            value={mode}
-            onChange={handleModeChange}
-            direction="row"
-            cardDirection="column"
-            error={modeError}
-            errorMessage={modeError ? 'Select a drawdown option to continue.' : undefined}
+            options={CUSTOM_METHOD_OPTIONS}
+            value={customMethod}
+            onChange={handleMethodChange}
+            direction="column"
+            cardDirection="row"
+            error={methodError}
+            errorMessage={methodError ? 'Select a method to continue.' : undefined}
           />
-        </Box>
-
-        <Box
-          sx={{
-            border: '1px solid',
-            borderColor: 'border.default',
-            borderRadius: (t) => `${t.shape.md}px`,
-            backgroundColor: 'background.paper',
-            p: 3,
-          }}
-        >
-          <Stack spacing={2.5}>
-
-            {/* ── Default: proportional summary ── */}
-            {mode === 'default' && (
-              <Stack spacing={1.5}>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  Your payments are taken from each investment option in the same proportion as your
-                  current balance across them. Most stable option first.
-                </Typography>
-                <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
-                  {DRAWDOWN_OPTIONS.map((option) => (
-                    <Box
-                      component="li"
-                      key={option.id}
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 2,
-                        py: 1.25,
-                        borderBottom: '1px solid',
-                        borderColor: 'border.subtle',
-                        '&:last-child': { borderBottom: 'none' },
-                      }}
-                    >
-                      <Typography variant="body" sx={{ flex: 1 }}>
-                        {option.name}
-                      </Typography>
-                      <Box sx={{ width: '5rem', flexShrink: 0 }}>
-                        <PercentageField
-                          aria-label={`${option.name} allocation percent`}
-                          value={DEFAULT_PROPORTIONS[option.id]}
-                          size="medium"
-                          disabled
-                        />
-                      </Box>
-                    </Box>
-                  ))}
-                </Stack>
-              </Stack>
-            )}
-
-            {/* ── Custom: method picker + form ── */}
-            {mode === 'custom' && (
-              <Stack spacing={1.5}>
-                <RadioCardGroup
-                  legend="Choose method"
-                  options={CUSTOM_METHOD_OPTIONS}
-                  value={customMethod}
-                  onChange={handleMethodChange}
-                  direction="column"
-                  cardDirection="row"
-                  error={methodError}
-                  errorMessage={methodError ? 'Select a method to continue.' : undefined}
-                />
 
                 {/* By order */}
                 {customMethod === 'order' && (
@@ -317,33 +238,88 @@ export function StepInvestmentDrawdown({
                         </Box>
                       ))}
                     </Stack>
+
+                    <AllocationTotal total={parseFloat(pctTotal.toFixed(2))} attempted={showValidation} />
                   </Stack>
                 )}
-              </Stack>
-            )}
-
-            {/* ── Rebalancing ── */}
-            <Divider />
-            <Stack spacing={1}>
-              <Typography variant="h6" component="h2">
-                Maintain your chosen investment balance?
-              </Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>
-                Over time, your investments can get out of balance from your chosen strategy.
-                Rebalancing helps keep your risk level and goals on track.
-              </Typography>
-              <Box sx={{ pt: 0.5 }}>
-                <Checkbox
-                  label="Automatically repeat this request and rebalance my investments"
-                  checked={autoRebalance}
-                  onChange={(checked) => onDrawdownChange({ ...drawdown, autoRebalance: checked })}
-                />
-              </Box>
-            </Stack>
-
-          </Stack>
-        </Box>
         </Stack>
+
+        {/* ── Rebalancing ── */}
+        <Divider />
+        <Stack spacing={1}>
+          <Typography variant="h6" component="h2">
+            Keep your investment mix on track
+          </Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            Over time, your investments can shift away from the mix you chose. We can automatically
+            adjust them to keep things balanced.
+          </Typography>
+          <Box
+            component="button"
+            onClick={() => setRebalanceInfoOpen(true)}
+            sx={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 0.75,
+              background: 'none',
+              border: 'none',
+              p: 0,
+              cursor: 'pointer',
+              color: 'primary.main',
+            }}
+          >
+            <Icon icon="circle-info" size="sm" color="primary" />
+            <Typography variant="body" sx={{ color: 'primary.main', fontWeight: 600 }}>
+              How does this work exactly?
+            </Typography>
+          </Box>
+
+          <Box sx={{ mt: 3 }}>
+            <Checkbox
+              label="Automatically keep my investments in the mix I selected"
+              checked={autoRebalance}
+              onChange={(checked) => onDrawdownChange({ ...drawdown, autoRebalance: checked })}
+            />
+          </Box>
+
+          <Dialog
+            open={rebalanceInfoOpen}
+            onClose={() => setRebalanceInfoOpen(false)}
+            title="How automatic rebalancing works"
+            size="medium"
+            confirmLabel="Got it"
+            onConfirm={() => setRebalanceInfoOpen(false)}
+          >
+            <Stack spacing={2}>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                When you choose your investments, you&apos;re setting a mix — for example:
+              </Typography>
+              <Box component="ul" sx={{ m: 0, pl: 2.5 }}>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>70% Growth</Typography>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>30% Defensive</Typography>
+              </Box>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                Over time, this mix can change as markets move. For example, it might become:
+              </Typography>
+              <Box component="ul" sx={{ m: 0, pl: 2.5 }}>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>80% Growth</Typography>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>20% Defensive</Typography>
+              </Box>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                If automatic rebalancing is turned on, we&apos;ll adjust your investments to bring them back to your original mix.
+              </Typography>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>This means we may:</Typography>
+              <Box component="ul" sx={{ m: 0, pl: 2.5 }}>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>Move some money out of investments that have grown more</Typography>
+                <Typography component="li" variant="body" sx={{ color: 'text.primary' }}>Move it into investments that have grown less</Typography>
+              </Box>
+              <Typography variant="body" sx={{ color: 'text.primary' }}>
+                This helps keep your investment strategy and risk level consistent over time.
+              </Typography>
+            </Stack>
+          </Dialog>
+        </Stack>
+      </Stack>
     </Stack>
   );
 }

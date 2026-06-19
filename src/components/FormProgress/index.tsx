@@ -39,6 +39,8 @@ export interface SimpleFormProgressProps extends BaseProps {
   activeStep?: number;
   /** Fired when a step is selected from the menu */
   onStepClick?: (stepIndex: number) => void;
+  /** Step indices (0-based) that should be disabled in the menu */
+  disabledSteps?: number[];
 }
 
 export interface SteppedFormProgressProps extends BaseProps {
@@ -76,12 +78,13 @@ interface WithStepIndicatorProps {
   maxStep?: number;
   steps?: FormProgressStep[];
   onStepClick?: (i: number) => void;
+  disabledSteps?: number[];
   sx?: SxProps<Theme>;
   barOffset?: string;
 }
 
 function withStepIndicator(bar: React.ReactNode, props: WithStepIndicatorProps): React.ReactElement {
-  const { showStepIndicator, stepMenu, activeStep, maxStep, steps, onStepClick, sx, barOffset } = props;
+  const { showStepIndicator, stepMenu, activeStep, maxStep, steps, onStepClick, disabledSteps, sx, barOffset } = props;
   if (!showStepIndicator || activeStep == null || !steps?.length) {
     return <Box sx={sx}>{bar}</Box>;
   }
@@ -93,6 +96,7 @@ function withStepIndicator(bar: React.ReactNode, props: WithStepIndicatorProps):
         steps={steps}
         showMenu={!!stepMenu}
         onStepClick={onStepClick}
+        disabledSteps={disabledSteps}
       />
       <Box sx={{ flex: 1, minWidth: 0, pt: barOffset }}>{bar}</Box>
     </Box>
@@ -117,11 +121,11 @@ export function FormProgress(props: FormProgressProps) {
   const { showStepIndicator, stepMenu, sx } = props;
 
   if (props.variant === 'simple') {
-    const { value, steps, activeStep, onStepClick, 'aria-label': ariaLabel } = props;
+    const { value, steps, activeStep, onStepClick, disabledSteps, 'aria-label': ariaLabel } = props;
     const pct = Math.min(100, Math.max(0, value));
     const visualPct = 10 + pct * 0.8;
     const bar = <SimpleBar pct={pct} visualPct={visualPct} ariaLabel={ariaLabel} />;
-    return withStepIndicator(bar, { showStepIndicator, stepMenu, activeStep, steps, onStepClick, sx, barOffset: SIMPLE_BAR_OFFSET });
+    return withStepIndicator(bar, { showStepIndicator, stepMenu, activeStep, steps, onStepClick, disabledSteps, sx, barOffset: SIMPLE_BAR_OFFSET });
   }
 
   const { steps, activeStep, maxStep = activeStep, onStepClick, tooltipLabels, 'aria-label': ariaLabel } = props;

@@ -1,4 +1,4 @@
-import { FORTNIGHTS_PER_YEAR, RETIREMENT_INCOME_ACCOUNT_RATES } from './constants';
+import { FORTNIGHTS_PER_YEAR, MIN_DRAWDOWN_RATES, RETIREMENT_INCOME_ACCOUNT_RATES } from './constants';
 import type { BankDetails, RetirementIncomeAccountState, PensionOption, SpouseDetails } from './types';
 import { MOCK_INVESTMENT_OPTIONS } from './steps/StepInvestmentMix';
 
@@ -81,6 +81,11 @@ export function estimatePension(
   const rateValue = option === 'spouse' ? rate.spouse : rate.single;
   const annual = (purchasePrice / RATE_PER) * rateValue;
   return { annual, fortnightly: annual / FORTNIGHTS_PER_YEAR };
+}
+
+/** Return the ATO minimum annual drawdown rate (as a percentage) for the given age. */
+export function getMinDrawdownRate(age: number): number {
+  return MIN_DRAWDOWN_RATES.find((b) => age >= b.minAge && age <= b.maxAge)?.rate ?? 5;
 }
 
 // ─── Retirement bonus estimate ────────────────────────────────────────────────

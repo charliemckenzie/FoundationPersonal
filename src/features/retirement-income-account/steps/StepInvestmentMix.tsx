@@ -7,18 +7,12 @@ import Typography from '@mui/material/Typography';
 import { AllocationTotal } from '../../beneficiaries/AllocationTotal';
 import { Alert } from '../../../components/Alert';
 import { PercentageField } from '../../../components/PercentageField';
-import { RadioCardGroup } from '../../../components/RadioGroup/RadioCardGroup';
 import type { InvestmentOption } from '../../investment-mix/types';
 import { validateStep3 } from '../../investment-mix/utils';
 import { detectAllocationWarning } from '../../investment-mix/allocationWarnings';
 import { MOCK_INVESTMENT_OPTIONS } from '../../investment-mix/mockData';
 
 export { MOCK_INVESTMENT_OPTIONS };
-
-// The default investment option for new Retirement Income accounts.
-const DEFAULT_OPTION_ID = 'opt-balanced-risk-adjusted';
-const DEFAULT_OPTION = MOCK_INVESTMENT_OPTIONS.find((o) => o.id === DEFAULT_OPTION_ID)!;
-const DEFAULT_ALLOCATIONS: Record<string, number> = { [DEFAULT_OPTION_ID]: 100 };
 
 export type InvestmentMode = 'default' | 'custom';
 
@@ -28,21 +22,14 @@ export interface InvestmentMixState {
 }
 
 export const INITIAL_INVESTMENT_MIX: InvestmentMixState = {
-  mode: '',
+  mode: 'custom',
   allocations: {},
 };
 
 export function investmentMixStepValid(mix: InvestmentMixState): boolean {
-  if (!mix.mode) return false;
-  if (mix.mode === 'default') return true;
   const { valid } = validateStep3(mix.allocations ?? {}, MOCK_INVESTMENT_OPTIONS);
   return valid;
 }
-
-const MODE_OPTIONS = [
-  { value: 'default', label: 'Default', icon: 'chart-bar' },
-  { value: 'custom', label: 'Choose your own', icon: 'pen' },
-];
 
 interface StepInvestmentMixProps {
   investmentMix: InvestmentMixState;
@@ -56,7 +43,7 @@ export function StepInvestmentMix({
   showValidation,
 }: StepInvestmentMixProps) {
   const options: InvestmentOption[] = MOCK_INVESTMENT_OPTIONS;
-  const { mode, allocations } = investmentMix;
+  const { allocations } = investmentMix;
   const safeAllocations = allocations ?? {};
   const { total } = validateStep3(safeAllocations, options);
   const warning = detectAllocationWarning(safeAllocations, options);
@@ -107,14 +94,6 @@ export function StepInvestmentMix({
     };
   }, []);
 
-  function handleModeChange(next: string) {
-    const nextMode = next as InvestmentMode;
-    onInvestmentMixChange({
-      mode: nextMode,
-      allocations: nextMode === 'default' ? DEFAULT_ALLOCATIONS : {},
-    });
-  }
-
   function handleAllocationChange(optionId: string, value: number | null) {
     onInvestmentMixChange({
       ...investmentMix,
@@ -128,127 +107,16 @@ export function StepInvestmentMix({
     return acc;
   }, {});
 
-  const modeError = showValidation && !mode;
-
   return (
     <Stack spacing={3}>
       <div>
-        <Typography variant="h5" sx={{ mb: 0.5 }}>How do you want your account to be invested?</Typography>
+        <Typography variant="h5" sx={{ mb: 0.5 }}>Choose your investment mix</Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
-          Take control of your Retirement Income account investment strategy and choose your own, or let us do it for you with our default option.
+          Allocate your account across one or more investment options. Your total must equal 100%.
         </Typography>
       </div>
 
-      {/* ── Mode selector ── */}
-      <Stack spacing={1.5}>
-        <Box
-          sx={{
-            '& .MuiFormControl-root': { width: '100%' },
-            '& .MuiFormGroup-root': { flexWrap: 'nowrap', width: '100%' },
-            '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
-          }}
-        >
-          <RadioCardGroup
-            legend="Select investment option"
-            legendBold
-            options={MODE_OPTIONS}
-            value={mode}
-            onChange={handleModeChange}
-            direction="row"
-            cardDirection="column"
-            error={modeError}
-            errorMessage={modeError ? 'Select an investment option to continue.' : undefined}
-          />
-        </Box>
-
-        {/* Default option summary */}
-        {mode === 'default' && DEFAULT_OPTION && (
-          <Box
-            sx={{
-              border: '1px solid',
-              borderColor: 'border.default',
-              borderRadius: (t) => `${t.shape.md}px`,
-              backgroundColor: 'background.paper',
-              p: 3,
-            }}
-          >
-          <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
-            <Box component="li">
-              <Typography
-                variant="h6"
-                sx={{
-                  display: 'block',
-                  pt: 1.5,
-                  pb: 1.5,
-                  borderBottom: '1px solid',
-                  borderColor: 'border.input',
-                }}
-              >
-                {DEFAULT_OPTION.category}
-              </Typography>
-              <Box
-                component="ul"
-                sx={{ m: 0, p: 0, listStyle: 'none' }}
-              >
-                <Box
-                  component="li"
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 3,
-                    py: 1.5,
-                    borderBottom: '1px solid',
-                    borderColor: 'border.subtle',
-                  }}
-                >
-                  <Box sx={{ flex: 1 }}>
-                    <Typography variant="body" sx={{ fontWeight: 700 }}>
-                      {DEFAULT_OPTION.name}
-                    </Typography>
-                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.25 }}>
-                      {DEFAULT_OPTION.riskLevel} risk · {DEFAULT_OPTION.annualFee}% p.a.
-                    </Typography>
-                  </Box>
-                  <Box sx={{ width: '9rem', flexShrink: 0 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography
-                        component="label"
-                        htmlFor={`alloc-${DEFAULT_OPTION.id}`}
-                        variant="small"
-                        sx={{ color: 'text.muted', whiteSpace: 'nowrap', cursor: 'default' }}
-                      >
-                        Allocate:
-                      </Typography>
-                      <PercentageField
-                        id={`alloc-${DEFAULT_OPTION.id}`}
-                        aria-label={`Allocate ${DEFAULT_OPTION.name} percent`}
-                        value={100}
-                        size="medium"
-                        disabled
-                        onChange={() => {}}
-                      />
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
-          </Stack>
-          </Box>
-        )}
-      </Stack>
-
-      {/* ── Custom allocation list ── */}
-      {mode === 'custom' && (
-        <Box
-          sx={{
-            border: '1px solid',
-            borderColor: 'border.default',
-            borderRadius: (t) => `${t.shape.md}px`,
-            backgroundColor: 'background.paper',
-            p: 3,
-          }}
-        >
-        <Stack spacing={3}>
+      <Stack spacing={3}>
           {warning && (
             <Alert severity="warning" title={warning.title} message={warning.message} />
           )}
@@ -330,8 +198,6 @@ export function StepInvestmentMix({
             <AllocationTotal total={parseFloat(total.toFixed(2))} attempted={showValidation} />
           </Box>
         </Stack>
-        </Box>
-      )}
     </Stack>
   );
 }
