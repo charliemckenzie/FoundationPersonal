@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import { MemberOnlineLayout } from '../../components/MemberOnline';
 import { Logo } from '../../components/Logo';
+import { ThemeModeProvider } from '../../app/themes/ThemeModeContext';
 import {
   MOCK_BALANCE,
   MOCK_FOOTER_DISCLAIMER,
@@ -18,6 +19,13 @@ const meta: Meta<typeof MemberOnlineLayout> = {
   title: 'Member Online / Target State / MemberOnlineLayout',
   component: MemberOnlineLayout,
   tags: ['autodocs'],
+  decorators: [
+    (Story) => (
+      <ThemeModeProvider>
+        <Story />
+      </ThemeModeProvider>
+    ),
+  ],
   parameters: {
     layout: 'fullscreen',
     docs: {
