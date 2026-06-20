@@ -66,6 +66,7 @@ All variants support \`error\`, \`disabled\`, and \`description\` on individual 
     errorMessage: { control: 'text', if: { arg: 'error', truthy: true } },
     showHelperText: { control: 'boolean' },
     helperText: { control: 'text', if: { arg: 'showHelperText', truthy: true } },
+    helperTextPosition: { control: 'inline-radio', options: ['top', 'bottom'], if: { arg: 'showHelperText', truthy: true } },
     color: { table: { disable: true } },
     size: { table: { disable: true } },
     cardDirection: { table: { disable: true } },
@@ -121,7 +122,36 @@ export const WithHelperText: Story = {
       },
     },
   },
-  args: { legend: 'T-shirt size', options: SIZE_OPTIONS, helperText: 'This cannot be changed after ordering.' },
+  args: { legend: 'T-shirt size', options: SIZE_OPTIONS, helperText: 'This cannot be changed after ordering.', showHelperText: true },
+};
+
+export const HelperTextTop: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Usage guidance:** Set `helperTextPosition="top"` to render the helper text between the legend and the options. ' +
+          'Use it for descriptive guidance the member should read *before* answering — e.g. defining a term used in the question. ' +
+          'The helper text stays linked to the group via `aria-describedby` in both positions.',
+      },
+    },
+  },
+  args: {
+    legend: 'Have you permanently retired from work?',
+    showHelperText: true,
+    helperText: (
+      <>
+        This means you were in paid employment for at least 10 hours a week and now you do not intend to work 10 or more
+        hours in any given future week.
+      </>
+    ),
+    helperTextPosition: 'top',
+    options: [
+      { value: 'yes', label: 'Yes' },
+      { value: 'no', label: 'No' },
+    ],
+    direction: 'row',
+  },
 };
 
 export const ErrorStates: Story = {

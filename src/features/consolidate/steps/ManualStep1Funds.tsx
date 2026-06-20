@@ -81,12 +81,11 @@ export function ManualStep1Funds({ funds, onChange, errors = {} }: ManualStep1Fu
                 </Typography>
                 {funds.length > 1 && (
                   <TextButton
+                    label="Remove"
                     onClick={() => handleRemoveFund(fund.id)}
                     startIcon="trash-can"
-                    color="error"
-                  >
-                    Remove
-                  </TextButton>
+                    color="primary"
+                  />
                 )}
               </Box>
 
@@ -108,9 +107,7 @@ export function ManualStep1Funds({ funds, onChange, errors = {} }: ManualStep1Fu
 
       {funds.length < 4 && (
         <Box>
-          <Button variant="outlined" onClick={handleAddFund} startIcon="plus">
-            Add another fund
-          </Button>
+          <Button label="Add another fund" variant="outlined" onClick={handleAddFund} startIcon="plus" />
         </Box>
       )}
     </Stack>

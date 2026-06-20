@@ -73,7 +73,7 @@ export function StepInvestmentStrategy({
           {/* Key points */}
           <Box sx={{ px: { xs: 3, sm: 4 }, py: { xs: 3, sm: 3 } }}>
             <Stack spacing={3}>
-              <Stack direction="row" spacing={2} alignItems="flex-start">
+              <Stack direction="row" spacing={2} sx={{ alignItems: 'flex-start' }}>
                 <Box
                   sx={(theme: Theme) => ({
                     flexShrink: 0,
@@ -99,7 +99,7 @@ export function StepInvestmentStrategy({
                 </Box>
               </Stack>
 
-              <Stack direction="row" spacing={2} alignItems="flex-start">
+              <Stack direction="row" spacing={2} sx={{ alignItems: 'flex-start' }}>
                 <Box
                   sx={(theme: Theme) => ({
                     flexShrink: 0,
@@ -130,11 +130,12 @@ export function StepInvestmentStrategy({
       </Collapse>
 
       {showValidation && investmentStrategy === null && (
-        <Alert
-          severity="error"
-          message="Please select an investment strategy option to continue."
-          sx={{ mt: 2 }}
-        />
+        <Box sx={{ mt: 2 }}>
+          <Alert
+            severity="error"
+            message="Please select an investment strategy option to continue."
+          />
+        </Box>
       )}
     </Box>
   );

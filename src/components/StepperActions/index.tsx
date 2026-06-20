@@ -35,6 +35,8 @@ export interface StepperActionsProps {
   onSave?: () => Promise<void>;
   /** When true, the cancel/exit button calls onExit directly without showing the confirmation dialog. */
   skipExitDialog?: boolean;
+  /** When true, hides the back/next button group entirely. */
+  hideNext?: boolean;
   sx?: SxProps<Theme>;
 }
 
@@ -57,6 +59,7 @@ export function StepperActions({
   savedLabel = 'Progress saved',
   onSave,
   skipExitDialog = false,
+  hideNext = false,
   sx,
 }: StepperActionsProps) {
   const [exitDialogOpen, setExitDialogOpen] = useState(false);
@@ -105,35 +108,37 @@ export function StepperActions({
         }}
       >
         {/* DOM-first so Back → Next → Cancel/Save is the keyboard tab order */}
-        <Box
-          sx={{
-            order: { xs: 1, sm: 3 },
-            display: 'flex',
-            gap: 1.5,
-            width: { xs: '100%', sm: 'auto' },
-          }}
-        >
-          {step > 1 && (
-            <Button
-              label={backLabel}
-              variant="outlined"
-              color="primary"
-              size="medium"
-              onClick={onBack}
-            />
-          )}
-          <Box sx={{ flexGrow: { xs: 1, sm: 0 } }}>
-            <Button
-              label={nextLabel}
-              variant="contained"
-              color="primary"
-              size="medium"
-              endIcon={isSubmitStep ? undefined : 'arrow-right'}
-              onClick={onNext}
-              sx={{ width: { xs: '100%', sm: 'auto' }, minWidth: { sm: '13rem' } }}
-            />
+        {!hideNext && (
+          <Box
+            sx={{
+              order: { xs: 1, sm: 3 },
+              display: 'flex',
+              gap: 1.5,
+              width: { xs: '100%', sm: 'auto' },
+            }}
+          >
+            {step > 1 && (
+              <Button
+                label={backLabel}
+                variant="outlined"
+                color="primary"
+                size="medium"
+                onClick={onBack}
+              />
+            )}
+            <Box sx={{ flexGrow: { xs: 1, sm: 0 } }}>
+              <Button
+                label={nextLabel}
+                variant="contained"
+                color="primary"
+                size="medium"
+                endIcon={isSubmitStep ? undefined : 'arrow-right'}
+                onClick={onNext}
+                sx={{ width: { xs: '100%', sm: 'auto' }, minWidth: { sm: '13rem' } }}
+              />
+            </Box>
           </Box>
-        </Box>
+        )}
 
         <Box sx={{ order: 2, flex: 1, display: { xs: 'none', sm: 'block' } }} />
 

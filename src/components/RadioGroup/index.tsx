@@ -33,14 +33,20 @@ export interface RadioGroupProps {
   direction?: RadioGroupDirection;
   color?: RadioColor;
   size?: RadioSize;
-  helperText?: string;
+  helperText?: React.ReactNode;
+  /**
+   * Where the helper text renders relative to the control.
+   * `'bottom'` (default) keeps it below the options; `'top'` renders it between
+   * the legend and the options, in DOM order before the control — useful for
+   * descriptive guidance the member should read before answering.
+   */
+  helperTextPosition?: 'top' | 'bottom';
   errorMessage?: string;
   error?: boolean;
   disabled?: boolean;
   required?: boolean;
   legendBold?: boolean;
   legendSx?: SxProps<Theme>;
-  sublabel?: React.ReactNode;
   cardDirection?: 'column' | 'row';
   onChange?: (value: string) => void;
   name?: string;
@@ -144,13 +150,13 @@ export function RadioGroup({
   color = 'primary',
   size = 'medium',
   helperText,
+  helperTextPosition = 'bottom',
   errorMessage,
   error = false,
   disabled = false,
   required = false,
   legendBold = true,
   legendSx,
-  sublabel,
   cardDirection = 'column',
   onChange,
   name,
@@ -166,9 +172,21 @@ export function RadioGroup({
   const isBoxedOrCard = variant === 'boxed' || variant === 'card';
   const isButton = variant === 'button';
 
+  // Single helper-text node reused for both positions so the id (and therefore the
+  // aria-describedby link) stays identical whether it renders above or below the control.
+  const helperNode = helperText ? (
+    <FormHelperText
+      id={helperId}
+      error={errorMessage ? false : undefined}
+      role={error && !errorMessage ? 'alert' : undefined}
+      sx={{ ml: 0, ...(helperTextPosition === 'top' && { mt: 0, mb: 2 }) }}
+    >
+      {helperText}
+    </FormHelperText>
+  ) : null;
+
   return (
     <FormControl
-      component="fieldset"
       error={error}
       disabled={disabled}
       required={required}
@@ -176,7 +194,7 @@ export function RadioGroup({
     >
       {legend && (
         <FormLabel
-          component="legend"
+          component="div"
           id={labelId}
           sx={[
             {
@@ -185,7 +203,7 @@ export function RadioGroup({
               // Match the TextField label weight (700) so a RadioGroup legend reads
               // as the same field label across forms.
               fontWeight: legendBold ? 700 : 400,
-              mb: 1,
+              mb: helperText && helperTextPosition === 'top' ? 0.25 : 1,
               '&.Mui-focused': { color: 'text.primary' },
               '&.Mui-error': { color: 'error.main' },
               '&.Mui-disabled': { color: 'text.disabled' },
@@ -196,11 +214,7 @@ export function RadioGroup({
           {legend}
         </FormLabel>
       )}
-      {sublabel && (
-        <Box sx={{ mb: 2 }}>
-          {sublabel}
-        </Box>
-      )}
+      {helperTextPosition === 'top' && helperNode}
       <MuiRadioGroup
         value={value}
         defaultValue={defaultValue}
@@ -310,11 +324,7 @@ export function RadioGroup({
           );
         })}
       </MuiRadioGroup>
-      {helperText && (
-        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
-          {helperText}
-        </FormHelperText>
-      )}
+      {helperTextPosition === 'bottom' && helperNode}
       {error && errorMessage && (
         <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}

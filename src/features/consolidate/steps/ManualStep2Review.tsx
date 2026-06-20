@@ -82,9 +82,7 @@ export function ManualStep2Review({
             <Typography variant="body" sx={{ fontWeight: 600 }}>
               {funds.length > 1 ? `Fund ${index + 1}` : 'Fund to transfer'}
             </Typography>
-            <TextButton onClick={onEdit} startIcon="pen">
-              Edit
-            </TextButton>
+            <TextButton label="Edit" onClick={onEdit} startIcon="pen" />
           </Box>
           <DescriptionList>
             <DescriptionList.Item label="Fund name" value={fund.fundName} />

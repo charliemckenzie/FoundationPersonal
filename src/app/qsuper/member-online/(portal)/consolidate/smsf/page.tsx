@@ -19,9 +19,7 @@ export default function QSuperSmsfConsolidatePage() {
           <Typography variant="h2" component="h1">
             Self-managed super fund (SMSF)
           </Typography>
-          <Alert severity="info">
-            This flow is under construction. Please use the manual transfer option for now.
-          </Alert>
+          <Alert severity="info" message="This flow is under construction. Please use the manual transfer option for now." />
         </Stack>
       </ContentContainer>
     </>

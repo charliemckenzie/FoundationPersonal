@@ -26,7 +26,14 @@ export interface CheckboxProps {
   color?: CheckboxColor;
   size?: CheckboxSize;
   labelPlacement?: LabelPlacement;
-  helperText?: string;
+  helperText?: React.ReactNode;
+  /**
+   * Where the helper text renders relative to the control.
+   * `'bottom'` (default) keeps it below the checkbox; `'top'` renders it above the
+   * checkbox row, in DOM order before the control — useful for descriptive guidance
+   * the member should read before ticking the box.
+   */
+  helperTextPosition?: 'top' | 'bottom';
   errorMessage?: string;
   error?: boolean;
   disabled?: boolean;
@@ -84,6 +91,7 @@ export function Checkbox({
   size = 'medium',
   labelPlacement = 'end',
   helperText,
+  helperTextPosition = 'bottom',
   errorMessage,
   error = false,
   disabled = false,
@@ -179,8 +187,22 @@ export function Checkbox({
         }
       : { p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } };
 
+  // Single helper-text node reused for both positions so the id (and therefore the
+  // aria-describedby link) stays identical whether it renders above or below the control.
+  const helperNode = helperText ? (
+    <FormHelperText
+      id={helperId}
+      error={errorMessage ? false : undefined}
+      role={error && !errorMessage ? 'alert' : undefined}
+      sx={{ ml: 0, ...(helperTextPosition === 'top' && { mt: 0, mb: 2 }) }}
+    >
+      {helperText}
+    </FormHelperText>
+  ) : null;
+
   return (
     <FormControl error={error} disabled={disabled} required={required}>
+      {helperTextPosition === 'top' && helperNode}
       <FormControlLabel
         labelPlacement={labelPlacement}
         label={renderLabelContent({ label, description, variant, icon, cardDirection, isSelected, disabled })}
@@ -204,11 +226,7 @@ export function Checkbox({
           />
         }
       />
-      {helperText && (
-        <FormHelperText id={helperId} error={errorMessage ? false : undefined} role={error && !errorMessage ? 'alert' : undefined} sx={{ ml: 0 }}>
-          {helperText}
-        </FormHelperText>
-      )}
+      {helperTextPosition === 'bottom' && helperNode}
       {error && errorMessage && (
         <FormHelperText error role="alert" id={errorId} sx={{ ml: 0, mt: 0 }}>
           {errorMessage}

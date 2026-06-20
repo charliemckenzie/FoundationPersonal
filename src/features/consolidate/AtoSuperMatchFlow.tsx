@@ -225,7 +225,6 @@ export function AtoSuperMatchFlow({ basePath }: AtoSuperMatchFlowProps) {
 
           <StepperActions
             step={activeStep + 1}
-            totalSteps={steps.length}
             isSubmitStep={currentStepId === 'review'}
             onNext={handleNext}
             onBack={handleBack}

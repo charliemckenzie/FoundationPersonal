@@ -10,6 +10,7 @@ import { Dialog } from '../../../../../components/Dialog';
 import { Icon } from '../../../../../components/Icon';
 import { TextButton } from '../../../../../components/TextButton';
 import { ContentContainer } from '../../../../../components/MemberOnline';
+import { DescriptionList } from '../../../../../components/DescriptionList';
 import { MOCK_USER_PROFILE } from '../../../../../features/lifetime-pension/constants';
 import { formatCurrency } from '../../../../../features/lifetime-pension/utils';
 
@@ -180,74 +181,45 @@ function SummaryContent() {
   const fortnightlyPayment = MOCK_SUBMISSION.annualPayment / 26;
   const profile = MOCK_USER_PROFILE;
 
-  function SummarySection({ title, children }: { title: string; children: React.ReactNode }) {
-    return (
-      <Stack spacing={1}>
-        <Typography variant="h6" sx={{ color: 'text.heading', pt: 1 }}>{title}</Typography>
-        <Box component="dl" sx={{ m: 0 }}>
-          {children}
-        </Box>
-      </Stack>
-    );
-  }
-
-  function SummaryRow({ label, children }: { label: string; children: React.ReactNode }) {
-    return (
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          columnGap: 2,
-          alignItems: 'flex-start',
-          py: 1,
-          borderTop: '1px solid',
-          borderTopColor: 'border.subtle',
-        }}
-      >
-        <Typography component="dt" variant="small" sx={{ fontWeight: 700, color: 'text.primary' }}>{label}</Typography>
-        <Typography component="dd" variant="small" sx={{ m: 0, color: 'text.primary' }}>
-          {children}
-        </Typography>
-      </Box>
-    );
-  }
-
   return (
     <Stack spacing={3} sx={{ pb: 1 }}>
-      <SummarySection title="Personal details">
-        <SummaryRow label="Full name">{[profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(' ')}</SummaryRow>
-        <SummaryRow label="Residential address">{profile.residentialAddress}</SummaryRow>
-        <SummaryRow label="Email address">{profile.email}</SummaryRow>
-        <SummaryRow label="Date of birth">{profile.dateOfBirth}</SummaryRow>
-        <SummaryRow label="Mobile phone">{profile.mobilePhone}</SummaryRow>
-      </SummarySection>
+      <DescriptionList title="Personal details" titleVariant="h6">
+        <DescriptionList.Item label="Full name" value={[profile.firstName, profile.middleName, profile.lastName].filter(Boolean).join(' ')} />
+        <DescriptionList.Item label="Residential address" value={profile.residentialAddress} />
+        <DescriptionList.Item label="Email address" value={profile.email} />
+        <DescriptionList.Item label="Date of birth" value={profile.dateOfBirth} />
+        <DescriptionList.Item label="Mobile phone" value={profile.mobilePhone} />
+      </DescriptionList>
 
-      <SummarySection title="Option">
-        <SummaryRow label="Pension option">{MOCK_SUBMISSION.option}</SummaryRow>
-      </SummarySection>
+      <DescriptionList title="Option" titleVariant="h6">
+        <DescriptionList.Item label="Pension option" value={MOCK_SUBMISSION.option} />
+      </DescriptionList>
 
-      <SummarySection title="Purchase price and funding">
-        <SummaryRow label="Purchase price">{formatCurrency(MOCK_SUBMISSION.purchasePrice)}</SummaryRow>
-        <SummaryRow label="Funded from">
-          <Stack spacing={0.5}>
-            {MOCK_SUBMISSION.fundsFrom.map((f) => (
-              <Box key={f.label}>
-                <Typography variant="small" sx={{ color: 'text.primary' }}>Transferring {formatCurrency(f.amount)} from</Typography>
-                <Typography variant="small" sx={{ color: 'text.muted' }}>{f.label}</Typography>
-              </Box>
-            ))}
-          </Stack>
-        </SummaryRow>
-      </SummarySection>
+      <DescriptionList title="Purchase price and funding" titleVariant="h6">
+        <DescriptionList.Item label="Purchase price" value={formatCurrency(MOCK_SUBMISSION.purchasePrice)} />
+        <DescriptionList.Item
+          label="Funded from"
+          value={
+            <Stack spacing={0.5}>
+              {MOCK_SUBMISSION.fundsFrom.map((f) => (
+                <Box key={f.label}>
+                  <Typography variant="small" sx={{ color: 'text.primary' }}>Transferring {formatCurrency(f.amount)} from</Typography>
+                  <Typography variant="small" sx={{ color: 'text.muted' }}>{f.label}</Typography>
+                </Box>
+              ))}
+            </Stack>
+          }
+        />
+      </DescriptionList>
 
-      <SummarySection title="Payment details">
-        <SummaryRow label="Annual payment amount">{formatCurrency(MOCK_SUBMISSION.annualPayment)}</SummaryRow>
-        <SummaryRow label="Estimated payment">{formatCurrency(fortnightlyPayment)} / fortnight</SummaryRow>
-        <SummaryRow label="First payment date">Tue, 03 Feb 2026</SummaryRow>
-        <SummaryRow label="BSB">{MOCK_SUBMISSION.bankDetails.bsb}</SummaryRow>
-        <SummaryRow label="Account number">{MOCK_SUBMISSION.bankDetails.accountNumber}</SummaryRow>
-        <SummaryRow label="Account name">{MOCK_SUBMISSION.bankDetails.accountName}</SummaryRow>
-      </SummarySection>
+      <DescriptionList title="Payment details" titleVariant="h6">
+        <DescriptionList.Item label="Annual payment amount" value={formatCurrency(MOCK_SUBMISSION.annualPayment)} />
+        <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
+        <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
+        <DescriptionList.Item label="BSB" value={MOCK_SUBMISSION.bankDetails.bsb} />
+        <DescriptionList.Item label="Account number" value={MOCK_SUBMISSION.bankDetails.accountNumber} />
+        <DescriptionList.Item label="Account name" value={MOCK_SUBMISSION.bankDetails.accountName} />
+      </DescriptionList>
     </Stack>
   );
 }

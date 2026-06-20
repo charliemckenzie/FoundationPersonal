@@ -22,26 +22,30 @@ export function ManualStep0BeforeYouStart({
           Before you start
         </Typography>
         <Typography variant="body" sx={{ color: 'text.muted', lineHeight: 1.75 }}>
-          Make sure you have the details of the fund you want to transfer from. You'll need your
-          member number and the fund's ABN.
+          Make sure you have the details of the fund you want to transfer from. You&apos;ll need your
+          member number and the fund&apos;s ABN.
         </Typography>
       </div>
 
-      <Alert severity="info" title="Things to consider">
-        <IconList
-          items={[
-            {
-              text: 'Closing your other super fund may end any insurance cover or benefits you have with them.',
-            },
-            {
-              text: 'If you have future contributions going to your other fund, you\'ll need to redirect them separately.',
-            },
-            {
-              text: 'Check if your other fund charges exit fees before proceeding.',
-            },
-          ]}
-        />
-      </Alert>
+      <Alert
+        severity="info"
+        title="Things to consider"
+        message={
+          <IconList
+            items={[
+              {
+                text: 'Closing your other super fund may end any insurance cover or benefits you have with them.',
+              },
+              {
+                text: "If you have future contributions going to your other fund, you'll need to redirect them separately.",
+              },
+              {
+                text: 'Check if your other fund charges exit fees before proceeding.',
+              },
+            ]}
+          />
+        }
+      />
 
       <Checkbox
         label="I've read the information above and want to continue"

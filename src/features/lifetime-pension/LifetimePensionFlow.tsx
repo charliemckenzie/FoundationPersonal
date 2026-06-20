@@ -19,7 +19,6 @@ import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
 import { StepDetails } from './steps/StepDetails';
-import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIDV, canSubmitIDV, initialIDVState as idvInitialState } from '../../features/idv';
 import type { IDVState as IdvModuleState } from '../../features/idv';
@@ -31,11 +30,8 @@ import { StepSuccess } from './steps/StepSuccess';
 import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
   allocateStepValid,
-  eligibilityStepValid,
   fundingStepValid,
   hasSelectedAccount,
-  introStepValid,
-  isEligible,
   optionStepValid,
   paymentsStepValid,
   reviewStepValid,
@@ -44,7 +40,6 @@ import {
 
 const STEP_KEYS: LifetimePensionStepId[] = [
   'intro',
-  'eligibility',
   'option',
   'funding',
   'allocate',
@@ -67,6 +62,7 @@ export function LifetimePensionFlow() {
   const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
   const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
 
+  const [introEligible, setIntroEligible] = useState(false);
   const [state, setState] = useState<LifetimePensionState>(INITIAL_STATE);
   const [activeStep, setActiveStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -79,7 +75,6 @@ export function LifetimePensionFlow() {
   const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
-  const eligible = useMemo(() => isEligible(state), [state]);
 
   const hasFullBalanceTransfer = useMemo(() => {
     return state.accounts.some(
@@ -89,28 +84,25 @@ export function LifetimePensionFlow() {
 
   function stepIsValid(step: number): boolean {
     if (step === 0) {
-      return introStepValid(state);
+      return introEligible;
     }
     if (step === 1) {
-      return eligibilityStepValid(state);
-    }
-    if (step === 2) {
       return optionStepValid(state);
     }
-    if (step === 3) {
+    if (step === 2) {
       return fundingStepValid(state);
     }
-    if (step === 4) {
+    if (step === 3) {
       return allocateStepValid(state);
     }
-    if (step === 5) {
+    if (step === 4) {
       return paymentsStepValid(state);
     }
-    if (step === 6) {
+    if (step === 5) {
       return true;
     }
-    // IDV step (7) — document selected and form complete (online), or checkbox confirmed (other)
-    if (step === 7) {
+    // IDV step (6) — document selected and form complete (online), or checkbox confirmed (other)
+    if (step === 6) {
       if (verifyMethod === 'other') return otherOptionsConfirmed;
       return canSubmitIDV(idvState);
     }
@@ -134,7 +126,7 @@ export function LifetimePensionFlow() {
       return;
     }
 
-    if (activeStep === 4 && hasFullBalanceTransfer) {
+    if (activeStep === 3 && hasFullBalanceTransfer) {
       setShowInsuranceModal(true);
       return;
     }
@@ -271,17 +263,8 @@ export function LifetimePensionFlow() {
           <Box>
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
-              <StepIntro />
+              <StepIntro onEligible={() => setIntroEligible(true)} />
             ) : activeStep === 1 ? (
-              <StepEligibility
-                retiredFromWork={state.retiredFromWork}
-                leftEmployerAfter60={state.leftEmployerAfter60}
-                onRetiredFromWorkChange={(value) => updateState({ ...state, retiredFromWork: value })}
-                onLeftEmployerAfter60Change={(value) => updateState({ ...state, leftEmployerAfter60: value })}
-                eligible={eligible}
-                showValidation={showValidation}
-              />
-            ) : activeStep === 2 ? (
               <StepOption
                 pensionOption={state.pensionOption}
                 spouseDetails={state.spouseDetails}
@@ -291,7 +274,7 @@ export function LifetimePensionFlow() {
                 }
                 showValidation={showValidation}
               />
-            ) : activeStep === 3 ? (
+            ) : activeStep === 2 ? (
               <StepFunding
                 purchaseAmount={state.purchaseAmount}
                 onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
@@ -303,7 +286,7 @@ export function LifetimePensionFlow() {
                   updateState({ ...state, introDeclarationPermanent: checked })
                 }
               />
-            ) : activeStep === 4 ? (
+            ) : activeStep === 3 ? (
               <StepAllocate
                 purchaseAmount={state.purchaseAmount}
                 accounts={state.accounts}
@@ -318,7 +301,7 @@ export function LifetimePensionFlow() {
                 }}
                 showValidation={showValidation}
               />
-            ) : activeStep === 5 ? (
+            ) : activeStep === 4 ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
                 bankDetails={state.bankDetails}
@@ -327,12 +310,12 @@ export function LifetimePensionFlow() {
                 }
                 showValidation={showValidation}
               />
-            ) : activeStep === 6 ? (
+            ) : activeStep === 5 ? (
               <StepDetails
                 profile={detailsProfile}
                 onProfileUpdate={setDetailsProfile}
               />
-            ) : activeStep === 7 ? (
+            ) : activeStep === 6 ? (
               <Stack spacing={3}>
                 <div>
                   <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
@@ -417,7 +400,7 @@ export function LifetimePensionFlow() {
           </StepTransition>
           </Box>
 
-          {showValidation && activeStep === 7 && !stepIsValid(7) && (
+          {showValidation && activeStep === 6 && !stepIsValid(6) && (
             <Alert
               severity="error"
               message="To continue, please complete the online identity check or confirm you'll provide identity documents using another method."
@@ -427,7 +410,8 @@ export function LifetimePensionFlow() {
           <StepperActions
             step={activeStep + 1}
             isSubmitStep={activeStep === STEP_KEYS.length - 1}
-            nextLabel={activeStep === STEP_KEYS.length - 1 ? 'Continue' : 'Next'}
+            hideNext={activeStep === 0 && !introEligible}
+            nextLabel={activeStep === 0 ? 'Get started' : activeStep === STEP_KEYS.length - 1 ? 'Continue' : 'Next'}
             onNext={handleNext}
             onBack={handleBack}
             onExit={() => router.push('/member-online')}

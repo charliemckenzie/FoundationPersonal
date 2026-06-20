@@ -35,7 +35,7 @@ export function ManualConsolidateFlow({ basePath }: ManualConsolidateFlowProps) 
   const [activeStep, setActiveStep] = useState(0);
 
   const [acknowledged, setAcknowledged] = useState(false);
-  const [funds, setFunds] = useState<ExternalFund[]>([
+  const [funds, setFunds] = useState<ExternalFund[]>(() => [
     {
       id: `fund-${Date.now()}`,
       fundName: '',
@@ -180,7 +180,6 @@ export function ManualConsolidateFlow({ basePath }: ManualConsolidateFlowProps) 
 
           <StepperActions
             step={activeStep + 1}
-            totalSteps={STEPS.length}
             isSubmitStep={activeStep === 2}
             onNext={handleNext}
             onBack={handleBack}

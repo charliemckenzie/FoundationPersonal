@@ -69,7 +69,7 @@ export default function IncomeAccountsPage() {
         <Stack spacing={2}>
           <Stack spacing={0.5}>
             <Typography variant="h5">Before retirement</Typography>
-            <Typography variant="body">A Transition to Retirement (TTR) strategy lets you start drawing from your super while you're still working, so you can ease back on hours or grow your balance without affecting your income.</Typography>
+            <Typography variant="body">A Transition to Retirement (TTR) strategy lets you start drawing from your super while you&apos;re still working, so you can ease back on hours or grow your balance without affecting your income.</Typography>
           </Stack>
           <LinkRow
             label="Ease into retirement with a TTR income account"

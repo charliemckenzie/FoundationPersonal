@@ -28,6 +28,10 @@ export interface InfoButtonDialogProps {
   tooltip?: never;
 }
 
+function isDialogMode(p: InfoButtonTooltipProps | InfoButtonDialogProps): p is InfoButtonDialogProps {
+  return 'dialogContent' in p && p.dialogContent !== undefined;
+}
+
 export type InfoButtonProps = (InfoButtonTooltipProps | InfoButtonDialogProps) & {
   /** Accessible label for the button. Defaults to "More information". */
   label?: string;
@@ -75,7 +79,7 @@ export function InfoButton({
     <MuiIconButton
       aria-label={label}
       disableRipple
-      onClick={'dialogContent' in modeProps ? () => setDialogOpen(true) : undefined}
+      onClick={isDialogMode(modeProps) ? () => setDialogOpen(true) : undefined}
       sx={[
         {
           display: 'inline-flex',
@@ -98,7 +102,7 @@ export function InfoButton({
     </MuiIconButton>
   );
 
-  if ('dialogContent' in modeProps) {
+  if (isDialogMode(modeProps)) {
     return (
       <>
         {button}

@@ -1,0 +1,7 @@
+- group "Will you be transferring $10,000 or more?" [ref=e4]:
+  - generic [ref=e5]: Will you be transferring $10,000 or more?
+  - generic [ref=e7]:
+    - paragraph [ref=e8]: A minimum transfer of $10,000 applies to open this account.
+    - generic [ref=e9] [cursor=pointer]:
+      - checkbox "Yes, I'll be transferring $10,000 or more" [ref=e11]
+      - generic [ref=e13]: Yes, I'll be transferring $10,000 or more

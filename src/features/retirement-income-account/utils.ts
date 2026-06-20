@@ -1,4 +1,5 @@
 import { FORTNIGHTS_PER_YEAR, MIN_DRAWDOWN_RATES, RETIREMENT_INCOME_ACCOUNT_RATES, RIA_INVESTMENT_OPTIONS } from './constants';
+import type { RetirementIncomeAccountState, PensionOption, SpouseDetails, BankDetails } from './types';
 
 // ─── BSB utilities ───────────────────────────────────────────────────────────
 

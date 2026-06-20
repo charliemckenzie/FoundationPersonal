@@ -131,6 +131,54 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   const isFirstStepRender = useRef(true);
   const skipHistoryPush = useRef(false);
 
+  const selectedAccount = useMemo(
+    () => accounts.find((a) => a.id === selectedAccountId),
+    [accounts, selectedAccountId],
+  );
+
+  const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
+
+  /** Lifecycle Investment Strategy is not available to income accounts. */
+  const availableOptions = useMemo(
+    () =>
+      isIncomeAccount
+        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== LIFECYCLE_ID)
+        : MOCK_INVESTMENT_OPTIONS,
+    [isIncomeAccount],
+  );
+
+  const allocatedOptions = useMemo(
+    () => availableOptions.filter((o) => (allocations[o.id] ?? 0) > 0),
+    [allocations, availableOptions],
+  );
+
+  // Payment preferences decide which option withdrawals are drawn from (order, priority, or split).
+  // With only one allocated option everything is drawn from it by definition, so the step is moot.
+  const showPaymentStep =
+    isIncomeAccount &&
+    applyTo !== null &&
+    applyToIncludesPayments(applyTo) &&
+    allocatedOptions.length >= 2;
+
+  // Lifecycle cannot participate in rebalancing at all — the PDS explicitly excludes any mix that
+  // contains Lifecycle, not just Lifecycle-only mixes.
+  const hasLifecycleInMix = (allocations[LIFECYCLE_ID] ?? 0) > 0;
+  const rebalanceEligible = !hasLifecycleInMix && allocatedOptions.length >= 2;
+  const showRebalanceStep =
+    applyTo !== null && applyToIncludesBalance(applyTo) && rebalanceEligible;
+
+  /** Steps are composed dynamically; two of them (rebalance, payment) are conditional. */
+  const steps = useMemo(() => {
+    const list: { id: string; label: string }[] = [];
+    if (!skipAccountStep) list.push({ id: 'account', label: 'Select account' });
+    if (!embedded) list.push({ id: 'apply-to', label: 'What to change' });
+    list.push({ id: 'allocations', label: 'Allocate new mix' });
+    if (showRebalanceStep) list.push({ id: 'rebalance', label: 'Keep on track' });
+    if (showPaymentStep) list.push({ id: 'payment', label: 'Payment preferences' });
+    if (!embedded) list.push({ id: 'review', label: 'Review and confirm' });
+    return list;
+  }, [skipAccountStep, embedded, showRebalanceStep, showPaymentStep]);
+
   // Mark the initial history entry so browser back/forward works within the form.
   // On each advance, push a new entry; on popstate, restore the step.
   //
@@ -185,54 +233,6 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   // setActiveStep and setError are stable useState setters — safe to omit from deps
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const selectedAccount = useMemo(
-    () => accounts.find((a) => a.id === selectedAccountId),
-    [accounts, selectedAccountId],
-  );
-
-  const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
-
-  /** Lifecycle Investment Strategy is not available to income accounts. */
-  const availableOptions = useMemo(
-    () =>
-      isIncomeAccount
-        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== LIFECYCLE_ID)
-        : MOCK_INVESTMENT_OPTIONS,
-    [isIncomeAccount],
-  );
-
-  const allocatedOptions = useMemo(
-    () => availableOptions.filter((o) => (allocations[o.id] ?? 0) > 0),
-    [allocations, availableOptions],
-  );
-
-  // Payment preferences decide which option withdrawals are drawn from (order, priority, or split).
-  // With only one allocated option everything is drawn from it by definition, so the step is moot.
-  const showPaymentStep =
-    isIncomeAccount &&
-    applyTo !== null &&
-    applyToIncludesPayments(applyTo) &&
-    allocatedOptions.length >= 2;
-
-  // Lifecycle cannot participate in rebalancing at all — the PDS explicitly excludes any mix that
-  // contains Lifecycle, not just Lifecycle-only mixes.
-  const hasLifecycleInMix = (allocations[LIFECYCLE_ID] ?? 0) > 0;
-  const rebalanceEligible = !hasLifecycleInMix && allocatedOptions.length >= 2;
-  const showRebalanceStep =
-    applyTo !== null && applyToIncludesBalance(applyTo) && rebalanceEligible;
-
-  /** Steps are composed dynamically; two of them (rebalance, payment) are conditional. */
-  const steps = useMemo(() => {
-    const list: { id: string; label: string }[] = [];
-    if (!skipAccountStep) list.push({ id: 'account', label: 'Select account' });
-    if (!embedded) list.push({ id: 'apply-to', label: 'What to change' });
-    list.push({ id: 'allocations', label: 'Allocate new mix' });
-    if (showRebalanceStep) list.push({ id: 'rebalance', label: 'Keep on track' });
-    if (showPaymentStep) list.push({ id: 'payment', label: 'Payment preferences' });
-    if (!embedded) list.push({ id: 'review', label: 'Review and confirm' });
-    return list;
-  }, [skipAccountStep, embedded, showRebalanceStep, showPaymentStep]);
 
   // A conditional step can only disappear while the member is on an earlier step (apply-to or
   // allocations), so activeStep never points past the list; review is always last. Stale rebalance

@@ -1,5 +1,7 @@
 import type { ComponentProps, ComponentType } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { Checkbox } from '../../components/Checkbox';
 
 type CheckboxArgs = ComponentProps<typeof Checkbox> & {
@@ -69,6 +71,7 @@ All variants support \`error\`, \`disabled\`, and \`description\`. The \`indeter
     errorMessage: { control: 'text', if: { arg: 'error', truthy: true } },
     showHelperText: { control: 'boolean' },
     helperText: { control: 'text', if: { arg: 'showHelperText', truthy: true } },
+    helperTextPosition: { control: 'inline-radio', options: ['top', 'bottom'], if: { arg: 'showHelperText', truthy: true } },
     showDescription: { control: 'boolean' },
     description: { control: 'text', if: { arg: 'showDescription', truthy: true } },
     labelPlacement: { table: { disable: true } },
@@ -132,7 +135,32 @@ export const WithHelperText: Story = {
       },
     },
   },
-  args: { label: 'Subscribe to newsletter', helperText: 'We send one email per week, no spam.' },
+  args: { label: 'Subscribe to newsletter', helperText: 'We send one email per week, no spam.', showHelperText: true },
+};
+
+export const HelperTextTop: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          '**Usage guidance:** Set `helperTextPosition="top"` to render the helper text above the checkbox row. ' +
+          'Use it for descriptive guidance the member should read *before* ticking the box. ' +
+          'The helper text stays linked to the checkbox via `aria-describedby` in both positions.',
+      },
+    },
+  },
+  render: () => (
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Typography variant="body" component="p" sx={{ fontWeight: 700, mb: 0.25 }}>
+        Will you be transferring $10,000 or more?
+      </Typography>
+      <Checkbox
+        label="Yes, I'll be transferring $10,000 or more"
+        helperText="A minimum transfer of $10,000 applies to open this account."
+        helperTextPosition="top"
+      />
+    </Box>
+  ),
 };
 
 export const ErrorStates: Story = {
@@ -181,7 +209,7 @@ export const WithDescription: Story = {
       },
     },
   },
-  args: { label: 'Subscribe to newsletter', description: 'We send one email per week. Unsubscribe any time.' },
+  args: { label: 'Subscribe to newsletter', description: 'We send one email per week. Unsubscribe any time.', showDescription: true },
 };
 
 export const Boxed: Story = {

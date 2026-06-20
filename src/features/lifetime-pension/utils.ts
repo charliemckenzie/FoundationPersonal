@@ -109,24 +109,6 @@ export function hasSelectedAccount(state: LifetimePensionState): boolean {
   return state.accounts.some((account) => account.selected);
 }
 
-export function isEligible(state: LifetimePensionState): boolean {
-  if (state.retiredFromWork === 'yes') return true;
-  if (state.retiredFromWork === 'no' && state.leftEmployerAfter60) {
-    return state.leftEmployerAfter60 === 'yes';
-  }
-  return false;
-}
-
-export function introStepValid(_state: LifetimePensionState): boolean {
-  return true;
-}
-
-export function eligibilityStepValid(state: LifetimePensionState): boolean {
-  if (state.retiredFromWork === 'yes') return true;
-  if (state.retiredFromWork === 'no') return state.leftEmployerAfter60 === 'yes';
-  return false;
-}
-
 function hasRequiredSpouseFields(details: SpouseDetails): boolean {
   return Boolean(
     details.firstName.trim() &&

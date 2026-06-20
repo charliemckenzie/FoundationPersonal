@@ -54,15 +54,16 @@ export function StepEligibility({
       >
         <RadioGroup
           legend="Have you permanently retired from work?"
-          legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, mb: 1, '&.Mui-focused': { color: 'text.heading' } }}
-          sublabel={
-            <Typography variant="small">
+          legendSx={{ typography: 'h6', color: 'text.heading', fontWeight: 700, '&.Mui-focused': { color: 'text.heading' } }}
+          helperText={
+            <>
               This means you were in paid employment for at least 10 hours a week and{' '}
               <Box component="span" sx={{ fontWeight: 700 }}>
                 now you do not intend to work 10 or more hours in any given future week.
               </Box>
-            </Typography>
+            </>
           }
+          helperTextPosition="top"
           value={retiredFromWork}
           options={YES_NO_OPTIONS}
           direction="row"

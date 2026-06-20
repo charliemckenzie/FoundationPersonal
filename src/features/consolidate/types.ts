@@ -1,3 +1,5 @@
+import type { RadioOption } from '@/components/RadioGroup';
+
 export type ConsolidateMethod = 'ato' | 'manual' | 'smsf';
 
 export type TransferAmountType = 'full' | 'partial';
@@ -70,23 +72,23 @@ export interface TargetAccount {
 
 /** Option constants — value/label/description pattern for RadioGroup/Select. */
 
-export const AMOUNT_OPTIONS = [
+export const AMOUNT_OPTIONS: RadioOption[] = [
   {
-    value: 'full' as TransferAmountType,
+    value: 'full' satisfies TransferAmountType,
     label: 'Full balance',
     description: 'Transfer the entire amount from this fund.',
   },
   {
-    value: 'partial' as TransferAmountType,
+    value: 'partial' satisfies TransferAmountType,
     label: 'Partial amount',
     description: 'Transfer only part of the balance.',
   },
-] as const;
+];
 
 export const SMSF_READINESS_ITEMS = [
   {
     field: 'assetsLiquidated' as keyof SmsfReadiness,
-    label: 'I\'ve sold my SMSF\'s assets to cash (or will roll cash only)',
+    label: "I've sold my SMSF's assets to cash (or will roll cash only)",
   },
   {
     field: 'esaConfirmed' as keyof SmsfReadiness,
@@ -94,7 +96,7 @@ export const SMSF_READINESS_ITEMS = [
   },
   {
     field: 'detailsVerifiable' as keyof SmsfReadiness,
-    label: 'My SMSF\'s ABN and bank details are current with the ATO',
+    label: "My SMSF's ABN and bank details are current with the ATO",
   },
   {
     field: 'windUpUnderstood' as keyof SmsfReadiness,

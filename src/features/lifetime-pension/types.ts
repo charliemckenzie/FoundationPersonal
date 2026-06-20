@@ -1,4 +1,3 @@
-export type EligibilityAnswer = 'yes' | 'no' | '';
 export type PensionOption = 'single' | 'spouse' | '';
 export type AgeScenario = '60-64' | '65-plus';
 
@@ -31,8 +30,6 @@ export interface LifetimePensionState {
   ageScenario: AgeScenario;
   introDeclarationRead: boolean;
   introDeclarationPermanent: boolean;
-  retiredFromWork: EligibilityAnswer;
-  leftEmployerAfter60: EligibilityAnswer;
   pensionOption: PensionOption;
   spouseDetails: SpouseDetails;
   purchaseAmount: number;
@@ -43,7 +40,6 @@ export interface LifetimePensionState {
 
 export type LifetimePensionStepId =
   | 'intro'
-  | 'eligibility'
   | 'option'
   | 'funding'
   | 'allocate'

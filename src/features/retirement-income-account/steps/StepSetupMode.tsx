@@ -138,7 +138,7 @@ export function StepSetupMode({ setupMode, onSetupModeChange, accounts, showVali
                     <Typography variant="small" sx={{ color: 'inherit' }}>
                       {showDetailsB ? 'Hide' : 'See balances after transfer'}
                     </Typography>
-                    <Icon icon={showDetailsB ? 'chevron-up' : 'chevron-down'} size="xs" color="primary" />
+                    <Icon icon={showDetailsB ? 'chevron-up' : 'chevron-down'} size="sm" color="primary" />
                   </Box>
                   <Collapse in={showDetailsB}>
                     <Stack spacing={0.5} sx={{ mt: 1 }}>
@@ -184,9 +184,7 @@ export function StepSetupMode({ setupMode, onSetupModeChange, accounts, showVali
       </Collapse>
 
       {hasError && (
-        <Alert severity="error">
-          Please select how you&rsquo;d like to set up your account.
-        </Alert>
+        <Alert severity="error" message="Please select how you'd like to set up your account." />
       )}
     </Stack>
   );

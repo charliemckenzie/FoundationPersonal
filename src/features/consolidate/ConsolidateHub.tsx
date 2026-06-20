@@ -33,10 +33,11 @@ export function ConsolidateHub({ basePath }: ConsolidateHubProps) {
           </Typography>
         </Stack>
 
-        <Alert severity="info" title="Before you consolidate">
-          Consolidating your super may affect insurance cover or benefits with your other fund.
-          Check your details before you proceed.
-        </Alert>
+        <Alert
+          severity="info"
+          title="Before you consolidate"
+          message="Consolidating your super may affect insurance cover or benefits with your other fund. Check your details before you proceed."
+        />
 
         <Stack spacing={2} component="nav" aria-label="Consolidation options">
           <LinkRow

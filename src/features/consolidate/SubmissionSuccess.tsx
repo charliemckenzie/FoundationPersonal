@@ -72,8 +72,8 @@ export function SubmissionSuccess({ submission, onBackToHub }: SubmissionSuccess
         </Typography>
 
         <Typography variant="body" sx={{ color: 'text.muted', lineHeight: 1.75 }}>
-          We've received your consolidation request. Processing typically takes 3–5 business days.
-          We'll notify you when the transfer is complete.
+          We&apos;ve received your consolidation request. Processing typically takes 3–5 business days.
+          We&apos;ll notify you when the transfer is complete.
         </Typography>
 
         <Box
@@ -93,9 +93,7 @@ export function SubmissionSuccess({ submission, onBackToHub }: SubmissionSuccess
           </DescriptionList>
         </Box>
 
-        <Button onClick={onBackToHub} fullWidth>
-          Back to Consolidate super
-        </Button>
+        <Button label="Back to Consolidate super" onClick={onBackToHub} fullWidth />
       </Stack>
     </Box>
   );

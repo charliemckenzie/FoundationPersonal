@@ -49,7 +49,7 @@ export function AtoStep2Results({
   if (done && funds.length === 0) {
     return (
       <Stack spacing={3} sx={{ alignItems: 'center', textAlign: 'center', py: 4 }}>
-        <Icon icon="circle-check" size="4xl" color="success" />
+        <Icon icon="circle-check" size="3xl" color="success" />
         <div>
           <Typography variant="h4" component="h2" sx={{ mb: 1 }}>
             No other super found
@@ -60,9 +60,7 @@ export function AtoStep2Results({
           </Typography>
         </div>
         <Alert severity="info" message="You can still transfer super manually if you know your other fund's details." />
-        <TextButton onClick={onToggleEmpty} startIcon="arrow-rotate-left">
-          Show sample results (dev)
-        </TextButton>
+        <TextButton label="Show sample results (dev)" onClick={onToggleEmpty} startIcon="arrow-rotate-left" />
       </Stack>
     );
   }
@@ -94,9 +92,7 @@ export function AtoStep2Results({
       </Stack>
 
       <Box>
-        <TextButton onClick={onToggleEmpty} startIcon="circle-exclamation" color="secondary">
-          Test empty state (dev)
-        </TextButton>
+        <TextButton label="Test empty state (dev)" onClick={onToggleEmpty} startIcon="circle-exclamation" color="primary" />
       </Box>
     </Stack>
   );

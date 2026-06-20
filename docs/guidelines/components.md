@@ -246,12 +246,12 @@ Searchable dropdown. Use when the option list is long or needs filtering.
 Key props: `label`, `options`, `value`, `groupBy`, `renderOption`, `loading`
 
 **Checkbox** — `src/components/Checkbox/`  
-Single checkbox. Three layouts: `default`, `boxed` (outlined), `card` (full-width selectable card).  
-Key props: `label`, `checked`, `variant`, `description`, `icon`, `indeterminate`, `color`
+Single checkbox. Three layouts: `default`, `boxed` (outlined), `card` (full-width selectable card). `helperText` accepts a `ReactNode` and renders below the control by default; set `helperTextPosition="top"` to place it above the checkbox row (stays linked via `aria-describedby` in both positions).  
+Key props: `label`, `checked`, `variant`, `description`, `icon`, `indeterminate`, `color`, `helperText`, `helperTextPosition`
 
 **RadioGroup** — `src/components/RadioGroup/`  
-Radio button set. Three layouts: `default`, `boxed`, `card`.  
-Key props: `legend`, `options`, `variant`, `value`, `direction`, `color`
+Radio button set. Three layouts: `default`, `boxed`, `card`. `helperText` accepts a `ReactNode` and renders below the options by default; set `helperTextPosition="top"` to place it between the legend and the options for descriptive guidance the member should read before answering (stays linked via `aria-describedby` in both positions).  
+Key props: `legend`, `options`, `variant`, `value`, `direction`, `color`, `helperText`, `helperTextPosition`
 
 **Switch** — `src/components/Switch/`  
 Toggle switch. Use for on/off settings rather than yes/no choices (use Checkbox for those).  

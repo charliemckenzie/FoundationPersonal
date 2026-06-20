@@ -137,15 +137,11 @@ export function StepReview({
             <>
               <DescriptionList.Item
                 label="Spouse full name"
-                value={[state.spouseDetails.firstName, state.spouseDetails.middleName, state.spouseDetails.lastName].filter(Boolean).join(' ') || '—'}
+                value={[state.spouseDetails.firstName, state.spouseDetails.lastName].filter(Boolean).join(' ') || '—'}
               />
               <DescriptionList.Item label="Spouse date of birth" value={state.spouseDetails.dateOfBirth || '—'} />
-              <DescriptionList.Item label="Spouse residential address" value={state.spouseDetails.residentialAddress || '—'} />
               <DescriptionList.Item label="Spouse email address" value={state.spouseDetails.emailAddress || '—'} />
               <DescriptionList.Item label="Spouse mobile phone" value={state.spouseDetails.mobilePhone || '—'} />
-              {state.spouseDetails.homePhone && (
-                <DescriptionList.Item label="Spouse home phone" value={state.spouseDetails.homePhone} />
-              )}
             </>
           )}
           <DescriptionList.Item

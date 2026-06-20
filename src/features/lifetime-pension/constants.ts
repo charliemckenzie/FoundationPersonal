@@ -2,7 +2,6 @@ import type { FormProgressStep } from '../../components/FormProgress';
 import type { FundingAccount, IDVState, LifetimePensionState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
 
 export const LIFETIME_PENSION_STEPS: FormProgressStep[] = [
-  { id: 'eligibility', label: 'Eligibility check' },
   { id: 'option', label: 'Spouse protection' },
   { id: 'funding', label: 'Purchase price' },
   { id: 'allocate', label: 'Allocate funds' },
@@ -58,8 +57,6 @@ export const INITIAL_STATE: LifetimePensionState = {
   ageScenario: '60-64',
   introDeclarationRead: false,
   introDeclarationPermanent: false,
-  retiredFromWork: '',
-  leftEmployerAfter60: '',
   pensionOption: '',
   spouseDetails: EMPTY_SPOUSE_DETAILS,
   purchaseAmount: 0,
@@ -77,7 +74,7 @@ export const MIN_PURCHASE_AMOUNT = 10000;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [20, 30, 50, 65, 80, 90, 95, 100] as const;
+export const TARGET_PERCENT = [30, 50, 65, 80, 90, 95, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Lifetime Pension payment estimate
@@ -118,7 +115,6 @@ export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
-  'Open a Lifetime Pension',
   'Open a Lifetime Pension',
   'Open a Lifetime Pension',
   'Open a Lifetime Pension',
