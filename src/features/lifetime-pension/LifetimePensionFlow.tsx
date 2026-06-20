@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -14,6 +14,8 @@ import { StepperActions } from '../../components/StepperActions';
 import { Alert } from '../../components/Alert';
 import { RadioGroup } from '../../components/RadioGroup';
 import { Checkbox } from '../../components/Checkbox';
+import { useSteppedFlow } from '../../lib/useSteppedFlow';
+import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
@@ -27,7 +29,7 @@ import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
 import { StepSuccess } from './steps/StepSuccess';
-import type { LifetimePensionDraft, LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
+import type { LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
   allocateStepValid,
   fundingStepValid,
@@ -63,16 +65,17 @@ export function LifetimePensionFlow() {
   const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
 
   const [introEligible, setIntroEligible] = useState(false);
-  const [state, setState] = useState<LifetimePensionState>(INITIAL_STATE);
-  const [activeStep, setActiveStep] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-  const [showValidation, setShowValidation] = useState(false);
+
+  // Step navigation + draft autosave/resume are shared with Retirement Income Account via useSteppedFlow.
+  const flow = useSteppedFlow<LifetimePensionState>({
+    initialState: INITIAL_STATE,
+    loadDraft,
+    saveDraft,
+    deleteDraft,
+  });
+  const { state, setState, activeStep, showValidation, submitted } = flow;
+
   const [showInsuranceModal, setShowInsuranceModal] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
-  const [resumeDraft, setResumeDraft] = useState<LifetimePensionDraft | null>(null);
-  const isReadyToAutoSaveRef = useRef(false);
-  const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const purchaseTotal = useMemo(() => totalSelectedAmount(state), [state]);
 
@@ -109,20 +112,9 @@ export function LifetimePensionFlow() {
     return reviewStepValid(state);
   }
 
-  function advance(nextStep: number) {
-    if (nextStep > 0) setIsSaving(true);
-    setActiveStep(nextStep);
-    setShowValidation(false);
-  }
-
-  function handleBack() {
-    setShowValidation(false);
-    setActiveStep((prev) => Math.max(0, prev - 1));
-  }
-
   function handleNext() {
     if (!stepIsValid(activeStep)) {
-      setShowValidation(true);
+      flow.setShowValidation(true);
       return;
     }
 
@@ -132,11 +124,11 @@ export function LifetimePensionFlow() {
     }
 
     if (activeStep === STEP_KEYS.length - 1) {
-      setSubmitted(true);
+      flow.submit();
       return;
     }
 
-    advance(activeStep + 1);
+    flow.advance(activeStep + 1);
   }
 
   function updateState(next: LifetimePensionState) {
@@ -145,62 +137,7 @@ export function LifetimePensionFlow() {
 
   function updateStepFromReview(stepId: LifetimePensionStepId) {
     const stepIndex = STEP_KEYS.indexOf(stepId);
-    if (stepIndex >= 0) {
-      setSubmitted(false);
-      setActiveStep(stepIndex);
-      setShowValidation(false);
-    }
-  }
-
-  // Load any existing draft on mount
-  useEffect(() => {
-    loadDraft().then((draft) => {
-      if (draft) {
-        setResumeDraft(draft);
-      } else {
-        isReadyToAutoSaveRef.current = true;
-      }
-    });
-  }, []);
-
-  // Debounced auto-save on any state or step change (skip intro step)
-  useEffect(() => {
-    if (!isReadyToAutoSaveRef.current) return;
-    if (activeStep === 0) return;
-    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
-
-    saveDebounceRef.current = setTimeout(() => {
-      setIsSaving(true);
-      saveDraft(state, activeStep).then(() => {
-        setIsSaving(false);
-        setLastSavedAt(new Date());
-      });
-    }, 500);
-
-    return () => {
-      if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
-    };
-  }, [state, activeStep]);
-
-  // Clean up draft after successful submission
-  useEffect(() => {
-    if (submitted) deleteDraft();
-  }, [submitted]);
-
-  function handleResumeConfirm() {
-    if (resumeDraft) {
-      setState(resumeDraft.state);
-      setActiveStep(resumeDraft.activeStep);
-      setLastSavedAt(new Date(resumeDraft.savedAt));
-    }
-    setResumeDraft(null);
-    isReadyToAutoSaveRef.current = true;
-  }
-
-  function handleResumeDismiss() {
-    deleteDraft();
-    setResumeDraft(null);
-    isReadyToAutoSaveRef.current = true;
+    if (stepIndex >= 0) flow.editStep(stepIndex);
   }
 
   // Success screen — IDV is handled inside StepSuccess as a modal.
@@ -253,7 +190,7 @@ export function LifetimePensionFlow() {
                   activeStep={activeStep - 1}
                   showStepIndicator
                   stepMenu
-                  onStepClick={(i) => advance(i + 1)}
+                  onStepClick={(i) => flow.advance(i + 1)}
                   sx={{ flex: 1, minWidth: 0 }}
                 />
               </Box>
@@ -413,10 +350,10 @@ export function LifetimePensionFlow() {
             hideNext={activeStep === 0 && !introEligible}
             nextLabel={activeStep === 0 ? 'Get started' : activeStep === STEP_KEYS.length - 1 ? 'Continue' : 'Next'}
             onNext={handleNext}
-            onBack={handleBack}
+            onBack={flow.back}
             onExit={() => router.push('/member-online')}
             exitDialogDescription={
-              lastSavedAt !== null
+              flow.lastSavedAt !== null
                 ? 'Your progress has been auto-saved. You can return to this application within 30 days.'
                 : undefined
             }
@@ -424,19 +361,13 @@ export function LifetimePensionFlow() {
         </Stack>
       </ContentContainer>
 
-      {resumeDraft !== null && (
-        <Dialog
-          open
-          onClose={handleResumeDismiss}
-          title="Continue your application?"
-          description={`You have a saved application from ${new Date(resumeDraft.savedAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}. Would you like to continue where you left off?`}
-          variant="neutral"
-          hideCloseButton
-          confirmLabel="Continue where I left off"
-          cancelLabel="Start fresh"
-          onConfirm={handleResumeConfirm}
-        />
-      )}
+      <ResumeDraftDialog
+        open={flow.pendingResume !== null}
+        savedAt={flow.pendingResume?.savedAt}
+        noun="application"
+        onContinue={flow.acceptResume}
+        onStartFresh={flow.discardResume}
+      />
 
       <Dialog
         open={showInsuranceModal}
@@ -449,7 +380,7 @@ export function LifetimePensionFlow() {
         cancelLabel="Go back"
         onConfirm={() => {
           setShowInsuranceModal(false);
-          advance(activeStep + 1);
+          flow.advance(activeStep + 1);
         }}
       />
 

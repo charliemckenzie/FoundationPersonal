@@ -204,7 +204,54 @@ Extraction pattern used throughout: pull type/interface declarations into `types
 
 **`InputSelect` (257)** is intentionally deferred to **WP4.4** (which decides whether it's consolidated into `Select` or kept).
 
-**WP4.2 / 4.3 / 4.4:** not started.
+### ✅ WP4.2 — IDV consolidation COMPLETE (2026-06-21, lean)
+
+The divergence turned out to be **moot at runtime**: `retirement-income-account/steps/StepIDV.tsx` (392) was imported at `RetirementIncomeAccountFlow.tsx:20` **but never rendered** — RIA's IDV runs through `StepSuccess` → the **shared** `IdvModal` → shared `StepIDV` (the comment "IDV is now a modal on the success screen" is accurate). So the local copy was a dead unused import; no UX reconciliation/migration was needed. Both local `idvService.ts` (RIA + LP, 47 each) were **byte-identical** to the shared one and imported **nowhere** (LP's Flow already imports `useIdvGate`/`StepIDV`/`canSubmitIDV`/`initialIDVState` from `../../features/idv`); the shared `idvService.ts` (59) is a strict superset (adds `clearIDVCache`). All three used the same `IDV_STORAGE_KEY = 'qsuper_idv_verified'`.
+
+**Removed (all verified dead by grep across `src/`, then by tsc):**
+- `src/features/retirement-income-account/steps/StepIDV.tsx` (file) + its unused import in the Flow.
+- `src/features/retirement-income-account/idvService.ts` + `src/features/lifetime-pension/idvService.ts` (files).
+- Now-dead IDV constants from both `constants.ts` (`IDV_STORAGE_KEY`, `IDV_CACHE_YEARS`, `AUSTRALIAN_STATES`, `initialIDVState()`) and dead IDV types from both `types.ts` (`IDVDocument`, `IDVState`) — plus the dead `IDVState` import in each `constants.ts`. Zero live consumers after the file deletions (the shared `features/idv` module owns its own copies).
+
+**Left untouched (live, out of WP4.2 scope):** each feature's local `VerifyDetailsContent` / `requiredFieldsFilled` / `verifyDetailsCanContinue` (`steps/StepVerifyDetails.tsx`) + the `UserProfile` / `VerifyDetailsState` types + `initialVerifyDetailsState` / `MOCK_USER_PROFILE` constants — the separate "confirm your details" gate, still consumed by `StepReview`/`StepSuccess`/the Flow. Consolidating *those* into `features/idv` (idv-shared-module-plan §6) is a larger, separate job, not part of WP4.2.
+
+**Verified:** `tsc` **0 errors**, `eslint` **0 errors** (warnings 112 → **111**), `npm run test` **543/543**. `lib:build` not required (none of the touched files are in `src/index.ts`). Nothing committed — Adam commits himself.
+
+### ✅ WP4.3 — stepped-flow save/resume consolidation COMPLETE (2026-06-21, lean)
+
+**Finding that reshaped the WP:** the plan assumed all 4 large flows share the same step/draft logic. They don't. Only **RIA + LP** are near-identical twins (same `advance`/`back`, same 3-effect draft-autosave lifecycle, same resume handshake — ~80 dup lines each). **InvestmentMix** drives steps via browser history with **no** persistence; **RetirementProjection** uses a `phase` state-machine + `sessionStorage` + field-error validation. And the `eslint-disable`s the plan wanted gone lived in InvestmentMix (2× history `exhaustive-deps`) and Projection (1× `set-state-in-effect`) — *not* in RIA/LP. Adam reframed the real goal: **"save/resume on stepped forms" is one problem and should have one approach**, not three hand-rolled ones.
+
+**Decisions (Adam, via Q&A):**
+- **Architecture:** a single save/resume hook used by every resumable flow; a thin twin engine for RIA/LP on top.
+- **UX policy — identical everywhere (resume dialog):** every stepped form that persists saves for 30 days (localStorage) and shows the **same resume dialog** on return. This **changed RetirementProjection** — it moved from silent/sessionStorage auto-restore to dialog/persistent, matching RIA/LP.
+- **Dialog wording:** one shared dialog component + behaviour; each flow supplies its own **noun** (RIA/LP "Continue your application?"; projection "Continue your projection?"). Same buttons/layout/timing.
+
+**Built (all in `src/lib`):**
+- **`useResumableDraft<T>`** — the single save/resume mechanism. Generic over the snapshot (no per-flow branches); config flags `resume: 'dialog' | 'auto'` + `debounceMs`; consumer supplies a storage `adapter` (load/save/clear) + `onRestore`. Latest-value refs synced in an effect (not during render) so the React-Compiler "no refs during render" rule stays clean.
+- **`useSteppedFlow<S>`** — the RIA/LP twin engine (state/activeStep/advance/back/editStep/showValidation/submit + resume handshake), built on `useResumableDraft` in dialog/500ms mode. `reviveState` config handles RIA's merge-over-INITIAL_STATE (LP omits it).
+- **`ResumeDraftDialog`** — the shared resume prompt (wraps Foundation `Dialog`), parameterized by `noun`. Matches RIA/LP's exact prior copy so theirs stays byte-identical.
+
+**Adopted by:** RIA + LP (via `useSteppedFlow`), RetirementProjection (via `useResumableDraft` directly — different nav model, **same** mechanism, + a new `retirement-projection/draftService.ts` mirroring the others). **InvestmentMix deliberately untouched** (no persistence by design; its 2 history `eslint-disable`s are justified and out of scope).
+
+**Behaviour-preserving cleanups folded in:** dropped `isSaving` (dead state — written, never rendered in either flow); `lastSavedAt` kept as the nullable flag it effectively was. Projection now **skips saving on the welcome screen** (mirrors RIA/LP "don't save the intro") so the resume dialog only appears for real progress.
+
+**Docs/Storybook (Adam asked):** thorough JSDoc on all three lib files; `ResumeDraftDialog` story (`Form Components / Stepped Forms / Resume Dialog`, +2 tests); `SteppedFormPersistence.mdx` pattern page documenting the policy + both hooks + "adding persistence to a new flow". **Base stepper components (`StepperActions`/`FormProgress`/`StepTransition`) needed no change** — the hooks are state/dialog only.
+
+**Verified:** `tsc` **0 errors**, `eslint` **0 errors** (warnings 111 → **109**; projection's `set-state-in-effect` disable removed, a couple of dead-code warnings cleared, **no new disables**), `npm run test` **545/545** (113 → 114 files), `lib:build` success (DTS stable **89.13 KB** — none of the new code is exported). Nothing committed — Adam commits himself.
+
+### ✅ WP4.4 — InputSelect vs Select + last over-limit file COMPLETE (2026-06-21, lean)
+
+**Decision: keep both, document the boundary.** Confirmed `InputSelectContainer` (`src/components/InputSelect/`) is a genuinely different component from `Select` — it's an inline select **adornment** fused onto another input (shares one border/focus ring, opens a desktop Menu or mobile Drawer), used as the unit/currency picker inside `TextField` (`selectAdornment`), `MoneyField`, and `PercentageField`. `Select` is a standalone full-width form field. They don't overlap; consolidating would be wrong. Documented the boundary in `docs/guidelines/components.md` (new catalogue entry + Quick Reference row clarifying "use `Select` when the dropdown *is* the field; `InputSelectContainer` only when a select sits inside another input").
+
+**Size split (the last >200 file):** `InputSelect/index.tsx` **257 → 107**, extracting `types.ts` (the 3 exported types), `styles.ts` (container/input/trigger/menu sx factories), `parts.tsx` (`ChevronIcon` + `InputSelectOptions` = the desktop Menu / mobile Drawer). `index.tsx` re-exports the public types so `src/index.ts`'s `export … from './components/InputSelect'` is unchanged. **InputSelect IS in the published graph** — `lib:build` DTS verified **stable at 89.13 KB** (API byte-identical).
+
+**Verified:** `tsc` **0 errors**, `eslint` **0 errors** (109 warnings, unchanged), `npm run test` **545/545**, `lib:build` success (DTS 89.13 KB). Nothing committed — Adam commits himself.
+
+**Phase 5 flags found here:** (1) `InputSelect` trigger uses `text.secondary` (banned per typography guidelines) for the placeholder colour — pre-existing, preserved as-is (behaviour-preserving); a Phase 5 token fix. (2) `InputSelectContainerProps.size` is accepted but unused in the impl — keep for API or drop in Phase 5.
+
+**✅ Phase 4 COMPLETE** — WP4.1 (size limits), WP4.2 (IDV consolidation), WP4.3 (stepped-flow save/resume), WP4.4 (InputSelect) all done and green. **Every `src/components/**/*.tsx` is now ≤200 lines**, and both enumerated 621-line `manage-income-accounts` pages are split. Final repo state: `tsc` 0, `eslint` 0 errors (109 warnings → Phase 5), `lib:build` DTS 89.13 KB, `npm run test` 545/545. Nothing committed — Adam commits himself.
+
+**Out of scope / candidate for a future size pass (never in WP4.1's enumerated list):** a few **app pages + one data file** still exceed 200 lines — `app/public-web/navData.tsx` (565, a nav *data* file, not a component), `app/review/page.tsx` (385), `app/paolo/card-cta-accessibility/page.tsx` (304, sandbox), `lifetime-pension/view-application/page.tsx` (327), `app/page.tsx` (256). WP4.1 targeted library components + the two 621-line pages only; these were never in scope. Flag for a separate page-size pass if wanted.
 
 *Original re-verified counts (2026-06-20, before any Phase 4 work):*
 
@@ -241,7 +288,7 @@ Extraction pattern used throughout: pull type/interface declarations into `types
 - [x] Phase 1 — tsc + eslint clean (§1–5) ✅ (committed to `main` in `7a25b7d`; tsc 0, eslint 0 errors, build exit 0)
 - [x] Phase 2 — CI gate added + **green on `main`** (§6). WP2.0 (story test) ✅, WP2.1 (`ci.yml`) ✅, WP2.3 (errors-only lint) ✅. **WP2.2 (mark required in branch protection) — declined by Adam; gate kept advisory by choice.**
 - [x] Phase 3 — `src/lib/format.ts` (canonical formatters; 6 currency + 8 date copies collapsed, projection outlier left separate) + seed unit tests (44 tests / 4 files). tsc 0, eslint 0 errors, lib:build OK, test 543/543. ✅ (not yet committed — Adam commits himself)
-- [~] Phase 4 — **WP4.1 (size limits) ✅ DONE**: 18 components + both 621-line pages now ≤200 lines (only `InputSelect` 257 left, deferred to WP4.4). tsc 0, eslint 0 errors (114→112 warnings), lib:build OK, test **543/543**. **WP4.2 (IDV merge), WP4.3 (`useSteppedFlow`), WP4.4 (InputSelect) — NOT STARTED.** See the "Phase 4 — IN PROGRESS" block for the per-component tally.
+- [x] Phase 4 — **COMPLETE (2026-06-21, lean)**. WP4.1 (size limits: 18 components + both 621-line pages ≤200) ✅; WP4.2 (IDV consolidation — removed dead local `StepIDV` + both dead `idvService` + dead IDV constants/types) ✅; WP4.3 (stepped-flow save/resume — single `useResumableDraft` mechanism + `useSteppedFlow` for RIA/LP + `ResumeDraftDialog`; RIA/LP/RetirementProjection adopted; projection `set-state-in-effect` disable removed; **UX policy: identical resume dialog everywhere**, projection moved silent/session → dialog/persistent) ✅; WP4.4 (InputSelect kept-and-documented vs Select; `InputSelect/index.tsx` 257→107) ✅. **Every `src/components/**/*.tsx` ≤200 lines** (a few out-of-scope app pages/data files remain >200 — see the Phase 4 COMPLETE note). Final: tsc 0, eslint 0 errors (109 warnings → Phase 5), lib:build DTS 89.13 KB, test **545/545**. See the per-WP blocks in the Phase 4 section.
 - [ ] Phase 5 — warnings, artifacts, gitignore, root docs
 
 ---

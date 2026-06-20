@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { FormProgress } from '../../components/FormProgress';
@@ -17,19 +17,10 @@ import { StepPartnerSuper } from './steps/StepPartnerSuper';
 import { StepAssetsDebts } from './steps/StepAssetsDebts';
 import { StepResults } from './steps/StepResults';
 import { StepNextSteps } from './steps/StepNextSteps';
+import { useResumableDraft } from '../../lib/useResumableDraft';
+import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
+import { saveDraft, loadDraft, deleteDraft, type FlowPhase, type ProjectionSnapshot } from './draftService';
 import type { RetirementProjectionState } from './types';
-
-type FlowPhase = 'welcome' | 'disclaimer' | 'form' | 'results' | 'next-steps';
-
-/** Session-scoped persistence so a refresh or accidental navigation resumes the flow. */
-const STORAGE_KEY = 'retirement-projection-v1';
-
-interface PersistedFlow {
-  state: RetirementProjectionState;
-  phase: FlowPhase;
-  formStep: number;
-  maxStep: number;
-}
 
 export interface StepErrors {
   currentAge?: string;
@@ -68,7 +59,6 @@ export function RetirementProjectionFlow() {
   const [formStep, setFormStep] = useState(0);
   const [maxStep, setMaxStep] = useState(0);
   const [errors, setErrors] = useState<StepErrors>({});
-  const restored = useRef(false);
 
   // Dynamic steps — partner super step only appears when includePartner === 'yes'
   const hasPartner = state.includePartner === 'yes';
@@ -78,35 +68,34 @@ export function RetirementProjectionFlow() {
   );
   const totalFormSteps = activeFormSteps.length - 1; // subtract the 'results' entry which is a marker, not a form step
 
-  // Resume a session interrupted by a refresh or accidental navigation.
-  // sessionStorage is only readable in the browser, so this must run after
-  // mount — a lazy useState initializer would mismatch the server render.
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const saved = JSON.parse(raw) as PersistedFlow;
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setState({ ...INITIAL_STATE, ...saved.state });
-        setPhase(saved.phase);
-        setFormStep(saved.formStep);
-        setMaxStep(saved.maxStep);
-      }
-    } catch {
-      // Corrupted or unavailable storage — start fresh.
-    }
-    restored.current = true;
-  }, []);
+  // Save/resume via the shared mechanism, in dialog mode — same "Continue your …?"
+  // prompt every stepped form shows. The snapshot carries the full flow position.
+  const draftAdapter = useMemo(
+    () => ({
+      load: loadDraft,
+      save: (snap: ProjectionSnapshot) => saveDraft(snap),
+      clear: deleteDraft,
+    }),
+    [],
+  );
+  const draft = useResumableDraft<ProjectionSnapshot>({
+    adapter: draftAdapter,
+    resume: 'dialog',
+    onRestore: (snap) => {
+      setState({ ...INITIAL_STATE, ...snap.state });
+      setPhase(snap.phase);
+      setFormStep(snap.formStep);
+      setMaxStep(snap.maxStep);
+    },
+  });
 
+  // Persist on any change, except the welcome screen — mirrors the other flows'
+  // "don't save the intro" rule, so the resume dialog only appears for real progress.
+  const { persist: persistDraft } = draft;
   useEffect(() => {
-    if (!restored.current) return;
-    try {
-      const snapshot: PersistedFlow = { state, phase, formStep, maxStep };
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(snapshot));
-    } catch {
-      // Storage unavailable — the flow still works, it just won't survive a refresh.
-    }
-  }, [state, phase, formStep, maxStep]);
+    if (phase === 'welcome') return;
+    persistDraft({ state, phase, formStep, maxStep });
+  }, [state, phase, formStep, maxStep, persistDraft]);
 
   function clearError(key: keyof StepErrors) {
     setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev));
@@ -167,11 +156,7 @@ export function RetirementProjectionFlow() {
 
   /** Full reset — only ever invoked after the user confirms (exit dialog / finish dialog). */
   function handleExit() {
-    try {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } catch {
-      // Storage unavailable — nothing to clear.
-    }
+    draft.clearDraft();
     setState(INITIAL_STATE);
     setPhase('welcome');
     setFormStep(0);
@@ -440,6 +425,14 @@ export function RetirementProjectionFlow() {
           </Typography>
         </Box>
       </Box>
+
+      <ResumeDraftDialog
+        open={draft.pendingDraft !== null}
+        savedAt={draft.pendingDraft?.savedAt}
+        noun="projection"
+        onContinue={draft.acceptDraft}
+        onStartFresh={draft.discardDraft}
+      />
     </Box>
   );
 }

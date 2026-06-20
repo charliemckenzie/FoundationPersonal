@@ -1,0 +1,66 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Form Components / Stepped Forms / Save & Resume" />
+
+# Stepped form save & resume
+
+Foundation has **one** way for a multi-step form to save a member's progress and let them pick it back up. Every stepped form that should persist uses it, so the behaviour is consistent and there is a single implementation to maintain.
+
+This page explains the policy and the two hooks that implement it.
+
+---
+
+## The UX policy — identical everywhere
+
+Any stepped form that saves progress behaves the same way for the member:
+
+- **Progress is saved** automatically as they go (skipping the intro/welcome step, so an untouched form leaves nothing behind).
+- It is kept for **30 days** in `localStorage` — closing the browser is fine.
+- On return, the member sees the **same resume dialog**: *"Continue your &lt;noun&gt;?"* → **Continue where I left off** / **Start fresh**.
+
+Only the **noun** changes so the wording stays natural to the task (an *application* for Retirement Income Account and Lifetime Pension, a *projection* for the Retirement Projection calculator). The dialog itself — layout, buttons, timing — is identical. See [Resume Dialog](/?path=/story/form-components-stepped-forms-resume-dialog--application).
+
+> **Not every form persists.** A short, in-and-out action (e.g. *Change investment mix*) deliberately has no save/resume — it uses browser back/forward instead. Persistence is for forms a member might genuinely leave and return to.
+
+---
+
+## The two hooks
+
+Both live in `src/lib`.
+
+### `useResumableDraft` — the save/resume mechanism
+
+The single source of "persist progress, restore it later". It is **generic over the snapshot** — it never inspects what is inside, so it needs no per-flow branches. The consumer supplies:
+
+- an **adapter** (`load` / `save` / `clear`) that knows *where* the snapshot lives, and
+- an **`onRestore`** callback that applies a restored snapshot back onto the flow's state.
+
+Differences between flows are configuration, not code:
+
+| Option | Applications (RIA, LP) | Calculator (Projection) |
+|---|---|---|
+| `resume` | `'dialog'` | `'dialog'` |
+| storage (in the adapter) | `localStorage`, 30-day expiry | `localStorage`, 30-day expiry |
+| `debounceMs` | `500` (via `useSteppedFlow`) | `0` |
+
+### `useSteppedFlow` — the RIA / LP engine
+
+Retirement Income Account and Lifetime Pension are near-identical multi-step applications. `useSteppedFlow` is their shared engine, built **on top of** `useResumableDraft` in dialog mode. It owns the parts both share:
+
+- `state` / `activeStep` and the `advance` / `back` / `editStep` transitions
+- the `showValidation` flag toggled on each navigation
+- debounced autosave (skipping the intro step) and submit cleanup
+- the resume handshake (`pendingResume` / `acceptResume` / `discardResume`)
+
+Flow-specific logic — per-step validation and the Next-button branching — stays in each flow and composes these primitives.
+
+The Retirement Projection calculator has a different navigation model (named phases, not flat steps), so it uses **`useResumableDraft` directly** rather than `useSteppedFlow` — but still through the same save/resume mechanism, so the member experience matches.
+
+---
+
+## Adding persistence to a new stepped form
+
+1. Decide if it should persist at all (see the note above).
+2. Add a `draftService.ts` for the feature (mirror the existing ones: `localStorage`, 30-day expiry).
+3. If it has flat numbered steps like RIA/LP, use **`useSteppedFlow`**. If it has a bespoke navigation model, use **`useResumableDraft`** directly.
+4. Render [`ResumeDraftDialog`](/?path=/story/form-components-stepped-forms-resume-dialog--application) with the flow's noun.

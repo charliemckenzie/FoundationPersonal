@@ -60,6 +60,7 @@ If this document is out of date, flag it to Moe immediately.
 | `IconButton` | Icon-only button with optional tooltip |
 | `InfoButton` | Inline info/help icon that opens a tooltip or dialog — sits alongside label text |
 | `IconList` | Icon-prefixed list (custom icons or numbered) |
+| `InputSelectContainer` | Inline select *adornment* fused onto an input (unit/currency picker inside TextField/MoneyField/PercentageField). Not a standalone field — use `Select` for that. |
 | `InvestmentOverview` | Account investment panel — header (account name + total balance) over a card per investment dial (current investments + future contributions / payments), each with an edit button and mix; footer with Change all and View history |
 | `LinearProgress` | Horizontal progress bar for loading or completion state |
 | `Logo` | Brand logo — primary, secondary, or mark; brand-aware |
@@ -238,8 +239,12 @@ Dual address capture (residential + optional postal) with autocomplete lookup.
 Key props: `onChange`, `defaultHasPostalAddress`, `disabled`, `addressLookup`
 
 **Select** — `src/components/Select/`  
-Dropdown select for a list of options. Adapts to a drawer on mobile for better usability.  
+Dropdown select for a **standalone form field** — a full-width labelled control that is the input. Adapts to a drawer on mobile for better usability.  
 Key props: `label`, `options`, `value`, `placeholder`, `size`, `error`
+
+**InputSelectContainer** — `src/components/InputSelect/`  
+**Not a standalone field — an inline select *adornment* fused onto another input.** It wraps a text-style input (`children`) and renders a select trigger button on the right, sharing one border + focus ring; opens a desktop dropdown or a mobile drawer. This is the unit/currency picker inside `TextField` (via `selectAdornment`), `MoneyField`, and `PercentageField` — e.g. an amount field with a "per week / per fortnight / per year" selector attached. Use `Select` when the dropdown *is* the field; use `InputSelectContainer` only when a select must sit **inside** another input. You rarely render it directly — reach for `TextField`/`MoneyField`/`PercentageField` with `selectAdornment` instead.  
+Key props: `selectAdornment` (`{ options, value, onChange, label, … }`), `error`, `disabled`, `focused`, `children`
 
 **Autocomplete** — `src/components/Autocomplete/`  
 Searchable dropdown. Use when the option list is long or needs filtering.  

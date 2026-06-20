@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -11,13 +11,14 @@ import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
+import { useSteppedFlow } from '../../lib/useSteppedFlow';
+import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
 import { INITIAL_STATE, RETIREMENT_INCOME_ACCOUNT_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
 import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
-import { StepIDV } from './steps/StepIDV';
 import { StepIntro } from './steps/StepIntro';
 import { StepPaymentSchedule } from './steps/StepPaymentSchedule';
 import { StepPayments } from './steps/StepPayments';
@@ -28,7 +29,7 @@ import { StepBeneficiary } from './steps/StepBeneficiary';
 import { StepReview } from './steps/StepReview';
 import { StepSetupMode } from './steps/StepSetupMode';
 import { StepSuccess } from './steps/StepSuccess';
-import type { RetirementIncomeAccountDraft, RetirementIncomeAccountState, RetirementIncomeAccountStepId, VerifyDetailsState } from './types';
+import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, VerifyDetailsState } from './types';
 import {
   allocateStepValid,
   eligibilityStepValid,
@@ -68,16 +69,19 @@ export function RetirementIncomeAccountFlow() {
 
   const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
 
-  const [state, setState] = useState<RetirementIncomeAccountState>(INITIAL_STATE);
-  const [activeStep, setActiveStep] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-  const [showValidation, setShowValidation] = useState(false);
+  // Step navigation + draft autosave/resume are shared with Lifetime Pension via useSteppedFlow.
+  const flow = useSteppedFlow<RetirementIncomeAccountState>({
+    initialState: INITIAL_STATE,
+    loadDraft,
+    saveDraft,
+    deleteDraft,
+    // Merge over INITIAL_STATE so any fields added after the draft was saved
+    // always have a valid default (e.g. paymentSchedule added in a later version).
+    reviveState: (saved) => ({ ...INITIAL_STATE, ...saved }),
+  });
+  const { state, setState, activeStep, showValidation, submitted } = flow;
+
   const [showInsuranceModal, setShowInsuranceModal] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
-  const [resumeDraft, setResumeDraft] = useState<RetirementIncomeAccountDraft | null>(null);
-  const isReadyToAutoSaveRef = useRef(false);
-  const saveDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const purchaseTotal = useMemo(() => {
     // In simple (autopilot) mode the funding step is skipped, so transferAmount
@@ -153,20 +157,9 @@ export function RetirementIncomeAccountFlow() {
     }
   }
 
-  function advance(nextStep: number) {
-    if (nextStep > 0) setIsSaving(true);
-    setActiveStep(nextStep);
-    setShowValidation(false);
-  }
-
-  function handleBack() {
-    setShowValidation(false);
-    setActiveStep((prev) => Math.max(0, prev - 1));
-  }
-
   function handleNext() {
     if (!stepIsValid(activeStep)) {
-      setShowValidation(true);
+      flow.setShowValidation(true);
       return;
     }
 
@@ -176,11 +169,11 @@ export function RetirementIncomeAccountFlow() {
     }
 
     if (activeStep === visibleStepKeys.length - 1) {
-      setSubmitted(true);
+      flow.submit();
       return;
     }
 
-    advance(activeStep + 1);
+    flow.advance(activeStep + 1);
   }
 
   function updateState(next: RetirementIncomeAccountState) {
@@ -189,64 +182,7 @@ export function RetirementIncomeAccountFlow() {
 
   function updateStepFromReview(stepId: RetirementIncomeAccountStepId) {
     const stepIndex = visibleStepKeys.indexOf(stepId);
-    if (stepIndex >= 0) {
-      setSubmitted(false);
-      setActiveStep(stepIndex);
-      setShowValidation(false);
-    }
-  }
-
-  // Load any existing draft on mount
-  useEffect(() => {
-    loadDraft().then((draft) => {
-      if (draft) {
-        setResumeDraft(draft);
-      } else {
-        isReadyToAutoSaveRef.current = true;
-      }
-    });
-  }, []);
-
-  // Debounced auto-save on any state or step change (skip intro step)
-  useEffect(() => {
-    if (!isReadyToAutoSaveRef.current) return;
-    if (activeStep === 0) return;
-    if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
-
-    saveDebounceRef.current = setTimeout(() => {
-      setIsSaving(true);
-      saveDraft(state, activeStep).then(() => {
-        setIsSaving(false);
-        setLastSavedAt(new Date());
-      });
-    }, 500);
-
-    return () => {
-      if (saveDebounceRef.current) clearTimeout(saveDebounceRef.current);
-    };
-  }, [state, activeStep]);
-
-  // Clean up draft after successful submission
-  useEffect(() => {
-    if (submitted) deleteDraft();
-  }, [submitted]);
-
-  function handleResumeConfirm() {
-    if (resumeDraft) {
-      // Merge with INITIAL_STATE so any fields added after the draft was saved
-      // always have a valid default (e.g. paymentSchedule added in a later version).
-      setState({ ...INITIAL_STATE, ...resumeDraft.state });
-      setActiveStep(resumeDraft.activeStep);
-      setLastSavedAt(new Date(resumeDraft.savedAt));
-    }
-    setResumeDraft(null);
-    isReadyToAutoSaveRef.current = true;
-  }
-
-  function handleResumeDismiss() {
-    deleteDraft();
-    setResumeDraft(null);
-    isReadyToAutoSaveRef.current = true;
+    if (stepIndex >= 0) flow.editStep(stepIndex);
   }
 
   // Success screen — IDV is handled inside StepSuccess as a modal.
@@ -322,7 +258,7 @@ export function RetirementIncomeAccountFlow() {
                   onStepClick={(i) => {
                     const targetStepId = visibleStepKeys[i + 1];
                     if (targetStepId === 'review') return;
-                    advance(i + 1);
+                    flow.advance(i + 1);
                   }}
                   disabledSteps={[visibleStepKeys.indexOf('review') - 1].filter((i) => i >= 0)}
                   sx={{ flex: 1, minWidth: 0 }}
@@ -426,8 +362,8 @@ export function RetirementIncomeAccountFlow() {
                   accountFilter="income"
                   embedded
                   skipIntro
-                  onComplete={() => advance(activeStep + 1)}
-                  onBack={handleBack}
+                  onComplete={() => flow.advance(activeStep + 1)}
+                  onBack={flow.back}
                 />
               </InvestmentMixProvider>
             ) : currentStepId === 'beneficiary' ? (
@@ -458,10 +394,10 @@ export function RetirementIncomeAccountFlow() {
             isSubmitStep={activeStep === visibleStepKeys.length - 1}
             nextLabel={activeStep === visibleStepKeys.length - 1 ? 'Continue' : 'Next'}
             onNext={handleNext}
-            onBack={handleBack}
+            onBack={flow.back}
             onExit={() => router.push('/member-online')}
             exitDialogDescription={
-              lastSavedAt !== null
+              flow.lastSavedAt !== null
                 ? 'Your progress has been auto-saved. You can return to this application within 30 days.'
                 : undefined
             }
@@ -470,19 +406,13 @@ export function RetirementIncomeAccountFlow() {
         </Stack>
       </ContentContainer>
 
-      {resumeDraft !== null && (
-        <Dialog
-          open
-          onClose={handleResumeDismiss}
-          title="Continue your application?"
-          description={`You have a saved application from ${new Date(resumeDraft.savedAt).toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })}. Would you like to continue where you left off?`}
-          variant="neutral"
-          hideCloseButton
-          confirmLabel="Continue where I left off"
-          cancelLabel="Start fresh"
-          onConfirm={handleResumeConfirm}
-        />
-      )}
+      <ResumeDraftDialog
+        open={flow.pendingResume !== null}
+        savedAt={flow.pendingResume?.savedAt}
+        noun="application"
+        onContinue={flow.acceptResume}
+        onStartFresh={flow.discardResume}
+      />
 
       <Dialog
         open={showInsuranceModal}
@@ -495,7 +425,7 @@ export function RetirementIncomeAccountFlow() {
         cancelLabel="Go back"
         onConfirm={() => {
           setShowInsuranceModal(false);
-          advance(activeStep + 1);
+          flow.advance(activeStep + 1);
         }}
       />
 

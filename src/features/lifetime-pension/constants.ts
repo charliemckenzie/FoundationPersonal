@@ -1,5 +1,5 @@
 import type { FormProgressStep } from '../../components/FormProgress';
-import type { FundingAccount, IDVState, LifetimePensionState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
+import type { FundingAccount, LifetimePensionState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
 
 export const LIFETIME_PENSION_STEPS: FormProgressStep[] = [
   { id: 'option', label: 'Spouse protection' },
@@ -143,48 +143,5 @@ export function initialVerifyDetailsState(): VerifyDetailsState {
   return {
     confirmed: '',
     edited: { ...MOCK_USER_PROFILE },
-  };
-}
-
-// ---------------------------------------------------------------------------
-// ID Verification gate
-// ---------------------------------------------------------------------------
-
-export const IDV_STORAGE_KEY = 'qsuper_idv_verified';
-export const IDV_CACHE_YEARS = 3;
-
-export const AUSTRALIAN_STATES = [
-  { value: 'ACT', label: 'Australian Capital Territory' },
-  { value: 'NSW', label: 'New South Wales' },
-  { value: 'NT', label: 'Northern Territory' },
-  { value: 'QLD', label: 'Queensland' },
-  { value: 'SA', label: 'South Australia' },
-  { value: 'TAS', label: 'Tasmania' },
-  { value: 'VIC', label: 'Victoria' },
-  { value: 'WA', label: 'Western Australia' },
-];
-
-export function initialIDVState(): IDVState {
-  return {
-    selectedDocument: '',
-    driversLicence: {
-      stateOfIssue: '',
-      licenceNumber: '',
-      cardNumber: '',
-      middleName: '',
-      noMiddleName: false,
-    },
-    medicare: {
-      cardColour: '',
-      cardNumber: '',
-      referenceNumber: '',
-      nameOnCard: '',
-      expiryDate: '',
-    },
-    passport: {
-      referenceNumber: '',
-      middleName: '',
-      noMiddleName: false,
-    },
   };
 }
