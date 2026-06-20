@@ -12,61 +12,10 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import type React from 'react';
 import { MobileDrawer } from '../inputs/MobileDrawer';
-import { buildInputStyles } from '../inputs/variantStyles';
+import type { SelectProps } from './types';
+import { buildSelectSx } from './styles';
 
-export interface SelectOption {
-  value: string;
-  label: string;
-  disabled?: boolean;
-}
-
-export type SelectSize = 'small' | 'medium';
-
-const CONDENSED_REDUCTION = 0.25; // rem = 4px
-
-function selectPadding(size: SelectSize, condensed: boolean): string {
-  const base = size === 'small' ? 0.5 : 0.75;
-  return `${base - (condensed ? CONDENSED_REDUCTION / 2 : 0)}rem`;
-}
-
-function buildSelectSx(size: SelectSize, condensed: boolean) {
-  return (t: import('@mui/material/styles').Theme) => ({
-    ...buildInputStyles(t),
-    minHeight: size === 'small'
-      ? `${2.5 - (condensed ? CONDENSED_REDUCTION : 0)}rem`
-      : `${3 - (condensed ? CONDENSED_REDUCTION : 0)}rem`,
-    fontSize: t.typography.body.fontSize,
-    '& div.MuiSelect-select': {
-      lineHeight: 1.5,
-      paddingTop: selectPadding(size, condensed),
-      paddingBottom: selectPadding(size, condensed),
-    },
-    '&& select.MuiInputBase-input': {
-      paddingTop: selectPadding(size, condensed),
-      paddingBottom: selectPadding(size, condensed),
-    },
-  });
-}
-
-export interface SelectProps {
-  label: string;
-  options: SelectOption[];
-  value?: string;
-  defaultValue?: string;
-  placeholder?: string;
-  size?: SelectSize;
-  condensed?: boolean;
-  helperText?: string;
-  errorMessage?: string;
-  error?: boolean;
-  required?: boolean;
-  disabled?: boolean;
-  fullWidth?: boolean;
-  native?: boolean;
-  onChange?: (value: string) => void;
-  id?: string;
-  name?: string;
-}
+export type { SelectOption, SelectSize, SelectProps } from './types';
 
 export function Select({
   label,

@@ -3,80 +3,18 @@ import MuiCheckbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
-import Box from '@mui/material/Box';
-import { type Theme } from '@mui/material/styles';
-import { selectedCardStyles } from '../inputs/variantStyles';
 import { CheckboxUncheckedIcon, CheckboxIndeterminateIcon, CheckboxCheckedIcon } from './icons';
-import { CheckboxCardLabel } from './CheckboxCardLabel';
+import { renderLabelContent } from './helpers';
+import { buildContainerSx, buildCheckboxSx } from './styles';
+import type { CheckboxProps } from './types';
 
-export type CheckboxVariant = 'default' | 'boxed' | 'card' | 'button';
-export type CheckboxColor = 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success' | 'default';
-export type CheckboxSize = 'small' | 'medium';
-export type LabelPlacement = 'end' | 'start' | 'top' | 'bottom';
-
-export interface CheckboxProps {
-  label: string;
-  description?: string;
-  variant?: CheckboxVariant;
-  icon?: string;
-  cardDirection?: 'column' | 'row';
-  checked?: boolean;
-  defaultChecked?: boolean;
-  indeterminate?: boolean;
-  color?: CheckboxColor;
-  size?: CheckboxSize;
-  labelPlacement?: LabelPlacement;
-  helperText?: React.ReactNode;
-  /**
-   * Where the helper text renders relative to the control.
-   * `'bottom'` (default) keeps it below the checkbox; `'top'` renders it above the
-   * checkbox row, in DOM order before the control — useful for descriptive guidance
-   * the member should read before ticking the box.
-   */
-  helperTextPosition?: 'top' | 'bottom';
-  errorMessage?: string;
-  error?: boolean;
-  disabled?: boolean;
-  required?: boolean;
-  onChange?: (checked: boolean) => void;
-  id?: string;
-  name?: string;
-}
-
-function renderLabelContent(args: {
-  label: string;
-  description?: string;
-  variant: CheckboxVariant;
-  icon?: string;
-  cardDirection: 'column' | 'row';
-  isSelected: boolean;
-  disabled: boolean;
-}): React.ReactNode {
-  const { label, description, variant, icon, cardDirection, isSelected, disabled } = args;
-  if (variant === 'card') {
-    return (
-      <CheckboxCardLabel
-        label={label}
-        description={description}
-        icon={icon}
-        cardDirection={cardDirection}
-        isSelected={isSelected}
-        disabled={disabled}
-      />
-    );
-  }
-  if (description) {
-    return (
-      <Box component="span" sx={{ display: 'flex', flexDirection: 'column' }}>
-        {label}
-        <Box component="span" sx={{ display: 'block', fontSize: (t: Theme) => t.typography.small.fontSize, color: disabled ? 'text.disabled' : isSelected ? 'text.primary' : 'text.muted', lineHeight: 1.4 }}>
-          {description}
-        </Box>
-      </Box>
-    );
-  }
-  return label;
-}
+export type {
+  CheckboxVariant,
+  CheckboxColor,
+  CheckboxSize,
+  LabelPlacement,
+  CheckboxProps,
+} from './types';
 
 export function Checkbox({
   label,
@@ -117,75 +55,18 @@ export function Checkbox({
     onChange?.(isChecked);
   };
 
-  const containerSx = isButton
-    ? (theme: Theme) => ({
-        ml: 0,
-        mr: 0,
-        gap: 0,
-        alignItems: 'center',
-        border: '1px solid',
-        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.input',
-        borderRadius: `${theme.shape.sm}px`,
-        height: '3rem',
-        px: 2,
-        cursor: disabled ? 'default' : 'pointer',
-        transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
-        backgroundColor: 'background.paper',
-        ...(isSelected && {
-          ...selectedCardStyles(theme),
-          boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
-        }),
-        ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
-        '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
-        '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
-        '& .MuiFormControlLabel-label': { typography: 'body', lineHeight: 1 },
-      })
-    : isBoxedOrCard
-    ? (theme: Theme) => ({
-        ml: 0,
-        gap: variant === 'card' ? 0 : 1.25,
-        position: 'relative' as const,
-        alignItems: variant === 'card' ? 'center' : description ? 'flex-start' : 'center',
-        justifyContent: variant === 'card' && cardDirection === 'column' ? 'center' : undefined,
-        '& .MuiFormControlLabel-label': variant === 'card' ? { flex: 1, display: 'flex', justifyContent: 'center' } : undefined,
-        border: '1px solid',
-        borderColor: isSelected ? 'primary.main' : error ? 'error.main' : 'border.input',
-        borderRadius: '0.5rem',
-        minHeight: '3rem',
-        minWidth: variant === 'card' && cardDirection === 'column' ? '9rem' : undefined,
-        px: 2,
-        ...(variant === 'boxed' && { pr: '1.25rem' }),
-        ...(variant === 'card' && cardDirection === 'row' && { pr: '2.5rem' }),
-        py: variant === 'card' ? 2 : description ? 1.5 : 0,
-        cursor: disabled ? 'default' : 'pointer',
-        transition: 'border-color 150ms ease, background-color 150ms ease, box-shadow 150ms ease',
-        backgroundColor: 'background.paper',
-        ...(isSelected && {
-          ...selectedCardStyles(theme),
-          // Inset shadow gives visual weight of a 2px border without changing box model.
-          // Non-colour differentiator (thickness) between selected and unselected, no layout shift.
-          boxShadow: `inset 0 0 0 1px ${theme.palette.primary.main}`,
-        }),
-        ...(!disabled && !isSelected && { '&:hover': { backgroundColor: 'action.hover' } }),
-        '&:has(.Mui-focusVisible)': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
-        '& .MuiCheckbox-root.Mui-focusVisible': { outline: 'none' },
-      })
-    : { ml: 0, gap: 1.25, alignItems: 'flex-start' };
+  const containerSx = buildContainerSx({
+    variant,
+    isButton,
+    isBoxedOrCard,
+    isSelected,
+    error,
+    disabled,
+    description: !!description,
+    cardDirection,
+  });
 
-  const checkboxSx =
-    variant === 'card' || variant === 'button'
-      ? {
-          position: 'absolute' as const,
-          width: '1px',
-          height: '1px',
-          opacity: 0,
-          p: 0,
-          m: 0,
-          overflow: 'hidden',
-          '&:hover, &:active': { backgroundColor: 'transparent' },
-          '&.Mui-focusVisible': { outline: 'none' },
-        }
-      : { p: 0, WebkitTapHighlightColor: 'transparent', '&:hover, &:active': { backgroundColor: 'transparent' } };
+  const checkboxSx = buildCheckboxSx(variant);
 
   // Single helper-text node reused for both positions so the id (and therefore the
   // aria-describedby link) stays identical whether it renders above or below the control.

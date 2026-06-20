@@ -4,15 +4,9 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { IconButton } from '../IconButton';
+import { formatDate } from '../../lib/format';
 import { CurrentMixSummary } from './CurrentMixSummary';
 import type { InvestmentMixDial, InvestmentOption } from './InvestmentOverview.types';
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
 
 interface DialItemProps {
   dial: InvestmentMixDial;

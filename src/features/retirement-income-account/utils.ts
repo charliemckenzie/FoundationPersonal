@@ -46,14 +46,9 @@ export function lookupBsbBank(bsb: string): string | null {
   return BSB_BANK_MAP[digits.slice(0, 2)] ?? null;
 }
 
-export function formatCurrency(value: number): string {
-  return value.toLocaleString('en-AU', {
-    style: 'currency',
-    currency: 'AUD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
-}
+// Canonical currency formatter lives in @/lib/format; re-exported so existing
+// call sites can keep importing from this barrel.
+export { formatCurrency } from '@/lib/format';
 
 // ─── Lifetime Pension payment estimate ────────────────────────────────────────
 

@@ -7,7 +7,7 @@ import { IconButton } from '../../IconButton';
 import { cellAlignSx, SR_ONLY } from './cellStyle';
 import type { DataGridColumn } from '../types';
 
-interface DataGridRowProps<T extends { id: string | number }> {
+export interface DataGridRowProps<T extends { id: string | number }> {
   row: T;
   columns: DataGridColumn<T>[];
   gridTemplateColumns: string;

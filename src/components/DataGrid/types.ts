@@ -1,6 +1,8 @@
 import type React from 'react';
+import type { SxProps, Theme } from '@mui/material/styles';
 
 // DataGrid shares its pagination contract with Table — one source of truth.
+import type { TablePaginationConfig as DataGridPaginationConfig } from '../Table';
 export type { TablePaginationConfig as DataGridPaginationConfig } from '../Table';
 
 export type DataGridDensity = 'condensed' | 'default' | 'spaced';
@@ -20,4 +22,28 @@ export interface DataGridColumn<T> {
   sortable?: boolean;
   /** Render arbitrary cell content, including interactive controls. Falls back to `String(row[key])`. */
   renderCell?: (row: T) => React.ReactNode;
+}
+
+export interface DataGridProps<T extends { id: string | number }> {
+  columns: DataGridColumn<T>[];
+  rows: T[];
+  /** Accessible name for the grid (maps to `aria-label`). */
+  label: string;
+  density?: DataGridDensity;
+  loading?: boolean;
+  emptyMessage?: string;
+  /** Master sort toggle; opt individual columns in with `column.sortable`. Ignored when `reorderable`. */
+  sortable?: boolean;
+  /** Adds a leading selection checkbox column. Controlled via `selectedIds`. */
+  selectable?: boolean;
+  selectedIds?: Array<string | number>;
+  onSelectionChange?: (ids: Array<string | number>) => void;
+  /** Adds a drag handle + arrow controls. Rows render in the given order. */
+  reorderable?: boolean;
+  onReorder?: (orderedIds: Array<string | number>) => void;
+  /** Renders a pagination footer. The consumer slices `rows` to the current page. */
+  pagination?: DataGridPaginationConfig;
+  /** Full-width footer content (e.g. a totals row). Receives the rows when a function. */
+  summaryRow?: React.ReactNode | ((rows: T[]) => React.ReactNode);
+  sx?: SxProps<Theme>;
 }

@@ -3,16 +3,9 @@
 import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import type { MouseEvent } from 'react';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import MuiDrawer from '@mui/material/Drawer';
 import { CloseButton } from '../../CloseButton';
-import { TextButton } from '../../TextButton';
-import { Button } from '../../Button';
-import { NavItem } from '../NavItem';
-import { MemberInfoCard } from '../MemberInfoCard';
-import { ThemeSwitcher } from '../ThemeSwitcher';
-import { MemberNavLogoHeader, MemberNavList } from '../hooks/memberNavParts';
+import { MemberNavLogoHeader } from '../hooks/memberNavParts';
 import {
   DEFAULT_MEMBER_ONLINE_COPY,
   type LogoSlot,
@@ -21,6 +14,8 @@ import {
   type MemberUser,
 } from '../types';
 import type { ThemeMode } from '../../../app/themes/ThemeModeContext';
+import { RootNavPanel } from './RootNavPanel';
+import { DrillNavPanel } from './DrillNavPanel';
 
 export interface MobileNavDrawerProps {
   /** Id applied to the drawer paper — used by the trigger's `aria-controls`. */
@@ -145,132 +140,32 @@ export function MobileNavDrawer({
             '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
           }}
         >
-          <Box
-            inert={drillItem !== null || undefined}
-            sx={{
-              flex: '0 0 50%',
-              minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              overflowY: 'auto',
-              pt: 2,
-              px: 2,
-              pb: 5,
-              gap: 2,
-            }}
-          >
-            <MemberInfoCard
-              user={user}
-              balance={balance}
-              totalBalanceLabel={labels.totalBalanceLabel}
-              memberNumberLabel={labels.memberNumberLabel}
-              copyLabel={labels.copyLabel}
-              copiedLabel={labels.copiedLabel}
-            />
-            <Box component="nav" aria-label="Primary" sx={{ mx: -0.5 }}>
-              <MemberNavList
-                items={primaryItems}
-                activeItemId={activeItemId}
-                onItemClick={handleItemClick}
-              />
-            </Box>
-            {secondaryItems !== undefined && secondaryItems.length > 0 && (
-              <>
-                <Divider sx={{ borderColor: 'border.subtle' }} />
-                <Box component="nav" aria-label="Secondary">
-                  <MemberNavList
-                    items={secondaryItems}
-                    activeItemId={activeItemId}
-                    onItemClick={handleItemClick}
-                    variant="secondary"
-                  />
-                </Box>
-              </>
-            )}
-            <Divider sx={{ borderColor: 'border.subtle' }} />
-            <Box sx={{ mt: 1 }}>
-              <ThemeSwitcher
-                mode={mode}
-                onChange={onModeChange}
-                size="medium"
-                fullWidth
-                lightLabel={labels.lightLabel}
-                darkLabel={labels.darkLabel}
-              />
-            </Box>
-            <Button
-              label={labels.logoutLabel}
-              variant="outlined"
-              fullWidth
-              onClick={onLogout}
-              sx={{ mt: 1, flexShrink: 0 }}
-            />
-            {lastLoggedIn !== undefined && (
-              <Typography variant="small" component="p" sx={{ color: 'text.muted', m: 0, mt: 1, textAlign: 'center' }}>
-                {labels.lastLoggedInLabel} {lastLoggedIn}
-              </Typography>
-            )}
-          </Box>
+          <RootNavPanel
+            inert={drillItem !== null}
+            labels={labels}
+            user={user}
+            balance={balance}
+            primaryItems={primaryItems}
+            secondaryItems={secondaryItems}
+            activeItemId={activeItemId}
+            onItemClick={handleItemClick}
+            mode={mode}
+            onModeChange={onModeChange}
+            onLogout={onLogout}
+            lastLoggedIn={lastLoggedIn}
+          />
 
-          <Box
-            inert={drillItem === null || undefined}
-            sx={{
-              flex: '0 0 50%',
-              minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              overflowY: 'auto',
-              p: 2,
-              gap: 2,
-            }}
-          >
-            <Box sx={{ mx: -2 }}>
-              <Box sx={{ px: 2, height: 48, display: 'flex', alignItems: 'center' }}>
-                <TextButton
-                  label={labels.backLabel}
-                  startIcon="chevron-left"
-                  iconDirection="left"
-                  onClick={handleBack}
-                />
-              </Box>
-              <Divider sx={{ borderColor: 'border.subtle' }} />
-            </Box>
-            <Typography
-              id={drillHeadingId}
-              ref={drillHeadingRef}
-              variant="h5"
-              component="h2"
-              tabIndex={-1}
-              sx={(t) => ({ color: 'text.heading', m: 0, mt: 1, fontSize: t.typography.body.fontSize, lineHeight: 1.5, outline: 'none' })}
-            >
-              {drillItem?.label}
-            </Typography>
-            <Box component="nav" aria-labelledby={drillHeadingId} sx={{ mx: -0.5 }}>
-              <Box
-                component="ul"
-                role="list"
-                sx={{ display: 'flex', flexDirection: 'column', listStyle: 'none', m: 0, p: 0 }}
-              >
-                {drillItem?.children?.map((child) => (
-                  <Box component="li" key={child.id}>
-                    <NavItem
-                      label={child.label}
-                      description={child.description}
-                      icon={child.icon}
-                      href={child.href}
-                      active={activeItemId === child.id}
-                      showAccentBar={false}
-                      onClick={() => {
-                        child.onClick?.();
-                        onItemClick?.(child);
-                        onClose();
-                      }}
-                    />
-                  </Box>
-                ))}
-              </Box>
-            </Box>
-          </Box>
+          <DrillNavPanel
+            inert={drillItem === null}
+            labels={labels}
+            drillItem={drillItem}
+            drillHeadingId={drillHeadingId}
+            drillHeadingRef={drillHeadingRef}
+            activeItemId={activeItemId}
+            onBack={handleBack}
+            onItemClick={onItemClick}
+            onClose={onClose}
+          />
         </Box>
       </Box>
     </MuiDrawer>

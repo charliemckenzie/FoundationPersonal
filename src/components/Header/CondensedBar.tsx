@@ -4,13 +4,12 @@ import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
-import InputBase from '@mui/material/InputBase'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
-import { Icon } from '../Icon'
 import { NavItemButton } from './NavItemButton'
 import { HeaderCtaButton } from './CtaButton'
+import { CondensedSearch } from './CondensedSearch'
 import type { NavItem, CtaAction, UtilityLink } from './types'
 
 export interface CondensedBarProps {
@@ -87,80 +86,18 @@ export function CondensedBar({
         <Box sx={{ flex: 1, display: searchOpen ? 'none' : 'block' }} />
 
         {/* Search — icon collapses to full bar */}
-        {onSearch &&
-          (searchOpen ? (
-            <Box
-              component="form"
-              role="search"
-              onSubmit={handleSearchSubmit}
-              onBlur={handleSearchBlur}
-              sx={{
-                flex: 1,
-                display: 'flex',
-                alignItems: 'center',
-                bgcolor: 'action.hover',
-                borderRadius: 6,
-                px: 2,
-                py: 0.5,
-                gap: 1,
-                outline: '2px solid',
-                outlineColor: 'border.focus',
-              }}
-            >
-              <InputBase
-                inputRef={inputRef}
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={searchPlaceholder ?? 'Search'}
-                inputProps={{ 'aria-label': 'Search' }}
-                sx={{ flex: 1, typography: 'small' }}
-              />
-              <Box
-                component="button"
-                type="submit"
-                aria-label="Submit search"
-                sx={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  p: 0,
-                  color: 'primary.main',
-                  borderRadius: 1,
-                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
-                  '&:focus': { outline: 'none' },
-                }}
-              >
-                <Icon icon="magnifying-glass" size="md" />
-              </Box>
-            </Box>
-          ) : (
-            <Box
-              component="button"
-              type="button"
-              aria-label="Open search"
-              onClick={handleOpenSearch}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                bgcolor: 'action.hover',
-                borderRadius: 6,
-                px: 1.5,
-                py: 0.75,
-                border: 'none',
-                cursor: 'pointer',
-                color: 'text.secondary',
-                outline: '2px solid transparent',
-                '&:hover': { bgcolor: 'action.selected' },
-                '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus' },
-                '&:focus': { outline: 'none' },
-              }}
-            >
-              <Icon icon="magnifying-glass" size="md" />
-            </Box>
-          ))}
+        {onSearch && (
+          <CondensedSearch
+            searchOpen={searchOpen}
+            query={query}
+            inputRef={inputRef}
+            searchPlaceholder={searchPlaceholder}
+            onQueryChange={setQuery}
+            onOpenSearch={handleOpenSearch}
+            onSearchBlur={handleSearchBlur}
+            onSearchSubmit={handleSearchSubmit}
+          />
+        )}
 
         {/* Utility links — text only, no icons */}
         {utilityLinks && (

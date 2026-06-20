@@ -1,61 +1,33 @@
-import React from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import Slide from '@mui/material/Slide';
-import type { TransitionProps } from '@mui/material/transitions';
 import MuiDialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 import { Button } from '../Button';
-import { Icon, type IconColor } from '../Icon';
+import { Icon } from '../Icon';
 import { CloseButton } from '../CloseButton';
 import { AlertDialog } from './AlertDialog';
 import { useDrawerDrag } from './useDrawerDrag';
+import { DrawerDragHandle } from './DrawerDragHandle';
+import {
+  SIZE_MAP,
+  VARIANT_ICONS,
+  VARIANT_ICON_COLOR,
+  VARIANT_BUTTON_COLOR,
+  SlideUp,
+} from './constants';
+import type { DialogProps } from './types';
 
-export type DialogVariant = 'neutral' | 'info' | 'warning' | 'danger' | 'alert';
-export type DialogSize = 'small' | 'medium' | 'large';
-export type AlertButtonLayout = 'row' | 'stack';
-export type DialogMobileDisplay = 'drawer' | 'dialog';
-export interface AlertAction { label: string; onClick: () => void }
-
-export interface DialogProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  children?: React.ReactNode;
-  confirmLabel?: string;
-  cancelLabel?: string;
-  onConfirm?: () => void;
-  /** Disables the confirm button — e.g. while a form in the body is incomplete. */
-  confirmDisabled?: boolean;
-  variant?: DialogVariant;
-  size?: DialogSize;
-  loading?: boolean;
-  disableCloseOnBackdrop?: boolean;
-  hideCloseButton?: boolean;
-  hideCancel?: boolean;
-  /** Suppresses the variant icon next to the dialog title. */
-  hideIcon?: boolean;
-  titleVariant?: 'h4' | 'h5' | 'h6';
-  alertButtonLayout?: AlertButtonLayout;
-  extraActions?: ReadonlyArray<AlertAction>;
-  mobileDisplay?: DialogMobileDisplay;
-}
-
-const SIZE_MAP: Record<DialogSize, 'xs' | 'sm' | 'md'> = { small: 'xs', medium: 'sm', large: 'md' };
-const VARIANT_ICONS: Record<Exclude<DialogVariant, 'neutral' | 'alert'>, string> = { info: 'info_1', warning: 'alert_1', danger: 'alert_2' };
-const VARIANT_ICON_COLOR: Record<Exclude<DialogVariant, 'neutral' | 'alert'>, IconColor> = { info: 'info', warning: 'warning', danger: 'error' };
-const VARIANT_BUTTON_COLOR: Record<Exclude<DialogVariant, 'alert'>, 'primary'> = { neutral: 'primary', info: 'primary', warning: 'primary', danger: 'primary' };
-
-const SlideUp = React.forwardRef<unknown, TransitionProps & { children: React.ReactElement }>(
-  function SlideUp(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  }
-);
+export type {
+  DialogVariant,
+  DialogSize,
+  AlertButtonLayout,
+  DialogMobileDisplay,
+  AlertAction,
+  DialogProps,
+} from './types';
 
 export function Dialog({
   open,
@@ -136,32 +108,10 @@ export function Dialog({
       }}
     >
       {showAsDrawer && (
-        <Box
-          aria-hidden="true"
+        <DrawerDragHandle
           onTouchStart={handleDragStart}
           onTouchMove={handleDragMove}
           onTouchEnd={handleDragEnd}
-          sx={(t) => ({
-            width: t.spacing(5),
-            height: t.spacing(0.5),
-            borderRadius: `${t.shape['xs']}px`,
-            backgroundColor: 'divider',
-            mx: 'auto',
-            mt: 1.5,
-            mb: 0,
-            touchAction: 'none',
-            cursor: 'grab',
-            // Expand touch target without affecting visual size
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: -12,
-              bottom: -12,
-              left: -40,
-              right: -40,
-            },
-            position: 'relative',
-          })}
         />
       )}
       <DialogTitle

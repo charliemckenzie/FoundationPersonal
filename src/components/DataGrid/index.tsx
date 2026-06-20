@@ -1,58 +1,26 @@
 'use client';
 
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import type { SxProps, Theme } from '@mui/material/styles';
-import type React from 'react';
 import {
-  DndContext,
   PointerSensor,
-  closestCenter,
   useSensor,
   useSensors,
   type DragEndEvent,
 } from '@dnd-kit/core';
-import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
-import { SortableContext, arrayMove, verticalListSortingStrategy } from '@dnd-kit/sortable';
-import { Spinner } from '../Spinner';
+import { arrayMove } from '@dnd-kit/sortable';
 import { useTableSort } from '../Table/parts/useTableSort';
 import { DataGridHeader } from './parts/DataGridHeader';
-import { DataGridRow } from './parts/DataGridRow';
-import { SortableDataGridRow } from './parts/SortableDataGridRow';
+import { DataGridBody } from './parts/DataGridBody';
 import { DataGridPagination } from './parts/DataGridPagination';
 import { buildGridTemplate } from './parts/gridTemplate';
 import { useRowReorder } from './parts/useRowReorder';
 import { useRowSelection } from './parts/useRowSelection';
 import { DENSITY_PY } from '../Table/parts/sharedConstants';
-import type { DataGridColumn, DataGridDensity, DataGridPaginationConfig } from './types';
+import type { DataGridProps } from './types';
 
-export type { DataGridColumn, DataGridDensity, DataGridAlign, DataGridPaginationConfig } from './types';
+export type { DataGridColumn, DataGridDensity, DataGridAlign, DataGridPaginationConfig, DataGridProps } from './types';
 
 const HORIZONTAL_PADDING = 2.5;
-
-export interface DataGridProps<T extends { id: string | number }> {
-  columns: DataGridColumn<T>[];
-  rows: T[];
-  /** Accessible name for the grid (maps to `aria-label`). */
-  label: string;
-  density?: DataGridDensity;
-  loading?: boolean;
-  emptyMessage?: string;
-  /** Master sort toggle; opt individual columns in with `column.sortable`. Ignored when `reorderable`. */
-  sortable?: boolean;
-  /** Adds a leading selection checkbox column. Controlled via `selectedIds`. */
-  selectable?: boolean;
-  selectedIds?: Array<string | number>;
-  onSelectionChange?: (ids: Array<string | number>) => void;
-  /** Adds a drag handle + arrow controls. Rows render in the given order. */
-  reorderable?: boolean;
-  onReorder?: (orderedIds: Array<string | number>) => void;
-  /** Renders a pagination footer. The consumer slices `rows` to the current page. */
-  pagination?: DataGridPaginationConfig;
-  /** Full-width footer content (e.g. a totals row). Receives the rows when a function. */
-  summaryRow?: React.ReactNode | ((rows: T[]) => React.ReactNode);
-  sx?: SxProps<Theme>;
-}
 
 /**
  * An interactive, `div`-based grid (ARIA `role="table"`) for editable cells, row
@@ -164,48 +132,17 @@ export function DataGrid<T extends { id: string | number }>({
         ariaRowIndex={pagination ? 1 : undefined}
       />
 
-      <Box role="rowgroup">
-        {loading && (
-          <Box role="row">
-            <Box role="cell" sx={{ py: 4, display: 'flex', justifyContent: 'center' }}>
-              <Spinner size="medium" />
-            </Box>
-          </Box>
-        )}
-        {isEmpty && (
-          <Box role="row">
-            <Box role="cell" sx={{ py: 4, display: 'flex', justifyContent: 'center' }}>
-              <Typography variant="body" color="text.muted">
-                {emptyMessage}
-              </Typography>
-            </Box>
-          </Box>
-        )}
-        {!loading && reorderable && (
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext items={orderedIds} strategy={verticalListSortingStrategy}>
-              {displayRows.map((row, index) => (
-                <SortableDataGridRow key={row.id} row={row} {...rowProps(row, index)} />
-              ))}
-            </SortableContext>
-          </DndContext>
-        )}
-        {!loading && !reorderable &&
-          displayRows.map((row, index) => (
-            <DataGridRow
-              key={row.id}
-              row={row}
-              reorderable={false}
-              isDragging={false}
-              {...rowProps(row, index)}
-            />
-          ))}
-      </Box>
+      <DataGridBody
+        loading={loading}
+        isEmpty={isEmpty}
+        emptyMessage={emptyMessage}
+        reorderable={reorderable}
+        sensors={sensors}
+        onDragEnd={handleDragEnd}
+        orderedIds={orderedIds}
+        displayRows={displayRows}
+        rowProps={rowProps}
+      />
 
       {summaryRow != null && (
         <Box role="row" sx={{ borderTop: '1px solid', borderColor: 'divider' }}>

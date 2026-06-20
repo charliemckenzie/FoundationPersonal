@@ -1,19 +1,13 @@
 import type { BeneficiaryDraft, ExpiryOption, Nomination } from './types';
 import { RELATIONSHIP_OPTIONS, EXPIRY_OPTIONS } from './types';
 import { validateEmail, validatePhone, validateDateOfBirth } from '../../components/inputs/validation';
+import { formatDate } from '@/lib/format';
 
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-export function formatDate(dateStr: string): string {
-  const [year, month, day] = dateStr.split('-').map(Number);
-  if (!year || !month || !day) return dateStr;
-  return `${day} ${MONTHS[month - 1]} ${year}`;
-}
-
-export function formatSubmittedAt(isoStr: string): string {
-  const d = new Date(isoStr);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
+// Canonical date formatter lives in @/lib/format. formatSubmittedAt is an alias
+// kept for existing call sites — the canonical formatDate handles both
+// date-only (`2026-06-05`) and full ISO timestamp inputs.
+export { formatDate };
+export const formatSubmittedAt = formatDate;
 
 export function calcAge(dateStr: string): number {
   const [year, month, day] = dateStr.split('-').map(Number);

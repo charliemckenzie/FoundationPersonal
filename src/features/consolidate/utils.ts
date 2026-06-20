@@ -1,22 +1,8 @@
 import type { ConsolidateSubmission, ExternalFund, FoundFund, TransferAmount, SmsfDetails, SmsfReadiness } from './types';
 
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(amount);
-}
-
-const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-export function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-export function formatDateDMY(iso: string): string {
-  const d = new Date(iso);
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  return `${dd} / ${mm} / ${d.getFullYear()}`;
-}
+// Currency/date display now comes from the canonical formatters in @/lib/format.
+// Re-exported here so existing call sites can keep importing from this barrel.
+export { formatCurrency, formatDate, formatDateDMY } from '@/lib/format';
 
 function generateReference(): string {
   const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';

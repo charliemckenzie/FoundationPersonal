@@ -106,13 +106,51 @@ Phases 1→2 are strictly ordered. Phases 3–5 can run in parallel once 1–2 l
 | 2.2 | Mark the `ci` check **required** in branch protection (Adam — repo admin action). Do this only after WP2.0 so the first required run is green. | XS |
 | 2.3 | Lint policy: fail on errors only at first (114 warnings exist); optionally ratchet warnings later. `eslint` already exits 0 on errors-only. | XS |
 
-**Owners:** Frink (workflow) → Chalmers (review). Lenny fixes WP2.0. Adam flips branch protection.
-**Dependency:** WP2.0 must be resolved (or the test step scoped to `test:unit`) before WP2.2, or the first required run is red.
-**Acceptance:** CI runs green on `main`; a deliberately-broken test PR goes red and blocks merge.
+### ✅ Phase 2 — COMPLETE (gate live, advisory by choice) — 2026-06-20
+
+- **WP2.0 — DONE.** Failing `MemberOnlineLayout.stories.tsx > Default` (`useThemeMode must be used inside a ThemeModeProvider`) fixed by wrapping the story in a `meta.decorators` `<ThemeModeProvider>` (Lenny). No interim `test:unit` scoping needed — full `npm run test` is green: **514/514**. Chalmers PASS.
+- **WP2.1 — DONE.** `.github/workflows/ci.yml` added: `checkout → setup-node(22, npm cache) → normalize lockfile → npm ci → tsc --noEmit → lint → build → lib:build → playwright install chromium → test`, on `pull_request` + `push: main`, with `concurrency` cancel and `timeout-minutes: 20`. Chalmers PASS (×2). **Verified GREEN on `origin/main`** (run `27862838364`, all 13 steps success, ~ full browser suite included).
+- **WP2.0/2.1 blocker found & fixed — lockfile registry hosts.** First CI run failed at `npm ci` (`Exit handler never called!`) because `package-lock.json` had 185 `resolved` URLs on the internal `https://nexus-repo/repository/npm-proxy/...` host (dual-device ping-pong) unreachable from runners. Fix (Adam-approved "clean lockfile + CI guard"): (1) rewrote the 185 URLs → `https://registry.npmjs.org/` (host-only, integrity unchanged); (2) added a `Normalize lockfile registry hosts` `sed` step before `npm ci` so future Nexus-device installs self-heal in CI. Also cleared the `skip-worktree` bit on `package-lock.json` (was hiding the fix from git) — **Adam chose to leave skip-worktree OFF** going forward so the lockfile stays honest.
+- **WP2.3 — DONE.** Errors-only lint policy confirmed: `npm run lint` has no `--max-warnings`; the 114 warnings pass, eslint exits 0. CI lint step green.
+- **WP2.2 — DECLINED by Adam (2026-06-20).** Adam does **not** want branch protection / a required check — the team pushes directly to `main` and the enforcement friction (PR-gated merges, ~2–3 min CI wait) isn't wanted. **The `ci` gate is live but advisory:** it runs on every push + PR and reports green/red, but never blocks. This is a deliberate choice, not an oversight — do not re-propose enforcement without Adam raising it first.
+
+**Owners (as executed):** Lenny (WP2.0 story fix) → Frink (workflow, drafted then handed to Claude after a session limit) → Chalmers (reviewed all changes, PASS). Adam committed/pushed directly to `main` and made the WP2.2 / skip-worktree calls.
+**Acceptance (met):** CI runs green on `main` (run `27862838364`). The "broken PR blocks merge" criterion is **moot** — WP2.2 (required check) was declined, so the gate is advisory and never blocks. The gate still surfaces green/red on every push + PR.
 
 ---
 
 ## Phase 3 — DRY + tests
+
+### ✅ Phase 3 — COMPLETE (2026-06-20)
+
+**Both WPs done, lean (no full team pipeline — direct build + verification, per Adam). `main`-ready; not yet committed (Adam commits himself).**
+
+| Gate | After |
+|---|---|
+| `npx tsc --noEmit` | **0 errors** |
+| `npx eslint .` | **0 errors** / 114 warnings (unchanged — Phase 5) |
+| `npm run lib:build` | **success** (incl. DTS) |
+| `npm run test` | **543/543** (33 new unit tests added) |
+
+**WP3.1 — single source for formatters (`src/lib/format.ts`).** Re-survey corrected the counts: the "7 currency + 8 date" copies were really **2 distinct currency behaviours + 1 date format family**:
+- **6 identical 2-dp AUD** `formatCurrency` (`$1,234.56`) — retirement-income-account, lifetime-pension, investment-mix, consolidate, InvestmentOverview, manage-income-accounts. Collapsed into canonical `formatCurrency`.
+- **1 deliberate outlier** — `retirement-projection/format.ts` (whole dollars, true-minus, `/yr`, signed). **Left untouched** (Adam's call — it's a different contract, not a duplicate; merging would silently change every projection figure to 2-dp).
+- **`formatDate`** (`5 Jun 2026`) ×5 + `formatDateDMY` (`05 / 06 / 2026`) ×2 + `formatDateLong` (`5 June 2026`) ×1 → all folded into canonical. The canonical `formatDate` adopts beneficiaries' **safe component-parse** for `YYYY-MM-DD` (avoids the `new Date('2026-06-05')` UTC-midnight shift) and falls back to `new Date` for ISO timestamps — output identical for current inputs. Added a **range guard** (month 1–12, day 1–31) so malformed dates return the original string instead of `40 undefined 2026` (a latent bug in every original copy; caught by a unit test).
+- **Approach:** feature `utils.ts` barrels now **re-export** the canonical formatters (`export { formatCurrency, … } from '@/lib/format'`) so all ~30 call sites keep importing from `../utils` unchanged — zero call-site churn, single implementation. The 2 exported component files (`InvestmentOverview/index.tsx`, `DialItem.tsx`) use a **relative** import (`../../lib/format`) because they're in the published `lib:build` graph and tsup/esbuild has no `@/` alias plugin. `src/lib/format.ts` is **not** exported from `src/index.ts` (it's an internal app util, not part of the public component API).
+- **Config fix:** added `resolve.alias` `@`→`src` to `vitest.config.ts` so the node `unit` project resolves the new `@/lib/format` imports (it previously had no `@/` imports to resolve).
+
+**WP3.2 — seed unit tests.** Added `src/lib/format.test.ts` (11 tests — currency rounding/grouping/negatives, date parsing incl. the timezone + malformed-input guards), `retirement-income-account/utils.test.ts` (`estimatePension` rate table + null cases, `getMinDrawdownRate` brackets, `estimateRetirementBonus` cap), `investment-mix/utils.test.ts` (`ordinal`, `allocationsEqual`, `summariseMix`, `validateStep3` incl. float tolerance). The `unit` project (`src/**/*.test.ts`, node env) now has 4 test files / 44 tests.
+
+**Carry-forwards:** none. Note for Phase 5: the barrel re-export comments + the untouched projection formatter are intentional, not cleanup targets.
+
+---
+
+**Status: ~~NOT STARTED~~ COMPLETE — see block above.** Phases 1 + 2 were done and `main` green; Phase 3 built on that. The CI gate runs on every push + PR (advisory), so this work gets automatic green/red feedback — but nothing blocks, so it was verified locally (tsc/lint/lib:build/test all green) before handing back.
+
+**Before starting, re-survey the duplication (counts below are from the 2026-06-20 review and may have drifted):**
+- `formatCurrency` — grep for definitions: `grep -rn "formatCurrency" src/ --include=*.ts`. Review listed 7 copies across `features/consolidate/utils.ts`, `features/investment-mix/utils.ts`, `features/lifetime-pension/utils.ts`, `features/retirement-income-account/utils.ts`, `features/retirement-projection/format.ts`, `components/InvestmentOverview/index.tsx`, `app/member-online/(portal)/manage-income-accounts/page.tsx`.
+- `formatDate` — 8 copies (similar spread). **Watch for divergent signatures/rounding/locale before collapsing** (`amount` vs `value`, options vs none) — settle one canonical signature, don't silently change any call site's output.
+- Test convention: only `features/retirement-projection/projection.test.ts` exists as a real unit test (vitest `unit` project = `src/**/*.test.{ts,tsx}`, node env — see `vitest.config.ts`). The `tests/` dir the Playwright instructions assume does **not** exist yet.
 
 | WP | § | Change | Effort |
 |---|---|---|---|
@@ -127,16 +165,59 @@ Phases 1→2 are strictly ordered. Phases 3–5 can run in parallel once 1–2 l
 
 ## Phase 4 — Structural cleanup
 
+**Status: IN PROGRESS (started 2026-06-20) — running LEAN at Adam's request (direct build + verify, one component at a time, no full team pipeline).** Baseline confirmed green before starting: `tsc` 0, `eslint` 0 errors (114 warnings), `lib:build` OK.
+
+### WP4.1 progress — 18 of 19 components DONE (only InputSelect left, deferred to WP4.4); 2 app pages remain
+
+Extraction pattern used throughout: pull type/interface declarations into `types.ts`, variant-style maps + derived-sx helpers into `styles.ts`, and large JSX subsections / cohesive logic into sibling sub-components or co-located hooks. `index.tsx` re-exports all public types (`export type { … } from './types'`) so `src/index.ts` and external imports are **unchanged**. Verified after each: `tsc` 0, `eslint` 0 errors, `lib:build` DTS stable (public API byte-identical), and the component's Storybook story tests pass. **Final state: every `src/components/**/*.tsx` is now ≤200 lines except `InputSelect` (257, deferred). Full repo green: `tsc` 0, `eslint` 0 errors, warnings 114→113.**
+
+| Component | Before | After (index) | New sibling files |
+|---|---|---|---|
+| `Card` | 387 | **154** | `types.ts`, `styles.ts`, `helpers.tsx`, `CardGrid.tsx` |
+| `RadioGroup` | 335 | **127** | `types.ts`, `styles.ts`, `RadioOptionItem.tsx` |
+| `AnnouncementBanner` | 304 | **187** | `types.ts`, `styles.ts` |
+| `MemberOnline/MobileNavDrawer` | 278 | **173** | `RootNavPanel.tsx`, `DrillNavPanel.tsx` |
+| `FileUpload` | 260 | **176** | `Dropzone.tsx` |
+| `PosterPanel` | 255 | **180** | `types.ts`, `styles.ts` |
+| `TextField` | 245 | **159** | `types.ts`, `styles.ts` |
+| `Checkbox` | 237 | **118** | `types.ts`, `helpers.tsx`, `styles.ts` |
+| `DescriptionList` | 233 | **90** | `types.ts`, `context.ts`, `DescriptionListItem.tsx` |
+| `AddressField/AustralianAutocomplete` | 239 | **187** | `autocompleteStyles.ts` (+ deduped an identical inline link sx) |
+| `Dialog` | 223 | **173** | `types.ts`, `constants.tsx` (incl. SlideUp), `DrawerDragHandle.tsx` |
+| `Header/ARTHeader` | 225 | **161** | `useArtHeaderNav.ts` (hook) |
+| `Header/QSuperHeader` | 210 | **180** | `useQSuperHeaderNav.ts` (hook; also removed an unused `UtilityBar` import) |
+| `Header/CondensedBar` | 203 | **140** | `CondensedSearch.tsx` |
+| `Select` | 218 | **167** | `types.ts`, `styles.ts` |
+| `DataGrid` | 219 | **156** | `parts/DataGridBody.tsx` (+ moved `DataGridProps` to `types.ts`, exported `DataGridRowProps`) |
+| `MemberOnline/NavFlyout` | 206 | **161** | `useNavFlyoutKeyboard.ts` (hook) |
+| `Table/ResponsiveTable` | 203 | **174** | `responsiveTableTypes.ts` |
+
+**Carry-forward found:** `src/components/Card/cardParts.tsx` (150 lines) is **tracked but imported nowhere** (grep across all `.ts`/`.tsx` returns zero references) — dead code. Left untouched (out of scope, "look before deleting"); flag for **Phase 5** cleanup or confirm with Moe whether it's intended.
+
+**The two 621-line `manage-income-accounts` pages — DONE.** Both split behaviour-preservingly into co-located siblings (mock data, types, sub-components extracted from the inline definitions):
+- `manage-income-accounts/page.tsx` **621 → 146** — extracted `types.ts`, `mockData.ts`, `AccountListRow.tsx`, `AccountSelect.tsx`, `ApplicationRow.tsx`, `detailParts.tsx` (DetailRow/Section), `AccountDetailView.tsx`. (Also dropped a dead unused `isLifetimePension` var.)
+- `manage-income-accounts/[id]/page.tsx` **621 → 150** — extracted `types.ts`, `mockData.ts` (the 178-line `MOCK_DETAILS`), `parts.tsx` (SectionHeading/DetailRow/InlineCard), `sections.tsx` (PaymentsSection/BeneficiariesSection), `CentrelinkScheduleSection.tsx`.
+
+**WP4.1 is COMPLETE** (everything except `InputSelect`, deferred to WP4.4). Full repo re-verified after all of WP4.1: `tsc` **0 errors**, `eslint` **0 errors** (warnings 114 → **112**, two dead imports/vars cleared as a side-effect), `lib:build` DTS stable at **89.13 KB**, `npm run test` **543/543 passing** (113 files). Nothing committed — Adam commits himself.
+
+**Note for whoever does these pages' follow-up:** `page.tsx` carried Adam's pre-existing uncommitted WIP when split; the split only relocated code (no logic change), and the file was green before and after.
+
+**`InputSelect` (257)** is intentionally deferred to **WP4.4** (which decides whether it's consolidated into `Select` or kept).
+
+**WP4.2 / 4.3 / 4.4:** not started.
+
+*Original re-verified counts (2026-06-20, before any Phase 4 work):*
+
 | WP | § | Change | Effort |
 |---|---|---|---|
-| 4.1 | §10 | Bring the 14 over-limit components under 200 lines by extracting variant-style maps/subsections (follow `components/buttons/variantStyles.ts`). Prioritise `Card` (387), `RadioGroup` (335), `AnnouncementBanner` (304). Split the 626/621-line `manage-income-accounts` pages into sub-components. | L |
-| 4.2 | §11 | Finish IDV extraction — make `retirement-income-account/steps/StepIDV.tsx` consume shared `features/idv/`; delete the duplicated 392-line copy. (Coordinate with the existing `idv-shared-module-plan.md`.) | M |
-| 4.3 | §12 | Extract a `useSteppedFlow` hook from the 7 `*Flow.tsx` orchestrators; remove the `eslint-disable exhaustive-deps` workarounds it enables. | L |
-| 4.4 | §13 | Moe decision: consolidate `InputSelect` vs `Select` or document why both exist. | S (+ build if merged) |
+| 4.1 | §10 | Bring the over-limit components under 200 lines by extracting variant-style maps/subsections (follow `components/buttons/variantStyles.ts`). **Re-verified: 19 component `.tsx` files now exceed 200 lines** (not 14). Top offenders: `Card/index.tsx` (387), `RadioGroup/index.tsx` (335), `AnnouncementBanner/index.tsx` (304), `MemberOnline/MobileNavDrawer/index.tsx` (278), `FileUpload/index.tsx` (260), `InputSelect/index.tsx` (257), `PosterPanel/index.tsx` (255), `TextField/index.tsx` (245), `Checkbox/index.tsx` (237), `DescriptionList/index.tsx` (233), `Dialog/index.tsx` (223). Also split the two **621-line** `manage-income-accounts` pages (`page.tsx` + `[id]/page.tsx`) into sub-components. **Do one component per PR; verify the story renders unchanged after each.** | L |
+| 4.2 | §11 | Finish IDV consolidation. The shared module **already exists** (`features/idv/`: `StepIDV.tsx` 363, `idvService.ts` 59, `IdvModal.tsx`, `useIdvGate.ts`) and is **already consumed** by `lifetime-pension` + `consolidate` + `RetirementIncomeAccountFlow.tsx`. Remaining duplicates: **`retirement-income-account/steps/StepIDV.tsx` (392 lines — has diverged from the shared 363-line copy, so diff carefully, don't blind-delete)** plus two near-identical local `idvService.ts` (retirement-income-account 47, lifetime-pension 47) vs shared (59). **First confirm whether the local `steps/StepIDV.tsx` is even still wired in** (the Flow imports `features/idv`) — it may be orphaned. Coordinate with `docs/Adam/idv-shared-module-plan.md`. | M |
+| 4.3 | §12 | Extract a `useSteppedFlow` hook from the `*Flow.tsx` orchestrators; remove the `eslint-disable exhaustive-deps` workarounds it enables. **Re-verified: 7 `*Flow.tsx` files, but only 4 are large stepped orchestrators worth the hook** — `InvestmentMixFlow` (560), `RetirementIncomeAccountFlow` (504), `LifetimePensionFlow` (458), `RetirementProjectionFlow` (445). The other 3 (`AtoSuperMatchFlow` 237, `ManualConsolidateFlow` 192, `NominationFlow` 160) are a different shape — assess whether they fit the hook or stay as-is. | L |
+| 4.4 | §13 | Moe decision: consolidate `InputSelect` vs `Select` or document why both exist. **Re-verified: `InputSelectContainer` is used in only 3 non-story files** — small surface, low-risk either way. | S (+ build if merged) |
 
-**Owners:** Moe (4.2/4.3/4.4 architecture) → Lenny → Chalmers → Marge (4.1 visual parity) → Flanders (4.2 a11y). Lisa updates `docs/guidelines/components.md` + stories for any API change.
-**Risk:** Medium — refactors with behaviour-preservation requirement. Stories + Phase 2 gate are the safety net. Do one component/flow per PR.
-**Acceptance:** no component index.tsx > 200 lines (or documented exception); single IDV implementation; flows share the hook; Storybook unchanged visually.
+**Owners (if routing through the team — Phase 3 was done lean/direct at Adam's request; ask Adam which he wants for Phase 4):** Moe (4.2/4.3/4.4 architecture) → Lenny → Chalmers → Marge (4.1 visual parity) → Flanders (4.2 a11y). Lisa updates `docs/guidelines/components.md` + stories for any API change.
+**Risk:** Medium — refactors with a behaviour-preservation requirement. Stories + the Phase 2 CI gate (advisory) + Phase 3's new unit tests are the safety net. **Do one component/flow at a time; run `npm run test` + `npx tsc --noEmit` after each.**
+**Acceptance:** no component `index.tsx` > 200 lines (or a documented exception); single IDV implementation; the 4 big flows share the hook; Storybook unchanged visually; `lib:build` still green (4.1 touches exported components).
 
 ---
 
@@ -158,24 +239,48 @@ Phases 1→2 are strictly ordered. Phases 3–5 can run in parallel once 1–2 l
 
 - [x] **Decision:** consolidate = **fix (A)** ✅
 - [x] Phase 1 — tsc + eslint clean (§1–5) ✅ (committed to `main` in `7a25b7d`; tsc 0, eslint 0 errors, build exit 0)
-- [ ] Phase 2 — CI gate added + marked required (§6) — ⚠️ blocked on WP2.0 (failing `MemberOnlineLayout` story test) before the test step can be required
-- [ ] Phase 3 — `src/lib/format.ts` + seed tests (§7, §8)
-- [ ] Phase 4 — size limits, IDV merge, flow hook, select consolidation (§10–13)
+- [x] Phase 2 — CI gate added + **green on `main`** (§6). WP2.0 (story test) ✅, WP2.1 (`ci.yml`) ✅, WP2.3 (errors-only lint) ✅. **WP2.2 (mark required in branch protection) — declined by Adam; gate kept advisory by choice.**
+- [x] Phase 3 — `src/lib/format.ts` (canonical formatters; 6 currency + 8 date copies collapsed, projection outlier left separate) + seed unit tests (44 tests / 4 files). tsc 0, eslint 0 errors, lib:build OK, test 543/543. ✅ (not yet committed — Adam commits himself)
+- [~] Phase 4 — **WP4.1 (size limits) ✅ DONE**: 18 components + both 621-line pages now ≤200 lines (only `InputSelect` 257 left, deferred to WP4.4). tsc 0, eslint 0 errors (114→112 warnings), lib:build OK, test **543/543**. **WP4.2 (IDV merge), WP4.3 (`useSteppedFlow`), WP4.4 (InputSelect) — NOT STARTED.** See the "Phase 4 — IN PROGRESS" block for the per-component tally.
 - [ ] Phase 5 — warnings, artifacts, gitignore, root docs
 
 ---
 
-## Kickoff prompt — Phase 2 (paste into a new context window)
+## Kickoff prompt — Phase 4 continuation: WP4.2 → WP4.3 → WP4.4 (paste into a new context window)
 
-> **Context:** Continue the Foundation code-quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md` (research: `docs/Adam/code-quality-review-2026-06-20.md`). **Read both before starting.** Phase 1 is **complete and green** — `main` (commit `7a25b7d`) has `npx tsc --noEmit` 0 errors, `npx eslint .` 0 errors (114 warnings remain, Phase 5), `npx next build` exit 0. We are now on **Phase 2 — the CI quality gate (§6).**
+> **Context:** Continue the Foundation code-quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md` (research: `docs/Adam/code-quality-review-2026-06-20.md`). **Read the "Phase 4 — IN PROGRESS" block first.** Phases 1–3 and **Phase 4 WP4.1 are COMPLETE and green** (verified 2026-06-21): `npx tsc --noEmit` **0 errors**, `npx eslint .` **0 errors** (112 warnings → Phase 5), `npm run lib:build` success (DTS 89.13 KB), `npm run test` **543/543** passing (113 files). **Nothing is committed yet — Adam commits/pushes himself; ask before assuming the working tree is clean.** A CI gate (`.github/workflows/ci.yml`) runs on every push + PR, **advisory only** (Adam declined branch protection — do NOT re-propose it).
 >
-> **Before writing the workflow, resolve WP2.0 — the one blocker.** `npm run test` (`vitest run`) is **not green**: `src/stories/member-online/MemberOnlineLayout.stories.tsx > Default` fails with `useThemeMode must be used inside a ThemeModeProvider`. It's unrelated to Phase 1 (pre-existing/from a merge). Investigate the story's decorator/provider setup vs. the global Storybook+vitest config, then **fix the story so the suite is green** (route to Lenny; loop in whoever owns the vitest Storybook setup). If a proper fix is non-trivial, propose the interim of scoping the CI test step to `npm run test:unit` (`vitest run --project unit`) and tell me before doing it. Note: the Storybook vitest project runs 109 stories in a chromium browser and needs `npx playwright install --with-deps chromium` in CI.
+> **WP4.1 is done:** all 18 over-limit components + both 621-line `manage-income-accounts` pages are now ≤200 lines (extraction pattern: `types.ts` / `styles.ts` / sibling sub-components / co-located hooks; `index.tsx` re-exports public types so the API is unchanged). The per-component before→after tally is in the "Phase 4 — IN PROGRESS" block. The only file still >200 is **`InputSelect/index.tsx` (257)**, intentionally left for WP4.4.
 >
-> **Then build the gate (WP2.1):** have Frink draft `.github/workflows/ci.yml` running `npm ci` → `npx tsc --noEmit` → `npm run lint` → `npm run build` → the test step (full `npm run test` once WP2.0 is fixed, else `test:unit`), on `pull_request` + `push` to `main`. Consider adding `npm run lib:build` (tsup) to protect the publish graph. Chalmers reviews the workflow. Verify CI is green, then I (Adam) handle **WP2.2** (mark `ci` required in branch protection — repo-admin action). **WP2.3:** errors-only lint policy (already exits 0).
+> **Workflow (confirmed by Adam):** run **LEAN** — direct build + verify, ONE unit at a time, no full team pipeline. After every change run `npx tsc --noEmit`, `npm run lint`, `npm run test`; for any change to an *exported* component (in `src/index.ts`) also `npm run lib:build`. **Do not create a branch or commit without asking Adam first.** Behaviour-preserving throughout; stories + Phase 3 unit tests are the safety net.
 >
-> **Workflow rules:** route through the team — Frink owns the workflow file, Lenny fixes the failing story, Chalmers reviews. **Do not create a branch without asking me first** — have Frink propose the branch name + scope and wait for my explicit approval. Don't commit until Chalmers signs off.
+> **You are now on WP4.2 (do these in order):**
 >
-> **Stop and check in with me** once CI is green on a test PR and ready for me to flip branch protection — don't mark the check required yourself (that's my action). Do **not** start Phase 3 without checking in.
+> **WP4.2 — finish IDV consolidation (§11).** The shared `features/idv/` module exists and is consumed by lifetime-pension, consolidate, and `RetirementIncomeAccountFlow.tsx`. **Re-verified 2026-06-21:** the local `retirement-income-account/steps/StepIDV.tsx` (392) **IS still imported** (`RetirementIncomeAccountFlow.tsx:20` — NOT orphaned), and it has **diverged** from the shared `features/idv/StepIDV.tsx` (363) — diff them carefully, don't blind-delete; the goal is to migrate the Flow onto the shared component (reconciling the divergence) then remove the local copy. Also collapse the two local `idvService.ts` (`retirement-income-account/idvService.ts` 47, `lifetime-pension/idvService.ts` 47) into the shared `features/idv/idvService.ts` (59) if they're truly equivalent. **Read `docs/Adam/idv-shared-module-plan.md` first.**
+>
+> **WP4.3 — extract `useSteppedFlow` (§12).** Re-verified 2026-06-21: 4 large stepped orchestrators worth a shared hook — `InvestmentMixFlow` (560), `RetirementIncomeAccountFlow` (504), `LifetimePensionFlow` (458), `RetirementProjectionFlow` (445). Extract their common step/back/next/draft logic into a `useSteppedFlow` hook and remove the `eslint-disable react-hooks/exhaustive-deps` workarounds it lets you delete. The 3 smaller flows (`AtoSuperMatchFlow` 237, `ManualConsolidateFlow` 192, `NominationFlow` 160) are a different shape — assess separately, they may not fit. **This is the riskiest WP** (shared stateful hook across 4 flows) — go one flow at a time, run `npm run test` after each.
+>
+> **WP4.4 — `InputSelect` vs `Select` (§13) + clears the last >200 file.** Architecture decision. **Re-verified 2026-06-21:** `InputSelectContainer` underpins the select-adornment feature of `TextField` (`TextField/index.tsx` + `types.ts`), `MoneyField`, and `PercentageField` — i.e. it's an *inline adornment select inside a field*, a genuinely different use case from the standalone `Select` dropdown. Likely outcome: **keep both, document the boundary** in `docs/guidelines/components.md`. Separately, bring `InputSelect/index.tsx` (257) under 200 via the same extraction pattern (it's the last over-limit file).
+>
+> **Also flag for Phase 5:** `src/components/Card/cardParts.tsx` (150 lines) is dead code — tracked but imported nowhere.
+
+---
+
+### (Archived) Phase 4 WP4.1 kickoff prompt
+
+> **Context:** …Phases 1–3 complete and green; start **Phase 4 — Structural cleanup**, WP4.1 (component size limits, §10) first — bring the 19 over-200 component files + the two 621-line `manage-income-accounts` pages under 200 via the `components/buttons/variantStyles.ts` extraction pattern, one at a time, behaviour-preserving. — *WP4.1 completed 2026-06-21, LEAN. All 18 components + both pages done (InputSelect 257 deferred to WP4.4). tsc 0, eslint 0 errors (114→112 warnings), lib:build OK, test 543/543. Per-component tally in the "Phase 4 — IN PROGRESS" block; WP4.2–4.4 remain. See the current Phase 4 continuation kickoff above.*
+
+---
+
+### (Archived) Phase 3 kickoff prompt
+
+> **Context:** …Phases 1 + 2 complete and green; do **Phase 3 — DRY + tests (§7, §8)**. Create `src/lib/format.ts` (canonical `formatCurrency`/`formatDate`), re-survey the 7 currency + 8 date copies, collapse without changing displayed output, seed `vitest` unit tests for the calc utils. — *Completed 2026-06-20. Re-survey found 6 identical 2-dp currency copies (collapsed) + 1 deliberate whole-dollar projection outlier (left separate, Adam's call); date family (`formatDate`/`formatDateDMY`/`formatDateLong`) folded into the canonical module with a safer date-only parse + range guard. Feature `utils.ts` barrels re-export the canonical formatters (zero call-site churn); the 2 exported component files use a relative import (tsup has no `@/` alias). Added `resolve.alias` to `vitest.config.ts`. 44 unit tests / 4 files. tsc 0, eslint 0 errors, lib:build OK, test 543/543. Done lean (no full team pipeline). See the "Phase 3 — COMPLETE" block above.*
+
+---
+
+### (Archived) Phase 2 kickoff prompt
+
+> **Context:** …Phase 1 complete and green; do **Phase 2 — CI quality gate (§6)**. Resolve WP2.0 (failing `MemberOnlineLayout` story — `ThemeModeProvider` missing), then Frink drafts `ci.yml` (tsc/lint/build/test), Chalmers reviews, verify green, Adam flips branch protection. — *Completed 2026-06-20. WP2.0/2.1/2.3 done & green on `main`; a lockfile `nexus-repo`-host blocker was found and fixed (rewrite + CI sed guard); WP2.2 (required check) was **declined** by Adam — gate left advisory. See the "Phase 2 — COMPLETE" block above.*
 
 ---
 

@@ -11,7 +11,7 @@
 
 The component library and styling discipline are genuinely strong (no `any`, no `px` font sizes, no hardcoded hex in components, token-only `sx`, 109 stories). But **`main` does not type-check or lint clean** — **57 TypeScript errors** and **25 ESLint errors** are committed — and **nothing in CI catches this**. Dev works because Turbopack doesn't type-check; the breakage is invisible until someone runs `next build`.
 
-> **⚠️ UPDATE 2026-06-20 — Phase 1 of the remediation plan is DONE.** §1–5 are **resolved**: `main` (commit `7a25b7d`) now has **0 `tsc` errors**, **0 `eslint` errors** (114 warnings remain → Phase 5), and **`next build` exits 0**. See `code-quality-remediation-plan-2026-06-20.md` → "Phase 1 — COMPLETE" for the per-WP detail and corrections. The original findings below are kept for the record; current-state columns are added to the metrics table. We are now on **Phase 2 (CI gate, §6)**.
+> **⚠️ UPDATE 2026-06-20 — Phase 1 of the remediation plan is DONE.** §1–5 are **resolved**: `main` (commit `7a25b7d`) now has **0 `tsc` errors**, **0 `eslint` errors** (114 warnings remain → Phase 5), and **`next build` exits 0**. See `code-quality-remediation-plan-2026-06-20.md` → "Phase 1 — COMPLETE" for the per-WP detail and corrections. The original findings below are kept for the record; current-state columns are added to the metrics table. **Phases 1 + 2 are now complete** — `main` is green (tsc 0, eslint 0 errors, build 0, `npm run test` 514/514) and an advisory CI gate runs on every push + PR (WP2.2 required-check declined by Adam). We are now on **Phase 3 (DRY + tests, §7–8)**.
 
 **Snapshot metrics**
 

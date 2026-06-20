@@ -1,118 +1,28 @@
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import type { SxProps, Theme } from '@mui/material/styles';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button } from '../Button';
 import { CloseButton } from '../CloseButton';
+import type { AnnouncementBannerProps } from './types';
+import {
+  DISMISSED_VALUE,
+  CONDENSED_REDUCTION,
+  rootSxByVariant,
+  sizePy,
+  sizePx,
+  sizeTitleVariant,
+  sizeButtonSize,
+  closeButtonSx,
+  bgImageSx,
+  noImagePrSx,
+} from './styles';
 
-// ── Types ──────────────────────────────────────────────────────────────────────
-
-export interface AnnouncementBannerAction {
-  label: string;
-  onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  /** If provided, wraps the button in a native anchor. */
-  href?: string;
-}
-
-export interface AnnouncementBannerImage {
-  src: string;
-  /** Defaults to empty string (decorative). Provide a description if the image conveys meaning. */
-  alt?: string;
-  /**
-   * `'background'` — illustration is applied as a CSS background-image on the banner surface.
-   *                  Text reflows to avoid it via right padding. The image sits behind all content.
-   * `'inline'`     — illustration is rendered as an `<img>` element in the flex row to the right
-   *                  of the text content. Hidden on mobile (`xs`).
-   * @default 'background'
-   */
-  display?: 'background' | 'inline';
-}
-
-export type AnnouncementBannerSize = 'small' | 'medium';
-
-export interface AnnouncementBannerProps {
-  /** Primary heading text. */
-  title: string;
-  /** Supporting body copy. Accepts a string or rich React content. */
-  description?: React.ReactNode;
-  /** Optional CTA button. */
-  action?: AnnouncementBannerAction;
-  /**
-   * Optional decorative illustration displayed on the right (hidden on mobile).
-   * Use `alt=""` (the default) when the image is purely decorative.
-   */
-  image?: AnnouncementBannerImage;
-  /**
-   * When provided, dismissed state is stored in `sessionStorage` under this key.
-   * The banner will not re-render once dismissed until the session ends.
-   * Use a unique, stable key per announcement (e.g. `'announcement-new-dashboard-2026'`).
-   *
-   * Omit to make visibility fully controlled by the caller.
-   */
-  storageKey?: string;
-  /**
-   * Called when the user dismisses the banner.
-   * If `storageKey` is set, this fires after `sessionStorage` is written.
-   */
-  onClose?: () => void;
-  /**
-   * `'dark'`    — brand navy surface, inverse (white) text, reversed button.
-   * `'primary'` — brand primary surface, inverse (white) text, reversed button.
-   * `'light'`   — subtle tinted surface, standard text, primary button.
-   * @default 'light'
-   */
-  variant?: 'dark' | 'light' | 'primary';
-  /**
-   * `'medium'` — default; larger padding, `h5` title, medium button.
-   * `'small'`  — reduced padding, `h6` title, small button.
-   * @default 'medium'
-   */
-  size?: AnnouncementBannerSize;
-  /**
-   * Reduces vertical padding by 4px, matching the visual rhythm of the condensed Button.
-   * @default false
-   */
-  condensed?: boolean;
-  sx?: SxProps<Theme>;
-}
-
-// ── Constants ──────────────────────────────────────────────────────────────────
-
-const DISMISSED_VALUE = 'dismissed';
-
-// ── Variant style maps (matches ActionBar conventions) ─────────────────────────
-
-const rootSxByVariant: Record<'dark' | 'light' | 'primary', SxProps<Theme>> = {
-  dark:    { backgroundColor: 'background.brandSecondary' },
-  primary: { backgroundColor: 'background.brandPrimary' },
-  light:   { backgroundColor: 'background.tintCool' },
-};
-
-// ── Size maps ──────────────────────────────────────────────────────────────────
-
-const CONDENSED_REDUCTION = 0.5; // spacing units = 4px per side
-
-const sizePy: Record<AnnouncementBannerSize, number> = {
-  medium: 4,   // 32px
-  small:  3,   // 24px
-};
-
-const sizePx: Record<AnnouncementBannerSize, { xs: number; sm: number }> = {
-  medium: { xs: 3, sm: 4 },
-  small:  { xs: 2.5, sm: 3 },
-};
-
-const sizeTitleVariant: Record<AnnouncementBannerSize, 'h5' | 'h6'> = {
-  medium: 'h5',
-  small:  'h6',
-};
-
-const sizeButtonSize: Record<AnnouncementBannerSize, 'medium' | 'small'> = {
-  medium: 'medium',
-  small:  'small',
-};
-
-// ── Component ──────────────────────────────────────────────────────────────────
+export type {
+  AnnouncementBannerAction,
+  AnnouncementBannerImage,
+  AnnouncementBannerSize,
+  AnnouncementBannerProps,
+} from './types';
 
 export function AnnouncementBanner({
   title,
@@ -152,41 +62,14 @@ export function AnnouncementBanner({
 
   if (dismissed) return null;
 
-  // On inverse variants, override CloseButton colours to stay visible on dark backgrounds.
-  const closeButtonSx: SxProps<Theme> = isInverse
-    ? {
-        color: 'text.inverse',
-        '&:hover':  { backgroundColor: 'rgba(255,255,255,0.15)', color: 'text.inverse' },
-        '&:active': { backgroundColor: 'rgba(255,255,255,0.20)', color: 'text.inverse' },
-        '&.Mui-focusVisible': {
-          outline: '2px solid rgba(255,255,255,0.9)',
-          outlineOffset: '2px',
-        },
-      }
-    : {};
-
   const py = sizePy[size] - (condensed ? CONDENSED_REDUCTION : 0);
   const { xs: pxXs, sm: pxSm } = sizePx[size];
   const titleVariant = sizeTitleVariant[size];
   const buttonSize = sizeButtonSize[size];
 
   const imageMode = image?.display ?? 'background';
-  const isBackground = image && imageMode === 'background';
-  const isInline     = image && imageMode === 'inline';
-
-  const bgImageSx: SxProps<Theme> = isBackground
-    ? {
-        backgroundImage: `url(${image.src})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: { xs: 'right -40px center', sm: 'right center' },
-        backgroundSize: { xs: '180px auto', sm: '220px auto', md: '260px auto' },
-        // Pad right so text never overlaps the illustration.
-        pr: { xs: 7, sm: '260px', md: '300px' },
-      }
-    : {};
-
-  // No-illustration fallback keeps content clear of the close button.
-  const noImagePrSx: SxProps<Theme> = !image ? { pr: { xs: 7, sm: 7 } } : {};
+  const isBackground = Boolean(image && imageMode === 'background');
+  const isInline     = Boolean(image && imageMode === 'inline');
 
   return (
     <Box
@@ -207,8 +90,8 @@ export function AnnouncementBanner({
           py,
         },
         rootSxByVariant[variant],
-        bgImageSx,
-        noImagePrSx,
+        bgImageSx(image, isBackground),
+        noImagePrSx(image),
         ...(Array.isArray(sx) ? sx : [sx ?? false]),
       ]}
     >
@@ -254,7 +137,7 @@ export function AnnouncementBanner({
       </Box>
 
       {/* ── Inline illustration (hidden on mobile) ───────────────────────────── */}
-      {isInline && (
+      {isInline && image && (
         <Box
           aria-hidden="true"
           sx={{
@@ -269,8 +152,8 @@ export function AnnouncementBanner({
         >
           <Box
             component="img"
-            src={image!.src}
-            alt={image!.alt ?? ''}
+            src={image.src}
+            alt={image.alt ?? ''}
             sx={{
               width: '100%',
               height: 'auto',
@@ -296,7 +179,7 @@ export function AnnouncementBanner({
           variant="ghost"
           color="muted"
           size="sm"
-          sx={closeButtonSx}
+          sx={closeButtonSx(isInverse)}
         />
       </Box>
     </Box>

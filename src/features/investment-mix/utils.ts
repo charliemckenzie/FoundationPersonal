@@ -23,9 +23,9 @@ export function rebalanceLabel(setting?: RebalanceSetting | null): string {
   return setting.frequency === 'six-monthly' ? 'Every 6 months' : 'Every 12 months';
 }
 
-export function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(amount);
-}
+// Currency/date display now comes from the canonical formatters in @/lib/format.
+// Re-exported here so existing call sites can keep importing from this barrel.
+export { formatCurrency, formatDate, formatDateDMY, formatDateLong } from '@/lib/format';
 
 /**
  * One-line summary of an allocation map for compact display (e.g. history rows).
@@ -60,26 +60,6 @@ const ORDINALS = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th'];
 /** Human ordinal for a zero-based index: 0 → "1st", 1 → "2nd", … */
 export function ordinal(index: number): string {
   return ORDINALS[index] ?? `${index + 1}th`;
-}
-
-const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-const MONTHS_LONG = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-export function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS_SHORT[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-export function formatDateDMY(iso: string): string {
-  const d = new Date(iso);
-  const dd = String(d.getDate()).padStart(2, '0');
-  const mm = String(d.getMonth() + 1).padStart(2, '0');
-  return `${dd} / ${mm} / ${d.getFullYear()}`;
-}
-
-export function formatDateLong(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS_LONG[d.getMonth()]} ${d.getFullYear()}`;
 }
 
 export function validateStep1(accountId: string): boolean {

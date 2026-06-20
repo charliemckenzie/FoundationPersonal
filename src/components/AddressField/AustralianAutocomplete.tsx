@@ -1,5 +1,4 @@
 import { useState, useEffect, useId } from 'react';
-import { alpha, type Theme } from '@mui/material/styles';
 import MuiAutocomplete from '@mui/material/Autocomplete';
 import MuiTextField from '@mui/material/TextField';
 import FormLabel from '@mui/material/FormLabel';
@@ -10,6 +9,7 @@ import { AustralianFields } from './AustralianFields';
 import { TextButton } from '../TextButton';
 import ButtonBase from '@mui/material/ButtonBase';
 import type { AustralianAddress, AddressSuggestion, AddressLookupConfig } from './types';
+import { inputSx, listboxSx, paperSx, linkSx } from './autocompleteStyles';
 
 type Mode = 'search' | 'confirmed' | 'manual';
 
@@ -25,32 +25,6 @@ interface AustralianAutocompleteProps {
 function isPopulated(v: AustralianAddress): boolean {
   return v.line1.trim().length > 0;
 }
-
-const inputSx = (t: Theme) => ({
-  fontSize: t.typography.body.fontSize,
-  borderRadius: `${t.shape.sm}px`,
-  backgroundColor: 'background.paper',
-  '&.MuiAutocomplete-inputRoot': { paddingTop: 0, paddingBottom: 0 },
-  '&.Mui-disabled': { backgroundColor: alpha(t.palette.background.default, 0.6) },
-  '&&.Mui-disabled fieldset': { borderColor: alpha(t.palette.border.input, 0.6) },
-  '&.MuiAutocomplete-inputRoot .MuiAutocomplete-input': { paddingTop: '12px', paddingBottom: '12px', lineHeight: 1.5 },
-  '& fieldset': { borderColor: 'border.input', borderRadius: `${t.shape.sm}px` },
-  '&:hover:not(.Mui-focused):not(.Mui-error):not(.Mui-disabled) fieldset': { borderColor: 'border.input' },
-  '&.Mui-focused': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
-  '&&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderWidth: '1px', borderColor: 'border.input' },
-});
-
-const listboxSx = (t: Theme) => ({
-  py: '4px',
-  '& .MuiAutocomplete-option': { fontSize: t.typography.body.fontSize, mx: '4px', borderRadius: `${t.shape.xs}px`, width: 'calc(100% - 8px)' },
-});
-
-const paperSx = (t: Theme) => ({
-  borderRadius: `${t.shape.sm}px`,
-  boxShadow: t.shadows[8],
-  '& .MuiAutocomplete-noOptions': { fontSize: t.typography.body.fontSize },
-  '& .MuiAutocomplete-loading': { fontSize: t.typography.body.fontSize },
-});
 
 export function AustralianAutocomplete({
   value,
@@ -105,20 +79,6 @@ export function AustralianAutocomplete({
     setMode('manual');
     onModeChange?.(false);
   }
-
-  const linkSx = (t: Theme) => ({
-    fontSize: t.typography.small.fontSize,
-    color: 'primary.main',
-    fontFamily: t.typography.fontFamily,
-    fontWeight: 400,
-    lineHeight: 1.5,
-    textAlign: 'left' as const,
-    alignSelf: 'flex-start',
-    borderRadius: '2px',
-    '&:hover': { color: 'primary.dark', textDecoration: 'underline' },
-    '&.Mui-focusVisible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
-    '&:disabled': { color: 'action.disabled' },
-  });
 
   if (mode === 'confirmed') {
     const addrLine1 = [value.line1, value.line2].filter(Boolean).join(', ');
@@ -218,19 +178,7 @@ export function AustralianAutocomplete({
         disableRipple
         onClick={handleUseManual}
         disabled={disabled}
-        sx={(t) => ({
-          fontSize: t.typography.small.fontSize,
-          color: 'primary.main',
-          fontFamily: t.typography.fontFamily,
-          fontWeight: 400,
-          lineHeight: 1.5,
-          textAlign: 'left',
-          alignSelf: 'flex-start',
-          borderRadius: '2px',
-          '&:hover': { color: 'primary.dark', textDecoration: 'underline' },
-          '&.Mui-focusVisible': { outline: `2px solid ${t.palette.border.focus}`, outlineOffset: '2px' },
-          '&:disabled': { color: 'action.disabled' },
-        })}
+        sx={linkSx}
       >
         Can&apos;t find your address? Enter manually
       </ButtonBase>

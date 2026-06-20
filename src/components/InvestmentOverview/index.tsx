@@ -4,23 +4,13 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Icon } from '../Icon';
+import { formatCurrency, formatDate } from '../../lib/format';
 import { DialItem } from './DialItem';
 import { InvestmentOverviewSkeleton } from './InvestmentOverviewSkeleton';
 import type { InvestmentOverviewProps } from './InvestmentOverview.types';
 
 export type { InvestmentOverviewProps, InvestmentMixDial } from './InvestmentOverview.types';
 export { InvestmentOverviewSkeleton } from './InvestmentOverviewSkeleton';
-
-const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-function formatCurrency(amount: number): string {
-  return new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD' }).format(amount);
-}
-
-function formatDate(iso: string): string {
-  const d = new Date(iso);
-  return `${d.getDate()} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
-}
 
 const focusRingSx = {
   outline: '2px solid',
