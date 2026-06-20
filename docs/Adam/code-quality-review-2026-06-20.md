@@ -11,22 +11,25 @@
 
 The component library and styling discipline are genuinely strong (no `any`, no `px` font sizes, no hardcoded hex in components, token-only `sx`, 109 stories). But **`main` does not type-check or lint clean** — **57 TypeScript errors** and **25 ESLint errors** are committed — and **nothing in CI catches this**. Dev works because Turbopack doesn't type-check; the breakage is invisible until someone runs `next build`.
 
+> **⚠️ UPDATE 2026-06-20 — Phase 1 of the remediation plan is DONE.** §1–5 are **resolved**: `main` (commit `7a25b7d`) now has **0 `tsc` errors**, **0 `eslint` errors** (114 warnings remain → Phase 5), and **`next build` exits 0**. See `code-quality-remediation-plan-2026-06-20.md` → "Phase 1 — COMPLETE" for the per-WP detail and corrections. The original findings below are kept for the record; current-state columns are added to the metrics table. We are now on **Phase 2 (CI gate, §6)**.
+
 **Snapshot metrics**
 
-| Signal | Result |
-|---|---|
-| `tsc --noEmit` errors | 57 |
-| ESLint errors / warnings | 25 / 114 |
-| Explicit `any` types (components/features/app) | 0 |
-| `px` font sizes | 0 |
-| Hardcoded hex in components/features | 0 |
-| Inline `style={{}}` props | 2 |
-| `formatCurrency` definitions | 7 (duplicated) |
-| `formatDate` definitions | 8 (duplicated) |
-| Test files | 1 |
-| Storybook stories | 109 |
-| Components > 200-line charter limit | 14 |
-| CI jobs running tsc/eslint/test/build | 0 |
+| Signal | At review (2026-06-20) | Current (post-Phase 1) |
+|---|---|---|
+| `tsc --noEmit` errors | 57 | **0** ✅ |
+| ESLint errors / warnings | 25 / 114 | **0** / 114 ✅ |
+| `next build` | broke | **exit 0** ✅ |
+| Explicit `any` types (components/features/app) | 0 | 0 |
+| `px` font sizes | 0 | 0 |
+| Hardcoded hex in components/features | 0 | 0 |
+| Inline `style={{}}` props | 2 | 2 |
+| `formatCurrency` definitions | 7 (duplicated) | 7 — **still TODO (Phase 3 §7)** |
+| `formatDate` definitions | 8 (duplicated) | 8 — **still TODO (Phase 3 §7)** |
+| Test files | *(stated 1)* | **110 vitest files** (1 unit test + 109 Storybook stories via `@storybook/addon-vitest` chromium project); **513/514 tests pass — 1 failing** (`MemberOnlineLayout.stories.tsx > Default`, `ThemeModeProvider` missing). The "1 test file" metric undercounted: there is genuinely 1 *unit* test, but the story suite also runs as tests. **Phase 2 blocker — see plan WP2.0.** |
+| Storybook stories | 109 | 109 |
+| Components > 200-line charter limit | 14 | 14 — **still TODO (Phase 4 §10)** |
+| CI jobs running tsc/eslint/test/build | 0 | 0 — **Phase 2 in progress (§6)** |
 
 ---
 
@@ -61,6 +64,8 @@ The React-Compiler lint rules are firing on real anti-patterns:
 ## 🟠 High — quality / maintainability / safety
 
 ### 6. No mechanical quality gate in CI — *this is the root cause of §1–5*
+
+> **Phase 2 status (2026-06-20):** This is now the active phase. `main` is green for tsc + eslint, so the gate is safe to add. **New blocker found while verifying the test step:** `npm run test` is not green — `MemberOnlineLayout.stories.tsx > Default` fails (`ThemeModeProvider` missing). The Storybook vitest project also needs chromium installed in CI. Both must be handled before the test gate is marked required — see plan WP2.0/2.1.
 `.github/workflows/` has only `publish`, `signoff`, `sync-runtimes`. **None run `tsc`, `eslint`, `vitest`, or `next build`.** The `signoff` gate only validates PR-body checkboxes — so the entire Chalmers/Flanders pipeline is enforced *socially*, not mechanically. That's exactly how 57 type errors reached `main`.
 **Fix:** add a `ci.yml` running `tsc --noEmit && eslint && next build` (and `vitest run`) as a required check. Highest-leverage single change in this review.
 

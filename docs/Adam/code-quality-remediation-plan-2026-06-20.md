@@ -31,13 +31,40 @@ Phases 1→2 are strictly ordered. Phases 3–5 can run in parallel once 1–2 l
 
 ---
 
-## Decision required before Phase 1 starts
+## Decision required before Phase 1 starts — ✅ RESOLVED (2026-06-20)
 
-**The `consolidate` feature (§3) is committed but doesn't compile and is self-labelled "under construction".** Choose one:
-- **A — Fix it** (this plan's default): correct the ~16 API-misuse errors so the feature compiles and works.
-- **B — Quarantine it**: if it's not meant to ship yet, exclude it from the build/typecheck (e.g. move under a `_wip/` path or `tsconfig` exclude) and fix later.
+**The `consolidate` feature (§3) is committed but doesn't compile and is self-labelled "under construction".**
+- **DECISION: Option A — Fix it.** Adam chose to fix the feature so it compiles and works (not quarantine). WP1.3 executed as a "fix". The CI gate (Phase 2) will therefore cover consolidate.
 
-Option A is assumed below. If you pick B, WP1.3 changes from "fix" to "isolate" and the CI gate (Phase 2) won't block on it. **This is the one open question to resolve at kickoff.**
+---
+
+## ✅ Phase 1 — COMPLETE (2026-06-20)
+
+**All five WPs done, team-routed, green.**
+
+| Gate | Before | After |
+|---|---|---|
+| `npx tsc --noEmit` | 57 errors | **0** |
+| `npx eslint .` | 25 errors / 114 warnings | **0 errors** / 114 warnings (warnings → Phase 5) |
+| `npx next build` | broke | **exit 0** |
+
+**Git state:** Phase 1 landed on `main` in commit `7a25b7d "updates"` — committed by Adam together with pre-existing unrelated WIP (lifetime-pension flow rework, Checkbox/RadioGroup/StepperActions, the new `eligibility-checker` feature). It did **not** go onto the proposed `fix/compile-lint-phase-1` branch + draft PR. `main` is clean and green.
+
+**What each WP actually did:**
+- **WP1.1** — added `import type { RetirementIncomeAccountState, PensionOption, SpouseDetails, BankDetails } from './types'` to `retirement-income-account/utils.ts`. ⚠️ Plan listed `PensionEstimate` too, but it's defined **locally** in `utils.ts:61` — importing it would clash, so it was excluded.
+- **WP1.2** — removed the duplicate "under construction" `export default` from the qsuper ato-supermatch page; kept the `AtoSuperMatchFlow` body.
+- **WP1.3** — fixed all 16 consolidate errors: Alert `children`→`message=`, removed non-existent `StepperActions totalSteps`, Button/TextButton `children`→`label=`, `AmountChoice` types (`AMOUNT_OPTIONS` typed as `RadioOption[]` with `satisfies` per value; RadioGroup `error` boolean + message routing; MoneyField `null`→`undefined`), Icon `"4xl"`→`3xl`, Button `color="secondary"/"error"`→`primary`. Chalmers PASS.
+- **WP1.4** — Moe decided by data shape: lifetime-pension `SpouseDetails` never captures `middleName`/`residentialAddress`/`homePhone` (the review was copied from `retirement-income-account`, which *does* collect them; lifetime-pension's capture step was trimmed but the review wasn't). **Removed the phantom rows** from `StepReview.tsx` rather than adding fields nothing populates. Chalmers PASS.
+- **Extra tsc errors not enumerated in the plan** (also inside the "0 errors" gate): `InfoButton/index.tsx:108` — **library-graph** fix; added an `isDialogMode(p): p is InfoButtonDialogProps` type predicate so the discriminated-union narrows `dialogTitle` to `string`. `StepInvestmentStrategy.tsx` — `alignItems` moved off `<Stack>` into `sx` (this MUI version rejects it as a direct Stack prop), and Alert `sx` removed → wrapped in `<Box sx={{mt:2}}>` (Alert has no `sx`). `StepSetupMode.tsx` — Icon `"xs"`→`"sm"`, Alert `children`→`message=`. Chalmers PASS.
+- **WP1.5 + remaining eslint** — `view-application/page.tsx`: replaced the in-render `SummarySection`/`SummaryRow` (18 "components during render" errors) with Foundation `DescriptionList`/`DescriptionList.Item`. Consolidate unescaped apostrophes →`&apos;` (4). `ManualConsolidateFlow.tsx:40` `Date.now()` → `useState(() => …)` lazy initializer. `InvestmentMixFlow.tsx`: moved the derived-state block (incl. `steps`) above the effects to fix use-before-declare + memoization-not-preserved (2). Chalmers PASS; **Flanders PASS** — the DescriptionList swap is a WCAG 2.2 AA *upgrade* (better reflow, equal/better contrast).
+
+**Plan corrections discovered (so Phase 2+ start from truth):**
+- §5/WP1.5 file attributions were approximate. The actual React-Compiler errors were: "components during render" in `view-application` (matches), `Date.now` impure in **`consolidate/manual/ManualConsolidateFlow.tsx:40`** (NOT `layout.tsx:30`), use-before-declare in **`investment-mix/InvestmentMixFlow.tsx:147`** (NOT `manage-income-accounts`). `layout.tsx` and `manage-income-accounts` had **no** eslint errors in the current tree.
+- The plan's WP list didn't enumerate the `InfoButton`/`StepInvestmentStrategy`/`StepSetupMode` tsc errors — they're now fixed.
+
+**Carry-forwards (logged for later phases, not Phase 1 blockers):**
+- **Destructive "Remove fund" button** (`consolidate/steps/ManualStep1Funds.tsx`) lost its red — Button/TextButton only support `primary`/`success`. Restoring destructive styling needs **Moe to add a destructive Button variant** (ties into §9, the children-vs-`message`/`label` API foot-gun that recurred across 10+ call sites — strong evidence §9 is worth doing).
+- Optional: pre-existing `h2→h6` heading gap in the view-application dialog (Flanders flagged; Marge's call on any size change). Not introduced by this work.
 
 ---
 
@@ -61,16 +88,26 @@ Option A is assumed below. If you pick B, WP1.3 changes from "fix" to "isolate" 
 
 ## Phase 2 — Lock it in (CI quality gate) — §6
 
+**Status at Phase 2 kickoff (2026-06-20):** Phase 1 is complete; `main` is green for `tsc` (0) and `eslint` (0 errors). The CI gate is now safe to add. **One blocker remains for the *test* step — see WP2.0 below.**
+
 **Goal:** A required CI check that fails any PR which breaks types, lint, build, or tests.
+
+**Confirmed npm scripts (from `package.json`, verified 2026-06-20):**
+- `npm run lint` → `eslint` — **0 errors**, 114 warnings (errors-only policy = green).
+- `npx tsc --noEmit` — **0 errors**.
+- `npm run build` → `next build` — **exits 0**.
+- `npm run test` → `vitest run` — ⚠️ **NOT green: 1 failing test** (see WP2.0). 110 vitest files run (1 unit test `retirement-projection/projection.test.ts` + 109 Storybook stories via `@storybook/addon-vitest` in a chromium browser project); 513/514 tests pass. The Storybook project requires a browser (Playwright/chromium) — CI must install it (`npx playwright install --with-deps chromium`) and this step is heavier/slower than tsc+lint.
+- `npm run lib:build` → `tsup` — the published-library build. The review's process note flagged `InfoButton`'s type error could break `lib:build`/dts; **that error is now fixed**, but consider adding `lib:build` to CI to protect the publish graph.
 
 | WP | Change | Effort |
 |---|---|---|
-| 2.1 | Add `.github/workflows/ci.yml`: `npm ci` → `npx tsc --noEmit` → `npm run lint` → `npm run test` → `npm run build`. Trigger on `pull_request` + `push` to `main`. | S |
-| 2.2 | Mark the `ci` check **required** in branch protection (Adam — repo admin action). | XS |
-| 2.3 | Decide lint policy: fail on errors only at first (114 warnings exist); optionally ratchet warnings later. | XS |
+| **2.0** | **BLOCKER — fix the failing test before the test gate can be required.** `src/stories/member-online/MemberOnlineLayout.stories.tsx > Default` fails with `useThemeMode must be used inside a ThemeModeProvider` (the story renders `MemberOnlineLayout` without wrapping it in `ThemeModeProvider`; the global Storybook/vitest decorator isn't applied to this story, or the story needs the provider). Unrelated to Phase 1 code — pre-existing/from the merge. Either fix the story's decorator/wrapper, or (interim) scope the CI test step to `npm run test:unit` (`vitest run --project unit`) so the gate is green while the story-test is fixed separately. **Route to Lenny (story fix) + Marge/Lisa if it's a decorator-config issue; confirm with whoever owns the vitest Storybook setup.** | S |
+| 2.1 | Add `.github/workflows/ci.yml`: `npm ci` → `npx tsc --noEmit` → `npm run lint` → `npm run build` → (test step: `npm run test` once WP2.0 is fixed, or `npm run test:unit` interim; the Storybook test project needs `npx playwright install --with-deps chromium`). Trigger on `pull_request` + `push` to `main`. Consider also `npm run lib:build`. | S |
+| 2.2 | Mark the `ci` check **required** in branch protection (Adam — repo admin action). Do this only after WP2.0 so the first required run is green. | XS |
+| 2.3 | Lint policy: fail on errors only at first (114 warnings exist); optionally ratchet warnings later. `eslint` already exits 0 on errors-only. | XS |
 
-**Owners:** Frink (workflow) → Chalmers (review). Adam flips branch protection.
-**Dependency:** Must land *after* Phase 1 or the very first run is red.
+**Owners:** Frink (workflow) → Chalmers (review). Lenny fixes WP2.0. Adam flips branch protection.
+**Dependency:** WP2.0 must be resolved (or the test step scoped to `test:unit`) before WP2.2, or the first required run is red.
 **Acceptance:** CI runs green on `main`; a deliberately-broken test PR goes red and blocks merge.
 
 ---
@@ -119,23 +156,29 @@ Option A is assumed below. If you pick B, WP1.3 changes from "fix" to "isolate" 
 
 ## Tracking checklist
 
-- [ ] **Decision:** consolidate = fix (A) or quarantine (B)
-- [ ] Phase 1 — tsc + eslint clean (§1–5)
-- [ ] Phase 2 — CI gate added + marked required (§6)
+- [x] **Decision:** consolidate = **fix (A)** ✅
+- [x] Phase 1 — tsc + eslint clean (§1–5) ✅ (committed to `main` in `7a25b7d`; tsc 0, eslint 0 errors, build exit 0)
+- [ ] Phase 2 — CI gate added + marked required (§6) — ⚠️ blocked on WP2.0 (failing `MemberOnlineLayout` story test) before the test step can be required
 - [ ] Phase 3 — `src/lib/format.ts` + seed tests (§7, §8)
 - [ ] Phase 4 — size limits, IDV merge, flow hook, select consolidation (§10–13)
 - [ ] Phase 5 — warnings, artifacts, gitignore, root docs
 
 ---
 
-## Kickoff prompt (paste into a new context window)
+## Kickoff prompt — Phase 2 (paste into a new context window)
 
-> **Context:** Work through the Foundation code quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md`, which is based on the research in `docs/Adam/code-quality-review-2026-06-20.md`. Read both before starting.
+> **Context:** Continue the Foundation code-quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md` (research: `docs/Adam/code-quality-review-2026-06-20.md`). **Read both before starting.** Phase 1 is **complete and green** — `main` (commit `7a25b7d`) has `npx tsc --noEmit` 0 errors, `npx eslint .` 0 errors (114 warnings remain, Phase 5), `npx next build` exit 0. We are now on **Phase 2 — the CI quality gate (§6).**
 >
-> **First, one decision I need to make:** the `consolidate` feature doesn't compile and is labelled "under construction" — ask me whether to **fix it** (Option A) or **quarantine it** (Option B) before touching it.
+> **Before writing the workflow, resolve WP2.0 — the one blocker.** `npm run test` (`vitest run`) is **not green**: `src/stories/member-online/MemberOnlineLayout.stories.tsx > Default` fails with `useThemeMode must be used inside a ThemeModeProvider`. It's unrelated to Phase 1 (pre-existing/from a merge). Investigate the story's decorator/provider setup vs. the global Storybook+vitest config, then **fix the story so the suite is green** (route to Lenny; loop in whoever owns the vitest Storybook setup). If a proper fix is non-trivial, propose the interim of scoping the CI test step to `npm run test:unit` (`vitest run --project unit`) and tell me before doing it. Note: the Storybook vitest project runs 109 stories in a chromium browser and needs `npx playwright install --with-deps chromium` in CI.
 >
-> **Then start Phase 1 (Stop the bleeding):** get `npx tsc --noEmit` and `npx eslint` to zero errors by working through WP1.1–1.5 in order. WP1.1 (restore the dropped type import in `features/retirement-income-account/utils.ts`) and WP1.2 (remove the duplicate `export default` in the qsuper ato-supermatch page) are the quick wins — do those first and re-run `tsc` so we can see the error count drop.
+> **Then build the gate (WP2.1):** have Frink draft `.github/workflows/ci.yml` running `npm ci` → `npx tsc --noEmit` → `npm run lint` → `npm run build` → the test step (full `npm run test` once WP2.0 is fixed, else `test:unit`), on `pull_request` + `push` to `main`. Consider adding `npm run lib:build` (tsup) to protect the publish graph. Chalmers reviews the workflow. Verify CI is green, then I (Adam) handle **WP2.2** (mark `ci` required in branch protection — repo-admin action). **WP2.3:** errors-only lint policy (already exits 0).
 >
-> **Workflow rules:** route the work through the team — Lenny builds, Chalmers reviews, Flanders for anything a11y-affecting (WP1.5 swaps in `DescriptionList`), Moe for the `SpouseDetails` type decision (WP1.4) and any API call. **Do not create a branch without asking me first** — have Frink propose the branch name and scope and wait for my approval. Don't commit until Chalmers has signed off. Show me the `tsc` error count after each work package so I can track progress.
+> **Workflow rules:** route through the team — Frink owns the workflow file, Lenny fixes the failing story, Chalmers reviews. **Do not create a branch without asking me first** — have Frink propose the branch name + scope and wait for my explicit approval. Don't commit until Chalmers signs off.
 >
-> Do **not** start Phase 2 (CI gate) until Phase 1 is green, or the first CI run will be red. Stop and check in with me when Phase 1 is complete.
+> **Stop and check in with me** once CI is green on a test PR and ready for me to flip branch protection — don't mark the check required yourself (that's my action). Do **not** start Phase 3 without checking in.
+
+---
+
+### (Archived) Phase 1 kickoff prompt
+
+> **Context:** Work through the plan… **First decision:** consolidate = fix (A) or quarantine (B). **Then Phase 1 (Stop the bleeding):** get `tsc`/`eslint` to zero via WP1.1–1.5 in order; WP1.1 + WP1.2 are the quick wins. Route through the team (Lenny builds, Chalmers reviews, Flanders for a11y/`DescriptionList`, Moe for the `SpouseDetails` decision). Don't branch/commit without approval. — *Completed 2026-06-20; see the Phase 1 status block above.*
