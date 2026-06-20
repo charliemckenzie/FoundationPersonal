@@ -29,6 +29,14 @@ jobs:
           node-version: '22'
           cache: 'npm'
 
+      # The internal Nexus `npm-proxy` mirror is unreachable from CI runners. If a
+      # lockfile written on a Nexus-connected device reintroduces those hosts, rewrite
+      # them to the public npm registry. The path after the host is identical and
+      # integrity hashes are content-based, so this is safe and keeps `npm ci` in sync
+      # with `package.json` (only hosts change). A no-op when the lockfile is clean.
+      - name: Normalize lockfile registry hosts
+        run: sed -i 's#https://nexus-repo/repository/npm-proxy/#https://registry.npmjs.org/#g' package-lock.json
+
       - name: Install dependencies
         run: npm ci
 
