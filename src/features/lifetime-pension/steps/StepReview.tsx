@@ -9,6 +9,9 @@ import { DescriptionList } from '../../../components/DescriptionList';
 import { Dialog } from '../../../components/Dialog';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
+import { AddressCapture } from '../../../components/AddressField/AddressCapture';
+import { mockAddressProvider } from '../../../components/AddressField/mockAddressProvider';
+import type { Address } from '../../../components/AddressField';
 import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
 import { PENSION_ESTIMATE_AGE } from '../constants';
 import { formatCurrency, totalSelectedAmount, estimateRetirementBonus, estimatePension } from '../utils';
@@ -37,6 +40,30 @@ function optionLabel(state: LifetimePensionState): string {
   return 'Not selected';
 }
 
+
+function parseAddressString(raw: string): Address {
+  const parts = raw.split(', ').map((s) => s.trim());
+  const last = parts[parts.length - 1] ?? '';
+  const statePostcodeMatch = last.match(/^([A-Z]{2,3})\s+(\d{4})$/);
+  if (statePostcodeMatch && parts.length >= 3) {
+    return {
+      type: 'australian',
+      line1: parts[0] ?? '',
+      line2: parts.length === 4 ? (parts[1] ?? '') : '',
+      suburb: parts.length === 4 ? (parts[2] ?? '') : (parts[1] ?? ''),
+      state: statePostcodeMatch[1] ?? '',
+      postcode: statePostcodeMatch[2] ?? '',
+    };
+  }
+  return { type: 'australian', line1: raw, line2: '', suburb: '', state: '', postcode: '' };
+}
+
+function addressToString(addr: Address): string {
+  if (addr.type === 'australian') {
+    return [addr.line1, addr.line2, addr.suburb, addr.state, addr.postcode].filter(Boolean).join(', ');
+  }
+  return [addr.line1, addr.line2, addr.city, addr.stateProvince, addr.postcode].filter(Boolean).join(', ');
+}
 
 function DeclLink({ href, children }: { href: string; children: React.ReactNode }) {
   return (
@@ -93,16 +120,18 @@ export function StepReview({
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
+  const [draftAddress, setDraftAddress] = useState<Address>({ type: 'australian', line1: '', line2: '', suburb: '', state: '', postcode: '' });
 
   const displayDetails = verifyDetailsState.edited;
 
   function handleOpenEdit() {
     setDraftDetails({ ...verifyDetailsState.edited });
+    setDraftAddress(parseAddressString(verifyDetailsState.edited.residentialAddress));
     setEditDetailsOpen(true);
   }
 
   function handleSaveDetails() {
-    onVerifyDetailsChange({ confirmed: 'no', edited: draftDetails });
+    onVerifyDetailsChange({ confirmed: 'no', edited: { ...draftDetails, residentialAddress: addressToString(draftAddress) } });
     setEditDetailsOpen(false);
   }
 
@@ -263,14 +292,25 @@ export function StepReview({
         onConfirm={handleSaveDetails}
       >
         <Stack spacing={2}>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            If there&rsquo;s an error with your name or date of birth please call us.
+          </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-            <TextField label="First name" value={draftDetails.firstName} onChange={(e) => setDraftDetails({ ...draftDetails, firstName: e.target.value })} />
-            <TextField label="Last name" value={draftDetails.lastName} onChange={(e) => setDraftDetails({ ...draftDetails, lastName: e.target.value })} />
+            <TextField label="First name" value={draftDetails.firstName} disabled onChange={() => {}} />
+            <TextField label="Last name" value={draftDetails.lastName} disabled onChange={() => {}} />
           </Box>
           <TextField label="Middle name" value={draftDetails.middleName} onChange={(e) => setDraftDetails({ ...draftDetails, middleName: e.target.value })} />
-          <TextField label="Residential address" value={draftDetails.residentialAddress} onChange={(e) => setDraftDetails({ ...draftDetails, residentialAddress: e.target.value })} />
+          <Stack spacing={1.5}>
+            <Typography variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>Residential address</Typography>
+            <AddressCapture
+              value={draftAddress}
+              onChange={setDraftAddress}
+              section="residential"
+              lookup={{ provider: mockAddressProvider }}
+            />
+          </Stack>
           <TextField label="Email address" type="email" value={draftDetails.email} onChange={(e) => setDraftDetails({ ...draftDetails, email: e.target.value })} />
-          <TextField label="Date of birth" value={draftDetails.dateOfBirth} onChange={(e) => setDraftDetails({ ...draftDetails, dateOfBirth: e.target.value })} />
+          <TextField label="Date of birth" value={draftDetails.dateOfBirth} disabled onChange={() => {}} />
           <TextField label="Mobile phone" type="tel" value={draftDetails.mobilePhone} onChange={(e) => setDraftDetails({ ...draftDetails, mobilePhone: e.target.value })} />
         </Stack>
       </Dialog>

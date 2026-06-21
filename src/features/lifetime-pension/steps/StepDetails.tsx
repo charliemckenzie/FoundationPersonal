@@ -77,7 +77,7 @@ export function StepDetails({ profile, onProfileUpdate }: StepDetailsProps) {
     return (
       <Stack spacing={3}>
         <div>
-          <Typography variant="h5" component="h1" sx={{ mb: 1 }}>
+          <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
             Confirm your details
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -178,7 +178,7 @@ export function StepDetails({ profile, onProfileUpdate }: StepDetailsProps) {
   return (
     <Stack spacing={3}>
       <div>
-        <Typography variant="h5" component="h1" sx={{ mb: 1 }}>
+        <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
           Confirm your details
         </Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>

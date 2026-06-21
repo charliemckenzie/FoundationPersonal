@@ -147,7 +147,7 @@ export function LifetimePensionFlow() {
       <ContentContainer size="md">
         <StepSuccess
           onReturnDashboard={() => router.push('/member-online')}
-          gate={{ ...gate, alreadyVerified: false }}
+          gate={{ ...gate, alreadyVerified: verifyMethod === 'online' && canSubmitIDV(idvState) }}
         />
       </ContentContainer>
     );
@@ -259,7 +259,7 @@ export function LifetimePensionFlow() {
                     Verify your identity
                   </Typography>
                   <Typography variant="body" sx={{ color: 'text.primary' }}>
-                    To process your application, we need to verify your identity. Select one of the documents below to get started.
+                    To process your application, we need to verify your identity. Choose how you&apos;d like to verify below.
                   </Typography>
                 </div>
 
@@ -348,7 +348,7 @@ export function LifetimePensionFlow() {
             step={activeStep + 1}
             isSubmitStep={activeStep === STEP_KEYS.length - 1}
             hideNext={activeStep === 0 && !introEligible}
-            nextLabel={activeStep === 0 ? 'Get started' : activeStep === STEP_KEYS.length - 1 ? 'Continue' : 'Next'}
+            nextLabel={activeStep === 0 ? 'Get started' : activeStep === STEP_KEYS.length - 1 ? 'Submit application' : 'Next'}
             onNext={handleNext}
             onBack={flow.back}
             onExit={() => router.push('/member-online')}

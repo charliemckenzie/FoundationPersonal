@@ -60,7 +60,7 @@ export function StepPayments({
         sx={{
           border: '1px solid',
           borderColor: 'border.default',
-          borderRadius: '16px',
+          borderRadius: (t) => `${t.shape.lg}px`,
           backgroundColor: 'background.paper',
           p: { xs: 3, sm: 4 },
         }}

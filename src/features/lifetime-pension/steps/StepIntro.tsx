@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
+import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Icon } from '../../../components/Icon';
 import { IconList } from '../../../components/IconList';
@@ -27,7 +28,7 @@ export function StepIntro({ onEligible }: StepIntroProps) {
         contribution joins a shared investment pool, giving you certainty no matter how long you live.
       </Typography>
 
-      <Box sx={{ mt: '40px' }}>
+      <Box sx={{ mt: 5 }}>
         <EligibilityChecker config={lifetimePensionConfig} onEligible={handleEligible} />
       </Box>
 
@@ -64,13 +65,9 @@ export function StepIntro({ onEligible }: StepIntroProps) {
               </Box>
               <Typography variant="body">
                 You have read and understood the{' '}
-                <Box
-                  component="a"
-                  href="#"
-                  sx={{ color: 'primary.main', textDecoration: 'underline' }}
-                >
+                <MuiLink href="#">
                   Super Savings Product Disclosure Statement for Income Account and Lifetime Pension (PDS)
-                </Box>
+                </MuiLink>
               </Typography>
             </Box>
           </Stack>

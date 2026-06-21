@@ -146,7 +146,7 @@ export function StepAllocate({
   return (
     <Stack spacing={3}>
       <div>
-        <Typography variant="h5" sx={{ mb: 0.5 }}>Allocate from your accounts</Typography>
+        <Typography variant="h5" component="h2" sx={{ mb: 0.5 }}>Allocate from your accounts</Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
           As you have multiple accounts we need you to tell us which accounts you would like us to take the{' '}
           <Box component="span" sx={{ fontWeight: 700 }}>{formatCurrency(purchaseAmount)} purchase price</Box>

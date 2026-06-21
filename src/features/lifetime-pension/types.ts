@@ -1,3 +1,5 @@
+import type { Address } from '../../components/AddressField';
+
 export type PensionOption = 'single' | 'spouse' | '';
 export type AgeScenario = '60-64' | '65-plus';
 
@@ -8,6 +10,7 @@ export interface SpouseDetails {
   dateOfBirth: string;
   mobilePhone: string;
   addressOption: 'same' | 'different';
+  address: Address | null;
   consentChecked: boolean;
   identityConsentChecked: boolean;
 }

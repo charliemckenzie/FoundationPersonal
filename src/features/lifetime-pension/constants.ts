@@ -49,6 +49,7 @@ const EMPTY_SPOUSE_DETAILS: SpouseDetails = {
   dateOfBirth: '',
   mobilePhone: '',
   addressOption: 'same',
+  address: null,
   consentChecked: false,
   identityConsentChecked: false,
 };

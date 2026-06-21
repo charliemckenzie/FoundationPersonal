@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import { useState } from 'react';
 import { Alert } from '../../../components/Alert';
 import { AddressCapture } from '../../../components/AddressField/AddressCapture';
 import { Checkbox } from '../../../components/Checkbox';
@@ -72,7 +71,6 @@ export function StepOption({
   showValidation,
 }: StepOptionProps) {
   const spouseMode = pensionOption === 'spouse';
-  const [spouseAddress, setSpouseAddress] = useState<Address>(MOCK_AU_ADDRESS);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   function updateField<K extends keyof SpouseDetails>(key: K, value: SpouseDetails[K]) {
@@ -87,7 +85,7 @@ export function StepOption({
     <Stack spacing={4}>
       <Stack spacing={2}>
         <div>
-          <Typography variant="h5" sx={{ mb: 0.5 }}>
+          <Typography variant="h5" component="h2" sx={{ mb: 0.5 }}>
             Select a single or spouse option
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
@@ -130,7 +128,7 @@ export function StepOption({
             sx={{
               border: '1px solid',
               borderColor: 'border.default',
-              borderRadius: '16px',
+              borderRadius: (t) => `${t.shape.lg}px`,
               backgroundColor: 'background.paper',
               p: { xs: 3, sm: 4 },
             }}
@@ -210,7 +208,7 @@ export function StepOption({
                   <Box
                     sx={{
                       backgroundColor: 'background.elevated',
-                      borderRadius: '8px',
+                      borderRadius: (t) => `${t.shape.md}px`,
                       px: 2,
                       py: 1.5,
                     }}
@@ -227,8 +225,8 @@ export function StepOption({
                 {spouseDetails.addressOption === 'different' && (
                   <Box sx={{ pt: 2 }}>
                     <AddressCapture
-                      value={spouseAddress}
-                      onChange={setSpouseAddress}
+                      value={spouseDetails.address ?? MOCK_AU_ADDRESS}
+                      onChange={(addr) => updateField('address', addr)}
                       section="spouse"
                       lookup={ADDRESS_LOOKUP}
                     />
@@ -242,7 +240,7 @@ export function StepOption({
                 <Typography variant="h6">
                   Verify your spouse&rsquo;s identity
                 </Typography>
-                <Typography variant="body" sx={{ color: 'text.default' }}>
+                <Typography variant="body" sx={{ color: 'text.primary' }}>
                   During the application processing we will use the information provided above to contact{' '}
                   {spouseDetails.firstName ? (
                     <Box component="span" sx={{ fontWeight: 700 }}>
@@ -265,12 +263,9 @@ export function StepOption({
                   checked={spouseDetails.identityConsentChecked}
                   onChange={(checked) => updateField('identityConsentChecked', checked)}
                   label={`I give Australian Retirement Trust permission to contact ${[spouseDetails.firstName, spouseDetails.lastName].filter(Boolean).join(' ') || 'my spouse'} regarding this application.`}
+                  error={showValidation && spouseMode && !spouseDetails.identityConsentChecked}
+                  errorMessage={showValidation && spouseMode && !spouseDetails.identityConsentChecked ? 'Permission to contact spouse is required' : undefined}
                 />
-                {showValidation && spouseMode && !spouseDetails.identityConsentChecked && (
-                  <Typography variant="caption" sx={{ color: 'error.main', display: 'block' }}>
-                    Permission to contact spouse is required
-                  </Typography>
-                )}
               </Stack>
 
             </Stack>
