@@ -29,6 +29,8 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "check-setup": "node scripts/check-setup.mjs",
+    "context-budget": "node scripts/context-budget.mjs",
+    "context-budget:check": "node scripts/context-budget.mjs --check",
     "sync-runtimes": "node scripts/sync-runtimes.mjs",
     "sync-runtimes:check": "node scripts/sync-runtimes.mjs --check",
     "check:signoff": "node scripts/check-signoff.mjs",
