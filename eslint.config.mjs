@@ -17,6 +17,8 @@ const eslintConfig = defineConfig([
     "dist/**",
     "storybook-static/**",
     "next-env.d.ts",
+    // Compiled Figma plugin output — not project source code.
+    "figma-plugin/**",
   ]),
   ...storybook.configs["flat/recommended"],
   // Foundation charter enforcement — see AGENTS.md.
@@ -24,6 +26,13 @@ const eslintConfig = defineConfig([
     files: ["src/**/*.{ts,tsx}"],
     rules: {
       "@typescript-eslint/no-explicit-any": "error",
+      // Standard TypeScript convention: _-prefixed names are intentionally unused.
+      "@typescript-eslint/no-unused-vars": ["warn", {
+        "varsIgnorePattern": "^_",
+        "argsIgnorePattern": "^_",
+        "destructuredArrayIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_",
+      }],
       "no-restricted-syntax": [
         "error",
         {

@@ -54,7 +54,6 @@ export default meta;
 type Story = StoryObj<TextFieldStoryArgs>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: {
       description: {

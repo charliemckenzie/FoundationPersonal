@@ -62,7 +62,6 @@ export default meta;
 type Story = StoryObj<typeof FileUpload>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: { docs: { description: { story: '' } } },
   args: { multiple: false, disabled: false },
   decorators: [(Story) => <div style={{ width: 520 }}><Story /></div>],

@@ -110,7 +110,6 @@ export const Severities: Story = {
 };
 
 export const WithIcon: Story = {
-  name: 'With Icon',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <Alert severity="error" message="Something went wrong. Please try again." icon={<Icon icon={SEVERITY_ICONS.error} color="inherit" size="lg" />} />
@@ -122,7 +121,6 @@ export const WithIcon: Story = {
 };
 
 export const WithTitle: Story = {
-  name: 'With Title',
   parameters: {
     docs: {
       description: {

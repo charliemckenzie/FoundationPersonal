@@ -83,16 +83,6 @@ const ALLOCATION_LABELS: Record<string, string> = {
   sustain3: 'Sustain 3',
 };
 
-const ASSET_LABELS: Record<string, string> = {
-  australianSharesIndex:            'Australian Shares Index',
-  internationalSharesHedgedIndex:   'International Shares Hedged Index',
-  internationalSharesUnhedgedIndex: 'International Shares Unhedged Index',
-  listedPropertyIndex:              'Listed Property Index',
-  unlistedAssets:                   'Unlisted Assets',
-  bondsIndex:                       'Bonds Index',
-  cash:                             'Cash',
-};
-
 const GROUPS = [
   { label: 'Lifetime',  keys: ['lifetime'] },
   { label: 'Outlook',   keys: ['outlook'] },

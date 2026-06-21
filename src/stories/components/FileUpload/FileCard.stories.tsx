@@ -61,7 +61,6 @@ export const Complete: Story = {
 };
 
 export const Error: Story = {
-  name: 'Error',
   parameters: { docs: { description: { story: 'Upload failed. Error message shown below the filename.' } } },
   args: {
     status: 'error',
@@ -76,7 +75,6 @@ export const Disabled: Story = {
 };
 
 export const AllStates: Story = {
-  name: 'All States',
   parameters: { docs: { description: { story: 'All four states shown together for comparison.' } } },
   render: () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>

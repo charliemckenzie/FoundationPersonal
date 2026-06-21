@@ -87,7 +87,6 @@ type Story = StoryObj<typeof Tabs>;
 // ─── Playground ───────────────────────────────────────────────────────────────
 
 export const Playground: Story = {
-  name: 'Playground',
   args: {
     label: 'Example tabs',
     size: 'medium',
@@ -131,7 +130,6 @@ function SizeRow({ size }: SizeRowProps) {
 }
 
 export const Sizes: Story = {
-  name: 'Sizes',
   parameters: {
     docs: {
       description: {
@@ -180,7 +178,6 @@ export const SegmentedDefault: Story = {
 // ─── Reversed ────────────────────────────────────────────────────────────────
 
 export const Reversed: Story = {
-  name: 'Reversed',
   parameters: {
     docs: {
       description: {

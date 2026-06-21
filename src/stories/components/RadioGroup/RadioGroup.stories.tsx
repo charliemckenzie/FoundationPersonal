@@ -77,7 +77,6 @@ export default meta;
 type Story = StoryObj<RadioGroupArgs>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: {
       description: {

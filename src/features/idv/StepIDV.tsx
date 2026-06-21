@@ -225,8 +225,6 @@ export interface StepIDVProps {
 }
 
 export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = false, hideSubmit = false }: StepIDVProps) {
-  const canSubmit = canSubmitIDV(state);
-
   const formContent = (
     <Stack spacing={3}>
       <Box

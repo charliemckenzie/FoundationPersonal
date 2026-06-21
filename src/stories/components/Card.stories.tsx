@@ -490,7 +490,6 @@ export const TopSectionModes: Story = {
 };
 
 export const ResponsiveGrid: Story = {
-  name: 'Responsive Grid',
   parameters: {
     docs: {
       description: {
@@ -519,7 +518,6 @@ export const ResponsiveGrid: Story = {
 };
 
 export const EqualHeightGrid: Story = {
-  name: 'Equal Height Grid',
   parameters: {
     docs: {
       description: {

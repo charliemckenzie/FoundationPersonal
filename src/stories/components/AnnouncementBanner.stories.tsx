@@ -51,7 +51,6 @@ type Story = StoryObj<typeof AnnouncementBanner>;
 type DefaultArgs = AnnouncementBannerProps & { actionLabel: string };
 
 export const Default: StoryObj<DefaultArgs> = {
-  name: 'Default',
   parameters: {
     docs: {
       description: {
@@ -135,7 +134,6 @@ export const WithIllustrationInline: Story = {
 // ── Text only (no CTA) ────────────────────────────────────────────────────────
 
 export const TextOnly: Story = {
-  name: 'Text Only',
   parameters: {
     docs: {
       description: {
@@ -154,7 +152,6 @@ export const TextOnly: Story = {
 // ── Variants ──────────────────────────────────────────────────────────────────
 
 export const LightVariant: Story = {
-  name: 'Light Variant',
   args: {
     variant: 'light',
     title: 'Tip: keep your details up to date',
@@ -165,7 +162,6 @@ export const LightVariant: Story = {
 };
 
 export const PrimaryVariant: Story = {
-  name: 'Primary Variant',
   args: {
     variant: 'primary',
     title: 'Try our new investment calculator',
@@ -176,7 +172,6 @@ export const PrimaryVariant: Story = {
 };
 
 export const DarkVariant: Story = {
-  name: 'Dark Variant',
   args: {
     variant: 'dark',
     title: 'Introducing ART Advice',

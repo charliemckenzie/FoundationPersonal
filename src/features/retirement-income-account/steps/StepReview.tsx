@@ -11,7 +11,7 @@ import { TextField } from '../../../components/TextField';
 import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
 import { formatCurrency, totalSelectedAmount, estimatePension } from '../utils';
-import { PENSION_ESTIMATE_AGE, FORTNIGHTS_PER_YEAR } from '../constants';
+import { PENSION_ESTIMATE_AGE } from '../constants';
 
 interface StepReviewProps {
   state: RetirementIncomeAccountState;
@@ -21,12 +21,6 @@ interface StepReviewProps {
   verifyDetailsState: VerifyDetailsState;
   onVerifyDetailsChange: (next: VerifyDetailsState) => void;
   profile: UserProfile;
-}
-
-function optionLabel(state: RetirementIncomeAccountState): string {
-  if (state.pensionOption === 'single') return 'Single option';
-  if (state.pensionOption === 'spouse') return 'Spouse protection option';
-  return 'Not selected';
 }
 
 function ReviewRow({ label, children }: { label: string; children: React.ReactNode }) {
@@ -366,7 +360,6 @@ export function StepReview({
   showValidation,
   verifyDetailsState,
   onVerifyDetailsChange,
-  profile,
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
@@ -384,7 +377,6 @@ export function StepReview({
   }
 
   const isSimple = state.setupMode === 'simple';
-  const selectedAccounts = state.accounts.filter((a) => a.transferAmount > 0);
   // In simple mode the funding step is skipped, so transferAmount is 0 — use full balances instead.
   const purchasePrice = isSimple
     ? state.accounts.reduce((sum, a) => sum + a.balance, 0)

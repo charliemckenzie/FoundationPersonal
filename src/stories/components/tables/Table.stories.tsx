@@ -131,7 +131,6 @@ export const Default: Story = {
 };
 
 export const HeaderStyles: Story = {
-  name: 'Header Styles',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       <div>
@@ -162,7 +161,6 @@ export const Striped: Story = {
 };
 
 export const Bordered: Story = {
-  name: 'Bordered',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       <div>
@@ -218,7 +216,6 @@ export const StickyHeader: Story = {
 };
 
 export const OverflowScroll: Story = {
-  name: 'Overflow Scroll',
   render: () => (
     <div style={{ maxWidth: 520 }}>
       <p style={{ marginBottom: 12, fontSize: 14, color: '#666' }}>
@@ -232,7 +229,6 @@ export const OverflowScroll: Story = {
 // ─── Pagination ──────────────────────────────────────────────────────────────
 
 export const Pagination: Story = {
-  name: 'Pagination',
   render: () => {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(5);

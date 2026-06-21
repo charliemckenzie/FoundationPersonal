@@ -253,7 +253,6 @@ export default meta;
 type Story = StoryObj<typeof Autocomplete>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: {
       description: {
@@ -379,6 +378,7 @@ export const Loading: Story = {
 function FlagImg({ code, label }: { code: string; label: string }) {
   const base = code.toLowerCase();
   return (
+    // eslint-disable-next-line @next/next/no-img-element
     <img
       loading="lazy"
       width="20"

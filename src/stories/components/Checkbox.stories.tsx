@@ -85,7 +85,6 @@ export default meta;
 type Story = StoryObj<CheckboxArgs>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: {
       description: {

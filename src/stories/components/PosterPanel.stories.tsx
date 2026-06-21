@@ -160,7 +160,6 @@ export const Default: Story = {
 // ── Content right ─────────────────────────────────────────────────────────────
 
 export const ContentRight: Story = {
-  name: 'Content Right',
   parameters: {
     docs: {
       description: {
@@ -198,7 +197,6 @@ export const ContentRight: Story = {
 // ── No gradient ───────────────────────────────────────────────────────────────
 
 export const NoGradient: Story = {
-  name: 'No Gradient',
   parameters: {
     docs: {
       description: {

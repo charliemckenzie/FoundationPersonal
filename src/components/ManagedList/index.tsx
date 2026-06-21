@@ -129,7 +129,7 @@ export function ManagedList({
               flexShrink: 0,
             })}
           >
-            <Icon icon={icon} style="light" size="xl+" color="text.heading" />
+            <Icon icon={icon} style={iconStyle} size="xl+" color="text.heading" />
           </Box>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="h6">{title}</Typography>

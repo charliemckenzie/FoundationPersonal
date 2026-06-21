@@ -24,20 +24,14 @@ export interface MemberHeaderProps {
   searchPlaceholder?: string;
 }
 
-const DEFAULT_SHORTCUT = '⌘ K';
-
 export function MemberHeader({
   user,
   mode,
   onModeChange,
-  searchValue,
-  onSearchChange,
   onSearchSubmit,
   onLogout,
   hideSearch = false,
-  searchShortcut = DEFAULT_SHORTCUT,
   logoutLabel = DEFAULT_MEMBER_ONLINE_COPY.logoutLabel,
-  searchPlaceholder = DEFAULT_MEMBER_ONLINE_COPY.searchPlaceholder,
 }: MemberHeaderProps) {
   return (
     <Box

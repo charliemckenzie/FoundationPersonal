@@ -110,7 +110,6 @@ function resolve(value: string, surfaceHex: string): string {
 
 const modes: Mode[] = ['light', 'dark'];
 const surfaces: Surface[] = ['default', 'paper', 'elevated'];
-const variants: Variant[] = ['default', 'boxed', 'card'];
 
 const rows: Row[] = [];
 
@@ -384,14 +383,6 @@ for (const mode of modes) {
 
     // ── CARD variant (same border + bg logic as boxed) ────────────────────
     // Same structural logic as boxed, copy with variant='card'
-    const cardStates: CheckState[] = [
-      'resting-unselected',
-      'hover-unselected',
-      'resting-selected',
-      'hover-selected',
-      'active-selected',
-      'focus-visible',
-    ];
     for (const row of rows.filter(
       (r) => r.mode === mode && r.surface === surface && r.variant === 'boxed'
     )) {

@@ -167,7 +167,6 @@ const SIZE_LABELS: Record<InfoButtonSize, string> = {
 };
 
 export const Sizes: Story = {
-  name: 'Sizes',
   parameters: {
     docs: {
       description: {

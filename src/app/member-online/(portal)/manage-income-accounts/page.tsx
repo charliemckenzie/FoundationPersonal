@@ -100,12 +100,12 @@ export default function ManageIncomeAccountsPage() {
             <Box sx={{ px: 2.5, py: 2, borderBottom: '1px solid', borderBottomColor: 'border.subtle', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
               <Typography variant="h6">Applications</Typography>
               {pendingApps.length > 0 && (
-                <Box sx={(t: Theme) => ({
+                <Box sx={{
                   display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                   minWidth: '1.375rem', height: '1.375rem', px: 0.5,
                   borderRadius: '999px', bgcolor: 'warning.main',
                   fontSize: '0.6875rem', fontWeight: 700, color: 'warning.contrastText',
-                })}>
+                }}>
                   {pendingApps.length}
                 </Box>
               )}

@@ -61,7 +61,6 @@ export const Controlled: Story = {
 };
 
 export const MultipleItems: Story = {
-  name: 'Multiple Items',
   render: () => (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
       <ExpandableItem label="What is this component?">
@@ -78,7 +77,6 @@ export const MultipleItems: Story = {
 };
 
 export const WithRichContent: Story = {
-  name: 'With Rich Content',
   render: () => (
     <ExpandableItem label="Technical specifications">
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>

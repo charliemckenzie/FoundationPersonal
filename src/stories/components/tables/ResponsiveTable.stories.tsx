@@ -93,7 +93,6 @@ export const Default: Story = {
 };
 
 export const HeaderStyles: Story = {
-  name: 'Header Styles',
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
       <div>

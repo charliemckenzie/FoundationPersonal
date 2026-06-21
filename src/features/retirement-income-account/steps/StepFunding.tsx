@@ -9,7 +9,7 @@ import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
-import { MIN_PURCHASE_AMOUNT, MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
+import { MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
 import { estimatePension, estimateRetirementBonus, formatCurrency } from '../utils';
 

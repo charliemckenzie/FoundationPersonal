@@ -13,14 +13,6 @@ import { PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, SetupMode } from '../types';
 import { estimatePension, formatCurrency, getMinDrawdownRate } from '../utils';
 
-function SectionLabel({ children, mb = 0.5 }: { children: React.ReactNode; mb?: number }) {
-  return (
-    <Typography variant="h6" sx={{ color: 'text.heading', mb }}>
-      {children}
-    </Typography>
-  );
-}
-
 function KeyPoint({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
   return (
     <Stack direction="row" spacing={2} sx={{ alignItems: 'flex-start' }}>
@@ -50,8 +42,6 @@ function KeyPoint({ icon, title, children }: { icon: string; title: string; chil
     </Stack>
   );
 }
-
-const TODAY = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
 
 interface StepSetupModeProps {
   setupMode: SetupMode;

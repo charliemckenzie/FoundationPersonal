@@ -43,7 +43,6 @@ export default meta;
 type Story = StoryObj<PasswordFieldStoryArgs>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: { description: { story: '' } },
   },

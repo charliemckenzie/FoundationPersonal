@@ -80,13 +80,6 @@ function parseComponents() {
   return components;
 }
 
-// ── Map stage → column ───────────────────────────────────────────────────────
-function stageToColumn(stage) {
-  if (stage === 'Stable') return 'Done';
-  if (stage === 'In Review') return 'In Review';
-  return 'In Progress';
-}
-
 // ── Main ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log('🔍 Fetching org/user ID...');
@@ -162,13 +155,6 @@ async function main() {
     if (stage === 'In Review') return columnMap['In Progress'];
     return columnMap['Todo'];
   };
-
-  // ── Get repo ID for creating issues ─────────────────────────────────────
-  console.log('\n📦 Fetching repo info...');
-  const repoData = await gql(`
-    query { repository(owner: "${REPO_OWNER}", name: "${REPO_NAME}") { id } }
-  `);
-  const repoId = repoData.repository.id;
 
   // ── Add Assignee label field ─────────────────────────────────────────────
   console.log('\n🏷  Checking Owner field...');

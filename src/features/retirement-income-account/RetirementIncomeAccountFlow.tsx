@@ -34,12 +34,9 @@ import {
   allocateStepValid,
   eligibilityStepValid,
   fundingStepValid,
-  hasSelectedAccount,
   introStepValid,
   isEligible,
-  investmentMixStepValid,
   investmentStrategyStepValid,
-  drawdownStepValid,
   beneficiaryStepValid,
   paymentScheduleStepValid,
   paymentsStepValid,
@@ -61,6 +58,17 @@ const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'beneficiary',
   'review',
 ];
+
+const CONDITIONAL_STEPS: RetirementIncomeAccountStepId[] = [
+  'funding',
+  'allocate',
+  'payment-schedule',
+  'investment-strategy',
+  'investment-mix',
+  'investment-drawdown',
+];
+
+const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix'];
 
 export function RetirementIncomeAccountFlow() {
   const router = useRouter();
@@ -98,19 +106,6 @@ export function RetirementIncomeAccountFlow() {
       (account) => account.selected && account.balance > 0 && account.transferAmount >= account.balance
     );
   }, [state.accounts]);
-
-  // Steps that are conditionally hidden when user selects "simple" setup mode
-  const CONDITIONAL_STEPS: RetirementIncomeAccountStepId[] = [
-    'funding',
-    'allocate',
-    'payment-schedule',
-    'investment-strategy',
-    'investment-mix',
-    'investment-drawdown',
-  ];
-
-  // Steps skipped when custom path user picks "use recommended" investment strategy
-  const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix'];
 
   // Filter visible steps based on setup mode and investment strategy
   const visibleStepKeys = useMemo(() => {

@@ -249,7 +249,7 @@ The divergence turned out to be **moot at runtime**: `retirement-income-account/
 
 **Phase 5 flags found here:** (1) `InputSelect` trigger uses `text.secondary` (banned per typography guidelines) for the placeholder colour — pre-existing, preserved as-is (behaviour-preserving); a Phase 5 token fix. (2) `InputSelectContainerProps.size` is accepted but unused in the impl — keep for API or drop in Phase 5.
 
-**✅ Phase 4 COMPLETE** — WP4.1 (size limits), WP4.2 (IDV consolidation), WP4.3 (stepped-flow save/resume), WP4.4 (InputSelect) all done and green. **Every `src/components/**/*.tsx` is now ≤200 lines**, and both enumerated 621-line `manage-income-accounts` pages are split. Final repo state: `tsc` 0, `eslint` 0 errors (109 warnings → Phase 5), `lib:build` DTS 89.13 KB, `npm run test` 545/545. Nothing committed — Adam commits himself.
+**✅ Phase 4 COMPLETE** — WP4.1 (size limits), WP4.2 (IDV consolidation), WP4.3 (stepped-flow save/resume), WP4.4 (InputSelect) all done and green. **Every `src/components/**/*.tsx` is now ≤200 lines**, and both enumerated 621-line `manage-income-accounts` pages are split. Final repo state: `tsc` 0, `eslint` 0 errors (109 warnings → Phase 5), `lib:build` DTS 89.13 KB, `npm run test` 545/545. **Committed by Adam (2026-06-21) — Phases 3 + 4 landed on `main` in `5959d39` + `ef9688e "updates to stepped forms"`; working tree clean.** (The "Nothing committed" notes in the per-WP blocks above were true at the time of writing each block; superseded by this commit.)
 
 **Out of scope / candidate for a future size pass (never in WP4.1's enumerated list):** a few **app pages + one data file** still exceed 200 lines — `app/public-web/navData.tsx` (565, a nav *data* file, not a component), `app/review/page.tsx` (385), `app/paolo/card-cta-accessibility/page.tsx` (304, sandbox), `lifetime-pension/view-application/page.tsx` (327), `app/page.tsx` (256). WP4.1 targeted library components + the two 621-line pages only; these were never in scope. Flag for a separate page-size pass if wanted.
 
@@ -270,15 +270,41 @@ The divergence turned out to be **moot at runtime**: `retirement-income-account/
 
 ## Phase 5 — Housekeeping
 
-| WP | Change | Effort |
-|---|---|---|
-| 5.1 | `npx eslint --fix` for the auto-fixable `storybook/no-redundant-story-name` warnings; clear unused vars/imports. | XS |
-| 5.2 | Replace `console.log` placeholder `onSearch` handlers in the 3 demo `layout.tsx` files (or wire real handlers). | XS |
-| 5.3 | Stop committing generated `tokens-resolved.json` / `tokens-flat.json` (gitignore + remove from tracking) unless Figma sync needs them tracked — confirm with token tooling owner. | S |
-| 5.4 | Reconcile `.gitignore` vs tracked `package-lock.json` / `.npmrc` — remove the dead ignore entries (both files are tracked). | XS |
-| 5.5 | Move root planning docs (`MUI_TYPOGRAPHY_MIGRATION.md`, `state-coverage-*.md`) into `docs/`. | XS |
+**Phase 5 IN PROGRESS (started 2026-06-21, lean).** Baseline confirmed green before starting: `tsc` 0, `eslint` 0 errors (109 warnings), `lib:build` DTS 89.13 KB, `npm run test` 545/545.
 
-**Owners:** Frink (5.1, 5.4, 5.5), Lenny (5.2), token tooling owner (5.3) → Chalmers.
+| WP | Change | Status | Effort |
+|---|---|---|---|
+| 5.1 | Clear lint warnings — story `name:` removals, unused vars/imports, exhaustive-deps, ESLint config hygiene. | ✅ **DONE** — 109 → **15 warnings** | XS |
+| 5.2 | Replace `console.log` placeholder `onSearch` handlers in the 3 demo `layout.tsx` files (or wire real handlers). | Not started | XS |
+| 5.3 | Stop committing generated `tokens-resolved.json` / `tokens-flat.json`. | ⏭ **SKIPPED — Adam chose to keep them tracked.** | — |
+| 5.4 | Reconcile `.gitignore` — remove the dead `package-lock.json` entry (it's tracked; `.npmrc` entry is correct and stays). | Not started | XS |
+| 5.5 | Move root planning docs (`MUI_TYPOGRAPHY_MIGRATION.md`, `state-coverage-section.md`, `state-coverage-tables.md`) into `docs/`. | Not started | XS |
+| 5.6 | **From WP4.4:** `InputSelect/styles.ts` `triggerButtonSx` uses banned `text.secondary` for placeholder colour — swap to a Foundation token; verify contrast. `InputSelectContainerProps.size` accepted but unused in impl — wire it or drop it from the type. | Not started | XS |
+| 5.7 | **Optional page-size pass:** `navData.tsx` (565), `app/review/page.tsx` (385), `lifetime-pension/view-application/page.tsx` (327), `app/page.tsx` (256). Apply WP4.1 pattern only if Adam wants page parity. | Not started — ask Adam | M |
+
+### ✅ WP5.1 detail — lint warning reduction (109 → 15)
+
+**Warning breakdown after WP5.1:**
+- 11× `react-hooks/set-state-in-effect` — documented intentional in `eslint.config.mjs`
+- 3× `react-hooks/refs` — documented intentional in `eslint.config.mjs`
+- 1× `@typescript-eslint/no-unused-vars` (`size` in `InputSelect/index.tsx`) — WP5.6 carry-forward
+
+**Changes made (all green: tsc 0, lint 0 errors / 15 warnings, test 545/545, lib:build 89.07 KB):**
+
+- **41 redundant `name:` removals** across 24 story files (`Alert`, `AnnouncementBanner`, `Autocomplete`, `Card`, `Checkbox`, `DateOfBirthField`, `FileUpload`, `Header`, `InputSelect`, `PasswordField`, `PosterPanel`, `RadioGroup`, `Select`, `Tabs`, `TextArea`, `TextField`, `InfoButton`, `ExpandableItem`, `FormProgress`, `StepperActions`, `ResponsiveTable`, `Table`, `Typography.stories.tsx`). `storybook/no-redundant-story-name` is NOT auto-fixable — all done manually.
+- **Unused import/var cleanups** in feature files: `Alert` import in `StepSuccess.tsx` (LP + RIA), `Button` import in `Header.stories.tsx`, unused type alias in `ActionBar.stories.tsx`, `hasSelectedAccount`/`investmentMixStepValid`/`drawdownStepValid` in two Flows, dead `SectionLabel`/`TODAY` in `StepSetupMode.tsx`, `MIN_PURCHASE_AMOUNT` in `StepFunding.tsx` (RIA), `FORTNIGHTS_PER_YEAR`/dead `optionLabel` fn/`profile` param/dead `selectedAccounts` line in `StepReview.tsx` (RIA), `profile` in `StepReview.tsx` (LP), dead `eligibleForBonus` line in `StepFunding.tsx` (LP), dead `canSubmit` line in `StepIDV.tsx`, `showEmpty` from `AtoStep2Results`, dead `ASSET_LABELS` in `InvestmentAllocations.stories.tsx`, `STEPPED_MIN_STEPS`/`STEPPED_MAX_STEPS` from `FormProgress.stories.tsx`.
+- **ESLint config** (`eslint.config.mjs`): added `"@typescript-eslint/no-unused-vars": ["warn", { varsIgnorePattern/argsIgnorePattern/destructuredArrayIgnorePattern/caughtErrorsIgnorePattern: "^_" }]` (standard TS convention for intentional `_`-prefixed unused vars); added `"figma-plugin/**"` to `globalIgnores` (compiled output, not project source).
+- **`AccountListRow.tsx` + `manage-income-accounts/page.tsx`**: removed unused `t: Theme` sx callbacks (converted to plain objects where `t` was never referenced in the body).
+- **`src/app/themes/factory.ts`**: removed unused `TINT` from the `./semantic` import.
+- **`ManagedList/index.tsx`**: wired the `iconStyle` prop to the `Icon` at line 132 (it was destructured with default `'solid'` but never passed through — the icon style was effectively hardcoded; genuine bug fix).
+- **`MemberHeader/index.tsx`**: removed 4 unimplemented search props (`searchValue`, `onSearchChange`, `searchShortcut`, `searchPlaceholder`) from the destructuring + removed the now-dead `DEFAULT_SHORTCUT` const. Props remain in the interface type for future use; callers unaffected.
+- **`scripts/radio-group-contrast-review.ts`**: removed dead `variants` const and dead `cardStates` const (assigned but never referenced).
+- **`scripts/setup-github-project.mjs`**: removed dead `stageToColumn` function + unused `repoId`/`repoData` block.
+- **`useArtHeaderNav.ts`**: wrapped `cancelClose`, `cancelOpen`, `closePanel`, `scheduleClose` in `useCallback` with correct deps (all stable — only refs + setState); added `closePanel` + `cancelOpen`/`cancelClose` to the 4 `useEffect` dep arrays. Fixes 3 + 1 `exhaustive-deps` warnings.
+- **`RetirementIncomeAccountFlow.tsx`**: moved `CONDITIONAL_STEPS` and `INVESTMENT_STEPS` to module scope (they were inside the component body — truly static constants that don't depend on state/props). Fixes the `useMemo` exhaustive-deps warning.
+- **`Autocomplete.stories.tsx`**: suppressed `@next/next/no-img-element` with an inline `// eslint-disable-next-line` comment (flag image in a story demo — Next.js `<Image />` doesn't make sense here).
+
+**Owners:** Lean/direct (no full team pipeline per Adam). Nothing committed — Adam commits himself.
 
 ---
 
@@ -287,13 +313,37 @@ The divergence turned out to be **moot at runtime**: `retirement-income-account/
 - [x] **Decision:** consolidate = **fix (A)** ✅
 - [x] Phase 1 — tsc + eslint clean (§1–5) ✅ (committed to `main` in `7a25b7d`; tsc 0, eslint 0 errors, build exit 0)
 - [x] Phase 2 — CI gate added + **green on `main`** (§6). WP2.0 (story test) ✅, WP2.1 (`ci.yml`) ✅, WP2.3 (errors-only lint) ✅. **WP2.2 (mark required in branch protection) — declined by Adam; gate kept advisory by choice.**
-- [x] Phase 3 — `src/lib/format.ts` (canonical formatters; 6 currency + 8 date copies collapsed, projection outlier left separate) + seed unit tests (44 tests / 4 files). tsc 0, eslint 0 errors, lib:build OK, test 543/543. ✅ (not yet committed — Adam commits himself)
-- [x] Phase 4 — **COMPLETE (2026-06-21, lean)**. WP4.1 (size limits: 18 components + both 621-line pages ≤200) ✅; WP4.2 (IDV consolidation — removed dead local `StepIDV` + both dead `idvService` + dead IDV constants/types) ✅; WP4.3 (stepped-flow save/resume — single `useResumableDraft` mechanism + `useSteppedFlow` for RIA/LP + `ResumeDraftDialog`; RIA/LP/RetirementProjection adopted; projection `set-state-in-effect` disable removed; **UX policy: identical resume dialog everywhere**, projection moved silent/session → dialog/persistent) ✅; WP4.4 (InputSelect kept-and-documented vs Select; `InputSelect/index.tsx` 257→107) ✅. **Every `src/components/**/*.tsx` ≤200 lines** (a few out-of-scope app pages/data files remain >200 — see the Phase 4 COMPLETE note). Final: tsc 0, eslint 0 errors (109 warnings → Phase 5), lib:build DTS 89.13 KB, test **545/545**. See the per-WP blocks in the Phase 4 section.
-- [ ] Phase 5 — warnings, artifacts, gitignore, root docs
+- [x] Phase 3 — `src/lib/format.ts` (canonical formatters; 6 currency + 8 date copies collapsed, projection outlier left separate) + seed unit tests (44 tests / 4 files). tsc 0, eslint 0 errors, lib:build OK, test 543/543. ✅ **Committed (`5959d39`/`ef9688e`, 2026-06-21).**
+- [x] Phase 4 — **COMPLETE (2026-06-21, lean)**. WP4.1 (size limits: 18 components + both 621-line pages ≤200) ✅; WP4.2 (IDV consolidation — removed dead local `StepIDV` + both dead `idvService` + dead IDV constants/types) ✅; WP4.3 (stepped-flow save/resume — single `useResumableDraft` mechanism + `useSteppedFlow` for RIA/LP + `ResumeDraftDialog`; RIA/LP/RetirementProjection adopted; projection `set-state-in-effect` disable removed; **UX policy: identical resume dialog everywhere**, projection moved silent/session → dialog/persistent) ✅; WP4.4 (InputSelect kept-and-documented vs Select; `InputSelect/index.tsx` 257→107) ✅. **Every `src/components/**/*.tsx` ≤200 lines** (a few out-of-scope app pages/data files remain >200 — see the Phase 4 COMPLETE note). Final: tsc 0, eslint 0 errors (109 warnings → Phase 5), lib:build DTS 89.13 KB, test **545/545**. **Committed (`5959d39`/`ef9688e`, 2026-06-21).** See the per-WP blocks in the Phase 4 section.
+- [ ] Phase 5 — **IN PROGRESS (2026-06-21, lean).** WP5.1 ✅ (109 → 15 warnings); WP5.3 ⏭ skipped (Adam: keep tokens tracked); WP5.2/5.4/5.5/5.6 remaining; WP5.7 optional (ask Adam). Current baseline: tsc 0, lint 0 errors / **15 warnings** (14 intentional + 1 WP5.6 defer), test 545/545, lib:build 89.07 KB. Nothing committed — Adam commits himself.
 
 ---
 
-## Kickoff prompt — Phase 4 continuation: WP4.2 → WP4.3 → WP4.4 (paste into a new context window)
+## Kickoff prompt — Phase 5 continuation (paste into a new context window)
+
+> **Context:** Continue the Foundation code-quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md`. **Phases 1–4 COMPLETE and committed** (`5959d39` + `ef9688e`, 2026-06-21). **Phase 5 is IN PROGRESS** — read the "Phase 5 — Housekeeping" section in full before doing anything; the per-WP status column and the WP5.1 detail block are the source of truth.
+>
+> **Current baseline (2026-06-21, nothing committed since `ef9688e`):** `npx tsc --noEmit` **0 errors**, `npx eslint .` **0 errors / 15 warnings** (14 documented intentional `set-state-in-effect`/`refs` + 1 WP5.6 defer for `InputSelect size`), `npm run lib:build` success (DTS **89.07 KB**), `npm run test` **545/545** (114 files). CI gate is advisory only — Adam declined branch protection; do NOT re-propose it.
+>
+> **Workflow (lean — confirmed by Adam):** direct build + verify, ONE unit at a time, no full team pipeline. After every change run `npx tsc --noEmit`, `npm run lint`, `npm run test`; for any change to an exported component (in `src/index.ts`) also `npm run lib:build`. **Adam commits/pushes himself — do not create a branch or commit without asking.** Always use the Q&A UI for questions, one at a time.
+>
+> **Remaining WPs (in order):**
+>
+> - **WP5.2** — Replace `console.log` placeholder `onSearch` handlers in `src/app/paolo/layout.tsx`, `src/app/public-web/layout.tsx`, `src/app/qsuper/public-web/layout.tsx`. These are demo layout files; no real search exists yet — replace with a `() => {}` no-op or remove the handler entirely. XS effort.
+> - **WP5.4** — Remove the dead `package-lock.json` entry from `.gitignore` (the file is tracked since the Phase 2 lockfile fix; the ignore entry is stale). The `.npmrc` ignore entry is correct and stays. XS effort.
+> - **WP5.5** — Move `MUI_TYPOGRAPHY_MIGRATION.md`, `state-coverage-section.md`, `state-coverage-tables.md` from the repo root into `docs/`. XS effort.
+> - **WP5.6** — `InputSelect/styles.ts`: the `triggerButtonSx` uses `text.secondary` (banned token) for the placeholder colour. Swap to a Foundation token (likely `text.muted` or `text.disabled` — check contrast, both modes). Also: `InputSelectContainerProps.size` is accepted by the type but never used in the implementation — wire it through or drop it from the interface (Moe's call if it's a public API decision). `InputSelect` IS in `src/index.ts` — run `npm run lib:build` after. XS effort, but needs a contrast check.
+> - **WP5.7 (optional)** — Ask Adam if he wants a page-size pass on out-of-scope app pages before calling Phase 5 done.
+>
+> **Start by re-verifying the baseline** (tsc/lint/test), then work the remaining WPs in the order above. Phase 5 closing out = plan complete.
+
+---
+
+## (Archived) Kickoff prompt — Phase 4 continuation: WP4.2 → WP4.3 → WP4.4
+
+> *Completed 2026-06-21, lean. WP4.2 (IDV dead-code removal), WP4.3 (stepped-flow save/resume consolidation — `useResumableDraft`/`useSteppedFlow`/`ResumeDraftDialog`, identical-resume-dialog UX policy, projection moved to dialog/persistent), WP4.4 (InputSelect kept+documented vs Select, `index.tsx` 257→107) all done and committed. See the per-WP blocks in the Phase 4 section. Original prompt preserved below.*
+
+### (Archived) Phase 4 continuation kickoff prompt — original text
 
 > **Context:** Continue the Foundation code-quality remediation plan in `docs/Adam/code-quality-remediation-plan-2026-06-20.md` (research: `docs/Adam/code-quality-review-2026-06-20.md`). **Read the "Phase 4 — IN PROGRESS" block first.** Phases 1–3 and **Phase 4 WP4.1 are COMPLETE and green** (verified 2026-06-21): `npx tsc --noEmit` **0 errors**, `npx eslint .` **0 errors** (112 warnings → Phase 5), `npm run lib:build` success (DTS 89.13 KB), `npm run test` **543/543** passing (113 files). **Nothing is committed yet — Adam commits/pushes himself; ask before assuming the working tree is clean.** A CI gate (`.github/workflows/ci.yml`) runs on every push + PR, **advisory only** (Adam declined branch protection — do NOT re-propose it).
 >

@@ -324,7 +324,6 @@ export function StepFunding({
   // rules). The >12-month membership condition can't be checked — there's no
   // such field in the mock data yet. Gated on the committed purchaseAmount so the
   // tile appears on blur, not mid-keystroke.
-  const eligibleForBonus = purchaseAmount > 0;
   const bonusValue = bonus?.forAmount === purchaseAmount ? bonus.value : null;
 
   // Clear any pending mock-calculation timer on unmount.

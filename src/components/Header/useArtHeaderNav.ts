@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { useTheme, useMediaQuery } from '@mui/material'
 import type { HeaderProps, NavItem } from './types'
 
@@ -25,23 +25,23 @@ export function useArtHeaderNav(
   const isMobile = useMediaQuery(theme.breakpoints.down('lg'))
   const isPhone = useMediaQuery(theme.breakpoints.down('md'))
 
-  const cancelClose = () => {
+  const cancelClose = useCallback(() => {
     if (closeTimerRef.current !== null) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null }
-  }
+  }, [])
 
-  const cancelOpen = () => {
+  const cancelOpen = useCallback(() => {
     if (openTimerRef.current !== null) { clearTimeout(openTimerRef.current); openTimerRef.current = null }
-  }
+  }, [])
 
-  const scheduleClose = () => {
+  const closePanel = useCallback(() => { cancelOpen(); cancelClose(); triggerRef.current?.focus(); setActivePanel(null) }, [cancelOpen, cancelClose])
+
+  const scheduleClose = useCallback(() => {
     cancelOpen()
     cancelClose()
     closeTimerRef.current = setTimeout(() => setActivePanel(null), 300)
-  }
+  }, [cancelOpen, cancelClose])
 
-  const closePanel = () => { cancelOpen(); cancelClose(); triggerRef.current?.focus(); setActivePanel(null) }
-
-  useEffect(() => { if (isMobile) closePanel() }, [isMobile])
+  useEffect(() => { if (isMobile) closePanel() }, [isMobile, closePanel])
 
   useEffect(() => {
     if (activePanel && headerRef.current) {
@@ -53,15 +53,15 @@ export function useArtHeaderNav(
     const handleScroll = () => { setScrolled(prev => prev ? window.scrollY > 100 : window.scrollY > 150); closePanel() }
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }, [closePanel])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') closePanel() }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+  }, [closePanel])
 
-  useEffect(() => () => { cancelOpen(); cancelClose() }, [])
+  useEffect(() => () => { cancelOpen(); cancelClose() }, [cancelOpen, cancelClose])
 
   const handleNavClick = (item: NavItem, el: HTMLButtonElement) => {
     if (item.type === 'link') { window.location.href = item.href; return }

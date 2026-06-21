@@ -2,7 +2,6 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';

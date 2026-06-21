@@ -516,6 +516,5 @@ const meta: Meta<typeof TypographyDoc> = {
 export default meta
 
 export const Overview: StoryObj<typeof TypographyDoc> = {
-  name: 'Overview',
   render: () => <TypographyDoc />,
 }

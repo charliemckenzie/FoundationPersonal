@@ -53,7 +53,6 @@ export default meta;
 type Story = StoryObj<typeof Select>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: {
     docs: {
       description: {

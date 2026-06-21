@@ -64,7 +64,6 @@ type Story = StoryObj<typeof StepperActions>;
 // ─── Playground ───────────────────────────────────────────────────────────────
 
 export const Playground: StoryObj<PlaygroundArgs> = {
-  name: 'Playground',
   parameters: {
     docs: { description: { story: '' } },
   },
@@ -123,7 +122,6 @@ export const Playground: StoryObj<PlaygroundArgs> = {
 // ─── States ───────────────────────────────────────────────────────────────────
 
 export const States: Story = {
-  name: 'States',
   parameters: {
     docs: {
       description: {

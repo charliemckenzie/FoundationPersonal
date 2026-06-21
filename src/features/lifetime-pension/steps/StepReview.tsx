@@ -81,7 +81,6 @@ export function StepReview({
   showValidation,
   verifyDetailsState,
   onVerifyDetailsChange,
-  profile,
   verifyMethod,
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);

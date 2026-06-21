@@ -21,11 +21,11 @@ export function AccountListRow({ account, onClick }: { account: IncomeAccount; o
         '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: -2, zIndex: 1, position: 'relative' },
       })}
     >
-      <Box sx={(t: Theme) => ({
+      <Box sx={{
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         width: '2.5rem', height: '2.5rem',
         borderRadius: '50%', bgcolor: 'primary.softMain', flexShrink: 0,
-      })}>
+      }}>
         <Icon icon={account.icon} style="light" size="lg" color="primary" />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>

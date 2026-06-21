@@ -36,7 +36,6 @@ const meta: Meta<typeof ActionBar> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof ActionBar>;
 
 // ── Default (playground with icon + colour controls) ──────────────────────────
 

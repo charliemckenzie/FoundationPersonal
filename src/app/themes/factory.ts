@@ -1,6 +1,6 @@
 import { createTheme, alpha, type Shadows } from '@mui/material/styles';
 import type {} from '@mui/x-date-pickers/themeAugmentation';
-import { buildLightPalette, buildDarkPalette, TINT } from './semantic';
+import { buildLightPalette, buildDarkPalette } from './semantic';
 import type { BrandConfig } from './brands/index';
 
 // MUI module augmentations live in src/types/mui.d.ts so they apply globally

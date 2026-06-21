@@ -23,7 +23,6 @@ export function AtoStep2Results({
   done,
   funds,
   onFundsChange,
-  showEmpty,
   onToggleEmpty,
 }: AtoStep2ResultsProps) {
   function handleToggleFund(id: string, selected: boolean) {

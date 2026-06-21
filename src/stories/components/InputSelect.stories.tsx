@@ -106,7 +106,6 @@ export const PercentageWithType: StoryObj = {
 // --- States ---
 
 export const ErrorState: StoryObj = {
-  name: 'Error State',
   render: function ErrorStory() {
     const [unit, setUnit] = useState('years');
     return (
@@ -151,7 +150,6 @@ export const Disabled: StoryObj = {
 };
 
 export const SmallSize: StoryObj = {
-  name: 'Small Size',
   render: function SmallSizeStory() {
     const [unit, setUnit] = useState('months');
     return (
@@ -224,7 +222,6 @@ export const WithDisabledOption: StoryObj = {
 };
 
 export const Uncontrolled: StoryObj = {
-  name: 'Uncontrolled',
   render: function UncontrolledStory() {
     return (
       <TextField

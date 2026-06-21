@@ -231,7 +231,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   // setActiveStep and setError are stable useState setters — safe to omit from deps
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   }, []);
 
   // A conditional step can only disappear while the member is on an earlier step (apply-to or

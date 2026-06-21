@@ -33,7 +33,6 @@ import type { LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } 
 import {
   allocateStepValid,
   fundingStepValid,
-  hasSelectedAccount,
   optionStepValid,
   paymentsStepValid,
   reviewStepValid,
@@ -59,8 +58,8 @@ export function LifetimePensionFlow() {
   const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
   const [detailsProfile, setDetailsProfile] = useState(MOCK_USER_PROFILE);
   const [idvState, setIdvState] = useState<IdvModuleState>(idvInitialState);
-  const [idvLoading, setIdvLoading] = useState(false);
-  const [idvError, setIdvError] = useState('');
+  const [idvLoading] = useState(false);
+  const [idvError] = useState('');
   const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
   const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
 

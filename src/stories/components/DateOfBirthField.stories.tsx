@@ -40,7 +40,6 @@ export default meta;
 type Story = StoryObj<typeof DateOfBirthField>;
 
 export const Playground: Story = {
-  name: 'Playground',
   parameters: { docs: { description: { story: '' } } },
   args: {
     label: 'Date of birth',

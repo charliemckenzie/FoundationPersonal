@@ -5,7 +5,6 @@ import Container from '@mui/material/Container'
 import Typography from '@mui/material/Typography'
 import { ThemeProvider } from '@mui/material/styles'
 import { Header } from '../../components/Header'
-import { Button } from '../../components/Button'
 import { createBrandTheme } from '../../app/themes/factory'
 import { themeB } from '../../app/themes/brands/theme-b'
 import type {
@@ -843,7 +842,6 @@ export const MegaMenuVariant: Story = {
 }
 
 export const MobileView: Story = {
-  name: 'Mobile View',
   parameters: {
     viewport: { defaultViewport: 'mobile1' },
   },
