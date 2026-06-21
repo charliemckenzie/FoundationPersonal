@@ -10,7 +10,8 @@ import { Dialog } from '../../../components/Dialog';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
 import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
-import { formatCurrency, totalSelectedAmount } from '../utils';
+import { PENSION_ESTIMATE_AGE } from '../constants';
+import { formatCurrency, totalSelectedAmount, estimateRetirementBonus, estimatePension } from '../utils';
 
 interface StepReviewProps {
   state: LifetimePensionState;
@@ -21,6 +22,13 @@ interface StepReviewProps {
   onVerifyDetailsChange: (next: VerifyDetailsState) => void;
   profile: UserProfile;
   verifyMethod: 'online' | 'other';
+}
+
+/** Convert ISO date (yyyy-mm-dd) to dd/mm/yyyy for display. Returns the original string if it can't be parsed. */
+function formatDob(iso: string): string {
+  const [y, m, d] = iso.split('-');
+  if (y && m && d) return `${d}/${m}/${y}`;
+  return iso;
 }
 
 function optionLabel(state: LifetimePensionState): string {
@@ -98,10 +106,11 @@ export function StepReview({
     setEditDetailsOpen(false);
   }
 
-  const selectedAccounts = state.accounts.filter((a) => a.selected);
+  const selectedAccounts = state.accounts.filter((a) => a.transferAmount > 0);
   const purchasePrice = totalSelectedAmount(state);
-  const annualPayment = purchasePrice > 0 ? purchasePrice * 1.015 : 0;
-  const fortnightlyPayment = annualPayment > 0 ? annualPayment / 26 : 0;
+  const estimate = estimatePension(purchasePrice, PENSION_ESTIMATE_AGE, state.pensionOption);
+  const annualPayment = estimate?.annual ?? 0;
+  const fortnightlyPayment = estimate?.fortnightly ?? 0;
 
   return (
     <Stack spacing={4}>
@@ -124,7 +133,7 @@ export function StepReview({
       </Stack>
 
       {/* Product details */}
-      <DescriptionList title="Product details">
+      <DescriptionList title="Product details" titleVariant="h6">
           <DescriptionList.Item
             label="Spouse option"
             value={
@@ -133,15 +142,26 @@ export function StepReview({
             action={<TextButton label="Edit" hideIcon aria-label="Edit option" onClick={() => onEditStep('option')} />}
           />
           {state.pensionOption === 'spouse' && (
-            <>
-              <DescriptionList.Item
-                label="Spouse full name"
-                value={[state.spouseDetails.firstName, state.spouseDetails.lastName].filter(Boolean).join(' ') || '—'}
-              />
-              <DescriptionList.Item label="Spouse date of birth" value={state.spouseDetails.dateOfBirth || '—'} />
-              <DescriptionList.Item label="Spouse email address" value={state.spouseDetails.emailAddress || '—'} />
-              <DescriptionList.Item label="Spouse mobile phone" value={state.spouseDetails.mobilePhone || '—'} />
-            </>
+            <DescriptionList.Item
+              label="Spouse details"
+              action={<TextButton label="Edit" hideIcon aria-label="Edit spouse details" onClick={() => onEditStep('option')} />}
+              value={
+                <Stack spacing={0.5}>
+                  <Box>
+                    <Box sx={{ fontWeight: 700 }}>{[state.spouseDetails.firstName, state.spouseDetails.lastName].filter(Boolean).join(' ') || '—'}</Box>
+                  </Box>
+                  {state.spouseDetails.dateOfBirth && (
+                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block' }}>Date of birth: {formatDob(state.spouseDetails.dateOfBirth)}</Typography>
+                  )}
+                  {state.spouseDetails.emailAddress && (
+                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block' }}>Email: {state.spouseDetails.emailAddress}</Typography>
+                  )}
+                  {state.spouseDetails.mobilePhone && (
+                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block' }}>Mobile: {state.spouseDetails.mobilePhone}</Typography>
+                  )}
+                </Stack>
+              }
+            />
           )}
           <DescriptionList.Item
             label="Purchase price"
@@ -155,34 +175,41 @@ export function StepReview({
             }
             action={<TextButton label="Edit" hideIcon aria-label="Edit purchase price" onClick={() => onEditStep('funding')} />}
           />
-          {selectedAccounts.length > 0 ? selectedAccounts.map((account, index) => (
-            <DescriptionList.Item
-              key={account.id}
-              label={account.label}
-              value={
-                <Box sx={{ fontWeight: 700 }}>{formatCurrency(account.transferAmount)}</Box>
-              }
-              action={index === 0 ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} /> : undefined}
-            />
-          )) : (
-            <DescriptionList.Item
-              label="Funding preferences"
-              value="—"
-              action={<TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} />}
-            />
-          )}
+          <DescriptionList.Item
+            label="Funding preferences"
+            value={
+              selectedAccounts.length > 0 ? (
+                <Stack spacing={1}>
+                  {selectedAccounts.map((account) => {
+                    const name = account.label.split(' - ')[0] ?? account.label;
+                    return (
+                      <Box key={account.id}>
+                        <Box sx={{ fontWeight: 700 }}>{formatCurrency(account.transferAmount)}</Box>
+                        <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.25 }}>
+                          From {name}
+                        </Typography>
+                      </Box>
+                    );
+                  })}
+                </Stack>
+              ) : '—'
+            }
+            action={<TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} />}
+          />
       </DescriptionList>
 
       {/* Payment details */}
       <DescriptionList
         title="Payment details"
+        titleVariant="h6"
         titleAction={<TextButton label="Edit" hideIcon aria-label="Edit payment details" onClick={() => onEditStep('payments')} />}
       >
-          <DescriptionList.Item label="Annual payment amount" value={formatCurrency(annualPayment)} />
-          <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
+          <DescriptionList.Item label="Fortnightly payments" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
           <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
+          <DescriptionList.Item label="First year's income" value={formatCurrency(annualPayment)} />
+          <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
           <DescriptionList.Item
-            label="Bank account"
+            label="Bank details"
             value={
               <Stack spacing={0.5}>
                 <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
@@ -196,13 +223,14 @@ export function StepReview({
       {/* Personal details */}
       <DescriptionList
         title="Personal details"
+        titleVariant="h6"
         titleAction={<TextButton label="Edit" hideIcon aria-label="Edit personal details" onClick={handleOpenEdit} />}
       >
           <DescriptionList.Item
             label="Full name"
             value={[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName].filter(Boolean).join(' ') || '—'}
           />
-          <DescriptionList.Item label="Date of birth" value={displayDetails.dateOfBirth || '—'} />
+          <DescriptionList.Item label="Date of birth" value={displayDetails.dateOfBirth ? formatDob(displayDetails.dateOfBirth) : '—'} />
           <DescriptionList.Item label="Mobile phone" value={displayDetails.mobilePhone || '—'} />
           <DescriptionList.Item label="Email address" value={displayDetails.email || '—'} />
           <DescriptionList.Item
@@ -250,6 +278,7 @@ export function StepReview({
       {/* Identity verification */}
       <DescriptionList
         title="Identity verification"
+        titleVariant="h6"
         titleAction={<TextButton label="Edit" hideIcon aria-label="Edit identity verification" onClick={() => onEditStep('idv')} />}
       >
         <DescriptionList.Item

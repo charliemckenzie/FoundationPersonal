@@ -12,7 +12,8 @@ import { TextButton } from '../../../../../components/TextButton';
 import { ContentContainer } from '../../../../../components/MemberOnline';
 import { DescriptionList } from '../../../../../components/DescriptionList';
 import { MOCK_USER_PROFILE } from '../../../../../features/lifetime-pension/constants';
-import { formatCurrency } from '../../../../../features/lifetime-pension/utils';
+import { PENSION_ESTIMATE_AGE } from '../../../../../features/lifetime-pension/constants';
+import { formatCurrency, estimatePension } from '../../../../../features/lifetime-pension/utils';
 
 // ---------------------------------------------------------------------------
 // Mock submitted application data (using LP data for TTR as instructed)
@@ -25,7 +26,6 @@ const MOCK_SUBMISSION = {
   submittedTime: '4:19PM AEST',
   email: 'jane.smith@gmail.com',
   purchasePrice: 295253.82,
-  annualPayment: 295253.82 * 1.015,
   bankDetails: { bsb: '064-000', accountNumber: '****4321', accountName: 'Jane Smith' },
   option: 'Single option',
   fundsFrom: [{ label: 'Super Savings - 123456789', amount: 295253.82 }],
@@ -178,7 +178,9 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 // ---------------------------------------------------------------------------
 
 function SummaryContent() {
-  const fortnightlyPayment = MOCK_SUBMISSION.annualPayment / 26;
+  const estimate = estimatePension(MOCK_SUBMISSION.purchasePrice, PENSION_ESTIMATE_AGE, 'single');
+  const annualPayment = estimate?.annual ?? 0;
+  const fortnightlyPayment = estimate?.fortnightly ?? 0;
   const profile = MOCK_USER_PROFILE;
 
   return (
@@ -213,8 +215,8 @@ function SummaryContent() {
       </DescriptionList>
 
       <DescriptionList title="Payment details" titleVariant="h6">
-        <DescriptionList.Item label="Annual payment amount" value={formatCurrency(MOCK_SUBMISSION.annualPayment)} />
-        <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
+        <DescriptionList.Item label="First year's income" value={formatCurrency(annualPayment)} />
+        <DescriptionList.Item label="Fortnightly payments" value={`${formatCurrency(fortnightlyPayment)} / fortnight`} />
         <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
         <DescriptionList.Item label="BSB" value={MOCK_SUBMISSION.bankDetails.bsb} />
         <DescriptionList.Item label="Account number" value={MOCK_SUBMISSION.bankDetails.accountNumber} />

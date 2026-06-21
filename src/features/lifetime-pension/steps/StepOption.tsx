@@ -243,7 +243,7 @@ export function StepOption({
                   Verify your spouse&rsquo;s identity
                 </Typography>
                 <Typography variant="body" sx={{ color: 'text.default' }}>
-                  During the application processing we will call{' '}
+                  During the application processing we will use the information provided above to contact{' '}
                   {spouseDetails.firstName ? (
                     <Box component="span" sx={{ fontWeight: 700 }}>
                       {[spouseDetails.firstName, spouseDetails.lastName].filter(Boolean).join(' ')}

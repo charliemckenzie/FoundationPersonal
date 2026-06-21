@@ -74,7 +74,7 @@ export const MIN_PURCHASE_AMOUNT = 10000;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 10000;
-export const TARGET_PERCENT = [30, 50, 65, 80, 90, 95, 100] as const;
+export const TARGET_PERCENT = [14, 29, 43, 57, 71, 86, 100] as const;
 
 // ---------------------------------------------------------------------------
 // Lifetime Pension payment estimate

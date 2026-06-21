@@ -240,6 +240,7 @@ export function LifetimePensionFlow() {
             ) : activeStep === 4 ? (
               <StepPayments
                 purchasePrice={purchaseTotal}
+                pensionOption={state.pensionOption}
                 bankDetails={state.bankDetails}
                 onBankDetailsChange={(nextBankDetails) =>
                   updateState({ ...state, bankDetails: nextBankDetails })

@@ -346,13 +346,23 @@ export function StepFunding({
   return (
     <Stack spacing={4}>
       {/* ── Purchase price ── */}
-      <Stack spacing={1}>
-        <Typography variant="h5" component="h2">Purchase price</Typography>
-        <Typography variant="body" sx={{ color: 'text.primary' }}>
-          The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
-          transferring money into an account you can draw on, this amount is pooled with other members to
-          fund your payments for life.
-        </Typography>
+      <Stack spacing={1.5}>
+        <Stack spacing={1}>
+          <Typography variant="h5" component="h2">Purchase price</Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            The purchase price is the amount of super you use to buy your Lifetime Pension. Unlike
+            transferring money into an account you can draw on, this amount is pooled with other members to
+            fund your payments for life.
+          </Typography>
+        </Stack>
+        <Box>
+          <TextButton
+            label="Considerations when allocating funds"
+            startIcon="circle-info"
+            iconDirection="left"
+            onClick={() => setConsiderationsOpen(true)}
+          />
+        </Box>
       </Stack>
 
       {/* ── Transfer panel + bonus (kept tight together) ── */}
@@ -372,16 +382,6 @@ export function StepFunding({
           onCalculate={handleCalculateBonus}
         />
       </Stack>
-
-      {/* ── Considerations info button + dialog ── */}
-      <Box>
-        <TextButton
-          label="Considerations when allocating funds"
-          startIcon="circle-info"
-          iconDirection="left"
-          onClick={() => setConsiderationsOpen(true)}
-        />
-      </Box>
 
       <Dialog
         open={considerationsOpen}
@@ -433,14 +433,7 @@ export function StepFunding({
 
       {/* ── Designed to be a lifelong commitment ── */}
       <Stack spacing={2}>
-        <div>
-          <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Designed to be a lifelong commitment</Typography>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>
-            You have 6 months from your Lifetime Pension start date to decide if it&apos;s right for you.
-            After this cooling-off period, the purchase is permanent and funds cannot be withdrawn, except
-            in the case of a terminal medical condition if money-back protection is payable.
-          </Typography>
-        </div>
+        <Typography variant="h6" component="h3">Designed to be a lifelong commitment</Typography>
         <Checkbox
           variant="default"
           checked={declarationPermanent}

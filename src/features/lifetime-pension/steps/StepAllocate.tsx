@@ -148,26 +148,11 @@ export function StepAllocate({
       <div>
         <Typography variant="h5" sx={{ mb: 0.5 }}>Allocate from your accounts</Typography>
         <Typography variant="body" sx={{ color: 'text.primary' }}>
-          As you have multiple accounts we need you to tell us which accounts you would like us to take the money from for your purchase.
+          As you have multiple accounts we need you to tell us which accounts you would like us to take the{' '}
+          <Box component="span" sx={{ fontWeight: 700 }}>{formatCurrency(purchaseAmount)} purchase price</Box>
+          {' '}from.
         </Typography>
       </div>
-
-      {/* Purchase price summary */}
-      <Box
-        sx={{
-          bgcolor: 'background.elevated',
-          borderRadius: (t) => `${t.shape.md}px`,
-          px: 2.5,
-          py: 2,
-        }}
-      >
-        <Typography variant="small" sx={{ color: 'text.default', display: 'block', mb: 0.5 }}>
-          Your Lifetime Pension purchase price
-        </Typography>
-        <Typography variant="h4" sx={{ color: 'text.heading' }}>
-          {formatCurrency(purchaseAmount)}
-        </Typography>
-      </Box>
 
       <Stack component="ul" spacing={0} sx={{ m: 0, p: 0, listStyle: 'none' }}>
         <Box component="li">
@@ -239,13 +224,6 @@ export function StepAllocate({
         </Box>
       </Stack>
 
-      {showValidation && over && (
-        <Alert severity="error" message={`Your allocations exceed the purchase amount by ${formatCurrency(totalAllocated - purchaseAmount)}.`} />
-      )}
-      {showValidation && !over && shortfall > 0 && (
-        <Alert severity="error" message={`Allocate ${formatCurrency(shortfall)} more to reach your purchase amount.`} />
-      )}
-
       <AllocationBar
         allocated={totalAllocated}
         target={purchaseAmount}
@@ -253,6 +231,13 @@ export function StepAllocate({
         barRef={barRef}
         isFloating={isFloating}
       />
+
+      {showValidation && over && (
+        <Alert severity="error" message={`Your allocations exceed the purchase amount by ${formatCurrency(totalAllocated - purchaseAmount)}.`} />
+      )}
+      {showValidation && !over && shortfall > 0 && (
+        <Alert severity="error" message={`Allocate ${formatCurrency(shortfall)} more to reach your purchase amount.`} />
+      )}
     </Stack>
   );
 }
