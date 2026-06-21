@@ -1,20 +1,28 @@
 #!/usr/bin/env node
 /**
- * Always-on context budget meter (AI token efficiency — Phase 0).
+ * Always-on context budget meter (AI token efficiency).
  *
- * Measures the context auto-loaded *before any work begins* on each AI runtime —
- * the "fixed per-session tax" (see docs/Adam/ai-efficiency-research.md, Finding 1).
- * This is the provable "before" number for the Phase 1 slim, and the mechanism for
- * an advisory guard that stops the bloat creeping back.
+ * Measures the context auto-loaded *before any work begins* on each AI runtime.
+ * Per docs/Adam/ai-efficiency-research.md there are TWO budgets, and conflating
+ * them hides the real win:
  *
- *   Claude Code: CLAUDE.md + everything it @imports, followed transitively.
- *   Copilot:     .github/copilot-instructions.md + its @imports, PLUS every
- *                .github/instructions/*.instructions.md whose `applyTo` glob
- *                matches a representative UI file (the a11y doc is applyTo:'**').
+ *   FIXED tax     — loaded every session regardless of what you're editing.
+ *                   Claude Code: the CLAUDE.md @import chain (followed transitively).
+ *                   Copilot: .github/copilot-instructions.md @imports PLUS any
+ *                   .github/instructions/*.instructions.md whose `applyTo` matches
+ *                   even a non-UI file (i.e. effectively '**' — loads for everything).
+ *   UI-conditional — Copilot only: instruction docs that match a UI file but NOT a
+ *                   non-UI file (e.g. the a11y catalogue after its glob was narrowed
+ *                   to UI surfaces). Loaded when editing components/pages, where it
+ *                   belongs — not "tax". Reported separately, never in the guard.
+ *
+ * The headline saving and the --check guard use the FIXED tax. (Before the a11y glob
+ * was narrowed it matched '**', so it counted as fixed — making the before/after a
+ * fair comparison: narrowing it MOVED a11y from fixed tax to UI-conditional.)
  *
  * Usage:
  *   node scripts/context-budget.mjs           print both runtimes' budgets
- *   node scripts/context-budget.mjs --check    fail (exit 1) if over BUDGET (see below)
+ *   node scripts/context-budget.mjs --check    fail (exit 1) if fixed tax over BUDGET
  *
  * Mirrors scripts/check-setup.mjs (plain .mjs, console output) and the --check
  * shape of scripts/sync-runtimes.mjs. No dependencies.
@@ -31,14 +39,14 @@ const CHECK = process.argv.includes('--check');
 // the absolute number isn't load-bearing, the before/after delta is).
 const CHARS_PER_TOKEN = 4;
 
-// The UI file used to decide which Copilot `applyTo` instruction docs are "always-on".
-// A typical component edit — matches '**' and '**/*.tsx', not '**/*.spec.ts'.
+// A typical component edit — used to find Copilot's UI-conditional instruction docs.
 const REPRESENTATIVE_UI_FILE = 'src/components/Button/index.tsx';
+// A non-UI file — an instruction doc that matches this is fixed tax (loads regardless).
+const REPRESENTATIVE_NON_UI_FILE = 'scripts/sync-runtimes.mjs';
 
-// Advisory guard threshold (tokens per runtime). Intentionally NOT armed in Phase 0:
-// it is set in Phase 1, step 1G of docs/Adam/ai-efficiency-implementation-plan.md,
-// once the slim establishes the real "after" number. null => --check always passes.
-const BUDGET = null;
+// Advisory guard threshold (FIXED-tax tokens per runtime). Set just above the
+// post-Phase-1 number for headroom. Phase 1 baseline (committed): ~29.5k/30.3k → ~11.4k.
+const BUDGET = 13000;
 
 // --- import-chain resolution ----------------------------------------------
 
@@ -115,17 +123,14 @@ function applyToMatches(applyTo, filePath) {
     .some((g) => globToRegExp(g).test(filePath));
 }
 
-/** Instruction docs that are always-on for Copilot when editing `uiFile`. */
-function matchingInstructionFiles(uiFile) {
+/** Instruction docs (abs paths) that apply to `filePath` via their applyTo glob. */
+function instructionFilesFor(filePath) {
   const dir = join(ROOT, '.github', 'instructions');
   if (!existsSync(dir)) return [];
   return readdirSync(dir)
     .filter((f) => f.endsWith('.instructions.md'))
     .map((f) => join(dir, f))
-    .filter((abs) => {
-      const applyTo = readApplyTo(abs);
-      return applyTo && applyToMatches(applyTo, uiFile);
-    });
+    .filter((abs) => { const a = readApplyTo(abs); return a && applyToMatches(a, filePath); });
 }
 
 // --- measurement + reporting ----------------------------------------------
@@ -139,42 +144,53 @@ function measure(absFiles) {
   return { files, chars, tokens: Math.round(chars / CHARS_PER_TOKEN) };
 }
 
-function report(name, budget) {
+function report(name, budget, note) {
   console.log(`\n${name}`);
   for (const f of budget.files) {
     console.log(`  ${f.tokens.toString().padStart(7)} tok  ${f.chars.toString().padStart(7)} ch   ${f.path}`);
   }
   console.log('  ' + '─'.repeat(46));
-  console.log(`  ${budget.tokens.toString().padStart(7)} tok  ${budget.chars.toString().padStart(7)} ch   TOTAL (${budget.files.length} files)`);
+  console.log(`  ${budget.tokens.toString().padStart(7)} tok  ${budget.chars.toString().padStart(7)} ch   TOTAL${note ? '  — ' + note : ''}`);
 }
 
-// --- run ------------------------------------------------------------------
+// --- compute --------------------------------------------------------------
 
-const claude = measure(collectChain(join(ROOT, 'CLAUDE.md')));
+// Claude Code has no applyTo mechanism: its fixed tax is just the @import chain.
+const claudeFixed = measure(collectChain(join(ROOT, 'CLAUDE.md')));
 
-const copilotEntry = join(ROOT, '.github', 'copilot-instructions.md');
-const copilotChain = collectChain(copilotEntry);
-const copilotAll = [...new Set([...copilotChain, ...matchingInstructionFiles(REPRESENTATIVE_UI_FILE)])];
-const copilot = measure(copilotAll);
+// Copilot: @import chain + instruction docs that match a non-UI file = fixed tax.
+const copilotChain = collectChain(join(ROOT, '.github', 'copilot-instructions.md'));
+const copilotFixedDocs = instructionFilesFor(REPRESENTATIVE_NON_UI_FILE);
+const copilotFixed = measure([...new Set([...copilotChain, ...copilotFixedDocs])]);
+
+// Copilot UI-conditional: docs matching a UI file that AREN'T already fixed tax.
+const fixedSet = new Set([...copilotChain, ...copilotFixedDocs]);
+const copilotUIExtra = measure(instructionFilesFor(REPRESENTATIVE_UI_FILE).filter((p) => !fixedSet.has(p)));
+
+// --- print ----------------------------------------------------------------
 
 console.log('\nAlways-on context budget  (token estimate = chars ÷ ' + CHARS_PER_TOKEN + ')');
-report('Claude Code  — CLAUDE.md @import chain', claude);
-report(`Copilot      — copilot-instructions.md @imports + applyTo matches for ${REPRESENTATIVE_UI_FILE}`, copilot);
+report('Claude Code — fixed tax (CLAUDE.md @import chain)', claudeFixed);
+report('Copilot — fixed tax (copilot-instructions.md @imports + always-on instruction docs)', copilotFixed);
+if (copilotUIExtra.files.length) {
+  report(`Copilot — + UI-conditional when editing ${REPRESENTATIVE_UI_FILE}`, copilotUIExtra, 'loaded only on UI files, not tax');
+}
 
-console.log('\n' + '═'.repeat(48));
-console.log(`  Claude Code : ~${claude.tokens.toLocaleString()} tokens`);
-console.log(`  Copilot     : ~${copilot.tokens.toLocaleString()} tokens`);
-console.log('═'.repeat(48) + '\n');
+console.log('\n' + '═'.repeat(56));
+console.log('  FIXED per-session tax (the guarded number):');
+console.log(`    Claude Code : ~${claudeFixed.tokens.toLocaleString()} tokens`);
+console.log(`    Copilot     : ~${copilotFixed.tokens.toLocaleString()} tokens`);
+if (copilotUIExtra.files.length) {
+  console.log(`  Copilot when editing a UI file: ~${(copilotFixed.tokens + copilotUIExtra.tokens).toLocaleString()} tokens (fixed + a11y catalogue)`);
+}
+console.log('═'.repeat(56) + '\n');
 
 if (CHECK) {
-  if (BUDGET === null) {
-    console.log('ℹ  --check: budget guard not yet armed (set in Phase 1, step 1G). Passing.\n');
-    process.exit(0);
-  }
-  const over = [['Claude Code', claude.tokens], ['Copilot', copilot.tokens]].filter(([, t]) => t > BUDGET);
+  const over = [['Claude Code', claudeFixed.tokens], ['Copilot', copilotFixed.tokens]].filter(([, t]) => t > BUDGET);
   if (over.length) {
-    for (const [name, t] of over) console.error(`✗  ${name} always-on context ~${t} tok exceeds budget ${BUDGET} tok`);
+    for (const [name, t] of over) console.error(`✗  ${name} fixed tax ~${t} tok exceeds budget ${BUDGET} tok`);
+    console.error('\nThe always-on context has grown. Move bulk to on-demand reference, or raise BUDGET deliberately.');
     process.exit(1);
   }
-  console.log(`✓  Both runtimes within budget (${BUDGET} tok).\n`);
+  console.log(`✓  Both runtimes' fixed tax within budget (${BUDGET} tok).\n`);
 }

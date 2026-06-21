@@ -1,0 +1,27 @@
+name: Context budget check
+
+# Advisory guard (non-blocking, matching the repo's branch-protection stance).
+# Fails if either runtime's FIXED always-on context tax exceeds the BUDGET in
+# scripts/context-budget.mjs — i.e. the bloat the Phase 1 slim removed has crept
+# back. Run `npm run context-budget` locally to see the breakdown.
+
+on:
+  pull_request:
+    paths:
+      - 'CLAUDE.md'
+      - '.github/copilot-instructions.md'
+      - 'AGENTS.md'
+      - 'docs/guidelines/essentials.md'
+      - '.github/instructions/**'
+      - 'scripts/context-budget.mjs'
+
+jobs:
+  context-budget:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check always-on context budget
+        run: node scripts/context-budget.mjs --check

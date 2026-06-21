@@ -1,18 +1,15 @@
 @AGENTS.md
-@docs/guidelines/typography.md
-@docs/guidelines/components.md
+@docs/guidelines/essentials.md
 
-# Always-on standards
+# On-demand reference (not auto-loaded)
 
-Copilot auto-applies these via `.github/instructions/*` (`applyTo` globs). Claude Code has no equivalent mechanism, so they are imported here to keep both runtimes in parity.
+The heavy guideline docs are intentionally **not** `@import`ed here — that keeps the per-session context lean. `docs/guidelines/essentials.md` carries the always-on core and points to each of these. Read the matching one before that kind of work:
 
-@.github/instructions/a11y.instructions.md
-
-When writing or reviewing Playwright tests (`**/*.spec.ts`), follow `.github/instructions/playwright-typescript.instructions.md` — role-based locators, web-first assertions, `test.step()` grouping, files in `tests/` as `<feature>.spec.ts`.
-
-## Member Online navigation
-
-Before changing the Member Online side nav (items, children, icons, order, secondary links, or which config shows), **read `src/app/member-online/(portal)/navigation-config/README.md` first.** The nav is driven by per-config JSON files in that folder — edit the JSON, not the components. The README explains the file shape, how to add/exclude items and children, the icon and `href`/placeholder conventions, and how to add a new config.
+- `docs/guidelines/typography.md` — full type scale, weights, spacing, composition
+- `docs/guidelines/components.md` — component catalogue + when-to-use
+- `.github/instructions/a11y.instructions.md` — full WCAG 2.2 AA catalogue (or use `/conformanceReport` / the Flanders agent for component sign-off)
+- `.github/instructions/playwright-typescript.instructions.md` — when writing or reviewing Playwright tests (`**/*.spec.ts`): role-based locators, web-first assertions, `test.step()` grouping, files in `tests/` as `<feature>.spec.ts`
+- `docs/team/relationship-map.md`, `docs/team/dependency-update.md` — team diagram + dependency workflow
 
 # The team in Claude Code
 
@@ -25,4 +22,3 @@ The Simpsons-themed team is defined in `AGENTS.md` (canonical, runtime-neutral).
 **Delegation:** only `smithers` carries the `Agent` tool. Every other agent does component discovery inline with `Read`/`Grep`/`Glob` rather than spawning a subagent.
 
 **Sync note:** `.claude/agents/` and `.claude/skills/` mirror `.github/agents/` and `.github/skills/`. When you change a team member's role or a skill, update both runtimes (or the canonical role text in AGENTS.md, which both defer to).
-
