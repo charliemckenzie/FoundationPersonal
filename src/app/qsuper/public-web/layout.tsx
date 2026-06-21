@@ -24,7 +24,7 @@ export default function QSuperPublicWebLayout({ children }: { children: React.Re
         activeAudienceHref="/personal"
         primaryCta={PRIMARY_CTA}
         secondaryCta={SECONDARY_CTA}
-        onSearch={(query) => console.log('search:', query)}
+        onSearch={() => {}}
         searchPlaceholder="Search QSuper"
       />
       <Box component="main" sx={{ flex: 1 }}>

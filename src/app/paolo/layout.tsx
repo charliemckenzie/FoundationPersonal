@@ -21,7 +21,7 @@ export default function PaoloLayout({ children }: { children: React.ReactNode })
         primaryCta={PRIMARY_CTA}
         secondaryCta={SECONDARY_CTA}
         utilityLinks={UTILITY_LINKS}
-        onSearch={(query) => console.log('search:', query)}
+        onSearch={() => {}}
       />
       <Box component="main" sx={{ flex: 1 }}>
         {children}

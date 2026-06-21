@@ -33,18 +33,18 @@ export const inputPortionSx = (error: boolean): SxProps<Theme> => (t) => ({
 });
 
 /** The select trigger button on the right of the field. */
-export const triggerButtonSx = (buttonFocused: boolean, hasValue: boolean): SxProps<Theme> => (t) => ({
+export const triggerButtonSx = (buttonFocused: boolean, hasValue: boolean, size: 'small' | 'medium'): SxProps<Theme> => (t) => ({
   display: 'flex',
   alignItems: 'center',
   gap: 0.75,
-  px: 1.5,
+  px: size === 'small' ? 1 : 1.5,
   border: 'none',
   backgroundColor: buttonFocused ? t.palette.action.selected : 'transparent',
   cursor: 'pointer',
   flexShrink: 0,
   minWidth: 'fit-content',
   typography: 'body',
-  color: hasValue ? t.palette.text.primary : t.palette.text.secondary,
+  color: hasValue ? t.palette.text.primary : t.palette.text.muted,
   borderRadius: `0 ${t.shape.sm}px ${t.shape.sm}px 0`,
   '&:hover:not(:disabled)': {
     backgroundColor: t.palette.action.hover,

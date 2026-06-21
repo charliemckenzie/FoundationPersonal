@@ -8,7 +8,6 @@ tsconfig.tsbuildinfo
 .env.local
 .env.*.local
 .npmrc
-package-lock.json
 .DS_Store
 **/.DS_Store
 *.tgz

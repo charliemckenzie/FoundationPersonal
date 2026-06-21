@@ -77,7 +77,7 @@ export function InputSelectContainer({
             ? `Edit ${selectAdornment.label}: ${displayText || selectAdornment.placeholder || 'Select option'}`
             : (!currentValue ? (selectAdornment.placeholder ?? 'Select option') : undefined)}
           id={selectId}
-          sx={triggerButtonSx(buttonFocused, !!currentValue)}
+          sx={triggerButtonSx(buttonFocused, !!currentValue, size)}
         >
           {selectAdornment.label && (
             <Box component="span" sx={visuallyHiddenSx}>

@@ -23,7 +23,7 @@ export default function PublicWebLayout({ children }: { children: React.ReactNod
         primaryCta={PRIMARY_CTA}
         secondaryCta={SECONDARY_CTA}
         utilityLinks={UTILITY_LINKS}
-        onSearch={(query) => console.log('search:', query)}
+        onSearch={() => {}}
       />
       <Box component="main" sx={{ flex: 1 }}>
         <PageTransition excludePaths={PAGE_TRANSITION_EXCLUDE}>

@@ -275,12 +275,12 @@ The divergence turned out to be **moot at runtime**: `retirement-income-account/
 | WP | Change | Status | Effort |
 |---|---|---|---|
 | 5.1 | Clear lint warnings — story `name:` removals, unused vars/imports, exhaustive-deps, ESLint config hygiene. | ✅ **DONE** — 109 → **15 warnings** | XS |
-| 5.2 | Replace `console.log` placeholder `onSearch` handlers in the 3 demo `layout.tsx` files (or wire real handlers). | Not started | XS |
+| 5.2 | Replace `console.log` placeholder `onSearch` handlers in the 3 demo `layout.tsx` files (or wire real handlers). | ✅ **DONE** — replaced with `() => {}` no-ops in all 3 layouts; search bar remains visible in demos | XS |
 | 5.3 | Stop committing generated `tokens-resolved.json` / `tokens-flat.json`. | ⏭ **SKIPPED — Adam chose to keep them tracked.** | — |
-| 5.4 | Reconcile `.gitignore` — remove the dead `package-lock.json` entry (it's tracked; `.npmrc` entry is correct and stays). | Not started | XS |
-| 5.5 | Move root planning docs (`MUI_TYPOGRAPHY_MIGRATION.md`, `state-coverage-section.md`, `state-coverage-tables.md`) into `docs/`. | Not started | XS |
-| 5.6 | **From WP4.4:** `InputSelect/styles.ts` `triggerButtonSx` uses banned `text.secondary` for placeholder colour — swap to a Foundation token; verify contrast. `InputSelectContainerProps.size` accepted but unused in impl — wire it or drop it from the type. | Not started | XS |
-| 5.7 | **Optional page-size pass:** `navData.tsx` (565), `app/review/page.tsx` (385), `lifetime-pension/view-application/page.tsx` (327), `app/page.tsx` (256). Apply WP4.1 pattern only if Adam wants page parity. | Not started — ask Adam | M |
+| 5.4 | Reconcile `.gitignore` — remove the dead `package-lock.json` entry (it's tracked; `.npmrc` entry is correct and stays). | ✅ **DONE** — dead entry removed from `.gitignore` | XS |
+| 5.5 | Move root planning docs (`MUI_TYPOGRAPHY_MIGRATION.md`, `state-coverage-section.md`, `state-coverage-tables.md`) into `docs/`. | ✅ **DONE** — all three moved to `docs/` | XS |
+| 5.6 | **From WP4.4:** `InputSelect/styles.ts` `triggerButtonSx` uses banned `text.secondary` for placeholder colour — swap to a Foundation token; verify contrast. `InputSelectContainerProps.size` accepted but unused in impl — wire it or drop it from the type. | ✅ **DONE** — `text.secondary` → `text.muted`; `size` wired through to `triggerButtonSx` (small: `px:1`, medium: `px:1.5`); `TextField` already passes `size` so wiring was the correct call. lint 15→14 warnings; lib:build DTS 89.07 KB stable. | XS |
+| 5.7 | **Optional page-size pass:** `navData.tsx` (565), `app/review/page.tsx` (385), `lifetime-pension/view-application/page.tsx` (327), `app/page.tsx` (256). Apply WP4.1 pattern only if Adam wants page parity. | ⏭ **SKIPPED — Adam chose to skip; Phase 5 done as-is.** | — |
 
 ### ✅ WP5.1 detail — lint warning reduction (109 → 15)
 
@@ -315,7 +315,7 @@ The divergence turned out to be **moot at runtime**: `retirement-income-account/
 - [x] Phase 2 — CI gate added + **green on `main`** (§6). WP2.0 (story test) ✅, WP2.1 (`ci.yml`) ✅, WP2.3 (errors-only lint) ✅. **WP2.2 (mark required in branch protection) — declined by Adam; gate kept advisory by choice.**
 - [x] Phase 3 — `src/lib/format.ts` (canonical formatters; 6 currency + 8 date copies collapsed, projection outlier left separate) + seed unit tests (44 tests / 4 files). tsc 0, eslint 0 errors, lib:build OK, test 543/543. ✅ **Committed (`5959d39`/`ef9688e`, 2026-06-21).**
 - [x] Phase 4 — **COMPLETE (2026-06-21, lean)**. WP4.1 (size limits: 18 components + both 621-line pages ≤200) ✅; WP4.2 (IDV consolidation — removed dead local `StepIDV` + both dead `idvService` + dead IDV constants/types) ✅; WP4.3 (stepped-flow save/resume — single `useResumableDraft` mechanism + `useSteppedFlow` for RIA/LP + `ResumeDraftDialog`; RIA/LP/RetirementProjection adopted; projection `set-state-in-effect` disable removed; **UX policy: identical resume dialog everywhere**, projection moved silent/session → dialog/persistent) ✅; WP4.4 (InputSelect kept-and-documented vs Select; `InputSelect/index.tsx` 257→107) ✅. **Every `src/components/**/*.tsx` ≤200 lines** (a few out-of-scope app pages/data files remain >200 — see the Phase 4 COMPLETE note). Final: tsc 0, eslint 0 errors (109 warnings → Phase 5), lib:build DTS 89.13 KB, test **545/545**. **Committed (`5959d39`/`ef9688e`, 2026-06-21).** See the per-WP blocks in the Phase 4 section.
-- [ ] Phase 5 — **IN PROGRESS (2026-06-21, lean).** WP5.1 ✅ (109 → 15 warnings); WP5.3 ⏭ skipped (Adam: keep tokens tracked); WP5.2/5.4/5.5/5.6 remaining; WP5.7 optional (ask Adam). Current baseline: tsc 0, lint 0 errors / **15 warnings** (14 intentional + 1 WP5.6 defer), test 545/545, lib:build 89.07 KB. Nothing committed — Adam commits himself.
+- [x] Phase 5 — **COMPLETE (2026-06-21, lean).** WP5.1 ✅ (109 → 15 warnings); WP5.2 ✅ (console.log → no-op); WP5.3 ⏭ skipped; WP5.4 ✅ (.gitignore cleaned); WP5.5 ✅ (3 root docs → docs/); WP5.6 ✅ (text.secondary → text.muted, size wired through, 15 → 14 warnings); WP5.7 ⏭ skipped (Adam). **Final baseline: tsc 0, lint 0 errors / 14 warnings (all documented intentional set-state-in-effect/refs), test 545/545, lib:build DTS 89.07 KB.** Nothing committed — Adam commits himself.
 
 ---
 
