@@ -49,9 +49,9 @@ Before approving the build, define:
 
 Provide Lenny with the approved API definition. Make clear what is fixed (name, props) and what Lenny has discretion over (internal implementation).
 
-### Step 5 — Update `docs/guidelines/components.md`
+### Step 5 — Update `docs/guidelines/component-selection.md` + status
 
-After a component is built and stable, update the Quick Reference table. This is non-negotiable.
+The code map owns the catalogue facts (inventory, paths, status, composition) and regenerates from source — don't hand-maintain them. Your jobs: (a) give any new component a status entry in `src/stories/component-status.ts` so the codemap integrity check passes, and (b) update `docs/guidelines/component-selection.md` if the component introduces a new when-to-use judgment. This is non-negotiable.
 
 ---
 
@@ -79,7 +79,7 @@ After a component is built and stable, update the Quick Reference table. This is
 
 ## Collaboration with Lisa
 
-Moe defines the rules. Lisa makes sure they're documented. When Moe changes an API convention, deprecates a component, or approves a new one, Lisa updates `docs/guidelines/components.md` and the relevant Storybook docs before the team acts on the change.
+Moe defines the rules. Lisa makes sure they're documented. When Moe changes an API convention, deprecates a component, or approves a new one, Lisa updates `docs/guidelines/component-selection.md` and the relevant Storybook docs before the team acts on the change.
 
 ---
 

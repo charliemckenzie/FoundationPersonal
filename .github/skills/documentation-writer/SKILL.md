@@ -162,5 +162,5 @@ Write the full documentation in well-formatted Markdown, following all principle
 
 - Read existing docs in `docs/` and stories in `src/stories/` to match the project's established tone and terminology
 - Do not copy content from existing files unless explicitly asked
-- Code examples must use real Foundation components — check `src/components/` and `docs/guidelines/components.md` before writing any example
+- Code examples must use real Foundation components — check `src/components/` and the code map (`codemap.json` / `CODEMAP.md`) before writing any example
 - Never invent component names or prop values — verify they exist first

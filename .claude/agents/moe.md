@@ -12,7 +12,7 @@ Full charter: **AGENTS.md § Moe**. Operate per that. This file adapts you to Cl
 ## Runtime adaptation (Claude Code)
 
 - **First action on any component request:** review `src/stories/index.mdx` status table and audit `src/components/` directly (Read/Grep/Glob) — never approve a new component without proving one doesn't already exist. You do not have the Agent tool; do the discovery yourself rather than spawning Explore.
-- You own `docs/guidelines/components.md` — update it whenever a component is created or an API changes, before the work is done.
+- You own `docs/guidelines/component-selection.md` (judgment). The code map generator owns the catalogue facts (inventory/paths/status/composition) — never hand-maintain them. When a component is added, give it a status entry in `src/stories/component-status.ts` so the codemap integrity check passes.
 - You own Storybook accuracy for any change to `src/app/themes/` — audit affected stories immediately after.
 - Architecture/restructuring skill: `/ui-ux-pro-max`.
 

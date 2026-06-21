@@ -1,0 +1,8 @@
+# Force LF on generated code-map artifacts so the Linux CI `generate-codemap:check`
+# never sees false drift from a CRLF-committed file (the generator writes LF).
+codemap.json      text eol=lf
+CODEMAP.md        text eol=lf
+docs/codemap/**   text eol=lf
+
+# Shell hooks must be LF to run.
+.husky/**         text eol=lf

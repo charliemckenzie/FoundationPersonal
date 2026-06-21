@@ -23,9 +23,8 @@ The small, shared rule set both runtimes (Claude Code + Copilot) load every turn
 ## Components — check first, never duplicate
 
 - **Always use an existing Foundation component** before reaching for raw MUI or custom HTML. **Never create a new component without Moe's sign-off.**
-- The catalogue (bare names — if one's missing, check `src/components/` directly):
-  Accordion · ActionBar · AddressField · Alert · AnnouncementBanner · ArtieAIButton · Autocomplete · Badge · Breadcrumb · Button · Calendar · Card · Charts · Checkbox · Chip · CloseButton · DataGrid · DateOfBirthField · DatePicker · DateRangePicker · DescriptionList · Dialog · Divider · Drawer · ExpandableCardList · ExpandableItem · FileUpload · Footer · FormProgress · Header · HeroIcon · Icon · IconButton · IconList · InfoButton · InputSelectContainer · InvestmentOverview · LinearProgress · LinkRow · Logo · ManagedList · MemberOnline · Menu · MOBreadcrumb · Modal · MoneyField · PageTransition · Pagination · PasswordField · PercentageField · PosterPanel · QuickLinks · RadioGroup · Select · Skeleton · SkipLinks · Snackbar · Spinner · StepperActions · StepTransition · Switch · Table · Tabs · TextArea · TextButton · TextField · Tooltip
-- Prop conventions: `variant`/`size`/`color`; events as `onX`; accessible name via `label` (not `aria-label`) on inputs and icon-only buttons.
+- **Find what exists in the code map** — `codemap.json` / `CODEMAP.md` is the live inventory (names, paths, status, what-composes-what, where-used; generated, always current). Read it before building; if something seems missing, check `src/components/` directly.
+- For *which* component to choose between similar ones, and the prop conventions → `docs/guidelines/component-selection.md`.
 
 ## Accessibility — the floor (WCAG 2.2 AA)
 
@@ -50,7 +49,7 @@ Severity legend: **CRITICAL** (fix before merge) · **IMPORTANT** (fix same spri
 ## On-demand reference — read before the matching work
 
 - **Full typography scale**, weights, spacing, composition → `docs/guidelines/typography.md`
-- **Component catalogue + when-to-use** (Dialog vs Modal, Select vs InputSelectContainer, etc.) → `docs/guidelines/components.md`
+- **Component inventory** (names, paths, status, composition, where-used) → `codemap.json` / `CODEMAP.md` (generated). **When-to-use judgment** (Dialog vs Modal, Select vs InputSelectContainer, etc.) → `docs/guidelines/component-selection.md`
 - **Full WCAG 2.2 AA catalogue** (38+ anti-patterns) → `.github/instructions/a11y.instructions.md`; component sign-off → Flanders / `/conformanceReport`
 - **Team roster, routing detail, pipeline, charter** → `AGENTS.md`
 - **Playwright tests** → `.github/instructions/playwright-typescript.instructions.md`

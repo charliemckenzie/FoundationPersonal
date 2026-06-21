@@ -6,7 +6,7 @@
 The heavy guideline docs are intentionally **not** `@import`ed here — that keeps the per-session context lean. `docs/guidelines/essentials.md` carries the always-on core and points to each of these. Read the matching one before that kind of work:
 
 - `docs/guidelines/typography.md` — full type scale, weights, spacing, composition
-- `docs/guidelines/components.md` — component catalogue + when-to-use
+- `codemap.json` / `CODEMAP.md` — generated component inventory (names, paths, status, composition, where-used); `docs/guidelines/component-selection.md` — when-to-use judgment + prop conventions
 - `.github/instructions/a11y.instructions.md` — full WCAG 2.2 AA catalogue (or use `/conformanceReport` / the Flanders agent for component sign-off)
 - `.github/instructions/playwright-typescript.instructions.md` — when writing or reviewing Playwright tests (`**/*.spec.ts`): role-based locators, web-first assertions, `test.step()` grouping, files in `tests/` as `<feature>.spec.ts`
 - `docs/team/relationship-map.md`, `docs/team/dependency-update.md` — team diagram + dependency workflow

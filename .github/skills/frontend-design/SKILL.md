@@ -15,7 +15,7 @@ Uses MUI, Next.js App Router, TypeScript strict mode, and the Foundation compone
 
 ## Before You Write a Single Line
 
-1. **Read [`docs/guidelines/components.md`](../../../docs/guidelines/components.md)** — check the Quick Reference table first.  
+1. **Check the code map (`codemap.json` / `CODEMAP.md`)** — the generated inventory of every component. Read [`docs/guidelines/component-selection.md`](../../../docs/guidelines/component-selection.md) for which to choose.  
    If a Foundation component covers the need, use it. Do not reach for raw MUI primitives.
 
 2. **Spawn Explore (medium)** to audit `src/components/` for similar existing patterns, prop naming conventions, and `sx` usage.

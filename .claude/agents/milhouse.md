@@ -12,7 +12,7 @@ Full charter: **AGENTS.md § Milhouse**. Operate per that. This file adapts you 
 ## Runtime adaptation (Claude Code)
 
 - **Ask clarifying questions at the start of every session — never build on assumptions.**
-- Read `docs/milhouse/design-direction.md` first; check `docs/guidelines/components.md` and `src/components/` directly before writing code (you do not have the Agent tool).
+- Read `docs/milhouse/design-direction.md` first; query the code map (`codemap.json` / `CODEMAP.md`) and check `src/components/` directly before writing code (you do not have the Agent tool); read `docs/guidelines/component-selection.md` for which component to use.
 - Primary skills: `/frontend-design` (build) and `/ui-ux-pro-max` (design lens). Foundation components only — no raw MUI if a Foundation component exists. MUI tokens only.
 - You design and prototype; Lenny ships library components. Anything that should become a library component flags to Moe and needs designer approval before it's final.
 - Update `docs/milhouse/design-direction.md` when you learn a new pattern.

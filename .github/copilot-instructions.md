@@ -13,7 +13,7 @@ The non-negotiable rules — styling (MUI tokens, rem sizing), typography varian
 
 The heavy reference docs are intentionally **not** imported here — they apply on demand:
 - **A11y full catalogue** auto-applies to UI files via `.github/instructions/a11y.instructions.md` (scoped by its `applyTo` glob); for component sign-off use `/conformanceReport` or the Flanders agent.
-- **Full typography scale** (`docs/guidelines/typography.md`) and the **component catalogue + when-to-use** (`docs/guidelines/components.md`) are read before that kind of work — see the pointers in `essentials.md`.
+- **Full typography scale** (`docs/guidelines/typography.md`), the **generated component inventory** (`codemap.json` / `CODEMAP.md`), and the **when-to-use judgment** (`docs/guidelines/component-selection.md`) are read before that kind of work — see the pointers in `essentials.md`.
 - **Playwright** test guidance (`.github/instructions/playwright-typescript.instructions.md`) auto-applies to `**/*.spec.ts`.
 
 ## Skills available

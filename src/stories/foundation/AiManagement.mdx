@@ -18,12 +18,20 @@ When GitHub Copilot opens a chat session, it automatically loads `.github/copilo
 .github/copilot-instructions.md   ← loaded automatically by Copilot (all models)
 CLAUDE.md                          ← loaded by Claude Code CLI + Copilot on Claude model
   │
-  ├── @AGENTS.md                   ← the agent team, their roles, and the component pipeline
-  ├── @docs/guidelines/typography.md   ← typography scale, allowed variants, sizing rules
-  └── @docs/guidelines/components.md  ← component catalogue + the rule to use existing ones
+  ├── @AGENTS.md                       ← the agent team, their roles, and the component pipeline
+  └── @docs/guidelines/essentials.md   ← the small always-on core: styling/typography rules,
+                                          a11y floor, stack versions, high-frequency gotchas,
+                                          and pointers to the on-demand reference below
 ```
 
-The result: every Copilot session starts with knowledge of the team structure, the design constraints, and the full component library — without anyone needing to paste context manually.
+The heavy reference docs are **not** eagerly imported — that keeps the always-on context lean (measured by `npm run context-budget`). They load on demand when the task needs them:
+
+- `docs/guidelines/typography.md` — full type scale and composition
+- `docs/guidelines/component-selection.md` — when-to-use judgment + the rule to use existing components
+- `codemap.json` / `CODEMAP.md` — the **generated** component inventory (names, paths, status, composition, where-used)
+- `.github/instructions/a11y.instructions.md` — full WCAG 2.2 AA catalogue (auto-applied to UI files in Copilot)
+
+The result: every session starts lean — core rules + team structure — and pulls the bulky reference only when relevant.
 
 ---
 
@@ -40,12 +48,16 @@ The result: every Copilot session starts with knowledge of the team structure, t
   </thead>
   <tbody>
     <tr>
-      <td><code>typography.md</code></td>
-      <td>Allowed typography variants, rem sizing rules, banned MUI variants</td>
+      <td><code>essentials.md</code></td>
+      <td>The always-on core: styling/typography rules, a11y floor, stack versions, gotchas, and pointers to on-demand reference</td>
     </tr>
     <tr>
-      <td><code>components.md</code></td>
-      <td>Full component catalogue; the rule to always use existing components first</td>
+      <td><code>typography.md</code></td>
+      <td>Full typography scale and composition (on-demand reference)</td>
+    </tr>
+    <tr>
+      <td><code>component-selection.md</code></td>
+      <td>When-to-use judgment + the rule to always use existing components first (inventory lives in the generated code map)</td>
     </tr>
   </tbody>
 </table>
@@ -68,23 +80,23 @@ Common triggers:
 **Process:**
 
 1. Write the guideline in `docs/guidelines/` as a focused `.md` file
-2. Add an `@` reference to it in both `.github/copilot-instructions.md` and `CLAUDE.md`
-3. Keep it short — AI context has limits and specific files load every session
+2. If it's a small, always-relevant rule, fold it into `docs/guidelines/essentials.md`. If it's bulky reference, add a **pointer** to it from `essentials.md` ("read X before doing Y") rather than an eager `@import`
+3. Keep it short — the always-on core loads every session; the `context-budget` guard watches its size
 
 ---
 
 ## Adding a Reference
 
-Both instruction files must be updated together. Open each and add the new reference on a new line:
+Keep the always-on context lean. For a small, always-relevant rule, add it to `docs/guidelines/essentials.md` (imported by both entry points — one shared source). For bulky reference, create a focused `.md` and add a **pointer** to it from `essentials.md` rather than an eager `@import` — eager imports load every session and are what the context-budget guard watches.
+
+The two entry points import only the core:
 
 ```
 @AGENTS.md
-@docs/guidelines/typography.md
-@docs/guidelines/components.md
-@docs/guidelines/your-new-file.md   ← add here
+@docs/guidelines/essentials.md
 ```
 
-Files are: `.github/copilot-instructions.md` and `CLAUDE.md` in the repository root.
+Files are: `.github/copilot-instructions.md` and `CLAUDE.md` in the repository root. After changing the always-on set, run `npm run context-budget` to confirm it stays lean.
 
 ---
 
@@ -138,7 +150,7 @@ You do not need to understand this system to use Copilot day-to-day. The files l
 You do need to understand it if you are:
 
 - **Getting unexpected output from an AI agent** — check whether a guideline file covers the area. If not, consider writing one.
-- **Building a new component** — `docs/guidelines/components.md` contains the rule that you must use an existing component first. AI agents are instructed to follow this; so should you.
+- **Building a new component** — check the code map (`codemap.json` / `CODEMAP.md`) for what exists, and `docs/guidelines/component-selection.md` for the rule to use an existing component first. AI agents are instructed to follow this; so should you.
 - **Adding a new convention to the codebase** — write it down in `docs/guidelines/` so AI agents learn it too.
 
 The goal is a shared understanding between the human team and the AI tools. When the guidelines are current, AI output requires less correction. When they fall behind, expect drift.

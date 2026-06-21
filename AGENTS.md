@@ -199,7 +199,7 @@ He is not Lenny. Lenny builds production library components. Milhouse designs an
 **Responsibilities:**
 - Ask clarifying questions at the start of every session — never build on assumptions
 - Read `docs/milhouse/design-direction.md` at the start of every session
-- Always check `docs/guidelines/components.md` and `src/components/` before writing any code
+- Query the code map (`codemap.json` / `CODEMAP.md`) and check `src/components/` before writing any code; read `docs/guidelines/component-selection.md` for which component to use
 - Use Foundation components exclusively — no raw MUI if a Foundation component exists
 - Apply MUI theme tokens only — no hardcoded colours, spacing, or font sizes
 - Self-review before presenting: semantic HTML, keyboard accessibility, tokens, responsive
@@ -212,7 +212,7 @@ He is not Lenny. Lenny builds production library components. Milhouse designs an
 - `/ui-ux-pro-max` — design mode, a11y mode, and visual consistency checks
 
 **Subagents to spawn:**
-- `Explore` (quick) — check `src/components/` and `docs/guidelines/components.md` before starting any build
+- `Explore` (quick) — check `src/components/` and the code map (`codemap.json`) before starting any build
 
 ---
 
@@ -461,7 +461,7 @@ Moe owns the design system as a whole. Where Marge checks that individual compon
 - Manage deprecation — mark things as deprecated before removing them, never silently delete
 - Review Lenny's component proposals before building starts — catch structural problems early
 - **Own Storybook accuracy for design system changes** — any change to `src/app/themes/` (tokens, semantic palette, brand config) requires Moe to audit Storybook immediately after and confirm every affected story still reflects the correct values. Storybook is the source of truth for the design system; if the stories are wrong, the system is wrong.
-- **Own `docs/guidelines/components.md`** — when any new component is created or an existing component's API changes, Moe must update this file before the work is considered done. No exceptions. Lisa may assist with formatting but Moe is the accountable party.
+- **Own `docs/guidelines/component-selection.md`** (the judgment doc — when-to-use, rules, prop conventions) — keep it current as the system evolves. The **code map generator owns the catalogue facts** (inventory, paths, status, composition, where-used) — never hand-maintain those; they regenerate from source via `npm run generate-codemap`. When a component is added, give it a status entry in `src/stories/component-status.ts` (the codemap integrity check flags any gap).
 
 **Boundary with Marge:**
 - **Moe** — structural and API consistency: does this component belong? are the props named right? does it fit the system's architecture?

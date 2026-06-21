@@ -1,0 +1,6 @@
+# Keep the code map fresh as a side effect of committing.
+# Regenerate, then re-stage the outputs so they land in THIS commit (without the
+# re-stage they'd be left unstaged and the commit would be one map behind).
+# See docs/Adam/ai-efficiency-implementation-plan.md §2F.
+npm run generate-codemap
+git add codemap.json CODEMAP.md docs/codemap

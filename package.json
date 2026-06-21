@@ -35,9 +35,12 @@
     "sync-runtimes:check": "node scripts/sync-runtimes.mjs --check",
     "check:signoff": "node scripts/check-signoff.mjs",
     "generate-tokens": "tsx scripts/generate-tokens.ts",
+    "generate-codemap": "tsx scripts/generate-codemap.ts",
+    "generate-codemap:check": "tsx scripts/generate-codemap.ts --check",
     "figma-import": "node scripts/figma-import-variables.mjs",
     "sync-font-awesome-icons": "node scripts/sync-font-awesome-icons.mjs",
-    "sync-project-board": "NODE_EXTRA_CA_CERTS=/tmp/art-ca.pem node scripts/setup-github-project.mjs"
+    "sync-project-board": "NODE_EXTRA_CA_CERTS=/tmp/art-ca.pem node scripts/setup-github-project.mjs",
+    "prepare": "husky"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -85,8 +88,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "eslint-plugin-storybook": "^10.4.1",
+    "husky": "^9.1.7",
     "playwright": "^1.59.1",
     "remark-gfm": "^4.0.1",
+    "ts-morph": "^28.0.0",
     "tsup": "^8.5.1",
     "tsx": "^4.19.3",
     "typescript": "^5",

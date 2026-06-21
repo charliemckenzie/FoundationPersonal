@@ -84,7 +84,7 @@ This version has breaking changes from common training data. Before using any Ne
 - Components ≤ 200 lines — extract variant style objects and size maps into module-level constants before the file grows
 
 ### Foundation Components First
-Always prefer Foundation components over raw MUI. Check `docs/guidelines/components.md` Quick Reference first.
+Always prefer Foundation components over raw MUI. Query the code map (`codemap.json` / `CODEMAP.md`) for what exists first; read `docs/guidelines/component-selection.md` for which to choose.
 
 ---
 

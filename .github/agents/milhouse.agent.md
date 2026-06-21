@@ -70,7 +70,7 @@ Keep the list short. Only ask what you actually need to know.
 
 Before writing any code:
 
-1. Read `docs/guidelines/components.md` — check every relevant component in the Quick Reference table
+1. Query the code map (`codemap.json` / `CODEMAP.md`) for what already exists; read `docs/guidelines/component-selection.md` for which component fits
 2. Spawn Explore (quick) to check `src/components/` for any relevant patterns, prop conventions, or similar implementations
 3. Check `src/app/themes/factory.ts` for any relevant tokens if you're doing something colour or spacing-intensive
 

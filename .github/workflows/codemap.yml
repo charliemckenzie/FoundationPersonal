@@ -1,0 +1,31 @@
+name: Code map check
+
+# Advisory backstop (non-blocking, matching the repo's branch-protection stance).
+# Fails if the committed code map (codemap.json / CODEMAP.md / docs/codemap/*) has
+# drifted from what the generator produces — i.e. a commit that bypassed the
+# pre-commit hook (--no-verify, or a clone without husky installed).
+# Run `npm run generate-codemap` locally to refresh and commit the result.
+
+on:
+  pull_request:
+    paths:
+      - 'src/components/**'
+      - 'src/index.ts'
+      - 'src/stories/component-status.ts'
+      - 'codemap.json'
+      - 'CODEMAP.md'
+      - 'docs/codemap/**'
+      - 'scripts/generate-codemap.ts'
+
+jobs:
+  codemap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install dependencies
+        run: npm ci
+      - name: Check the code map is up to date
+        run: npm run generate-codemap:check

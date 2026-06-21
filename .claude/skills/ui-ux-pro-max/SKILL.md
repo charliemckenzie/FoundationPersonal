@@ -151,6 +151,6 @@ Focus order must follow visual/DOM order. Never use `tabIndex > 0`.
 ## References
 
 - Typography scale: [`docs/guidelines/typography.md`](../../../docs/guidelines/typography.md)
-- Component catalogue: [`docs/guidelines/components.md`](../../../docs/guidelines/components.md)
+- Component inventory: `codemap.json` / `CODEMAP.md` (generated). When-to-use: [`docs/guidelines/component-selection.md`](../../../docs/guidelines/component-selection.md)
 - Theme source: `src/app/themes/factory.ts`, `src/app/themes/semantic.ts`
 - Brand configs: `src/app/themes/brands/`

@@ -6,7 +6,7 @@ Personal knowledge base of Foundation design patterns and decisions. Updated acr
 
 ## Foundation Principles
 
-- Foundation components first — always. Check `docs/guidelines/components.md` before writing a single line.
+- Foundation components first — always. Check the code map (`codemap.json` / `CODEMAP.md`) and `docs/guidelines/component-selection.md` before writing a single line.
 - MUI theme tokens only — no hardcoded colours, spacing, or font sizes anywhere.
 - `sx` prop with string token shorthand for static values: `'primary.main'`, `'background.paper'`.
 - Callback syntax `(t) => ...` only for conditional logic — never for static tokens.
