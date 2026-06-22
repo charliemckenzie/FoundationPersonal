@@ -4,6 +4,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-ria': {
     id: 'acc-ria',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '#ACC-235896',
     balance: 1289130.55,
     status: 'active',
@@ -37,6 +38,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-ria-2': {
     id: 'acc-ria-2',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '#ACC-235897',
     balance: 89130.55,
     status: 'active',
@@ -70,6 +72,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-lp': {
     id: 'acc-lp',
     name: 'Lifetime Pension',
+    accountType: 'lp',
     memberNumber: '#ACC-235898',
     balance: 180.99,
     status: 'active',
@@ -102,6 +105,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-ttr': {
     id: 'acc-ttr',
     name: 'Retirement Income Account',
+    accountType: 'ttr',
     memberNumber: '#ACC-235899',
     balance: 0.77,
     status: 'active',
@@ -129,6 +133,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-closed-1': {
     id: 'acc-closed-1',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '#ACC-235900',
     balance: 0,
     status: 'closed',
@@ -155,6 +160,7 @@ export const MOCK_DETAILS: Record<string, AccountDetail> = {
   'acc-closed-2': {
     id: 'acc-closed-2',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '#ACC-235901',
     balance: 0,
     status: 'closed',

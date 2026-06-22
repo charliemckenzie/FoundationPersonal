@@ -10,21 +10,23 @@ import { ContentContainer, MOBreadcrumb } from '../../../../../../components/Mem
 import { FormProgress } from '../../../../../../components/FormProgress';
 import { StepperActions } from '../../../../../../components/StepperActions';
 import { StepTransition } from '../../../../../../components/StepTransition';
-import { Alert } from '../../../../../../components/Alert';
+import { Alert, SEVERITY_ICONS } from '../../../../../../components/Alert';
 import { Icon } from '../../../../../../components/Icon';
 import { MoneyField } from '../../../../../../components/MoneyField';
 import { TextButton } from '../../../../../../components/TextButton';
 import { Button } from '../../../../../../components/Button';
 import { MOCK_INCOME_ACCOUNTS } from '../../mockData';
 import { formatCurrency } from '../../../../../../lib/format';
-import { MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../../../../../../features/retirement-income-account/constants';
+import { MIN_REMAINING_BALANCE, MIN_ACCUMULATION_BALANCE, PENSION_ESTIMATE_AGE } from '../../../../../../features/retirement-income-account/constants';
 import { estimatePension } from '../../../../../../features/retirement-income-account/utils';
 
 // Mock balances — replace with real data fetch
-const MOCK_SUPER_SAVINGS_BALANCE = 4452.51;
+const MOCK_SUPER_SAVINGS_BALANCE: Record<string, number> = {
+  'acc-ria':   4452.51,
+  'acc-ria-2': 24750.00,
+};
+const DEFAULT_SUPER_SAVINGS_BALANCE = 4452.51;
 const MOCK_RIA_BALANCE = 1289130.55;
-
-const TODAY = new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
 
 const STEPS = [
   { id: 'transfer', label: 'Transfer details' },
@@ -47,7 +49,9 @@ function StepTransferDetails({
   showValidation: boolean;
 }) {
   const [liveAmount, setLiveAmount] = useState(amount ?? 0);
+  const [today] = useState(() => new Date().toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' }));
 
+  const belowMinimum = superSavingsBalance > 0 && superSavingsBalance < MIN_ACCUMULATION_BALANCE;
   const hasValue = liveAmount > 0;
   const remaining = superSavingsBalance - liveAmount;
   const overFunds = hasValue && remaining < 0;
@@ -81,7 +85,7 @@ function StepTransferDetails({
         {/* Grey header — shows remaining SS balance, updates live */}
         <Box sx={{ px: { xs: 3, sm: 4 }, pt: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 }, bgcolor: 'background.default' }}>
           <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
-            Available funds as at {TODAY}
+            Available funds as at {today}
           </Typography>
           <Typography
             variant="h4"
@@ -124,32 +128,42 @@ function StepTransferDetails({
           </Box>
 
           <Stack spacing={3}>
+            {belowMinimum && (
+              <Alert
+                severity="warning"
+                title="Minimum balance required"
+                icon={<Icon icon={SEVERITY_ICONS.warning} color="inherit" size="lg" />}
+                message={
+                  <>
+                    You need at least {formatCurrency(MIN_ACCUMULATION_BALANCE)} in Super Savings to make a transfer.{' '}
+                    <Box
+                      component="a"
+                      href="/member-online/contributions"
+                      sx={{ color: 'inherit', fontWeight: 600, textDecoration: 'underline', '&:hover': { textDecoration: 'none' } }}
+                    >
+                      Top up Super Savings
+                    </Box>.
+                  </>
+                }
+              />
+            )}
             <Stack spacing={0.5}>
               <MoneyField
                 label="Amount to transfer into your account"
                 value={amount}
                 fullWidth
+                disabled={belowMinimum}
                 error={fieldError}
                 helperText={fieldHelperText}
                 onInputChange={(v) => setLiveAmount(v ?? 0)}
                 onChange={onAmountChange}
               />
-              <Typography variant="small" sx={{ color: 'text.muted' }}>
-                Not enough funds?{' '}
-                <Box
-                  component="a"
-                  href="/member-online/contributions"
-                  sx={{ color: 'primary.main', textDecoration: 'underline', '&:hover': { textDecoration: 'none' } }}
-                >
-                  Add money to my super
-                </Box>
-              </Typography>
             </Stack>
 
             {/* Current / new RIA balance estimate */}
             <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
               <Box>
-                <Typography variant="h5" component="p" sx={{ color: 'text.heading' }}>
+                <Typography variant="h5" component="p" sx={{ color: belowMinimum ? 'text.muted' : 'text.heading' }}>
                   {formatCurrency(riaBalance)}
                 </Typography>
                 <Typography variant="small" sx={{ display: 'block', color: 'text.muted' }}>Current balance</Typography>
@@ -159,7 +173,7 @@ function StepTransferDetails({
                 <Typography
                   variant="h5"
                   component="p"
-                  sx={{ color: 'text.heading', transition: 'color 200ms ease' }}
+                  sx={{ color: hasValue ? 'text.heading' : 'text.muted', transition: 'color 200ms ease' }}
                 >
                   {hasValue ? formatCurrency(riaBalance + (!overFunds ? liveAmount : 0)) : '–'}
                 </Typography>
@@ -300,7 +314,7 @@ function StepReview({
         ].map(({ label, value }, i, arr) => (
           <Box key={label}>
             <Box sx={{ mx: 4, borderTop: '1px solid', borderColor: 'border.subtle' }} />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', px: 4, py: 2.5 }}>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' }, gap: { xs: 0.5, sm: 0 }, px: 4, py: 2.5 }}>
               <Typography variant="body" sx={{ color: 'text.muted' }}>{label}</Typography>
               <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>{value}</Typography>
             </Box>
@@ -330,16 +344,18 @@ function StepReview({
               <Box sx={{ mx: 4, borderTop: '1px solid', borderColor: 'border.subtle' }} />
               <Box
                 sx={{
-                  display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr',
-                  alignItems: 'center',
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  justifyContent: 'space-between',
+                  alignItems: { xs: 'flex-start', sm: 'center' },
+                  gap: { xs: 1, sm: 0 },
                   px: 4,
                   py: 2.5,
                 }}
               >
                 <Typography variant="body" sx={{ color: 'text.muted' }}>{label}</Typography>
-                <Typography variant="body" sx={{ color: 'text.muted', textAlign: 'right' }}>{before}</Typography>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+                  <Typography variant="body" sx={{ color: 'text.muted' }}>{before}</Typography>
                   <Icon icon="arrow-right" size="xs" color="muted" />
                   <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>{after}</Typography>
                 </Box>
@@ -402,9 +418,10 @@ export default function AddMoneyPage() {
   const account = MOCK_INCOME_ACCOUNTS.find((a) => a.id === id);
   const backToManage = () => router.push(`/member-online/manage-income-accounts?account=${id}`);
 
-  const superSavingsBalance = MOCK_SUPER_SAVINGS_BALANCE;
+  const superSavingsBalance = MOCK_SUPER_SAVINGS_BALANCE[id] ?? DEFAULT_SUPER_SAVINGS_BALANCE;
   const riaBalance = MOCK_RIA_BALANCE;
   const hasNoFunds = superSavingsBalance === 0;
+  const belowMinimum = superSavingsBalance > 0 && superSavingsBalance < MIN_ACCUMULATION_BALANCE;
 
   const [step, setStep] = useState<Step>('transfer');
   const [amount, setAmount] = useState<number | null>(null);
@@ -432,6 +449,7 @@ export default function AddMoneyPage() {
 
   function handleNext() {
     if (step === 'transfer') {
+      if (belowMinimum) return;
       const valid = amount && amount > 0 && amount <= superSavingsBalance;
       if (!valid) {
         setShowValidation(true);

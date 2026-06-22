@@ -4,6 +4,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
   {
     id: 'acc-ria',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '235896',
     balance: 1289130.55,
     status: 'active',
@@ -14,6 +15,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
   {
     id: 'acc-ria-2',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '235897',
     balance: 89130.55,
     status: 'active',
@@ -24,16 +26,19 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
   {
     id: 'acc-lp',
     name: 'Lifetime Pension',
+    accountType: 'lp',
     memberNumber: '235898',
     balance: 180.99,
     status: 'active',
     nextPaymentAmount: '$3,021.15',
     nextPaymentDate: '30 Jun 2026',
+    purchasePrice: 750000,
     icon: 'money-check-dollar',
   },
   {
     id: 'acc-ttr',
     name: 'Retirement Income Account',
+    accountType: 'ttr',
     memberNumber: '235899',
     balance: 0.77,
     status: 'active',
@@ -44,6 +49,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
   {
     id: 'acc-closed-1',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '235900',
     balance: 0,
     status: 'closed',
@@ -55,6 +61,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
   {
     id: 'acc-closed-2',
     name: 'Retirement Income Account',
+    accountType: 'ria',
     memberNumber: '235901',
     balance: 0,
     status: 'closed',
