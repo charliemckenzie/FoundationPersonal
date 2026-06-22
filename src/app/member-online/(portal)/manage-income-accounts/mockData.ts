@@ -49,6 +49,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
     status: 'closed',
     nextPaymentAmount: '—',
     nextPaymentDate: '—',
+    closingDate: '14 Mar 2025',
     icon: 'money-simple-from-bracket',
   },
   {
@@ -59,6 +60,7 @@ export const MOCK_INCOME_ACCOUNTS: IncomeAccount[] = [
     status: 'closed',
     nextPaymentAmount: '—',
     nextPaymentDate: '—',
+    closingDate: '2 Jan 2024',
     icon: 'money-simple-from-bracket',
   },
 ];
