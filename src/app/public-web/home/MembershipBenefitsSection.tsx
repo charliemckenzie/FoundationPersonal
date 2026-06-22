@@ -46,7 +46,8 @@ export function MembershipBenefitsSection() {
   return (
     <Box
       sx={{
-        py: { xs: 7, md: 10 },
+        pt: { xs: 4, md: '2.3125rem' },
+        pb: { xs: 7, md: 10 },
         bgcolor: 'background.paper',
       }}
     >
@@ -195,7 +196,7 @@ export function MembershipBenefitsSection() {
               variant="display-5"
               component="h2"
               sx={{
-                mb: '4rem',
+                mb: { xs: '2.5rem', md: '4rem' },
               }}
             >
               Make the most of your membership
