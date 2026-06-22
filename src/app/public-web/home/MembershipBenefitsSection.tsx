@@ -10,24 +10,28 @@ import { HOMEPAGE_CONTAINER_SX } from './templateOverrides';
 
 const BENEFITS = [
   {
-    icon: 'gift',
+    icon: 'tag',
+    style: 'regular' as const,
     title: 'Member deals and discounts',
     description: 'Save money with over 3,000 offers from big brands.',
   },
   {
     icon: 'umbrella',
+    style: 'regular' as const,
     title: 'Insurance',
     description: "We've got your covered for a rainy day.",
   },
   {
-    icon: 'book-open-lines',
+    icon: 'podcast',
+    style: 'solid' as const,
     title: 'Podcasts',
     description: 'Your guide to super, retirement, and investing.',
   },
   {
-    icon: 'messages-dollar',
+    icon: 'comment',
+    style: 'regular' as const,
     title: 'Live chat',
-    description: 'Available 8am–7:30pm AEST Monday to Friday.',
+    description: 'Available 7am–7:30pm AEST Monday to Friday.',
   },
 ];
 
@@ -42,8 +46,7 @@ export function MembershipBenefitsSection() {
   return (
     <Box
       sx={{
-        pt: { xs: 6, md: '2.1875rem' },
-        pb: { xs: 6, md: 10 },
+        py: { xs: 7, md: 10 },
         bgcolor: 'background.paper',
       }}
     >
@@ -57,7 +60,6 @@ export function MembershipBenefitsSection() {
             alignItems: 'center',
           }}
         >
-          {/* Left looping video */}
           <Box
             sx={{
               width: '100%',
@@ -117,46 +119,46 @@ export function MembershipBenefitsSection() {
                   position: 'absolute',
                   left: { xs: '1rem', md: '2rem' },
                   right: { xs: '1rem', md: '2rem' },
-                  bottom: { xs: '1rem', md: '2rem' },
+                  bottom: { xs: '1.5rem', md: '2rem' },
                   display: 'flex',
+                  flexDirection: 'row',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   gap: 2,
                   px: { xs: '1.5rem', md: '2rem' },
-                  py: { xs: '1.25rem', md: '1.5rem' },
+                  pt: { xs: '1.5rem', md: '1.5rem' },
+                  pb: { xs: '1.75rem', md: '1.5rem' },
+                  minHeight: { xs: '5.25rem', md: 'auto' },
                   textAlign: 'left',
+                  color: 'common.white',
                   cursor: 'pointer',
                   appearance: 'none',
                   border: 0,
                   borderRadius: '1.75rem',
-                  bgcolor: (theme) => alpha(theme.palette.common.white, 0.2),
+                  bgcolor: 'rgba(205, 212, 234, 0.38)',
                   backdropFilter: 'blur(18px)',
                   WebkitBackdropFilter: 'blur(18px)',
-                  boxShadow: (theme) => `0 0.5rem 2rem ${alpha(theme.palette.primary.main, 0.2)}`,
+                  boxShadow: '0 0.5rem 2rem rgba(28, 53, 94, 0.12)',
                   outline: 'none',
                   transition: 'background-color 180ms ease, box-shadow 180ms ease, backdrop-filter 180ms ease',
                   '&:hover': {
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.92),
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    boxShadow: (theme) => `0 0.75rem 2.25rem ${alpha(theme.palette.primary.main, 0.3)}`,
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.98),
+                    boxShadow: (theme) => `0 0.75rem 2.25rem ${alpha(theme.palette.primary.main, 0.24)}`,
                   },
                   '&:focus-visible': {
-                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.92),
-                    backdropFilter: 'blur(6px)',
-                    WebkitBackdropFilter: 'blur(6px)',
-                    boxShadow: (theme) => `0 0 0 0.1875rem ${alpha(theme.palette.common.white, 0.55)}`,
+                    bgcolor: (theme) => alpha(theme.palette.primary.main, 0.98),
+                    boxShadow: (theme) => `0 0 0 0.1875rem ${alpha(theme.palette.common.white, 0.5)}`,
                   },
                 }}
               >
-                <Box sx={{ minWidth: 0 }}>
+                <Box sx={{ minWidth: 0, flex: '1 1 auto' }}>
                   <Typography
                     variant="lead"
-                    sx={{ color: 'common.white', fontWeight: 700, mb: 0.5 }}
+                    sx={{ color: 'inherit', fontWeight: '700 !important', mb: 0.5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}
                   >
                     {MEMBERSHIP_MEDIA_OVERLAY.title}
                   </Typography>
-                  <Typography variant="lead" sx={{ color: 'common.white' }}>
+                  <Typography variant="lead" sx={{ color: 'inherit', fontWeight: 400, fontSize: { xs: '1rem', md: '1.25rem' }, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' }}>
                     {MEMBERSHIP_MEDIA_OVERLAY.subtitle}
                   </Typography>
                 </Box>
@@ -179,7 +181,6 @@ export function MembershipBenefitsSection() {
             </Box>
           </Box>
 
-          {/* Right content */}
           <Box
             sx={{
               width: '100%',
@@ -190,25 +191,48 @@ export function MembershipBenefitsSection() {
               },
             }}
           >
-            <Typography variant="display-5" component="h2" sx={{ mb: 4 }}>
+            <Typography
+              variant="display-5"
+              component="h2"
+              sx={{
+                mb: '4rem',
+              }}
+            >
               Make the most of your membership
             </Typography>
 
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)' },
-                gap: 3,
+                gridTemplateColumns: { xs: '1fr', md: 'repeat(2, minmax(0, 1fr))' },
+                rowGap: { xs: 4, md: 6 },
+                columnGap: '1.5rem',
               }}
             >
               {BENEFITS.map((benefit) => (
-                <Box key={benefit.title} sx={{ display: 'flex', gap: 1.5 }}>
-                  <Icon icon={benefit.icon} size="lg" color="primary" />
+                <Box key={benefit.title} sx={{ display: 'flex', alignItems: 'flex-start', gap: '1.5rem' }}>
+                  <Box
+                    sx={{
+                      width: '3rem',
+                      height: '3rem',
+                      minWidth: '3rem',
+                      borderRadius: '50%',
+                      bgcolor: '#EDEFF2',
+                      color: 'text.heading',
+                      fontSize: '1.875rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Icon icon={benefit.icon} style={benefit.style} size="inherit" color="inherit" />
+                  </Box>
+
                   <Box>
-                    <Typography variant="body" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    <Typography variant="h5" component="h3" sx={{ mb: 1 }}>
                       {benefit.title}
                     </Typography>
-                    <Typography variant="small" sx={{ color: 'text.muted' }}>
+                    <Typography variant="lead" sx={{ maxWidth: '20rem', color: 'text.muted' }}>
                       {benefit.description}
                     </Typography>
                   </Box>
