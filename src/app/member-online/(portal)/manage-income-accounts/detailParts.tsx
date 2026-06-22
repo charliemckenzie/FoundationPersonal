@@ -34,9 +34,10 @@ interface SectionProps {
   title: string;
   children: React.ReactNode;
   action?: { label: string; href: string; icon?: string };
+  hideAction?: boolean;
 }
 
-export function Section({ title, children, action }: SectionProps) {
+export function Section({ title, children, action, hideAction }: SectionProps) {
   const router = useRouter();
   return (
     <Box
@@ -52,7 +53,7 @@ export function Section({ title, children, action }: SectionProps) {
         <Typography variant="h6" sx={{ mb: 2 }}>{title}</Typography>
         {children}
       </Box>
-      {action && (
+      {action && !hideAction && (
         <Box
           sx={{
             px: 4, py: 1.5,

@@ -3,14 +3,18 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Icon } from '../../../../components/Icon';
+import { TextButton } from '../../../../components/TextButton';
+import { Chip } from '../../../../components/Chip';
 import { formatCurrency } from '../../../../lib/format';
 import { DetailRow, Section } from './detailParts';
 import type { IncomeAccount } from './types';
 
 export function AccountDetailView({ account }: { account: IncomeAccount }) {
+  const isClosed = account.status === 'closed';
+
   return (
     <Stack spacing={3}>
-      {/* Overview section - styled like purchase price card */}
+      {/* Overview section */}
       <Box
         sx={(t: Theme) => ({
           borderRadius: `${t.shape.lg}px`,
@@ -20,17 +24,25 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
           overflow: 'hidden',
         })}
       >
-        {/* Grey header — balance */}
-        <Box sx={{ p: 4, bgcolor: 'background.default' }}>
-          <Typography variant="small" sx={{ color: 'text.primary', display: 'block', mb: 0.5 }}>
-            Account balance as at 17 June 2026
+        {/* Balance header */}
+        <Box sx={{ p: 4, bgcolor: isClosed ? 'action.hover' : 'background.default' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+            <Typography variant="small" sx={{ color: isClosed ? 'text.disabled' : 'text.primary', display: 'block' }}>
+              {isClosed ? 'Account closed' : 'Account balance as at 17 June 2026'}
+            </Typography>
+            {isClosed && <Chip label="Closed" size="x-small" color="default" />}
+          </Box>
+          <Typography variant="h4" sx={{ color: isClosed ? 'text.disabled' : 'text.heading', fontFamily: '"Noto Sans", sans-serif' }}>
+            {isClosed ? '$0.00' : formatCurrency(account.balance)}
           </Typography>
-          <Typography variant="h4" sx={{ color: 'text.heading', fontFamily: '"Noto Sans", sans-serif' }}>
-            {formatCurrency(account.balance)}
-          </Typography>
+          {isClosed && account.closingDate && (
+            <Typography variant="small" sx={{ color: 'text.disabled', display: 'block', mt: 0.5 }}>
+              Closed {account.closingDate}
+            </Typography>
+          )}
         </Box>
 
-        {/* White body — details, with the arrow straddling the seam */}
+        {/* Body */}
         <Box sx={{ position: 'relative', px: 4, pt: 5, pb: 4, borderTop: '1px solid', borderColor: 'border.subtle' }}>
           <Box
             sx={{
@@ -49,11 +61,11 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
               bgcolor: 'background.paper',
             }}
           >
-            <Icon icon="arrow-down" size="lg" color="primary" />
+            <Icon icon="arrow-down" size="lg" color={isClosed ? 'text.disabled' : 'primary'} />
           </Box>
 
-          <Typography variant="h6" sx={{ mb: 2 }}>Overview</Typography>
-          <DetailRow label="Next payment:" value={`${account.nextPaymentAmount}, ${account.nextPaymentDate}`} />
+          <Typography variant="h6" sx={{ mb: 2, color: isClosed ? 'text.secondary' : 'text.heading' }}>Overview</Typography>
+          <DetailRow label="Next payment:" value={isClosed ? '—' : `${account.nextPaymentAmount}, ${account.nextPaymentDate}`} />
           <DetailRow label="Payment frequency:" value="Fortnightly" />
           <DetailRow label="Financial year to date:" value="$0.00" />
           <DetailRow
@@ -76,10 +88,20 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
           />
           <DetailRow label="Product holder" value="H Rialto A Nse" />
         </Box>
+
+        {/* Restart CTA — closed accounts only */}
+        {isClosed && (
+          <Box sx={{ px: 4, py: 1.5, borderTop: '1px solid', borderTopColor: 'border.subtle' }}>
+            <TextButton
+              label="Restart this account"
+              onClick={() => {}}
+            />
+          </Box>
+        )}
       </Box>
 
       {/* Bank details section */}
-      <Section title="Bank details" action={{ label: 'Edit bank details', href: '#' }}>
+      <Section title="Bank details" action={{ label: 'Edit bank details', href: '#' }} hideAction={isClosed}>
         <DetailRow label="Bank:" value="Commonwealth Bank of Australia" />
         <DetailRow label="BSB:" value="062-000" />
         <DetailRow label="Account number:" value="1234 5678" />
@@ -94,7 +116,7 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
       </Section>
 
       {/* Centrelink schedule section */}
-      <Section title="Centrelink schedule" action={{ label: 'Download Centrelink schedule', href: '#', icon: 'arrow-down-to-line' }}>
+      <Section title="Centrelink schedule" action={{ label: 'Download Centrelink schedule', href: '#', icon: 'arrow-down-to-line' }} hideAction={isClosed}>
         <Typography variant="body" sx={{ color: 'text.primary', mb: 2 }}>
           Your eligibility for income support or an Age Pension from the government may be affected if you are receiving payments from a QSuper income account.
         </Typography>
@@ -104,7 +126,7 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
       </Section>
 
       {/* Beneficiary section */}
-      <Section title="Beneficiaries" action={{ label: 'Manage beneficiaries', href: '/member-online/beneficiaries' }}>
+      <Section title="Beneficiaries" action={{ label: 'Manage beneficiaries', href: '/member-online/beneficiaries' }} hideAction={isClosed}>
         <DetailRow label="Option:" value="Spouse Protection" />
         <DetailRow label="Spouse:" value="Jane Rialto" />
         <DetailRow label="Phone:" value="0412 345 678" />
