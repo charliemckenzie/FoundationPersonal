@@ -10,6 +10,7 @@ export interface IncomeAccount {
   status: AccountStatus;
   nextPaymentAmount: string;
   nextPaymentDate: string;
+  closingDate?: string;
   icon: string;
 }
 
