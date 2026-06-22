@@ -5,12 +5,14 @@ export type AccountStatus = 'active' | 'closed';
 export interface IncomeAccount {
   id: string;
   name: string;
+  accountType: 'ria' | 'lp' | 'ttr';
   memberNumber: string;
   balance: number;
   status: AccountStatus;
   nextPaymentAmount: string;
   nextPaymentDate: string;
   closingDate?: string;
+  purchasePrice?: number;
   icon: string;
 }
 
