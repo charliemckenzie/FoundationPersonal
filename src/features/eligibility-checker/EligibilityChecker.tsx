@@ -103,8 +103,8 @@ export interface EligibilityCheckerProps {
   defaultAnswers?: Answers;
   /** Start in the eligible/success state (uncontrolled). */
   defaultEligible?: boolean;
-  /** Called once when the checker transitions to the eligible/success state. */
-  onEligible?: () => void;
+  /** Called once when the checker transitions to the eligible/success state. Receives the answers at the time of completion. */
+  onEligible?: (answers: Answers) => void;
 }
 
 export function EligibilityChecker({
@@ -141,7 +141,7 @@ export function EligibilityChecker({
       setActiveStep((s) => s + 1);
     } else if (outcome === 'eligible') {
       setEligible(true);
-      onEligible?.();
+      onEligible?.(answers);
     }
   }
 

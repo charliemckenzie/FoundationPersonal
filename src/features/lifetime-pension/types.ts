@@ -1,4 +1,5 @@
 import type { Address } from '../../components/AddressField';
+import type { Answers } from '../eligibility-checker';
 
 export type PensionOption = 'single' | 'spouse' | '';
 export type AgeScenario = '60-64' | '65-plus';
@@ -33,6 +34,10 @@ export interface LifetimePensionState {
   ageScenario: AgeScenario;
   introDeclarationRead: boolean;
   introDeclarationPermanent: boolean;
+  /** Whether the user has completed (passed) the eligibility questionnaire. */
+  eligibilityCompleted: boolean;
+  /** Answers given during the eligibility questionnaire — retained for resuming. */
+  eligibilityAnswers: Answers | null;
   pensionOption: PensionOption;
   spouseDetails: SpouseDetails;
   purchaseAmount: number;

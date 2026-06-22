@@ -63,8 +63,6 @@ export function LifetimePensionFlow() {
   const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
   const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
 
-  const [introEligible, setIntroEligible] = useState(false);
-
   // Step navigation + draft autosave/resume are shared with Retirement Income Account via useSteppedFlow.
   const flow = useSteppedFlow<LifetimePensionState>({
     initialState: INITIAL_STATE,
@@ -86,7 +84,7 @@ export function LifetimePensionFlow() {
 
   function stepIsValid(step: number): boolean {
     if (step === 0) {
-      return introEligible && state.introDeclarationPermanent;
+      return Boolean(state.eligibilityCompleted) && state.introDeclarationPermanent;
     }
     if (step === 1) {
       return optionStepValid(state);
@@ -200,7 +198,9 @@ export function LifetimePensionFlow() {
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
               <StepIntro
-                onEligible={() => setIntroEligible(true)}
+                onEligible={(answers) => updateState({ ...state, eligibilityCompleted: true, eligibilityAnswers: answers })}
+                defaultEligible={state.eligibilityCompleted}
+                defaultAnswers={state.eligibilityAnswers ?? undefined}
                 declarationPermanent={state.introDeclarationPermanent}
                 onDeclarationPermanentChange={(checked) =>
                   updateState({ ...state, introDeclarationPermanent: checked })
@@ -350,7 +350,7 @@ export function LifetimePensionFlow() {
           <StepperActions
             step={activeStep + 1}
             isSubmitStep={activeStep === STEP_KEYS.length - 1}
-            hideNext={activeStep === 0 && !introEligible}
+            hideNext={activeStep === 0 && !state.eligibilityCompleted}
             nextLabel={activeStep === 0 ? 'Get started' : activeStep === STEP_KEYS.length - 1 ? 'Submit application' : 'Next'}
             onNext={handleNext}
             onBack={flow.back}

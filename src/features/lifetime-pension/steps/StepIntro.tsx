@@ -9,20 +9,23 @@ import { Checkbox } from '../../../components/Checkbox';
 import { Icon } from '../../../components/Icon';
 import { IconList } from '../../../components/IconList';
 import { EligibilityChecker, lifetimePensionConfig } from '@/features/eligibility-checker';
+import type { Answers } from '@/features/eligibility-checker';
 
 interface StepIntroProps {
-  onEligible?: () => void;
+  onEligible?: (answers: Answers) => void;
+  defaultEligible?: boolean;
+  defaultAnswers?: Answers;
   declarationPermanent: boolean;
   onDeclarationPermanentChange: (checked: boolean) => void;
   showValidation: boolean;
 }
 
-export function StepIntro({ onEligible, declarationPermanent, onDeclarationPermanentChange, showValidation }: StepIntroProps) {
-  const [eligible, setEligible] = useState(false);
+export function StepIntro({ onEligible, defaultEligible = false, defaultAnswers, declarationPermanent, onDeclarationPermanentChange, showValidation }: StepIntroProps) {
+  const [eligible, setEligible] = useState(defaultEligible);
 
-  function handleEligible() {
+  function handleEligible(answers: Answers) {
     setEligible(true);
-    onEligible?.();
+    onEligible?.(answers);
   }
 
   return (
@@ -33,7 +36,12 @@ export function StepIntro({ onEligible, declarationPermanent, onDeclarationPerma
       </Typography>
 
       <Box sx={{ mt: 5 }}>
-        <EligibilityChecker config={lifetimePensionConfig} onEligible={handleEligible} />
+        <EligibilityChecker
+          config={lifetimePensionConfig}
+          defaultEligible={defaultEligible}
+          defaultAnswers={defaultAnswers}
+          onEligible={handleEligible}
+        />
       </Box>
 
       {eligible && (
