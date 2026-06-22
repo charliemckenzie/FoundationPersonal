@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
-import { Checkbox } from '../../../components/Checkbox';
 import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
@@ -25,8 +24,6 @@ interface StepFundingProps {
   pensionOption: PensionOption;
   accounts: FundingAccount[];
   showValidation: boolean;
-  declarationPermanent: boolean;
-  onDeclarationPermanentChange: (checked: boolean) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -301,8 +298,6 @@ export function StepFunding({
   pensionOption,
   accounts,
   showValidation,
-  declarationPermanent,
-  onDeclarationPermanentChange,
 }: StepFundingProps) {
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
   const [considerationsOpen, setConsiderationsOpen] = useState(false);
@@ -431,22 +426,6 @@ export function StepFunding({
         </Stack>
       </Dialog>
 
-      {/* ── Designed to be a lifelong commitment ── */}
-      <Stack spacing={2}>
-        <Typography variant="h6" component="h3">Designed to be a lifelong commitment</Typography>
-        <Checkbox
-          variant="default"
-          checked={declarationPermanent}
-          onChange={onDeclarationPermanentChange}
-          error={showValidation && !declarationPermanent}
-          errorMessage={
-            showValidation && !declarationPermanent
-              ? 'Please confirm you understand the permanent purchase terms.'
-              : undefined
-          }
-          label="I understand that after the 6-month cooling-off period my purchase is permanent, and I will not be able to withdraw these funds, except in the case of a terminal medical condition if money-back protection is payable."
-        />
-      </Stack>
     </Stack>
   );
 }

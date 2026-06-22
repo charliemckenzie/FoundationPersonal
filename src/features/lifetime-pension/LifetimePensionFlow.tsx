@@ -86,7 +86,7 @@ export function LifetimePensionFlow() {
 
   function stepIsValid(step: number): boolean {
     if (step === 0) {
-      return introEligible;
+      return introEligible && state.introDeclarationPermanent;
     }
     if (step === 1) {
       return optionStepValid(state);
@@ -199,7 +199,14 @@ export function LifetimePensionFlow() {
           <Box>
           <StepTransition step={activeStep}>
             {activeStep === 0 ? (
-              <StepIntro onEligible={() => setIntroEligible(true)} />
+              <StepIntro
+                onEligible={() => setIntroEligible(true)}
+                declarationPermanent={state.introDeclarationPermanent}
+                onDeclarationPermanentChange={(checked) =>
+                  updateState({ ...state, introDeclarationPermanent: checked })
+                }
+                showValidation={showValidation}
+              />
             ) : activeStep === 1 ? (
               <StepOption
                 pensionOption={state.pensionOption}
@@ -217,10 +224,6 @@ export function LifetimePensionFlow() {
                 pensionOption={state.pensionOption}
                 accounts={state.accounts}
                 showValidation={showValidation}
-                declarationPermanent={state.introDeclarationPermanent}
-                onDeclarationPermanentChange={(checked) =>
-                  updateState({ ...state, introDeclarationPermanent: checked })
-                }
               />
             ) : activeStep === 3 ? (
               <StepAllocate

@@ -106,20 +106,30 @@ export function useSteppedFlow<S>({
     persist({ state, activeStep });
   }, [state, activeStep, persist]);
 
+  function scrollToTop() {
+    // On desktop the layout uses a scrollable #main-content element (overflowY: auto).
+    // On mobile the page body scrolls. Scroll both to cover all breakpoints.
+    document.getElementById('main-content')?.scrollTo({ top: 0, behavior: 'instant' });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
   const advance = useCallback((step: number) => {
     setActiveStep(step);
     setShowValidation(false);
+    scrollToTop();
   }, []);
 
   const back = useCallback(() => {
     setShowValidation(false);
     setActiveStep((prev) => Math.max(0, prev - 1));
+    scrollToTop();
   }, []);
 
   const editStep = useCallback((step: number) => {
     setSubmitted(false);
     setActiveStep(step);
     setShowValidation(false);
+    scrollToTop();
   }, []);
 
   const { clearDraft } = draft;

@@ -126,7 +126,7 @@ export function optionStepValid(state: LifetimePensionState): boolean {
 }
 
 export function fundingStepValid(state: LifetimePensionState): boolean {
-  return state.purchaseAmount >= MIN_PURCHASE_AMOUNT && state.introDeclarationPermanent;
+  return state.purchaseAmount >= MIN_PURCHASE_AMOUNT;
 }
 
 export function allocateStepValid(state: LifetimePensionState): boolean {

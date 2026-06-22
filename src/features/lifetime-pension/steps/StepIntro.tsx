@@ -5,15 +5,19 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import MuiLink from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
+import { Checkbox } from '../../../components/Checkbox';
 import { Icon } from '../../../components/Icon';
 import { IconList } from '../../../components/IconList';
 import { EligibilityChecker, lifetimePensionConfig } from '@/features/eligibility-checker';
 
 interface StepIntroProps {
   onEligible?: () => void;
+  declarationPermanent: boolean;
+  onDeclarationPermanentChange: (checked: boolean) => void;
+  showValidation: boolean;
 }
 
-export function StepIntro({ onEligible }: StepIntroProps) {
+export function StepIntro({ onEligible, declarationPermanent, onDeclarationPermanentChange, showValidation }: StepIntroProps) {
   const [eligible, setEligible] = useState(false);
 
   function handleEligible() {
@@ -70,6 +74,22 @@ export function StepIntro({ onEligible }: StepIntroProps) {
                 </MuiLink>
               </Typography>
             </Box>
+          </Stack>
+
+          {/* Designed to be a lifelong commitment */}
+          <Stack spacing={2}>
+            <Typography variant="h6" component="h3">Designed to be a lifelong commitment</Typography>
+            <Checkbox
+              checked={declarationPermanent}
+              onChange={onDeclarationPermanentChange}
+              error={showValidation && !declarationPermanent}
+              errorMessage={
+                showValidation && !declarationPermanent
+                  ? 'Please confirm you understand the permanent purchase terms.'
+                  : undefined
+              }
+              label="I understand that after the 6-month cooling-off period my purchase is permanent, and I will not be able to withdraw these funds, except in the case of a terminal medical condition if money-back protection is payable."
+            />
           </Stack>
 
           <Typography variant="small" sx={{ color: 'text.muted' }}>
