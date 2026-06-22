@@ -12,7 +12,7 @@ interface DetailRowProps {
 
 export function DetailRow({ label, value, note }: DetailRowProps) {
   return (
-    <Box sx={{ display: 'flex', py: 1.5, borderBottom: '1px solid', borderBottomColor: 'border.subtle' }}>
+    <Box sx={{ display: 'flex', py: 1.5, borderBottom: '1px solid', borderBottomColor: 'border.subtle', '&:last-child': { borderBottom: 'none' } }}>
       <Typography variant="body" sx={{ color: 'text.muted', width: '40%', flexShrink: 0 }}>
         {label}
       </Typography>
@@ -50,24 +50,19 @@ export function Section({ title, children, action, hideAction }: SectionProps) {
       })}
     >
       <Box sx={{ p: 4 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>{title}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 2 }}>
+          <Typography variant="h6">{title}</Typography>
+          {action && !hideAction && (
+            <TextButton
+              size="small"
+              hideIcon
+              label={action.label}
+              onClick={() => router.push(action.href)}
+            />
+          )}
+        </Box>
         {children}
       </Box>
-      {action && !hideAction && (
-        <Box
-          sx={{
-            px: 4, py: 1.5,
-            borderTop: '1px solid', borderTopColor: 'border.subtle',
-            bgcolor: 'background.paper',
-          }}
-        >
-          <TextButton
-            label={action.label}
-            onClick={() => router.push(action.href)}
-            {...(action.icon ? { startIcon: action.icon } : {})}
-          />
-        </Box>
-      )}
     </Box>
   );
 }

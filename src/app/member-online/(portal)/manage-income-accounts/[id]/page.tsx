@@ -129,6 +129,7 @@ export default function IncomeAccountDetailPage() {
                 onViewHistory={() => router.push(`${HISTORY_PATH}?account=${detail.investmentAccount.id}`)}
               />
             )}
+
           </Stack>
         )}
 

@@ -18,6 +18,7 @@ export interface AccountDetail {
   id: string;
   name: string;
   memberNumber: string;
+  accountType: 'ria' | 'lp' | 'ttr';
   balance: number;
   status: 'active' | 'closed';
   openedAt: string;

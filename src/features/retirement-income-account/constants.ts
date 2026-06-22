@@ -103,6 +103,7 @@ export const MIN_PURCHASE_AMOUNT = 0;
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
 export const MIN_REMAINING_BALANCE = 6000;
+export const MIN_ACCUMULATION_BALANCE = 10000;
 
 // ---------------------------------------------------------------------------
 // Retirement Income Account payment estimate
