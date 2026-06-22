@@ -8,68 +8,91 @@ import { HOMEPAGE_CONTAINER_SX } from './templateOverrides';
 
 export function MobileAppSection() {
   return (
-    <Box sx={{ bgcolor: 'background.brandSecondary', py: { xs: 6, md: 10 }, overflow: 'hidden' }}>
+    <Box sx={{ bgcolor: 'background.default', pt: { xs: 6, md: 8 }, pb: { xs: 0, md: 0 }, overflow: 'hidden' }}>
       <Container maxWidth={false} sx={HOMEPAGE_CONTAINER_SX}>
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
-            gap: { xs: 4, md: 8 },
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: 'repeat(12, minmax(0, 1fr))' },
+            columnGap: { md: '1.5rem' },
+            rowGap: { xs: '3rem', md: 0 },
             alignItems: 'center',
           }}
         >
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', mb: 3 }}>
+          <Box
+            sx={{
+              gridColumn: { md: '1 / span 7', lg: '1 / span 7' },
+              maxWidth: { md: '44rem' },
+              pb: { md: 8 },
+            }}
+          >
+            <Box sx={{ display: 'flex', gap: '1.25rem', alignItems: 'center', mb: '3rem' }}>
               <Box
                 component="img"
                 src="/images/homepage/apple-store-icon.png"
                 alt="Apple App Store"
-                sx={{ width: '1.5rem', height: '1.5rem', objectFit: 'contain' }}
+                sx={{ width: '1.75rem', height: '1.75rem', objectFit: 'contain' }}
               />
               <Box
                 component="img"
                 src="/images/homepage/Google_Play_2022_icon 1.png"
                 alt="Get it on Google Play"
-                sx={{ width: '6.5rem', height: 'auto', objectFit: 'contain' }}
+                sx={{ width: '1.75rem', height: '1.75rem', objectFit: 'contain' }}
               />
             </Box>
 
-            <Typography variant="display-5" component="h2" sx={{ color: 'text.inverse', mb: 2 }}>
+            <Typography variant="display-5" component="h2" sx={{ color: 'text.heading', mb: 2 }}>
               Take your super on the road with Australian Retirement Trust
             </Typography>
-            <Typography variant="body" sx={{ color: 'text.inverse', opacity: 0.85, mb: 3 }}>
-              Whether you&apos;re checking your balance or reviewing your cover, our
-              mobile app helps you stay connected to your super.
+            <Typography variant="lead" sx={{ color: 'text.primary', mb: 3 }}>
+              Whether you&apos;re checking your balance or reviewing your cover,{' '}
+              <Box component="span" sx={{ color: 'primary.main' }}>
+                our mobile app
+              </Box>{' '}
+              helps you stay connected to your super.
             </Typography>
 
             <Button
               label="Join today"
               variant="contained"
-              reversed
+              size="large"
+              fullWidth
               href="/join"
+              sx={{ width: { md: 'auto' } }}
             />
           </Box>
 
-          <Box sx={{ flex: 1, display: 'flex', justifyContent: 'center', position: 'relative' }}>
-            <Box
-              component="img"
-              src="/images/homepage/mobile-app-phone.png"
-              alt="ART mobile app"
-              sx={{ maxWidth: '22rem', width: '100%', height: 'auto', objectFit: 'contain' }}
-            />
-            <Box
-              component="img"
-              src="/images/homepage/mobile-app-qr.png"
-              alt="QR code to download the app"
-              sx={{
-                position: 'absolute',
-                right: { xs: '0.25rem', md: '-1.25rem' },
-                top: { xs: '1.5rem', md: '2.5rem' },
-                width: { xs: '8rem', md: '11rem' },
-                height: 'auto',
-                borderRadius: 'shape.2xl',
-              }}
-            />
+          <Box
+            sx={{
+              gridColumn: { md: '8 / span 5', lg: '8 / span 5' },
+              display: 'flex',
+              justifyContent: { xs: 'center', md: 'flex-end' },
+              alignSelf: 'end',
+              pr: { md: '3.375rem' },
+            }}
+          >
+            <Box sx={{ position: 'relative', width: 'fit-content', mb: { xs: '-8rem', md: '-1rem' } }}>
+              <Box
+                component="img"
+                src="/images/homepage/mobile-app-phone.png"
+                alt="ART mobile app"
+                sx={{ maxWidth: { xs: '24rem', md: '24rem' }, width: '100%', height: 'auto', objectFit: 'contain' }}
+              />
+              <Box
+                component="img"
+                src="/images/homepage/mobile-app-qr.png"
+                alt="QR code to download the app"
+                sx={{
+                  display: { xs: 'none', md: 'block' },
+                  position: 'absolute',
+                  right: { xs: '0.5rem', md: '-3.375rem' },
+                  top: { xs: '1.25rem', md: '7.5rem' },
+                  width: { xs: '8rem', md: '10rem' },
+                  height: 'auto',
+                  borderRadius: 'shape.2xl',
+                }}
+              />
+            </Box>
           </Box>
         </Box>
       </Container>
