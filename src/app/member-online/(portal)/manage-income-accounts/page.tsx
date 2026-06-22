@@ -33,14 +33,6 @@ export default function ManageIncomeAccountsPage() {
 
   return (
     <ContentContainer size="md">
-      {/* Page heading */}
-      <Stack spacing={0.75} sx={{ mb: 4 }}>
-        <Typography variant="h1">Manage income accounts</Typography>
-        <Typography variant="lead" sx={{ color: 'text.muted' }}>
-          Select an account to view details and manage your payments.
-        </Typography>
-      </Stack>
-
       {/* Dev toggle — preview empty state */}
       <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
         <Box
@@ -75,6 +67,14 @@ export default function ManageIncomeAccountsPage() {
         </Box>
       </Box>
 
+      {/* Page heading */}
+      <Stack spacing={0.75} sx={{ mb: 4 }}>
+        <Typography variant="h1">Manage income accounts</Typography>
+        <Typography variant="lead" sx={{ color: 'text.muted' }}>
+          Select an account to view details and manage your payments.
+        </Typography>
+      </Stack>
+
       {previewEmpty ? (
         /* ── Empty state ── */
         <Stack spacing={4}>
@@ -84,7 +84,7 @@ export default function ManageIncomeAccountsPage() {
             title="Your income accounts"
             description="No income accounts set up yet."
             items={[]}
-            emptyMessage="No income accounts on file"
+            emptyMessage="No income accounts created yet"
             addLabel="Open an income account"
             onAdd={() => router.push('/member-online/income-accounts')}
           />
