@@ -34,6 +34,7 @@ export interface LifetimePensionState {
   ageScenario: AgeScenario;
   introDeclarationRead: boolean;
   introDeclarationPermanent: boolean;
+  introDeclarationTaxDeduction: boolean;
   /** Whether the user has completed (passed) the eligibility questionnaire. */
   eligibilityCompleted: boolean;
   /** Answers given during the eligibility questionnaire — retained for resuming. */

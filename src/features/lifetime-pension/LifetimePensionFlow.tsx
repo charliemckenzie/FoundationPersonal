@@ -28,6 +28,7 @@ import { StepIntro } from './steps/StepIntro';
 import { StepOption } from './steps/StepOption';
 import { StepPayments } from './steps/StepPayments';
 import { StepReview } from './steps/StepReview';
+import { lifetimePensionConfig } from '../eligibility-checker';
 import { StepSuccess } from './steps/StepSuccess';
 import type { LifetimePensionState, LifetimePensionStepId, VerifyDetailsState } from './types';
 import {
@@ -84,7 +85,13 @@ export function LifetimePensionFlow() {
 
   function stepIsValid(step: number): boolean {
     if (step === 0) {
-      return Boolean(state.eligibilityCompleted) && state.introDeclarationPermanent;
+      const hasTaxWarning = state.eligibilityAnswers
+        ? lifetimePensionConfig.steps[1].getOutcome(state.eligibilityAnswers) === 'warning'
+        : false;
+      return Boolean(state.eligibilityCompleted)
+        && state.introDeclarationPermanent
+        && state.introDeclarationRead
+        && (!hasTaxWarning || state.introDeclarationTaxDeduction);
     }
     if (step === 1) {
       return optionStepValid(state);
@@ -199,11 +206,27 @@ export function LifetimePensionFlow() {
             {activeStep === 0 ? (
               <StepIntro
                 onEligible={(answers) => updateState({ ...state, eligibilityCompleted: true, eligibilityAnswers: answers })}
+                onEligibilityReset={() => updateState({
+                  ...state,
+                  eligibilityCompleted: false,
+                  eligibilityAnswers: null,
+                  introDeclarationPermanent: false,
+                  introDeclarationRead: false,
+                  introDeclarationTaxDeduction: false,
+                })}
                 defaultEligible={state.eligibilityCompleted}
                 defaultAnswers={state.eligibilityAnswers ?? undefined}
                 declarationPermanent={state.introDeclarationPermanent}
                 onDeclarationPermanentChange={(checked) =>
                   updateState({ ...state, introDeclarationPermanent: checked })
+                }
+                declarationRead={state.introDeclarationRead}
+                onDeclarationReadChange={(checked) =>
+                  updateState({ ...state, introDeclarationRead: checked })
+                }
+                declarationTaxDeduction={state.introDeclarationTaxDeduction}
+                onDeclarationTaxDeductionChange={(checked) =>
+                  updateState({ ...state, introDeclarationTaxDeduction: checked })
                 }
                 showValidation={showValidation}
               />
@@ -339,6 +362,13 @@ export function LifetimePensionFlow() {
             )}
           </StepTransition>
           </Box>
+
+          {showValidation && activeStep === 0 && !stepIsValid(0) && (
+            <Alert
+              severity="error"
+              message="Please complete the eligibility check and confirm the statements above before continuing."
+            />
+          )}
 
           {showValidation && activeStep === 6 && !stepIsValid(6) && (
             <Alert

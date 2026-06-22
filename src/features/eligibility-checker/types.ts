@@ -37,6 +37,8 @@ export interface ConditionalQuestion {
   question: EligibilityQuestion;
 }
 
+import type React from 'react';
+
 export interface EligibilityStepConfig {
   id: string;
   question: EligibilityQuestion;
@@ -45,9 +47,9 @@ export interface EligibilityStepConfig {
   /** Derives this step's outcome from the full answer set. */
   getOutcome: (answers: Answers) => EligibilityOutcome;
   /** Shown in an error Alert when the outcome is `'ineligible'`. */
-  ineligibleMessage?: string;
+  ineligibleMessage?: React.ReactNode;
   /** Shown in a warning Alert when the outcome is `'warning'` (advisory — does not block). */
-  warningMessage?: string;
+  warningMessage?: React.ReactNode;
   /** Shown on the success screen checklist when this step's outcome was `'warning'`. */
   eligibleWarningNote?: string;
 }

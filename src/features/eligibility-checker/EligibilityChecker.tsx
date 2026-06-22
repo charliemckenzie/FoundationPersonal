@@ -1,14 +1,11 @@
 'use client';
 
-import { keyframes } from '@emotion/react';
 import { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import MuiDivider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import type { SxProps, Theme } from '@mui/material/styles';
 import { Button } from '@/components/Button';
-import { Icon } from '@/components/Icon';
-import { IconButton } from '@/components/IconButton';
 import { StepTransition } from '@/components/StepTransition';
 import { EligibilityCheckerStep } from './EligibilityCheckerStep';
 import type { Answers, EligibilityAnswer, EligibilityCheckerConfig, EligibilityOutcome } from './types';
@@ -34,58 +31,19 @@ const visuallyHiddenSx: SxProps<Theme> = {
   border: 0,
 };
 
-const fadeInUp = keyframes`
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-`;
-
 interface EligibleViewProps {
   config: EligibilityCheckerConfig;
-  answers: Answers;
   onReset: () => void;
 }
 
-function EligibleView({ config, answers, onReset }: EligibleViewProps) {
+function EligibleView({ config, onReset }: EligibleViewProps) {
   return (
-    <Box role="status">
-      <Typography variant="h5" component="p" sx={{ color: 'success.text', mb: 2 }}>
+    <Box role="status" sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+      <Typography variant="h6" component="p" sx={{ color: 'success.text' }}>
         {config.eligibleTitle}
       </Typography>
-      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25, mb: 3 }}>
-        {config.eligibleChecklist.map((item, index) => {
-          const step = config.steps[index];
-          const isWarning = step && step.getOutcome(answers) === 'warning' && !!step.eligibleWarningNote;
-          return (
-            <Box
-              key={item}
-              sx={{
-                display: 'flex',
-                alignItems: isWarning ? 'flex-start' : 'center',
-                gap: 1.25,
-                opacity: 0,
-                animation: `${fadeInUp} 0.4s ease-out forwards`,
-                animationDelay: `${0.3 + index * 0.15}s`,
-              }}
-            >
-              <Box
-                sx={{
-                  color: 'success.main',
-                  display: 'flex',
-                  flexShrink: 0,
-                  mt: isWarning ? '2px' : 0,
-                }}
-              >
-                <Icon icon={isWarning ? 'triangle-exclamation' : 'circle-check'} size="sm" color="inherit" />
-              </Box>
-              <Typography variant="body" sx={{ color: 'success.text' }}>
-                {isWarning ? step.eligibleWarningNote : item}
-              </Typography>
-            </Box>
-          );
-        })}
-      </Box>
       <Button
-        label="Update eligibility answers"
+        label="Update answers"
         variant="outlined"
         color="success"
         size="small"
@@ -105,6 +63,8 @@ export interface EligibilityCheckerProps {
   defaultEligible?: boolean;
   /** Called once when the checker transitions to the eligible/success state. Receives the answers at the time of completion. */
   onEligible?: (answers: Answers) => void;
+  /** Called when the user clicks "Update answers" to restart the checker. */
+  onReset?: () => void;
 }
 
 export function EligibilityChecker({
@@ -113,6 +73,7 @@ export function EligibilityChecker({
   defaultAnswers,
   defaultEligible = false,
   onEligible,
+  onReset: onResetProp,
 }: EligibilityCheckerProps) {
   const { steps } = config;
   const [activeStep, setActiveStep] = useState(defaultStep);
@@ -164,6 +125,7 @@ export function EligibilityChecker({
   function handleReset() {
     setEligible(false);
     setActiveStep(0);
+    onResetProp?.();
   }
 
   return (
@@ -183,24 +145,6 @@ export function EligibilityChecker({
             <Typography variant="h5" component="h2">
               Check your eligibility
             </Typography>
-            <Box sx={{ display: 'flex', gap: 1 }}>
-              <IconButton
-                icon="arrow-left"
-                label="Back to the previous question"
-                variant="outlined"
-                size="small"
-                disabled={activeStep === 0}
-                onClick={handleBack}
-              />
-              <IconButton
-                icon="arrow-right"
-                label="Go to the next question"
-                variant="outlined"
-                size="small"
-                disabled={!canGoForward}
-                onClick={handleForward}
-              />
-            </Box>
           </Box>
           <MuiDivider sx={{ borderColor: 'border.subtle', mb: 3 }} />
         </>
@@ -209,14 +153,16 @@ export function EligibilityChecker({
       <StepTransition step={eligible ? steps.length : activeStep} onEntered={() => focusRef.current?.focus()}>
         <Box ref={focusRef} tabIndex={-1} sx={{ outline: 'none' }}>
           {eligible ? (
-            <EligibleView config={config} answers={answers} onReset={handleReset} />
+            <EligibleView config={config} onReset={handleReset} />
           ) : (
             <EligibilityCheckerStep
+              key={currentStep.id}
               step={currentStep}
               answers={answers}
               outcome={currentOutcome}
               onChange={handleChange}
-              onForward={canGoForward ? handleForward : undefined}
+              onForward={handleForward}
+              onBack={activeStep > 0 ? handleBack : undefined}
             />
           )}
         </Box>

@@ -58,6 +58,7 @@ export const INITIAL_STATE: LifetimePensionState = {
   ageScenario: '60-64',
   introDeclarationRead: false,
   introDeclarationPermanent: false,
+  introDeclarationTaxDeduction: false,
   eligibilityCompleted: false,
   eligibilityAnswers: null,
   pensionOption: '',

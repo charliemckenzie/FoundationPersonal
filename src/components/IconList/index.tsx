@@ -1,3 +1,4 @@
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
@@ -10,7 +11,7 @@ export type HeadingElement = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 
 export interface IconListItem {
   icon?: string;
-  text: string;
+  text: React.ReactNode;
   heading?: string;
   headingComponent?: HeadingElement;
 }

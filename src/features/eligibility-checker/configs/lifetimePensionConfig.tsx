@@ -1,3 +1,4 @@
+import MuiLink from '@mui/material/Link';
 import type { EligibilityCheckerConfig, EligibilityOption } from '../types';
 
 const YES_NO: EligibilityOption[] = [
@@ -40,7 +41,7 @@ export const lifetimePensionConfig: EligibilityCheckerConfig = {
         if (answers.transfer === 'no') return 'ineligible';
         return 'pending';
       },
-      ineligibleMessage: 'You cannot open a Lifetime Pension account without a minimum transfer of $10,000.',
+      ineligibleMessage: <>You cannot open a Lifetime Pension account without a minimum transfer of $10,000. Please <MuiLink href="#" sx={{ color: 'error.main' }}>contact us</MuiLink> if you need help.</>,
     },
     {
       id: 'taxDeduction',
@@ -75,7 +76,7 @@ export const lifetimePensionConfig: EligibilityCheckerConfig = {
         const primary = answers.taxDeduction;
         if (primary === 'yes') {
           if (answers.taxDeductionProcessed === 'yes') return 'eligible';
-          if (answers.taxDeductionProcessed === 'no') return 'ineligible';
+          if (answers.taxDeductionProcessed === 'no') return 'warning';
           return 'pending';
         }
         if (primary === 'no') {
@@ -85,8 +86,9 @@ export const lifetimePensionConfig: EligibilityCheckerConfig = {
         }
         return 'pending';
       },
-      ineligibleMessage: "You're not eligible to proceed yet. Please contact us for assistance.",
-      warningMessage: 'Please complete this first so we can process your application.',
+      warningMessage: (
+        <>If you claimed a tax deduction on voluntary contributions in the current or last financial year, you must have confirmation it has been processed. Without it, we cannot process your notice of deduction. We recommend completing this before submitting your application. Please <MuiLink href="#">contact us</MuiLink> if you need help.</>
+      ),
       eligibleWarningNote:
         'While you can proceed with this application, we recommend finalising any outstanding voluntary tax deduction issues to avoid processing delays.',
     },
