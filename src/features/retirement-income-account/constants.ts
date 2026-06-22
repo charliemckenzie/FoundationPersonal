@@ -102,7 +102,7 @@ export const MIN_PURCHASE_AMOUNT = 0;
 // Minimum balance a member must leave in their Accumulation account to keep it
 // open (and any attached insurance active). Distinct rule from the minimum
 // purchase price — they share a value today but are not the same constraint.
-export const MIN_REMAINING_BALANCE = 10000;
+export const MIN_REMAINING_BALANCE = 6000;
 
 // ---------------------------------------------------------------------------
 // Retirement Income Account payment estimate
