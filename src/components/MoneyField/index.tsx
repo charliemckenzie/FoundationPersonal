@@ -40,8 +40,14 @@ function formatMoney(raw: string, normalize = false): string {
   const hasDot = dotIndex !== -1;
   const intStr = hasDot ? raw.slice(0, dotIndex) : raw;
   const decStr = hasDot ? raw.slice(dotIndex + 1) : '';
+  // During typing (normalize=false) use regex comma-insertion so leading zeros are
+  // preserved as an intermediate editing state (e.g. "00,000" after deleting the
+  // leading digit of "200,000"). On blur (normalize=true) collapse via parseInt to
+  // produce a canonical number like "0" or "100,000".
   const formattedInt = intStr
-    ? (parseInt(intStr, 10) || 0).toLocaleString('en-US')
+    ? normalize
+      ? (parseInt(intStr, 10) || 0).toLocaleString('en-US')
+      : intStr.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
     : '';
   if (!hasDot) return formattedInt;
   if (normalize && !decStr) return formattedInt;
