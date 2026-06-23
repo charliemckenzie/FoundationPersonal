@@ -17,7 +17,6 @@ import { INITIAL_STATE, RETIREMENT_INCOME_ACCOUNT_STEPS, MOCK_USER_PROFILE, STEP
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
 import { useIdvGate } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
-import { StepEligibility } from './steps/StepEligibility';
 import { StepFunding } from './steps/StepFunding';
 import { StepIntro } from './steps/StepIntro';
 import { StepPaymentSchedule } from './steps/StepPaymentSchedule';
@@ -32,10 +31,8 @@ import { StepSuccess } from './steps/StepSuccess';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, VerifyDetailsState } from './types';
 import {
   allocateStepValid,
-  eligibilityStepValid,
   fundingStepValid,
   introStepValid,
-  isEligible,
   investmentStrategyStepValid,
   beneficiaryStepValid,
   paymentScheduleStepValid,
@@ -47,7 +44,6 @@ import {
 
 const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'intro',
-  'eligibility',
   'setup-mode',
   'funding',
   'allocate',
@@ -99,7 +95,7 @@ export function RetirementIncomeAccountFlow() {
     }
     return totalSelectedAmount(state);
   }, [state]);
-  const eligible = useMemo(() => isEligible(state), [state]);
+  const eligible = useMemo(() => Boolean(state.eligibilityCompleted), [state]);
 
   const hasFullBalanceTransfer = useMemo(() => {
     return state.accounts.some(
@@ -126,8 +122,6 @@ export function RetirementIncomeAccountFlow() {
     switch (stepId) {
       case 'intro':
         return introStepValid(state);
-      case 'eligibility':
-        return eligibilityStepValid(state);
       case 'funding':
         return fundingStepValid(state);
       case 'allocate':
@@ -219,22 +213,7 @@ export function RetirementIncomeAccountFlow() {
               {STEP_TITLES[activeStep]}
             </Typography>
             {activeStep === 0 && (
-              <>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  A Retirement Income account allows people to receive regular tax free income from your super during
-                  retirement. To learn more about this account you can download the{' '}
-                  <Typography
-                    component="a"
-                    variant="body"
-                    href="#"
-                    sx={{ color: 'primary.main', textDecoration: 'underline', '&:hover': { textDecoration: 'none' } }}
-                  >
-                    Product Disclosure Statement
-                  </Typography>
-                  .
-                </Typography>
-                <Divider sx={{ mt: 2 }} />
-              </>
+              <Divider sx={{ mt: 2 }} />
             )}
             {activeStep > 0 && (
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -266,24 +245,25 @@ export function RetirementIncomeAccountFlow() {
           <StepTransition step={activeStep}>
             {currentStepId === 'intro' ? (
               <StepIntro
+                onEligible={(answers) =>
+                  updateState({ ...state, eligibilityCompleted: true, eligibilityAnswers: answers })
+                }
+                onEligibilityReset={() =>
+                  updateState({
+                    ...state,
+                    eligibilityCompleted: false,
+                    eligibilityAnswers: null,
+                    introDeclarationRead: false,
+                    introDeclarationPermanent: false,
+                  })
+                }
+                defaultEligible={state.eligibilityCompleted}
+                defaultAnswers={state.eligibilityAnswers ?? undefined}
                 declarationRead={state.introDeclarationRead}
-                declarationPermanent={state.introDeclarationPermanent}
                 showValidation={showValidation}
                 onDeclarationReadChange={(checked) =>
                   updateState({ ...state, introDeclarationRead: checked })
                 }
-                onDeclarationPermanentChange={(checked) =>
-                  updateState({ ...state, introDeclarationPermanent: checked })
-                }
-              />
-            ) : currentStepId === 'eligibility' ? (
-              <StepEligibility
-                retiredFromWork={state.retiredFromWork}
-                leftEmployerAfter60={state.leftEmployerAfter60}
-                onRetiredFromWorkChange={(value) => updateState({ ...state, retiredFromWork: value })}
-                onLeftEmployerAfter60Change={(value) => updateState({ ...state, leftEmployerAfter60: value })}
-                eligible={eligible}
-                showValidation={showValidation}
               />
             ) : currentStepId === 'funding' ? (
               <StepFunding
@@ -387,7 +367,8 @@ export function RetirementIncomeAccountFlow() {
           <StepperActions
             step={activeStep + 1}
             isSubmitStep={activeStep === visibleStepKeys.length - 1}
-            nextLabel={activeStep === visibleStepKeys.length - 1 ? 'Continue' : 'Next'}
+            hideNext={currentStepId === 'intro' && !eligible}
+            nextLabel={currentStepId === 'intro' ? 'Get started' : activeStep === visibleStepKeys.length - 1 ? 'Continue' : 'Next'}
             onNext={handleNext}
             onBack={flow.back}
             onExit={() => router.push('/member-online')}

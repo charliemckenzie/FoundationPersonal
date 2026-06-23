@@ -219,20 +219,12 @@ export function StepPaymentSchedule({
               </Box>
             </Stack>
 
-            <Box
-              sx={{
-                '& .MuiFormControl-root': { width: '100%' },
-                '& .MuiFormGroup-root': { flexWrap: 'nowrap', width: '100%' },
-                '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
-              }}
-            >
-              <RadioCardGroup
+            <RadioCardGroup
                 options={paymentTypeOptions}
                 value={paymentSchedule.amountType}
                 onChange={(v) => update('amountType', v as PaymentSchedule['amountType'])}
                 direction={isMobile ? 'column' : 'row'}
               />
-            </Box>
 
             {paymentSchedule.amountType === 'specific' && (
               <Stack spacing={1.5}>
@@ -264,77 +256,82 @@ export function StepPaymentSchedule({
               </Typography>
             )}
 
-            {/* ── Payment schedule ── */}
-            <div>
-              <Select
-                label="Payment frequency"
-                fullWidth
-                placeholder="Please select"
-                options={FREQUENCY_OPTIONS}
-                value={paymentSchedule.frequency}
-                onChange={(v) => {
-                  onPaymentScheduleChange({ ...paymentSchedule, frequency: v as PaymentSchedule['frequency'], firstPaymentMonth: '' });
-                }}
-                error={freqError}
-                errorMessage={freqError ? 'Select a payment frequency to continue.' : undefined}
-              />
-              {paymentSchedule.frequency && (
-                <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.75 }}>
-                  {FREQUENCY_HELPER[paymentSchedule.frequency]}
-                </Typography>
-              )}
-            </div>
-
-            <Select
-              label="First payment date"
-              fullWidth
-              native
-              placeholder="Please select"
-              options={dateOptions}
-              value={paymentSchedule.firstPaymentMonth}
-              onChange={(v) => update('firstPaymentMonth', v)}
-              error={monthError}
-              errorMessage={monthError ? 'Select a first payment date to continue.' : undefined}
-              disabled={!paymentSchedule.frequency}
-            />
-
-            <Checkbox
-              checked={paymentSchedule.adjustForCPI}
-              onChange={(checked) => update('adjustForCPI', checked)}
-              label="Adjust my income to cover increases in cost of living"
-            />
-
-            {/* Stats — year 1 income + per-frequency */}
-            {purchaseAmount > 0 && paymentSchedule.amountType && (
-              <Box sx={{ pt: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
-                  <Box>
-                    <Typography variant="h5" component="p">{formatCurrency(effectiveAnnual)}</Typography>
-                    <Typography variant="small" sx={{ display: 'block' }}>Year 1 income</Typography>
-                  </Box>
-                  {perFrequency !== null && (
-                    <>
-                      <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
-                      <Box>
-                        <Typography variant="h5" component="p">{formatCurrency(perFrequency)}</Typography>
-                        <Typography variant="small" sx={{ display: 'block' }}>
-                          {FREQUENCY_PERIOD_LABEL[paymentSchedule.frequency]} payments
-                        </Typography>
-                      </Box>
-                    </>
+            {/* ── Payment schedule — only shown once an amount type is selected ── */}
+            {paymentSchedule.amountType && (
+              <>
+                <div>
+                  <Select
+                    label="Payment frequency"
+                    fullWidth
+                    placeholder="Please select"
+                    options={FREQUENCY_OPTIONS}
+                    value={paymentSchedule.frequency}
+                    onChange={(v) => {
+                      onPaymentScheduleChange({ ...paymentSchedule, frequency: v as PaymentSchedule['frequency'], firstPaymentMonth: '' });
+                    }}
+                    error={freqError}
+                    errorMessage={freqError ? 'Select a payment frequency to continue.' : undefined}
+                  />
+                  {paymentSchedule.frequency && (
+                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 0.75 }}>
+                      {FREQUENCY_HELPER[paymentSchedule.frequency]}
+                    </Typography>
                   )}
-                </Box>
-                <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-                  The figures above are estimates and may vary due to daily price changes.
-                </Typography>
-              </Box>
-            )}
+                </div>
 
-            {paymentSchedule.adjustForCPI && (
-              <Alert
-                severity="info"
-                message="If your payments drop below the legislated minimum in future, we will automatically update your payments to the minimum amount allowed and let you know in Member Online and on your annual statement."
-              />
+                <Select
+                  label="First payment date"
+                  fullWidth
+                  native
+                  placeholder="Please select"
+                  options={dateOptions}
+                  value={paymentSchedule.firstPaymentMonth}
+                  onChange={(v) => update('firstPaymentMonth', v)}
+                  error={monthError}
+                  errorMessage={monthError ? 'Select a first payment date to continue.' : undefined}
+                  disabled={!paymentSchedule.frequency}
+                />
+
+                {/* Stats — annual payment + per-frequency */}
+                {purchaseAmount > 0 && (
+                  <Box sx={{ pt: 1 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
+                      <Box>
+                        <Typography variant="h5" component="p">{formatCurrency(effectiveAnnual)}</Typography>
+                        <Typography variant="small" sx={{ display: 'block' }}>Annual payment</Typography>
+                      </Box>
+                      {perFrequency !== null && (
+                        <>
+                          <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
+                          <Box>
+                            <Typography variant="h5" component="p">{formatCurrency(perFrequency)}</Typography>
+                            <Typography variant="small" sx={{ display: 'block' }}>
+                              {FREQUENCY_PERIOD_LABEL[paymentSchedule.frequency]} payments
+                            </Typography>
+                          </Box>
+                        </>
+                      )}
+                    </Box>
+                    <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
+                      The figures above are estimates and may vary due to daily price changes.
+                    </Typography>
+                  </Box>
+                )}
+
+                <Checkbox
+                  checked={paymentSchedule.adjustForCPI}
+                  onChange={(checked) => update('adjustForCPI', checked)}
+                  label="Adjust my income to cover increases in cost of living"
+                  description="Each year your payment will increase by the Consumer Price Index (CPI). For example, if CPI is 4%, a $10,000 annual payment becomes $10,400."
+                />
+
+                {paymentSchedule.adjustForCPI && (
+                  <Alert
+                    severity="info"
+                    message="If your payments drop below the legislated minimum in future, we will automatically update your payments to the minimum amount allowed and let you know in Member Online and on your annual statement."
+                  />
+                )}
+              </>
             )}
           </Stack>
         </Box>

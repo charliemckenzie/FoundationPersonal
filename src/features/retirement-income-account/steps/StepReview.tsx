@@ -11,7 +11,7 @@ import { TextField } from '../../../components/TextField';
 import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
 import { formatCurrency, totalSelectedAmount, estimatePension } from '../utils';
-import { PENSION_ESTIMATE_AGE } from '../constants';
+import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL } from '../constants';
 
 interface StepReviewProps {
   state: RetirementIncomeAccountState;
@@ -382,6 +382,18 @@ export function StepReview({
     ? state.accounts.reduce((sum, a) => sum + a.balance, 0)
     : totalSelectedAmount(state);
 
+  // Estimated payment figures
+  const effectiveFrequency = isSimple ? 'fortnightly' : (state.paymentSchedule.frequency ?? 'fortnightly');
+  const effectiveAnnual = (() => {
+    const minAnnual = purchasePrice * 0.05;
+    if (isSimple) return minAnnual;
+    if (state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0) return state.paymentSchedule.specificAmount;
+    return minAnnual;
+  })();
+  const perFrequencyPayment = effectiveAnnual / (PAYMENT_FREQUENCY_DIVISORS[effectiveFrequency] ?? 26);
+  const freqLabel = effectiveFrequency.charAt(0).toUpperCase() + effectiveFrequency.slice(1);
+  const periodLabel = PAYMENT_PERIOD_LABEL[effectiveFrequency] ?? effectiveFrequency;
+
   return (
     <Stack spacing={0}>
       <PrintCard />
@@ -496,6 +508,33 @@ export function StepReview({
           <ReviewValue>
             {state.setupMode === 'simple' ? 'No' : state.paymentSchedule.adjustForCPI ? 'Yes' : 'No'}
           </ReviewValue>
+        </ReviewRow>
+      </ReviewSection>
+
+      {/* Estimated payments */}
+      <ReviewSection title="Estimated payments" onEdit={isSimple ? undefined : () => onEditStep('payment-schedule')}>
+        <ReviewRow label="Opening balance">
+          <ReviewValue>{purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}</ReviewValue>
+        </ReviewRow>
+        <ReviewRow label={`${freqLabel} payments`}>
+          <ReviewValue>{purchasePrice > 0 ? `${formatCurrency(perFrequencyPayment)} / ${periodLabel}` : '—'}</ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="First payment date">
+          <ReviewValue>
+            {isSimple
+              ? (() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + 14);
+                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
+                  return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                })()
+              : state.paymentSchedule.firstPaymentMonth
+                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                : '—'}
+          </ReviewValue>
+        </ReviewRow>
+        <ReviewRow label="First year's income">
+          <ReviewValue>{purchasePrice > 0 ? formatCurrency(effectiveAnnual) : '—'}</ReviewValue>
         </ReviewRow>
       </ReviewSection>
 

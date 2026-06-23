@@ -1,12 +1,12 @@
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DescriptionList } from '../../../components/DescriptionList';
-import { Alert } from '../../../components/Alert';
-import { TextField } from '../../../components/TextField';
-import type { BankDetails, PaymentSchedule } from '../types';
-import { formatCurrency, estimateRetirementBonus, estimatePension, parseBsbDigits, formatBsb, lookupBsbBank } from '../utils';
-import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL } from '../constants';
+import type { BankDetails, PaymentSchedule, SavedBankAccount } from '../types';
+import { formatCurrency, estimateRetirementBonus, estimatePension, lookupBsbBank } from '../utils';
+import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL, MOCK_SAVED_BANK_ACCOUNTS } from '../constants';
+import { BankAccountSelector } from '../components/BankAccountSelector';
 
 interface StepPaymentsProps {
   purchasePrice: number;
@@ -23,8 +23,10 @@ export function StepPayments({
   onBankDetailsChange,
   showValidation,
 }: StepPaymentsProps) {
-  // Use the product rate estimate (same as the setup mode card) as the base annual amount.
-  // If the user chose a specific amount on the payment schedule step, use that instead.
+  // Mock saved accounts state (in production this would come from API)
+  const [savedAccounts, setSavedAccounts] = useState<SavedBankAccount[]>(MOCK_SAVED_BANK_ACCOUNTS);
+
+  // Payment calculations
   const freq = paymentSchedule.frequency || 'fortnightly';
   const divisor = PAYMENT_FREQUENCY_DIVISORS[freq] ?? 26;
   const periodLabel = PAYMENT_PERIOD_LABEL[freq] ?? 'fortnight';
@@ -38,81 +40,93 @@ export function StepPayments({
       : baseAnnual;
 
   const perPeriod = effectiveAnnual > 0 ? effectiveAnnual / divisor : 0;
+  const freqLabel = `${freq.charAt(0).toUpperCase()}${freq.slice(1)} payments`;
 
-  function updateField<K extends keyof BankDetails>(key: K, value: BankDetails[K]) {
-    onBankDetailsChange({ ...bankDetails, [key]: value });
+  // Handle saved account selection
+  function handleSelectAccount(account: SavedBankAccount) {
+    onBankDetailsChange({
+      bsb: account.bsb,
+      accountNumber: account.accountNumber,
+      accountName: account.accountName,
+      savedAccountId: account.id,
+      verified: true,
+      resolvedName: account.accountName,
+    });
   }
 
-  const bsbDigits = parseBsbDigits(bankDetails.bsb);
-  const bsbBankName = lookupBsbBank(bankDetails.bsb);
+  // Handle new account verified
+  function handleNewAccountVerified(details: { bsb: string; accountNumber: string; accountName: string; resolvedName: string; saveAccount: boolean }) {
+    const bankName = lookupBsbBank(details.bsb) ?? 'Unknown Bank';
+    const newAccount: SavedBankAccount = {
+      id: `new-${Date.now()}`,
+      bsb: details.bsb,
+      accountNumber: details.accountNumber,
+      accountName: details.accountName,
+      bankName,
+      maskedAccountNumber: `••• ${details.accountNumber.slice(-4)}`,
+      lastUsed: new Date().toISOString(),
+    };
+
+    if (details.saveAccount) {
+      setSavedAccounts((prev) => [...prev, newAccount]);
+    }
+
+    onBankDetailsChange({
+      bsb: details.bsb,
+      accountNumber: details.accountNumber,
+      accountName: details.accountName,
+      savedAccountId: newAccount.id,
+      verified: true,
+      resolvedName: details.resolvedName,
+    });
+  }
 
   return (
     <Stack spacing={4}>
+      {/* Payment summary */}
       <Stack spacing={2}>
         <div>
           <Typography variant="h5" sx={{ mb: 0.5 }}>
-            Bank details
+            Estimated payments
           </Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
             Your actual payment may vary. These estimates are based on your selected purchase amount.
           </Typography>
         </div>
 
-      <DescriptionList title="Payment summary" titleVariant="h6" valueAlign="right" density="condensed">
-        <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
-        <DescriptionList.Item label="Estimated annual amount" value={formatCurrency(effectiveAnnual)} />
-        <DescriptionList.Item label="Estimated payment" value={`${formatCurrency(perPeriod)} / ${periodLabel}`} />
-        <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
-      </DescriptionList>
+        <DescriptionList title="Payment amounts" titleVariant="h6" valueAlign="right" density="condensed">
+          <DescriptionList.Item label="Opening balance" value={formatCurrency(purchasePrice)} />
+          <DescriptionList.Item label={freqLabel} value={`${formatCurrency(perPeriod)} / ${periodLabel}`} />
+          <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
+          <DescriptionList.Item label="First year's income" value={formatCurrency(effectiveAnnual)} />
+        </DescriptionList>
 
+        <DescriptionList title="Retirement bonus" titleVariant="h6" valueAlign="right" density="condensed">
+          <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
+        </DescriptionList>
+      </Stack>
+
+      {/* Bank details section */}
       <Box
         sx={{
           border: '1px solid',
           borderColor: 'border.default',
-          borderRadius: (t) => `${t.shape.md}px`,
+          borderRadius: (t) => `${t.shape.lg}px`,
           backgroundColor: 'background.paper',
-          p: 3,
+          p: { xs: 3, sm: 4 },
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <Typography variant="h6">Bank details</Typography>
-          <Alert
-            severity="warning"
-            message="Please check your BSB and account number carefully. Incorrect details may delay payments."
-          />
-          <TextField
-            label="BSB"
-            fullWidth
-            value={bankDetails.bsb}
-            placeholder="000-000"
-            helperText={showValidation && bsbDigits.length < 6 ? undefined : (bsbBankName ?? undefined)}
-            error={showValidation && bsbDigits.length < 6}
-            errorMessage={showValidation && bsbDigits.length < 6 ? 'A valid 6-digit BSB is required' : undefined}
-            onChange={(event) => {
-              const digits = parseBsbDigits(event.target.value);
-              updateField('bsb', formatBsb(digits));
-            }}
-            htmlInputProps={{ inputMode: 'numeric', pattern: '[0-9\\-]*', maxLength: 7 }}
-          />
-          <TextField
-            label="Account number"
-            fullWidth
-            value={bankDetails.accountNumber}
-            onChange={(event) => updateField('accountNumber', event.target.value)}
-            error={showValidation && !bankDetails.accountNumber.trim()}
-            errorMessage={showValidation && !bankDetails.accountNumber.trim() ? 'Account number is required' : undefined}
-          />
-          <TextField
-            label="Account name"
-            fullWidth
-            value={bankDetails.accountName}
-            onChange={(event) => updateField('accountName', event.target.value)}
-            error={showValidation && !bankDetails.accountName.trim()}
-            errorMessage={showValidation && !bankDetails.accountName.trim() ? 'Account name is required' : undefined}
+
+          <BankAccountSelector
+            savedAccounts={savedAccounts}
+            onSelectAccount={handleSelectAccount}
+            onNewAccountVerified={handleNewAccountVerified}
+            showValidation={showValidation && !bankDetails.verified}
           />
         </Stack>
       </Box>
-      </Stack>
     </Stack>
   );
 }

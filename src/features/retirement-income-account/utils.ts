@@ -46,6 +46,49 @@ export function lookupBsbBank(bsb: string): string | null {
   return BSB_BANK_MAP[digits.slice(0, 2)] ?? null;
 }
 
+// ─── Bank account verification (mock) ─────────────────────────────────────────
+
+export interface BankVerificationResult {
+  success: boolean;
+  accountHolderName: string | null;
+  errorMessage?: string;
+}
+
+/**
+ * Mock bank account verification via NPP/PayID lookup.
+ * In production this would call a real API. Returns a resolved account holder name.
+ * For demo purposes, returns predictable names based on account number patterns.
+ */
+export function verifyBankAccount(bsb: string, accountNumber: string): BankVerificationResult {
+  const digits = parseBsbDigits(bsb);
+  if (digits.length < 6) {
+    return { success: false, accountHolderName: null, errorMessage: 'Invalid BSB' };
+  }
+  if (!accountNumber || accountNumber.length < 6) {
+    return { success: false, accountHolderName: null, errorMessage: 'Invalid account number' };
+  }
+
+  // Mock: return different names based on last digit of account number
+  const lastDigit = accountNumber.slice(-1);
+  const mockNames: Record<string, string> = {
+    '0': 'Jane Smith',
+    '1': 'Jane Smith',
+    '2': 'Jane M Smith',
+    '3': 'J Smith',
+    '4': 'Jane Elizabeth Smith',
+    '5': 'Smith J',
+    '6': 'Jane Smith',
+    '7': 'J Smith Family Trust',
+    '8': 'Jane Smith',
+    '9': 'Jane Smith',
+  };
+
+  return {
+    success: true,
+    accountHolderName: mockNames[lastDigit] ?? 'Jane Smith',
+  };
+}
+
 // Canonical currency formatter lives in @/lib/format; re-exported so existing
 // call sites can keep importing from this barrel.
 export { formatCurrency } from '@/lib/format';
@@ -118,7 +161,7 @@ export function isEligible(state: RetirementIncomeAccountState): boolean {
 }
 
 export function introStepValid(state: RetirementIncomeAccountState): boolean {
-  return state.introDeclarationRead && state.introDeclarationPermanent;
+  return Boolean(state.eligibilityCompleted) && state.introDeclarationRead;
 }
 
 export function eligibilityStepValid(state: RetirementIncomeAccountState): boolean {
@@ -165,7 +208,12 @@ export function allocateStepValid(state: RetirementIncomeAccountState): boolean 
 }
 
 function bankDetailsValid(details: BankDetails): boolean {
-  return Boolean(details.bsb.trim() && details.accountNumber.trim() && details.accountName.trim());
+  // Must have basic fields
+  if (!details.bsb.trim() || !details.accountNumber.trim() || !details.accountName.trim()) {
+    return false;
+  }
+  // Must be either a saved account or a verified new account
+  return Boolean(details.savedAccountId || details.verified);
 }
 
 export function paymentScheduleStepValid(state: RetirementIncomeAccountState): boolean {

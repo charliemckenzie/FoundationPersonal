@@ -1,3 +1,5 @@
+import type { Answers } from '../eligibility-checker';
+
 export type EligibilityAnswer = 'yes' | 'no' | '';
 export type PensionOption = 'single' | 'spouse' | '';
 export type AgeScenario = '60-64' | '65-plus';
@@ -28,6 +30,29 @@ export interface BankDetails {
   bsb: string;
   accountNumber: string;
   accountName: string;
+  /** ID of saved account if selected from list */
+  savedAccountId?: string;
+  /** Whether account has been verified via lookup */
+  verified?: boolean;
+  /** Account holder name returned by bank lookup */
+  resolvedName?: string;
+}
+
+/** A previously-used bank account saved on file. */
+export interface SavedBankAccount {
+  id: string;
+  /** BSB in XXX-XXX format */
+  bsb: string;
+  /** Masked account number for display, e.g. '••• ••• 4821' */
+  maskedAccountNumber: string;
+  /** Full account number (for selection) */
+  accountNumber: string;
+  /** Account holder name */
+  accountName: string;
+  /** Bank name derived from BSB */
+  bankName: string;
+  /** ISO timestamp of last use */
+  lastUsed: string;
 }
 
 export type PaymentFrequency = 'fortnightly' | 'monthly' | 'quarterly' | 'half-yearly' | 'annually';
@@ -45,6 +70,10 @@ export interface RetirementIncomeAccountState {
   ageScenario: AgeScenario;
   introDeclarationRead: boolean;
   introDeclarationPermanent: boolean;
+  /** Whether the user has completed (passed) the eligibility questionnaire. */
+  eligibilityCompleted: boolean;
+  /** Answers given during the eligibility questionnaire — retained for resuming. */
+  eligibilityAnswers: Answers | null;
   retiredFromWork: EligibilityAnswer;
   leftEmployerAfter60: EligibilityAnswer;
   pensionOption: PensionOption;
@@ -92,7 +121,6 @@ export type InvestmentStrategy = 'default' | 'custom' | null;
 
 export type RetirementIncomeAccountStepId =
   | 'intro'
-  | 'eligibility'
   | 'funding'
   | 'allocate'
   | 'setup-mode'

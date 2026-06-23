@@ -1,5 +1,5 @@
 import type { FormProgressStep } from '../../components/FormProgress';
-import type { FundingAccount, RetirementIncomeAccountState, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
+import type { FundingAccount, RetirementIncomeAccountState, SavedBankAccount, SpouseDetails, UserProfile, VerifyDetailsState } from './types';
 
 import { MOCK_INVESTMENT_OPTIONS } from '../investment-mix/mockData';
 
@@ -7,7 +7,6 @@ import { MOCK_INVESTMENT_OPTIONS } from '../investment-mix/mockData';
 export const RIA_INVESTMENT_OPTIONS = MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== 'opt-lifecycle');
 
 export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
-  { id: 'eligibility', label: 'Eligibility check' },
   { id: 'setup-mode', label: 'Account setup' },
   { id: 'funding', label: 'Funding your income account' },
   { id: 'allocate', label: 'Allocate funds' },
@@ -55,6 +54,8 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
   ageScenario: '60-64',
   introDeclarationRead: false,
   introDeclarationPermanent: false,
+  eligibilityCompleted: false,
+  eligibilityAnswers: null,
   retiredFromWork: '',
   leftEmployerAfter60: '',
   pensionOption: '',
@@ -178,11 +179,9 @@ export const PAYMENT_PERIOD_LABEL: Record<string, string> = {
   'half-yearly': '6 months',
   annually: 'year',
 };
-export const TARGET_PERCENT = [9, 18, 27, 36, 45, 55, 64, 73, 82, 91, 100] as const;
+export const TARGET_PERCENT = [11, 22, 33, 44, 56, 67, 78, 89, 100] as const;
 
 export const STEP_TITLES = [
-  'Open a Retirement Income Account',
-  'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
@@ -215,3 +214,55 @@ export function initialVerifyDetailsState(): VerifyDetailsState {
     edited: { ...MOCK_USER_PROFILE },
   };
 }
+
+// ---------------------------------------------------------------------------
+// Saved Bank Accounts (mock data)
+// ---------------------------------------------------------------------------
+
+export const MOCK_SAVED_BANK_ACCOUNTS: SavedBankAccount[] = [
+  {
+    id: 'bank-1',
+    bsb: '063-123',
+    maskedAccountNumber: '••• ••• 4821',
+    accountNumber: '12344821',
+    accountName: 'Jane Smith',
+    bankName: 'Commonwealth Bank of Australia',
+    lastUsed: '2026-05-15T10:30:00Z',
+  },
+  {
+    id: 'bank-2',
+    bsb: '032-456',
+    maskedAccountNumber: '••• ••• 7892',
+    accountNumber: '98767892',
+    accountName: 'Jane Smith',
+    bankName: 'Westpac',
+    lastUsed: '2026-03-22T14:15:00Z',
+  },
+  {
+    id: 'bank-3',
+    bsb: '013-789',
+    maskedAccountNumber: '••• ••• 1234',
+    accountNumber: '55551234',
+    accountName: 'J Smith Family Trust',
+    bankName: 'ANZ Bank',
+    lastUsed: '2025-12-01T09:00:00Z',
+  },
+  {
+    id: 'bank-4',
+    bsb: '923-100',
+    maskedAccountNumber: '••• ••• 5678',
+    accountNumber: '11115678',
+    accountName: 'Jane M Smith',
+    bankName: 'ING',
+    lastUsed: '2025-10-10T16:45:00Z',
+  },
+  {
+    id: 'bank-5',
+    bsb: '182-222',
+    maskedAccountNumber: '••• ••• 9999',
+    accountNumber: '33339999',
+    accountName: 'Jane Smith',
+    bankName: 'Macquarie Bank',
+    lastUsed: '2025-08-05T11:20:00Z',
+  },
+];

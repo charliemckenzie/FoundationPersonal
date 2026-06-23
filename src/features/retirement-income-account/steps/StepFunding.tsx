@@ -4,11 +4,12 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
-import { Accordion } from '../../../components/Accordion';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
+import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
+import { TextButton } from '../../../components/TextButton';
 import { MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
 import { estimatePension, estimateRetirementBonus, formatCurrency } from '../utils';
@@ -137,7 +138,7 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
             <Typography variant="h5" component="p" sx={{ ...(estimateColor && { color: estimateColor }), transition: 'color 200ms ease' }}>
               {formatCurrency(annualEstimate)}
             </Typography>
-            <Typography variant="small" sx={{ display: 'block' }}>Year 1 income</Typography>
+            <Typography variant="small" sx={{ display: 'block' }}>Annual payment</Typography>
           </Box>
           <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
           <Box>
@@ -148,8 +149,8 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           </Box>
         </Box>
         <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-          Estimates are based on the government minimum drawdown rate for age {PENSION_ESTIMATE_AGE} (5% per year).
-          Your actual payments may be higher. Minimum rates are set by the ATO and reviewed periodically.
+          These figures are estimates only based on the government minimum drawdown rate for age {PENSION_ESTIMATE_AGE} (5% per year).
+          Your actual payments may vary. You can choose your payment frequency in the next step. Minimum rates are set by the ATO and reviewed periodically.
         </Typography>
       </Box>
 
@@ -333,6 +334,7 @@ export function StepFunding({
   showValidation,
 }: StepFundingProps) {
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
+  const [considerationsOpen, setConsiderationsOpen] = useState(false);
 
   // The bonus is calculated on demand — the real calculation is expensive, so we
   // only run it when the member asks. We cache it against the purchase price it
@@ -365,11 +367,21 @@ export function StepFunding({
   return (
     <Stack spacing={4}>
       {/* ── Purchase price ── */}
-      <Stack spacing={1}>
-        <Typography variant="h5" component="h2">Funding your income account</Typography>
-        <Typography variant="body" sx={{ color: 'text.primary' }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam.
-        </Typography>
+      <Stack spacing={1.5}>
+        <Stack spacing={1}>
+          <Typography variant="h5" component="h2">Funding your income account</Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            Transfer super into your Retirement Income account to start receiving regular income payments.
+          </Typography>
+        </Stack>
+        <Box>
+          <TextButton
+            label="Considerations when allocating funds"
+            startIcon="circle-info"
+            iconDirection="left"
+            onClick={() => setConsiderationsOpen(true)}
+          />
+        </Box>
       </Stack>
 
       {/* ── Transfer panel + bonus (kept tight together) ── */}
@@ -391,17 +403,29 @@ export function StepFunding({
         )}
       </Stack>
 
-      {/* ── Considerations ── */}
-      <Stack spacing={2}>
-        <div>
-          <Typography variant="h6" component="h3" sx={{ mb: 0.5 }}>Considerations when allocating funds</Typography>
+      <Dialog
+        open={considerationsOpen}
+        onClose={() => setConsiderationsOpen(false)}
+        title="Considerations when allocating funds"
+        size="medium"
+        confirmLabel="Close"
+        onConfirm={() => setConsiderationsOpen(false)}
+      >
+        <Stack spacing={0.5} sx={{ mb: 3 }}>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
-            A Retirement Income account is a long-term commitment, so it&apos;s worth weighing up these points before
-            you decide how much to use.
+            A Retirement Income account is a long-term commitment, so it&apos;s worth weighing up these points
+            before you decide how much to transfer.
           </Typography>
-        </div>
-        <Accordion items={ALLOCATION_CONSIDERATIONS} />
-      </Stack>
+        </Stack>
+        <Stack spacing={3}>
+          {ALLOCATION_CONSIDERATIONS.map(({ id, title, content }) => (
+            <div key={id}>
+              <Typography variant="h6" sx={{ mb: 0.75 }}>{title}</Typography>
+              {content}
+            </div>
+          ))}
+        </Stack>
+      </Dialog>
     </Stack>
   );
 }

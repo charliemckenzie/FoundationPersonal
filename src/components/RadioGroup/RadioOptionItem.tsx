@@ -13,6 +13,7 @@ interface RadioOptionItemProps {
   color: RadioColor;
   size: RadioSize;
   cardDirection: 'column' | 'row';
+  direction: 'column' | 'row';
   groupDisabled: boolean;
   resolvedValue: string;
 }
@@ -23,6 +24,7 @@ export function RadioOptionItem({
   color,
   size,
   cardDirection,
+  direction,
   groupDisabled,
   resolvedValue,
 }: RadioOptionItemProps) {
@@ -100,6 +102,7 @@ export function RadioOptionItem({
       sx={cardContainerSx({
         variant: variant as 'boxed' | 'card',
         cardDirection,
+        direction,
         description: !!option.description,
         isSelected,
         isItemDisabled,
