@@ -246,9 +246,6 @@ export function BankAccountSelector({
       <Stack spacing={2}>
         <Typography variant="h6" sx={{ color: 'text.heading' }}>Select a saved account</Typography>
         <FormControl fullWidth>
-          <FormLabel sx={{ mb: 0.75, typography: 'bodyStrong', color: 'text.primary' }}>
-            Choose a bank account
-          </FormLabel>
         <MuiSelect
           value={selectedId}
           onChange={(e) => handleSelectSavedAccount(e.target.value)}
@@ -424,14 +421,6 @@ function NewAccountForm({
           />
         )}
 
-        {!isEditing && (
-          <Checkbox
-            label="Save this account for future use"
-            checked={saveAccount}
-            onChange={(isChecked) => onSaveAccountChange(isChecked)}
-          />
-        )}
-
         <Stack direction="row" spacing={2}>
           <Button variant="contained" label="Yes, this is my account" onClick={onConfirm} />
           <Button variant="outlined" label={backLabel} onClick={onBack} />
@@ -472,6 +461,13 @@ function NewAccountForm({
         error={showAccountNameError} errorMessage={showAccountNameError ? 'Account name is required' : undefined}
         onChange={(e) => onAccountNameChange(e.target.value)}
       />
+      {!isEditing && (
+        <Checkbox
+          label="Save this account for future use"
+          checked={saveAccount}
+          onChange={(isChecked) => onSaveAccountChange(isChecked)}
+        />
+      )}
       <Button variant="contained" label="Verify account" onClick={onVerify} disabled={!canVerify || !!duplicateAccount} sx={{ alignSelf: 'flex-start' }} />
     </Stack>
   );
