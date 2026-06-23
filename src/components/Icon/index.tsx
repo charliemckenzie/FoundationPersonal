@@ -78,6 +78,13 @@ function getStyleVariant(style: IconStyle): 'solid' | 'light' | 'regular' {
 }
 
 function resolveIconPaths(icon: string, style: IconStyle): { primary: string; fallback: string } {
+  // Handle art folder custom icons
+  if (icon.startsWith('art/')) {
+    const artIconName = icon.replace(/^art\//, '').replace(/\.svg$/i, '');
+    const primary = `/icons/art/${encodeURIComponent(artIconName)}.svg`;
+    return { primary, fallback: primary };
+  }
+
   const variant = getStyleVariant(style);
   const fallbackVariant = 'solid';
   const normalized = normalizeIconName(icon).replace(/\.svg$/i, '');

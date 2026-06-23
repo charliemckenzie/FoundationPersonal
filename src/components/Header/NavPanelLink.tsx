@@ -7,10 +7,13 @@ interface NavPanelLinkProps {
   description?: string
   /** Renders the label bold — used when the link itself is the primary item (no group heading above). */
   prominent?: boolean
+  variant?: 'default' | 'member-v2'
   onClick?: () => void
 }
 
-export function NavPanelLink({ href, label, description, prominent, onClick }: NavPanelLinkProps) {
+export function NavPanelLink({ href, label, description, prominent, variant = 'default', onClick }: NavPanelLinkProps) {
+  const isMemberV2 = variant === 'member-v2'
+
   return (
     <Box
       component="a"
@@ -18,7 +21,7 @@ export function NavPanelLink({ href, label, description, prominent, onClick }: N
       onClick={onClick}
       sx={{
         display: 'block',
-        py: 0.75,
+        py: isMemberV2 ? 0 : 0.75,
         textDecorationLine: 'none !important',
         color: 'text.primary',
         '&:visited': { color: 'text.primary' },
@@ -37,7 +40,15 @@ export function NavPanelLink({ href, label, description, prominent, onClick }: N
         },
       }}
     >
-      <Typography variant="body" sx={{ display: 'block', fontWeight: prominent ? 700 : 400 }}>
+      <Typography
+        variant={isMemberV2 ? 'body' : 'body'}
+        sx={{
+          display: 'block',
+          fontSize: isMemberV2 ? '1rem' : undefined,
+          fontWeight: prominent ? 700 : 400,
+          lineHeight: isMemberV2 ? 1.4 : undefined,
+        }}
+      >
         {label}
       </Typography>
       {description && (
