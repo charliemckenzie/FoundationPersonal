@@ -71,10 +71,10 @@ function CopResultCard({
 
   return (
     <Stack spacing={2}>
-      {/* Status alert */}
+      {/* Status alert — the CoP verdict */}
       <Alert severity={severity} title={statusTitle} message={message(resolvedName)} />
 
-      {/* Account details including the entered name */}
+      {/* Account details */}
       <DescriptionList
         title="Account details"
         titleVariant="h6"
