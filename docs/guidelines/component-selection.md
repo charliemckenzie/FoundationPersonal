@@ -19,6 +19,8 @@
 | AnnouncementBanner | Dismissible page-level announcement with optional CTA |
 | ArtieAIButton | Gradient "Ask Artie" AI-assistant button — that entry point only |
 | Autocomplete | Searchable dropdown with grouping/custom options |
+| BankAccountField | Bank account selection + entry — saved accounts list with add-new flow |
+| BankDetailsField | BSB + account number + account name capture (used inside BankAccountField) |
 | Badge | Count or dot overlay on a child element |
 | Breadcrumb | Navigation trail (public pages) |
 | Button | Primary action button — contained/outlined/ghost |
@@ -83,6 +85,7 @@
 ## When to use which (the calls the code can't make for you)
 
 - **Dialog vs Modal** — `Dialog` for a confirm/cancel pattern (built-in actions, semantic variants, drawer on mobile). `Modal` when you need full control of body + actions with no confirm pattern.
+- **BankAccountField vs BankDetailsField** — `BankAccountField` when the member may have existing saved accounts (selection + add-new flow). `BankDetailsField` when only raw BSB/account entry is needed (it is also used internally by `BankAccountField`'s add-new panel).
 - **Select vs InputSelectContainer** — `Select` when the dropdown *is* the field (standalone, full-width, labelled). `InputSelectContainer` only when a select must sit *inside* another input (the unit/currency picker in `TextField`/`MoneyField`/`PercentageField` via `selectAdornment`). You rarely render the latter directly.
 - **Table vs DataGrid** — `Table` for read-only tabular data. `DataGrid` when cells are editable/interactive, rows reorder, or rows are selectable.
 - **Accordion vs ExpandableItem vs ExpandableCardList** — `ExpandableItem` for a single collapsible panel; `Accordion` for a set (one-open or multi-open); `ExpandableCardList` for an *editable item list* where each row needs its own action (e.g. Remove) beside the disclosure.

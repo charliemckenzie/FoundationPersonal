@@ -2,11 +2,10 @@
   "generatedBy": "scripts/generate-codemap.ts",
   "note": "GENERATED — do not hand-edit. Run `npm run generate-codemap`.",
   "counts": {
-    "total": 88,
+    "total": 90,
     "byStatus": {
-      "draft": 51,
+      "draft": 69,
       "stable": 12,
-      "unknown": 16,
       "review": 7,
       "container": 2
     }
@@ -88,6 +87,7 @@
         "CloseButton"
       ],
       "usedBy": [
+        "BankAccountField",
         "Snackbar",
         "StepperActions"
       ],
@@ -182,6 +182,50 @@
       ]
     },
     {
+      "name": "BankAccountField",
+      "kind": "component",
+      "status": "draft",
+      "path": "src/components/BankAccountField",
+      "story": "/?path=/story/form-components-bank-accounts-bankaccountfield--default",
+      "storyFile": "src/stories/components/BankAccountField.stories.tsx",
+      "composes": [
+        "Alert",
+        "BankDetailsField",
+        "Button",
+        "Dialog",
+        "Icon",
+        "IconButton",
+        "RadioGroup",
+        "Select"
+      ],
+      "usedBy": [],
+      "exports": [
+        "BankAccountField",
+        "BankAccountFieldProps",
+        "SavedBankAccount",
+        "VerificationResult"
+      ]
+    },
+    {
+      "name": "BankDetailsField",
+      "kind": "component",
+      "status": "draft",
+      "path": "src/components/BankDetailsField",
+      "story": "/?path=/story/form-components-bankdetailsfield--default",
+      "storyFile": "src/stories/components/BankDetailsField.stories.tsx",
+      "composes": [
+        "TextField"
+      ],
+      "usedBy": [
+        "BankAccountField"
+      ],
+      "exports": [
+        "BankDetailsField",
+        "BankDetailsFieldProps",
+        "BankDetailsValue"
+      ]
+    },
+    {
       "name": "BarChart",
       "kind": "component",
       "status": "draft",
@@ -224,6 +268,7 @@
         "Accordion",
         "ActionBar",
         "AnnouncementBanner",
+        "BankAccountField",
         "Card",
         "Dialog",
         "FileCard",
@@ -282,8 +327,9 @@
     {
       "name": "CardGrid",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/Card",
+      "story": "/?path=/story/components-card--grid",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -328,8 +374,9 @@
     {
       "name": "CheckboxButtonGroup",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/Checkbox",
+      "story": "/?path=/story/form-components-checkbox-checkboxbuttongroup--default",
       "storyFile": "src/stories/components/Checkbox/CheckboxButtonGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -338,8 +385,9 @@
     {
       "name": "CheckboxCardGroup",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/Checkbox",
+      "story": "/?path=/story/form-components-checkbox-checkboxcardgroup--default",
       "storyFile": "src/stories/components/Checkbox/CheckboxCardGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -363,8 +411,9 @@
     {
       "name": "CloseButton",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/CloseButton",
+      "story": "/?path=/story/atomic-components-closebutton--default",
       "storyFile": "src/stories/components/CloseButton.stories.tsx",
       "composes": [
         "Icon"
@@ -453,8 +502,9 @@
     {
       "name": "DescriptionList",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/DescriptionList",
+      "story": "/?path=/story/components-description-list-descriptionlist--default",
       "storyFile": "src/stories/components/DescriptionList.stories.tsx",
       "composes": [
         "Skeleton"
@@ -481,6 +531,7 @@
         "Icon"
       ],
       "usedBy": [
+        "BankAccountField",
         "InfoButton",
         "StepperActions"
       ],
@@ -519,8 +570,9 @@
     {
       "name": "ExpandableCardList",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/ExpandableCardList",
+      "story": "/?path=/story/components-expandable-expandablecardlist--default",
       "storyFile": "src/stories/components/expandable/ExpandableCardList.stories.tsx",
       "composes": [
         "Icon",
@@ -553,8 +605,9 @@
     {
       "name": "FileCard",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/FileUpload",
+      "story": "/?path=/story/form-components-fileupload-filecard--default",
       "storyFile": "src/stories/components/FileUpload/FileCard.stories.tsx",
       "composes": [
         "Button",
@@ -668,6 +721,7 @@
       "usedBy": [
         "Accordion",
         "ArtieAIButton",
+        "BankAccountField",
         "Button",
         "Calendar",
         "Checkbox",
@@ -717,6 +771,7 @@
         "Tooltip"
       ],
       "usedBy": [
+        "BankAccountField",
         "DataGrid",
         "FileCard",
         "Header",
@@ -754,8 +809,9 @@
     {
       "name": "InfoButton",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/InfoButton",
+      "story": "/?path=/story/components-buttons-infobutton--default",
       "storyFile": "src/stories/components/buttons/InfoButton.stories.tsx",
       "composes": [
         "Dialog",
@@ -773,8 +829,9 @@
     {
       "name": "InputSelectContainer",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/InputSelect",
+      "story": "/?path=/story/form-components-textinput-inputselect--default",
       "composes": [],
       "usedBy": [
         "TextField"
@@ -789,8 +846,9 @@
     {
       "name": "InvestmentOverview",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/InvestmentOverview",
+      "story": "/?path=/story/member-online-investments-investment-overview--default",
       "storyFile": "src/stories/member-online/InvestmentOverview.stories.tsx",
       "composes": [
         "Icon",
@@ -865,8 +923,9 @@
     {
       "name": "ManagedList",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/ManagedList",
+      "story": "/?path=/story/components-managed-list-managedlist--default",
       "storyFile": "src/stories/components/ManagedList.stories.tsx",
       "composes": [
         "Chip",
@@ -1141,8 +1200,9 @@
     {
       "name": "PageTransition",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/PageTransition",
+      "story": "/?path=/story/utilities-page-transition--default",
       "storyFile": "src/stories/components/PageTransition.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -1197,8 +1257,9 @@
     {
       "name": "PosterPanel",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/PosterPanel",
+      "story": "/?path=/story/components-poster-panel--default",
       "storyFile": "src/stories/components/PosterPanel.stories.tsx",
       "composes": [
         "Button",
@@ -1227,8 +1288,9 @@
     {
       "name": "RadioButtonGroup",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/RadioGroup",
+      "story": "/?path=/story/form-components-radiogroup-radiobuttongroup--default",
       "storyFile": "src/stories/components/RadioGroup/RadioButtonGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -1237,8 +1299,9 @@
     {
       "name": "RadioCardGroup",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/RadioGroup",
+      "story": "/?path=/story/form-components-radiogroup-radiocardgroup--default",
       "storyFile": "src/stories/components/RadioGroup/RadioCardGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -1255,7 +1318,8 @@
         "Icon"
       ],
       "usedBy": [
-        "AddressField"
+        "AddressField",
+        "BankAccountField"
       ],
       "exports": [
         "RadioButtonGroup",
@@ -1288,6 +1352,7 @@
       "composes": [],
       "usedBy": [
         "AddressField",
+        "BankAccountField",
         "Table"
       ],
       "exports": [
@@ -1406,8 +1471,9 @@
     {
       "name": "StepTransition",
       "kind": "component",
-      "status": "unknown",
+      "status": "draft",
       "path": "src/components/StepTransition",
+      "story": "/?path=/story/form-components-stepped-forms-step-transition--default",
       "storyFile": "src/stories/components/stepped-forms/StepTransition.stories.tsx",
       "composes": [],
       "usedBy": [],
@@ -1521,6 +1587,7 @@
       ],
       "usedBy": [
         "AddressField",
+        "BankDetailsField",
         "DateOfBirthField",
         "MoneyField",
         "PasswordField",

@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/PosterPanel
 kind: component
 composes: [Button, TextButton]
@@ -8,4 +8,6 @@ composes: [Button, TextButton]
 # PosterPanel
 
 **Composes:** [[Button]] · [[TextButton]]
+
+**Story:** `/?path=/story/components-poster-panel--default`
 **StoryFile:** `src/stories/components/PosterPanel.stories.tsx`

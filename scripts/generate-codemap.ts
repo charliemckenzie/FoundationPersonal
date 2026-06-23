@@ -325,13 +325,21 @@ if (issues.length) {
 }
 
 if (CHECK) {
+  let failed = false;
   if (drift.length) {
     console.error(`\n✗  codemap artifacts are stale (${drift.length}):`);
     for (const d of drift) console.error('   ' + d);
     console.error('\nRun `npm run generate-codemap` and commit the result.');
-    process.exit(1);
+    failed = true;
   }
-  console.log('\n✓  codemap artifacts up to date.\n');
+  if (issues.length) {
+    console.error(`\n✗  ${issues.length} component(s) have no entry in component-status.ts:`);
+    for (const i of issues) console.error('   • ' + i);
+    console.error('\nAdd a row to src/stories/component-status.ts for each component above.');
+    failed = true;
+  }
+  if (failed) process.exit(1);
+  console.log('\n✓  codemap artifacts up to date and all components have a status entry.\n');
 } else {
   console.log(drift.length ? `\nWrote ${drift.length} change(s).\n` : '\nNo changes.\n');
 }

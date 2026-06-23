@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/ExpandableCardList
 kind: component
 composes: [Icon, Tooltip]
@@ -8,4 +8,6 @@ composes: [Icon, Tooltip]
 # ExpandableCardList
 
 **Composes:** [[Icon]] · [[Tooltip]]
+
+**Story:** `/?path=/story/components-expandable-expandablecardlist--default`
 **StoryFile:** `src/stories/components/expandable/ExpandableCardList.stories.tsx`

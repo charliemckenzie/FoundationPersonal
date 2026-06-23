@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/InputSelect
 kind: component
 composes: []
@@ -8,3 +8,5 @@ composes: []
 # InputSelectContainer
 
 **Used by:** [[TextField]]
+
+**Story:** `/?path=/story/form-components-textinput-inputselect--default`

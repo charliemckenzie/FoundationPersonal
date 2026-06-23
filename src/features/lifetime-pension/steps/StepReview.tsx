@@ -241,9 +241,9 @@ export function StepReview({
             label="Bank details"
             value={
               <Stack spacing={0.5}>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
                 <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
                 <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc No. {state.bankDetails.accountNumber || '—'}</Typography>
-                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
               </Stack>
             }
           />

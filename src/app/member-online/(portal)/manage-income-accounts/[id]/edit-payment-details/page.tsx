@@ -199,7 +199,7 @@ export default function EditPaymentDetailsPage() {
   const backToManage = () => router.push(`/member-online/manage-income-accounts?account=${id}`);
 
   const [submitted, setSubmitted] = useState(false);
-  const [frequency, setFrequency] = useState(MOCK_CURRENT_SCHEDULE.frequency);
+  const [frequency, setFrequency] = useState<string>(MOCK_CURRENT_SCHEDULE.frequency);
   const [paymentDate, setPaymentDate] = useState(MOCK_CURRENT_SCHEDULE.firstPaymentDate);
   const [showValidation, setShowValidation] = useState(false);
 

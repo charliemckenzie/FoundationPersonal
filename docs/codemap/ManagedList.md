@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/ManagedList
 kind: component
 composes: [Chip, Icon, IconButton, Skeleton]
@@ -8,4 +8,6 @@ composes: [Chip, Icon, IconButton, Skeleton]
 # ManagedList
 
 **Composes:** [[Chip]] · [[Icon]] · [[IconButton]] · [[Skeleton]]
+
+**Story:** `/?path=/story/components-managed-list-managedlist--default`
 **StoryFile:** `src/stories/components/ManagedList.stories.tsx`

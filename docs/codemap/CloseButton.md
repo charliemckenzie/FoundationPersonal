@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/CloseButton
 kind: component
 composes: [Icon]
@@ -9,4 +9,6 @@ composes: [Icon]
 
 **Composes:** [[Icon]]
 **Used by:** [[Alert]] · [[AnnouncementBanner]] · [[Dialog]] · [[Drawer]] · [[MobileNavDrawer]] · [[Modal]]
+
+**Story:** `/?path=/story/atomic-components-closebutton--default`
 **StoryFile:** `src/stories/components/CloseButton.stories.tsx`

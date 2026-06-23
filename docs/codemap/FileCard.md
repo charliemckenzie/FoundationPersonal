@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/FileUpload
 kind: component
 composes: [Button, Icon, IconButton, LinearProgress]
@@ -8,4 +8,6 @@ composes: [Button, Icon, IconButton, LinearProgress]
 # FileCard
 
 **Composes:** [[Button]] · [[Icon]] · [[IconButton]] · [[LinearProgress]]
+
+**Story:** `/?path=/story/form-components-fileupload-filecard--default`
 **StoryFile:** `src/stories/components/FileUpload/FileCard.stories.tsx`

@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/DescriptionList
 kind: component
 composes: [Skeleton]
@@ -8,4 +8,6 @@ composes: [Skeleton]
 # DescriptionList
 
 **Composes:** [[Skeleton]]
+
+**Story:** `/?path=/story/components-description-list-descriptionlist--default`
 **StoryFile:** `src/stories/components/DescriptionList.stories.tsx`

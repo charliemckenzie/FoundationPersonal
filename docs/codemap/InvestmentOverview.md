@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/InvestmentOverview
 kind: component
 composes: [Icon, IconButton, Skeleton]
@@ -8,4 +8,6 @@ composes: [Icon, IconButton, Skeleton]
 # InvestmentOverview
 
 **Composes:** [[Icon]] · [[IconButton]] · [[Skeleton]]
+
+**Story:** `/?path=/story/member-online-investments-investment-overview--default`
 **StoryFile:** `src/stories/member-online/InvestmentOverview.stories.tsx`

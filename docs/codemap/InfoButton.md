@@ -1,5 +1,5 @@
 ---
-status: unknown
+status: draft
 path: src/components/InfoButton
 kind: component
 composes: [Dialog, Icon, Tooltip]
@@ -8,4 +8,6 @@ composes: [Dialog, Icon, Tooltip]
 # InfoButton
 
 **Composes:** [[Dialog]] · [[Icon]] · [[Tooltip]]
+
+**Story:** `/?path=/story/components-buttons-infobutton--default`
 **StoryFile:** `src/stories/components/buttons/InfoButton.stories.tsx`

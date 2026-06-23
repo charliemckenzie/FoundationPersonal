@@ -232,12 +232,12 @@ function ZeroBalanceScreen({ onBack }: { onBack: () => void }) {
             You can add money to your Super Savings account by making a voluntary contribution or rolling over funds from another super fund.
           </Typography>
           <Box sx={{ pt: 1 }}>
-            <TextButton label="Add money to Super Savings" href="/member-online/contributions" />
+            <Button variant="ghost" label="Add money to Super Savings" href="/member-online/contributions" />
           </Box>
         </Stack>
       </Box>
       <Box>
-        <Button variant="text" label="Back to account" onClick={onBack} />
+        <Button variant="ghost" label="Back to account" onClick={onBack} />
       </Box>
     </Stack>
   );
@@ -268,11 +268,9 @@ function StepReview({
   const sectionHeaderSx = {
     px: 4,
     py: 2.5,
-    mx: 4,
     borderBottom: '1px solid',
     borderColor: 'border.subtle',
     mx: 0,
-    px: 4,
   };
 
   const rowSx = {
@@ -356,7 +354,7 @@ function StepReview({
                 <Typography variant="body" sx={{ color: 'text.muted' }}>{label}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
                   <Typography variant="body" sx={{ color: 'text.muted' }}>{before}</Typography>
-                  <Icon icon="arrow-right" size="xs" color="muted" />
+                  <Icon icon="arrow-right" size="sm" color="text.muted" />
                   <Typography variant="body" sx={{ fontWeight: 600, color: 'text.primary' }}>{after}</Typography>
                 </Box>
               </Box>

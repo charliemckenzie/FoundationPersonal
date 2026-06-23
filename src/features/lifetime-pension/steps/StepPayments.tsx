@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -28,7 +27,9 @@ export function StepPayments({
   const annualPayment = estimate?.annual ?? 0;
   const fortnightlyPayment = estimate?.fortnightly ?? 0;
 
-  const [selectedAccountId, setSelectedAccountId] = useState<string | undefined>(undefined);
+  const selectedAccountId = MOCK_SAVED_ACCOUNTS.find(
+    (a) => a.accountNumber === bankDetails.accountNumber && a.bsb === bankDetails.bsb
+  )?.id;
 
   return (
     <Stack spacing={4}>
@@ -72,7 +73,6 @@ export function StepPayments({
           savedAccounts={MOCK_SAVED_ACCOUNTS}
           selectedAccountId={selectedAccountId}
           onSelectAccount={(account) => {
-            setSelectedAccountId(account.id);
             onBankDetailsChange({ bsb: account.bsb, accountNumber: account.accountNumber, accountName: account.accountName });
           }}
           onVerifyAndAdd={async (details) => {

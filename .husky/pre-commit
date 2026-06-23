@@ -3,4 +3,5 @@
 # re-stage they'd be left unstaged and the commit would be one map behind).
 # See docs/Adam/ai-efficiency-implementation-plan.md §2F.
 npm run generate-codemap
+npm run generate-codemap:check
 git add codemap.json CODEMAP.md docs/codemap

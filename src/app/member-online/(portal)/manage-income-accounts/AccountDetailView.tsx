@@ -63,8 +63,8 @@ export function AccountDetailView({ account }: { account: IncomeAccount }) {
             <Typography variant="small" sx={{ color: isClosed ? 'text.disabled' : 'text.muted' }}>
               {isClosed ? 'Account summary' : 'Account balance as at 17 June 2026'}
             </Typography>
-            {isClosed && <Chip label="Closed" size="x-small" color="default" sx={{ ml: 0.5 }} />}
-            <Icon icon={showMoreDetails ? 'chevron-up' : 'chevron-down'} size="xs" color={isClosed ? 'text.disabled' : 'text.muted'} />
+            {isClosed && <Box component="span" sx={{ ml: 0.5 }}><Chip label="Closed" size="x-small" color="default" /></Box>}
+            <Icon icon={showMoreDetails ? 'chevron-up' : 'chevron-down'} size="sm" color={isClosed ? 'text.disabled' : 'text.muted'} />
           </Box>
 
           {/* Expandable details */}
