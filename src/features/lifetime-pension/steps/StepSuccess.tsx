@@ -6,10 +6,13 @@ import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
 import { IdvModal, type UseIdvGate } from '../../../features/idv';
+import type { OtherIdMethod } from '../../../features/idv';
 
 export interface StepSuccessProps {
   onReturnDashboard: () => void;
   gate: UseIdvGate;
+  verifyMethod: 'online' | 'other';
+  otherIdMethod: OtherIdMethod;
 }
 
 interface ConfirmItemProps {
@@ -27,11 +30,12 @@ function ConfirmItem({ children }: ConfirmItemProps) {
   );
 }
 
-export function StepSuccess({ onReturnDashboard, gate }: StepSuccessProps) {
+export function StepSuccess({ onReturnDashboard, gate, verifyMethod, otherIdMethod }: StepSuccessProps) {
   const [idvModalOpen, setIdvModalOpen] = useState(false);
   const [idvVerified, setIdvVerified] = useState(gate.alreadyVerified);
 
-  const verified = idvVerified;
+  // For the 'other' path, the electronic IDV check is irrelevant — treat as pending.
+  const verified = verifyMethod === 'online' ? idvVerified : false;
 
   return (
     <Stack spacing={4} sx={{ alignItems: 'center', textAlign: 'center' }}>
@@ -112,26 +116,50 @@ export function StepSuccess({ onReturnDashboard, gate }: StepSuccessProps) {
                 backgroundColor: 'action.hover',
               }}
             >
-              <Stack spacing={1.5}>
-                <Typography variant="h6" sx={{ color: 'text.heading' }}>
-                  Identity verification required
-                </Typography>
-                <Typography variant="body" sx={{ color: 'text.primary' }}>
-                  To fully process your Lifetime Pension account, we need to verify your
-                  identity. This is a quick process — you&apos;ll need one of the following:
-                  an Australian drivers licence, Medicare card, or passport.
-                </Typography>
-                <Typography variant="small" sx={{ color: 'text.secondary' }}>
-                  Until your identity is verified, your application cannot be fully processed.
-                  You can complete this now or return later from your dashboard.
-                </Typography>
-                <Box sx={{ pt: 0.5 }}>
-                  <Button
-                    label="Verify your identity"
-                    onClick={() => setIdvModalOpen(true)}
-                  />
-                </Box>
-              </Stack>
+              {verifyMethod === 'other' ? (
+                <Stack spacing={1.5}>
+                  {otherIdMethod === 'later' ? (
+                    <>
+                      <Typography variant="h6" sx={{ color: 'text.heading' }}>
+                        Identity documents still required
+                      </Typography>
+                      <Typography variant="body" sx={{ color: 'text.primary' }}>
+                        Upload your identity documents via <strong>Upload files</strong> in Member Online. We&apos;ll send you email reminders. Your application can&apos;t be processed until we receive them.
+                      </Typography>
+                    </>
+                  ) : (
+                    <>
+                      <Typography variant="h6" sx={{ color: 'text.heading' }}>
+                        Identity documents received
+                      </Typography>
+                      <Typography variant="body" sx={{ color: 'text.primary' }}>
+                        We&apos;ve received your identity documents and will review them. No further action is needed from you right now.
+                      </Typography>
+                    </>
+                  )}
+                </Stack>
+              ) : (
+                <Stack spacing={1.5}>
+                  <Typography variant="h6" sx={{ color: 'text.heading' }}>
+                    Identity verification required
+                  </Typography>
+                  <Typography variant="body" sx={{ color: 'text.primary' }}>
+                    To fully process your Lifetime Pension account, we need to verify your
+                    identity. This is a quick process &mdash; you&apos;ll need one of the following:
+                    an Australian drivers licence, Medicare card, or passport.
+                  </Typography>
+                  <Typography variant="small" sx={{ color: 'text.secondary' }}>
+                    Until your identity is verified, your application cannot be fully processed.
+                    You can complete this now or return later from your dashboard.
+                  </Typography>
+                  <Box sx={{ pt: 0.5 }}>
+                    <Button
+                      label="Verify your identity"
+                      onClick={() => setIdvModalOpen(true)}
+                    />
+                  </Box>
+                </Stack>
+              )}
             </Box>
           )}
 

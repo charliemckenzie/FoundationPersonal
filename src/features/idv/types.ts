@@ -23,6 +23,19 @@ export interface VerifyDetailsState {
 
 export type IDVDocument = 'drivers-licence' | 'medicare' | 'passport' | '';
 
+// ---------------------------------------------------------------------------
+// Offline ID upload
+// ---------------------------------------------------------------------------
+
+export type OtherIdMethod = 'selfie' | 'certified' | 'later' | '';
+
+export interface OtherIdState {
+  method: OtherIdMethod;
+  /** Uploaded files (prototype only — not JSON-serialisable, won’t survive draft resume). */
+  files: File[];
+  laterConfirmed: boolean;
+}
+
 export interface IDVState {
   selectedDocument: IDVDocument;
   driversLicence: {

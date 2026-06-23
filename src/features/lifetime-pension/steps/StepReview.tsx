@@ -12,9 +12,15 @@ import { TextField } from '../../../components/TextField';
 import { AddressCapture } from '../../../components/AddressField/AddressCapture';
 import { mockAddressProvider } from '../../../components/AddressField/mockAddressProvider';
 import type { Address } from '../../../components/AddressField';
+import type { OtherIdMethod } from '../../../features/idv';
 import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
 import { PENSION_ESTIMATE_AGE } from '../constants';
 import { formatCurrency, totalSelectedAmount, estimateRetirementBonus, estimatePension } from '../utils';
+
+interface OtherIdSummary {
+  method: OtherIdMethod;
+  fileNames: string[];
+}
 
 interface StepReviewProps {
   state: LifetimePensionState;
@@ -25,6 +31,7 @@ interface StepReviewProps {
   onVerifyDetailsChange: (next: VerifyDetailsState) => void;
   profile: UserProfile;
   verifyMethod: 'online' | 'other';
+  otherIdSummary?: OtherIdSummary;
 }
 
 /** Convert ISO date (yyyy-mm-dd) to dd/mm/yyyy for display. Returns the original string if it can't be parsed. */
@@ -117,6 +124,7 @@ export function StepReview({
   verifyDetailsState,
   onVerifyDetailsChange,
   verifyMethod,
+  otherIdSummary,
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
@@ -325,7 +333,14 @@ export function StepReview({
           label="Status"
           value={
             <Box sx={{ fontWeight: 700 }}>
-              {verifyMethod === 'other'
+              {verifyMethod === 'other' && otherIdSummary
+                ? otherIdSummary.method === 'later'
+                  ? 'Provide identity later'
+                  : [
+                      otherIdSummary.method === 'selfie' ? 'Selfie ID' : 'Certified ID',
+                      otherIdSummary.fileNames.length > 0 ? otherIdSummary.fileNames.join(', ') : 'No files uploaded',
+                    ].join(': ')
+                : verifyMethod === 'other'
                 ? 'Member will supply documents as per our Identity Factsheet'
                 : 'Digital verification complete'}
             </Box>

@@ -1,4 +1,4 @@
-import type { IDVState, UserProfile, VerifyDetailsState } from './types';
+import type { IDVState, OtherIdState, UserProfile, VerifyDetailsState } from './types';
 
 // ---------------------------------------------------------------------------
 // Verify Details gate
@@ -78,3 +78,19 @@ export function initialIDVState(): IDVState {
     },
   };
 }
+
+// ---------------------------------------------------------------------------
+// Offline ID upload
+// ---------------------------------------------------------------------------
+
+export const initialOtherIdState: OtherIdState = {
+  method: '',
+  files: [],
+  laterConfirmed: false,
+};
+
+export const OTHER_ID_METHOD_OPTIONS = [
+  { value: 'selfie', label: 'Selfie ID', icon: 'user' },
+  { value: 'certified', label: 'Certified ID', icon: 'file-signature' },
+  { value: 'later', label: "I'll provide this later", icon: 'calendar' },
+] as const;

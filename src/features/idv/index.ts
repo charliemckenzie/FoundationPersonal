@@ -6,6 +6,10 @@ export { StepIDV, canSubmitIDV } from './StepIDV';
 export type { StepIDVProps } from './StepIDV';
 export { IdvModal } from './IdvModal';
 export type { IdvModalProps } from './IdvModal';
+export { OfflineIdv } from './OfflineIdv';
+export type { OfflineIdvProps } from './OfflineIdv';
+export { IdDocumentsModal } from './IdDocumentsModal';
+export type { IdDocumentsModalProps } from './IdDocumentsModal';
 export {
   VerifyDetailsContent,
   requiredFieldsFilled,
@@ -29,12 +33,16 @@ export {
   IDV_CACHE_YEARS,
   initialIDVState,
   initialVerifyDetailsState,
+  initialOtherIdState,
+  OTHER_ID_METHOD_OPTIONS,
 } from './constants';
 
 // Types
 export type {
   IDVDocument,
   IDVState,
+  OtherIdMethod,
+  OtherIdState,
   UserProfile,
   VerifyDetailsState,
 } from './types';

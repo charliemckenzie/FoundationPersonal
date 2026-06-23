@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { Alert } from '../../components/Alert';
@@ -8,7 +9,6 @@ import { Checkbox } from '../../components/Checkbox';
 import { RadioGroup, type RadioOption } from '../../components/RadioGroup';
 import { Select } from '../../components/Select';
 import { TextField } from '../../components/TextField';
-import { TextButton } from '../../components/TextButton';
 import { AUSTRALIAN_STATES, MEDICARE_COLOUR_OPTIONS } from './constants';
 import type { IDVDocument, IDVState } from './types';
 
@@ -44,7 +44,7 @@ const LICENCE_STATE_CONFIG: Record<string, LicenceStateConfig> = {
   ACT: { secondaryLabel: 'Card number', secondaryHelper: 'On the front of your licence, below the licence number.' },
   NSW: { secondaryLabel: 'Card number', secondaryHelper: 'The 10-digit number on the front, lower right.' },
   NT: { secondaryLabel: 'Card number', secondaryHelper: 'On the back of your licence.' },
-  QLD: { secondaryLabel: 'Reference number', secondaryHelper: 'The 10-digit reference number on the back of your licence.' },
+  QLD: { secondaryLabel: 'Reference number', secondaryHelper: '' },
   SA: { secondaryLabel: 'Card number', secondaryHelper: 'On the back of your licence, near the barcode.' },
   TAS: { secondaryLabel: 'Card number', secondaryHelper: 'On the back of your licence.' },
   VIC: { secondaryLabel: 'Card number', secondaryHelper: 'On the back of your licence, above the barcode.' },
@@ -69,17 +69,52 @@ function DriversLicenceForm({ fields, onChange }: DriversLicenceFormProps) {
       {/* Dependent fields appear once a state is chosen; the secondary number adapts to it. */}
       {stateConfig && (
         <>
-          <TextField
-            label="Licence number"
-            value={fields.licenceNumber}
-            onChange={(e) => set('licenceNumber', e.target.value)}
-          />
-          <TextField
-            label={stateConfig.secondaryLabel}
-            value={fields.cardNumber}
-            helperText={stateConfig.secondaryHelper}
-            onChange={(e) => set('cardNumber', e.target.value)}
-          />
+          {/* Licence number + secondary number — side by side on sm+, stacked on xs */}
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+              gap: 2,
+            }}
+          >
+            <Stack spacing={1.5}>
+              <TextField
+                label="Licence number"
+                value={fields.licenceNumber}
+                onChange={(e) => set('licenceNumber', e.target.value)}
+              />
+              {/* Placeholder: front of licence */}
+              <Box
+                sx={{
+                  width: '100%',
+                  aspectRatio: '16 / 9',
+                  backgroundColor: 'action.hover',
+                  borderRadius: (t) => `${t.shape.sm}px`,
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                }}
+              />
+            </Stack>
+            <Stack spacing={1.5}>
+              <TextField
+                label={stateConfig.secondaryLabel}
+                value={fields.cardNumber}
+                helperText={stateConfig.secondaryHelper}
+                onChange={(e) => set('cardNumber', e.target.value)}
+              />
+              {/* Placeholder: back of licence */}
+              <Box
+                sx={{
+                  width: '100%',
+                  aspectRatio: '16 / 9',
+                  backgroundColor: 'action.hover',
+                  borderRadius: (t) => `${t.shape.sm}px`,
+                  border: '1px dashed',
+                  borderColor: 'divider',
+                }}
+              />
+            </Stack>
+          </Box>
           <TextField
             label="Middle name"
             value={fields.middleName}
@@ -256,23 +291,13 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
         so we can help.
       </Typography>
 
-      {/* Document sub-form — grey box, 32px below tiles */}
+      {/* Document sub-form — 32px below tiles */}
       {state.selectedDocument !== '' && (
-        <Box
-          sx={{
-            mt: 4,
-            backgroundColor: 'action.hover',
-            borderRadius: (t) => `${t.shape.md}px`,
-            p: 3,
-          }}
-        >
+        <Box sx={{ mt: 4 }}>
           <Stack spacing={3}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="h5">
-                {DOCUMENT_HEADINGS[state.selectedDocument]}
-              </Typography>
-              <TextButton label="Need help?" startIcon="circle-info" hideIcon={false} onClick={() => {}} />
-            </Box>
+            <Typography variant="h5">
+              {DOCUMENT_HEADINGS[state.selectedDocument]}
+            </Typography>
 
             {state.selectedDocument === 'drivers-licence' && (
               <DriversLicenceForm
@@ -298,8 +323,10 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
 
       {/* Declaration */}
       {state.selectedDocument !== '' && (
-        <Stack spacing={2}>
-          <Typography variant="h5">Declaration</Typography>
+        <>
+          <Divider />
+          <Stack spacing={2}>
+            <Typography variant="h5">Declaration</Typography>
           <Typography variant="body" sx={{ color: 'text.primary' }}>
             With your consent, Australian Retirement Trust can use the Equifax IDMatrix to
             verify your identity electronically. This program uses data held in places such
@@ -337,6 +364,7 @@ export function StepIDV({ state, onChange, onSubmit, loading, error, embedded = 
             </Box>
           )}
         </Stack>
+        </>
       )}
     </Stack>
   );

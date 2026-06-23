@@ -13,12 +13,12 @@ import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
 import { Alert } from '../../components/Alert';
 import { RadioGroup } from '../../components/RadioGroup';
-import { Checkbox } from '../../components/Checkbox';
 import { useSteppedFlow } from '../../lib/useSteppedFlow';
 import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
 import { INITIAL_STATE, LIFETIME_PENSION_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
-import { useIdvGate } from '../../features/idv';
+import { useIdvGate, OfflineIdv, initialOtherIdState } from '../../features/idv';
+import type { OtherIdState } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
 import { StepDetails } from './steps/StepDetails';
 import { StepFunding } from './steps/StepFunding';
@@ -62,7 +62,7 @@ export function LifetimePensionFlow() {
   const [idvLoading] = useState(false);
   const [idvError] = useState('');
   const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
-  const [otherOptionsConfirmed, setOtherOptionsConfirmed] = useState(false);
+  const [otherIdState, setOtherIdState] = useState<OtherIdState>(initialOtherIdState);
 
   // Step navigation + draft autosave/resume are shared with Retirement Income Account via useSteppedFlow.
   const flow = useSteppedFlow<LifetimePensionState>({
@@ -108,9 +108,15 @@ export function LifetimePensionFlow() {
     if (step === 5) {
       return true;
     }
-    // IDV step (6) — document selected and form complete (online), or checkbox confirmed (other)
+    // IDV step (6) — document selected and form complete (online), or other-options complete
     if (step === 6) {
-      if (verifyMethod === 'other') return otherOptionsConfirmed;
+      if (verifyMethod === 'other') {
+        if (otherIdState.method === 'selfie' || otherIdState.method === 'certified') {
+          return otherIdState.files.length > 0;
+        }
+        if (otherIdState.method === 'later') return otherIdState.laterConfirmed;
+        return false;
+      }
       return canSubmitIDV(idvState);
     }
     return reviewStepValid(state);
@@ -153,6 +159,8 @@ export function LifetimePensionFlow() {
         <StepSuccess
           onReturnDashboard={() => router.push('/member-online')}
           gate={{ ...gate, alreadyVerified: verifyMethod === 'online' && canSubmitIDV(idvState) }}
+          verifyMethod={verifyMethod}
+          otherIdMethod={otherIdState.method}
         />
       </ContentContainer>
     );
@@ -301,17 +309,8 @@ export function LifetimePensionFlow() {
                 />
 
                 {verifyMethod === 'online' ? (
-                  <Box
-                    sx={(theme) => ({
-                      borderRadius: `${theme.shape.lg}px`,
-                      backgroundColor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'border.default',
-                      px: { xs: 3, sm: 4 },
-                      pt: { xs: 3, sm: 4 },
-                      pb: { xs: 3, sm: 4 },
-                    })}
-                  >
+                  <>
+                    <Divider />
                     <StepIDV
                       state={idvState}
                       onChange={setIdvState}
@@ -320,30 +319,16 @@ export function LifetimePensionFlow() {
                       error={idvError}
                       embedded
                     />
-                  </Box>
+                  </>
                 ) : (
-                  <Box
-                    sx={(theme) => ({
-                      borderRadius: `${theme.shape.lg}px`,
-                      backgroundColor: 'background.paper',
-                      border: '1px solid',
-                      borderColor: 'border.default',
-                      px: { xs: 3, sm: 4 },
-                      pt: { xs: 3, sm: 4 },
-                      pb: { xs: 3, sm: 4 },
-                    })}
-                  >
-                    <Stack spacing={2}>
-                      <Typography variant="body" sx={{ color: 'text.primary' }}>
-                        Please refer to the Proof of Identity factsheet for other options to prove your identity.
-                      </Typography>
-                      <Checkbox
-                        label="I confirm that I will provide identity documents as described in the Proof of Identity factsheet."
-                        checked={otherOptionsConfirmed}
-                        onChange={setOtherOptionsConfirmed}
-                      />
-                    </Stack>
-                  </Box>
+                  <>
+                    <Divider />
+                    <OfflineIdv
+                      state={otherIdState}
+                      onChange={setOtherIdState}
+                      showValidation={showValidation}
+                    />
+                  </>
                 )}
               </Stack>
             ) : (
@@ -358,6 +343,11 @@ export function LifetimePensionFlow() {
                 onVerifyDetailsChange={setVerifyDetailsState}
                 profile={detailsProfile}
                 verifyMethod={verifyMethod}
+                otherIdSummary={
+                  verifyMethod === 'other' && otherIdState.method !== ''
+                    ? { method: otherIdState.method, fileNames: otherIdState.files.map((f) => f.name) }
+                    : undefined
+                }
               />
             )}
           </StepTransition>
@@ -373,7 +363,7 @@ export function LifetimePensionFlow() {
           {showValidation && activeStep === 6 && !stepIsValid(6) && (
             <Alert
               severity="error"
-              message="To continue, please complete the online identity check or confirm you'll provide identity documents using another method."
+              message="To continue, upload your identity documents, or choose 'I\u2019ll provide this later' and confirm."
             />
           )}
 

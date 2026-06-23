@@ -18,6 +18,8 @@ export default function LifetimePensionSubmittedPage() {
       <StepSuccess
         onReturnDashboard={() => router.push('/member-online')}
         gate={pendingGate}
+        verifyMethod="online"
+        otherIdMethod=""
       />
     </ContentContainer>
   );
