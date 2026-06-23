@@ -310,7 +310,6 @@ export function RetirementIncomeAccountFlow() {
                 onBankDetailsChange={(nextBankDetails) =>
                   updateState({ ...state, bankDetails: nextBankDetails })
                 }
-                showValidation={showValidation}
               />
             ) : currentStepId === 'investment-strategy' ? (
               <StepInvestmentStrategy
