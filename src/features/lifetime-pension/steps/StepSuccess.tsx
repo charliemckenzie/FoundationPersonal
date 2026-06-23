@@ -1,11 +1,10 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useState } from 'react';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
-import { IdvModal, type UseIdvGate } from '../../../features/idv';
+import type { UseIdvGate } from '../../../features/idv';
 import type { OtherIdMethod } from '../../../features/idv';
 
 export interface StepSuccessProps {
@@ -31,11 +30,8 @@ function ConfirmItem({ children }: ConfirmItemProps) {
 }
 
 export function StepSuccess({ onReturnDashboard, gate, verifyMethod, otherIdMethod }: StepSuccessProps) {
-  const [idvModalOpen, setIdvModalOpen] = useState(false);
-  const [idvVerified, setIdvVerified] = useState(gate.alreadyVerified);
-
   // For the 'other' path, the electronic IDV check is irrelevant — treat as pending.
-  const verified = verifyMethod === 'online' ? idvVerified : false;
+  const verified = verifyMethod === 'online' && gate.alreadyVerified;
 
   return (
     <Stack spacing={4} sx={{ alignItems: 'center', textAlign: 'center' }}>
@@ -152,12 +148,6 @@ export function StepSuccess({ onReturnDashboard, gate, verifyMethod, otherIdMeth
                     Until your identity is verified, your application cannot be fully processed.
                     You can complete this now or return later from your dashboard.
                   </Typography>
-                  <Box sx={{ pt: 0.5 }}>
-                    <Button
-                      label="Verify your identity"
-                      onClick={() => setIdvModalOpen(true)}
-                    />
-                  </Box>
                 </Stack>
               )}
             </Box>
@@ -192,14 +182,6 @@ export function StepSuccess({ onReturnDashboard, gate, verifyMethod, otherIdMeth
           </Stack>
         </Stack>
       </Box>
-
-      {/* IDV modal */}
-      <IdvModal
-        open={idvModalOpen}
-        onClose={() => setIdvModalOpen(false)}
-        gate={gate}
-        onVerified={() => setIdvVerified(true)}
-      />
 
     </Stack>
   );

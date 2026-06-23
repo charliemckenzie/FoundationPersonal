@@ -10,12 +10,7 @@ import { ContentContainer, MOBreadcrumb } from '@/components/MemberOnline';
 import { FormProgress } from '@/components/FormProgress';
 import { StepTransition } from '@/components/StepTransition';
 import { StepperActions } from '@/components/StepperActions';
-import {
-  useIdvGate,
-  canSubmitIDV,
-  initialVerifyDetailsState,
-} from '@/features/idv';
-import type { VerifyDetailsState } from '@/features/idv';
+import { useIdvGate, canSubmitIDV } from '@/features/idv';
 import { AtoStep0Identity } from './steps/AtoStep0Identity';
 import { AtoStep1Consent } from './steps/AtoStep1Consent';
 import { AtoStep2Results } from './steps/AtoStep2Results';
@@ -46,7 +41,6 @@ export function AtoSuperMatchFlow({ basePath }: AtoSuperMatchFlowProps) {
   const [activeStep, setActiveStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  const [verifyState, setVerifyState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
   const [consentChecked, setConsentChecked] = useState(false);
   const [funds, setFunds] = useState<FoundFund[]>(
     MOCK_FOUND_FUNDS.map((f) => ({ ...f, selected: false })),
@@ -189,11 +183,7 @@ export function AtoSuperMatchFlow({ basePath }: AtoSuperMatchFlowProps) {
 
           <StepTransition step={activeStep}>
             {currentStepId === 'identity' && (
-              <AtoStep0Identity
-                gate={gate}
-                verifyState={verifyState}
-                onVerifyStateChange={setVerifyState}
-              />
+              <AtoStep0Identity gate={gate} />
             )}
             {currentStepId === 'consent' && (
               <AtoStep1Consent checked={consentChecked} onChange={setConsentChecked} />

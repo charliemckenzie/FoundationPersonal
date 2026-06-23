@@ -1,18 +1,14 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { StepIDV, VerifyDetailsContent, MOCK_USER_PROFILE } from '@/features/idv';
-import type { UseIdvGate, VerifyDetailsState } from '@/features/idv';
+import { DigitalIDV } from '@/features/idv';
+import type { UseIdvGate } from '@/features/idv';
 
 export interface AtoStep0IdentityProps {
   gate: UseIdvGate;
-  verifyState: VerifyDetailsState;
-  onVerifyStateChange: (next: VerifyDetailsState) => void;
 }
 
 export function AtoStep0Identity({
   gate,
-  verifyState,
-  onVerifyStateChange,
 }: AtoStep0IdentityProps) {
   return (
     <Stack spacing={4}>
@@ -26,23 +22,7 @@ export function AtoStep0Identity({
         </Typography>
       </div>
 
-      <div>
-        <Typography variant="h4" component="h3" sx={{ mb: 2 }}>
-          Confirm your details
-        </Typography>
-        <Typography variant="body" sx={{ color: 'text.muted', lineHeight: 1.75, mb: 2 }}>
-          Please check that your personal details are correct. Incorrect details — especially your
-          address — may cause identity verification to fail.
-        </Typography>
-        <VerifyDetailsContent
-          profile={MOCK_USER_PROFILE}
-          state={verifyState}
-          onChange={onVerifyStateChange}
-          showValidation={false}
-        />
-      </div>
-
-      <StepIDV
+      <DigitalIDV
         state={gate.idvState}
         onChange={gate.setIdvState}
         onSubmit={() => {}}

@@ -2,20 +2,13 @@
 // Consumers import from '@/features/idv' only — never reach into internal files.
 
 // Components
-export { StepIDV, canSubmitIDV } from './StepIDV';
-export type { StepIDVProps } from './StepIDV';
-export { IdvModal } from './IdvModal';
-export type { IdvModalProps } from './IdvModal';
+export { DigitalIDV, canSubmitIDV } from './DigitalIDV';
+export type { DigitalIDVProps } from './DigitalIDV';
 export { OfflineIdv } from './OfflineIdv';
 export type { OfflineIdvProps } from './OfflineIdv';
 export { IdDocumentsModal } from './IdDocumentsModal';
 export type { IdDocumentsModalProps } from './IdDocumentsModal';
-export {
-  VerifyDetailsContent,
-  requiredFieldsFilled,
-  verifyDetailsCanContinue,
-} from './VerifyDetailsContent';
-export type { VerifyDetailsContentProps } from './VerifyDetailsContent';
+
 
 // Hook
 export { useIdvGate } from './useIdvGate';

@@ -21,7 +21,7 @@ const GENERIC_ERROR = 'We could not verify your identity. Please check your deta
 /**
  * State machine for the IDV gate: holds the document form state, runs the
  * (mock) Equifax submit, and records a successful verification in the shared
- * cache. Consumers pair this with either StepIDV (inline) or IdvModal (dialog).
+ * cache. Consumers pair this with DigitalIDV (inline).
  */
 export function useIdvGate(): UseIdvGate {
   const [alreadyVerified] = useState(() => checkIDVCache());

@@ -22,7 +22,7 @@ import type { OtherIdState } from '../../features/idv';
 import { StepAllocate } from './steps/StepAllocate';
 import { StepDetails } from './steps/StepDetails';
 import { StepFunding } from './steps/StepFunding';
-import { StepIDV, canSubmitIDV, initialIDVState as idvInitialState } from '../../features/idv';
+import { DigitalIDV, canSubmitIDV, initialIDVState as idvInitialState } from '../../features/idv';
 import type { IDVState as IdvModuleState } from '../../features/idv';
 import { StepIntro } from './steps/StepIntro';
 import { StepOption } from './steps/StepOption';
@@ -311,7 +311,7 @@ export function LifetimePensionFlow() {
                 {verifyMethod === 'online' ? (
                   <>
                     <Divider />
-                    <StepIDV
+                    <DigitalIDV
                       state={idvState}
                       onChange={setIdvState}
                       onSubmit={handleNext}
