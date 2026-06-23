@@ -1,3 +1,4 @@
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import { BankAccountField } from '../../components/BankAccountField';
 import {
@@ -37,6 +38,9 @@ All interactive elements support \`disabled\` to lock the control during submiss
     onSelectAccount: { table: { disable: true } },
     onVerifyAndAdd: { table: { disable: true } },
     onDeleteAccount: { table: { disable: true } },
+    onEditAccount: { table: { disable: true } },
+    onVerifyAndEdit: { table: { disable: true } },
+    onAccountEdited: { table: { disable: true } },
   },
   decorators: [(Story) => <div style={{ maxWidth: 480 }}><Story /></div>],
 };
@@ -58,26 +62,9 @@ export const AddOnly: Story = {
   },
 };
 
-export const SelectFromSaved: Story = {
-  args: {
-    savedAccounts: MOCK_SAVED_ACCOUNTS,
-    selectedAccountId: MOCK_SAVED_ACCOUNTS[0].id,
-    onSelectAccount: () => {},
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          'Two saved accounts displayed as radio cards. The first account is pre-selected. No add or delete controls — selection only.',
-      },
-    },
-  },
-};
-
 export const SelectWithAdd: Story = {
   args: {
     savedAccounts: MOCK_SAVED_ACCOUNTS,
-    selectedAccountId: MOCK_SAVED_ACCOUNTS[0].id,
     onSelectAccount: () => {},
     onVerifyAndAdd: mockVerifyAndAdd,
   },
@@ -91,19 +78,30 @@ export const SelectWithAdd: Story = {
   },
 };
 
-export const FullManagement: Story = {
-  args: {
-    savedAccounts: MOCK_SAVED_ACCOUNTS,
-    selectedAccountId: MOCK_SAVED_ACCOUNTS[0].id,
-    onSelectAccount: () => {},
-    onVerifyAndAdd: mockVerifyAndAdd,
-    onDeleteAccount: () => {},
+export const ManageableEdit: Story = {
+  render: () => {
+    const [accounts, setAccounts] = React.useState([...MOCK_SAVED_ACCOUNTS]);
+    return (
+      <div style={{ maxWidth: 480 }}>
+        <BankAccountField
+          savedAccounts={accounts}
+          onVerifyAndEdit={async (_accountId, details) => mockVerifyAndAdd(details)}
+          onAccountEdited={(accountId, details) =>
+            setAccounts((prev) =>
+              prev.map((a) => (a.id === accountId ? { ...a, ...details } : a))
+            )
+          }
+          onDeleteAccount={(id) => setAccounts((prev) => prev.filter((a) => a.id !== id))}
+          onVerifyAndAdd={mockVerifyAndAdd}
+        />
+      </div>
+    );
   },
   parameters: {
     docs: {
       description: {
         story:
-          'Full account management: radio cards with delete icons, collapsible add form, and a confirmation dialog before deletion. This is the variant used in account settings.',
+          'Accounts rendered as non-selectable display boxes. Clicking the edit icon expands the card inline with pre-populated fields and a "Verify and save" button. Delete shows the confirmation dialog. A BSB starting with `999` triggers a verification failure.',
       },
     },
   },
@@ -112,10 +110,8 @@ export const FullManagement: Story = {
 export const SingleAccount: Story = {
   args: {
     savedAccounts: MOCK_SAVED_ACCOUNTS_SINGLE,
-    selectedAccountId: MOCK_SAVED_ACCOUNTS_SINGLE[0].id,
     onSelectAccount: () => {},
     onVerifyAndAdd: mockVerifyAndAdd,
-    onDeleteAccount: () => {},
   },
   parameters: {
     docs: {
@@ -143,21 +139,3 @@ export const ManyAccounts: Story = {
   },
 };
 
-export const Disabled: Story = {
-  args: {
-    savedAccounts: MOCK_SAVED_ACCOUNTS,
-    selectedAccountId: MOCK_SAVED_ACCOUNTS[0].id,
-    onSelectAccount: () => {},
-    onVerifyAndAdd: mockVerifyAndAdd,
-    onDeleteAccount: () => {},
-    disabled: true,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story:
-          '**Usage guidance:** Use `disabled` when bank account details have been confirmed and should not be changed — for example, during form submission or in a read-only review step. All radio cards, delete buttons, and the add panel are non-interactive.',
-      },
-    },
-  },
-};

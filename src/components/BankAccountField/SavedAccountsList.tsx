@@ -9,7 +9,10 @@ import MenuItem from '@mui/material/MenuItem';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Collapse from '@mui/material/Collapse';
 import { useId, useState } from 'react';
+import { EditAccountPanel } from './EditAccountPanel';
+import type { BankDetailsValue } from '../BankDetailsField';
 import { IconButton } from '../IconButton';
 import { cardContainerSx, defaultRadioSx } from '../RadioGroup/styles';
 import { RadioUncheckedIcon, RadioCheckedIcon } from '../RadioGroup/icons';
@@ -27,6 +30,14 @@ interface SavedAccountsListProps {
   onSelect: (account: SavedBankAccount) => void;
   onDeleteRequest: (account: SavedBankAccount) => void;
   showDeleteButtons: boolean;
+  onEditRequest?: (account: SavedBankAccount) => void;
+  showEditButtons?: boolean;
+  /**
+   * When provided, switches to the manageable (non-selectable) variant.
+   * Each card has inline edit expansion.
+   */
+  onVerifyAndEdit?: (accountId: string, details: BankDetailsValue) => Promise<{ success: boolean; errorMessage?: string }>;
+  onEditSaved?: (accountId: string, details: BankDetailsValue) => void;
   /** IDs of accounts that should never show a delete button (e.g. locally-added, not yet persisted). */
   nonDeletableIds?: ReadonlySet<string>;
   /** Mask account numbers to show only the last 4 digits. Defaults to `true`. */
@@ -77,6 +88,10 @@ export function SavedAccountsList({
   onSelect,
   onDeleteRequest,
   showDeleteButtons,
+  onEditRequest,
+  showEditButtons = false,
+  onVerifyAndEdit,
+  onEditSaved,
   nonDeletableIds,
   maskAccountNumbers = false,
   disabled = false,
@@ -87,6 +102,92 @@ export function SavedAccountsList({
   const [internalSelectValue, setInternalSelectValue] = useState(selectedId ?? '');
   const resolvedSelectValue = selectedId ?? internalSelectValue;
   const useSelectVariant = accounts.length > SELECT_THRESHOLD;
+  const [editingAccountId, setEditingAccountId] = useState<string | undefined>();
+
+  // Manageable (non-selectable) variant — inline edit expansion
+  if (onVerifyAndEdit) {
+    return (
+      <Stack spacing={1.5}>
+        {accounts.map((account) => {
+          const isEditing = editingAccountId === account.id;
+          const canDelete = showDeleteButtons && !(nonDeletableIds?.has(account.id) ?? false);
+          const bankName = lookupBsbBank(account.bsb);
+          const displayNumber = maskAccountNumbers ? maskAccountNumber(account.accountNumber) : account.accountNumber;
+
+          return (
+            <Box
+              key={account.id}
+              sx={{
+                border: '1px solid',
+                borderColor: 'border.default',
+                borderRadius: '1rem',
+                backgroundColor: 'background.paper',
+                p: { xs: 2, sm: 3 },
+              }}
+            >
+              <Stack direction="row" spacing={2} sx={{ alignItems: 'center' }}>
+                <Stack spacing={0} sx={{ flex: 1, minWidth: 0 }}>
+                  <Typography variant="body" component="span" sx={{ fontWeight: 'fontWeightMedium', display: 'block' }}>
+                    {account.accountName}
+                  </Typography>
+                  {bankName && (
+                    <Typography variant="small" component="span" sx={{ color: 'text.muted', display: 'block' }}>
+                      {bankName}
+                    </Typography>
+                  )}
+                  <Typography variant="small" component="span" sx={{ color: 'text.muted', display: 'block' }}>
+                    {account.bsb} · {displayNumber}
+                  </Typography>
+                </Stack>
+
+                <Stack direction="row" spacing={1} sx={{ flexShrink: 0 }}>
+                  <IconButton
+                    icon="pen-to-square"
+                    iconStyle="solid"
+                    label={isEditing ? `Cancel editing ${account.accountName}` : `Edit ${account.accountName}`}
+                    variant="outlined"
+                    size="medium"
+                    disabled={disabled}
+                    showTooltip
+                    onClick={() => setEditingAccountId(isEditing ? undefined : account.id)}
+                  />
+                  {canDelete && (
+                    <IconButton
+                      icon="trash"
+                      iconStyle="solid"
+                      label={`Delete ${account.accountName}`}
+                      variant="outlined"
+                      size="medium"
+                      disabled={disabled}
+                      showTooltip
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        onDeleteRequest(account);
+                      }}
+                    />
+                  )}
+                </Stack>
+              </Stack>
+
+              <Collapse in={isEditing} unmountOnExit>
+                <EditAccountPanel
+                  defaultValue={{ bsb: account.bsb, accountNumber: account.accountNumber, accountName: account.accountName }}
+                  onVerify={(details) => onVerifyAndEdit(account.id, details)}
+                  onSaveConfirmed={(details) => {
+                    onEditSaved?.(account.id, details);
+                    setEditingAccountId(undefined);
+                  }}
+                  onCancel={() => setEditingAccountId(undefined)}
+                  disabled={disabled}
+                />
+              </Collapse>
+            </Box>
+          );
+        })}
+      </Stack>
+    );
+  }
 
   // Select variant — used when there are more than SELECT_THRESHOLD accounts
   if (useSelectVariant) {
@@ -200,6 +301,7 @@ export function SavedAccountsList({
             const isSelected = account.id === selectedId;
             const isItemDisabled = disabled;
             const canDelete = showDeleteButtons && !(nonDeletableIds?.has(account.id) ?? false);
+            const canEdit = showEditButtons && !(nonDeletableIds?.has(account.id) ?? false);
 
             return (
               <Box key={account.id} sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
@@ -238,6 +340,23 @@ export function SavedAccountsList({
                     />
                   }
                 />
+
+                {canEdit && (
+                  <IconButton
+                    icon="pen-to-square"
+                    iconStyle="solid"
+                    label={`Edit ${account.accountName}`}
+                    variant="outlined"
+                    size="medium"
+                    disabled={disabled}
+                    showTooltip
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      onEditRequest?.(account);
+                    }}
+                  />
+                )}
 
                 {canDelete && (
                   <IconButton

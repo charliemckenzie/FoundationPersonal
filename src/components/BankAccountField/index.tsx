@@ -43,6 +43,24 @@ export interface BankAccountFieldProps {
    */
   onDeleteAccount?: (accountId: string) => void;
 
+  /**
+   * Called when the user clicks the edit button on a saved account.
+   * If absent, no edit button is shown.
+   */
+  onEditAccount?: (account: SavedBankAccount) => void;
+
+  /**
+   * Async function to verify and save edits to an existing account.
+   * When provided, accounts render as non-selectable boxes with inline edit expansion
+   * instead of radio cards.
+   */
+  onVerifyAndEdit?: (accountId: string, details: BankDetailsValue) => Promise<VerificationResult>;
+
+  /**
+   * Called after an inline account edit has been verified and saved.
+   */
+  onAccountEdited?: (accountId: string, details: BankDetailsValue) => void;
+
   /** Disables all interactive elements. */
   disabled?: boolean;
 
@@ -56,6 +74,9 @@ export function BankAccountField({
   onSelectAccount,
   onVerifyAndAdd,
   onDeleteAccount,
+  onEditAccount,
+  onVerifyAndEdit,
+  onAccountEdited,
   disabled = false,
   maskAccountNumbers = false,
 }: BankAccountFieldProps) {
@@ -69,6 +90,7 @@ export function BankAccountField({
   const addedAccountIds: ReadonlySet<string> = new Set(addedAccounts.map((a) => a.id));
   const hasSavedAccounts = allAccounts.length > 0;
   const showDeleteButtons = Boolean(onDeleteAccount);
+  const showEditButtons = Boolean(onEditAccount);
   const showAddNew = Boolean(onVerifyAndAdd);
 
   // Track the pre-panel selection so Cancel can restore it
@@ -160,9 +182,14 @@ export function BankAccountField({
               onSelect={(account) => {
                 setActiveSelectedId(account.id);
                 onSelectAccount?.(account);
+                if (addPanelOpen) setAddPanelOpen(false);
               }}
               onDeleteRequest={handleDeleteRequest}
               showDeleteButtons={showDeleteButtons}
+              onEditRequest={onEditAccount}
+              showEditButtons={showEditButtons}
+              onVerifyAndEdit={onVerifyAndEdit}
+              onEditSaved={onAccountEdited}
               nonDeletableIds={addedAccountIds}
               maskAccountNumbers={maskAccountNumbers}
               disabled={disabled}
@@ -211,8 +238,8 @@ export function BankAccountField({
           variant="alert"
           title="Delete bank account?"
           description={`BSB ${pendingDelete.bsb} · account ending ${pendingDelete.accountNumber.slice(-4)} will be removed. This cannot be undone.`}
-          confirmLabel="Delete account"
-          cancelLabel="Keep account"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
         />
       )}
     </>

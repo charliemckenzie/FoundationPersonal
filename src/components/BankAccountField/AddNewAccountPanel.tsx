@@ -84,7 +84,7 @@ export function AddNewAccountPanel({
         <Typography variant="h6">Add new account</Typography>
 
         {/* firstFocusRef is attached to a wrapper so the parent can move focus here */}
-        <div ref={firstFocusRef as React.RefObject<HTMLDivElement>}>
+        <div ref={firstFocusRef as React.RefObject<HTMLDivElement>} style={{ marginTop: 0 }}>
           <BankDetailsField
             onChange={setValue}
             showValidation={showValidation}
