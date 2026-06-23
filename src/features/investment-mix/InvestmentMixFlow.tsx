@@ -283,6 +283,28 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
     if (error && checked) setError(null);
   }
 
+  function commitChange() {
+    const change = buildChange(
+      selectedAccountId,
+      accounts,
+      applyTo!,
+      allocations,
+      showPaymentStep ? (paymentPreference ?? undefined) : undefined,
+      showRebalanceStep ? (rebalance ?? undefined) : undefined,
+    );
+    saveChange(change);
+    setSubmittedChange(change);
+    if (onComplete) {
+      onComplete(change);
+      return;
+    }
+    const successParams = new URLSearchParams(window.location.search);
+    successParams.set('step', 'success');
+    history.replaceState({}, '', `?${successParams.toString()}`);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setSubmitted(true);
+  }
+
   function handleNext() {
     if (showIntro) {
       if (!introReviewed) {
@@ -342,27 +364,7 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
         setError('Please confirm the declaration before submitting.');
         return;
       }
-      const change = buildChange(
-        selectedAccountId,
-        accounts,
-        applyTo!,
-        allocations,
-        showPaymentStep ? (paymentPreference ?? undefined) : undefined,
-        showRebalanceStep ? (rebalance ?? undefined) : undefined,
-      );
-      saveChange(change);
-      setSubmittedChange(change);
-      if (onComplete) {
-        onComplete(change);
-        return;
-      }
-      // Replace (not push) so the user cannot navigate back into a re-submit scenario.
-      // GA4 picks this up as a page_view for the success step.
-      const successParams = new URLSearchParams(window.location.search);
-      successParams.set('step', 'success');
-      history.replaceState({}, '', `?${successParams.toString()}`);
-      window.scrollTo({ top: 0, behavior: 'instant' });
-      setSubmitted(true);
+      commitChange();
       return;
     }
 
@@ -543,7 +545,11 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
         cancelLabel="Cancel"
         onConfirm={() => {
           setSpeedBumpWarning(null);
-          advance(activeStep + 1);
+          if (embedded && activeStep === steps.length - 1) {
+            commitChange();
+          } else {
+            advance(activeStep + 1);
+          }
         }}
       >
         <Box sx={{ mt: 1.5 }}>

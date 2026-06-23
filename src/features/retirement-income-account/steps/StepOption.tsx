@@ -63,20 +63,12 @@ export function StepOption({
           </Typography>
         </div>
 
-      <Box
-        sx={{
-          '& .MuiFormControl-root': { width: '100%' },
-          '& .MuiFormGroup-root': { flexWrap: 'nowrap', width: '100%' },
-          '& .MuiFormControlLabel-root': { flex: 1, minWidth: 0 },
-        }}
-      >
-        <RadioCardGroup
+      <RadioCardGroup
           options={OPTION_CHOICES}
           value={pensionOption}
           onChange={(value) => onPensionOptionChange(value as PensionOption)}
           direction="row"
         />
-      </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75 }}>
         <Typography variant="small" sx={{ color: 'text.muted' }}>

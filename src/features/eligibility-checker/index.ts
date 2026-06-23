@@ -11,3 +11,4 @@ export type {
   ConditionalQuestion,
 } from './types';
 export { lifetimePensionConfig } from './configs/lifetimePensionConfig';
+export { retirementIncomeAccountConfig } from './configs/retirementIncomeAccountConfig';

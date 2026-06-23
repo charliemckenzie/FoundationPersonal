@@ -65,7 +65,7 @@ export function RadioGroup({
       error={error}
       disabled={disabled}
       required={required}
-      sx={{ border: 'none', p: 0, m: 0, minWidth: 0 }}
+      sx={{ border: 'none', p: 0, m: 0, minWidth: 0, ...(isBoxedOrCard && { width: '100%' }) }}
     >
       {legend && (
         <FormLabel
@@ -101,7 +101,7 @@ export function RadioGroup({
           if (value === undefined) setInternalValue(e.target.value);
           onChange?.(e.target.value);
         }}
-        sx={{ gap: isBoxedOrCard || isButton ? 1 : 1.5 }}
+        sx={{ gap: isBoxedOrCard || isButton ? 1 : 1.5, ...(isBoxedOrCard && { width: '100%' }) }}
       >
         {options.map((option) => (
           <RadioOptionItem
@@ -111,6 +111,7 @@ export function RadioGroup({
             color={color}
             size={size}
             cardDirection={cardDirection}
+            direction={direction}
             groupDisabled={disabled}
             resolvedValue={resolvedValue}
           />

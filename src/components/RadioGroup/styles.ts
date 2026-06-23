@@ -4,6 +4,7 @@ import { selectedCardStyles } from '../inputs/variantStyles';
 export const cardContainerSx = (args: {
   variant: 'boxed' | 'card';
   cardDirection: 'column' | 'row';
+  direction: 'column' | 'row';
   description: boolean;
   isSelected: boolean;
   isItemDisabled: boolean;
@@ -29,6 +30,8 @@ export const cardContainerSx = (args: {
   borderRadius: '0.5rem',
   minHeight: '3rem',
   minWidth: args.variant === 'card' && args.cardDirection === 'column' ? '9rem' : undefined,
+  width: args.direction === 'column' ? '100%' : undefined,
+  flex: args.direction === 'row' ? 1 : undefined,
   px: 2,
   ...(args.variant === 'boxed' && { pr: '1.25rem' }),
   py: args.variant === 'card' || args.description ? 2 : 0,
