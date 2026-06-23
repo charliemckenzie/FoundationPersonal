@@ -7,7 +7,8 @@ import { BankDetailsField } from '../BankDetailsField';
 import type { BankDetailsValue } from '../BankDetailsField';
 import { formatBsb } from '../BankDetailsField/utils';
 import { Button } from '../Button';
-import { Alert } from '../Alert';
+import { Alert, SEVERITY_ICONS } from '../Alert';
+import { Icon } from '../Icon';
 import { DescriptionList } from '../DescriptionList';
 import type { CopResult, VerificationResult } from './types';
 
@@ -41,12 +42,12 @@ const COP_ALERT_CONFIG = {
   'close-match': {
     severity: 'warning' as const,
     message: () =>
-      'Please double check the recipient details as an incorrect payment may be difficult to retrieve.',
+      "Only continue once you've confirmed the recipient's name and details are correct, as we can't guarantee funds sent to the wrong account can be recovered.",
   },
   'no-match': {
     severity: 'error' as const,
     message: () =>
-      'Please double check the recipient details as an incorrect payment may be difficult to retrieve.',
+      "Only continue once you've confirmed the recipient's name and details are correct, as we can't guarantee funds sent to the wrong account can be recovered.",
   },
 };
 
@@ -62,6 +63,7 @@ function CopResultCard({
   value: BankDetailsValue;
 }) {
   const { severity, message } = COP_ALERT_CONFIG[copResult];
+  const icon = <Icon icon={SEVERITY_ICONS[severity]} style="solid" size="lg" color={severity} />;
 
   const statusTitle = {
     match: `The account is in the name of ${resolvedName}`,
@@ -72,12 +74,10 @@ function CopResultCard({
   return (
     <Stack spacing={2}>
       {/* Status alert — the CoP verdict */}
-      <Alert severity={severity} title={statusTitle} message={message(resolvedName)} />
+      <Alert severity={severity} icon={icon} title={statusTitle} message={message(resolvedName)} />
 
       {/* Account details */}
       <DescriptionList
-        title="Account details"
-        titleVariant="h6"
         density="condensed"
         sx={{
           backgroundColor: 'background.tintNeutral',
@@ -90,7 +90,6 @@ function CopResultCard({
         }}
       >
         <DescriptionList.Item label="Account name you entered" value={enteredName} />
-        <DescriptionList.Item label="Account name" value={value.accountName} />
         <DescriptionList.Item label="BSB" value={formatBsb(value.bsb.replace(/\D/g, ''))} />
         <DescriptionList.Item label="Account number" value={value.accountNumber} />
       </DescriptionList>
@@ -177,6 +176,7 @@ export function AddNewAccountPanel({
             <div ref={firstFocusRef as React.RefObject<HTMLDivElement>} style={{ marginTop: 0 }}>
               <BankDetailsField
                 onChange={setValue}
+                defaultValue={value}
                 showValidation={showValidation}
                 disabled={disabled || isVerifying}
               />
