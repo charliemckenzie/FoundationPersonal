@@ -35,12 +35,18 @@ export const MOCK_SAVED_ACCOUNTS_EMPTY: SavedBankAccount[] = [];
 
 /**
  * Mock verification service. Simulates network latency (1.2s).
- * BSB starting with "999" is treated as invalid.
+ *
+ * CoP simulation triggers (based on account name entered):
+ *   - BSB starts with `999` → error (no CoP phase)
+ *   - Account name `Jane Smith` (case-insensitive) → match
+ *   - Account name `J Smith` (case-insensitive) → close-match, resolvedName 'Jane Smith'
+ *   - Any other name → no-match, resolvedName 'Jane Smith'
  */
 export async function mockVerifyAndAdd(
   details: BankDetailsValue
 ): Promise<VerificationResult> {
   await new Promise<void>((resolve) => setTimeout(resolve, 1200));
+
   if (details.bsb.startsWith('999')) {
     return {
       success: false,
@@ -48,5 +54,28 @@ export async function mockVerifyAndAdd(
         'We could not verify this account. Check the BSB and account number and try again.',
     };
   }
-  return { success: true };
+
+  const name = details.accountName.trim().toLowerCase();
+
+  if (name === 'jane smith') {
+    return {
+      success: true,
+      copResult: 'match',
+      resolvedName: 'Jane Smith',
+    };
+  }
+
+  if (name === 'j smith') {
+    return {
+      success: true,
+      copResult: 'close-match',
+      resolvedName: 'Jane Smith',
+    };
+  }
+
+  return {
+    success: true,
+    copResult: 'no-match',
+    resolvedName: 'Jane Smith',
+  };
 }

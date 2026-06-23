@@ -68,17 +68,16 @@ export function BankDetailsField({
         <TextField
           label="Account name"
           fullWidth
-          required
           value={value.accountName}
           disabled={disabled}
           error={showValidation && !value.accountName.trim()}
           errorMessage={showValidation && !value.accountName.trim() ? 'Account name is required' : undefined}
+          helperText={showValidation && !value.accountName.trim() ? undefined : "We'll check this against the full account name"}
           onChange={(event) => updateField('accountName', event.target.value)}
         />
         <TextField
           label="BSB"
           fullWidth
-          required
           value={value.bsb}
           placeholder="000-000"
           disabled={disabled}
@@ -94,7 +93,6 @@ export function BankDetailsField({
         <TextField
           label="Account number"
           fullWidth
-          required
           value={value.accountNumber}
           disabled={disabled}
           error={showValidation && !value.accountNumber.trim()}

@@ -5,18 +5,17 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { BankDetailsField } from '../BankDetailsField';
 import type { BankDetailsValue } from '../BankDetailsField';
+import { formatBsb } from '../BankDetailsField/utils';
 import { Button } from '../Button';
-import { Alert } from '../Alert';
+import { Alert, SEVERITY_ICONS } from '../Alert';
 import { Icon } from '../Icon';
-import type { VerificationResult } from './types';
-
-/** Delay in ms between "verified" message and the account being added. */
-const ADD_DELAY_MS = 1500;
+import { DescriptionList } from '../DescriptionList';
+import type { CopResult, VerificationResult } from './types';
 
 interface AddNewAccountPanelProps {
-  /** Called to verify the account details. Returns success/failure. */
+  /** Called to verify the account details. Returns a VerificationResult which may include CoP data. */
   onVerify: (details: BankDetailsValue) => Promise<VerificationResult>;
-  /** Called after verification succeeds and the post-verify delay has elapsed. */
+  /** Called when the user confirms adding the account after seeing the CoP result. */
   onAddConfirmed: (details: BankDetailsValue) => void;
   onCancel?: () => void;
   disabled?: boolean;
@@ -24,9 +23,78 @@ interface AddNewAccountPanelProps {
   firstFocusRef?: React.RefObject<HTMLElement | null>;
 }
 
+type Phase =
+  | { kind: 'form' }
+  | { kind: 'verifying' }
+  | { kind: 'cop'; copResult: CopResult; resolvedName: string; enteredName: string };
+
 function isBankDetailsComplete(value: BankDetailsValue): boolean {
   const digits = value.bsb.replace(/\D/g, '');
   return digits.length === 6 && value.accountNumber.trim() !== '' && value.accountName.trim() !== '';
+}
+
+const COP_ALERT_CONFIG = {
+  match: {
+    severity: 'success' as const,
+    message: (resolvedName: string) =>
+      `The account is in the name of ${resolvedName}.`,
+  },
+  'close-match': {
+    severity: 'warning' as const,
+    message: () =>
+      "Only continue once you've confirmed the recipient's name and details are correct, as we can't guarantee funds sent to the wrong account can be recovered.",
+  },
+  'no-match': {
+    severity: 'error' as const,
+    message: () =>
+      "Only continue once you've confirmed the recipient's name and details are correct, as we can't guarantee funds sent to the wrong account can be recovered.",
+  },
+};
+
+function CopResultCard({
+  copResult,
+  resolvedName,
+  enteredName,
+  value,
+}: {
+  copResult: CopResult;
+  resolvedName: string;
+  enteredName: string;
+  value: BankDetailsValue;
+}) {
+  const { severity, message } = COP_ALERT_CONFIG[copResult];
+  const icon = <Icon icon={SEVERITY_ICONS[severity]} style="solid" size="lg" color={severity} />;
+
+  const statusTitle = {
+    match: `The account is in the name of ${resolvedName}`,
+    'close-match': `The account is in the name of ${resolvedName}`,
+    'no-match': 'The account name entered does not match the account.',
+  }[copResult];
+
+  return (
+    <Stack spacing={2}>
+      {/* Status alert — the CoP verdict */}
+      <Alert severity={severity} icon={icon} title={statusTitle} message={message(resolvedName)} />
+
+      {/* Account details */}
+      <DescriptionList
+        density="condensed"
+        sx={{
+          backgroundColor: 'background.tintNeutral',
+          border: 'none',
+          borderRadius: '0.75rem',
+          px: { xs: 2, sm: 3 },
+          py: 2,
+          pt: 2,
+          pb: 2,
+        }}
+      >
+        <DescriptionList.Item label="Account name you entered" value={enteredName} />
+        <DescriptionList.Item label="BSB" value={formatBsb(value.bsb.replace(/\D/g, ''))} />
+        <DescriptionList.Item label="Account number" value={value.accountNumber} />
+      </DescriptionList>
+    </Stack>
+  );
 }
 
 export function AddNewAccountPanel({
@@ -38,9 +106,11 @@ export function AddNewAccountPanel({
 }: AddNewAccountPanelProps) {
   const [value, setValue] = useState<BankDetailsValue>({ bsb: '', accountNumber: '', accountName: '' });
   const [showValidation, setShowValidation] = useState(false);
-  const [verifying, setVerifying] = useState(false);
-  const [verified, setVerified] = useState(false);
   const [verificationError, setVerificationError] = useState<string | undefined>();
+  const [phase, setPhase] = useState<Phase>({ kind: 'form' });
+
+  const isVerifying = phase.kind === 'verifying';
+  const isCop = phase.kind === 'cop';
 
   async function handleVerify() {
     setShowValidation(true);
@@ -50,24 +120,40 @@ export function AddNewAccountPanel({
       return;
     }
 
-    setVerifying(true);
+    setPhase({ kind: 'verifying' });
     try {
       const result = await onVerify(value);
       if (!result.success) {
-        setVerifying(false);
+        setPhase({ kind: 'form' });
         setVerificationError(result.errorMessage ?? 'Verification failed. Please try again.');
         return;
       }
-      // Step 1 complete — show the verified success message
-      setVerifying(false);
-      setVerified(true);
-      // Step 2 — brief delay then hand off to the parent to add the account
-      await new Promise<void>((resolve) => setTimeout(resolve, ADD_DELAY_MS));
-      onAddConfirmed(value);
+
+      if (result.copResult) {
+        // Part 2 — show CoP result before confirming
+        setPhase({
+          kind: 'cop',
+          copResult: result.copResult,
+          resolvedName: result.resolvedName ?? value.accountName,
+          enteredName: value.accountName,
+        });
+      } else {
+        // No CoP data — backwards-compatible: add immediately
+        onAddConfirmed(value);
+      }
     } catch {
-      setVerifying(false);
+      setPhase({ kind: 'form' });
       setVerificationError('Something went wrong. Please try again.');
     }
+  }
+
+  function handleConfirmAndAdd() {
+    onAddConfirmed(value);
+  }
+
+  function handleGoBack() {
+    setPhase({ kind: 'form' });
+    setVerificationError(undefined);
   }
 
   return (
@@ -83,54 +169,81 @@ export function AddNewAccountPanel({
       <Stack spacing={2}>
         <Typography variant="h6">Add new account</Typography>
 
-        {/* firstFocusRef is attached to a wrapper so the parent can move focus here */}
-        <div ref={firstFocusRef as React.RefObject<HTMLDivElement>} style={{ marginTop: 0 }}>
-          <BankDetailsField
-            onChange={setValue}
-            showValidation={showValidation}
-            disabled={disabled || verifying}
-          />
-        </div>
+        {/* Part 1 — form fields (hidden during CoP review, not unmounted so values persist) */}
+        {!isCop && (
+          <>
+            {/* firstFocusRef is attached to a wrapper so the parent can move focus here */}
+            <div ref={firstFocusRef as React.RefObject<HTMLDivElement>} style={{ marginTop: 0 }}>
+              <BankDetailsField
+                onChange={setValue}
+                defaultValue={value}
+                showValidation={showValidation}
+                disabled={disabled || isVerifying}
+              />
+            </div>
 
-        {verificationError && (
-          <Alert
-            severity="error"
-            message={verificationError}
-          />
+            {verificationError && (
+              <Alert severity="error" message={verificationError} />
+            )}
+
+            <Stack direction="row" spacing={1.5}>
+              <Button
+                label="Verify"
+                size="small"
+                variant="outlined"
+                disabled={disabled || isVerifying}
+                loading={isVerifying}
+                hideLoadingText
+                aria-busy={isVerifying}
+                onClick={handleVerify}
+                type="button"
+              />
+              {onCancel && (
+                <Button
+                  label="Cancel"
+                  size="small"
+                  variant="ghost"
+                  disabled={disabled || isVerifying}
+                  onClick={onCancel}
+                  type="button"
+                />
+              )}
+            </Stack>
+          </>
         )}
 
-        {verified && (
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            <Icon icon="circle-check" style="solid" color="success" size="md" />
-            <Typography variant="small" sx={{ color: 'success.main', fontWeight: 'fontWeightMedium' }}>
-              Account verified. Now adding account…
-            </Typography>
+        {/* Part 2 — Confirmation of Payee result */}
+        {isCop && (
+          <Stack spacing={2}>
+            <Box role="status" aria-live="polite" aria-atomic="true">
+              <CopResultCard
+                copResult={phase.copResult}
+                resolvedName={phase.resolvedName}
+                enteredName={phase.enteredName}
+                value={value}
+              />
+            </Box>
+
+            <Stack direction="row" spacing={1.5}>
+              <Button
+                label="Confirm and add"
+                size="small"
+                variant="outlined"
+                disabled={disabled}
+                onClick={handleConfirmAndAdd}
+                type="button"
+              />
+              <Button
+                label="Go back"
+                size="small"
+                variant="ghost"
+                disabled={disabled}
+                onClick={handleGoBack}
+                type="button"
+              />
+            </Stack>
           </Stack>
         )}
-
-        <Stack direction="row" spacing={1.5}>
-          <Button
-            label="Verify and add"
-            size="small"
-            variant="outlined"
-            disabled={disabled || verifying || verified}
-            loading={verifying || verified}
-            hideLoadingText
-            aria-busy={verifying || verified}
-            onClick={handleVerify}
-            type="button"
-          />
-          {onCancel && !verified && (
-            <Button
-              label="Cancel"
-              size="small"
-              variant="ghost"
-              disabled={disabled || verifying}
-              onClick={onCancel}
-              type="button"
-            />
-          )}
-        </Stack>
       </Stack>
     </Box>
   );

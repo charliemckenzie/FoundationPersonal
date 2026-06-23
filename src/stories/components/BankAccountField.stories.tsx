@@ -19,7 +19,15 @@ const meta: Meta<typeof BankAccountField> = {
         component: `
 BankAccountField is a composite form control for managing bank account selection and entry. Its behaviour is derived entirely from which props are provided — no mode prop required.
 
-**Add only** (no \`savedAccounts\`): renders a BSB/account number/account name form with a "Verify and add" button. Use BSB starting with \`999\` to trigger a verification failure.
+**Add only** (no \`savedAccounts\`): renders an account name / BSB / account number form with a "Verify" button.
+
+**Two-step Confirmation of Payee (CoP):** after clicking Verify, the panel transitions to a CoP result screen showing the name you entered, a status alert (match / close match / no match), and a grey summary of the account details. The user must then click "Confirm and add" to proceed, or "Go back" to correct their details. Fields are prefilled on go back.
+
+**CoP test triggers (account name):**
+- \`Jane Smith\` → ✅ Match
+- \`J Smith\` → ⚠️ Close match (resolved: Jane Smith)
+- Any other name → ❌ No match (resolved: Jane Smith)
+- BSB starting \`999\` → verification error (no CoP phase)
 
 **Select from saved**: renders radio cards, one per account. Selecting a card calls \`onSelectAccount\`.
 
@@ -56,7 +64,7 @@ export const AddOnly: Story = {
     docs: {
       description: {
         story:
-          'No saved accounts — only the add-new form is shown. Enter a BSB starting with `999` (e.g. `999-000`) and click "Verify and add" to see the inline verification failure message. Any other valid BSB succeeds.',
+          'No saved accounts — only the add-new form is shown. Part 1: fill in the fields and click **Verify**. Part 2: a Confirmation of Payee result is shown. Use account name `Jane Smith` for a match (green), `J Smith` for a close match (amber), or any other name for no match (red). Click **Confirm and add** to proceed, or **Go back** to edit — fields are prefilled. A BSB starting with `999` triggers a verification error before CoP.',
       },
     },
   },
@@ -72,7 +80,7 @@ export const SelectWithAdd: Story = {
     docs: {
       description: {
         story:
-          'Two saved accounts plus an "Add a new account" button. Clicking the button expands the add form inline. Focus moves to the first field automatically.',
+          'Two saved accounts plus an "Add a new account" button. Clicking the button expands the add form inline with the two-step CoP verification flow. Focus moves to the first field automatically.',
       },
     },
   },
