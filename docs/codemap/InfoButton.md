@@ -8,3 +8,4 @@ composes: [Dialog, Icon, Tooltip]
 # InfoButton
 
 **Composes:** [[Dialog]] · [[Icon]] · [[Tooltip]]
+**StoryFile:** `src/stories/components/buttons/InfoButton.stories.tsx`

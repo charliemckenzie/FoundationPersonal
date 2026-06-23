@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[Footer]] · [[Header]]
 
 **Story:** `/?path=/story/components-logo--default`
+**StoryFile:** `src/stories/components/Logo.stories.tsx`

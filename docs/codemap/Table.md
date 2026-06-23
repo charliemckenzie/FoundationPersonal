@@ -11,3 +11,4 @@ composes: [Icon, IconButton, Select, Spinner]
 **Used by:** [[DataGrid]]
 
 **Story:** `/?path=/story/components-tables-table--default`
+**StoryFile:** `src/stories/components/tables/Table.stories.tsx`

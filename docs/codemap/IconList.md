@@ -10,3 +10,4 @@ composes: [Icon]
 **Composes:** [[Icon]]
 
 **Story:** `/?path=/story/components-iconlist--default`
+**StoryFile:** `src/stories/components/IconList.stories.tsx`

@@ -10,3 +10,4 @@ composes: [Icon]
 **Composes:** [[Icon]]
 
 **Story:** `/?path=/story/accessibility-skiplinks--default`
+**StoryFile:** `src/stories/components/SkipLinks.stories.tsx`

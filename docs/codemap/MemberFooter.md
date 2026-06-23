@@ -12,3 +12,4 @@ composes: []
 **Used by:** [[MemberOnlineLayout]]
 
 **Story:** `/?path=/story/member-online-memberfooter--default`
+**StoryFile:** `src/stories/member-online/MemberFooter.stories.tsx`

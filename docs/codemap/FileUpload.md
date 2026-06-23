@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/form-components-fileupload-fileupload--default`
+**StoryFile:** `src/stories/components/FileUpload/FileUpload.stories.tsx`

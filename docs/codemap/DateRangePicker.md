@@ -10,3 +10,4 @@ composes: [DatePicker]
 **Composes:** [[DatePicker]]
 
 **Story:** `/?path=/story/components-daterangepicker--default`
+**StoryFile:** `src/stories/components/DateRangePicker.stories.tsx`

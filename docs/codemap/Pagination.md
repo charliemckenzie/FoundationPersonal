@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/components-pagination--default`
+**StoryFile:** `src/stories/components/Pagination.stories.tsx`

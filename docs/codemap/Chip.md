@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[ManagedList]]
 
 **Story:** `/?path=/story/components-chip--default`
+**StoryFile:** `src/stories/components/Chip.stories.tsx`

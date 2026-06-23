@@ -13,3 +13,4 @@ composes: [ArtieAIButton, Button, MemberOnline, ThemeSwitcher, UserChip]
 **Used by:** [[MemberOnlineLayout]]
 
 **Story:** `/?path=/story/member-online-memberheader--default`
+**StoryFile:** `src/stories/member-online/MemberHeader.stories.tsx`

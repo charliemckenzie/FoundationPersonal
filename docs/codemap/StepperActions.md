@@ -10,3 +10,4 @@ composes: [Alert, Button, Dialog, Icon, TextButton]
 **Composes:** [[Alert]] · [[Button]] · [[Dialog]] · [[Icon]] · [[TextButton]]
 
 **Story:** `/?path=/story/form-components-stepped-forms-stepperactions--states`
+**StoryFile:** `src/stories/components/stepped-forms/StepperActions.stories.tsx`

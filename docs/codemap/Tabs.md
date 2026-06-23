@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/components-tabs--default`
+**StoryFile:** `src/stories/components/Tabs.stories.tsx`

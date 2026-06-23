@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[ExpandableCardList]] · [[FormProgress]] · [[IconButton]] · [[InfoButton]]
 
 **Story:** `/?path=/story/components-tooltip--default`
+**StoryFile:** `src/stories/components/Tooltip.stories.tsx`

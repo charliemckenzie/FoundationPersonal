@@ -10,3 +10,4 @@ composes: [Button, CloseButton]
 **Composes:** [[Button]] · [[CloseButton]]
 
 **Story:** `/?path=/story/components-announcement-banner--default`
+**StoryFile:** `src/stories/components/AnnouncementBanner.stories.tsx`

@@ -10,3 +10,4 @@ composes: [TextField]
 **Composes:** [[TextField]]
 
 **Story:** `/?path=/story/form-components-textinput-moneyfield--default`
+**StoryFile:** `src/stories/components/MoneyField.stories.tsx`

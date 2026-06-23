@@ -11,3 +11,4 @@ composes: []
 **Part of:** [[Charts]]
 
 **Story:** `/?path=/story/components-charts-barchart--default`
+**StoryFile:** `src/stories/components/charts/BarChart.stories.tsx`

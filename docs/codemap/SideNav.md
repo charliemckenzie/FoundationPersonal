@@ -13,3 +13,4 @@ composes: [BalanceCard, MemberOnline, NavFlyout]
 **Used by:** [[MemberOnlineLayout]]
 
 **Story:** `/?path=/story/member-online-sidenav--default`
+**StoryFile:** `src/stories/member-online/SideNav.stories.tsx`

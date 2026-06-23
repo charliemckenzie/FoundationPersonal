@@ -1,3 +1,43 @@
+/**
+ * @design
+ * Purpose: Primary action trigger — the single most important action a user can take
+ * on a given screen.
+ *
+ * Variants:
+ *   - contained: Highest visual weight. Use for the one primary CTA per view. Never
+ *     place two contained buttons side-by-side.
+ *   - outlined: Medium weight. Use for secondary actions that matter but should not
+ *     compete with a contained button (e.g. Cancel beside Submit).
+ *   - ghost: Lowest weight. Use for tertiary actions, back navigation, or destructive
+ *     flows where de-emphasis is intentional.
+ *
+ * Sizes:
+ *   - small (40px / 36px condensed): inline actions, table rows, tight layouts.
+ *   - medium (48px / 44px condensed): standard form layouts, cards, dialogs. Default.
+ *   - large (56px / 52px condensed): hero sections, landing-page CTAs.
+ *   Use `condensed` to reduce height by 4px — never drop to a smaller size tier just
+ *   to save space.
+ *
+ * Colors:
+ *   - primary: default for all variants.
+ *   - white: reversed — use only on a brand-colour (primary/gradient) background.
+ *   - success: positive confirmation actions only (e.g. "Submit application").
+ *
+ * Icons:
+ *   - Start icon: previews the action (plus → Add, arrow-down-to-line → Download).
+ *   - End icon: signals direction or consequence (arrow-right → Next,
+ *     arrow-up-right → leaves the site).
+ *   - Never combine a start and end icon on the same button.
+ *   - Icons are decorative by default (aria-hidden). Use `endIconLabel` /
+ *     `startIconLabel` only when the icon conveys meaning absent from the label
+ *     (e.g. endIconLabel="opens in a new tab").
+ *
+ * Avoid:
+ *   - Multiple contained buttons in the same view.
+ *   - Using this component for the AI entry point — that is ArtieAIButton.
+ *   - Labels longer than 3–4 words; favour verbs ("Save changes", not "Click here
+ *     to save your changes").
+ */
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import { Button } from '../../../components/Button';

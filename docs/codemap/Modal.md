@@ -10,3 +10,4 @@ composes: [CloseButton]
 **Composes:** [[CloseButton]]
 
 **Story:** `/?path=/story/utilities-modal--default`
+**StoryFile:** `src/stories/components/Modal.stories.tsx`

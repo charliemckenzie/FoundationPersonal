@@ -8,3 +8,4 @@ composes: [Icon, IconButton, Skeleton]
 # InvestmentOverview
 
 **Composes:** [[Icon]] · [[IconButton]] · [[Skeleton]]
+**StoryFile:** `src/stories/member-online/InvestmentOverview.stories.tsx`

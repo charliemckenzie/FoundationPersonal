@@ -11,3 +11,4 @@ composes: [Icon]
 **Used by:** [[MemberHeader]]
 
 **Story:** `/?path=/story/components-buttons-artieai-button--default`
+**StoryFile:** `src/stories/components/buttons/ArtieAIButton.stories.tsx`

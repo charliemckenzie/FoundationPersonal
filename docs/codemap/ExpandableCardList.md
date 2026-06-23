@@ -8,3 +8,4 @@ composes: [Icon, Tooltip]
 # ExpandableCardList
 
 **Composes:** [[Icon]] · [[Tooltip]]
+**StoryFile:** `src/stories/components/expandable/ExpandableCardList.stories.tsx`

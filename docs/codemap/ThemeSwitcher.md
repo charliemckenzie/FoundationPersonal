@@ -13,3 +13,4 @@ composes: [Icon, MemberOnline]
 **Used by:** [[MemberHeader]] · [[MobileNavDrawer]]
 
 **Story:** `/?path=/story/member-online-themeswitcher--default`
+**StoryFile:** `src/stories/member-online/ThemeSwitcher.stories.tsx`

@@ -11,3 +11,41 @@ composes: [CloseButton]
 **Used by:** [[Snackbar]] · [[StepperActions]]
 
 **Story:** `/?path=/story/components-alert--default`
+**StoryFile:** `src/stories/components/Alert.stories.tsx`
+
+## Design guidance
+
+Purpose: Inline status message that communicates the outcome of a system event or
+validates user input at the page/section level.
+
+Severities:
+  - error: Blocking failure. Something went wrong and the user must act before
+    continuing (e.g. "Form could not be submitted").
+  - warning: Non-blocking but important. Informs the user of a risk or upcoming
+    change (e.g. "Session expires in 5 minutes").
+  - info: Neutral, informational. No action required unless an action slot is
+    provided (e.g. "A new version is available").
+  - success: Confirms a completed action (e.g. "Changes saved"). Avoid overusing;
+    reserve for moments that genuinely deserve celebration.
+
+Anatomy:
+  - message (required): the core message. Keep to 1–2 sentences.
+  - title (optional): bold heading above the message. Use when the type of event
+    needs naming separately from the detail (e.g. title="Error",
+    message="The form could not be submitted. Check the fields below.").
+  - icon (optional): pass a severity-matched Icon for full visual treatment. Always
+    pass `color="inherit"` and `size="lg"` to the Icon.
+  - onClose (optional): renders a dismiss button. Use for non-critical, transient
+    alerts only.
+  - action (optional): renders a Button in the trailing slot. Use `size="small"
+    condensed` to keep it proportional.
+
+Placement:
+  - At the top of the affected section, not at the top of the page.
+  - On multi-step forms: place a single error Alert directly above StepperActions
+    (a top-of-step error scrolls out of view).
+
+Avoid:
+  - Stacking multiple Alerts of the same severity — consolidate messages.
+  - Using Alert for transient toasts — use Snackbar instead.
+  - Long messages that scroll — keep it scannable.

@@ -11,3 +11,4 @@ composes: [Icon, Spinner, Tooltip]
 **Used by:** [[DataGrid]] · [[FileCard]] · [[Header]] · [[InvestmentOverview]] · [[ManagedList]] · [[MemberInfoCard]] · [[MemberOnline]] · [[MobileHeader]] · [[Table]]
 
 **Story:** `/?path=/story/components-buttons-iconbutton--default`
+**StoryFile:** `src/stories/components/buttons/IconButton.stories.tsx`

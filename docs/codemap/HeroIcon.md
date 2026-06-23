@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[QuickLinks]]
 
 **Story:** `/?path=/story/components-icons-hero-icon--default`
+**StoryFile:** `src/stories/components/HeroIcon.stories.tsx`

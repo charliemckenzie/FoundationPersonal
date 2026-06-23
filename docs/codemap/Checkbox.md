@@ -11,3 +11,4 @@ composes: [Icon]
 **Used by:** [[AddressField]] · [[DataGrid]]
 
 **Story:** `/?path=/story/form-components-checkbox--default`
+**StoryFile:** `src/stories/components/Checkbox.stories.tsx`

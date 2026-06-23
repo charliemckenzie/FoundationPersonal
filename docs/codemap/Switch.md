@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/form-components-switch--default`
+**StoryFile:** `src/stories/components/Switch.stories.tsx`

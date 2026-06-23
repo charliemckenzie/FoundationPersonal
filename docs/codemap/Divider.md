@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/components-divider--default`
+**StoryFile:** `src/stories/components/Divider.stories.tsx`

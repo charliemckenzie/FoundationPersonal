@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[FormProgress]]
 
 **Story:** `/?path=/story/components-menu--default`
+**StoryFile:** `src/stories/components/Menu.stories.tsx`

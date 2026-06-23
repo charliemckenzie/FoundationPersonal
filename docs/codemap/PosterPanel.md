@@ -8,3 +8,4 @@ composes: [Button, TextButton]
 # PosterPanel
 
 **Composes:** [[Button]] · [[TextButton]]
+**StoryFile:** `src/stories/components/PosterPanel.stories.tsx`

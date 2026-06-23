@@ -11,3 +11,44 @@ composes: [Button, CloseButton, Icon]
 **Used by:** [[InfoButton]] · [[StepperActions]]
 
 **Story:** `/?path=/story/components-dialog--default`
+**StoryFile:** `src/stories/components/Dialog.stories.tsx`
+
+## Design guidance
+
+Purpose: Structured overlay for confirmations, alerts, and destructive-action flows.
+Provides a consistent confirm/cancel pattern with semantic variant colouring.
+Use Modal when you need full control of body + actions with no confirm pattern.
+
+Variants:
+  - neutral (default): standard confirmations and informational prompts.
+  - warning: irreversible or risky actions where the user should pause
+    (e.g. "Are you sure you want to remove this beneficiary?").
+  - danger: destructive actions with significant consequence
+    (e.g. "This will permanently delete your account").
+  - success: completion confirmations (use sparingly).
+
+Sizes:
+  - small: single-sentence confirmations. Default.
+  - medium: confirmations with a short paragraph of context.
+  - large: confirmations that require the user to read and understand a block of
+    content before acting.
+
+Mobile behaviour:
+  - Default (`mobileDisplay="drawer"`): slides up from the bottom on small screens.
+    Preferred — matches native mobile sheet patterns.
+  - `mobileDisplay="dialog"`: keeps the centred modal on all breakpoints. Use only
+    when the sheet behaviour would be confusing in context.
+
+Key props:
+  - title + description: always required. Keep description to 1–2 sentences.
+  - confirmLabel / cancelLabel: use action verbs, not "OK" or "Yes"
+    (e.g. confirmLabel="Remove beneficiary", cancelLabel="Keep").
+  - loading: disables confirm + shows spinner. Use while the confirmed action is
+    in flight.
+  - disableCloseOnBackdrop: set true for destructive flows to prevent accidental
+    dismissal.
+
+Avoid:
+  - Using Dialog for content-heavy overlays — use Modal.
+  - Using "OK" / "Yes" / "No" as button labels.
+  - Opening a Dialog from inside another Dialog.

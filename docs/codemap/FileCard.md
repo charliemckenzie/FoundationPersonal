@@ -8,3 +8,4 @@ composes: [Button, Icon, IconButton, LinearProgress]
 # FileCard
 
 **Composes:** [[Button]] · [[Icon]] · [[IconButton]] · [[LinearProgress]]
+**StoryFile:** `src/stories/components/FileUpload/FileCard.stories.tsx`

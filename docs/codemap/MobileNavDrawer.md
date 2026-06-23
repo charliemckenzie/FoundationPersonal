@@ -13,3 +13,4 @@ composes: [Button, CloseButton, MemberInfoCard, MemberOnline, NavItem, TextButto
 **Used by:** [[MemberOnlineLayout]]
 
 **Story:** `/?path=/story/member-online-mobilenavdrawer--default`
+**StoryFile:** `src/stories/member-online/MobileNavDrawer.stories.tsx`

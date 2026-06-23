@@ -10,3 +10,4 @@ composes: [Button, Icon, Menu, Tooltip]
 **Composes:** [[Button]] · [[Icon]] · [[Menu]] · [[Tooltip]]
 
 **Story:** `/?path=/story/form-components-stepped-forms-formprogress--simple`
+**StoryFile:** `src/stories/components/stepped-forms/FormProgress.stories.tsx`

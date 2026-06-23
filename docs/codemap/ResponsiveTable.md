@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/components-tables-responsive-table--default`
+**StoryFile:** `src/stories/components/tables/ResponsiveTable.stories.tsx`

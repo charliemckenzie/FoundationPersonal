@@ -10,3 +10,4 @@ composes: [TextField]
 **Composes:** [[TextField]]
 
 **Story:** `/?path=/story/form-components-textinput-textarea--default`
+**StoryFile:** `src/stories/components/TextArea.stories.tsx`

@@ -10,3 +10,4 @@ composes: [Icon]
 **Composes:** [[Icon]]
 
 **Story:** `/?path=/story/form-components-date-calendar--default`
+**StoryFile:** `src/stories/components/Calendar.stories.tsx`

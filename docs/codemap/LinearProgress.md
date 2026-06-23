@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[FileCard]]
 
 **Story:** `/?path=/story/components-linearprogress--default`
+**StoryFile:** `src/stories/components/LinearProgress.stories.tsx`

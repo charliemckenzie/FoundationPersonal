@@ -8,3 +8,4 @@ composes: [Skeleton]
 # DescriptionList
 
 **Composes:** [[Skeleton]]
+**StoryFile:** `src/stories/components/DescriptionList.stories.tsx`

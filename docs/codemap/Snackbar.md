@@ -10,3 +10,4 @@ composes: [Alert, Icon]
 **Composes:** [[Alert]] · [[Icon]]
 
 **Story:** `/?path=/story/components-snackbar--default`
+**StoryFile:** `src/stories/components/Snackbar.stories.tsx`

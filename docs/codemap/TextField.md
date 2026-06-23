@@ -11,3 +11,43 @@ composes: [InputSelectContainer]
 **Used by:** [[AddressField]] · [[DateOfBirthField]] · [[MoneyField]] · [[PasswordField]] · [[PercentageField]] · [[TextArea]]
 
 **Story:** `/?path=/story/form-components-textfield--default`
+**StoryFile:** `src/stories/components/TextField.stories.tsx`
+
+## Design guidance
+
+Purpose: Single-line free-text input for names, emails, search queries, and other
+unstructured string values.
+
+Specialised variants — use these instead of TextField when the data type is known:
+  - PasswordField: password entry with show/hide toggle.
+  - MoneyField: currency input with thousand-separator formatting.
+  - PercentageField: percentage input clamped 0–100.
+  - TextArea: multi-line free text.
+  - DateOfBirthField: date-of-birth capture.
+  All inherit TextField styling automatically.
+
+Sizes:
+  - medium (48px): standard forms. Default.
+  - small (40px): dense layouts, filters, inline search.
+  Use `condensed` to reduce height by 4px within a size tier.
+
+Adornments:
+  - startAdornment: icon or short text prefix at the leading edge
+    (e.g. magnifying-glass for search, currency symbol).
+  - endAdornment: icon or short text suffix at the trailing edge
+    (e.g. unit labels, clear buttons).
+  - selectAdornment: inline Select fused to the trailing edge via
+    InputSelectContainer — use for unit pickers (e.g. AUD / USD).
+
+Validation:
+  - Set `error` + `errorMessage` to show the error state. The errorMessage is
+    linked to the input via aria-describedby automatically.
+  - Always show `helperText` for format hints (e.g. "DD/MM/YYYY") before the user
+    interacts — don't wait for an error.
+
+Avoid:
+  - Using TextField for multi-line input — use TextArea.
+  - Using TextField for currency — use MoneyField.
+  - Using TextField for passwords — use PasswordField.
+  - Setting `type="number"` — use `type="tel"` with validation instead; number
+    inputs have poor accessibility and inconsistent browser behaviour.

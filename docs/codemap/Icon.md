@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[Accordion]] · [[ArtieAIButton]] · [[Button]] · [[Calendar]] · [[Checkbox]] · [[CloseButton]] · [[DataGrid]] · [[DatePicker]] · [[Dialog]] · [[ExpandableCardList]] · [[ExpandableItem]] · [[FileCard]] · [[Footer]] · [[FormProgress]] · [[Header]] · [[IconButton]] · [[IconList]] · [[InfoButton]] · [[InvestmentOverview]] · [[LinkRow]] · [[ManagedList]] · [[MemberOnline]] · [[MemberSearchField]] · [[MobileHeader]] · [[NavFlyout]] · [[NavItem]] · [[RadioGroup]] · [[SkipLinks]] · [[Snackbar]] · [[StepperActions]] · [[Table]] · [[TextButton]] · [[ThemeSwitcher]]
 
 **Story:** `/?path=/story/components-icons-icon--default`
+**StoryFile:** `src/stories/components/Icon.stories.tsx`

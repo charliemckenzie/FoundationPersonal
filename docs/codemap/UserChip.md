@@ -13,3 +13,4 @@ composes: [MemberOnline]
 **Used by:** [[MemberHeader]]
 
 **Story:** `/?path=/story/member-online-userchip--default`
+**StoryFile:** `src/stories/member-online/UserChip.stories.tsx`

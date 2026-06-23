@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[DescriptionList]] · [[InvestmentOverview]] · [[ManagedList]]
 
 **Story:** `/?path=/story/components-skeleton--default`
+**StoryFile:** `src/stories/components/Skeleton.stories.tsx`

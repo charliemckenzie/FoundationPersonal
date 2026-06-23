@@ -10,3 +10,4 @@ composes: [HeroIcon]
 **Composes:** [[HeroIcon]]
 
 **Story:** `/?path=/story/public-web-section-navigation-tab--default`
+**StoryFile:** `src/stories/components/QuickLinks.stories.tsx`

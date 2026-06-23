@@ -10,3 +10,4 @@ composes: [Checkbox, Icon, IconButton, Spinner, Table]
 **Composes:** [[Checkbox]] · [[Icon]] · [[IconButton]] · [[Spinner]] · [[Table]]
 
 **Story:** `/?path=/story/components-tables-datagrid--default`
+**StoryFile:** `src/stories/components/tables/DataGrid.stories.tsx`

@@ -10,3 +10,4 @@ composes: []
 **Used by:** [[DataGrid]] · [[IconButton]] · [[Table]] · [[TextButton]]
 
 **Story:** `/?path=/story/components-spinner--default`
+**StoryFile:** `src/stories/components/Spinner.stories.tsx`

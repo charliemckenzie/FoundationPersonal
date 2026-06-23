@@ -8,3 +8,4 @@ composes: [Chip, Icon, IconButton, Skeleton]
 # ManagedList
 
 **Composes:** [[Chip]] · [[Icon]] · [[IconButton]] · [[Skeleton]]
+**StoryFile:** `src/stories/components/ManagedList.stories.tsx`

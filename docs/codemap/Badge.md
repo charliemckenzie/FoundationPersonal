@@ -9,3 +9,4 @@ composes: []
 
 
 **Story:** `/?path=/story/components-badge--default`
+**StoryFile:** `src/stories/components/Badge.stories.tsx`

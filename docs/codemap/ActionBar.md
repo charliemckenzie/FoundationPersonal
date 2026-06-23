@@ -10,3 +10,4 @@ composes: [Button]
 **Composes:** [[Button]]
 
 **Story:** `/?path=/story/components-action-bar--default`
+**StoryFile:** `src/stories/components/ActionBar.stories.tsx`

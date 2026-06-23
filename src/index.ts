@@ -43,6 +43,17 @@ export type {
   AddressLookupProvider,
   AddressLookupConfig,
 } from './components/AddressField'
+export { BankDetailsField } from './components/BankDetailsField'
+export type {
+  BankDetailsFieldProps,
+  BankDetailsValue,
+} from './components/BankDetailsField'
+export { BankAccountField } from './components/BankAccountField'
+export type {
+  BankAccountFieldProps,
+  SavedBankAccount,
+  VerificationResult,
+} from './components/BankAccountField'
 export { Autocomplete } from './components/Autocomplete'
 export { Badge } from './components/Badge'
 export { Breadcrumb } from './components/Breadcrumb'

@@ -11,3 +11,4 @@ composes: []
 **Part of:** [[Charts]]
 
 **Story:** `/?path=/story/components-charts-linechart--default`
+**StoryFile:** `src/stories/components/charts/LineChart.stories.tsx`

@@ -10,3 +10,4 @@ composes: [Icon, Logo]
 **Composes:** [[Icon]] · [[Logo]]
 
 **Story:** `/?path=/story/public-web-footer--default`
+**StoryFile:** `src/stories/components/Footer.stories.tsx`

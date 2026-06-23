@@ -22,6 +22,7 @@ export const COMPONENTS: ComponentStatusEntry[] = [
   { name: 'LineChart',         status: 'draft',  story: '/?path=/story/components-charts-linechart--default' },
   { name: 'Accordion',         status: 'stable', story: '/?path=/story/components-expandable-accordion--default' },
   { name: 'AddressField',      status: 'draft',  story: '/?path=/story/form-components-addressfield--default' },
+  { name: 'BankDetailsField',  status: 'draft',  story: '/?path=/story/form-components-bankdetailsfield--default' },
   { name: 'Alert',             status: 'review', story: '/?path=/story/components-alert--default' },
   { name: 'ActionBar',         status: 'draft',  story: '/?path=/story/components-action-bar--default' },
   { name: 'AnnouncementBanner', status: 'draft', story: '/?path=/story/components-announcement-banner--default' },

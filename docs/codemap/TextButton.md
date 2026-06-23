@@ -11,3 +11,4 @@ composes: [Icon, Spinner]
 **Used by:** [[AddressField]] · [[Card]] · [[MobileNavDrawer]] · [[PosterPanel]] · [[StepperActions]]
 
 **Story:** `/?path=/story/components-buttons-textbutton--default`
+**StoryFile:** `src/stories/components/buttons/TextButton.stories.tsx`

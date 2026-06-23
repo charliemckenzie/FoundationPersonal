@@ -13,3 +13,4 @@ composes: [IconButton, MemberOnline]
 **Used by:** [[MobileNavDrawer]]
 
 **Story:** `/?path=/story/member-online-memberinfocard--default`
+**StoryFile:** `src/stories/member-online/MemberInfoCard.stories.tsx`

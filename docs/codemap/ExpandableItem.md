@@ -10,3 +10,4 @@ composes: [Icon]
 **Composes:** [[Icon]]
 
 **Story:** `/?path=/story/components-expandable-expandableitem--default`
+**StoryFile:** `src/stories/components/expandable/ExpandableItem.stories.tsx`

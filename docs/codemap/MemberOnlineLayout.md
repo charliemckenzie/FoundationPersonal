@@ -12,3 +12,4 @@ composes: [MemberFooter, MemberHeader, MobileHeader, MobileNavDrawer, SideNav]
 **Composes:** [[MemberFooter]] · [[MemberHeader]] · [[MobileHeader]] · [[MobileNavDrawer]] · [[SideNav]]
 
 **Story:** `/?path=/story/member-online-memberonlinelayout--default`
+**StoryFile:** `src/stories/member-online/MemberOnlineLayout.stories.tsx`

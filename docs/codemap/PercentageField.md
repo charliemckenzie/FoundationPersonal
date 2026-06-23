@@ -10,3 +10,4 @@ composes: [TextField]
 **Composes:** [[TextField]]
 
 **Story:** `/?path=/story/form-components-textinput-percentagefield--default`
+**StoryFile:** `src/stories/components/PercentageField.stories.tsx`

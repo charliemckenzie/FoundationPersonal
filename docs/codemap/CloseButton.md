@@ -9,3 +9,4 @@ composes: [Icon]
 
 **Composes:** [[Icon]]
 **Used by:** [[Alert]] · [[AnnouncementBanner]] · [[Dialog]] · [[Drawer]] · [[MobileNavDrawer]] · [[Modal]]
+**StoryFile:** `src/stories/components/CloseButton.stories.tsx`

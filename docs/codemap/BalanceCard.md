@@ -13,3 +13,4 @@ composes: [MemberOnline]
 **Used by:** [[SideNav]]
 
 **Story:** `/?path=/story/member-online-balancecard--default`
+**StoryFile:** `src/stories/member-online/BalanceCard.stories.tsx`

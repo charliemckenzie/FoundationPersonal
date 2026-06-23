@@ -11,3 +11,4 @@ composes: [Icon]
 **Used by:** [[AddressField]]
 
 **Story:** `/?path=/story/form-components-radiogroup--default`
+**StoryFile:** `src/stories/components/RadioGroup/RadioGroup.stories.tsx`

@@ -34,6 +34,7 @@ import { COMPONENTS } from '../src/stories/component-status';
 
 const ROOT = norm(join(dirname(fileURLToPath(import.meta.url)), '..'));
 const COMPONENTS_DIR = ROOT + '/src/components';
+const STORIES_DIR = ROOT + '/src/stories';
 const CHECK = process.argv.includes('--check');
 
 function norm(p: string): string { return p.replace(/\\/g, '/'); }
@@ -47,6 +48,8 @@ interface CodemapNode {
   path: string;            // dir, repo-relative
   dir: string;             // dir, absolute-normalised (internal only)
   story?: string;
+  storyFile?: string;      // repo-relative path to the .stories.tsx file
+  design?: string;         // extracted @design JSDoc block
   partOf?: string;
   composes: Set<string>;
   usedBy: Set<string>;
@@ -61,6 +64,59 @@ const barrel = project.getSourceFileOrThrow(ROOT + '/src/index.ts');
 /** True for declaration kinds that represent a runtime value (a component), not a type. */
 function isValueDecl(kindName: string): boolean {
   return kindName === 'FunctionDeclaration' || kindName === 'VariableDeclaration' || kindName === 'ClassDeclaration';
+}
+
+// --- story file discovery + @design extraction ---------------------------
+
+/**
+ * Recursively find all *.stories.tsx files under STORIES_DIR.
+ * Returns repo-relative paths.
+ */
+function findStoryFiles(): string[] {
+  const results: string[] = [];
+  function walk(dir: string): void {
+    for (const entry of readdirSync(dir)) {
+      const full = norm(join(dir, entry));
+      if (statSync(full).isDirectory()) { walk(full); continue; }
+      if (entry.endsWith('.stories.tsx')) results.push(rel(full));
+    }
+  }
+  if (existsSync(STORIES_DIR)) walk(STORIES_DIR);
+  return results;
+}
+
+/**
+ * Extract the content of the first `@design` JSDoc block from a story file.
+ * Strips the leading ` * ` from each line and trims blank lead/trail lines.
+ */
+function extractDesignBlock(filePath: string): string | undefined {
+  let src: string;
+  try { src = readFileSync(join(ROOT, filePath), 'utf8'); } catch { return undefined; }
+  const match = src.match(/\/\*\*[\s\S]*?@design([\s\S]*?)(?:\*\/|(?=\s*\/\*\*))/);
+  if (!match) return undefined;
+  const raw = match[1];
+  const cleaned = raw
+    .split('\n')
+    .map((l) => l.replace(/^\s*\*\s?/, ''))
+    .join('\n')
+    .trim();
+  return cleaned || undefined;
+}
+
+/** Attach storyFile + design to every node whose name matches a story title segment. */
+function attachStoryFiles(): void {
+  const storyFiles = findStoryFiles();
+  for (const node of nodes.values()) {
+    // Match by convention: story file name is <ComponentName>.stories.tsx (any depth)
+    const match = storyFiles.find((f) => {
+      const fileName = f.split('/').pop()!;
+      return fileName === `${node.name}.stories.tsx`;
+    });
+    if (!match) continue;
+    node.storyFile = match;
+    const design = extractDesignBlock(match);
+    if (design) node.design = design;
+  }
 }
 
 /** Exported name -> { file, isValue } for every public-barrel export. */
@@ -170,6 +226,8 @@ function buildJson(): string {
     nodes: sortedNodes().map((n) => ({
       name: n.name, kind: n.kind, status: n.status, path: n.path,
       ...(n.story ? { story: n.story } : {}),
+      ...(n.storyFile ? { storyFile: n.storyFile } : {}),
+      ...(n.design ? { design: n.design } : {}),
       ...(n.partOf ? { partOf: n.partOf } : {}),
       composes: sortedNames(n.composes), usedBy: sortedNames(n.usedBy), exports: sortedNames(n.exports),
     })),
@@ -205,6 +263,8 @@ function buildNoteMd(n: CodemapNode): string {
   if (n.composes.size) lines.push(`**Composes:** ${sortedNames(n.composes).map(link).join(' · ')}`);
   if (n.usedBy.size) lines.push(`**Used by:** ${sortedNames(n.usedBy).map(link).join(' · ')}`);
   if (n.story) lines.push('', `**Story:** \`${n.story}\``);
+  if (n.storyFile) lines.push(`**StoryFile:** \`${n.storyFile}\``);
+  if (n.design) lines.push('', '## Design guidance', '', n.design);
   return lines.join('\n') + '\n';
 }
 
@@ -250,6 +310,8 @@ nodesByDirDesc = [...nodes.values()].sort((a, b) => b.dir.length - a.dir.length)
 attachExports(barrelExports);
 computePartOf();
 computeComposes();
+
+attachStoryFiles();
 
 reconcile(ROOT + '/codemap.json', buildJson());
 reconcile(ROOT + '/CODEMAP.md', buildCatalogueMd());

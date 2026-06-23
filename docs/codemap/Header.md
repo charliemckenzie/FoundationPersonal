@@ -10,3 +10,4 @@ composes: [Button, Icon, IconButton, Logo]
 **Composes:** [[Button]] · [[Icon]] · [[IconButton]] · [[Logo]]
 
 **Story:** `/?path=/story/public-web-header--default`
+**StoryFile:** `src/stories/components/Header.stories.tsx`

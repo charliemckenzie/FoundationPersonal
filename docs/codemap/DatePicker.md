@@ -11,3 +11,4 @@ composes: [Icon]
 **Used by:** [[DateRangePicker]]
 
 **Story:** `/?path=/story/components-datepicker--default`
+**StoryFile:** `src/stories/components/DatePicker.stories.tsx`

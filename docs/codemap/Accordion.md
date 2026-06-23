@@ -10,3 +10,4 @@ composes: [Button, Icon]
 **Composes:** [[Button]] · [[Icon]]
 
 **Story:** `/?path=/story/components-expandable-accordion--default`
+**StoryFile:** `src/stories/components/expandable/Accordion.stories.tsx`

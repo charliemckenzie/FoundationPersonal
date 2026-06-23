@@ -18,6 +18,7 @@
       "status": "stable",
       "path": "src/components/Accordion",
       "story": "/?path=/story/components-expandable-accordion--default",
+      "storyFile": "src/stories/components/expandable/Accordion.stories.tsx",
       "composes": [
         "Button",
         "Icon"
@@ -35,6 +36,7 @@
       "status": "draft",
       "path": "src/components/ActionBar",
       "story": "/?path=/story/components-action-bar--default",
+      "storyFile": "src/stories/components/ActionBar.stories.tsx",
       "composes": [
         "Button"
       ],
@@ -52,6 +54,7 @@
       "status": "draft",
       "path": "src/components/AddressField",
       "story": "/?path=/story/form-components-addressfield--default",
+      "storyFile": "src/stories/components/AddressField.stories.tsx",
       "composes": [
         "Autocomplete",
         "Checkbox",
@@ -79,6 +82,8 @@
       "status": "review",
       "path": "src/components/Alert",
       "story": "/?path=/story/components-alert--default",
+      "storyFile": "src/stories/components/Alert.stories.tsx",
+      "design": "Purpose: Inline status message that communicates the outcome of a system event or\r\nvalidates user input at the page/section level.\r\n\nSeverities:\r\n  - error: Blocking failure. Something went wrong and the user must act before\r\n    continuing (e.g. \"Form could not be submitted\").\r\n  - warning: Non-blocking but important. Informs the user of a risk or upcoming\r\n    change (e.g. \"Session expires in 5 minutes\").\r\n  - info: Neutral, informational. No action required unless an action slot is\r\n    provided (e.g. \"A new version is available\").\r\n  - success: Confirms a completed action (e.g. \"Changes saved\"). Avoid overusing;\r\n    reserve for moments that genuinely deserve celebration.\r\n\nAnatomy:\r\n  - message (required): the core message. Keep to 1–2 sentences.\r\n  - title (optional): bold heading above the message. Use when the type of event\r\n    needs naming separately from the detail (e.g. title=\"Error\",\r\n    message=\"The form could not be submitted. Check the fields below.\").\r\n  - icon (optional): pass a severity-matched Icon for full visual treatment. Always\r\n    pass `color=\"inherit\"` and `size=\"lg\"` to the Icon.\r\n  - onClose (optional): renders a dismiss button. Use for non-critical, transient\r\n    alerts only.\r\n  - action (optional): renders a Button in the trailing slot. Use `size=\"small\"\r\n    condensed` to keep it proportional.\r\n\nPlacement:\r\n  - At the top of the affected section, not at the top of the page.\r\n  - On multi-step forms: place a single error Alert directly above StepperActions\r\n    (a top-of-step error scrolls out of view).\r\n\nAvoid:\r\n  - Stacking multiple Alerts of the same severity — consolidate messages.\r\n  - Using Alert for transient toasts — use Snackbar instead.\r\n  - Long messages that scroll — keep it scannable.",
       "composes": [
         "CloseButton"
       ],
@@ -96,6 +101,7 @@
       "status": "draft",
       "path": "src/components/AnnouncementBanner",
       "story": "/?path=/story/components-announcement-banner--default",
+      "storyFile": "src/stories/components/AnnouncementBanner.stories.tsx",
       "composes": [
         "Button",
         "CloseButton"
@@ -115,6 +121,7 @@
       "status": "draft",
       "path": "src/components/ArtieAIButton",
       "story": "/?path=/story/components-buttons-artieai-button--default",
+      "storyFile": "src/stories/components/buttons/ArtieAIButton.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -133,6 +140,7 @@
       "status": "draft",
       "path": "src/components/Autocomplete",
       "story": "/?path=/story/form-components-autocomplete--default",
+      "storyFile": "src/stories/components/Autocomplete.stories.tsx",
       "composes": [],
       "usedBy": [
         "AddressField"
@@ -147,6 +155,7 @@
       "status": "review",
       "path": "src/components/Badge",
       "story": "/?path=/story/components-badge--default",
+      "storyFile": "src/stories/components/Badge.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -159,6 +168,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/BalanceCard",
       "story": "/?path=/story/member-online-balancecard--default",
+      "storyFile": "src/stories/member-online/BalanceCard.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "MemberOnline"
@@ -177,6 +187,7 @@
       "status": "draft",
       "path": "src/components/Charts/BarChart",
       "story": "/?path=/story/components-charts-barchart--default",
+      "storyFile": "src/stories/components/charts/BarChart.stories.tsx",
       "partOf": "Charts",
       "composes": [],
       "usedBy": [],
@@ -191,6 +202,7 @@
       "status": "draft",
       "path": "src/components/Breadcrumb",
       "story": "/?path=/story/public-web-breadcrumb--default",
+      "storyFile": "src/stories/components/Breadcrumb.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -203,6 +215,8 @@
       "status": "stable",
       "path": "src/components/Button",
       "story": "/?path=/story/components-buttons-button--default",
+      "storyFile": "src/stories/components/buttons/Button.stories.tsx",
+      "design": "Purpose: Primary action trigger — the single most important action a user can take\r\non a given screen.\r\n\nVariants:\r\n  - contained: Highest visual weight. Use for the one primary CTA per view. Never\r\n    place two contained buttons side-by-side.\r\n  - outlined: Medium weight. Use for secondary actions that matter but should not\r\n    compete with a contained button (e.g. Cancel beside Submit).\r\n  - ghost: Lowest weight. Use for tertiary actions, back navigation, or destructive\r\n    flows where de-emphasis is intentional.\r\n\nSizes:\r\n  - small (40px / 36px condensed): inline actions, table rows, tight layouts.\r\n  - medium (48px / 44px condensed): standard form layouts, cards, dialogs. Default.\r\n  - large (56px / 52px condensed): hero sections, landing-page CTAs.\r\n  Use `condensed` to reduce height by 4px — never drop to a smaller size tier just\r\n  to save space.\r\n\nColors:\r\n  - primary: default for all variants.\r\n  - white: reversed — use only on a brand-colour (primary/gradient) background.\r\n  - success: positive confirmation actions only (e.g. \"Submit application\").\r\n\nIcons:\r\n  - Start icon: previews the action (plus → Add, arrow-down-to-line → Download).\r\n  - End icon: signals direction or consequence (arrow-right → Next,\r\n    arrow-up-right → leaves the site).\r\n  - Never combine a start and end icon on the same button.\r\n  - Icons are decorative by default (aria-hidden). Use `endIconLabel` /\r\n    `startIconLabel` only when the icon conveys meaning absent from the label\r\n    (e.g. endIconLabel=\"opens in a new tab\").\r\n\nAvoid:\r\n  - Multiple contained buttons in the same view.\r\n  - Using this component for the AI entry point — that is ArtieAIButton.\r\n  - Labels longer than 3–4 words; favour verbs (\"Save changes\", not \"Click here\r\n    to save your changes\").",
       "composes": [
         "Icon"
       ],
@@ -231,6 +245,7 @@
       "status": "draft",
       "path": "src/components/Calendar",
       "story": "/?path=/story/form-components-date-calendar--default",
+      "storyFile": "src/stories/components/Calendar.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -245,6 +260,7 @@
       "status": "draft",
       "path": "src/components/Card",
       "story": "/?path=/story/components-card--contained",
+      "storyFile": "src/stories/components/Card.stories.tsx",
       "composes": [
         "Button",
         "TextButton"
@@ -291,6 +307,7 @@
       "status": "stable",
       "path": "src/components/Checkbox",
       "story": "/?path=/story/form-components-checkbox--default",
+      "storyFile": "src/stories/components/Checkbox.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -313,6 +330,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/Checkbox",
+      "storyFile": "src/stories/components/Checkbox/CheckboxButtonGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -322,6 +340,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/Checkbox",
+      "storyFile": "src/stories/components/Checkbox/CheckboxCardGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -332,6 +351,7 @@
       "status": "review",
       "path": "src/components/Chip",
       "story": "/?path=/story/components-chip--default",
+      "storyFile": "src/stories/components/Chip.stories.tsx",
       "composes": [],
       "usedBy": [
         "ManagedList"
@@ -345,6 +365,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/CloseButton",
+      "storyFile": "src/stories/components/CloseButton.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -364,6 +385,7 @@
       "status": "draft",
       "path": "src/components/DataGrid",
       "story": "/?path=/story/components-tables-datagrid--default",
+      "storyFile": "src/stories/components/tables/DataGrid.stories.tsx",
       "composes": [
         "Checkbox",
         "Icon",
@@ -386,6 +408,7 @@
       "status": "draft",
       "path": "src/components/DateOfBirthField",
       "story": "/?path=/story/form-components-textfield--specialized",
+      "storyFile": "src/stories/components/DateOfBirthField.stories.tsx",
       "composes": [
         "TextField"
       ],
@@ -401,6 +424,7 @@
       "status": "draft",
       "path": "src/components/DatePicker",
       "story": "/?path=/story/components-datepicker--default",
+      "storyFile": "src/stories/components/DatePicker.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -417,6 +441,7 @@
       "status": "draft",
       "path": "src/components/DateRangePicker",
       "story": "/?path=/story/components-daterangepicker--default",
+      "storyFile": "src/stories/components/DateRangePicker.stories.tsx",
       "composes": [
         "DatePicker"
       ],
@@ -430,6 +455,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/DescriptionList",
+      "storyFile": "src/stories/components/DescriptionList.stories.tsx",
       "composes": [
         "Skeleton"
       ],
@@ -447,6 +473,8 @@
       "status": "draft",
       "path": "src/components/Dialog",
       "story": "/?path=/story/components-dialog--default",
+      "storyFile": "src/stories/components/Dialog.stories.tsx",
+      "design": "Purpose: Structured overlay for confirmations, alerts, and destructive-action flows.\r\nProvides a consistent confirm/cancel pattern with semantic variant colouring.\r\nUse Modal when you need full control of body + actions with no confirm pattern.\r\n\nVariants:\r\n  - neutral (default): standard confirmations and informational prompts.\r\n  - warning: irreversible or risky actions where the user should pause\r\n    (e.g. \"Are you sure you want to remove this beneficiary?\").\r\n  - danger: destructive actions with significant consequence\r\n    (e.g. \"This will permanently delete your account\").\r\n  - success: completion confirmations (use sparingly).\r\n\nSizes:\r\n  - small: single-sentence confirmations. Default.\r\n  - medium: confirmations with a short paragraph of context.\r\n  - large: confirmations that require the user to read and understand a block of\r\n    content before acting.\r\n\nMobile behaviour:\r\n  - Default (`mobileDisplay=\"drawer\"`): slides up from the bottom on small screens.\r\n    Preferred — matches native mobile sheet patterns.\r\n  - `mobileDisplay=\"dialog\"`: keeps the centred modal on all breakpoints. Use only\r\n    when the sheet behaviour would be confusing in context.\r\n\nKey props:\r\n  - title + description: always required. Keep description to 1–2 sentences.\r\n  - confirmLabel / cancelLabel: use action verbs, not \"OK\" or \"Yes\"\r\n    (e.g. confirmLabel=\"Remove beneficiary\", cancelLabel=\"Keep\").\r\n  - loading: disables confirm + shows spinner. Use while the confirmed action is\r\n    in flight.\r\n  - disableCloseOnBackdrop: set true for destructive flows to prevent accidental\r\n    dismissal.\r\n\nAvoid:\r\n  - Using Dialog for content-heavy overlays — use Modal.\r\n  - Using \"OK\" / \"Yes\" / \"No\" as button labels.\r\n  - Opening a Dialog from inside another Dialog.",
       "composes": [
         "Button",
         "CloseButton",
@@ -466,6 +494,7 @@
       "status": "draft",
       "path": "src/components/Divider",
       "story": "/?path=/story/components-divider--default",
+      "storyFile": "src/stories/components/Divider.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -478,6 +507,7 @@
       "status": "draft",
       "path": "src/components/Drawer",
       "story": "/?path=/story/components-drawer--default",
+      "storyFile": "src/stories/components/Drawer.stories.tsx",
       "composes": [
         "CloseButton"
       ],
@@ -491,6 +521,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/ExpandableCardList",
+      "storyFile": "src/stories/components/expandable/ExpandableCardList.stories.tsx",
       "composes": [
         "Icon",
         "Tooltip"
@@ -509,6 +540,7 @@
       "status": "review",
       "path": "src/components/ExpandableItem",
       "story": "/?path=/story/components-expandable-expandableitem--default",
+      "storyFile": "src/stories/components/expandable/ExpandableItem.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -523,6 +555,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/FileUpload",
+      "storyFile": "src/stories/components/FileUpload/FileCard.stories.tsx",
       "composes": [
         "Button",
         "Icon",
@@ -543,6 +576,7 @@
       "status": "draft",
       "path": "src/components/FileUpload",
       "story": "/?path=/story/form-components-fileupload-fileupload--default",
+      "storyFile": "src/stories/components/FileUpload/FileUpload.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -553,6 +587,7 @@
       "status": "draft",
       "path": "src/components/Footer",
       "story": "/?path=/story/public-web-footer--default",
+      "storyFile": "src/stories/components/Footer.stories.tsx",
       "composes": [
         "Icon",
         "Logo"
@@ -568,6 +603,7 @@
       "status": "stable",
       "path": "src/components/FormProgress",
       "story": "/?path=/story/form-components-stepped-forms-formprogress--simple",
+      "storyFile": "src/stories/components/stepped-forms/FormProgress.stories.tsx",
       "composes": [
         "Button",
         "Icon",
@@ -589,6 +625,7 @@
       "status": "stable",
       "path": "src/components/Header",
       "story": "/?path=/story/public-web-header--default",
+      "storyFile": "src/stories/components/Header.stories.tsx",
       "composes": [
         "Button",
         "Icon",
@@ -606,6 +643,7 @@
       "status": "draft",
       "path": "src/components/HeroIcon",
       "story": "/?path=/story/components-icons-hero-icon--default",
+      "storyFile": "src/stories/components/HeroIcon.stories.tsx",
       "composes": [],
       "usedBy": [
         "QuickLinks"
@@ -625,6 +663,7 @@
       "status": "draft",
       "path": "src/components/Icon",
       "story": "/?path=/story/components-icons-icon--default",
+      "storyFile": "src/stories/components/Icon.stories.tsx",
       "composes": [],
       "usedBy": [
         "Accordion",
@@ -671,6 +710,7 @@
       "status": "stable",
       "path": "src/components/IconButton",
       "story": "/?path=/story/components-buttons-iconbutton--default",
+      "storyFile": "src/stories/components/buttons/IconButton.stories.tsx",
       "composes": [
         "Icon",
         "Spinner",
@@ -697,6 +737,7 @@
       "status": "draft",
       "path": "src/components/IconList",
       "story": "/?path=/story/components-iconlist--default",
+      "storyFile": "src/stories/components/IconList.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -715,6 +756,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/InfoButton",
+      "storyFile": "src/stories/components/buttons/InfoButton.stories.tsx",
       "composes": [
         "Dialog",
         "Icon",
@@ -749,6 +791,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/InvestmentOverview",
+      "storyFile": "src/stories/member-online/InvestmentOverview.stories.tsx",
       "composes": [
         "Icon",
         "IconButton",
@@ -763,6 +806,7 @@
       "status": "draft",
       "path": "src/components/LinearProgress",
       "story": "/?path=/story/components-linearprogress--default",
+      "storyFile": "src/stories/components/LinearProgress.stories.tsx",
       "composes": [],
       "usedBy": [
         "FileCard"
@@ -777,6 +821,7 @@
       "status": "draft",
       "path": "src/components/Charts/LineChart",
       "story": "/?path=/story/components-charts-linechart--default",
+      "storyFile": "src/stories/components/charts/LineChart.stories.tsx",
       "partOf": "Charts",
       "composes": [],
       "usedBy": [],
@@ -791,6 +836,7 @@
       "status": "draft",
       "path": "src/components/LinkRow",
       "story": "/?path=/story/member-online-target-state-linkrow--with-link",
+      "storyFile": "src/stories/member-online/LinkRow.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -806,6 +852,7 @@
       "status": "draft",
       "path": "src/components/Logo",
       "story": "/?path=/story/components-logo--default",
+      "storyFile": "src/stories/components/Logo.stories.tsx",
       "composes": [],
       "usedBy": [
         "Footer",
@@ -820,6 +867,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/ManagedList",
+      "storyFile": "src/stories/components/ManagedList.stories.tsx",
       "composes": [
         "Chip",
         "Icon",
@@ -835,6 +883,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MemberFooter",
       "story": "/?path=/story/member-online-memberfooter--default",
+      "storyFile": "src/stories/member-online/MemberFooter.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [],
       "usedBy": [
@@ -851,6 +900,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MemberHeader",
       "story": "/?path=/story/member-online-memberheader--default",
+      "storyFile": "src/stories/member-online/MemberHeader.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "ArtieAIButton",
@@ -873,6 +923,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MemberInfoCard",
       "story": "/?path=/story/member-online-memberinfocard--default",
+      "storyFile": "src/stories/member-online/MemberInfoCard.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "IconButton",
@@ -921,6 +972,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MemberOnlineLayout",
       "story": "/?path=/story/member-online-memberonlinelayout--default",
+      "storyFile": "src/stories/member-online/MemberOnlineLayout.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "MemberFooter",
@@ -958,6 +1010,7 @@
       "status": "draft",
       "path": "src/components/Menu",
       "story": "/?path=/story/components-menu--default",
+      "storyFile": "src/stories/components/Menu.stories.tsx",
       "composes": [],
       "usedBy": [
         "FormProgress"
@@ -974,6 +1027,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MobileHeader",
       "story": "/?path=/story/member-online-mobileheader--default",
+      "storyFile": "src/stories/member-online/MobileHeader.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "Button",
@@ -995,6 +1049,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/MobileNavDrawer",
       "story": "/?path=/story/member-online-mobilenavdrawer--default",
+      "storyFile": "src/stories/member-online/MobileNavDrawer.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "Button",
@@ -1019,6 +1074,7 @@
       "status": "draft",
       "path": "src/components/Modal",
       "story": "/?path=/story/utilities-modal--default",
+      "storyFile": "src/stories/components/Modal.stories.tsx",
       "composes": [
         "CloseButton"
       ],
@@ -1033,6 +1089,7 @@
       "status": "stable",
       "path": "src/components/MoneyField",
       "story": "/?path=/story/form-components-textinput-moneyfield--default",
+      "storyFile": "src/stories/components/MoneyField.stories.tsx",
       "composes": [
         "TextField"
       ],
@@ -1048,6 +1105,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/NavFlyout",
       "story": "/?path=/story/member-online-navflyout--default",
+      "storyFile": "src/stories/member-online/NavFlyout.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "Icon"
@@ -1066,6 +1124,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/NavItem",
       "story": "/?path=/story/member-online-navitem--default",
+      "storyFile": "src/stories/member-online/NavItem.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "Icon"
@@ -1084,6 +1143,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/PageTransition",
+      "storyFile": "src/stories/components/PageTransition.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -1094,6 +1154,7 @@
       "status": "draft",
       "path": "src/components/Pagination",
       "story": "/?path=/story/components-pagination--default",
+      "storyFile": "src/stories/components/Pagination.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -1106,6 +1167,7 @@
       "status": "draft",
       "path": "src/components/PasswordField",
       "story": "/?path=/story/form-components-textinput-passwordfield--default",
+      "storyFile": "src/stories/components/PasswordField.stories.tsx",
       "composes": [
         "TextField"
       ],
@@ -1122,6 +1184,7 @@
       "status": "stable",
       "path": "src/components/PercentageField",
       "story": "/?path=/story/form-components-textinput-percentagefield--default",
+      "storyFile": "src/stories/components/PercentageField.stories.tsx",
       "composes": [
         "TextField"
       ],
@@ -1136,6 +1199,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/PosterPanel",
+      "storyFile": "src/stories/components/PosterPanel.stories.tsx",
       "composes": [
         "Button",
         "TextButton"
@@ -1149,6 +1213,7 @@
       "status": "draft",
       "path": "src/components/QuickLinks",
       "story": "/?path=/story/public-web-section-navigation-tab--default",
+      "storyFile": "src/stories/components/QuickLinks.stories.tsx",
       "composes": [
         "HeroIcon"
       ],
@@ -1164,6 +1229,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/RadioGroup",
+      "storyFile": "src/stories/components/RadioGroup/RadioButtonGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -1173,6 +1239,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/RadioGroup",
+      "storyFile": "src/stories/components/RadioGroup/RadioCardGroup.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -1183,6 +1250,7 @@
       "status": "stable",
       "path": "src/components/RadioGroup",
       "story": "/?path=/story/form-components-radiogroup--default",
+      "storyFile": "src/stories/components/RadioGroup/RadioGroup.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -1205,6 +1273,7 @@
       "status": "draft",
       "path": "src/components/Table",
       "story": "/?path=/story/components-tables-responsive-table--default",
+      "storyFile": "src/stories/components/tables/ResponsiveTable.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -1215,6 +1284,7 @@
       "status": "review",
       "path": "src/components/Select",
       "story": "/?path=/story/form-components-select--default",
+      "storyFile": "src/stories/components/Select.stories.tsx",
       "composes": [],
       "usedBy": [
         "AddressField",
@@ -1230,6 +1300,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/SideNav",
       "story": "/?path=/story/member-online-sidenav--default",
+      "storyFile": "src/stories/member-online/SideNav.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "BalanceCard",
@@ -1250,6 +1321,7 @@
       "status": "draft",
       "path": "src/components/Skeleton",
       "story": "/?path=/story/components-skeleton--default",
+      "storyFile": "src/stories/components/Skeleton.stories.tsx",
       "composes": [],
       "usedBy": [
         "DescriptionList",
@@ -1266,6 +1338,7 @@
       "status": "stable",
       "path": "src/components/SkipLinks",
       "story": "/?path=/story/accessibility-skiplinks--default",
+      "storyFile": "src/stories/components/SkipLinks.stories.tsx",
       "composes": [
         "Icon"
       ],
@@ -1282,6 +1355,7 @@
       "status": "draft",
       "path": "src/components/Snackbar",
       "story": "/?path=/story/components-snackbar--default",
+      "storyFile": "src/stories/components/Snackbar.stories.tsx",
       "composes": [
         "Alert",
         "Icon"
@@ -1297,6 +1371,7 @@
       "status": "draft",
       "path": "src/components/Spinner",
       "story": "/?path=/story/components-spinner--default",
+      "storyFile": "src/stories/components/Spinner.stories.tsx",
       "composes": [],
       "usedBy": [
         "DataGrid",
@@ -1314,6 +1389,7 @@
       "status": "draft",
       "path": "src/components/StepperActions",
       "story": "/?path=/story/form-components-stepped-forms-stepperactions--states",
+      "storyFile": "src/stories/components/stepped-forms/StepperActions.stories.tsx",
       "composes": [
         "Alert",
         "Button",
@@ -1332,6 +1408,7 @@
       "kind": "component",
       "status": "unknown",
       "path": "src/components/StepTransition",
+      "storyFile": "src/stories/components/stepped-forms/StepTransition.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": []
@@ -1342,6 +1419,7 @@
       "status": "review",
       "path": "src/components/Switch",
       "story": "/?path=/story/form-components-switch--default",
+      "storyFile": "src/stories/components/Switch.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -1354,6 +1432,7 @@
       "status": "draft",
       "path": "src/components/Table",
       "story": "/?path=/story/components-tables-table--default",
+      "storyFile": "src/stories/components/tables/Table.stories.tsx",
       "composes": [
         "Icon",
         "IconButton",
@@ -1380,6 +1459,7 @@
       "status": "stable",
       "path": "src/components/Tabs",
       "story": "/?path=/story/components-tabs--default",
+      "storyFile": "src/stories/components/Tabs.stories.tsx",
       "composes": [],
       "usedBy": [],
       "exports": [
@@ -1392,6 +1472,7 @@
       "status": "draft",
       "path": "src/components/TextArea",
       "story": "/?path=/story/form-components-textinput-textarea--default",
+      "storyFile": "src/stories/components/TextArea.stories.tsx",
       "composes": [
         "TextField"
       ],
@@ -1408,6 +1489,7 @@
       "status": "stable",
       "path": "src/components/TextButton",
       "story": "/?path=/story/components-buttons-textbutton--default",
+      "storyFile": "src/stories/components/buttons/TextButton.stories.tsx",
       "composes": [
         "Icon",
         "Spinner"
@@ -1432,6 +1514,8 @@
       "status": "review",
       "path": "src/components/TextField",
       "story": "/?path=/story/form-components-textfield--default",
+      "storyFile": "src/stories/components/TextField.stories.tsx",
+      "design": "Purpose: Single-line free-text input for names, emails, search queries, and other\r\nunstructured string values.\r\n\nSpecialised variants — use these instead of TextField when the data type is known:\r\n  - PasswordField: password entry with show/hide toggle.\r\n  - MoneyField: currency input with thousand-separator formatting.\r\n  - PercentageField: percentage input clamped 0–100.\r\n  - TextArea: multi-line free text.\r\n  - DateOfBirthField: date-of-birth capture.\r\n  All inherit TextField styling automatically.\r\n\nSizes:\r\n  - medium (48px): standard forms. Default.\r\n  - small (40px): dense layouts, filters, inline search.\r\n  Use `condensed` to reduce height by 4px within a size tier.\r\n\nAdornments:\r\n  - startAdornment: icon or short text prefix at the leading edge\r\n    (e.g. magnifying-glass for search, currency symbol).\r\n  - endAdornment: icon or short text suffix at the trailing edge\r\n    (e.g. unit labels, clear buttons).\r\n  - selectAdornment: inline Select fused to the trailing edge via\r\n    InputSelectContainer — use for unit pickers (e.g. AUD / USD).\r\n\nValidation:\r\n  - Set `error` + `errorMessage` to show the error state. The errorMessage is\r\n    linked to the input via aria-describedby automatically.\r\n  - Always show `helperText` for format hints (e.g. \"DD/MM/YYYY\") before the user\r\n    interacts — don't wait for an error.\r\n\nAvoid:\r\n  - Using TextField for multi-line input — use TextArea.\r\n  - Using TextField for currency — use MoneyField.\r\n  - Using TextField for passwords — use PasswordField.\r\n  - Setting `type=\"number\"` — use `type=\"tel\"` with validation instead; number\r\n    inputs have poor accessibility and inconsistent browser behaviour.",
       "composes": [
         "InputSelectContainer"
       ],
@@ -1453,6 +1537,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/ThemeSwitcher",
       "story": "/?path=/story/member-online-themeswitcher--default",
+      "storyFile": "src/stories/member-online/ThemeSwitcher.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "Icon",
@@ -1473,6 +1558,7 @@
       "status": "draft",
       "path": "src/components/Tooltip",
       "story": "/?path=/story/components-tooltip--default",
+      "storyFile": "src/stories/components/Tooltip.stories.tsx",
       "composes": [],
       "usedBy": [
         "ExpandableCardList",
@@ -1490,6 +1576,7 @@
       "status": "draft",
       "path": "src/components/MemberOnline/UserChip",
       "story": "/?path=/story/member-online-userchip--default",
+      "storyFile": "src/stories/member-online/UserChip.stories.tsx",
       "partOf": "MemberOnline",
       "composes": [
         "MemberOnline"
