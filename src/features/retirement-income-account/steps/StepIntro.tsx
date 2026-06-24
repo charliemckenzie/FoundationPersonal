@@ -67,15 +67,15 @@ export function StepIntro({
 
             <IconList
               items={[
-                { text: <><strong>Easy setup:</strong> It takes about 10-15 minutes to complete.</> },
-                { text: <><strong>Transferring funds:</strong> You&apos;ll be asked to transfer funds from your accumulation account into your new income account. There&apos;s no minimum transfer amount. If you need to consolidate funds from outside of ART, do this before opening your new account.</> },
+                { text: 'It takes about 10-15 minutes to complete.' },
+                { text: <>You&apos;ll be asked to transfer funds from your accumulation account into your new income account. There&apos;s no minimum transfer amount. If you need to consolidate funds from outside of ART, do this before opening your new account.</> },
                 { text: <>
-                  <strong>Insurance cover:</strong> Understand how opening this account may affect your{' '}
+                  Understand how opening this account may affect your{' '}
                   <MuiLink component="button" onClick={() => setInsuranceDialogOpen(true)} sx={{ color: 'primary.main', cursor: 'pointer', verticalAlign: 'baseline' }}>insurance cover</MuiLink>.
                 </> },
-                { text: <><strong>When payments start:</strong> Your payments will start from the next business day after processing.</> },
-                { text: <><strong>Identity check:</strong> Have your driver&apos;s licence, Medicare card or passport handy. You may need to confirm your identity to process your application.</> },
-                { text: <><strong>Read the PDS:</strong> Make sure you have read and understood the <MuiLink href="#" sx={{ color: 'primary.main' }}>Super Savings Product Disclosure Statement for Income Account and Retirement Income Account (PDS)</MuiLink>.</> },
+                { text: 'Your payments will start from the next business day after processing.' },
+                { text: <>Have your driver&apos;s licence, Medicare card or passport handy. You may need to confirm your identity to process your application.</> },
+                { text: <>Make sure you have read and understood the <MuiLink href="#" sx={{ color: 'primary.main' }}>Super Savings Product Disclosure Statement for Income Account and Retirement Income Account (PDS)</MuiLink>.</> },
               ]}
             />
           </Stack>
