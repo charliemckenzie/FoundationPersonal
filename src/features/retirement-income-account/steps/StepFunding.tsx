@@ -9,6 +9,7 @@ import { Button } from '../../../components/Button';
 import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
+import { RadioGroup } from '../../../components/RadioGroup';
 import { TextButton } from '../../../components/TextButton';
 import { MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
@@ -45,6 +46,9 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   // when purchaseAmount changes externally (commit on blur, draft resume, reset).
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
   const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
+  const [transferType, setTransferType] = useState<'custom' | 'full' | 'keep'>('custom');
+  const [keepAmount, setKeepAmount] = useState(0);
+  const [liveKeepAmount, setLiveKeepAmount] = useState(0);
   // Track the amount for which payments have been calculated. Reset when the
   // committed purchase amount changes so the button re-appears.
   const [calculatedForAmount, setCalculatedForAmount] = useState<number | null>(null);
@@ -54,6 +58,24 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
     setPrevPurchase(purchaseAmount);
     setLiveAmount(purchaseAmount);
     // Don't reset calculatedForAmount — keep showing stale values and re-enable the button.
+  }
+
+  function handleTransferTypeChange(value: string) {
+    const type = value as 'custom' | 'full' | 'keep';
+    setTransferType(type);
+    if (type === 'full') {
+      onPurchaseAmountChange(totalAvailable);
+      setLiveAmount(totalAvailable);
+    } else if (type === 'keep') {
+      onPurchaseAmountChange(0);
+      setLiveAmount(0);
+      setKeepAmount(0);
+      setLiveKeepAmount(0);
+    } else {
+      onPurchaseAmountChange(0);
+      setLiveAmount(0);
+    }
+    setCalculatedForAmount(null);
   }
 
   const reduceMotion = useReducedMotion();
@@ -70,9 +92,12 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
   const remaining = totalAvailable - displayAmount;
-  const overFunds = hasValue && remaining < 0;
-  const lowBalance = hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
-  const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
+  const overFunds = transferType !== 'keep' && hasValue && remaining < 0;
+  const lowBalance = transferType !== 'keep' && hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
+  const remainingColor = overFunds ? 'error.text' : undefined;
+  const derivedTransferAmount = Math.max(0, totalAvailable - liveKeepAmount);
+  const keepOverFunds = transferType === 'keep' && liveKeepAmount > totalAvailable;
+  const keepBelowMin = transferType === 'keep' && liveKeepAmount > 0 && liveKeepAmount < MIN_REMAINING_BALANCE;
 
   // Payment summary is shown once the member has calculated at least once.
   const hasCalculated = calculatedForAmount !== null;
@@ -134,17 +159,75 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
         </Box>
 
         {/* Purchase price */}
-        <MoneyField
-          label="Amount to transfer into your account"
-          value={purchaseAmount || null}
-          fullWidth
-          error={fieldError}
-          helperText={fieldError ? helperText : ''}
-          onInputChange={(v) => setLiveAmount(v ?? 0)}
-          onChange={(v) => {
-            onPurchaseAmountChange(v ?? 0);
-          }}
+        <RadioGroup
+          legend="Transfer"
+          value={transferType}
+          onChange={handleTransferTypeChange}
+          options={[
+            { value: 'custom', label: 'Specified amount' },
+            { value: 'full', label: 'Full balance' },
+            { value: 'keep', label: 'Leave an amount behind' },
+          ]}
+          direction="row"
         />
+
+        {transferType === 'custom' && (
+          <Box sx={{ mt: 2 }}>
+            <MoneyField
+              label="Amount to transfer into your account"
+              value={purchaseAmount || null}
+              fullWidth
+              error={fieldError}
+              helperText={fieldError ? helperText : ''}
+              onInputChange={(v) => setLiveAmount(v ?? 0)}
+              onChange={(v) => {
+                onPurchaseAmountChange(v ?? 0);
+              }}
+            />
+          </Box>
+        )}
+
+        {transferType === 'full' && (
+          <Box sx={{ mt: 2 }}>
+            <MoneyField
+              label="Amount to transfer into your account"
+              value={totalAvailable}
+              fullWidth
+              disabled
+              helperText=""
+              onInputChange={() => {}}
+              onChange={() => {}}
+            />
+            <Box sx={{ mt: 2 }}>
+              <Alert
+                severity="info"
+                message="This will close your Accumulation account and cancel any insurance cover you hold."
+              />
+            </Box>
+          </Box>
+        )}
+
+        {transferType === 'keep' && (
+          <Box sx={{ mt: 2 }}>
+            <MoneyField
+              label="Amount to keep in your Accumulation account"
+              value={keepAmount || null}
+              fullWidth
+              error={keepOverFunds}
+              helperText={keepOverFunds ? 'Amount to keep cannot exceed your available funds.' : 'This will transfer most of your balance into your new income account and leave the amount you specify above in your Accumulation account.'}
+              onInputChange={(v) => {
+                const k = v ?? 0;
+                setLiveKeepAmount(k);
+                setLiveAmount(Math.max(0, totalAvailable - k));
+              }}
+              onChange={(v) => {
+                const k = v ?? 0;
+                setKeepAmount(k);
+                onPurchaseAmountChange(Math.max(0, totalAvailable - k));
+              }}
+            />
+          </Box>
+        )}
 
       {/* Payment summary — shown only after the member clicks "Calculate payments" */}
       <Box sx={{ mt: 2.5 }}>
@@ -185,16 +268,7 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
         )}
       </Box>
 
-      {/* Minimum balance warning — shown inline when remaining drops below threshold */}
-      {lowBalance && (
-        <Box sx={{ mt: 3 }}>
-          <Alert
-            severity="warning"
-            title="Minimum balance warning"
-            message={`Please be aware that leaving less than ${formatCurrency(MIN_REMAINING_BALANCE)} in your Accumulation account will close it. If all your accounts close, any insurance you hold will also be cancelled.`}
-          />
-        </Box>
-      )}
+
       {overFunds && (
         <Box sx={{ mt: 3 }}>
           <Alert
@@ -425,13 +499,11 @@ export function StepFunding({
           showValidation={showValidation}
         />
 
-        {eligibleForBonus && (
-          <RetirementBonus
-            amount={bonusValue}
-            loading={calculating}
-            onCalculate={handleCalculateBonus}
-          />
-        )}
+        <RetirementBonus
+          amount={bonusValue}
+          loading={calculating}
+          onCalculate={handleCalculateBonus}
+        />
       </Stack>
 
       <Dialog
