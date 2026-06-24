@@ -9,40 +9,18 @@ const YES_NO: EligibilityOption[] = [
 /**
  * Retirement Income Account eligibility pre-gate.
  *
- * 1. Minimum starting balance — radio yes/no (yes → eligible, no → ineligible).
- * 2. Tax deduction — radio with two follow-up branches (claimed → processed?,
+ * 1. Tax deduction — radio with two follow-up branches (claimed → processed?,
  *    not claimed → intend to?). An unprocessed claim blocks; an intention to
  *    claim is advisory (warning, but the member may continue).
- * 3. Retirement status — radio, with a "left an employer after 60" fallback.
+ * 2. Retirement status — radio, with a "left an employer after 60" fallback.
  */
 export const retirementIncomeAccountConfig: EligibilityCheckerConfig = {
   eligibleTitle: "You're eligible to apply for a Retirement Income account",
   eligibleChecklist: [
-    'Minimum starting balance',
     'Tax deduction consideration',
     'Retirement requirements',
   ],
   steps: [
-    {
-      id: 'transfer',
-      question: {
-        id: 'transfer',
-        text: 'Minimum starting balance',
-        kind: 'radio',
-        direction: 'column',
-        helperText: 'To open a Retirement Income account you need a starting balance greater than $0.',
-        options: [
-          { value: 'yes', label: "Yes, I'll be transferring more than $0" },
-          { value: 'no', label: "No, I won't be" },
-        ],
-      },
-      getOutcome: (answers) => {
-        if (answers.transfer === 'yes') return 'eligible';
-        if (answers.transfer === 'no') return 'ineligible';
-        return 'pending';
-      },
-      ineligibleMessage: <>You cannot open a Retirement Income account without a starting balance greater than $0. Please <MuiLink href="#" sx={{ color: 'error.main' }}>contact us</MuiLink> if you need help.</>,
-    },
     {
       id: 'taxDeduction',
       question: {
