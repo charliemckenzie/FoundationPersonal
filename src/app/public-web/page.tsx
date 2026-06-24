@@ -1,36 +1,18 @@
 import Box from '@mui/material/Box';
-import { PublicWebExperimentThemeProvider } from './PublicWebExperimentThemeProvider';
-import {
-  HeroSection,
-  QuickLinksSection,
-  FeesSection,
-  InvestmentStrategySection,
-  AwardsSection,
-  AppointmentsSection,
-  MembershipBenefitsSection,
-  MobileAppSection,
-} from './home';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 export default function PublicWebPage() {
   return (
-    <PublicWebExperimentThemeProvider>
-      <Box
-        sx={{
-          color: 'text.primary',
-          '& a, & a:hover, & a:focus, & a:active': {
-            textDecoration: 'none',
-          },
-        }}
-      >
-        <HeroSection />
-        <QuickLinksSection />
-        <FeesSection />
-        <InvestmentStrategySection />
-        <AwardsSection />
-        <AppointmentsSection />
-        <MembershipBenefitsSection />
-        <MobileAppSection />
-      </Box>
-    </PublicWebExperimentThemeProvider>
+    <Box sx={{ bgcolor: 'background.default', py: { xs: 6, md: 10 } }}>
+      <Container maxWidth="lg">
+        <Typography variant="display-5" component="h1" sx={{ mb: 1 }}>
+          Public Web
+        </Typography>
+        <Typography variant="lead" component="p" sx={{ color: 'text.secondary' }}>
+          Public-facing website placeholder — add pages here.
+        </Typography>
+      </Container>
+    </Box>
   );
 }
