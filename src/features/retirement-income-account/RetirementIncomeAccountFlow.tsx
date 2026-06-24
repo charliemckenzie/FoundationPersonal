@@ -11,11 +11,16 @@ import { ContentContainer, MOBreadcrumb } from '../../components/MemberOnline';
 import { Dialog } from '../../components/Dialog';
 import { StepTransition } from '../../components/StepTransition';
 import { StepperActions } from '../../components/StepperActions';
+import { Alert } from '../../components/Alert';
 import { useSteppedFlow } from '../../lib/useSteppedFlow';
 import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
 import { INITIAL_STATE, RETIREMENT_INCOME_ACCOUNT_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
-import { useIdvGate } from '../../features/idv';
+import { useIdvGate, DigitalIDV, OfflineIdv, canSubmitIDV, initialOtherIdState } from '../../features/idv';
+import type { OtherIdState, IDVState as IdvModuleState } from '../../features/idv';
+import { initialIDVState as idvInitialState } from '../../features/idv';
+import { RadioGroup } from '../../components/RadioGroup';
+import { StepDetails } from './steps/StepDetails';
 import { StepAllocate } from './steps/StepAllocate';
 import { StepFunding } from './steps/StepFunding';
 import { StepIntro } from './steps/StepIntro';
@@ -52,6 +57,8 @@ const STEP_KEYS: RetirementIncomeAccountStepId[] = [
   'investment-strategy',
   'investment-mix',
   'beneficiary',
+  'details',
+  'idv',
   'review',
 ];
 
@@ -72,6 +79,12 @@ export function RetirementIncomeAccountFlow() {
   const gate = useIdvGate();
 
   const [verifyDetailsState, setVerifyDetailsState] = useState<VerifyDetailsState>(initialVerifyDetailsState);
+  const [detailsProfile, setDetailsProfile] = useState(MOCK_USER_PROFILE);
+  const [idvState, setIdvState] = useState<IdvModuleState>(idvInitialState);
+  const [idvLoading] = useState(false);
+  const [idvError] = useState('');
+  const [verifyMethod, setVerifyMethod] = useState<'online' | 'other'>('online');
+  const [otherIdState, setOtherIdState] = useState<OtherIdState>(initialOtherIdState);
 
   // Step navigation + draft autosave/resume are shared with Lifetime Pension via useSteppedFlow.
   const flow = useSteppedFlow<RetirementIncomeAccountState>({
@@ -139,6 +152,18 @@ export function RetirementIncomeAccountFlow() {
         return true;
       case 'beneficiary':
         return beneficiaryStepValid(state);
+      case 'details':
+        return true;
+      case 'idv': {
+        if (verifyMethod === 'other') {
+          if (otherIdState.method === 'selfie' || otherIdState.method === 'certified') {
+            return otherIdState.files.length > 0;
+          }
+          if (otherIdState.method === 'later') return otherIdState.laterConfirmed;
+          return false;
+        }
+        return canSubmitIDV(idvState);
+      }
       case 'review':
         return reviewStepValid(state);
       default:
@@ -346,6 +371,56 @@ export function RetirementIncomeAccountFlow() {
                 onBeneficiaryStateChange={(next) => updateState({ ...state, beneficiaryState: next })}
                 showValidation={showValidation}
               />
+            ) : currentStepId === 'details' ? (
+              <StepDetails
+                profile={detailsProfile}
+                onProfileUpdate={setDetailsProfile}
+              />
+            ) : currentStepId === 'idv' ? (
+              <Stack spacing={3}>
+                <div>
+                  <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+                    Verify your identity
+                  </Typography>
+                  <Typography variant="body" sx={{ color: 'text.primary' }}>
+                    To process your application, we need to verify your identity. Choose how you&apos;d like to verify below.
+                  </Typography>
+                </div>
+
+                <RadioGroup
+                  legend="How would you like to verify?"
+                  value={verifyMethod}
+                  options={[
+                    { value: 'online', label: 'Online' },
+                    { value: 'other', label: 'Other options' },
+                  ]}
+                  direction="column"
+                  onChange={(value) => setVerifyMethod(value as 'online' | 'other')}
+                />
+
+                {verifyMethod === 'online' ? (
+                  <>
+                    <Divider />
+                    <DigitalIDV
+                      state={idvState}
+                      onChange={setIdvState}
+                      onSubmit={handleNext}
+                      loading={idvLoading}
+                      error={idvError}
+                      embedded
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Divider />
+                    <OfflineIdv
+                      state={otherIdState}
+                      onChange={setOtherIdState}
+                      showValidation={showValidation}
+                    />
+                  </>
+                )}
+              </Stack>
             ) : (
               <StepReview
                 state={state}
@@ -356,11 +431,24 @@ export function RetirementIncomeAccountFlow() {
                 showValidation={showValidation}
                 verifyDetailsState={verifyDetailsState}
                 onVerifyDetailsChange={setVerifyDetailsState}
-                profile={MOCK_USER_PROFILE}
+                profile={detailsProfile}
+                verifyMethod={verifyMethod}
+                otherIdSummary={
+                  verifyMethod === 'other' && otherIdState.method !== ''
+                    ? { method: otherIdState.method, fileNames: otherIdState.files.map((f) => f.name) }
+                    : undefined
+                }
               />
             )}
           </StepTransition>
           </Box>
+
+          {showValidation && currentStepId === 'idv' && !stepIsValid(activeStep) && (
+            <Alert
+              severity="error"
+              message="To continue, upload your identity documents, or choose 'I\u2019ll provide this later' and confirm."
+            />
+          )}
 
           {currentStepId !== 'investment-mix' && (
           <StepperActions

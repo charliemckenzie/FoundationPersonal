@@ -16,6 +16,8 @@ export const RETIREMENT_INCOME_ACCOUNT_STEPS: FormProgressStep[] = [
   { id: 'investment-mix', label: 'Investment mix' },
   { id: 'investment-drawdown', label: 'Drawdown order' },
   { id: 'beneficiary', label: 'Reversionary beneficiary' },
+  { id: 'details', label: 'Your details' },
+  { id: 'idv', label: 'Verify your identity' },
   { id: 'review', label: 'Review' },
 ];
 
@@ -179,9 +181,11 @@ export const PAYMENT_PERIOD_LABEL: Record<string, string> = {
   'half-yearly': '6 months',
   annually: 'year',
 };
-export const TARGET_PERCENT = [11, 22, 33, 44, 56, 67, 78, 89, 100] as const;
+export const TARGET_PERCENT = [9, 18, 27, 36, 45, 55, 64, 73, 82, 91, 100] as const;
 
 export const STEP_TITLES = [
+  'Open a Retirement Income Account',
+  'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',
   'Open a Retirement Income Account',

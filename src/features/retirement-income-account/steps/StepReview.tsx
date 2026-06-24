@@ -2,16 +2,27 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
+import type { Address } from '../../../components/AddressField';
+import { AddressCapture } from '../../../components/AddressField/AddressCapture';
+import { mockAddressProvider } from '../../../components/AddressField/mockAddressProvider';
 import { Alert } from '../../../components/Alert';
+import { Button } from '../../../components/Button';
 import { Checkbox } from '../../../components/Checkbox';
+import { DescriptionList } from '../../../components/DescriptionList';
 import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
 import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
-import { formatCurrency, totalSelectedAmount, estimatePension } from '../utils';
+import type { OtherIdMethod } from '../../../features/idv';
+import { formatCurrency, totalSelectedAmount, estimatePension, estimateRetirementBonus } from '../utils';
 import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL } from '../constants';
+
+interface OtherIdSummary {
+  method: OtherIdMethod;
+  fileNames: string[];
+}
 
 interface StepReviewProps {
   state: RetirementIncomeAccountState;
@@ -21,90 +32,39 @@ interface StepReviewProps {
   verifyDetailsState: VerifyDetailsState;
   onVerifyDetailsChange: (next: VerifyDetailsState) => void;
   profile: UserProfile;
+  verifyMethod: 'online' | 'other';
+  otherIdSummary?: OtherIdSummary;
 }
 
-function ReviewRow({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-        alignItems: 'flex-start',
-        columnGap: 2,
-        rowGap: { xs: 0.5, sm: 0 },
-        py: 1.5,
-        borderTop: '1px solid',
-        borderTopColor: 'border.subtle',
-        '&:last-child': {
-          borderBottom: '1px solid',
-          borderBottomColor: 'border.subtle',
-        },
-      }}
-    >
-      <Typography component="dt" variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>
-        {label}
-      </Typography>
-      <Box component="dd" sx={{ m: 0 }}>{children}</Box>
-    </Box>
-  );
+/** Convert ISO date (yyyy-mm-dd) to dd/mm/yyyy for display. Returns the original string if it can't be parsed. */
+function formatDob(iso: string): string {
+  const [y, m, d] = iso.split('-');
+  if (y && m && d) return `${d}/${m}/${y}`;
+  return iso;
 }
 
-function ReviewValue({ children }: { children: React.ReactNode }) {
-  if (typeof children === 'string' || typeof children === 'number') {
-    return (
-      <Typography variant="body" sx={{ color: 'text.primary' }}>
-        {children}
-      </Typography>
-    );
+function parseAddressString(raw: string): Address {
+  const parts = raw.split(', ').map((s) => s.trim());
+  const last = parts[parts.length - 1] ?? '';
+  const statePostcodeMatch = last.match(/^([A-Z]{2,3})\s+(\d{4})$/);
+  if (statePostcodeMatch && parts.length >= 3) {
+    return {
+      type: 'australian',
+      line1: parts[0] ?? '',
+      line2: parts.length === 4 ? (parts[1] ?? '') : '',
+      suburb: parts.length === 4 ? (parts[2] ?? '') : (parts[1] ?? ''),
+      state: statePostcodeMatch[1] ?? '',
+      postcode: statePostcodeMatch[2] ?? '',
+    };
   }
-  return <>{children}</>;
+  return { type: 'australian', line1: raw, line2: '', suburb: '', state: '', postcode: '' };
 }
 
-interface SectionProps {
-  title: string;
-  onEdit?: () => void;
-  children: React.ReactNode;
-  sx?: object;
-}
-
-function ReviewSection({ title, onEdit, children, sx }: SectionProps) {
-  return (
-    <Stack spacing={3} sx={{ mt: 5, ...sx }}>
-      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-        <Typography variant="h5">{title}</Typography>
-        {onEdit && <TextButton label="Edit" hideIcon onClick={onEdit} />}
-      </Stack>
-      <Box component="dl" sx={{ m: 0 }}>
-        {children}
-      </Box>
-    </Stack>
-  );
-}
-
-function PrintCard() {
-  return (
-    <Box
-      sx={{
-        backgroundColor: 'action.hover',
-        borderRadius: (t) => `${t.shape.lg}px`,
-        p: 3,
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 2,
-      }}
-    >
-      <Typography variant="h6" sx={{ color: 'text.heading' }}>
-          Retirement Income Account application
-        </Typography>
-      <TextButton
-        label="Print"
-        startIcon="print"
-        onClick={() => window.print()}
-      />
-    </Box>
-  );
+function addressToString(addr: Address): string {
+  if (addr.type === 'australian') {
+    return [addr.line1, addr.line2, addr.suburb, addr.state, addr.postcode].filter(Boolean).join(', ');
+  }
+  return [addr.line1, addr.line2, addr.city, addr.stateProvince, addr.postcode].filter(Boolean).join(', ');
 }
 
 function DeclLink({ href, children }: { href: string; children: React.ReactNode }) {
@@ -290,66 +250,50 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
   }
 
   return (
-    <ReviewSection title="Investment strategy" onEdit={onEdit}>
-      <ReviewRow label="Strategy type">
-        <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>{mixLabel}</Typography>
-          {mixMode === 'custom' && (
-            <ExpandToggle
-              expanded={showAllocation}
-              onToggle={() => setShowAllocation((v) => !v)}
-              expandLabel="View allocation"
-              collapseLabel="Hide allocation"
-            />
-          )}
-        </Stack>
-      </ReviewRow>
-      {mixMode === 'custom' && showAllocation && (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-            columnGap: 2,
-            py: 1.5,
-            borderTop: '1px solid',
-            borderTopColor: 'border.subtle',
-            '&:last-child': { borderBottom: '1px solid', borderBottomColor: 'border.subtle' },
-          }}
-        >
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
-          <AllocationTable allocations={state.investmentMix.allocations} label="Allocation" />
-        </Box>
-      )}
-      <ReviewRow label="Drawdown options">
-        <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>{drawdownLabel}</Typography>
-          {drawdownMode === 'custom' && (
-            <ExpandToggle
-              expanded={showDrawdown}
-              onToggle={() => setShowDrawdown((v) => !v)}
-              expandLabel="View preferences"
-              collapseLabel="Hide preferences"
-            />
-          )}
-        </Stack>
-      </ReviewRow>
-      {drawdownMode === 'custom' && showDrawdown && (
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-            columnGap: 2,
-            py: 1.5,
-            borderTop: '1px solid',
-            borderTopColor: 'border.subtle',
-            '&:last-child': { borderBottom: '1px solid', borderBottomColor: 'border.subtle' },
-          }}
-        >
-          <Box sx={{ display: { xs: 'none', sm: 'block' } }} />
-          <DrawdownTable drawdown={state.drawdown} />
-        </Box>
-      )}
-    </ReviewSection>
+    <DescriptionList
+      title="Investment strategy"
+      titleVariant="h6"
+      titleAction={onEdit ? <TextButton label="Edit" hideIcon aria-label="Edit investment strategy" onClick={onEdit} /> : undefined}
+    >
+      <DescriptionList.Item
+        label="Strategy type"
+        value={
+          <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
+            <Typography variant="body" sx={{ color: 'text.primary' }}>{mixLabel}</Typography>
+            {mixMode === 'custom' && (
+              <>
+                <ExpandToggle
+                  expanded={showAllocation}
+                  onToggle={() => setShowAllocation((v) => !v)}
+                  expandLabel="View allocation"
+                  collapseLabel="Hide allocation"
+                />
+                {showAllocation && <AllocationTable allocations={state.investmentMix.allocations} label="Allocation" />}
+              </>
+            )}
+          </Stack>
+        }
+      />
+      <DescriptionList.Item
+        label="Drawdown options"
+        value={
+          <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
+            <Typography variant="body" sx={{ color: 'text.primary' }}>{drawdownLabel}</Typography>
+            {drawdownMode === 'custom' && (
+              <>
+                <ExpandToggle
+                  expanded={showDrawdown}
+                  onToggle={() => setShowDrawdown((v) => !v)}
+                  expandLabel="View preferences"
+                  collapseLabel="Hide preferences"
+                />
+                {showDrawdown && <DrawdownTable drawdown={state.drawdown} />}
+              </>
+            )}
+          </Stack>
+        }
+      />
+    </DescriptionList>
   );
 }
 
@@ -360,29 +304,32 @@ export function StepReview({
   showValidation,
   verifyDetailsState,
   onVerifyDetailsChange,
+  profile,
+  verifyMethod,
+  otherIdSummary,
 }: StepReviewProps) {
   const [editDetailsOpen, setEditDetailsOpen] = useState(false);
   const [draftDetails, setDraftDetails] = useState<UserProfile>(verifyDetailsState.edited);
+  const [draftAddress, setDraftAddress] = useState<Address>({ type: 'australian', line1: '', line2: '', suburb: '', state: '', postcode: '' });
 
   const displayDetails = verifyDetailsState.edited;
 
   function handleOpenEdit() {
     setDraftDetails({ ...verifyDetailsState.edited });
+    setDraftAddress(parseAddressString(verifyDetailsState.edited.residentialAddress));
     setEditDetailsOpen(true);
   }
 
   function handleSaveDetails() {
-    onVerifyDetailsChange({ confirmed: 'no', edited: draftDetails });
+    onVerifyDetailsChange({ confirmed: 'no', edited: { ...draftDetails, residentialAddress: addressToString(draftAddress) } });
     setEditDetailsOpen(false);
   }
 
   const isSimple = state.setupMode === 'simple';
-  // In simple mode the funding step is skipped, so transferAmount is 0 — use full balances instead.
   const purchasePrice = isSimple
     ? state.accounts.reduce((sum, a) => sum + a.balance, 0)
     : totalSelectedAmount(state);
 
-  // Estimated payment figures
   const effectiveFrequency = isSimple ? 'fortnightly' : (state.paymentSchedule.frequency ?? 'fortnightly');
   const effectiveAnnual = (() => {
     const minAnnual = purchasePrice * 0.05;
@@ -395,31 +342,120 @@ export function StepReview({
   const periodLabel = PAYMENT_PERIOD_LABEL[effectiveFrequency] ?? effectiveFrequency;
 
   return (
-    <Stack spacing={0}>
-      <PrintCard />
+    <Stack spacing={4}>
+      {/* Header */}
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <Stack spacing={0.5}>
+          <Typography variant="h5" component="h2">
+            Review your Retirement Income Account application
+          </Typography>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            Check the details below before submitting.
+          </Typography>
+        </Stack>
+        <Button
+          label="Print"
+          variant="outlined"
+          size="small"
+          startIcon="print"
+          onClick={() => window.print()}
+        />
+      </Stack>
+
+      {/* Product details */}
+      <DescriptionList title="Product details" titleVariant="h6">
+        <DescriptionList.Item
+          label="Setup preference"
+          value={state.setupMode === 'simple' ? 'Set it up for me' : "I'll customise it myself"}
+          action={<TextButton label="Edit" hideIcon aria-label="Edit account setup" onClick={() => onEditStep('setup-mode')} />}
+        />
+        <DescriptionList.Item
+          label="Opening balance"
+          value={
+            isSimple
+              ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
+              : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'
+          }
+          action={!isSimple ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} /> : undefined}
+        />
+      </DescriptionList>
+
+      {/* Payment details */}
+      <DescriptionList
+        title="Payment details"
+        titleVariant="h6"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit payment details" onClick={() => onEditStep('payments')} />}
+      >
+        <DescriptionList.Item
+          label={`${freqLabel} payments`}
+          value={purchasePrice > 0 ? `${formatCurrency(perFrequencyPayment)} / ${periodLabel}` : '—'}
+        />
+        <DescriptionList.Item
+          label="First payment date"
+          value={
+            isSimple
+              ? (() => {
+                  const d = new Date();
+                  d.setDate(d.getDate() + 14);
+                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
+                  return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                })()
+              : state.paymentSchedule.firstPaymentMonth
+                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                : '—'
+          }
+        />
+        <DescriptionList.Item
+          label="First year's income"
+          value={purchasePrice > 0 ? formatCurrency(effectiveAnnual) : '—'}
+        />
+        <DescriptionList.Item
+          label="Estimated retirement bonus"
+          value={purchasePrice > 0 ? formatCurrency(estimateRetirementBonus(purchasePrice)) : '—'}
+        />
+        <DescriptionList.Item
+          label="Bank details"
+          value={
+            <Stack spacing={0.5}>
+              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
+              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
+              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc No. {state.bankDetails.accountNumber || '—'}</Typography>
+            </Stack>
+          }
+        />
+      </DescriptionList>
 
       {/* Personal details */}
-      <ReviewSection title="Personal details" sx={{ mt: 4 }} onEdit={handleOpenEdit}>
-        <ReviewRow label="Full name">
-          <ReviewValue>
-            {[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName]
-              .filter(Boolean)
-              .join(' ') || '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Residential address">
-          <ReviewValue>{displayDetails.residentialAddress || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Email address">
-          <ReviewValue>{displayDetails.email || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Date of birth">
-          <ReviewValue>{displayDetails.dateOfBirth || '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Mobile phone">
-          <ReviewValue>{displayDetails.mobilePhone || '—'}</ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
+      <DescriptionList
+        title="Personal details"
+        titleVariant="h6"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit personal details" onClick={handleOpenEdit} />}
+      >
+        <DescriptionList.Item
+          label="Full name"
+          value={[displayDetails.firstName, displayDetails.middleName, displayDetails.lastName].filter(Boolean).join(' ') || '—'}
+        />
+        <DescriptionList.Item label="Date of birth" value={displayDetails.dateOfBirth ? formatDob(displayDetails.dateOfBirth) : '—'} />
+        <DescriptionList.Item label="Mobile phone" value={displayDetails.mobilePhone || '—'} />
+        <DescriptionList.Item label="Email address" value={displayDetails.email || '—'} />
+        <DescriptionList.Item
+          label="Residential address"
+          value={
+            (() => {
+              const addr = displayDetails.residentialAddress || '—';
+              const commaIdx = addr.indexOf(',');
+              const line1 = commaIdx > -1 ? addr.slice(0, commaIdx) : addr;
+              const line2 = commaIdx > -1 ? addr.slice(commaIdx + 1).trim() : null;
+              return (
+                <Stack spacing={0}>
+                  <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{line1}</Typography>
+                  {line2 && <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{line2}</Typography>}
+                </Stack>
+              );
+            })()
+          }
+        />
+      </DescriptionList>
 
       {/* Edit personal details dialog */}
       <Dialog
@@ -432,179 +468,102 @@ export function StepReview({
         onConfirm={handleSaveDetails}
       >
         <Stack spacing={2}>
+          <Typography variant="body" sx={{ color: 'text.primary' }}>
+            If there&rsquo;s an error with your name or date of birth please call us.
+          </Typography>
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-            <TextField label="First name" value={draftDetails.firstName} onChange={(e) => setDraftDetails({ ...draftDetails, firstName: e.target.value })} />
-            <TextField label="Last name" value={draftDetails.lastName} onChange={(e) => setDraftDetails({ ...draftDetails, lastName: e.target.value })} />
+            <TextField label="First name" value={draftDetails.firstName} disabled onChange={() => {}} />
+            <TextField label="Last name" value={draftDetails.lastName} disabled onChange={() => {}} />
           </Box>
           <TextField label="Middle name" value={draftDetails.middleName} onChange={(e) => setDraftDetails({ ...draftDetails, middleName: e.target.value })} />
-          <TextField label="Residential address" value={draftDetails.residentialAddress} onChange={(e) => setDraftDetails({ ...draftDetails, residentialAddress: e.target.value })} />
+          <Stack spacing={1.5}>
+            <Typography variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>Residential address</Typography>
+            <AddressCapture
+              value={draftAddress}
+              onChange={setDraftAddress}
+              section="residential"
+              lookup={{ provider: mockAddressProvider }}
+            />
+          </Stack>
           <TextField label="Email address" type="email" value={draftDetails.email} onChange={(e) => setDraftDetails({ ...draftDetails, email: e.target.value })} />
-          <TextField label="Date of birth" value={draftDetails.dateOfBirth} onChange={(e) => setDraftDetails({ ...draftDetails, dateOfBirth: e.target.value })} />
+          <TextField label="Date of birth" value={draftDetails.dateOfBirth} disabled onChange={() => {}} />
           <TextField label="Mobile phone" type="tel" value={draftDetails.mobilePhone} onChange={(e) => setDraftDetails({ ...draftDetails, mobilePhone: e.target.value })} />
         </Stack>
       </Dialog>
-
-      {/* Account setup — visible for both modes */}
-      <ReviewSection title="Account setup" onEdit={() => onEditStep('setup-mode')}>
-        <ReviewRow label="Setup preference">
-          <ReviewValue>
-            {state.setupMode === 'simple' ? 'Set it up for me' : "I'll customise it myself"}
-          </ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Funding */}
-      <ReviewSection title="Funding" onEdit={isSimple ? undefined : () => onEditStep('allocate')}>
-        <ReviewRow label="Opening balance">
-          <ReviewValue>
-            {isSimple
-              ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
-              : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}
-          </ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Your payments */}
-      <ReviewSection title="Your payments" onEdit={isSimple ? undefined : () => onEditStep('payment-schedule')}>
-        <ReviewRow label="Payment frequency">
-          <ReviewValue>
-            {state.setupMode === 'simple'
-              ? 'Fortnightly (Wednesdays)'
-              : state.paymentSchedule.frequency
-                ? state.paymentSchedule.frequency.charAt(0).toUpperCase() + state.paymentSchedule.frequency.slice(1)
-                : '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="First payment date">
-          <ReviewValue>
-            {state.setupMode === 'simple'
-              ? (() => {
-                  const d = new Date();
-                  d.setDate(d.getDate() + 14);
-                  // Advance to next Wednesday (day 3)
-                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
-                  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
-                })()
-              : state.paymentSchedule.firstPaymentMonth
-                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' })
-                : '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Payment amount">
-          <ReviewValue>
-            {state.setupMode === 'simple'
-              ? (() => {
-                  const est = estimatePension(purchasePrice, PENSION_ESTIMATE_AGE, 'single');
-                  return est ? formatCurrency(est.fortnightly) + ' / fortnight' : '—';
-                })()
-              : state.paymentSchedule.amountType === 'minimum'
-                ? 'Minimum'
-                : state.paymentSchedule.amountType === 'specific' && state.paymentSchedule.specificAmount > 0
-                  ? `${formatCurrency(state.paymentSchedule.specificAmount)} per year`
-                  : '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="Adjust for cost of living">
-          <ReviewValue>
-            {state.setupMode === 'simple' ? 'No' : state.paymentSchedule.adjustForCPI ? 'Yes' : 'No'}
-          </ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Estimated payments */}
-      <ReviewSection title="Estimated payments" onEdit={isSimple ? undefined : () => onEditStep('payment-schedule')}>
-        <ReviewRow label="Opening balance">
-          <ReviewValue>{purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label={`${freqLabel} payments`}>
-          <ReviewValue>{purchasePrice > 0 ? `${formatCurrency(perFrequencyPayment)} / ${periodLabel}` : '—'}</ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="First payment date">
-          <ReviewValue>
-            {isSimple
-              ? (() => {
-                  const d = new Date();
-                  d.setDate(d.getDate() + 14);
-                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
-                  return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-                })()
-              : state.paymentSchedule.firstPaymentMonth
-                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
-                : '—'}
-          </ReviewValue>
-        </ReviewRow>
-        <ReviewRow label="First year's income">
-          <ReviewValue>{purchasePrice > 0 ? formatCurrency(effectiveAnnual) : '—'}</ReviewValue>
-        </ReviewRow>
-      </ReviewSection>
-
-      {/* Bank details */}
-      <ReviewSection title="Bank details" onEdit={() => onEditStep('payments')}>
-        <ReviewRow label="Bank account">
-          <Stack spacing={1.5}>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>BSB</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.bsb || '—'}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>Account number</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.accountNumber || '—'}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="small" sx={{ color: 'text.muted' }}>Account name</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary' }}>{state.bankDetails.accountName || '—'}</Typography>
-            </Box>
-          </Stack>
-        </ReviewRow>
-      </ReviewSection>
 
       {/* Investment strategy */}
       <InvestmentStrategySection state={state} onEdit={isSimple ? undefined : () => onEditStep('investment-strategy')} />
 
       {/* Reversionary beneficiary */}
-      <ReviewSection title="Reversionary beneficiary" onEdit={() => onEditStep('beneficiary')}>
+      <DescriptionList
+        title="Reversionary beneficiary"
+        titleVariant="h6"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit reversionary beneficiary" onClick={() => onEditStep('beneficiary')} />}
+      >
         {state.beneficiaryState?.nominate === 'yes' && state.beneficiaryState.beneficiary.relationship ? (
           <>
-            <ReviewRow label="Relationship">
-              <ReviewValue>
-                {state.beneficiaryState.beneficiary.relationship.charAt(0).toUpperCase() +
-                  state.beneficiaryState.beneficiary.relationship.slice(1)}
-              </ReviewValue>
-            </ReviewRow>
-            <ReviewRow label="Name">
-              <ReviewValue>
-                {[
+            <DescriptionList.Item
+              label="Relationship"
+              value={
+                state.beneficiaryState.beneficiary.relationship.charAt(0).toUpperCase() +
+                state.beneficiaryState.beneficiary.relationship.slice(1)
+              }
+            />
+            <DescriptionList.Item
+              label="Name"
+              value={
+                [
                   state.beneficiaryState.beneficiary.firstName,
                   state.beneficiaryState.beneficiary.middleName,
                   state.beneficiaryState.beneficiary.lastName,
                 ]
                   .filter(Boolean)
-                  .join(' ') || '—'}
-              </ReviewValue>
-            </ReviewRow>
-            <ReviewRow label="Date of birth">
-              <ReviewValue>{state.beneficiaryState.beneficiary.dateOfBirth || '—'}</ReviewValue>
-            </ReviewRow>
+                  .join(' ') || '—'
+              }
+            />
+            <DescriptionList.Item
+              label="Date of birth"
+              value={state.beneficiaryState.beneficiary.dateOfBirth || '—'}
+            />
             {state.beneficiaryState.beneficiary.phone && (
-              <ReviewRow label="Phone number">
-                <ReviewValue>{state.beneficiaryState.beneficiary.phone}</ReviewValue>
-              </ReviewRow>
+              <DescriptionList.Item label="Phone number" value={state.beneficiaryState.beneficiary.phone} />
             )}
             {state.beneficiaryState.beneficiary.email && (
-              <ReviewRow label="Email address">
-                <ReviewValue>{state.beneficiaryState.beneficiary.email}</ReviewValue>
-              </ReviewRow>
+              <DescriptionList.Item label="Email address" value={state.beneficiaryState.beneficiary.email} />
             )}
           </>
         ) : (
-          <ReviewRow label="Nomination">
-            <ReviewValue>No beneficiary nominated</ReviewValue>
-          </ReviewRow>
+          <DescriptionList.Item label="Nomination" value="No beneficiary nominated" />
         )}
-      </ReviewSection>
+      </DescriptionList>
+
+      {/* Identity verification */}
+      <DescriptionList
+        title="Identity verification"
+        titleVariant="h6"
+        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit identity verification" onClick={() => onEditStep('idv')} />}
+      >
+        <DescriptionList.Item
+          label="Status"
+          value={
+            <Box sx={{ fontWeight: 700 }}>
+              {verifyMethod === 'other' && otherIdSummary
+                ? otherIdSummary.method === 'later'
+                  ? 'Provide identity later'
+                  : [
+                      otherIdSummary.method === 'selfie' ? 'Selfie ID' : 'Certified ID',
+                      otherIdSummary.fileNames.length > 0 ? otherIdSummary.fileNames.join(', ') : 'No files uploaded',
+                    ].join(': ')
+                : verifyMethod === 'other'
+                ? 'Member will supply documents as per our Identity Factsheet'
+                : 'Digital verification complete'}
+            </Box>
+          }
+        />
+      </DescriptionList>
 
       {/* Declaration */}
-      <Stack spacing={3} sx={{ mt: 5 }}>
+      <Stack spacing={3}>
         <DeclarationBox />
         <Checkbox
           checked={state.reviewDeclarationChecked}

@@ -130,6 +130,8 @@ export type RetirementIncomeAccountStepId =
   | 'investment-mix'
   | 'investment-drawdown'
   | 'beneficiary'
+  | 'details'
+  | 'idv'
   | 'review';
 
 export interface RetirementIncomeAccountDraft {
