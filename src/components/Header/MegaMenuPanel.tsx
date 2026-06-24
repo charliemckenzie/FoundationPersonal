@@ -23,7 +23,7 @@ export function MegaMenuPanel({ item, open, headerBottom, experimentalNav = fals
   const panelRef = useRef<HTMLDivElement>(null)
   const theme = useTheme()
   const isQSuper = theme.brandConfig?.name === 'QSuper'
-  const isMemberV2 = experimentalNav && item.label === 'Member'
+  const isPrimaryExperimentalMenu = experimentalNav && ['Member', 'Adviser', 'Employer'].includes(item.label)
 
   useEffect(() => {
     if (open && panelRef.current) {
@@ -45,11 +45,11 @@ export function MegaMenuPanel({ item, open, headerBottom, experimentalNav = fals
           onMouseLeave={onMouseLeave}
           sx={{
             position: 'fixed',
-            top: isMemberV2 ? headerBottom + 10 : headerBottom - 2,
-            left: isMemberV2 ? '50%' : 0,
-            right: isMemberV2 ? 'auto' : 0,
-            transform: isMemberV2 ? 'translateX(-50%)' : 'none',
-            width: isMemberV2 ? 'min(82rem, calc(100vw - 2.5rem))' : 'auto',
+            top: isPrimaryExperimentalMenu ? headerBottom + 10 : headerBottom - 2,
+            left: isPrimaryExperimentalMenu ? '50%' : 0,
+            right: isPrimaryExperimentalMenu ? 'auto' : 0,
+            transform: isPrimaryExperimentalMenu ? 'translateX(-50%)' : 'none',
+            width: isPrimaryExperimentalMenu ? 'min(82rem, calc(100vw - 2.5rem))' : 'auto',
             zIndex: (t) => t.zIndex.megaMenu,
           }}
         >
@@ -99,7 +99,7 @@ export function MegaMenuPanel({ item, open, headerBottom, experimentalNav = fals
                   sx={experimentalNav
                     ? {
                         display: 'grid',
-                        gridTemplateColumns: isMemberV2 ? '1.98fr 0.94fr' : '2fr 1fr',
+                        gridTemplateColumns: isPrimaryExperimentalMenu ? '1.98fr 0.94fr' : '2fr 1fr',
                         bgcolor: 'transparent',
                         border: 1,
                         borderColor: 'border.subtle',
@@ -114,37 +114,37 @@ export function MegaMenuPanel({ item, open, headerBottom, experimentalNav = fals
                       ? {
                           display: 'grid',
                           gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`,
-                          rowGap: isMemberV2 ? 2.5 : 3,
-                          columnGap: isMemberV2 ? { xs: '1rem', md: '1.375rem', lg: '1.75rem' } : 3,
-                          '& > :nth-of-type(2)': isMemberV2
+                          rowGap: isPrimaryExperimentalMenu ? 2.5 : 3,
+                          columnGap: isPrimaryExperimentalMenu ? { xs: '1rem', md: '1.375rem', lg: '1.75rem' } : 3,
+                          '& > :nth-of-type(2)': isPrimaryExperimentalMenu
                             ? { ml: { xs: '-0.25rem', md: '-0.4rem', lg: '-0.5rem' } }
                             : undefined,
-                          py: isMemberV2 ? '4rem' : 5,
-                          px: isMemberV2 ? '4rem' : 4,
-                          bgcolor: isMemberV2 ? 'background.paper' : 'transparent',
+                          py: isPrimaryExperimentalMenu ? '4rem' : 5,
+                          px: isPrimaryExperimentalMenu ? '4rem' : 4,
+                          bgcolor: isPrimaryExperimentalMenu ? 'background.paper' : 'transparent',
                         }
                       : { flex: 1, display: 'grid', gridTemplateColumns: `repeat(${item.columns.length}, 1fr)`, gap: 3 }}
                   >
                     {item.columns.map((col, i) => (
-                      <MegaMenuColumn key={i} group={col} variant={isMemberV2 ? 'member-v2' : 'default'} onClose={onClose} />
+                      <MegaMenuColumn key={i} group={col} variant={isPrimaryExperimentalMenu ? 'member-v2' : 'default'} onClose={onClose} />
                     ))}
                   </Box>
                   {item.promoCard && (
                     <Box
                       sx={experimentalNav
                         ? (t) => ({
-                            background: isMemberV2
+                            background: isPrimaryExperimentalMenu
                               ? `linear-gradient(165deg, ${alpha(t.palette.common.white, 0.74)}, ${alpha(t.palette.info.light, 0.12)})`
                               : `linear-gradient(160deg, ${alpha(t.palette.info.light, 0.9)}, ${alpha(t.palette.info.main, 0.45)})`,
-                            backgroundColor: isMemberV2
+                            backgroundColor: isPrimaryExperimentalMenu
                               ? alpha(t.palette.common.white, 0.52)
                               : alpha(t.palette.common.white, 0.16),
-                            backdropFilter: isMemberV2 ? 'blur(30px) saturate(145%) brightness(1.05)' : 'blur(12px)',
-                            WebkitBackdropFilter: isMemberV2 ? 'blur(30px) saturate(145%) brightness(1.05)' : 'blur(12px)',
+                            backdropFilter: isPrimaryExperimentalMenu ? 'blur(30px) saturate(145%) brightness(1.05)' : 'blur(12px)',
+                            WebkitBackdropFilter: isPrimaryExperimentalMenu ? 'blur(30px) saturate(145%) brightness(1.05)' : 'blur(12px)',
                             borderLeft: '1px solid',
                             borderLeftColor: alpha(t.palette.common.white, 0.62),
-                            px: isMemberV2 ? '3rem' : 4,
-                            py: isMemberV2 ? '4rem' : 5,
+                            px: isPrimaryExperimentalMenu ? '3rem' : 4,
+                            py: isPrimaryExperimentalMenu ? '4rem' : 5,
                             '& p': { lineHeight: 1.6 },
                           })
                         : { '& p': { lineHeight: 1.75 } }}

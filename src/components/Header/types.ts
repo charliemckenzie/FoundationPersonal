@@ -89,4 +89,8 @@ export interface HeaderProps {
   activeAudienceHref?: string
   /** Public-web homepage-only visual treatment that blends header into hero background. */
   homepageBlend?: boolean
+  /** Optional experimental navigation styling toggle (for design exploration). */
+  experimentalNav?: boolean
+  /** Explicit experimental header variant; use URL/query toggles to switch layouts without code edits. */
+  experimentalNavVariant?: 'member-v1' | 'member-v2'
 }
