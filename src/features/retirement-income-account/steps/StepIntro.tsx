@@ -67,7 +67,7 @@ export function StepIntro({
 
             <IconList
               items={[
-                { text: 'It takes about 15 minutes to complete' },
+                { text: 'It takes about 10-15 minutes to complete' },
                 { text: "Have your driver's licence, Medicare card or passport handy as you may need to confirm your identity to process your application" },
                 { text: <>
                   Understand how opening this account may affect your{' '}
