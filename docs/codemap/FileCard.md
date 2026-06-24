@@ -8,6 +8,7 @@ composes: [Button, Icon, IconButton, LinearProgress]
 # FileCard
 
 **Composes:** [[Button]] · [[Icon]] · [[IconButton]] · [[LinearProgress]]
+**Used by:** [[idv]]
 
 **Story:** `/?path=/story/form-components-fileupload-filecard--default`
 **StoryFile:** `src/stories/components/FileUpload/FileCard.stories.tsx`

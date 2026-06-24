@@ -8,7 +8,7 @@ composes: [CloseButton]
 # Alert
 
 **Composes:** [[CloseButton]]
-**Used by:** [[BankAccountField]] · [[Snackbar]] · [[StepperActions]]
+**Used by:** [[BankAccountField]] · [[Snackbar]] · [[StepperActions]] · [[idv]]
 
 **Story:** `/?path=/story/components-alert--default`
 **StoryFile:** `src/stories/components/Alert.stories.tsx`

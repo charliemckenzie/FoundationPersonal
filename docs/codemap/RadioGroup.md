@@ -8,7 +8,7 @@ composes: [Icon]
 # RadioGroup
 
 **Composes:** [[Icon]]
-**Used by:** [[AddressField]] · [[BankAccountField]]
+**Used by:** [[AddressField]] · [[BankAccountField]] · [[idv]]
 
 **Story:** `/?path=/story/form-components-radiogroup--default`
 **StoryFile:** `src/stories/components/RadioGroup/RadioGroup.stories.tsx`

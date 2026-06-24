@@ -1,0 +1,64 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundation / Components vs Features" />
+
+# Components vs Features
+
+Foundation has two kinds of reusable unit. Most are **components**. A growing few are **features**. They are documented differently, so it matters which one you're building.
+
+---
+
+## The one-question test
+
+> **Can you drop it anywhere with just props, owning nothing about the app around it?**
+
+- **Yes** → it's a **component**.
+- **No** — it owns flow, routing, or persistence → it's a **feature**.
+
+That's the whole rule. Domain complexity does not promote a component to a feature. IDV and Bank details are complicated; they're still components, because they take `value`/`state` + `onChange` and own nothing about the journey around them.
+
+---
+
+## The difference
+
+| | Component | Feature |
+|---|---|---|
+| **Owns** | Nothing — fully controlled. Takes `value`/`state` + `onChange`. | Orchestration — step navigation, routing (`useSearchParams`, history), persistence. |
+| **Reused by** | Dropping it in and wiring props. | Passing props/config that express per-consumer variations. |
+| **Home** | `src/components/` | `src/features/` |
+| **Documented as** | Props table + variant stories. | The same, one tier up: public API, variants as stories, **a data contract** (inputs → `onComplete` output), and where-used. |
+
+A feature is documented **like a component, one tier up**. Same shape — just add the data contract and the where-used list.
+
+---
+
+## Examples
+
+| Unit | Kind | Why |
+|---|---|---|
+| IDV | Component | Controlled. Takes `state` + `onChange`, owns nothing about the surrounding journey. |
+| Bank details | Component | Controlled. Domain rules live in it, but it doesn't drive navigation. |
+| Allocation step | Component | A single controlled step. The flow around it owns the orchestration. |
+| **Investment Mix** | **Feature** | Owns its own steps, reads the URL, pushes history, returns a result. Reused in three places via props. |
+| **Eligibility Checker** | **Feature** | Config-driven pre-gate that owns its own step navigation and outcome logic. |
+
+---
+
+## Variations are props — never a fork
+
+A feature is reused by passing **props/config**, never by copying the entry component into a forked variant. One entry point; the differences between consumers are configuration.
+
+Investment Mix proves it: one `InvestmentMixFlow` serves an ART standalone switch, a QSuper standalone switch, and an embedded step inside the Retirement Income Account flow — purely through props (`brandName`, `accountFilter`, `embedded`, `skipIntro`, `onComplete`).
+
+---
+
+## How a feature is documented
+
+Every feature follows the same shape. See the [feature-doc template](/?path=/docs/features-_template--docs) for the required sections, and [Investment Mix](/?path=/docs/features-investment-mix--docs) for a worked example.
+
+1. **What & when** — the journey it owns; when to use it.
+2. **Public API** — the props table. The props *are* the variation surface.
+3. **Variants / modes** — a matrix plus one live story per variant.
+4. **Data contract** — inputs (props + URL params) → output (`onComplete` payload).
+5. **Constraints** — conditional steps, domain rules, "requires a router".
+6. **Composition / where-used** — from the codemap; not hand-maintained.

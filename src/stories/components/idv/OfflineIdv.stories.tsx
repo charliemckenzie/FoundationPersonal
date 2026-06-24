@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import { OfflineIdv, initialOtherIdState } from '../../../features/idv';
-import type { OtherIdState } from '../../../features/idv';
+import { OfflineIdv, initialOtherIdState } from '../../../components/idv';
+import type { OtherIdState } from '../../../components/idv';
 
 const meta: Meta<typeof OfflineIdv> = {
   title: 'Form Components / IDV / OfflineIdv',
@@ -13,7 +13,7 @@ const meta: Meta<typeof OfflineIdv> = {
       description: {
         component:
           'Offline identity verification — lets a member supply a **Selfie ID**, **Certified ID**, or declare they will provide documents later.\n\n' +
-          'Lives in `@/features/idv` alongside the digital IDV form. Used in the Lifetime Pension "Other options" branch.\n\n' +
+          'Lives in `@/components/idv` alongside the digital IDV form. Used in the Lifetime Pension "Other options" branch.\n\n' +
           '- **Selfie ID** — images only (JPG/PNG), rejects PDF per factsheet requirement.\n' +
           '- **Certified ID** — images + PDF.\n' +
           '- **Provide later** — confirmation checkbox; application cannot be processed until documents are received.\n\n' +

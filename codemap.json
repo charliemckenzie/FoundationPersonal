@@ -2,9 +2,9 @@
   "generatedBy": "scripts/generate-codemap.ts",
   "note": "GENERATED — do not hand-edit. Run `npm run generate-codemap`.",
   "counts": {
-    "total": 90,
+    "total": 91,
     "byStatus": {
-      "draft": 69,
+      "draft": 70,
       "stable": 12,
       "review": 7,
       "container": 2
@@ -22,7 +22,9 @@
         "Button",
         "Icon"
       ],
-      "usedBy": [],
+      "usedBy": [
+        "idv"
+      ],
       "exports": [
         "Accordion",
         "AccordionItem",
@@ -89,7 +91,8 @@
       "usedBy": [
         "BankAccountField",
         "Snackbar",
-        "StepperActions"
+        "StepperActions",
+        "idv"
       ],
       "exports": [
         "Alert"
@@ -192,6 +195,7 @@
         "Alert",
         "BankDetailsField",
         "Button",
+        "DescriptionList",
         "Dialog",
         "Icon",
         "IconButton",
@@ -278,7 +282,8 @@
         "MobileHeader",
         "MobileNavDrawer",
         "PosterPanel",
-        "StepperActions"
+        "StepperActions",
+        "idv"
       ],
       "exports": [
         "Button"
@@ -310,7 +315,9 @@
         "Button",
         "TextButton"
       ],
-      "usedBy": [],
+      "usedBy": [
+        "idv"
+      ],
       "exports": [
         "Card",
         "CardBodyVariant",
@@ -359,7 +366,8 @@
       ],
       "usedBy": [
         "AddressField",
-        "DataGrid"
+        "DataGrid",
+        "idv"
       ],
       "exports": [
         "Checkbox",
@@ -509,7 +517,9 @@
       "composes": [
         "Skeleton"
       ],
-      "usedBy": [],
+      "usedBy": [
+        "BankAccountField"
+      ],
       "exports": [
         "DescriptionList",
         "DescriptionListDensity",
@@ -533,7 +543,8 @@
       "usedBy": [
         "BankAccountField",
         "InfoButton",
-        "StepperActions"
+        "StepperActions",
+        "idv"
       ],
       "exports": [
         "Dialog"
@@ -615,7 +626,9 @@
         "IconButton",
         "LinearProgress"
       ],
-      "usedBy": [],
+      "usedBy": [
+        "idv"
+      ],
       "exports": [
         "FileCard",
         "FileCardProps",
@@ -796,7 +809,9 @@
       "composes": [
         "Icon"
       ],
-      "usedBy": [],
+      "usedBy": [
+        "idv"
+      ],
       "exports": [
         "HeadingElement",
         "IconList",
@@ -805,6 +820,29 @@
         "IconListSize",
         "IconListType"
       ]
+    },
+    {
+      "name": "idv",
+      "kind": "component",
+      "status": "draft",
+      "path": "src/components/idv",
+      "story": "/?path=/story/form-components-idv-digitalidv--default",
+      "composes": [
+        "Accordion",
+        "Alert",
+        "Button",
+        "Card",
+        "Checkbox",
+        "Dialog",
+        "FileCard",
+        "IconList",
+        "RadioGroup",
+        "Select",
+        "TextButton",
+        "TextField"
+      ],
+      "usedBy": [],
+      "exports": []
     },
     {
       "name": "InfoButton",
@@ -1319,7 +1357,8 @@
       ],
       "usedBy": [
         "AddressField",
-        "BankAccountField"
+        "BankAccountField",
+        "idv"
       ],
       "exports": [
         "RadioButtonGroup",
@@ -1353,7 +1392,8 @@
       "usedBy": [
         "AddressField",
         "BankAccountField",
-        "Table"
+        "Table",
+        "idv"
       ],
       "exports": [
         "Select"
@@ -1565,7 +1605,8 @@
         "Card",
         "MobileNavDrawer",
         "PosterPanel",
-        "StepperActions"
+        "StepperActions",
+        "idv"
       ],
       "exports": [
         "TextButton",
@@ -1592,7 +1633,8 @@
         "MoneyField",
         "PasswordField",
         "PercentageField",
-        "TextArea"
+        "TextArea",
+        "idv"
       ],
       "exports": [
         "TextField"

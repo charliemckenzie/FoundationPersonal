@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import { DigitalIDV, initialIDVState, type IDVState } from '../../../features/idv';
+import { DigitalIDV, initialIDVState, type IDVState } from '../../../components/idv';
 
 const meta: Meta<typeof DigitalIDV> = {
   title: 'Form Components / IDV / DigitalIDV',
@@ -11,7 +11,7 @@ const meta: Meta<typeof DigitalIDV> = {
     docs: {
       description: {
         component:
-          'The Equifax IDMatrix identity-verification form. Reusable across flows via `@/features/idv`.\n\n' +
+          'The Equifax IDMatrix identity-verification form. Reusable across flows via `@/components/idv`.\n\n' +
           'Render it two ways:\n' +
           '- **On a page** — `embedded={false}` (default) shows the "Proof of identity" page heading and a bordered card with a left-aligned Submit.\n' +
           '- **In a dialog** — `embedded` suppresses the page heading, drops the card border, and right-aligns Submit.\n\n' +

@@ -16,9 +16,9 @@ import { useSteppedFlow } from '../../lib/useSteppedFlow';
 import { ResumeDraftDialog } from '../../lib/ResumeDraftDialog';
 import { INITIAL_STATE, RETIREMENT_INCOME_ACCOUNT_STEPS, MOCK_USER_PROFILE, STEP_TITLES, TARGET_PERCENT, initialVerifyDetailsState } from './constants';
 import { deleteDraft, loadDraft, saveDraft } from './draftService';
-import { useIdvGate, DigitalIDV, OfflineIdv, canSubmitIDV, initialOtherIdState } from '../../features/idv';
-import type { OtherIdState, IDVState as IdvModuleState } from '../../features/idv';
-import { initialIDVState as idvInitialState } from '../../features/idv';
+import { useIdvGate, DigitalIDV, OfflineIdv, canSubmitIDV, initialOtherIdState } from '../../components/idv';
+import type { OtherIdState, IDVState as IdvModuleState } from '../../components/idv';
+import { initialIDVState as idvInitialState } from '../../components/idv';
 import { RadioGroup } from '../../components/RadioGroup';
 import { StepDetails } from './steps/StepDetails';
 import { StepAllocate } from './steps/StepAllocate';
@@ -29,6 +29,7 @@ import { StepPayments } from './steps/StepPayments';
 import { StepInvestmentStrategy } from './steps/StepInvestmentStrategy';
 import { InvestmentMixFlow } from '../../features/investment-mix/InvestmentMixFlow';
 import { InvestmentMixProvider } from '../../features/investment-mix/InvestmentMixContext';
+import type { InvestmentMixChange } from '../../features/investment-mix/types';
 import { StepBeneficiary } from './steps/StepBeneficiary';
 import { StepReview } from './steps/StepReview';
 import { StepSetupMode } from './steps/StepSetupMode';
@@ -72,6 +73,32 @@ const CONDITIONAL_STEPS: RetirementIncomeAccountStepId[] = [
 ];
 
 const INVESTMENT_STEPS: RetirementIncomeAccountStepId[] = ['investment-mix'];
+
+/**
+ * Map the embedded Investment Mix feature's result back onto RIA's own state so the
+ * review screen renders what the member just chose. The feature returns its outcome
+ * through `onComplete` — RIA does not read the feature's internal `sessionStorage`.
+ *
+ * The income flow only ever produces a proportional ('default') or percentage drawdown;
+ * it has no 'order' method. Rebalancing maps onto `autoRebalance`.
+ */
+function riaStateFromMixChange(
+  prev: RetirementIncomeAccountState,
+  change: InvestmentMixChange,
+): Pick<RetirementIncomeAccountState, 'investmentMix' | 'drawdown'> {
+  const isPercentage = change.paymentPreference?.type === 'percentage';
+  return {
+    investmentMix: { mode: 'custom', allocations: change.allocations },
+    drawdown: {
+      ...prev.drawdown,
+      mode: isPercentage ? 'custom' : 'default',
+      customMethod: isPercentage ? 'percentage' : '',
+      orderAllocations: {},
+      percentageAllocations: isPercentage ? (change.paymentPreference?.percentages ?? {}) : {},
+      autoRebalance: change.rebalance?.enabled ?? false,
+    },
+  };
+}
 
 export function RetirementIncomeAccountFlow() {
   const router = useRouter();
@@ -364,7 +391,10 @@ export function RetirementIncomeAccountFlow() {
                   accountFilter="income"
                   embedded
                   skipIntro
-                  onComplete={() => flow.advance(activeStep + 1)}
+                  onComplete={(change) => {
+                    updateState({ ...state, ...riaStateFromMixChange(state, change) });
+                    flow.advance(activeStep + 1);
+                  }}
                   onBack={flow.back}
                 />
               </InvestmentMixProvider>

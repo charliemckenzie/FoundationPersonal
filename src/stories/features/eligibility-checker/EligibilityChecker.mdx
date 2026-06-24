@@ -1,0 +1,64 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as EligibilityStories from './EligibilityChecker.stories';
+
+<Meta of={EligibilityStories} />
+
+# Eligibility Checker
+
+A compact, config-driven eligibility pre-gate. It is a **feature** — it owns its own step navigation, conditional follow-ups, and outcome logic. See [Components vs Features](/?path=/docs/foundation-components-vs-features--docs) and the [feature-doc template](/?path=/docs/features-_template--docs).
+
+---
+
+## 1. What & when
+
+Use it to gate a journey behind a few yes/no questions before the member commits. One question per card, conditional follow-ups, and an outcome: a success callout, an advisory warning the member can pass, or a hard "no" that disables Next.
+
+---
+
+## 2. Public API
+
+| Prop | Type | Default | What it changes |
+|---|---|---|---|
+| `config` | `EligibilityCheckerConfig` | — | The whole question set, branches, and outcome wording. **This is the variation surface.** |
+| `defaultStep` | `number` | first step | Seed the starting step (resume/demo). |
+| `defaultAnswers` | `Answers` | `{}` | Seed answers (resume/demo). |
+| `defaultEligible` | `boolean` | `false` | Start in the eligible (success) state. |
+
+---
+
+## 3. Variants
+
+The variation is the **config**, not the component. Two configs exist today.
+
+| Variant | Config | UX difference |
+|---|---|---|
+| Lifetime Pension | `lifetimePensionConfig` | Minimum-transfer, tax-deduction, and retirement-status questions. |
+| Retirement Income Account | `retirementIncomeAccountConfig` | Tax-deduction branch then retirement status. |
+
+### Lifetime Pension
+
+<Canvas of={EligibilityStories.Step1Unanswered} />
+
+### Retirement Income Account
+
+<Canvas of={EligibilityStories.RetirementIncomeAccount} />
+
+---
+
+## 4. Data contract
+
+- **Input** — a single `config` plus optional seed props.
+- **Output** — the member’s `Answers` and an eligible/ineligible outcome, surfaced inline; the host reads the result to decide whether to continue.
+
+---
+
+## 5. Constraints
+
+- Conditional follow-up questions appear based on prior answers.
+- A hard "no" disables Next; an advisory warning leaves it enabled.
+
+---
+
+## 6. Composition / where-used
+
+> **Hand-maintained** until features are registered in the codemap (follow-up). Drives the eligibility step in the Lifetime Pension and Retirement Income Account applications.

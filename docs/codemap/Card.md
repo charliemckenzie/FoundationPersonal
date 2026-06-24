@@ -8,6 +8,7 @@ composes: [Button, TextButton]
 # Card
 
 **Composes:** [[Button]] · [[TextButton]]
+**Used by:** [[idv]]
 
 **Story:** `/?path=/story/components-card--contained`
 **StoryFile:** `src/stories/components/Card.stories.tsx`

@@ -8,6 +8,7 @@ composes: [Button, Icon]
 # Accordion
 
 **Composes:** [[Button]] · [[Icon]]
+**Used by:** [[idv]]
 
 **Story:** `/?path=/story/components-expandable-accordion--default`
 **StoryFile:** `src/stories/components/expandable/Accordion.stories.tsx`

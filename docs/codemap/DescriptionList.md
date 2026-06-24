@@ -8,6 +8,7 @@ composes: [Skeleton]
 # DescriptionList
 
 **Composes:** [[Skeleton]]
+**Used by:** [[BankAccountField]]
 
 **Story:** `/?path=/story/components-description-list-descriptionlist--default`
 **StoryFile:** `src/stories/components/DescriptionList.stories.tsx`

@@ -8,6 +8,7 @@ composes: [Icon]
 # IconList
 
 **Composes:** [[Icon]]
+**Used by:** [[idv]]
 
 **Story:** `/?path=/story/components-iconlist--default`
 **StoryFile:** `src/stories/components/IconList.stories.tsx`

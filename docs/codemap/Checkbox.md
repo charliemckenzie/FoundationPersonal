@@ -8,7 +8,7 @@ composes: [Icon]
 # Checkbox
 
 **Composes:** [[Icon]]
-**Used by:** [[AddressField]] · [[DataGrid]]
+**Used by:** [[AddressField]] · [[DataGrid]] · [[idv]]
 
 **Story:** `/?path=/story/form-components-checkbox--default`
 **StoryFile:** `src/stories/components/Checkbox.stories.tsx`

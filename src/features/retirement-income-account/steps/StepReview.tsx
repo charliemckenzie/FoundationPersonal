@@ -13,9 +13,9 @@ import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
 import { TextField } from '../../../components/TextField';
-import { MOCK_INVESTMENT_OPTIONS } from './StepInvestmentMix';
+import { MOCK_INVESTMENT_OPTIONS } from '../../investment-mix/mockData';
 import type { RetirementIncomeAccountState, RetirementIncomeAccountStepId, UserProfile, VerifyDetailsState } from '../types';
-import type { OtherIdMethod } from '../../../features/idv';
+import type { OtherIdMethod } from '../../../components/idv';
 import { formatCurrency, totalSelectedAmount, estimatePension, estimateRetirementBonus } from '../utils';
 import { PENSION_ESTIMATE_AGE, PAYMENT_FREQUENCY_DIVISORS, PAYMENT_PERIOD_LABEL } from '../constants';
 
