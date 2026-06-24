@@ -42,6 +42,7 @@ export interface LifetimePensionState {
   pensionOption: PensionOption;
   spouseDetails: SpouseDetails;
   purchaseAmount: number;
+  fundingTransferType: 'custom' | 'full';
   accounts: FundingAccount[];
   bankDetails: BankDetails;
   reviewDeclarationChecked: boolean;

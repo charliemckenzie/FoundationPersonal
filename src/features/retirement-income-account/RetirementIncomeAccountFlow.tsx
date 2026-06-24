@@ -116,16 +116,20 @@ export function RetirementIncomeAccountFlow() {
     );
   }, [state.accounts]);
 
-  // Filter visible steps based on setup mode and investment strategy
+  // Filter visible steps based on setup mode, investment strategy, and funding type
   const visibleStepKeys = useMemo(() => {
     if (state.setupMode === 'simple') {
       return STEP_KEYS.filter((id) => !CONDITIONAL_STEPS.includes(id));
     }
-    if (state.investmentStrategy === 'default') {
-      return STEP_KEYS.filter((id) => !INVESTMENT_STEPS.includes(id));
+    let keys = STEP_KEYS;
+    if (state.fundingTransferType === 'full') {
+      keys = keys.filter((id) => id !== 'allocate');
     }
-    return STEP_KEYS;
-  }, [state.setupMode, state.investmentStrategy]);
+    if (state.investmentStrategy === 'default') {
+      keys = keys.filter((id) => !INVESTMENT_STEPS.includes(id));
+    }
+    return keys;
+  }, [state.setupMode, state.investmentStrategy, state.fundingTransferType]);
 
   // Get current step ID from the visible steps
   const currentStepId = visibleStepKeys[activeStep];
@@ -244,13 +248,10 @@ export function RetirementIncomeAccountFlow() {
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 <FormProgress
                   variant="simple"
-                  value={TARGET_PERCENT[activeStep - 1]}
-                  steps={RETIREMENT_INCOME_ACCOUNT_STEPS.filter((s) => {
-                    const id = s.id as RetirementIncomeAccountStepId;
-                    if (state.setupMode === 'simple') return !CONDITIONAL_STEPS.includes(id);
-                    if (state.investmentStrategy === 'default') return !INVESTMENT_STEPS.includes(id);
-                    return true;
-                  })}
+                  value={Math.round((activeStep / (visibleStepKeys.length - 1)) * 100)}
+                  steps={RETIREMENT_INCOME_ACCOUNT_STEPS.filter((s) =>
+                    visibleStepKeys.includes(s.id as RetirementIncomeAccountStepId) && s.id !== 'intro'
+                  )}
                   activeStep={activeStep - 1}
                   showStepIndicator
                   stepMenu
@@ -294,6 +295,8 @@ export function RetirementIncomeAccountFlow() {
               <StepFunding
                 purchaseAmount={state.purchaseAmount}
                 onPurchaseAmountChange={(amount) => updateState({ ...state, purchaseAmount: amount })}
+                fundingTransferType={state.fundingTransferType}
+                onFundingChange={(updates) => updateState({ ...state, ...updates })}
                 pensionOption="single"
                 accounts={state.accounts}
                 showValidation={showValidation}

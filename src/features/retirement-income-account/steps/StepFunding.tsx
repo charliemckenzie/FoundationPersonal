@@ -6,11 +6,9 @@ import Typography from '@mui/material/Typography';
 import type { Theme } from '@mui/material/styles';
 import { Alert } from '../../../components/Alert';
 import { Button } from '../../../components/Button';
-import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
 import { RadioGroup } from '../../../components/RadioGroup';
-import { TextButton } from '../../../components/TextButton';
 import { MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
 import { estimatePension, estimateRetirementBonus, formatCurrency } from '../utils';
@@ -22,6 +20,8 @@ import { estimatePension, estimateRetirementBonus, formatCurrency } from '../uti
 interface StepFundingProps {
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  fundingTransferType: 'custom' | 'full' | 'keep';
+  onFundingChange: (updates: { fundingTransferType: 'custom' | 'full' | 'keep'; purchaseAmount: number }) => void;
   pensionOption: PensionOption;
   accounts: FundingAccount[];
   showValidation: boolean;
@@ -37,16 +37,18 @@ interface TransferPanelProps {
   totalAvailable: number;
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  fundingTransferType: 'custom' | 'full' | 'keep';
+  onFundingChange: (updates: { fundingTransferType: 'custom' | 'full' | 'keep'; purchaseAmount: number }) => void;
   pensionOption: PensionOption;
   showValidation: boolean;
 }
 
-function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation }: TransferPanelProps) {
+function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, fundingTransferType, onFundingChange, pensionOption, showValidation }: TransferPanelProps) {
   // Live value as the member types — drives the available-funds header only. Synced
   // when purchaseAmount changes externally (commit on blur, draft resume, reset).
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
   const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
-  const [transferType, setTransferType] = useState<'custom' | 'full' | 'keep'>('custom');
+  const transferType = fundingTransferType;
   const [keepAmount, setKeepAmount] = useState(0);
   const [liveKeepAmount, setLiveKeepAmount] = useState(0);
   // Track the amount for which payments have been calculated. Reset when the
@@ -62,18 +64,17 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 
   function handleTransferTypeChange(value: string) {
     const type = value as 'custom' | 'full' | 'keep';
-    setTransferType(type);
     if (type === 'full') {
-      onPurchaseAmountChange(totalAvailable);
       setLiveAmount(totalAvailable);
+      onFundingChange({ fundingTransferType: type, purchaseAmount: totalAvailable });
     } else if (type === 'keep') {
-      onPurchaseAmountChange(0);
       setLiveAmount(0);
       setKeepAmount(0);
       setLiveKeepAmount(0);
+      onFundingChange({ fundingTransferType: type, purchaseAmount: 0 });
     } else {
-      onPurchaseAmountChange(0);
       setLiveAmount(0);
+      onFundingChange({ fundingTransferType: type, purchaseAmount: 0 });
     }
     setCalculatedForAmount(null);
   }
@@ -161,7 +162,7 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
         {/* Purchase price */}
         <RadioGroup
           legend="Transfer"
-          value={transferType}
+          value={transferType ?? 'custom'}
           onChange={handleTransferTypeChange}
           options={[
             { value: 'custom', label: 'Specified amount' },
@@ -189,21 +190,10 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 
         {transferType === 'full' && (
           <Box sx={{ mt: 2 }}>
-            <MoneyField
-              label="Amount to transfer into your account"
-              value={totalAvailable}
-              fullWidth
-              disabled
-              helperText=""
-              onInputChange={() => {}}
-              onChange={() => {}}
+            <Alert
+              severity="info"
+              message="We will transfer your full balance into your new Retirement Income Account. This will close your Accumulation account and cancel any insurance cover you hold."
             />
-            <Box sx={{ mt: 2 }}>
-              <Alert
-                severity="info"
-                message="This will close your Accumulation account and cancel any insurance cover you hold."
-              />
-            </Box>
           </Box>
         )}
 
@@ -283,48 +273,6 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
 }
 
 // ---------------------------------------------------------------------------
-// Considerations
-// ---------------------------------------------------------------------------
-
-const ALLOCATION_CONSIDERATIONS = [
-  {
-    id: 'tax-free',
-    title: 'Tax-free payments and investments',
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        If you&apos;re over 60, your income payments and investment earnings from a Retirement Income account
-        are tax-free. That means the full amount you receive goes to you — with no tax taken out. The more
-        you transfer into your account, the more you can earn in tax-free investment returns before each
-        payment.
-      </Typography>
-    ),
-  },
-  {
-    id: 'access',
-    title: 'Withdraw money when you need it',
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        You can take out one-off lump-sum payments from your balance whenever you need — on top of your
-        regular income payments. You also choose how much you receive and how often, subject to the
-        government minimum drawdown amount. This flexibility makes it easy to handle unexpected expenses
-        without disrupting your regular income.
-      </Typography>
-    ),
-  },
-  {
-    id: 'investment',
-    title: 'You choose how your money is invested',
-    content: (
-      <Typography variant="body" sx={{ lineHeight: 1.75 }}>
-        Your Retirement Income account balance stays invested while you&apos;re drawing from it, so it can
-        keep growing. You choose which investment options your balance is held in, and you can also specify
-        which options your payments come from. If you&apos;re not sure where to start, our default Lifecycle
-        strategy automatically adjusts your mix as you age.
-      </Typography>
-    ),
-  },
-];
-
 // ---------------------------------------------------------------------------
 // Retirement bonus — celebratory good-news callout (intentionally not an Alert)
 // ---------------------------------------------------------------------------
@@ -434,13 +382,13 @@ function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps)
 export function StepFunding({
   purchaseAmount,
   onPurchaseAmountChange,
+  fundingTransferType,
+  onFundingChange,
   pensionOption,
   accounts,
   showValidation,
 }: StepFundingProps) {
   const totalAvailable = accounts.reduce((sum, a) => sum + a.balance, 0);
-  const [considerationsOpen, setConsiderationsOpen] = useState(false);
-
   // The bonus is calculated on demand — the real calculation is expensive, so we
   // only run it when the member asks. We cache it against the purchase price it
   // was computed for, so changing the amount resets to the "Calculate" prompt
@@ -472,21 +420,11 @@ export function StepFunding({
   return (
     <Stack spacing={4}>
       {/* ── Purchase price ── */}
-      <Stack spacing={1.5}>
-        <Stack spacing={1}>
-          <Typography variant="h5" component="h2">Funding your income account</Typography>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>
-            Transfer super into your Retirement Income account to start receiving regular income payments.
-          </Typography>
-        </Stack>
-        <Box>
-          <TextButton
-            label="Considerations when allocating funds"
-            startIcon="circle-info"
-            iconDirection="left"
-            onClick={() => setConsiderationsOpen(true)}
-          />
-        </Box>
+      <Stack spacing={1}>
+        <Typography variant="h5" component="h2">Funding your income account</Typography>
+        <Typography variant="body" sx={{ color: 'text.primary' }}>
+          Transfer super into your Retirement Income account to start receiving regular income payments.
+        </Typography>
       </Stack>
 
       {/* ── Transfer panel + bonus (kept tight together) ── */}
@@ -495,6 +433,8 @@ export function StepFunding({
           totalAvailable={totalAvailable}
           purchaseAmount={purchaseAmount}
           onPurchaseAmountChange={onPurchaseAmountChange}
+          fundingTransferType={fundingTransferType}
+          onFundingChange={onFundingChange}
           pensionOption={pensionOption}
           showValidation={showValidation}
         />
@@ -506,29 +446,6 @@ export function StepFunding({
         />
       </Stack>
 
-      <Dialog
-        open={considerationsOpen}
-        onClose={() => setConsiderationsOpen(false)}
-        title="Considerations when allocating funds"
-        size="medium"
-        confirmLabel="Close"
-        onConfirm={() => setConsiderationsOpen(false)}
-      >
-        <Stack spacing={0.5} sx={{ mb: 3 }}>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>
-            A Retirement Income account is a long-term commitment, so it&apos;s worth weighing up these points
-            before you decide how much to transfer.
-          </Typography>
-        </Stack>
-        <Stack spacing={3}>
-          {ALLOCATION_CONSIDERATIONS.map(({ id, title, content }) => (
-            <div key={id}>
-              <Typography variant="h6" sx={{ mb: 0.75 }}>{title}</Typography>
-              {content}
-            </div>
-          ))}
-        </Stack>
-      </Dialog>
     </Stack>
   );
 }

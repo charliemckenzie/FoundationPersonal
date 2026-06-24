@@ -79,6 +79,7 @@ export interface RetirementIncomeAccountState {
   pensionOption: PensionOption;
   spouseDetails: SpouseDetails;
   purchaseAmount: number;
+  fundingTransferType: 'custom' | 'full' | 'keep';
   accounts: FundingAccount[];
   setupMode: SetupMode;
   investmentStrategy: InvestmentStrategy;

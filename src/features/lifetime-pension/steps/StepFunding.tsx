@@ -9,6 +9,7 @@ import { Button } from '../../../components/Button';
 import { Dialog } from '../../../components/Dialog';
 import { Icon } from '../../../components/Icon';
 import { MoneyField } from '../../../components/MoneyField';
+import { RadioGroup } from '../../../components/RadioGroup';
 import { TextButton } from '../../../components/TextButton';
 import { MIN_PURCHASE_AMOUNT, MIN_REMAINING_BALANCE, PENSION_ESTIMATE_AGE } from '../constants';
 import type { FundingAccount, PensionOption } from '../types';
@@ -21,6 +22,8 @@ import { estimatePension, estimateRetirementBonus, formatCurrency } from '../uti
 interface StepFundingProps {
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  fundingTransferType: 'custom' | 'full';
+  onFundingChange: (updates: { fundingTransferType: 'custom' | 'full'; purchaseAmount: number }) => void;
   pensionOption: PensionOption;
   accounts: FundingAccount[];
   showValidation: boolean;
@@ -36,14 +39,17 @@ interface TransferPanelProps {
   totalAvailable: number;
   purchaseAmount: number;
   onPurchaseAmountChange: (amount: number) => void;
+  fundingTransferType: 'custom' | 'full';
+  onFundingChange: (updates: { fundingTransferType: 'custom' | 'full'; purchaseAmount: number }) => void;
   pensionOption: PensionOption;
   showValidation: boolean;
   showPriceError?: boolean;
 }
 
-function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation, showPriceError = false }: TransferPanelProps) {
+function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, fundingTransferType, onFundingChange, pensionOption, showValidation, showPriceError = false }: TransferPanelProps) {
   // Live value as the member types — drives the available-funds header only. Synced
   // when purchaseAmount changes externally (commit on blur, draft resume, reset).
+  const transferType = fundingTransferType;
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
   const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
   // Track the amount for which payments have been calculated. Reset when the
@@ -62,6 +68,18 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   // Whether the field has been blurred at least once — drives blur-time validation.
   const [touched, setTouched] = useState(false);
 
+  function handleTransferTypeChange(value: string) {
+    const type = value as 'custom' | 'full';
+    if (type === 'full') {
+      setLiveAmount(totalAvailable);
+      onFundingChange({ fundingTransferType: type, purchaseAmount: totalAvailable });
+    } else {
+      setLiveAmount(0);
+      onFundingChange({ fundingTransferType: type, purchaseAmount: 0 });
+    }
+    setCalculatedForAmount(null);
+  }
+
   function handleCalculate() {
     if (calcTimer.current) clearTimeout(calcTimer.current);
     setCalculating(true);
@@ -74,10 +92,10 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
   const remaining = totalAvailable - displayAmount;
-  const overFunds = hasValue && remaining < 0;
-  const lowBalance = hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
-  // Default colour when healthy; only shift to warning/error states.
-  const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
+  const overFunds = transferType !== 'full' && hasValue && remaining < 0;
+  const lowBalance = transferType !== 'full' && hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
+  // Default colour when healthy; only shift to error state.
+  const remainingColor = overFunds ? 'error.text' : undefined;
   const optionLabel = pensionOption === 'spouse' ? 'spouse protection' : 'single';
   // Payment summary is shown once the member has calculated at least once.
   const hasCalculated = calculatedForAmount !== null;
@@ -148,18 +166,42 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
         </Box>
 
         {/* Purchase price */}
-        <MoneyField
-          label="Lifetime Pension purchase price"
-          value={purchaseAmount || null}
-          fullWidth
-          error={fieldError}
-          helperText={helperText}
-          onInputChange={(v) => setLiveAmount(v ?? 0)}
-          onChange={(v) => {
-            onPurchaseAmountChange(v ?? 0);
-            setTouched(true);
-          }}
+        <RadioGroup
+          legend="Transfer"
+          value={transferType ?? 'custom'}
+          onChange={handleTransferTypeChange}
+          options={[
+            { value: 'custom', label: 'Specified amount' },
+            { value: 'full', label: 'Full balance' },
+          ]}
+          direction="row"
         />
+
+        {transferType === 'custom' && (
+          <Box sx={{ mt: 2 }}>
+            <MoneyField
+              label="Lifetime Pension purchase price"
+              value={purchaseAmount || null}
+              fullWidth
+              error={fieldError}
+              helperText={helperText}
+              onInputChange={(v) => setLiveAmount(v ?? 0)}
+              onChange={(v) => {
+                onPurchaseAmountChange(v ?? 0);
+                setTouched(true);
+              }}
+            />
+          </Box>
+        )}
+
+        {transferType === 'full' && (
+          <Box sx={{ mt: 2 }}>
+            <Alert
+              severity="info"
+              message="We will transfer your full balance into your new Lifetime Pension. This will close your Accumulation account and cancel any insurance cover you hold."
+            />
+          </Box>
+        )}
 
       {/* Payment summary — shown only after the member clicks "Calculate payments" */}
       <Box sx={{ mt: 2.5 }}>
@@ -332,6 +374,8 @@ function RetirementBonus({ amount, loading, onCalculate }: RetirementBonusProps)
 export function StepFunding({
   purchaseAmount,
   onPurchaseAmountChange,
+  fundingTransferType,
+  onFundingChange,
   pensionOption,
   accounts,
   showValidation,
@@ -403,6 +447,8 @@ export function StepFunding({
           totalAvailable={totalAvailable}
           purchaseAmount={purchaseAmount}
           onPurchaseAmountChange={onPurchaseAmountChange}
+          fundingTransferType={fundingTransferType}
+          onFundingChange={onFundingChange}
           pensionOption={pensionOption}
           showValidation={showValidation}
           showPriceError={showPriceError}

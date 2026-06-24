@@ -63,6 +63,7 @@ export const INITIAL_STATE: RetirementIncomeAccountState = {
   pensionOption: '',
   spouseDetails: EMPTY_SPOUSE_DETAILS,
   purchaseAmount: 0,
+  fundingTransferType: 'custom',
   accounts: BASE_ACCOUNTS,
   setupMode: null,
   investmentStrategy: null,

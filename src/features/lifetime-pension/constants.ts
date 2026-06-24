@@ -64,6 +64,7 @@ export const INITIAL_STATE: LifetimePensionState = {
   pensionOption: '',
   spouseDetails: EMPTY_SPOUSE_DETAILS,
   purchaseAmount: 0,
+  fundingTransferType: 'custom',
   accounts: BASE_ACCOUNTS,
   bankDetails: {
     bsb: '',
@@ -115,7 +116,7 @@ export const LIFETIME_PENSION_RATES: Record<number, { single: number; spouse: nu
 export const PENSION_ESTIMATE_AGE = 67;
 export const FORTNIGHTS_PER_YEAR = 26;
 
-export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft';
+export const DRAFT_STORAGE_KEY = 'qsuper_lifetime_pension_draft_v2';
 export const DRAFT_EXPIRY_DAYS = 30;
 
 export const STEP_TITLES = [
