@@ -259,7 +259,7 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
         label="Strategy type"
         value={
           <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
-            <Typography variant="body" sx={{ color: 'text.primary' }}>{mixLabel}</Typography>
+            <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{mixLabel}</Typography>
             {mixMode === 'custom' && (
               <>
                 <ExpandToggle
@@ -278,7 +278,7 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
         label="Drawdown options"
         value={
           <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
-            <Typography variant="body" sx={{ color: 'text.primary' }}>{drawdownLabel}</Typography>
+            <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{drawdownLabel}</Typography>
             {drawdownMode === 'custom' && (
               <>
                 <ExpandToggle
@@ -349,9 +349,7 @@ export function StepReview({
           <Typography variant="h5" component="h2">
             Review your Retirement Income Account application
           </Typography>
-          <Typography variant="body" sx={{ color: 'text.primary' }}>
-            Check the details below before submitting.
-          </Typography>
+
         </Stack>
         <Button
           label="Print"
