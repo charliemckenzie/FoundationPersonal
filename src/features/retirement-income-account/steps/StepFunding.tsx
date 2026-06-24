@@ -41,37 +41,52 @@ interface TransferPanelProps {
 }
 
 function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange, pensionOption, showValidation }: TransferPanelProps) {
-  // Live value as the member types — drives the live estimate panel only. Synced
+  // Live value as the member types — drives the available-funds header only. Synced
   // when purchaseAmount changes externally (commit on blur, draft resume, reset).
   const [liveAmount, setLiveAmount] = useState(purchaseAmount);
   const [prevPurchase, setPrevPurchase] = useState(purchaseAmount);
+  // Track the amount for which payments have been calculated. Reset when the
+  // committed purchase amount changes so the button re-appears.
+  const [calculatedForAmount, setCalculatedForAmount] = useState<number | null>(null);
+  const [calculating, setCalculating] = useState(false);
+  const calcTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   if (purchaseAmount !== prevPurchase) {
     setPrevPurchase(purchaseAmount);
     setLiveAmount(purchaseAmount);
+    // Don't reset calculatedForAmount — keep showing stale values and re-enable the button.
   }
 
-  // Whether the field has been blurred at least once — drives blur-time validation.
+  const reduceMotion = useReducedMotion();
+
+  function handleCalculate() {
+    if (calcTimer.current) clearTimeout(calcTimer.current);
+    setCalculating(true);
+    calcTimer.current = setTimeout(() => {
+      setCalculatedForAmount(purchaseAmount);
+      setCalculating(false);
+    }, 1200);
+  }
 
   const displayAmount = liveAmount;
   const hasValue = displayAmount > 0;
-  const estimate = estimatePension(displayAmount, PENSION_ESTIMATE_AGE, pensionOption);
   const remaining = totalAvailable - displayAmount;
   const overFunds = hasValue && remaining < 0;
   const lowBalance = hasValue && remaining >= 0 && remaining < MIN_REMAINING_BALANCE;
-  // Default colour when healthy; only shift to warning/error states.
   const remainingColor = overFunds ? 'error.text' : lowBalance ? 'warning.text' : undefined;
-  const annualEstimate = estimate?.annual ?? 0;
-  const fortnightlyEstimate = estimate?.fortnightly ?? 0;
-  // Muted while the purchase price is $0; default heading colour once a value is entered.
-  const estimateColor = estimate ? undefined : 'text.muted';
 
-  // Validation runs on the committed value, so the error only appears/clears on
-  // blur — never mid-keystroke. The below-minimum error shows once the field has
-  // been blurred (touched); pressing Next (showValidation) additionally flags an
-  // empty field.
+  // Payment summary is shown once the member has calculated at least once.
+  const hasCalculated = calculatedForAmount !== null;
+  // Button is disabled when the displayed result is already up to date (or loading).
+  const calculationCurrent = (hasCalculated && calculatedForAmount === liveAmount) || calculating;
+  // Estimate is always based on the amount that was actually calculated, so values
+  // stay stable while the member edits the field.
+  const calculatedEstimate = hasCalculated ? estimatePension(calculatedForAmount!, PENSION_ESTIMATE_AGE, pensionOption) : null;
+  const annualEstimate = calculatedEstimate?.annual ?? 0;
+  const fortnightlyEstimate = calculatedEstimate?.fortnightly ?? 0;
+
   const isEmpty = purchaseAmount === 0;
   const fieldError = showValidation ? isEmpty : false;
-  const helperText = 'Enter a purchase price to continue.';
+  const helperText = 'Enter a transfer amount to continue.';
 
   return (
     <Box
@@ -131,27 +146,43 @@ function TransferPanel({ totalAvailable, purchaseAmount, onPurchaseAmountChange,
           }}
         />
 
-      {/* Estimated payments — always visible, updates live as the purchase price is entered */}
+      {/* Payment summary — shown only after the member clicks "Calculate payments" */}
       <Box sx={{ mt: 2.5 }}>
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
-          <Box>
-            <Typography variant="h5" component="p" sx={{ ...(estimateColor && { color: estimateColor }), transition: 'color 200ms ease' }}>
-              {formatCurrency(annualEstimate)}
+        <Button
+          label={hasCalculated ? 'Update calculation' : 'Calculate payments'}
+          variant="outlined"
+          size="small"
+          disabled={calculationCurrent}
+          loading={calculating}
+          onClick={handleCalculate}
+        />
+        {hasCalculated && (
+          <motion.div
+            animate={{ opacity: calculating ? 0.5 : 1 }}
+            transition={reduceMotion ? { duration: 0 } : { duration: 0.25, ease: 'easeInOut' }}
+            style={{ marginTop: '20px' }}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 3 }}>
+              <Box>
+                <Typography variant="h5" component="p">
+                  {formatCurrency(annualEstimate)}
+                </Typography>
+                <Typography variant="small" sx={{ display: 'block' }}>Annual payment</Typography>
+              </Box>
+              <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
+              <Box>
+                <Typography variant="h5" component="p">
+                  {formatCurrency(fortnightlyEstimate)}
+                </Typography>
+                <Typography variant="small" sx={{ display: 'block' }}>Fortnightly payments</Typography>
+              </Box>
+            </Box>
+            <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
+              These figures are estimates only based on the government minimum drawdown rate for age {PENSION_ESTIMATE_AGE} (5% per year).
+              Your actual payments may vary. You can choose your payment frequency in the next step. Minimum rates are set by the ATO and reviewed periodically.
             </Typography>
-            <Typography variant="small" sx={{ display: 'block' }}>Annual payment</Typography>
-          </Box>
-          <Box sx={{ alignSelf: 'stretch', width: '1px', bgcolor: 'border.subtle' }} />
-          <Box>
-            <Typography variant="h5" component="p" sx={{ ...(estimateColor && { color: estimateColor }), transition: 'color 200ms ease' }}>
-              {formatCurrency(fortnightlyEstimate)}
-            </Typography>
-            <Typography variant="small" sx={{ display: 'block' }}>Fortnightly payments</Typography>
-          </Box>
-        </Box>
-        <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-          These figures are estimates only based on the government minimum drawdown rate for age {PENSION_ESTIMATE_AGE} (5% per year).
-          Your actual payments may vary. You can choose your payment frequency in the next step. Minimum rates are set by the ATO and reviewed periodically.
-        </Typography>
+          </motion.div>
+        )}
       </Box>
 
       {/* Minimum balance warning — shown inline when remaining drops below threshold */}
