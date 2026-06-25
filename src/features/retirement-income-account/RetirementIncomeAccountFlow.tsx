@@ -238,7 +238,6 @@ export function RetirementIncomeAccountFlow() {
       <ContentContainer size="md">
         <StepSuccess
           onReturnDashboard={() => router.push('/member-online')}
-          gate={{ ...gate, alreadyVerified: false }}
         />
       </ContentContainer>
     );

@@ -26,7 +26,7 @@ const BRAND_MAP: Record<string, { brand: HeroIconBrand; items: typeof ART_ITEMS 
   'theme-b':  { brand: 'qsuper', items: QSUPER_ITEMS },
 };
 
-type SectionNavStoryArgs = Omit<QuickLinksProps, 'items' | 'brand'> & {
+type SectionNavStoryArgs = Omit<QuickLinksProps, 'items'> & {
   itemCount: number;
   activeIndex: number;
 };
@@ -61,7 +61,6 @@ const meta: Meta<SectionNavStoryArgs> = {
       options: ['sm', 'md', 'lg', 'xl'],
       description: 'Size of the hero icon.',
     },
-    activeHref: { table: { disable: true } },
   },
 };
 
@@ -69,15 +68,13 @@ export default meta;
 type Story = StoryObj<SectionNavStoryArgs>;
 
 export const Default: Story = {
-  render: ({ itemCount, iconSize, activeIndex }, context) => {
-    const { brand, items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
+  render: ({ itemCount, iconSize }, context) => {
+    const { items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
     const sliced = items.slice(0, itemCount);
     return (
       <QuickLinks
         items={sliced}
-        brand={brand}
         iconSize={iconSize}
-        activeHref={sliced[activeIndex]?.href}
       />
     );
   },
@@ -91,16 +88,16 @@ export const Default: Story = {
 export const ThreeItems: Story = {
   name: 'Three items (minimum)',
   render: (_, context) => {
-    const { brand, items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
+    const { items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
     const sliced = items.slice(0, 3);
-    return <QuickLinks items={sliced} brand={brand} iconSize="md" activeHref={sliced[0].href} />;
+    return <QuickLinks items={sliced} iconSize="md" />;
   },
 };
 
 export const SixItems: Story = {
   name: 'Six items (maximum)',
   render: (_, context) => {
-    const { brand, items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
-    return <QuickLinks items={items} brand={brand} iconSize="md" activeHref={items[2].href} />;
+    const { items } = BRAND_MAP[context.globals.brand ?? 'foundation'] ?? BRAND_MAP['foundation'];
+    return <QuickLinks items={items} iconSize="md" />;
   },
 };

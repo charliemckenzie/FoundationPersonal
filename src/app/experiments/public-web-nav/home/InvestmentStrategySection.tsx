@@ -530,8 +530,6 @@ export function InvestmentStrategySection() {
             <Tabs
               label="Investment strategy options"
               tabStyle="segmented"
-              fullWidthOnMobile
-              mobileScrollable
               tabs={[
                 { label: 'Set and forget', content: <LifecycleStrategy /> },
                 { label: 'You choose', content: <FeeChooser /> },

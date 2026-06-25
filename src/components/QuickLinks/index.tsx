@@ -112,7 +112,7 @@ export function QuickLinks({
 
               {/* Heading */}
               <Typography
-                variant={{ xs: 'h6', md: 'h5' }}
+                variant="h6"
                 component="h3"
                 sx={{
                   textAlign: 'center',

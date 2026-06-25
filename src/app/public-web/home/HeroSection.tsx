@@ -26,16 +26,7 @@ export function HeroSection() {
     >
       <Container
         maxWidth={false}
-        sx={[
-          HOMEPAGE_CONTAINER_SX,
-          {
-            position: 'relative',
-            zIndex: 2,
-            height: { md: '100%' },
-            display: { md: 'flex' },
-            alignItems: { md: 'center' },
-          },
-        ]}
+        sx={{ ...HOMEPAGE_CONTAINER_SX, position: 'relative', zIndex: 2, height: { md: '100%' }, display: { md: 'flex' }, alignItems: { md: 'center' } }}
       >
         {/* Right image viewport clips Artie so he can stay large without crossing into text. */}
         <Box

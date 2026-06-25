@@ -333,7 +333,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                       display: 'flex',
                       alignItems: 'stretch',
                       gap: useExperimentalDesktopNav ? 1 : 4,
-                      ...(useExperimentalDesktopNav && {
+                      ...(useExperimentalDesktopNav ? {
                         px: 1,
                         py: 0.5,
                         borderRadius: '999px',
@@ -342,7 +342,7 @@ export function ARTHeader({ navItems, secondaryNavItems, primaryCta, secondaryCt
                         borderColor: alpha('#FFFFFF', 0.26),
                         backdropFilter: 'blur(8px)',
                         width: 'fit-content',
-                      }),
+                      } : {}),
                     }}
                   >
                     {navItems.map((item) => (
