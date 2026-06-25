@@ -1,6 +1,7 @@
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import { Alert } from '../../../components/Alert';
 import { DescriptionList } from '../../../components/DescriptionList';
 import { BankAccountField } from '../../../components/BankAccountField';
 import { MOCK_SAVED_ACCOUNTS, mockVerifyAndAdd } from '../../../components/BankAccountField/mockData';
@@ -13,6 +14,7 @@ interface StepPaymentsProps {
   paymentSchedule: PaymentSchedule;
   bankDetails: BankDetails;
   onBankDetailsChange: (next: BankDetails) => void;
+  isFullBalance?: boolean;
 }
 
 export function StepPayments({
@@ -20,6 +22,7 @@ export function StepPayments({
   paymentSchedule,
   bankDetails,
   onBankDetailsChange,
+  isFullBalance,
 }: StepPaymentsProps) {
   // Payment calculations
   const freq = paymentSchedule.frequency || 'fortnightly';
@@ -64,6 +67,13 @@ export function StepPayments({
         <DescriptionList title="Retirement bonus" titleVariant="h6" valueAlign="right" density="condensed">
           <DescriptionList.Item label="Estimated retirement bonus" value={formatCurrency(estimateRetirementBonus(purchasePrice))} />
         </DescriptionList>
+
+        {isFullBalance && (
+          <Alert
+            severity="info"
+            message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
+          />
+        )}
       </Stack>
 
       {/* Bank details section */}

@@ -1,6 +1,7 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import type { Theme } from '@mui/material/styles';
 import { useState } from 'react';
 import type { Address } from '../../../components/AddressField';
 import { AddressCapture } from '../../../components/AddressField/AddressCapture';
@@ -113,7 +114,7 @@ function AllocationTable({ allocations, label }: { allocations: Record<string, n
   }, {});
 
   return (
-    <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
+    <Stack spacing={0} component="dl" sx={{ m: 0, width: '100%', '& > div:first-of-type': { borderTop: 'none' } }}>
       {Object.entries(grouped).map(([category, opts]) => {
         const allocated = opts.filter((o) => (allocations[o.id] ?? 0) > 0);
         if (allocated.length === 0) return null;
@@ -128,6 +129,7 @@ function AllocationTable({ allocations, label }: { allocations: Record<string, n
                 sx={{
                   display: 'flex',
                   justifyContent: 'space-between',
+                  width: '100%',
                   py: 0.75,
                   borderTop: '1px solid',
                   borderColor: 'border.subtle',
@@ -158,7 +160,7 @@ function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['d
   if (drawdown.customMethod === 'order') {
     const sorted = [...options].sort((a, b) => (drawdown.orderAllocations[a.id] ?? 0) - (drawdown.orderAllocations[b.id] ?? 0));
     return (
-      <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
+      <Stack spacing={0} component="dl" sx={{ m: 0, width: '100%', '& > div:first-of-type': { borderTop: 'none' } }}>
         {sorted.map((o) => {
           const pos = drawdown.orderAllocations[o.id];
           return (
@@ -167,6 +169,7 @@ function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['d
               sx={{
                 display: 'flex',
                 justifyContent: 'space-between',
+                width: '100%',
                 py: 0.75,
                 borderTop: '1px solid',
                 borderColor: 'border.subtle',
@@ -181,7 +184,7 @@ function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['d
     );
   }
   return (
-    <Stack spacing={0} component="dl" sx={{ m: 0, '& > div:first-of-type': { borderTop: 'none' } }}>
+    <Stack spacing={0} component="dl" sx={{ m: 0, width: '100%', '& > div:first-of-type': { borderTop: 'none' } }}>
       {options.map((o) => {
         const pct = drawdown.percentageAllocations[o.id];
         return (
@@ -190,6 +193,7 @@ function DrawdownTable({ drawdown }: { drawdown: RetirementIncomeAccountState['d
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
+              width: '100%',
               py: 0.75,
               borderTop: '1px solid',
               borderColor: 'border.subtle',
@@ -237,17 +241,23 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
   const isSimple = state.setupMode === 'simple';
   const mixLabel = isSimple
     ? '100% Balanced Risk-Adjusted'
-    : mixMode === 'default' ? 'Default' : mixMode === 'custom' ? 'Choose your own' : '—';
+    : mixMode === 'default' ? 'Default — 100% Balanced Risk-Adjusted' : mixMode === 'custom' ? 'Choose your own' : '—';
+
+  const hasCustomAllocations = mixMode === 'custom' && Object.values(state.investmentMix.allocations).some(v => v > 0);
 
   const drawdownMode = state.drawdown.mode;
   const drawdownMethod = state.drawdown.customMethod;
-  const defaultDrawdownDescription = 'Proportional — drawn from each investment based on your current allocation';
-  let drawdownLabel = isSimple ? defaultDrawdownDescription : '—';
+  const proportionalLabel = 'Proportionally across my balance';
+  let drawdownLabel = isSimple ? proportionalLabel : '—';
   if (!isSimple) {
-    if (drawdownMode === 'default') drawdownLabel = defaultDrawdownDescription;
-    else if (drawdownMode === 'custom' && drawdownMethod === 'order') drawdownLabel = 'Choose your own (order based)';
-    else if (drawdownMode === 'custom' && drawdownMethod === 'percentage') drawdownLabel = 'Choose your own (percentage based)';
+    if (drawdownMode === 'default') drawdownLabel = proportionalLabel;
+    else if (drawdownMode === 'custom' && drawdownMethod === 'order') drawdownLabel = 'Choose by order';
+    else if (drawdownMode === 'custom' && drawdownMethod === 'percentage') drawdownLabel = 'From specific options by percentage';
+    else if (drawdownMode === 'custom') drawdownLabel = proportionalLabel;
   }
+
+  const hasPercentageSplit = drawdownMethod === 'percentage' && Object.values(state.drawdown.percentageAllocations ?? {}).some(v => v > 0);
+  const hasOrderPreference = drawdownMethod === 'order' && Object.values(state.drawdown.orderAllocations ?? {}).some(v => v > 0);
 
   return (
     <DescriptionList
@@ -258,9 +268,9 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
       <DescriptionList.Item
         label="Strategy type"
         value={
-          <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
+          <Stack spacing={0} sx={{ alignItems: 'flex-start', width: '100%' }}>
             <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{mixLabel}</Typography>
-            {mixMode === 'custom' && (
+            {hasCustomAllocations && (
               <>
                 <ExpandToggle
                   expanded={showAllocation}
@@ -277,9 +287,20 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
       <DescriptionList.Item
         label="Drawdown options"
         value={
-          <Stack spacing={0} sx={{ alignItems: 'flex-start' }}>
+          <Stack spacing={0} sx={{ alignItems: 'flex-start', width: '100%' }}>
             <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>{drawdownLabel}</Typography>
-            {drawdownMode === 'custom' && (
+            {hasPercentageSplit && (
+              <>
+                <ExpandToggle
+                  expanded={showDrawdown}
+                  onToggle={() => setShowDrawdown((v) => !v)}
+                  expandLabel="View split"
+                  collapseLabel="Hide split"
+                />
+                {showDrawdown && <Box sx={{ mt: 1, width: '100%' }}><DrawdownTable drawdown={state.drawdown} /></Box>}
+              </>
+            )}
+            {hasOrderPreference && (
               <>
                 <ExpandToggle
                   expanded={showDrawdown}
@@ -287,7 +308,7 @@ function InvestmentStrategySection({ state, onEdit }: { state: RetirementIncomeA
                   expandLabel="View preferences"
                   collapseLabel="Hide preferences"
                 />
-                {showDrawdown && <DrawdownTable drawdown={state.drawdown} />}
+                {showDrawdown && <Box sx={{ mt: 1, width: '100%' }}><DrawdownTable drawdown={state.drawdown} /></Box>}
               </>
             )}
           </Stack>
@@ -328,7 +349,9 @@ export function StepReview({
   const isSimple = state.setupMode === 'simple';
   const purchasePrice = isSimple
     ? state.accounts.reduce((sum, a) => sum + a.balance, 0)
-    : totalSelectedAmount(state);
+    : state.fundingTransferType === 'full'
+      ? state.purchaseAmount
+      : totalSelectedAmount(state);
 
   const effectiveFrequency = isSimple ? 'fortnightly' : (state.paymentSchedule.frequency ?? 'fortnightly');
   const effectiveAnnual = (() => {
@@ -344,7 +367,7 @@ export function StepReview({
   return (
     <Stack spacing={4}>
       {/* Header */}
-      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
         <Stack spacing={0.5}>
           <Typography variant="h5" component="h2">
             Review your Retirement Income Account application
@@ -361,67 +384,113 @@ export function StepReview({
       </Stack>
 
       {/* Product details */}
-      <DescriptionList title="Product details" titleVariant="h6">
-        <DescriptionList.Item
-          label="Setup preference"
-          value={state.setupMode === 'simple' ? 'Set it up for me' : "I'll customise it myself"}
-          action={<TextButton label="Edit" hideIcon aria-label="Edit account setup" onClick={() => onEditStep('setup-mode')} />}
-        />
-        <DescriptionList.Item
-          label="Opening balance"
-          value={
-            isSimple
-              ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
-              : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'
-          }
-          action={!isSimple ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep('allocate')} /> : undefined}
-        />
-      </DescriptionList>
+      <Box
+        sx={(t: Theme) => ({
+          borderRadius: `${t.shape.lg}px`,
+          border: '1px solid',
+          borderColor: 'border.default',
+          bgcolor: 'background.paper',
+          overflow: 'hidden',
+        })}
+      >
+        <DescriptionList title="Product details" titleVariant="h6" sx={{ border: 'none', borderRadius: 0 }}>
+          <DescriptionList.Item
+            label="Setup preference"
+            value={state.setupMode === 'simple' ? 'Set it up for me' : "I'll customise it myself"}
+            action={<TextButton label="Edit" hideIcon aria-label="Edit account setup" onClick={() => onEditStep('setup-mode')} />}
+          />
+          <DescriptionList.Item
+            label="Opening balance"
+            value={
+              isSimple
+                ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
+                : state.fundingTransferType === 'full'
+                  ? (
+                    <Stack spacing={0}>
+                      <Typography variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>Full balance</Typography>
+                      <Typography variant="small" sx={{ color: 'text.secondary' }}>
+                        Current balance: {formatCurrency(purchasePrice)}
+                      </Typography>
+                    </Stack>
+                  )
+                  : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'
+            }
+            action={!isSimple ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep(state.fundingTransferType === 'full' ? 'funding' : 'allocate')} /> : undefined}
+          />
+        </DescriptionList>
+        {(isSimple || state.fundingTransferType === 'full') && (
+          <Box sx={{ px: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 } }}>
+            <Alert
+              severity="info"
+              message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
+            />
+          </Box>
+        )}
+      </Box>
 
       {/* Payment details */}
-      <DescriptionList
-        title="Payment details"
-        titleVariant="h6"
-        titleAction={<TextButton label="Edit" hideIcon aria-label="Edit payment details" onClick={() => onEditStep('payments')} />}
+      <Box
+        sx={(t: Theme) => ({
+          borderRadius: `${t.shape.lg}px`,
+          border: '1px solid',
+          borderColor: 'border.default',
+          bgcolor: 'background.paper',
+          overflow: 'hidden',
+        })}
       >
-        <DescriptionList.Item
-          label={`${freqLabel} payments`}
-          value={purchasePrice > 0 ? `${formatCurrency(perFrequencyPayment)} / ${periodLabel}` : '—'}
-        />
-        <DescriptionList.Item
-          label="First payment date"
-          value={
-            isSimple
-              ? (() => {
-                  const d = new Date();
-                  d.setDate(d.getDate() + 14);
-                  d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
-                  return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
-                })()
-              : state.paymentSchedule.firstPaymentMonth
-                ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
-                : '—'
-          }
-        />
-        <DescriptionList.Item
-          label="First year's income"
-          value={purchasePrice > 0 ? formatCurrency(effectiveAnnual) : '—'}
-        />
-        <DescriptionList.Item
-          label="Estimated retirement bonus"
-          value={purchasePrice > 0 ? formatCurrency(estimateRetirementBonus(purchasePrice)) : '—'}
-        />
-        <DescriptionList.Item
-          label="Bank details"
-          value={
-            <Stack spacing={0.5}>
-              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
-              <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc No. {state.bankDetails.accountNumber || '—'}</Typography>
-            </Stack>
-          }
-        />
-      </DescriptionList>
+        <DescriptionList
+          title="Payment details"
+          titleVariant="h6"
+          titleAction={<TextButton label="Edit" hideIcon aria-label="Edit payment details" onClick={() => onEditStep('payments')} />}
+          sx={{ border: 'none', borderRadius: 0 }}
+        >
+          <DescriptionList.Item
+            label={`${freqLabel} payments`}
+            value={purchasePrice > 0 ? `${formatCurrency(perFrequencyPayment)} / ${periodLabel}` : '—'}
+          />
+          <DescriptionList.Item
+            label="First payment date"
+            value={
+              isSimple
+                ? (() => {
+                    const d = new Date();
+                    d.setDate(d.getDate() + 14);
+                    d.setDate(d.getDate() + ((3 - d.getDay() + 7) % 7));
+                    return d.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+                  })()
+                : state.paymentSchedule.firstPaymentMonth
+                  ? new Date(state.paymentSchedule.firstPaymentMonth + 'T00:00:00').toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+                  : '—'
+            }
+          />
+          <DescriptionList.Item
+            label="First year's income"
+            value={purchasePrice > 0 ? formatCurrency(effectiveAnnual) : '—'}
+          />
+          <DescriptionList.Item
+            label="Estimated retirement bonus"
+            value={purchasePrice > 0 ? formatCurrency(estimateRetirementBonus(purchasePrice)) : '—'}
+          />
+          <DescriptionList.Item
+            label="Bank details"
+            value={
+              <Stack spacing={0.5}>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc Name: {state.bankDetails.accountName || '—'}</Typography>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>BSB: {state.bankDetails.bsb || '—'}</Typography>
+                <Typography variant="body" sx={{ color: 'text.primary', fontWeight: 700 }}>Acc No. {state.bankDetails.accountNumber || '—'}</Typography>
+              </Stack>
+            }
+          />
+        </DescriptionList>
+        {!isSimple && state.fundingTransferType === 'full' && (
+          <Box sx={{ px: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 } }}>
+            <Alert
+              severity="info"
+              message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
+            />
+          </Box>
+        )}
+      </Box>
 
       {/* Personal details */}
       <DescriptionList
