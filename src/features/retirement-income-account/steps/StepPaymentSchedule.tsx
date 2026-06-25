@@ -179,13 +179,8 @@ export function StepPaymentSchedule({
             Amount transferred into your account
           </Typography>
           <Typography variant="h4">
-            {purchaseAmount > 0 ? formatCurrency(purchaseAmount) : '—'}
+            {isFullBalance ? 'Full balance' : purchaseAmount > 0 ? formatCurrency(purchaseAmount) : '—'}
           </Typography>
-          {isFullBalance && (
-            <Typography variant="small" sx={{ color: 'text.secondary', mt: 0.5, display: 'block' }}>
-              Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change.
-            </Typography>
-          )}
         </Box>
 
         {/* White body — all payment controls + stats */}
@@ -320,7 +315,7 @@ export function StepPaymentSchedule({
                       )}
                     </Box>
                     <Typography variant="small" sx={{ color: 'text.muted', display: 'block', mt: 1.5, lineHeight: 1.5 }}>
-                      The figures above are estimates and may vary due to daily price changes.
+                      The figures above are estimates and may vary due to daily price changes.{isFullBalance && ` Estimates are based on your current full account balance (${formatCurrency(purchaseAmount)}), which may change before your application is processed.`}
                     </Typography>
                   </Box>
                 )}
