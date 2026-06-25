@@ -58,7 +58,7 @@ export function StepPayments({
         </div>
 
         <DescriptionList title="Payment amounts" titleVariant="h6" valueAlign="right" density="condensed">
-          <DescriptionList.Item label="Opening balance" value={formatCurrency(purchasePrice)} />
+          <DescriptionList.Item label="Opening balance" value={isFullBalance ? 'Full balance' : formatCurrency(purchasePrice)} />
           <DescriptionList.Item label={freqLabel} value={`${formatCurrency(perPeriod)} / ${periodLabel}`} />
           <DescriptionList.Item label="First payment date" value="Tue, 03 Feb 2026" />
           <DescriptionList.Item label="First year's income" value={formatCurrency(effectiveAnnual)} />
@@ -71,7 +71,7 @@ export function StepPayments({
         {isFullBalance && (
           <Alert
             severity="info"
-            message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
+            message={`Based on your current full account balance (${formatCurrency(purchasePrice)}). If your balance changes before your application is processed (within 10 business days), these figures may change.`}
           />
         )}
       </Stack>
