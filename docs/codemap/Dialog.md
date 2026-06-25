@@ -8,7 +8,7 @@ composes: [Button, CloseButton, Icon]
 # Dialog
 
 **Composes:** [[Button]] · [[CloseButton]] · [[Icon]]
-**Used by:** [[BankAccountField]] · [[InfoButton]] · [[StepperActions]]
+**Used by:** [[BankAccountField]] · [[InfoButton]] · [[StepperActions]] · [[idv]]
 
 **Story:** `/?path=/story/components-dialog--default`
 **StoryFile:** `src/stories/components/Dialog.stories.tsx`

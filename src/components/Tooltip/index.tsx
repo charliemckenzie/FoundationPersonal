@@ -1,4 +1,5 @@
 import MuiTooltip from '@mui/material/Tooltip';
+import type { SxProps, Theme } from '@mui/material/styles';
 import type React from 'react';
 
 export type TooltipPlacement =
@@ -20,6 +21,7 @@ export interface TooltipProps {
   children: React.ReactElement;
   placement?: TooltipPlacement;
   arrow?: boolean;
+  tooltipSx?: SxProps<Theme>;
   disableHoverListener?: boolean;
   disableFocusListener?: boolean;
   disableTouchListener?: boolean;
@@ -30,6 +32,7 @@ export function Tooltip({
   children,
   placement = 'top',
   arrow = true,
+  tooltipSx,
   disableHoverListener,
   disableFocusListener,
   disableTouchListener,
@@ -50,6 +53,7 @@ export function Tooltip({
             justifyContent: 'center',
             lineHeight: 1.2,
             py: 0.5,
+            ...(tooltipSx as object),
           },
         },
       }}

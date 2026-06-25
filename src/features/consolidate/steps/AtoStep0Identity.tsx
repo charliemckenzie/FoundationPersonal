@@ -1,7 +1,7 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { DigitalIDV } from '@/features/idv';
-import type { UseIdvGate } from '@/features/idv';
+import { DigitalIDV } from '@/components/idv';
+import type { UseIdvGate } from '@/components/idv';
 
 export interface AtoStep0IdentityProps {
   gate: UseIdvGate;

@@ -10,7 +10,7 @@ import { ContentContainer, MOBreadcrumb } from '@/components/MemberOnline';
 import { FormProgress } from '@/components/FormProgress';
 import { StepTransition } from '@/components/StepTransition';
 import { StepperActions } from '@/components/StepperActions';
-import { useIdvGate, canSubmitIDV } from '@/features/idv';
+import { useIdvGate, canSubmitIDV } from '@/components/idv';
 import { AtoStep0Identity } from './steps/AtoStep0Identity';
 import { AtoStep1Consent } from './steps/AtoStep1Consent';
 import { AtoStep2Results } from './steps/AtoStep2Results';

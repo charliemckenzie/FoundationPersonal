@@ -1,0 +1,65 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Features / _Template" />
+
+# Feature doc template
+
+Copy this shape for every feature. A feature is documented like a component, one tier up — same props table and variant stories, plus a **data contract** and **where-used**.
+
+First, confirm it's a feature: read [Components vs Features](/?path=/docs/foundation-components-vs-features--docs). If it's controlled and owns nothing about the app around it, it's a component — document it as one.
+
+Delete this intro and fill the six sections below.
+
+---
+
+## 1. What & when
+
+One paragraph. The journey the feature owns, end to end. When to reach for it — and when not to.
+
+---
+
+## 2. Public API
+
+The props table. **The props are the variation surface** — each one is a lever a consumer pulls to get its variant.
+
+| Prop | Type | Default | What it changes |
+|---|---|---|---|
+| `exampleProp` | `'a' \| 'b'` | `'a'` | One line on the UX or behaviour it controls. |
+
+---
+
+## 3. Variants / modes
+
+A matrix, then one **live story per variant** embedded below it. Each row is one line on the UX difference — the story shows it.
+
+| Variant | Props | UX difference |
+|---|---|---|
+| Default | — | The baseline journey. |
+| Embedded | `embedded` | Stripped chrome for hosting inside another flow. |
+
+Embed the stories with `<Story />` / `<Canvas>` so the reader clicks through the real flow.
+
+---
+
+## 4. Data contract
+
+What goes in, what comes out. Make the seam explicit so a host knows exactly what it receives.
+
+- **Inputs** — props + any URL params the feature reads (e.g. `?step`, `?account`).
+- **Output** — the `onComplete` payload shape, or the terminal state when the feature self-completes (e.g. a success screen).
+
+A feature should return its result to its host, not leak it through a side channel.
+
+---
+
+## 5. Constraints
+
+- Conditional steps — what makes them appear or disappear.
+- Domain rules that gate behaviour.
+- Environmental requirements (e.g. "requires a Next.js router").
+
+---
+
+## 6. Composition / where-used
+
+Link to the codemap. Do **not** hand-maintain this list — it regenerates from source. Until features are registered in the codemap, note that the list is hand-written and mark it as such.

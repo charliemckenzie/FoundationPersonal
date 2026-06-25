@@ -17,11 +17,12 @@ export interface HeaderCtaButtonProps {
   variant: 'contained' | 'outlined'
   size?: 'small' | 'medium' | 'large'
   condensed?: boolean
+  reversed?: boolean
   noMenu?: boolean
   sx?: SxProps<Theme>
 }
 
-export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: HeaderCtaButtonProps) {
+export function HeaderCtaButton({ cta, variant, size, condensed, reversed = false, noMenu, sx }: HeaderCtaButtonProps) {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [expanded, setExpanded] = useState<string | null>(null)
   const hasMenu = !noMenu && (cta.menu?.length ?? 0) > 0
@@ -39,6 +40,7 @@ export function HeaderCtaButton({ cta, variant, size, condensed, noMenu, sx }: H
         variant={variant}
         size={size}
         condensed={condensed}
+        reversed={reversed}
         endIcon={hasMenu ? 'chevron-down' : undefined}
         aria-expanded={hasMenu ? open : undefined}
         aria-haspopup={hasMenu ? 'menu' : undefined}

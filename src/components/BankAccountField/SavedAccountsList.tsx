@@ -312,6 +312,7 @@ export function SavedAccountsList({
                     cardContainerSx({
                       variant: 'boxed',
                       cardDirection: 'row',
+                      direction: 'row',
                       description: true,
                       isSelected,
                       isItemDisabled,

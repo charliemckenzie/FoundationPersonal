@@ -3,7 +3,9 @@ import Box from '@mui/material/Box';
 import {
   EligibilityChecker,
   lifetimePensionConfig,
+  retirementIncomeAccountConfig,
   type Answers,
+  type EligibilityCheckerConfig,
 } from '../../../features/eligibility-checker';
 
 const meta: Meta<typeof EligibilityChecker> = {
@@ -31,13 +33,14 @@ interface HarnessProps {
   defaultStep?: number;
   defaultAnswers?: Answers;
   defaultEligible?: boolean;
+  config?: EligibilityCheckerConfig;
 }
 
-function Harness({ defaultStep, defaultAnswers, defaultEligible }: HarnessProps) {
+function Harness({ defaultStep, defaultAnswers, defaultEligible, config = lifetimePensionConfig }: HarnessProps) {
   return (
     <Box sx={{ maxWidth: '34rem', mx: 'auto' }}>
       <EligibilityChecker
-        config={lifetimePensionConfig}
+        config={config}
         defaultStep={defaultStep}
         defaultAnswers={defaultAnswers}
         defaultEligible={defaultEligible}
@@ -120,4 +123,13 @@ export const Step3Ineligible: Story = {
 /** Eligible — the card transforms to the success callout. */
 export const EligibleState: Story = {
   render: () => <Harness defaultEligible />,
+};
+
+/**
+ * Retirement Income Account variant — the same component driven by a different `config`.
+ * Proves the feature is reused via config, not a forked copy: tax-deduction branch first,
+ * then retirement status.
+ */
+export const RetirementIncomeAccount: Story = {
+  render: () => <Harness config={retirementIncomeAccountConfig} />,
 };

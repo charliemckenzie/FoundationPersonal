@@ -12,7 +12,7 @@ import { TextField } from '../../../components/TextField';
 import { AddressCapture } from '../../../components/AddressField/AddressCapture';
 import { mockAddressProvider } from '../../../components/AddressField/mockAddressProvider';
 import type { Address } from '../../../components/AddressField';
-import type { OtherIdMethod } from '../../../features/idv';
+import type { OtherIdMethod } from '../../../components/idv';
 import type { LifetimePensionState, LifetimePensionStepId, UserProfile, VerifyDetailsState } from '../types';
 import { PENSION_ESTIMATE_AGE } from '../constants';
 import { formatCurrency, totalSelectedAmount, estimateRetirementBonus, estimatePension } from '../utils';

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { ContentContainer } from '../../../../../components/MemberOnline';
-import { useIdvGate } from '../../../../../features/idv';
+import { useIdvGate } from '../../../../../components/idv';
 import { StepSuccess } from '../../../../../features/lifetime-pension/steps/StepSuccess';
 
 export default function LifetimePensionSubmittedPage() {

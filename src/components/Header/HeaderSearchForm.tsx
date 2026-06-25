@@ -8,6 +8,7 @@ import { Icon } from '../Icon'
 interface HeaderSearchFormProps {
   onSubmit: (query: string) => void
   placeholder?: string
+  inverted?: boolean
   /** Aria label for the input. Defaults to the placeholder, or "Search" if neither is set. */
   inputAriaLabel?: string
 }
@@ -16,7 +17,7 @@ interface HeaderSearchFormProps {
  * The pill-shaped search box used in UtilityBar (desktop + tablet) and other header bars.
  * Single source of truth — was previously duplicated across each bar component.
  */
-export function HeaderSearchForm({ onSubmit, placeholder = 'Search', inputAriaLabel }: HeaderSearchFormProps) {
+export function HeaderSearchForm({ onSubmit, placeholder = 'Search', inverted = false, inputAriaLabel }: HeaderSearchFormProps) {
   const [query, setQuery] = useState('')
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -33,7 +34,7 @@ export function HeaderSearchForm({ onSubmit, placeholder = 'Search', inputAriaLa
         flex: 1,
         display: 'flex',
         alignItems: 'center',
-        bgcolor: 'action.hover',
+        bgcolor: inverted ? 'rgba(255,255,255,0.16)' : 'action.hover',
         borderRadius: 6,
         px: 2,
         py: 0.5,
@@ -45,7 +46,7 @@ export function HeaderSearchForm({ onSubmit, placeholder = 'Search', inputAriaLa
         onChange={(e) => setQuery(e.target.value)}
         placeholder={placeholder}
         inputProps={{ 'aria-label': inputAriaLabel ?? placeholder }}
-        sx={(t) => ({ flex: 1, fontSize: t.typography.body.fontSize })}
+        sx={(t) => ({ flex: 1, fontSize: t.typography.body.fontSize, color: inverted ? t.palette.common.white : t.palette.text.primary })}
       />
       <Box
         component="button"
@@ -58,9 +59,9 @@ export function HeaderSearchForm({ onSubmit, placeholder = 'Search', inputAriaLa
           display: 'flex',
           alignItems: 'center',
           p: 0,
-          color: 'text.secondary',
+          color: inverted ? 'text.inverse' : 'text.secondary',
           borderRadius: 1,
-          '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+          '&:focus-visible': { outline: '2px solid', outlineColor: inverted ? 'common.white' : 'border.focus', outlineOffset: '2px' },
           '&:focus': { outline: 'none' },
         }}
       >

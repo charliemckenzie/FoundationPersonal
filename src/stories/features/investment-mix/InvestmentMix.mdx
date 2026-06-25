@@ -1,0 +1,119 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks';
+import * as InvestmentMixStories from './InvestmentMixFlow.stories';
+
+<Meta of={InvestmentMixStories} />
+
+# Investment Mix
+
+A multi-step flow for changing where a member’s super is invested. It is a **feature**, not a component — it owns its own steps, reads the URL, pushes browser history, and returns a result. Read [Components vs Features](/?path=/docs/foundation-components-vs-features--docs) for the distinction, and the [feature-doc template](/?path=/docs/features-_template--docs) for the shape this page follows.
+
+---
+
+## 1. What & when
+
+Use Investment Mix whenever a member sets or changes how their super is invested — as a standalone "change my mix" journey, or embedded as one step inside a larger application (e.g. opening a Retirement Income Account).
+
+One entry component, `InvestmentMixFlow`, serves every consumer. The variation between consumers is **props**, never a forked copy.
+
+### What the feature owns
+
+The feature is exactly four capabilities — for **both income and accumulation** accounts:
+
+1. **Change an existing allocation %** — re-mix where the current balance is invested.
+2. **Assign a new allocation %** — set the mix for future contributions / payments.
+3. **Rebalancing** — keep the chosen mix on track automatically.
+4. **Funding preferences** — for income accounts, how payments/withdrawals are drawn across options.
+
+That's the whole feature. Everything else the **standalone** journey shows is **host scaffolding**, not part of the feature — the page provides it, and the feature does not require it:
+
+| Host scaffolding (not the feature) | Why it's the host's, not the feature's |
+|---|---|
+| Before-you-start intro | A page-level preamble; suppressed with `skipIntro`. |
+| Account selection | The host already knows the account when embedded; skipped via `embedded` or `?account`. |
+| "What to change" (apply-to) | A routing choice into capabilities 1/2; the host can fix it (embedded defaults to both). |
+| Review & confirm | A submission concern the host owns. |
+| Success screen | Suppressed entirely when `onComplete` is provided — the host takes the result. |
+
+This is why **embedded mode ≈ the feature itself**: RIA strips all of the above and renders just the four capabilities, then reads the result from `onComplete`.
+
+---
+
+## 2. Public API
+
+The props are the variation surface — each one is a lever a consumer pulls.
+
+| Prop | Type | Default | What it changes |
+|---|---|---|---|
+| `overviewPath` | `string` | — | Where Back/Exit returns to (the account overview). |
+| `brandName` | `string` | `'ART'` | Brand wording in the payment-preference step, e.g. `'QSuper'`. |
+| `accountFilter` | `'all' \| 'accum' \| 'income'` | `'all'` | Which accounts the journey offers. `income` excludes the Lifecycle strategy; `accum` includes it. |
+| `onComplete` | `(change: InvestmentMixChange) => void` | — | Called with the result on submit. When set, the success screen is suppressed — the host takes over. |
+| `embedded` | `boolean` | `false` | Strips the breadcrumb, page title, and internal stepper for hosting inside another form. |
+| `skipIntro` | `boolean` | `false` | Skips the "Before you start" intro and lands on step 1. |
+| `onBack` | `() => void` | — | In embedded mode, called when the member presses Back on the first step, so the host can navigate. |
+
+---
+
+## 3. Variants
+
+| Variant | Props | UX difference |
+|---|---|---|
+| Standalone | `accountFilter="all"` | The four capabilities wrapped in page scaffolding (intro, account select, review). |
+| Standalone (QSuper) | `+ brandName="QSuper"` | Identical flow; brand wording changes. |
+| Embedded in new account | `embedded skipIntro accountFilter="income"` | The feature with no scaffolding — straight to the capabilities; returns its result via `onComplete`. |
+| Accumulation account | `accountFilter="accum"` | Includes the Lifecycle Investment Strategy option. |
+
+### Standalone (ART)
+
+<Canvas of={InvestmentMixStories.Standalone} />
+
+### Standalone (QSuper)
+
+<Canvas of={InvestmentMixStories.StandaloneQSuper} />
+
+### Embedded in new account
+
+<Canvas of={InvestmentMixStories.EmbeddedInNewAccount} />
+
+### Accumulation account
+
+<Canvas of={InvestmentMixStories.AccumulationAccount} />
+
+---
+
+## 4. Data contract
+
+**Inputs**
+
+- Props (above).
+- URL params the flow reads to deep-link into a state:
+  - `?account=<id>` — pre-selects an account and skips the account step.
+  - `?applyTo=<option>` — pre-selects the "what to change" choice (still shown, still editable).
+  - `?step=<step-id>` — the current step, written on every navigation so browser back/forward and analytics work.
+
+**Output**
+
+- `onComplete(change)` returns an `InvestmentMixChange`: `accountId`, `accountName`, `applyTo`, `allocations`, optional `paymentPreference` and `rebalance`, plus `referenceNumber` and `submittedAt`.
+- When `onComplete` is not provided, the flow shows its own success screen instead.
+
+Embedded hosts must read the result from `onComplete` — the feature does not require the host to read its internal storage.
+
+---
+
+## 5. Constraints
+
+- **Conditional steps.** The rebalance and payment-preference steps appear only when they apply (a balance change with two or more non-Lifecycle options; income payments across two or more options).
+- **Lifecycle exclusion.** Income accounts cannot choose the Lifecycle Investment Strategy, and any mix containing Lifecycle is excluded from automatic rebalancing.
+- **Requires a router.** The flow uses Next.js `useRouter`/`useSearchParams` and browser history — it must run inside a Next.js App Router context (Storybook mocks this via `nextjs.appDirectory`).
+
+---
+
+## 6. Composition / where-used
+
+> **Hand-maintained** until features are registered in the codemap (tracked as a follow-up). Once registered, this list regenerates from source.
+
+| Consumer | Location |
+|---|---|
+| ART standalone switch | `src/app/member-online/(portal)/investments/manage-investments/change-mix/page.tsx` |
+| QSuper standalone switch | `src/app/qsuper/member-online/(portal)/investments/manage-investments/change-mix/page.tsx` |
+| Embedded in RIA new-account | `src/features/retirement-income-account/RetirementIncomeAccountFlow.tsx` (step `investment-mix`) |

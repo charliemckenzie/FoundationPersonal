@@ -4,8 +4,8 @@ import Typography from '@mui/material/Typography';
 import { Button } from '../../../components/Button';
 import { Icon } from '../../../components/Icon';
 import { TextButton } from '../../../components/TextButton';
-import type { UseIdvGate } from '../../../features/idv';
-import type { OtherIdMethod } from '../../../features/idv';
+import type { UseIdvGate } from '../../../components/idv';
+import type { OtherIdMethod } from '../../../components/idv';
 
 export interface StepSuccessProps {
   onReturnDashboard: () => void;

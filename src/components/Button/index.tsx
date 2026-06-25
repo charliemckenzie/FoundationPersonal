@@ -121,6 +121,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
           ? `calc(${sizeStyles[size].height} - ${CONDENSED_REDUCTION})`
           : sizeStyles[size].height,
         px: sizeStyles[size].px,
+        textDecoration: 'none !important',
+        textDecorationLine: 'none !important',
         ...(hasStartIcon && { paddingRight: `calc(${theme.spacing(sizeStyles[size].px)} + 0.25rem)` }),
         ...(hasEndIcon   && { paddingLeft:  `calc(${theme.spacing(sizeStyles[size].px)} + 0.25rem)` }),
         ...variantStyles,
@@ -132,6 +134,10 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(function 
         '&.Mui-disabled, &:disabled': {
           cursor: 'not-allowed',
           pointerEvents: 'none',
+        },
+        '&:hover, &:focus-visible, &:active': {
+          textDecoration: 'none !important',
+          textDecorationLine: 'none !important',
         },
         ...buildFocusStyles(reversed || color === 'white', resolvedColor),
       }),

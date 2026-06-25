@@ -4,12 +4,14 @@ import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Toolbar from '@mui/material/Toolbar'
+import InputBase from '@mui/material/InputBase'
 import ButtonBase from '@mui/material/ButtonBase'
 import Typography from '@mui/material/Typography'
 import { Logo } from '../Logo'
+import { Icon } from '../Icon'
 import { NavItemButton } from './NavItemButton'
 import { HeaderCtaButton } from './CtaButton'
-import { CondensedSearch } from './CondensedSearch'
+import { HOMEPAGE_HEADER_CONTAINER_SX } from './headerUtils'
 import type { NavItem, CtaAction, UtilityLink } from './types'
 
 export interface CondensedBarProps {
@@ -17,6 +19,8 @@ export interface CondensedBarProps {
   utilityLinks?: UtilityLink[]
   primaryCta?: CtaAction
   secondaryCta?: CtaAction
+  inverted?: boolean
+  wide?: boolean
   searchPlaceholder?: string
   onSearch?: (query: string) => void
   activePanel: string | null
@@ -30,6 +34,8 @@ export function CondensedBar({
   utilityLinks,
   primaryCta,
   secondaryCta,
+  inverted = false,
+  wide = false,
   searchPlaceholder,
   onSearch,
   activePanel,
@@ -58,11 +64,11 @@ export function CondensedBar({
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth={wide ? false : 'lg'} sx={wide ? HOMEPAGE_HEADER_CONTAINER_SX : undefined}>
       <Toolbar disableGutters sx={{ gap: 1, py: 1, alignItems: 'center' }}>
         {/* Mark logo */}
         <Box component="a" href="/" aria-label="Go to home" sx={{ flexShrink: 0, mr: 1, display: 'inline-flex', textDecoration: 'none', '& > div': { height: '2.5rem' } }}>
-          <Logo variant="mark" size="lg" />
+          <Logo variant="mark" size="lg" inverted={inverted} />
         </Box>
 
         {/* Primary nav — hidden when search is expanded */}
@@ -73,6 +79,7 @@ export function CondensedBar({
                 key={item.label}
                 item={item}
                 active={activePanel === item.label}
+                inverted={inverted}
                 sx={{ px: 0, pt: 0, pb: 0 }}
                 fontSize="1rem"
                 onClick={onNavClick}
@@ -86,18 +93,80 @@ export function CondensedBar({
         <Box sx={{ flex: 1, display: searchOpen ? 'none' : 'block' }} />
 
         {/* Search — icon collapses to full bar */}
-        {onSearch && (
-          <CondensedSearch
-            searchOpen={searchOpen}
-            query={query}
-            inputRef={inputRef}
-            searchPlaceholder={searchPlaceholder}
-            onQueryChange={setQuery}
-            onOpenSearch={handleOpenSearch}
-            onSearchBlur={handleSearchBlur}
-            onSearchSubmit={handleSearchSubmit}
-          />
-        )}
+        {onSearch &&
+          (searchOpen ? (
+            <Box
+              component="form"
+              role="search"
+              onSubmit={handleSearchSubmit}
+              onBlur={handleSearchBlur}
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                bgcolor: inverted ? 'rgba(255,255,255,0.16)' : 'action.hover',
+                borderRadius: 6,
+                px: 2,
+                py: 0.5,
+                gap: 1,
+                outline: '2px solid',
+                outlineColor: inverted ? 'common.white' : 'border.focus',
+              }}
+            >
+              <InputBase
+                inputRef={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={searchPlaceholder ?? 'Search'}
+                inputProps={{ 'aria-label': 'Search' }}
+                sx={{ flex: 1, typography: 'small', color: inverted ? 'text.inverse' : 'text.primary' }}
+              />
+              <Box
+                component="button"
+                type="submit"
+                aria-label="Submit search"
+                sx={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  p: 0,
+                  color: inverted ? 'text.inverse' : 'primary.main',
+                  borderRadius: 1,
+                  '&:focus-visible': { outline: '2px solid', outlineColor: inverted ? 'common.white' : 'border.focus', outlineOffset: '2px' },
+                  '&:focus': { outline: 'none' },
+                }}
+              >
+                <Icon icon="magnifying-glass" size="md" />
+              </Box>
+            </Box>
+          ) : (
+            <Box
+              component="button"
+              type="button"
+              aria-label="Open search"
+              onClick={handleOpenSearch}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                bgcolor: inverted ? 'rgba(255,255,255,0.16)' : 'action.hover',
+                borderRadius: 6,
+                px: 1.5,
+                py: 0.75,
+                border: 'none',
+                cursor: 'pointer',
+                color: inverted ? 'text.inverse' : 'text.secondary',
+                outline: '2px solid transparent',
+                '&:hover': { bgcolor: inverted ? 'rgba(255,255,255,0.22)' : 'action.selected' },
+                '&:focus-visible': { outline: '2px solid', outlineColor: inverted ? 'common.white' : 'border.focus' },
+                '&:focus': { outline: 'none' },
+              }}
+            >
+              <Icon icon="magnifying-glass" size="md" />
+            </Box>
+          ))}
 
         {/* Utility links — text only, no icons */}
         {utilityLinks && (
@@ -111,11 +180,11 @@ export function CondensedBar({
                   px: 0.75,
                   py: 0.5,
                   borderRadius: 1,
-                  color: 'text.secondary',
+                  color: inverted ? 'text.inverse' : 'text.secondary',
                   textDecoration: 'none',
                   '&, & *': { textDecoration: 'none !important' },
-                  '&:hover': { color: 'primary.main' },
-                  '&:focus-visible': { outline: '2px solid', outlineColor: 'border.focus', outlineOffset: '2px' },
+                  '&:hover': { color: inverted ? 'common.white' : 'primary.main' },
+                  '&:focus-visible': { outline: '2px solid', outlineColor: inverted ? 'common.white' : 'border.focus', outlineOffset: '2px' },
                   '&:focus': { outline: 'none' },
                 }}
               >
@@ -130,8 +199,8 @@ export function CondensedBar({
         {/* CTAs — small */}
         {(primaryCta || secondaryCta) && (
           <Box sx={{ display: 'flex', gap: 1 }}>
-            {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed sx={{ px: 2 }} />}
-            {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed sx={{ px: 2 }} />}
+            {primaryCta && <HeaderCtaButton cta={primaryCta} variant="outlined" size="small" condensed reversed={inverted} sx={{ px: 2 }} />}
+            {secondaryCta && <HeaderCtaButton cta={secondaryCta} variant="contained" size="small" condensed reversed={inverted} sx={{ px: 2 }} />}
           </Box>
         )}
       </Toolbar>

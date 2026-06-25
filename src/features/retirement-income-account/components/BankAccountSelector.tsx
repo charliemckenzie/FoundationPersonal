@@ -212,7 +212,7 @@ export function BankAccountSelector({
         <Icon icon="piggy-bank" size="lg" style="solid" color="inherit" />
       </Box>
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography variant="bodyStrong" component="div" sx={{ color: 'text.primary', lineHeight: 1.3 }}>
+        <Typography variant="body" component="div" sx={{ color: 'text.primary', lineHeight: 1.3, fontWeight: 700 }}>
           {confirmedAccount.bankName ?? 'New account'}
         </Typography>
         <Typography variant="caption" component="div" sx={{ color: 'text.muted', mt: 0.25 }}>
@@ -232,7 +232,7 @@ export function BankAccountSelector({
       verifyState={verifyState} resolvedName={resolvedName} nameMismatch={nameMismatch}
       saveAccount={saveAccount} onSaveAccountChange={setSaveAccount}
       onConfirm={handleConfirmAccount} onBack={() => setVerifyState('idle')}
-      duplicateAccount={duplicateAccount} onUseDuplicate={handleUseDuplicate}
+      duplicateAccount={duplicateAccount ?? null} onUseDuplicate={handleUseDuplicate}
     />
   );
 

@@ -1,5 +1,5 @@
 // Public API surface for the reusable IDV module.
-// Consumers import from '@/features/idv' only — never reach into internal files.
+// Consumers import from '@/components/idv' only — never reach into internal files.
 
 // Components
 export { DigitalIDV, canSubmitIDV } from './DigitalIDV';

@@ -188,7 +188,7 @@ export function buildSegmentedContainerSx(theme: Theme, fullWidth: boolean, reve
     width: fullWidth ? '100%' : 'auto',
     bgcolor: reversed
       ? alpha(theme.palette.common.white, 0.15)
-      : alpha(theme.palette.primary.main, 0.1),
+      : '#F4F5F7',
     borderRadius: `${theme.shape.button}px`,
     padding: `${SEGMENTED_PADDING}px`,
   };

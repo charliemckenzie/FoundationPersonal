@@ -31,11 +31,13 @@ export interface LogoProps {
   variant?: LogoVariant;
   /** Controls the logo height. Width scales proportionally. */
   size?: 'sm' | 'md' | 'lg';
+  /** Use white logo color for dark/brand backgrounds. */
+  inverted?: boolean;
   /** Accessible label. Defaults to the brand name. */
   alt?: string;
 }
 
-export function Logo({ variant = 'primary', size = 'md', alt }: LogoProps) {
+export function Logo({ variant = 'primary', size = 'md', inverted = false, alt }: LogoProps) {
   const theme = useTheme();
   const brandName = theme.brandConfig.name;
   const logoMap = BRAND_LOGOS[brandName] ?? BRAND_LOGOS['ART'];
@@ -48,7 +50,7 @@ export function Logo({ variant = 'primary', size = 'md', alt }: LogoProps) {
   return (
     <Box
       sx={(t) => ({
-        color: 'primary.main',
+        color: inverted ? 'common.white' : 'primary.main',
         height: { sm: t.spacing(3), md: t.spacing(5), lg: t.spacing(6.5) }[size],
         '& svg': { height: '100%', width: 'auto', display: 'block' },
       })}

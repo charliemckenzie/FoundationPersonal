@@ -60,6 +60,7 @@ export const COMPONENTS: ComponentStatusEntry[] = [
   { name: 'Icon',              status: 'draft',  story: '/?path=/story/components-icons-icon--default' },
   { name: 'IconButton',        status: 'stable', story: '/?path=/story/components-buttons-iconbutton--default' },
   { name: 'IconList',          status: 'draft',  story: '/?path=/story/components-iconlist--default' },
+  { name: 'idv',               status: 'draft',  story: '/?path=/story/form-components-idv-digitalidv--default' },
   { name: 'InfoButton',        status: 'draft',  story: '/?path=/story/components-buttons-infobutton--default' },
   { name: 'InputSelectContainer', status: 'draft', story: '/?path=/story/form-components-textinput-inputselect--default' },
   { name: 'InvestmentOverview', status: 'draft', story: '/?path=/story/member-online-investments-investment-overview--default' },
