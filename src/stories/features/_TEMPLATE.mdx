@@ -1,65 +1,39 @@
 import { Meta } from '@storybook/addon-docs/blocks';
 
-<Meta title="Features / _Template" />
+<Meta title="Features / Overview" />
 
-# Feature doc template
+# Features
 
-Copy this shape for every feature. A feature is documented like a component, one tier up — same props table and variant stories, plus a **data contract** and **where-used**.
-
-First, confirm it's a feature: read [Components vs Features](/?path=/docs/foundation-components-vs-features--docs). If it's controlled and owns nothing about the app around it, it's a component — document it as one.
-
-Delete this intro and fill the six sections below.
+Features are complete, self-contained user journeys — the kind of thing a member does from start to finish in a single sitting.
 
 ---
 
-## 1. What & when
+## What's the difference between a Feature and a Component?
 
-One paragraph. The journey the feature owns, end to end. When to reach for it — and when not to.
+A **component** is a building block. A Button, an Alert, a form field. It does one visual job and knows nothing about your application or your data.
 
----
+A **feature** is a full experience. It combines multiple components, manages its own steps, and handles a real member task — things like checking eligibility, changing an investment mix, or completing a multi-step form. Features know about your data, your flow, and your domain rules.
 
-## 2. Public API
+Think of it this way:
 
-The props table. **The props are the variation surface** — each one is a lever a consumer pulls to get its variant.
-
-| Prop | Type | Default | What it changes |
-|---|---|---|---|
-| `exampleProp` | `'a' \| 'b'` | `'a'` | One line on the UX or behaviour it controls. |
-
----
-
-## 3. Variants / modes
-
-A matrix, then one **live story per variant** embedded below it. Each row is one line on the UX difference — the story shows it.
-
-| Variant | Props | UX difference |
+| | Component | Feature |
 |---|---|---|
-| Default | — | The baseline journey. |
-| Embedded | `embedded` | Stripped chrome for hosting inside another flow. |
-
-Embed the stories with `<Story />` / `<Canvas>` so the reader clicks through the real flow.
-
----
-
-## 4. Data contract
-
-What goes in, what comes out. Make the seam explicit so a host knows exactly what it receives.
-
-- **Inputs** — props + any URL params the feature reads (e.g. `?step`, `?account`).
-- **Output** — the `onComplete` payload shape, or the terminal state when the feature self-completes (e.g. a success screen).
-
-A feature should return its result to its host, not leak it through a side channel.
+| **Example** | Button, DatePicker, Alert | Investment Mix Flow, Eligibility Checker |
+| **Does one thing** | Yes | No — it owns a whole journey |
+| **Manages steps or state** | No | Yes |
+| **Knows about member data** | No | Yes |
+| **Can be dropped anywhere** | Yes | Designed for a specific context |
 
 ---
 
-## 5. Constraints
+## When do you use a Feature?
 
-- Conditional steps — what makes them appear or disappear.
-- Domain rules that gate behaviour.
-- Environmental requirements (e.g. "requires a Next.js router").
+Reach for a feature when you need to drop an entire end-to-end flow into a page — not just a visual element. Features take care of the journey so the page only needs to host them.
+
+If you just need to show or collect a piece of information, you want a component. If you need to walk a member through something with multiple steps or decisions, you want a feature.
 
 ---
 
-## 6. Composition / where-used
+## What's in this section?
 
-Link to the codemap. Do **not** hand-maintain this list — it regenerates from source. Until features are registered in the codemap, note that the list is hand-written and mark it as such.
+Each entry in this section documents one self-contained member journey. Browse the sidebar to explore what's available.

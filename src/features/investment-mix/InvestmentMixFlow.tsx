@@ -24,7 +24,7 @@ import { useInvestmentMix } from './InvestmentMixContext';
 import { Dialog } from '../../components/Dialog';
 import { TextButton } from '../../components/TextButton';
 import { MOCK_ACCOUNTS, MOCK_INVESTMENT_OPTIONS } from './mockData';
-import type { ApplyTo, InvestmentMixChange, PaymentPreference, RebalanceSetting } from './types';
+import type { ApplyTo, InvestmentAccount, InvestmentMixChange, InvestmentOption, PaymentPreference, RebalanceSetting } from './types';
 import { applyToIncludesPayments, applyToIncludesBalance } from './types';
 import {
   validateStep1,
@@ -62,6 +62,10 @@ interface InvestmentMixFlowProps {
   skipIntro?: boolean;
   /** When embedded and the user presses Back on the first step, this is called so the parent can navigate back. */
   onBack?: () => void;
+  /** Override accounts — for Storybook/test scenarios (e.g. new vs existing member). */
+  mockAccounts?: InvestmentAccount[];
+  /** Override investment options — for Storybook/test scenarios (e.g. new vs existing allocation). */
+  mockOptions?: InvestmentOption[];
 }
 
 /**
@@ -84,7 +88,7 @@ export function InvestmentMixFlow(props: InvestmentMixFlowProps) {
   );
 }
 
-function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all', onComplete, embedded = false, skipIntro = false, onBack }: InvestmentMixFlowProps) {
+function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all', onComplete, embedded = false, skipIntro = false, onBack, mockAccounts, mockOptions }: InvestmentMixFlowProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { saveChange } = useInvestmentMix();
@@ -94,10 +98,11 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   const skipAccountStep = embedded || !!accountFromUrl;
 
   const accounts = useMemo(() => {
-    if (accountFilter === 'accum') return MOCK_ACCOUNTS.filter((a) => !a.isIncomeAccount);
-    if (accountFilter === 'income') return MOCK_ACCOUNTS.filter((a) => !!a.isIncomeAccount);
-    return MOCK_ACCOUNTS;
-  }, [accountFilter]);
+    const base = mockAccounts ?? MOCK_ACCOUNTS;
+    if (accountFilter === 'accum') return base.filter((a) => !a.isIncomeAccount);
+    if (accountFilter === 'income') return base.filter((a) => !!a.isIncomeAccount);
+    return base;
+  }, [accountFilter, mockAccounts]);
 
   // A dial's edit link pre-selects one apply-to option on the "what to change" step — the step
   // still shows, so the member can change the choice. Only honour a value valid for the account type.
@@ -139,13 +144,10 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   const isIncomeAccount = selectedAccount?.isIncomeAccount ?? false;
 
   /** Lifecycle Investment Strategy is not available to income accounts. */
-  const availableOptions = useMemo(
-    () =>
-      isIncomeAccount
-        ? MOCK_INVESTMENT_OPTIONS.filter((o) => o.id !== LIFECYCLE_ID)
-        : MOCK_INVESTMENT_OPTIONS,
-    [isIncomeAccount],
-  );
+  const availableOptions = useMemo(() => {
+    const base = mockOptions ?? MOCK_INVESTMENT_OPTIONS;
+    return isIncomeAccount ? base.filter((o) => o.id !== LIFECYCLE_ID) : base;
+  }, [isIncomeAccount, mockOptions]);
 
   const allocatedOptions = useMemo(
     () => availableOptions.filter((o) => (allocations[o.id] ?? 0) > 0),

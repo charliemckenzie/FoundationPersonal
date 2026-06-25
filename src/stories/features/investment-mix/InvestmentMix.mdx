@@ -5,115 +5,154 @@ import * as InvestmentMixStories from './InvestmentMixFlow.stories';
 
 # Investment Mix
 
-A multi-step flow for changing where a member’s super is invested. It is a **feature**, not a component — it owns its own steps, reads the URL, pushes browser history, and returns a result. Read [Components vs Features](/?path=/docs/foundation-components-vs-features--docs) for the distinction, and the [feature-doc template](/?path=/docs/features-_template--docs) for the shape this page follows.
+The switching mechanism for changing where a member's super is invested. It covers three steps: setting the allocation, choosing rebalancing, and (for income accounts) setting payment preferences. What comes before and after - the intro, account selection, review, success screen - is the host's responsibility, not this feature's.
+
+This is the piece that gets reused. The same feature appears inside a standalone investment switch journey and embedded inside the Retirement Income Account application.
 
 ---
 
-## 1. What & when
+## The four scenarios
 
-Use Investment Mix whenever a member sets or changes how their super is invested — as a standalone "change my mix" journey, or embedded as one step inside a larger application (e.g. opening a Retirement Income Account).
+The feature behaves differently depending on two things: the **account type** and whether the member is **new or existing**.
 
-One entry component, `InvestmentMixFlow`, serves every consumer. The variation between consumers is **props**, never a forked copy.
-
-### What the feature owns
-
-The feature is exactly four capabilities — for **both income and accumulation** accounts:
-
-1. **Change an existing allocation %** — re-mix where the current balance is invested.
-2. **Assign a new allocation %** — set the mix for future contributions / payments.
-3. **Rebalancing** — keep the chosen mix on track automatically.
-4. **Funding preferences** — for income accounts, how payments/withdrawals are drawn across options.
-
-That's the whole feature. Everything else the **standalone** journey shows is **host scaffolding**, not part of the feature — the page provides it, and the feature does not require it:
-
-| Host scaffolding (not the feature) | Why it's the host's, not the feature's |
-|---|---|
-| Before-you-start intro | A page-level preamble; suppressed with `skipIntro`. |
-| Account selection | The host already knows the account when embedded; skipped via `embedded` or `?account`. |
-| "What to change" (apply-to) | A routing choice into capabilities 1/2; the host can fix it (embedded defaults to both). |
-| Review & confirm | A submission concern the host owns. |
-| Success screen | Suppressed entirely when `onComplete` is provided — the host takes the result. |
-
-This is why **embedded mode ≈ the feature itself**: RIA strips all of the above and renders just the four capabilities, then reads the result from `onComplete`.
-
----
-
-## 2. Public API
-
-The props are the variation surface — each one is a lever a consumer pulls.
-
-| Prop | Type | Default | What it changes |
-|---|---|---|---|
-| `overviewPath` | `string` | — | Where Back/Exit returns to (the account overview). |
-| `brandName` | `string` | `'ART'` | Brand wording in the payment-preference step, e.g. `'QSuper'`. |
-| `accountFilter` | `'all' \| 'accum' \| 'income'` | `'all'` | Which accounts the journey offers. `income` excludes the Lifecycle strategy; `accum` includes it. |
-| `onComplete` | `(change: InvestmentMixChange) => void` | — | Called with the result on submit. When set, the success screen is suppressed — the host takes over. |
-| `embedded` | `boolean` | `false` | Strips the breadcrumb, page title, and internal stepper for hosting inside another form. |
-| `skipIntro` | `boolean` | `false` | Skips the "Before you start" intro and lands on step 1. |
-| `onBack` | `() => void` | — | In embedded mode, called when the member presses Back on the first step, so the host can navigate. |
-
----
-
-## 3. Variants
-
-| Variant | Props | UX difference |
+| | Accumulation | Income |
 |---|---|---|
-| Standalone | `accountFilter="all"` | The four capabilities wrapped in page scaffolding (intro, account select, review). |
-| Standalone (QSuper) | `+ brandName="QSuper"` | Identical flow; brand wording changes. |
-| Embedded in new account | `embedded skipIntro accountFilter="income"` | The feature with no scaffolding — straight to the capabilities; returns its result via `onComplete`. |
-| Accumulation account | `accountFilter="accum"` | Includes the Lifecycle Investment Strategy option. |
+| **New** | Allocation only | Allocation + payment preferences |
+| **Existing** | Allocation shows current % | Allocation shows current % + payment preferences |
 
-### Standalone (ART)
+**New vs existing** changes what the allocation step looks like:
+- **New** - the member has no existing mix, so only the "Allocate:" input appears.
+- **Existing** - the member already has a mix, so a "Current:" column sits alongside the new inputs so they can see exactly what they are changing from.
 
-<Canvas of={InvestmentMixStories.Standalone} />
-
-### Standalone (QSuper)
-
-<Canvas of={InvestmentMixStories.StandaloneQSuper} />
-
-### Embedded in new account
-
-<Canvas of={InvestmentMixStories.EmbeddedInNewAccount} />
-
-### Accumulation account
-
-<Canvas of={InvestmentMixStories.AccumulationAccount} />
+**Accumulation vs income** changes which steps appear:
+- **Accumulation** - Allocate mix, then (if 2+ options chosen) Rebalancing.
+- **Income** - Allocate mix, then (if 2+ options chosen) Rebalancing, then Payment preferences.
 
 ---
 
-## 4. Data contract
+## New - Accumulation
 
-**Inputs**
+No existing allocation. The member starts fresh. Only the "Allocate:" column appears.
 
-- Props (above).
-- URL params the flow reads to deep-link into a state:
-  - `?account=<id>` — pre-selects an account and skips the account step.
-  - `?applyTo=<option>` — pre-selects the "what to change" choice (still shown, still editable).
-  - `?step=<step-id>` — the current step, written on every navigation so browser back/forward and analytics work.
-
-**Output**
-
-- `onComplete(change)` returns an `InvestmentMixChange`: `accountId`, `accountName`, `applyTo`, `allocations`, optional `paymentPreference` and `rebalance`, plus `referenceNumber` and `submittedAt`.
-- When `onComplete` is not provided, the flow shows its own success screen instead.
-
-Embedded hosts must read the result from `onComplete` — the feature does not require the host to read its internal storage.
+<Canvas of={InvestmentMixStories.NewAccumulation} />
 
 ---
 
-## 5. Constraints
+## Existing - Accumulation
 
-- **Conditional steps.** The rebalance and payment-preference steps appear only when they apply (a balance change with two or more non-Lifecycle options; income payments across two or more options).
-- **Lifecycle exclusion.** Income accounts cannot choose the Lifecycle Investment Strategy, and any mix containing Lifecycle is excluded from automatic rebalancing.
-- **Requires a router.** The flow uses Next.js `useRouter`/`useSearchParams` and browser history — it must run inside a Next.js App Router context (Storybook mocks this via `nextjs.appDirectory`).
+The member already has a mix. The "Current:" column shows their existing allocation alongside the new inputs.
+
+<Canvas of={InvestmentMixStories.ExistingAccumulation} />
 
 ---
 
-## 6. Composition / where-used
+## New - Income
 
-> **Hand-maintained** until features are registered in the codemap (tracked as a follow-up). Once registered, this list regenerates from source.
+A new income account. No existing allocation. Payment preferences appear after the member allocates to 2 or more options.
 
-| Consumer | Location |
+<Canvas of={InvestmentMixStories.NewIncome} />
+
+---
+
+## Existing - Income
+
+An existing income member. Currently split across High Growth (60%) and Conservative (40%). The "Current:" column shows what they are moving away from.
+
+<Canvas of={InvestmentMixStories.ExistingIncome} />
+
+---
+
+## Allocation warning dialog (speed bump)
+
+When the member tries to proceed past the allocation step, the flow checks their chosen mix against four scenarios. If any match, a dialog interrupts before advancing to the next step.
+
+The dialog always offers two paths: **Continue** (proceed with the chosen mix) and **Cancel** (go back and revise). A "Get personalised financial advice" link is shown in every case.
+
+### Scenario 1 — 100% Cash
+
+**Trigger:** The member puts 100% of their allocation into the Cash option only.
+
+> **"Is 100% Cash right for you?"**
+> Cash typically earns lower returns than growth options and may not keep pace with inflation over time. For most members, this can significantly reduce how much super you build before retirement.
+
+---
+
+### Scenario 2 — 100% in a single high-volatility option
+
+**Trigger:** The member puts 100% into any one of the following undiversified, high-volatility options: Australian Shares, International Shares (Hedged), International Shares (Unhedged), Listed Property, High Growth, or High Growth Index.
+
+> **"100% in [Option Name]"**
+> Concentrating everything in [Option Name] means your entire balance moves with that one market. A significant downturn could substantially reduce your super with nothing else to cushion the impact.
+
+---
+
+### Scenario 3 — Entirely defensive mix
+
+**Trigger:** The member spreads across two or more options, but every chosen option is a defensive one (Cash, Bonds, Conservative, or Conservative Balanced). No growth element at all.
+
+> **"Your mix is entirely defensive"**
+> Your new allocation is spread across low-growth, defensive options only. These aim to protect against loss, but typically won't deliver the growth needed to build your super meaningfully over the long term.
+
+---
+
+### Scenario 4 — High concentration in Unlisted Assets
+
+**Trigger:** The member allocates 50% or more to the Unlisted Assets option.
+
+> **"High concentration in Unlisted Assets"**
+> You've put [X]% into Unlisted Assets. These are less liquid than other options — in some market conditions it may be harder to switch out quickly. Consider whether this level of exposure suits your circumstances.
+
+---
+
+### When no dialog appears
+
+If the member's allocation doesn't match any of the above scenarios the flow advances immediately to the next step with no interruption.
+
+---
+
+## Rebalancing step
+
+The rebalancing step ("Keep on track") is **conditional** — it only appears when all three conditions are met:
+
+| Condition | Requirement |
 |---|---|
-| ART standalone switch | `src/app/member-online/(portal)/investments/manage-investments/change-mix/page.tsx` |
-| QSuper standalone switch | `src/app/qsuper/member-online/(portal)/investments/manage-investments/change-mix/page.tsx` |
-| Embedded in RIA new-account | `src/features/retirement-income-account/RetirementIncomeAccountFlow.tsx` (step `investment-mix`) |
+| **Applies to balance** | The change covers the existing balance (i.e. "Apply to" is set to "All" or "Balance only"). Changing future contributions only skips rebalancing. |
+| **Two or more options chosen** | The member has allocated to at least two investment options. A single-option mix cannot drift, so there is nothing to rebalance. |
+| **No Lifecycle in the mix** | The mix contains zero allocation to the Lifecycle strategy. The PDS explicitly excludes Lifecycle from rebalancing — this applies even if the member chose Lifecycle alongside other options. |
+
+### When the step is skipped
+
+- The member changed **future contributions only** (balance is untouched).
+- The member chose **only one option** (e.g. 100% Balanced).
+- The member included **Lifecycle** at any percentage.
+
+In all of these cases the flow jumps from the allocation step directly to payment preferences (income accounts) or the review step (accumulation accounts).
+
+### "Turning off" an existing rebalancing arrangement
+
+If the member previously had automatic rebalancing set up and then selects "No, I'll manage it myself", a notice informs them that submitting this change will turn rebalancing off on their account.
+
+---
+
+## Payment preferences step
+
+The payment preferences step is **conditional** — it only appears when all three conditions are met:
+
+| Condition | Requirement |
+|---|---|
+| **Income account** | The selected account is a Retirement Income Account. Accumulation accounts never see this step. |
+| **Applies to payments** | The change covers the payments dial (i.e. "Apply to" is set to "All" or "Payments only"). Changing the balance-only mix on an income account skips this step. |
+| **Two or more options chosen** | The member has allocated to at least two investment options. With a single option, all payments are drawn from it by definition — the step is moot. |
+
+### When the step is skipped
+
+- Any accumulation account.
+- An income account where the change covers the **balance only**.
+- An income account where the member chose **only one option**.
+
+### Payment methods
+
+When the step does appear, the member chooses how their pension payments are drawn:
+
+- **Proportionally across my balance** — each payment is drawn from all options in the same proportion as the current balance at the time of payment. This is pre-selected as the default.
+- **From specific options by percentage** — the member sets what share of each payment comes from each option. If one option runs out, the remainder is drawn proportionally from the others.

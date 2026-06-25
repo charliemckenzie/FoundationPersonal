@@ -23,6 +23,7 @@ export function Step3Allocations({
   showValidation,
 }: Step3AllocationsProps) {
   const { total } = validateStep3(allocations, options);
+  const hasExisting = options.some((o) => o.currentAllocation > 0);
   const barRef = useRef<HTMLDivElement>(null);
   const [isFloating, setIsFloating] = useState(false);
 
@@ -155,21 +156,30 @@ export function Step3Allocations({
                       />
                     </>
                   )}
-                  <Box sx={{ width: '9rem', flexShrink: 0 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Typography
-                        component="label"
-                        htmlFor={`alloc-${option.id}`}
-                        variant="small"
-                        sx={{ color: 'text.muted', whiteSpace: 'nowrap', cursor: 'default' }}
-                      >
-                        Allocate:
-                      </Typography>
+                  <Box
+                    component="label"
+                    sx={{
+                      display: 'flex',
+                      flexDirection: { xs: 'column', sm: 'row' },
+                      alignItems: { xs: 'flex-start', sm: 'center' },
+                      gap: { xs: 0.25, sm: 1 },
+                      flexShrink: 0,
+                      cursor: 'default',
+                    }}
+                  >
+                    <Typography
+                      variant="small"
+                      sx={{ color: 'text.muted', whiteSpace: 'nowrap', flexShrink: 0 }}
+                    >
+                      {hasExisting ? 'New:' : 'Allocate:'}
+                    </Typography>
+                    <Box sx={{ width: { xs: '6rem', sm: '7rem' } }}>
                       <PercentageField
                         id={`alloc-${option.id}`}
-                        aria-label={`Allocate ${option.name} percent`}
+                        aria-label={`${hasExisting ? 'New allocation for' : 'Allocate'} ${option.name} percent`}
                         value={allocations[option.id] ?? null}
                         size="medium"
+                        fullWidth
                         onChange={(v) => onChange(option.id, v)}
                       />
                     </Box>

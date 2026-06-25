@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { InvestmentMixFlow } from '../../../features/investment-mix/InvestmentMixFlow';
 import { InvestmentMixProvider } from '../../../features/investment-mix/InvestmentMixContext';
-import type { InvestmentMixChange } from '../../../features/investment-mix/types';
+import type { InvestmentMixChange, InvestmentOption } from '../../../features/investment-mix/types';
+import { MOCK_INVESTMENT_OPTIONS } from '../../../features/investment-mix/mockData';
 import { Alert } from '../../../components/Alert';
 
 const meta: Meta<typeof InvestmentMixFlow> = {
@@ -12,41 +13,43 @@ const meta: Meta<typeof InvestmentMixFlow> = {
   component: InvestmentMixFlow,
   parameters: {
     layout: 'fullscreen',
-    // The flow reads useSearchParams() and calls history.pushState — it needs the
-    // App Router mock that @storybook/nextjs-vite provides.
     nextjs: { appDirectory: true },
-    docs: {
-      description: {
-        component:
-          'A multi-step flow for changing where a member’s super is invested. One entry component, ' +
-          '`InvestmentMixFlow`, serves every consumer — an ART standalone switch, a QSuper standalone ' +
-          'switch, and an embedded step inside the Retirement Income Account application. The differences ' +
-          'are props, not forks.\n\n' +
-          'Each story below renders the **live** flow with one consumer’s props. Click through the steps ' +
-          'to experience it, then switch stories to compare variants.',
-      },
-    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof InvestmentMixFlow>;
 
-/** Standalone variants own the page chrome (breadcrumb + container) themselves. */
-function StandaloneHarness(props: React.ComponentProps<typeof InvestmentMixFlow>) {
-  return (
-    <InvestmentMixProvider>
-      <InvestmentMixFlow {...props} />
-    </InvestmentMixProvider>
-  );
-}
+// Mock data sets
 
 /**
- * Embedded mode has no chrome of its own, so the harness supplies a host frame and
- * shows the returned `InvestmentMixChange` — proving the data contract: the feature
- * hands its result back to its host instead of leaking it through storage.
+ * New member / new account - no existing allocation.
+ * The allocation step shows only the "Allocate:" input column.
  */
-function EmbeddedHarness(props: Omit<React.ComponentProps<typeof InvestmentMixFlow>, 'onComplete' | 'onBack'>) {
+const FRESH_OPTIONS: InvestmentOption[] = MOCK_INVESTMENT_OPTIONS.map((o) => ({
+  ...o,
+  currentAllocation: 0,
+}));
+
+/**
+ * Existing income account - currently split across two options.
+ * The allocation step shows a "Current:" column alongside the new "Allocate:" inputs.
+ */
+const INCOME_EXISTING_OPTIONS: InvestmentOption[] = MOCK_INVESTMENT_OPTIONS.map((o) => ({
+  ...o,
+  currentAllocation: o.id === 'opt-high-growth' ? 60 : o.id === 'opt-conservative' ? 40 : 0,
+}));
+
+// Story harness
+
+/**
+ * Renders the switching mechanism only - no breadcrumb, no intro, no review page.
+ * Mimics being embedded inside a host journey. Shows a success banner when the
+ * member completes the flow to confirm the data contract.
+ */
+type FeatureHarnessProps = Omit<React.ComponentProps<typeof InvestmentMixFlow>, 'embedded' | 'skipIntro' | 'onComplete' | 'onBack'>;
+
+function FeatureHarness(props: FeatureHarnessProps) {
   const [result, setResult] = useState<InvestmentMixChange | null>(null);
   return (
     <InvestmentMixProvider>
@@ -55,12 +58,14 @@ function EmbeddedHarness(props: Omit<React.ComponentProps<typeof InvestmentMixFl
           {result && (
             <Alert
               severity="success"
-              title="Host received the result"
-              message={`onComplete returned a change for ${result.accountName} (${Object.keys(result.allocations).length} option(s)).`}
+              title="Change submitted"
+              message={`Allocation change for ${result.accountName} received by the host.`}
             />
           )}
           <InvestmentMixFlow
             {...props}
+            embedded
+            skipIntro
             onComplete={(change) => setResult(change)}
             onBack={() => {}}
           />
@@ -70,42 +75,68 @@ function EmbeddedHarness(props: Omit<React.ComponentProps<typeof InvestmentMixFl
   );
 }
 
-/** ART standalone switch — full intro, account select, and review. The default journey. */
-export const Standalone: Story = {
-  render: () => (
-    <StandaloneHarness overviewPath="/member-online/investments" accountFilter="all" />
-  ),
-};
+// Stories
 
-/** QSuper standalone switch — identical flow, `brandName="QSuper"` changes the brand wording. */
-export const StandaloneQSuper: Story = {
+/**
+ * Member opening a new accumulation account - no existing allocation.
+ * Only the "Allocate:" column appears.
+ * Steps: Allocate mix -> Rebalancing (once 2+ options chosen).
+ */
+export const NewAccumulation: Story = {
+  name: 'New - Accumulation',
   render: () => (
-    <StandaloneHarness
-      overviewPath="/qsuper/member-online/investments"
-      accountFilter="all"
-      brandName="QSuper"
+    <FeatureHarness
+      overviewPath="/member-online/investments"
+      accountFilter="accum"
+      mockOptions={FRESH_OPTIONS}
     />
   ),
 };
 
 /**
- * Embedded inside the Retirement Income Account application: no breadcrumb, no page
- * title, no intro. Starts at allocations and returns its result via `onComplete`.
+ * Existing accumulation member changing their mix.
+ * The "Current:" column shows their existing allocation alongside the new "Allocate:" inputs.
+ * Steps: Allocate mix -> Rebalancing (once 2+ options chosen).
  */
-export const EmbeddedInNewAccount: Story = {
+export const ExistingAccumulation: Story = {
+  name: 'Existing - Accumulation',
   render: () => (
-    <EmbeddedHarness
-      overviewPath="/member-online/retirement-income-account"
-      accountFilter="income"
-      embedded
-      skipIntro
+    <FeatureHarness
+      overviewPath="/member-online/investments"
+      accountFilter="accum"
+      mockOptions={MOCK_INVESTMENT_OPTIONS}
     />
   ),
 };
 
-/** Accumulation account — `accountFilter="accum"` includes the Lifecycle Investment Strategy option. */
-export const AccumulationAccount: Story = {
+/**
+ * Member opening a new income account - no existing allocation.
+ * Only the "Allocate:" column appears.
+ * Steps: Allocate mix -> Rebalancing -> Payment preferences (once 2+ options chosen).
+ */
+export const NewIncome: Story = {
+  name: 'New - Income',
   render: () => (
-    <StandaloneHarness overviewPath="/member-online/investments" accountFilter="accum" />
+    <FeatureHarness
+      overviewPath="/member-online/investments"
+      accountFilter="income"
+      mockOptions={FRESH_OPTIONS}
+    />
+  ),
+};
+
+/**
+ * Existing income member changing their mix - currently split across High Growth (60%)
+ * and Conservative (40%). The "Current:" column shows what they are moving away from.
+ * Steps: Allocate mix -> Rebalancing -> Payment preferences (once 2+ options chosen).
+ */
+export const ExistingIncome: Story = {
+  name: 'Existing - Income',
+  render: () => (
+    <FeatureHarness
+      overviewPath="/member-online/investments"
+      accountFilter="income"
+      mockOptions={INCOME_EXISTING_OPTIONS}
+    />
   ),
 };
