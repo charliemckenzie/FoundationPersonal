@@ -5,6 +5,7 @@ import type { NavGroup } from './types'
 
 interface MegaMenuColumnProps {
   group: NavGroup
+  variant?: 'default' | 'member-v2'
   onClose: () => void
 }
 
@@ -17,7 +18,8 @@ interface MegaMenuColumnProps {
  *   - standalone item (just headingHref, no children) renders as a regular-weight link
  *   - "prominent" link styling kicks in when there's no heading at all
  */
-export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
+export function MegaMenuColumn({ group, variant = 'default', onClose }: MegaMenuColumnProps) {
+  const isMemberV2 = variant === 'member-v2'
   const hasChildren = (group.links && group.links.length > 0) || (group.groups && group.groups.length > 0)
   const headingIsBold = hasChildren || group.bold === true
 
@@ -29,7 +31,7 @@ export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
         onClick={onClose}
         sx={{
           display: 'block',
-          mb: headingIsBold ? 1 : 0,
+          mb: headingIsBold ? (isMemberV2 ? '2.5rem' : 1) : 0,
           color: 'text.primary',
           textDecorationLine: 'none !important',
           '&:hover': { color: 'primary.main', textDecorationLine: 'none !important' },
@@ -42,12 +44,12 @@ export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
           '&:focus': { outline: 'none' },
         }}
       >
-        <Typography variant="body" sx={{ fontWeight: headingIsBold ? 700 : 400, display: 'block' }}>
+        <Typography variant={isMemberV2 ? 'h6' : 'body'} sx={{ fontWeight: headingIsBold ? 700 : 400, display: 'block' }}>
           {group.heading}
         </Typography>
       </Box>
     ) : (
-      <Typography variant="body" component="p" sx={{ fontWeight: 700, color: 'text.primary', mb: 1, display: 'block' }}>
+      <Typography variant={isMemberV2 ? 'h6' : 'body'} component="p" sx={{ fontWeight: 700, color: 'text.primary', mb: isMemberV2 ? '2.5rem' : 1, display: 'block' }}>
         {group.heading}
       </Typography>
     )
@@ -58,7 +60,7 @@ export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         {headingNode}
         {group.groups.map((subGroup, i) => (
-          <MegaMenuColumn key={i} group={subGroup} onClose={onClose} />
+          <MegaMenuColumn key={i} group={subGroup} variant={variant} onClose={onClose} />
         ))}
       </Box>
     )
@@ -68,9 +70,9 @@ export function MegaMenuColumn({ group, onClose }: MegaMenuColumnProps) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column' }}>
       {headingNode}
-      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: isMemberV2 ? '2rem' : 0 }}>
         {(group.links ?? []).map((link) => (
-          <NavPanelLink key={link.href} {...link} prominent={prominent} onClick={onClose} />
+          <NavPanelLink key={link.href} {...link} variant={variant} prominent={prominent} onClick={onClose} />
         ))}
       </Box>
     </Box>

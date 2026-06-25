@@ -1,4 +1,12 @@
 import type { NavItemMegamenu } from './types'
+import type { SxProps, Theme } from '@mui/material/styles'
+
+export const HOMEPAGE_HEADER_CONTAINER_SX: SxProps<Theme> = {
+  width: '100%',
+  maxWidth: '100rem',
+  mx: 'auto',
+  px: { xs: 2, sm: 3, md: 4, lg: 5 },
+}
 
 /**
  * Flatten all links from a megamenu's columns into a single ordered list.

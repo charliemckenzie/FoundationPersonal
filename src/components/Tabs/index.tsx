@@ -74,30 +74,32 @@ export function Tabs({
 
   return (
     <Box ref={tabsRef}>
-      <Box
-        {...(isSegmented && {
-          sx: (theme: Theme) => buildSegmentedContainerSx(theme, fullWidth, reversed),
-        })}
-      >
-        <MuiTabs
-          value={active}
-          onChange={handleChange}
-          aria-label={label}
-          selectionFollowsFocus
-          sx={(theme) => buildMuiTabsSx(theme, isSegmented, size, fullWidth, reversed)}
+      <Box sx={isSegmented && !fullWidth ? { display: 'flex', justifyContent: 'center' } : undefined}>
+        <Box
+          {...(isSegmented && {
+            sx: (theme: Theme) => buildSegmentedContainerSx(theme, fullWidth, reversed),
+          })}
         >
-          {tabs.map((tab, i) => (
-            <MuiTab
-              key={i}
-              label={tab.label}
-              disabled={tab.disabled}
-              disableRipple
-              id={`${uid}-tab-${i}`}
-              aria-controls={`${uid}-tabpanel-${i}`}
-              sx={(theme) => buildTabSx(theme, size, tabStyle, reversed, isSegmented ? equalTabWidth : undefined)}
-            />
-          ))}
-        </MuiTabs>
+          <MuiTabs
+            value={active}
+            onChange={handleChange}
+            aria-label={label}
+            selectionFollowsFocus
+            sx={(theme) => buildMuiTabsSx(theme, isSegmented, size, fullWidth, reversed)}
+          >
+            {tabs.map((tab, i) => (
+              <MuiTab
+                key={i}
+                label={tab.label}
+                disabled={tab.disabled}
+                disableRipple
+                id={`${uid}-tab-${i}`}
+                aria-controls={`${uid}-tabpanel-${i}`}
+                sx={(theme) => buildTabSx(theme, size, tabStyle, reversed, isSegmented ? equalTabWidth : undefined)}
+              />
+            ))}
+          </MuiTabs>
+        </Box>
       </Box>
       {tabs.map((tab, i) =>
         tab.content !== undefined ? (

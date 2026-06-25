@@ -76,6 +76,7 @@ const ART: Brand = {
       heading: 'Experiments',
       pages: [
         { label: 'Retirement projector', href: '/retirement-projection' },
+        { label: 'Home Page 2026', href: '/experiments/public-web-nav' },
       ],
     },
   ],
