@@ -99,12 +99,18 @@ export function RetirementIncomeAccountFlow() {
   const { state, setState, activeStep, showValidation, submitted } = flow;
 
   const [showInsuranceModal, setShowInsuranceModal] = useState(false);
+  const [editingFromReview, setEditingFromReview] = useState(false);
 
   const purchaseTotal = useMemo(() => {
     // In simple (autopilot) mode the funding step is skipped, so transferAmount
     // is never set. Fall back to the full account balances, matching the review screen.
     if (state.setupMode === 'simple') {
       return state.accounts.reduce((sum, account) => sum + account.balance, 0);
+    }
+    // When full balance is selected the allocate step is skipped, so transferAmount
+    // is never populated. Use purchaseAmount which was set directly in StepFunding.
+    if (state.fundingTransferType === 'full') {
+      return state.purchaseAmount;
     }
     return totalSelectedAmount(state);
   }, [state]);
@@ -191,6 +197,17 @@ export function RetirementIncomeAccountFlow() {
       return;
     }
 
+    if (editingFromReview) {
+      // If switching to custom investment strategy, the user still needs to go through
+      // investment-mix before returning to review. All other edits go straight back.
+      const needsInvestmentMix = currentStepId === 'investment-strategy' && state.investmentStrategy === 'custom';
+      if (!needsInvestmentMix) {
+        setEditingFromReview(false);
+        flow.advance(visibleStepKeys.indexOf('review'));
+        return;
+      }
+    }
+
     flow.advance(activeStep + 1);
   }
 
@@ -200,7 +217,10 @@ export function RetirementIncomeAccountFlow() {
 
   function updateStepFromReview(stepId: RetirementIncomeAccountStepId) {
     const stepIndex = visibleStepKeys.indexOf(stepId);
-    if (stepIndex >= 0) flow.editStep(stepIndex);
+    if (stepIndex >= 0) {
+      setEditingFromReview(true);
+      flow.editStep(stepIndex);
+    }
   }
 
   // Success screen — IDV is handled inside StepSuccess as a modal.
@@ -329,6 +349,7 @@ export function RetirementIncomeAccountFlow() {
                 paymentSchedule={state.paymentSchedule}
                 onPaymentScheduleChange={(next) => updateState({ ...state, paymentSchedule: next })}
                 showValidation={showValidation}
+                isFullBalance={state.fundingTransferType === 'full'}
               />
             ) : currentStepId === 'payments' ? (
               <StepPayments
@@ -338,6 +359,7 @@ export function RetirementIncomeAccountFlow() {
                 onBankDetailsChange={(nextBankDetails) =>
                   updateState({ ...state, bankDetails: nextBankDetails })
                 }
+                isFullBalance={state.fundingTransferType === 'full'}
               />
             ) : currentStepId === 'investment-strategy' ? (
               <StepInvestmentStrategy
@@ -364,7 +386,34 @@ export function RetirementIncomeAccountFlow() {
                   accountFilter="income"
                   embedded
                   skipIntro
-                  onComplete={() => flow.advance(activeStep + 1)}
+                  initialAllocations={Object.keys(state.investmentMix.allocations).length > 0 ? state.investmentMix.allocations : undefined}
+                  initialRebalance={state.drawdown.autoRebalance !== undefined ? { enabled: state.drawdown.autoRebalance } : undefined}
+                  initialPaymentPreference={
+                    state.drawdown.customMethod === 'percentage' && Object.keys(state.drawdown.percentageAllocations).length > 0
+                      ? { type: 'percentage', percentages: state.drawdown.percentageAllocations }
+                      : state.drawdown.customMethod === ''
+                        ? undefined
+                        : { type: 'proportional' }
+                  }
+                  onComplete={(change) => {
+                    const paymentPref = change.paymentPreference;
+                    updateState({
+                      ...state,
+                      investmentMix: { mode: 'custom', allocations: change.allocations },
+                      drawdown: {
+                        ...state.drawdown,
+                        customMethod: paymentPref?.type === 'percentage' ? 'percentage' : '',
+                        percentageAllocations: paymentPref?.type === 'percentage' ? (paymentPref.percentages ?? {}) : {},
+                        autoRebalance: change.rebalance?.enabled ?? state.drawdown.autoRebalance,
+                      },
+                    });
+                    if (editingFromReview) {
+                      setEditingFromReview(false);
+                      flow.advance(visibleStepKeys.indexOf('review'));
+                    } else {
+                      flow.advance(activeStep + 1);
+                    }
+                  }}
                   onBack={flow.back}
                 />
               </InvestmentMixProvider>
@@ -398,7 +447,7 @@ export function RetirementIncomeAccountFlow() {
                     { value: 'other', label: 'Other options' },
                   ]}
                   direction="column"
-                  onChange={(value) => setVerifyMethod(value as 'online' | 'other')}
+                  onChange={(value) => { setVerifyMethod(value as 'online' | 'other'); flow.setShowValidation(false); }}
                 />
 
                 {verifyMethod === 'online' ? (
@@ -406,7 +455,7 @@ export function RetirementIncomeAccountFlow() {
                     <Divider />
                     <DigitalIDV
                       state={idvState}
-                      onChange={setIdvState}
+                      onChange={(next) => { setIdvState(next); flow.setShowValidation(false); }}
                       onSubmit={handleNext}
                       loading={idvLoading}
                       error={idvError}
@@ -418,7 +467,7 @@ export function RetirementIncomeAccountFlow() {
                     <Divider />
                     <OfflineIdv
                       state={otherIdState}
-                      onChange={setOtherIdState}
+                      onChange={(next) => { setOtherIdState(next); flow.setShowValidation(false); }}
                       showValidation={showValidation}
                     />
                   </>
@@ -449,7 +498,7 @@ export function RetirementIncomeAccountFlow() {
           {showValidation && currentStepId === 'idv' && !stepIsValid(activeStep) && (
             <Alert
               severity="error"
-              message="To continue, upload your identity documents, or choose 'I\u2019ll provide this later' and confirm."
+              message="Select an identity verification option to continue."
             />
           )}
 

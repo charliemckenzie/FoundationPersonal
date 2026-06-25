@@ -56,6 +56,12 @@ interface InvestmentMixFlowProps {
   accountFilter?: 'all' | 'accum' | 'income';
   /** When provided, called on successful submission instead of showing the success screen. */
   onComplete?: (change: InvestmentMixChange) => void;
+  /** Pre-populate allocations (e.g. when returning to edit an existing mix). */
+  initialAllocations?: Record<string, number>;
+  /** Pre-populate rebalance setting (e.g. when returning to edit). */
+  initialRebalance?: RebalanceSetting;
+  /** Pre-populate payment preference (e.g. when returning to edit). */
+  initialPaymentPreference?: PaymentPreference;
   /** When true, suppresses breadcrumb, page title and internal stepper — for embedding inside another form. */
   embedded?: boolean;
   /** When true, skips the 'Before you start' intro page and goes straight to step 1. */
@@ -84,7 +90,7 @@ export function InvestmentMixFlow(props: InvestmentMixFlowProps) {
   );
 }
 
-function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all', onComplete, embedded = false, skipIntro = false, onBack }: InvestmentMixFlowProps) {
+function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter = 'all', onComplete, initialAllocations, initialRebalance, initialPaymentPreference, embedded = false, skipIntro = false, onBack }: InvestmentMixFlowProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { saveChange } = useInvestmentMix();
@@ -117,9 +123,9 @@ function InvestmentMixFlowInner({ overviewPath, brandName = 'ART', accountFilter
   // When embedded in a new account form, default to 'income-both' — the member isn't
   // changing an existing mix, so the choice is always "set up both balance and payments".
   const [applyTo, setApplyTo] = useState<ApplyTo | null>(embedded ? 'income-both' : applyToFromUrl);
-  const [allocations, setAllocations] = useState<Record<string, number>>({});
-  const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(null);
-  const [rebalance, setRebalance] = useState<RebalanceSetting | null>(null);
+  const [allocations, setAllocations] = useState<Record<string, number>>(initialAllocations ?? {});
+  const [paymentPreference, setPaymentPreference] = useState<PaymentPreference | null>(initialPaymentPreference ?? null);
+  const [rebalance, setRebalance] = useState<RebalanceSetting | null>(initialRebalance ?? null);
   const [showStep3Validation, setShowStep3Validation] = useState(false);
   const [showPaymentValidation, setShowPaymentValidation] = useState(false);
   const [declarationChecked, setDeclarationChecked] = useState(false);
