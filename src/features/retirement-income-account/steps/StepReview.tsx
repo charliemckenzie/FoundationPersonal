@@ -405,27 +405,12 @@ export function StepReview({
               isSimple
                 ? formatCurrency(state.accounts.reduce((sum, a) => sum + a.balance, 0))
                 : state.fundingTransferType === 'full'
-                  ? (
-                    <Stack spacing={0}>
-                      <Typography variant="body" sx={{ fontWeight: 700, color: 'text.primary' }}>Full balance</Typography>
-                      <Typography variant="small" sx={{ color: 'text.secondary' }}>
-                        Current balance: {formatCurrency(purchasePrice)}
-                      </Typography>
-                    </Stack>
-                  )
+                  ? 'Full balance'
                   : purchasePrice > 0 ? formatCurrency(purchasePrice) : '—'
             }
             action={!isSimple ? <TextButton label="Edit" hideIcon aria-label="Edit funding" onClick={() => onEditStep(state.fundingTransferType === 'full' ? 'funding' : 'allocate')} /> : undefined}
           />
         </DescriptionList>
-        {(isSimple || state.fundingTransferType === 'full') && (
-          <Box sx={{ px: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 } }}>
-            <Alert
-              severity="info"
-              message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
-            />
-          </Box>
-        )}
       </Box>
 
       {/* Payment details */}
@@ -486,7 +471,7 @@ export function StepReview({
           <Box sx={{ px: { xs: 3, sm: 4 }, pb: { xs: 3, sm: 4 } }}>
             <Alert
               severity="info"
-              message="Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change."
+              message={`Based on your current full account balance (${formatCurrency(purchasePrice)}). If your balance changes before your application is processed (within 10 business days), these figures may change.`}
             />
           </Box>
         )}
