@@ -92,6 +92,7 @@ interface StepPaymentScheduleProps {
   paymentSchedule: PaymentSchedule;
   onPaymentScheduleChange: (next: PaymentSchedule) => void;
   showValidation: boolean;
+  isFullBalance?: boolean;
 }
 
 export function StepPaymentSchedule({
@@ -99,6 +100,7 @@ export function StepPaymentSchedule({
   paymentSchedule,
   onPaymentScheduleChange,
   showValidation,
+  isFullBalance,
 }: StepPaymentScheduleProps) {
   const dateOptions = useMemo(() => buildDateOptions(paymentSchedule.frequency ?? null), [paymentSchedule.frequency]);
 
@@ -179,6 +181,11 @@ export function StepPaymentSchedule({
           <Typography variant="h4">
             {purchaseAmount > 0 ? formatCurrency(purchaseAmount) : '—'}
           </Typography>
+          {isFullBalance && (
+            <Typography variant="small" sx={{ color: 'text.secondary', mt: 0.5, display: 'block' }}>
+              Based on your current balance. If your balance changes before your application is processed (within 10 business days), these figures may change.
+            </Typography>
+          )}
         </Box>
 
         {/* White body — all payment controls + stats */}
