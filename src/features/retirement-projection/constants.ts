@@ -131,7 +131,10 @@ export const YEARLY_MONTHLY_OPTIONS = [
  * (see docs/retirement-projection-calculation.md).
  */
 export const LIFESTYLE_TARGETS = {
-  modest: { single: 33134, couple: 47731 },
+  modest: {
+    homeowner: { single: 33134, couple: 47731 },
+    renter: { single: 51164, couple: 69002 },
+  },
   comfortable: { single: 51630, couple: 72663 },
 } as const;
 
@@ -139,27 +142,38 @@ export function formatTargetIncome(amount: number): string {
   return `$${amount.toLocaleString('en-AU')} / year`;
 }
 
-export function getLifestyleOptions(couple: boolean) {
-  return [
+/** Resolve the modest target based on couple status and home ownership. */
+export function getModestTarget(couple: boolean, homeowner: boolean): number {
+  const band = homeowner ? LIFESTYLE_TARGETS.modest.homeowner : LIFESTYLE_TARGETS.modest.renter;
+  return couple ? band.couple : band.single;
+}
+
+export function getLifestyleOptions(couple: boolean, homeowner = true) {
+  const options = [
     {
       value: 'modest' as const,
       label: 'ASFA Modest',
-      yearlyAmount: formatTargetIncome(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single),
+      yearlyAmount: formatTargetIncome(getModestTarget(couple, homeowner)),
       description: couple
         ? 'Covers essential living costs with basic leisure activities for a couple.'
         : 'Covers essential living costs with basic leisure activities.',
       image: '/images/asfa-modest.svg',
     },
-    {
-      value: 'comfortable' as const,
-      label: 'ASFA Comfortable',
-      yearlyAmount: formatTargetIncome(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single),
-      description: couple
-        ? 'Good standard of living including travel, leisure, and healthcare for a couple.'
-        : 'Good standard of living including travel, leisure, and healthcare.',
-      image: '/images/asfa-comfortable.svg',
-    },
+    ...(homeowner
+      ? [
+          {
+            value: 'comfortable' as const,
+            label: 'ASFA Comfortable',
+            yearlyAmount: formatTargetIncome(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single),
+            description: couple
+              ? 'Good standard of living including travel, leisure, and healthcare for a couple.'
+              : 'Good standard of living including travel, leisure, and healthcare.',
+            image: '/images/asfa-comfortable.svg',
+          },
+        ]
+      : []),
   ];
+  return options;
 }
 
 export const LIFESTYLE_OPTIONS = getLifestyleOptions(false);

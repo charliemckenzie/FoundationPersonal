@@ -52,9 +52,14 @@ describe('computeProjection — shape & invariants', () => {
 });
 
 describe('computeProjection — target income', () => {
-  it('uses the ASFA single band for a single member', () => {
-    const r = computeProjection(make({ currentAge: '40', retirementAge: '67', lifestyle: 'modest' }));
-    expect(r.targetIncome).toBe(LIFESTYLE_TARGETS.modest.single);
+  it('uses the ASFA single homeowner band for a single member who owns their home', () => {
+    const r = computeProjection(make({ currentAge: '40', retirementAge: '67', lifestyle: 'modest', ownHome: 'yes' }));
+    expect(r.targetIncome).toBe(LIFESTYLE_TARGETS.modest.homeowner.single);
+  });
+
+  it('uses the ASFA single renter band for a single member who rents', () => {
+    const r = computeProjection(make({ currentAge: '40', retirementAge: '67', lifestyle: 'modest', ownHome: 'no' }));
+    expect(r.targetIncome).toBe(LIFESTYLE_TARGETS.modest.renter.single);
   });
 
   it('uses the ASFA couple band when a partner is included', () => {

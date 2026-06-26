@@ -8,13 +8,15 @@ import { AmountOrPercentField } from '../AmountOrPercentField';
 import { ThingsToConsider } from '../ThingsToConsider';
 import type { PartnerDetails } from '../types';
 import { CONTRIBUTION_FREQUENCY_OPTIONS } from '../constants';
+import type { StepErrors } from '../RetirementProjectionFlow';
 
 interface StepPartnerSuperProps {
   partner: PartnerDetails;
+  errors?: Pick<StepErrors, 'partnerSuperBalance'>;
   onPartnerChange: (partner: PartnerDetails) => void;
 }
 
-export function StepPartnerSuper({ partner, onPartnerChange }: StepPartnerSuperProps) {
+export function StepPartnerSuper({ partner, errors, onPartnerChange }: StepPartnerSuperProps) {
   return (
     <Box
       sx={{
@@ -44,6 +46,8 @@ export function StepPartnerSuper({ partner, onPartnerChange }: StepPartnerSuperP
             label="What is your partner's total super balance?"
             placeholder="For example, 120,000"
             value={partner.superBalance ? Number(partner.superBalance) : null}
+            error={!!errors?.partnerSuperBalance}
+            errorMessage={errors?.partnerSuperBalance}
             onChange={(value) =>
               onPartnerChange({ ...partner, superBalance: value?.toString() ?? '' })
             }

@@ -15,10 +15,10 @@ import { SuccessSummaryCard, SummaryRow } from './SuccessSummaryCard';
 import { computeProjection } from './projection';
 import { formatCurrency } from './format';
 import type { LifestyleOption, RetirementProjectionState } from './types';
-import { LIFESTYLE_TARGETS } from './constants';
+import { LIFESTYLE_TARGETS, getModestTarget } from './constants';
 
-function getLifestyleLabel(lifestyle: LifestyleOption, couple: boolean, customTarget: string): string {
-  if (lifestyle === 'modest') return `Modest (${formatCurrency(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} p.a.)`;
+function getLifestyleLabel(lifestyle: LifestyleOption, couple: boolean, homeowner: boolean, customTarget: string): string {
+  if (lifestyle === 'modest') return `Modest (${formatCurrency(getModestTarget(couple, homeowner))} p.a.)`;
   if (lifestyle === 'comfortable') return `Comfortable (${formatCurrency(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} p.a.)`;
   if (lifestyle === 'custom' && customTarget) return `Custom (${formatCurrency(Number(customTarget))} p.a.)`;
   return 'Not set';
@@ -44,6 +44,7 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
   > | null>(null);
 
   const couple = state.includePartner === 'yes';
+  const homeowner = state.ownHome === 'yes';
 
   // Live preview: compute score with the draft values
   const previewScore = useMemo(() => {
@@ -133,7 +134,7 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
               variant="boxed"
               direction="column"
               options={[
-                { value: 'modest', label: 'Modest', description: `${formatCurrency(couple ? LIFESTYLE_TARGETS.modest.couple : LIFESTYLE_TARGETS.modest.single)} per year` },
+                { value: 'modest', label: 'Modest', description: `${formatCurrency(getModestTarget(couple, homeowner))} per year` },
                 { value: 'comfortable', label: 'Comfortable', description: `${formatCurrency(couple ? LIFESTYLE_TARGETS.comfortable.couple : LIFESTYLE_TARGETS.comfortable.single)} per year` },
                 { value: 'custom', label: 'Custom amount', description: 'Set your own target income' },
               ]}
@@ -190,7 +191,7 @@ function RetirementGoalTile({ state, onStateChange, currentScore }: RetirementGo
     >
       <Box sx={{ mb: 2 }}>
         <SummaryRow label="Retirement age" value={state.retirementAge} />
-        <SummaryRow label="Target income" value={getLifestyleLabel(state.lifestyle, couple, state.customTarget)} divider={false} />
+        <SummaryRow label="Target income" value={getLifestyleLabel(state.lifestyle, couple, homeowner, state.customTarget)} divider={false} />
       </Box>
     </SuccessSummaryCard>
   );

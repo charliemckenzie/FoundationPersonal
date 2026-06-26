@@ -11,6 +11,8 @@ interface AmountOrPercentFieldProps {
   value: string;
   placeholder?: string;
   helperText?: string;
+  error?: boolean;
+  errorMessage?: string;
   onValueChange: (value: string) => void;
   onUnitChange: (unit: string) => void;
 }
@@ -30,6 +32,8 @@ export function AmountOrPercentField({
   value,
   placeholder,
   helperText,
+  error,
+  errorMessage,
   onValueChange,
   onUnitChange,
 }: AmountOrPercentFieldProps) {
@@ -47,6 +51,8 @@ export function AmountOrPercentField({
         label={label}
         placeholder={placeholder}
         helperText={helperText}
+        error={error}
+        errorMessage={errorMessage}
         value={numericValue ?? null}
         onChange={(v) => onValueChange(v?.toString() ?? '')}
         selectAdornment={selectAdornment}
@@ -60,6 +66,8 @@ export function AmountOrPercentField({
       label={label}
       placeholder={placeholder}
       helperText={helperText}
+      error={error}
+      errorMessage={errorMessage}
       value={numericValue ?? null}
       onChange={(v) => onValueChange(v?.toString() ?? '')}
       selectAdornment={selectAdornment}

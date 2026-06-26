@@ -20,7 +20,7 @@ function digitsOnly(value: string): string {
 
 interface StepIncomeProps {
   state: RetirementProjectionState;
-  errors?: Pick<StepErrors, 'currentAge' | 'retirementAge'>;
+  errors?: Pick<StepErrors, 'currentAge' | 'retirementAge' | 'salary' | 'partnerAge' | 'partnerRetirementAge' | 'partnerSalary' | 'mortgageBalance' | 'mortgageRepayments'>;
   onCurrentAgeChange: (value: string) => void;
   onRetirementAgeChange: (value: string) => void;
   onSalaryChange: (value: number | null) => void;
@@ -99,6 +99,8 @@ export function StepIncome({
             placeholder="For example, 95,000"
             onChange={onSalaryChange}
             value={state.salary ? Number(state.salary) : null}
+            error={!!errors?.salary}
+            errorMessage={errors?.salary}
             selectAdornment={{
               options: SALARY_FREQUENCY_OPTIONS,
               defaultValue: state.salaryFrequency,
@@ -132,6 +134,8 @@ export function StepIncome({
                   placeholder="For example, 47"
                   htmlInputProps={NUMERIC_INPUT_PROPS}
                   value={state.partner.age}
+                  error={!!errors?.partnerAge}
+                  errorMessage={errors?.partnerAge}
                   onChange={(e) =>
                     onPartnerChange({ ...state.partner, age: digitsOnly(e.target.value) })
                   }
@@ -141,6 +145,8 @@ export function StepIncome({
                   placeholder="For example, 67"
                   htmlInputProps={NUMERIC_INPUT_PROPS}
                   value={state.partner.retirementAge}
+                  error={!!errors?.partnerRetirementAge}
+                  errorMessage={errors?.partnerRetirementAge}
                   onChange={(e) =>
                     onPartnerChange({ ...state.partner, retirementAge: digitsOnly(e.target.value) })
                   }
@@ -149,6 +155,8 @@ export function StepIncome({
                   label="What is your partner's salary before tax?"
                   placeholder="For example, 80,000"
                   value={state.partner.salary ? Number(state.partner.salary) : null}
+                  error={!!errors?.partnerSalary}
+                  errorMessage={errors?.partnerSalary}
                   onChange={(value) =>
                     onPartnerChange({ ...state.partner, salary: value?.toString() ?? '' })
                   }
@@ -191,6 +199,8 @@ export function StepIncome({
                   label="Current mortgage balance"
                   placeholder="For example, 250,000"
                   value={state.homeLoan.mortgageBalance ? Number(state.homeLoan.mortgageBalance) : null}
+                  error={!!errors?.mortgageBalance}
+                  errorMessage={errors?.mortgageBalance}
                   onChange={(value) =>
                     onHomeLoanChange({ ...state.homeLoan, mortgageBalance: value?.toString() ?? '' })
                   }
@@ -199,6 +209,8 @@ export function StepIncome({
                   label="Current mortgage repayments"
                   placeholder="For example, 2,000"
                   value={state.homeLoan.mortgageRepayments ? Number(state.homeLoan.mortgageRepayments) : null}
+                  error={!!errors?.mortgageRepayments}
+                  errorMessage={errors?.mortgageRepayments}
                   onChange={(value) =>
                     onHomeLoanChange({ ...state.homeLoan, mortgageRepayments: value?.toString() ?? '' })
                   }

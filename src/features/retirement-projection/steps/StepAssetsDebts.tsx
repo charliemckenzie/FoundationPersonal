@@ -14,6 +14,7 @@ import type {
   DebtsDetails,
 } from '../types';
 import { ThingsToConsider } from '../ThingsToConsider';
+import type { StepErrors } from '../RetirementProjectionFlow';
 
 interface StepAssetsDebtsProps {
   ownProperty: string;
@@ -23,6 +24,7 @@ interface StepAssetsDebtsProps {
   hasManagedFunds: string;
   managedFunds: ManagedFundsDetails;
   debts: DebtsDetails;
+  errors?: Pick<StepErrors, 'propertyMarketValue' | 'propertyRentalIncome' | 'propertyCapitalGrowth' | 'propertyLoans' | 'propertyRepayments' | 'savingsTotal' | 'savingsInterest' | 'managedFundsMarketValue' | 'managedFundsIncome' | 'managedFundsGrowth' | 'managedFundsLoans' | 'managedFundsRepayments'>;
   onOwnPropertyChange: (value: string) => void;
   onPropertyChange: (property: InvestmentPropertyDetails) => void;
   onHasSavingsChange: (value: string) => void;
@@ -41,6 +43,7 @@ export function StepAssetsDebts({
   hasManagedFunds,
   managedFunds,
   debts,
+  errors,
   onOwnPropertyChange,
   onPropertyChange,
   onHasSavingsChange,
@@ -104,6 +107,8 @@ export function StepAssetsDebts({
                   label="Current market value"
                   placeholder="For example, 750,000"
                   value={property.marketValue ? Number(property.marketValue) : null}
+                  error={!!errors?.propertyMarketValue}
+                  errorMessage={errors?.propertyMarketValue}
                   onChange={(value) =>
                     onPropertyChange({ ...property, marketValue: value?.toString() ?? '' })
                   }
@@ -113,6 +118,8 @@ export function StepAssetsDebts({
                   placeholder="For example, 4"
                   unit={property.rentalIncomeUnit}
                   value={property.rentalIncome}
+                  error={!!errors?.propertyRentalIncome}
+                  errorMessage={errors?.propertyRentalIncome}
                   onValueChange={(value) =>
                     onPropertyChange({ ...property, rentalIncome: value })
                   }
@@ -125,6 +132,8 @@ export function StepAssetsDebts({
                   placeholder="For example, 3"
                   unit={property.capitalGrowthUnit}
                   value={property.capitalGrowth}
+                  error={!!errors?.propertyCapitalGrowth}
+                  errorMessage={errors?.propertyCapitalGrowth}
                   onValueChange={(value) =>
                     onPropertyChange({ ...property, capitalGrowth: value })
                   }
@@ -136,6 +145,8 @@ export function StepAssetsDebts({
                   label="Current loans against investment properties"
                   placeholder="For example, 200,000"
                   value={property.currentLoans ? Number(property.currentLoans) : null}
+                  error={!!errors?.propertyLoans}
+                  errorMessage={errors?.propertyLoans}
                   onChange={(value) =>
                     onPropertyChange({ ...property, currentLoans: value?.toString() ?? '' })
                   }
@@ -144,6 +155,8 @@ export function StepAssetsDebts({
                   label="Expected monthly repayments in retirement"
                   placeholder="For example, 1,500"
                   value={property.monthlyRepayments ? Number(property.monthlyRepayments) : null}
+                  error={!!errors?.propertyRepayments}
+                  errorMessage={errors?.propertyRepayments}
                   onChange={(value) =>
                     onPropertyChange({ ...property, monthlyRepayments: value?.toString() ?? '' })
                   }
@@ -178,6 +191,8 @@ export function StepAssetsDebts({
                   label="Total savings"
                   placeholder="For example, 40,000"
                   value={savings.totalSavings ? Number(savings.totalSavings) : null}
+                  error={!!errors?.savingsTotal}
+                  errorMessage={errors?.savingsTotal}
                   onChange={(value) =>
                     onSavingsChange({ ...savings, totalSavings: value?.toString() ?? '' })
                   }
@@ -186,6 +201,8 @@ export function StepAssetsDebts({
                   label="Expected interest each year"
                   placeholder="For example, 4"
                   value={savings.expectedInterest ? Number(savings.expectedInterest) : null}
+                  error={!!errors?.savingsInterest}
+                  errorMessage={errors?.savingsInterest}
                   onChange={(value) =>
                     onSavingsChange({ ...savings, expectedInterest: value?.toString() ?? '' })
                   }
@@ -220,6 +237,8 @@ export function StepAssetsDebts({
                   label="Current market value"
                   placeholder="For example, 50,000"
                   value={managedFunds.marketValue ? Number(managedFunds.marketValue) : null}
+                  error={!!errors?.managedFundsMarketValue}
+                  errorMessage={errors?.managedFundsMarketValue}
                   onChange={(value) =>
                     onManagedFundsChange({ ...managedFunds, marketValue: value?.toString() ?? '' })
                   }
@@ -229,6 +248,8 @@ export function StepAssetsDebts({
                   placeholder="For example, 4"
                   unit={managedFunds.netIncomeUnit}
                   value={managedFunds.netIncome}
+                  error={!!errors?.managedFundsIncome}
+                  errorMessage={errors?.managedFundsIncome}
                   onValueChange={(value) =>
                     onManagedFundsChange({ ...managedFunds, netIncome: value })
                   }
@@ -241,6 +262,8 @@ export function StepAssetsDebts({
                   placeholder="For example, 3"
                   unit={managedFunds.capitalGrowthUnit}
                   value={managedFunds.capitalGrowth}
+                  error={!!errors?.managedFundsGrowth}
+                  errorMessage={errors?.managedFundsGrowth}
                   onValueChange={(value) =>
                     onManagedFundsChange({ ...managedFunds, capitalGrowth: value })
                   }
@@ -252,6 +275,8 @@ export function StepAssetsDebts({
                   label="Current loans against these investments"
                   placeholder="For example, 10,000"
                   value={managedFunds.loansAgainst ? Number(managedFunds.loansAgainst) : null}
+                  error={!!errors?.managedFundsLoans}
+                  errorMessage={errors?.managedFundsLoans}
                   onChange={(value) =>
                     onManagedFundsChange({ ...managedFunds, loansAgainst: value?.toString() ?? '' })
                   }
@@ -260,6 +285,8 @@ export function StepAssetsDebts({
                   label="Monthly repayments on those loans"
                   placeholder="For example, 200"
                   value={managedFunds.monthlyRepayments ? Number(managedFunds.monthlyRepayments) : null}
+                  error={!!errors?.managedFundsRepayments}
+                  errorMessage={errors?.managedFundsRepayments}
                   onChange={(value) =>
                     onManagedFundsChange({ ...managedFunds, monthlyRepayments: value?.toString() ?? '' })
                   }

@@ -204,7 +204,8 @@ export function StepSuper({
           )}
 
           <RadioGroup
-            legend="Are you making contributions to another super fund?"
+            legend="Do you have any other super funds?"
+            helperText="If you have a QSuper account, select yes"
             options={[
               { value: 'yes', label: 'Yes' },
               { value: 'no', label: 'No' },

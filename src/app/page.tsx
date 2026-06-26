@@ -77,6 +77,7 @@ const ART: Brand = {
       pages: [
         { label: 'Retirement projector', href: '/retirement-projection' },
         { label: 'Home Page 2026', href: '/experiments/public-web-nav' },
+        { label: 'Contributions calculator', href: '/advice/contributions' },
       ],
     },
   ],

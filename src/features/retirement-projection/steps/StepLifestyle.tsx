@@ -18,6 +18,7 @@ interface StepLifestyleProps {
   lifestyle: LifestyleOption | null;
   customTarget: string;
   couple?: boolean;
+  homeowner?: boolean;
   errors?: Pick<StepErrors, 'lifestyle' | 'customTarget'>;
   onLifestyleChange: (value: LifestyleOption) => void;
   onCustomTargetChange: (value: number | null) => void;
@@ -62,12 +63,13 @@ export function StepLifestyle({
   lifestyle,
   customTarget,
   couple = false,
+  homeowner = true,
   errors,
   onLifestyleChange,
   onCustomTargetChange,
   sectionLabel,
 }: StepLifestyleProps) {
-  const lifestyleOptions = getLifestyleOptions(couple);
+  const lifestyleOptions = getLifestyleOptions(couple, homeowner);
   return (
     <Box
       sx={{

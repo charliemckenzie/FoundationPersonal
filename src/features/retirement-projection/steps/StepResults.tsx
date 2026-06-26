@@ -24,7 +24,7 @@ interface StepResultsProps {
 /** Label + value row for the breakdown tables */
 function BreakdownRow({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
   return (
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', py: 1.5, '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' } }}>
+    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', py: 1.5, '&:not(:last-child)': { borderBottom: '1px solid', borderColor: 'divider' }, '&:last-child': { pb: 0 } }}>
       <Typography variant="small" color="text.muted">{label}</Typography>
       <Typography variant="small" sx={{ fontWeight: 600, ...(highlight === true && { color: 'success.main' }), ...(highlight === false && { color: 'error.main' }) }}>{value}</Typography>
     </Box>
@@ -88,7 +88,7 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
           }}
         >
           {/* Super balance breakdown */}
-          <Box sx={{ p: 3 }}>
+          <Box sx={{ p: '1rem' }}>
             <Typography variant="small" sx={{ color: 'secondary.main', fontWeight: 700, mb: 1.5 }}>Super balance</Typography>
             <BreakdownRow label={`Super at ${state.retirementAge}`} value={formatCurrency(projection.projectedBalance)} />
             <BreakdownRow label="Your goal" value={formatCurrency(projection.targetBalance)} />
@@ -100,13 +100,13 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
           </Box>
 
           {/* Retirement income breakdown */}
-          <Box sx={{ p: 3, borderTop: '1px solid', borderColor: 'divider' }}>
+          <Box sx={{ p: '1rem', borderTop: '1px solid', borderColor: 'divider' }}>
             <Typography variant="small" sx={{ color: 'secondary.main', fontWeight: 700, mb: 1.5 }}>Retirement income</Typography>
             <BreakdownRow label="Projected retirement income" value={formatCurrency(projection.projectedIncome, { perYear: true })} />
             <BreakdownRow label="Your goal" value={formatCurrency(projection.targetIncome, { perYear: true })} />
             <BreakdownRow
               label="Variance"
-              value={formatCurrency(incomeVariance, { signed: true })}
+              value={formatCurrency(incomeVariance, { signed: true, perYear: true })}
               highlight={incomeVariance >= 0}
             />
           </Box>
@@ -164,7 +164,7 @@ export function StepResults({ state, onStateChange, onBack, onNext, onExit }: St
             </Typography>
             <Typography variant="small" sx={{ color: `${severity}.dark`, lineHeight: 1.6 }}>
               {onTrack
-                ? 'This means your projected income meets or exceeds your goal. Adjust the inputs on the right to explore different scenarios.'
+                ? 'This means your projected income meets or exceeds your goal. Adjust the inputs below to explore different scenarios.'
                 : `Your projected income falls short of your goal by ${formatCurrency(projection.targetIncome - projection.projectedIncome)} a year. Explore the options below to improve your projection.`}
             </Typography>
           </Box>

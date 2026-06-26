@@ -1,5 +1,5 @@
 import type { RetirementProjectionState } from './types';
-import { LIFESTYLE_TARGETS } from './constants';
+import { LIFESTYLE_TARGETS, getModestTarget } from './constants';
 
 /**
  * Deterministic retirement projection in today's dollars.
@@ -143,6 +143,8 @@ function parseSimInputs(state: RetirementProjectionState): SimInputs {
         ? num(state.customTarget)
         : (() => {
             const key = state.lifestyle ?? 'comfortable';
+            const homeowner = state.ownHome === 'yes';
+            if (key === 'modest') return getModestTarget(couple, homeowner);
             const band = LIFESTYLE_TARGETS[key] ?? LIFESTYLE_TARGETS.comfortable;
             return couple ? band.couple : band.single;
           })(),
@@ -343,8 +345,10 @@ export function computeProjection(state: RetirementProjectionState): ProjectionR
   // Solve sustainable income first — this is the max annual income that lasts to the horizon.
   const sustainableIncome = solveSustainableIncome(inputs);
 
-  // Run the chart simulation drawing at the sustainable rate so bars reflect actual projected income.
-  const chartInputs: SimInputs = { ...inputs, targetIncome: Math.max(sustainableIncome, inputs.targetIncome) };
+  // Run the chart simulation drawing at the sustainable rate so bars reflect
+  // actual projected income. The target line on the chart shows the goal —
+  // the gap between bars and line communicates the shortfall visually.
+  const chartInputs: SimInputs = { ...inputs, targetIncome: sustainableIncome };
   const sim = initialSimState(chartInputs);
   const years: ProjectionYear[] = [];
   let projectedBalance = 0;

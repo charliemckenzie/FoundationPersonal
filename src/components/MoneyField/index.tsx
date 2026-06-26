@@ -14,6 +14,7 @@ export interface MoneyFieldProps {
   condensed?: boolean;
   helperText?: string;
   error?: boolean;
+  errorMessage?: string;
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -76,6 +77,7 @@ export function MoneyField({
   condensed,
   helperText,
   error,
+  errorMessage,
   required,
   disabled,
   fullWidth,
@@ -148,6 +150,7 @@ export function MoneyField({
       condensed={condensed}
       helperText={helperText}
       error={error}
+      errorMessage={errorMessage}
       required={required}
       disabled={disabled}
       fullWidth={fullWidth}

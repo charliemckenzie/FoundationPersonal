@@ -14,6 +14,7 @@ export interface PercentageFieldProps {
   condensed?: boolean;
   helperText?: string;
   error?: boolean;
+  errorMessage?: string;
   required?: boolean;
   disabled?: boolean;
   fullWidth?: boolean;
@@ -45,6 +46,7 @@ export function PercentageField({
   condensed,
   helperText,
   error,
+  errorMessage,
   required,
   disabled,
   fullWidth,
@@ -103,6 +105,7 @@ export function PercentageField({
       condensed={condensed}
       helperText={helperText}
       error={error}
+      errorMessage={errorMessage}
       required={required}
       disabled={disabled}
       fullWidth={fullWidth}

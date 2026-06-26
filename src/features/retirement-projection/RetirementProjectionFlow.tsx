@@ -25,6 +25,25 @@ import type { RetirementProjectionState } from './types';
 export interface StepErrors {
   currentAge?: string;
   retirementAge?: string;
+  salary?: string;
+  partnerAge?: string;
+  partnerRetirementAge?: string;
+  partnerSalary?: string;
+  mortgageBalance?: string;
+  mortgageRepayments?: string;
+  partnerSuperBalance?: string;
+  propertyMarketValue?: string;
+  propertyRentalIncome?: string;
+  propertyCapitalGrowth?: string;
+  propertyLoans?: string;
+  propertyRepayments?: string;
+  savingsTotal?: string;
+  savingsInterest?: string;
+  managedFundsMarketValue?: string;
+  managedFundsIncome?: string;
+  managedFundsGrowth?: string;
+  managedFundsLoans?: string;
+  managedFundsRepayments?: string;
   lifestyle?: string;
   customTarget?: string;
 }
@@ -34,13 +53,87 @@ function validateStep(step: number, state: RetirementProjectionState): StepError
   if (step === 0) {
     const currentAge = Number(state.currentAge);
     const retirementAge = Number(state.retirementAge);
-    if (!state.currentAge || !Number.isFinite(currentAge) || currentAge < 15 || currentAge > 99) {
-      errors.currentAge = 'Enter an age between 15 and 99.';
+    if (!state.currentAge || !Number.isFinite(currentAge)) {
+      errors.currentAge = 'Enter your age.';
     }
-    if (!state.retirementAge || !Number.isFinite(retirementAge) || retirementAge > 99) {
-      errors.retirementAge = 'Enter a retirement age up to 99.';
+    if (!state.retirementAge || !Number.isFinite(retirementAge)) {
+      errors.retirementAge = 'Enter your retirement age.';
     } else if (!errors.currentAge && retirementAge <= currentAge) {
       errors.retirementAge = 'Retirement age must be later than your current age.';
+    }
+    if (!state.salary) {
+      errors.salary = 'Enter your salary.';
+    }
+    if (state.includePartner === 'yes') {
+      const partnerAge = Number(state.partner.age);
+      const partnerRetAge = Number(state.partner.retirementAge);
+      if (!state.partner.age || !Number.isFinite(partnerAge)) {
+        errors.partnerAge = 'Enter your partner\u2019s age.';
+      }
+      if (!state.partner.retirementAge || !Number.isFinite(partnerRetAge)) {
+        errors.partnerRetirementAge = 'Enter your partner\u2019s retirement age.';
+      }
+      if (!state.partner.salary) {
+        errors.partnerSalary = 'Enter your partner\u2019s salary.';
+      }
+    }
+    if (state.ownHome === 'yes') {
+      if (!state.homeLoan.mortgageBalance) {
+        errors.mortgageBalance = 'Enter your mortgage balance.';
+      }
+      if (!state.homeLoan.mortgageRepayments) {
+        errors.mortgageRepayments = 'Enter your mortgage repayments.';
+      }
+    }
+  }
+  if (step === 3 && state.includePartner === 'yes') {
+    if (!state.partner.superBalance) {
+      errors.partnerSuperBalance = 'Enter your partner\u2019s super balance.';
+    }
+  }
+  const assetsStep = state.includePartner === 'yes' ? 4 : 3;
+  if (step === assetsStep) {
+    if (state.ownInvestmentProperty === 'yes') {
+      if (!state.investmentProperty.marketValue) {
+        errors.propertyMarketValue = 'Enter the property\u2019s market value.';
+      }
+      if (!state.investmentProperty.rentalIncome) {
+        errors.propertyRentalIncome = 'Enter the net rental income.';
+      }
+      if (!state.investmentProperty.capitalGrowth) {
+        errors.propertyCapitalGrowth = 'Enter the expected capital growth.';
+      }
+      if (!state.investmentProperty.currentLoans) {
+        errors.propertyLoans = 'Enter current loans against the property.';
+      }
+      if (!state.investmentProperty.monthlyRepayments) {
+        errors.propertyRepayments = 'Enter expected monthly repayments.';
+      }
+    }
+    if (state.hasSavings === 'yes') {
+      if (!state.savings.totalSavings) {
+        errors.savingsTotal = 'Enter your total savings.';
+      }
+      if (!state.savings.expectedInterest) {
+        errors.savingsInterest = 'Enter the expected interest rate.';
+      }
+    }
+    if (state.hasManagedFunds === 'yes') {
+      if (!state.managedFunds.marketValue) {
+        errors.managedFundsMarketValue = 'Enter the market value of your managed funds.';
+      }
+      if (!state.managedFunds.netIncome) {
+        errors.managedFundsIncome = 'Enter the expected net income.';
+      }
+      if (!state.managedFunds.capitalGrowth) {
+        errors.managedFundsGrowth = 'Enter the expected capital growth.';
+      }
+      if (!state.managedFunds.loansAgainst) {
+        errors.managedFundsLoans = 'Enter current loans against these investments.';
+      }
+      if (!state.managedFunds.monthlyRepayments) {
+        errors.managedFundsRepayments = 'Enter monthly repayments on those loans.';
+      }
     }
   }
   if (step === 1) {
@@ -221,7 +314,9 @@ export function RetirementProjectionFlow() {
           <Box sx={{ pt: 3, pb: 2, borderBottom: '1px solid', borderColor: 'divider' }}>
             <Box sx={{ mx: 5 }}>
               <FormProgress
-                variant="stepped"
+                variant="responsive"
+                showStepIndicator
+                stepMenu
                 steps={activeFormSteps}
                 activeStep={getActiveFormStep()}
                 maxStep={maxStep}
@@ -282,12 +377,12 @@ export function RetirementProjectionFlow() {
                     errors={errors}
                     onCurrentAgeChange={(value) => { setState((prev) => ({ ...prev, currentAge: value })); clearError('currentAge'); }}
                     onRetirementAgeChange={(value) => { setState((prev) => ({ ...prev, retirementAge: value })); clearError('retirementAge'); }}
-                    onSalaryChange={(value) => setState((prev) => ({ ...prev, salary: value?.toString() ?? '' }))}
+                    onSalaryChange={(value) => { setState((prev) => ({ ...prev, salary: value?.toString() ?? '' })); clearError('salary'); }}
                     onSalaryFrequencyChange={(value) => setState((prev) => ({ ...prev, salaryFrequency: value }))}
                     onIncludePartnerChange={(value) => setState((prev) => ({ ...prev, includePartner: value }))}
-                    onPartnerChange={(partner) => setState((prev) => ({ ...prev, partner }))}
+                    onPartnerChange={(partner) => { setState((prev) => ({ ...prev, partner })); clearError('partnerAge'); clearError('partnerRetirementAge'); clearError('partnerSalary'); }}
                     onOwnHomeChange={(value) => setState((prev) => ({ ...prev, ownHome: value }))}
-                    onHomeLoanChange={(loan) => setState((prev) => ({ ...prev, homeLoan: loan }))}
+                    onHomeLoanChange={(loan) => { setState((prev) => ({ ...prev, homeLoan: loan })); clearError('mortgageBalance'); clearError('mortgageRepayments'); }}
                   />
                 )}
                 {formStep === 1 && (
@@ -295,6 +390,7 @@ export function RetirementProjectionFlow() {
                     lifestyle={state.lifestyle}
                     customTarget={state.customTarget}
                     couple={state.includePartner === 'yes'}
+                    homeowner={state.ownHome === 'yes'}
                     errors={errors}
                     onLifestyleChange={(value) => {
                       setState((prev) => ({ ...prev, lifestyle: value }));
@@ -322,7 +418,8 @@ export function RetirementProjectionFlow() {
                 {hasPartner && formStep === 3 && (
                   <StepPartnerSuper
                     partner={state.partner}
-                    onPartnerChange={(partner) => setState((prev) => ({ ...prev, partner }))}
+                    errors={errors}
+                    onPartnerChange={(partner) => { setState((prev) => ({ ...prev, partner })); clearError('partnerSuperBalance'); }}
                   />
                 )}
                 {formStep === (hasPartner ? 4 : 3) && (
@@ -334,12 +431,13 @@ export function RetirementProjectionFlow() {
                     hasManagedFunds={state.hasManagedFunds}
                     managedFunds={state.managedFunds}
                     debts={state.debts}
+                    errors={errors}
                     onOwnPropertyChange={(value) => setState((prev) => ({ ...prev, ownInvestmentProperty: value }))}
-                    onPropertyChange={(property) => setState((prev) => ({ ...prev, investmentProperty: property }))}
+                    onPropertyChange={(property) => { setState((prev) => ({ ...prev, investmentProperty: property })); clearError('propertyMarketValue'); clearError('propertyRentalIncome'); clearError('propertyCapitalGrowth'); clearError('propertyLoans'); clearError('propertyRepayments'); }}
                     onHasSavingsChange={(value) => setState((prev) => ({ ...prev, hasSavings: value }))}
-                    onSavingsChange={(savings) => setState((prev) => ({ ...prev, savings }))}
+                    onSavingsChange={(savings) => { setState((prev) => ({ ...prev, savings })); clearError('savingsTotal'); clearError('savingsInterest'); }}
                     onHasManagedFundsChange={(value) => setState((prev) => ({ ...prev, hasManagedFunds: value }))}
-                    onManagedFundsChange={(funds) => setState((prev) => ({ ...prev, managedFunds: funds }))}
+                    onManagedFundsChange={(funds) => { setState((prev) => ({ ...prev, managedFunds: funds })); clearError('managedFundsMarketValue'); clearError('managedFundsIncome'); clearError('managedFundsGrowth'); clearError('managedFundsLoans'); clearError('managedFundsRepayments'); }}
                     onDebtsChange={(debts) => setState((prev) => ({ ...prev, debts }))}
                   />
                 )}
